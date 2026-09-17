@@ -9,7 +9,7 @@
 
 | 要查什么 | 入口 |
 |---|---|
-| 多人手动军师、最多七回合与药水搜索、复用范围和局部模拟证据 | [多人军师（开发中）](multiplayer-advisor.md) |
+| 多人手动军师、最多七回合与药水搜索、复用范围和局部模拟证据 | [多人军师（fork 0.40.3）](multiplayer-advisor.md) |
 | 无需训练的有界新颖性／Beam 组合、实验开关和完整对照 | [有界多策略搜索](strategy/bounded-novelty-search-20260916.md) |
 | 不启动 Godot 批量跑搜索、量宽度与预算 | [离线搜索宿主](OFFLINE_SEARCH_HARNESS.md) |
 | 完整性能优化正式 PR、路线控件复用、0.38.6 合并验证与对照 | [正式 PR 验收](performance/performance-pr-20260915.md) |

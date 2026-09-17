@@ -1,19 +1,20 @@
 # 战斗路线求解器 / Combat Solver
 
-Combat Solver 是一个面向《杀戮尖塔 2》单人模式的战斗路线求解器。进入战斗后，它会在后台模拟当前手牌、牌堆、敌人行动、药水、遗物、选牌和跨回合状态，并在预算范围内给出推荐路线、预计战损与关键行动。
+Combat Solver 是《杀戮尖塔 2》的战斗路线求解器，本 fork 支持单人求解和多人手动军师。它会在后台模拟当前手牌、牌堆、敌人行动、药水、遗物、选牌和跨回合状态，并在预算范围内给出推荐路线、预计战损与关键行动。
 
-玩家可以只查看建议，也可以让求解器执行当前回合，或连续接管整场战斗。搜索不会修改游戏 RNG，也不会在后台操作真实战斗状态。
+单人模式下，玩家可以只查看建议，也可以让求解器执行当前回合，或连续接管整场战斗。多人模式只提供手动请求的建议。搜索不会修改游戏 RNG，也不会在后台操作真实战斗状态。
 
-当前版本为 **0.40.2**：合入 ltlly 的卡牌变形长线搜索性能优化，并修正搜索进度与高战损引导。详见 [更新日志](docs/releases/0.40.2-RELEASE_NOTES.md)。
+当前 fork 版本为 **0.40.3**，基于上游 `0.40.2`，新增多人手动军师。可直接安装的 ZIP 见 [GitHub Release](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.40.3)，功能变化见 [更新日志](docs/releases/0.40.3-RELEASE_NOTES.md)。
 
-本开发分支新增 [多人军师](docs/multiplayer-advisor.md)：手动重新计算，推荐本人的出牌和用药路线，最多推演七个敌方回合，不自动操作。队友行动后自行决定何时重算。尚未发布，也尚未完成真实联机验收。
+[多人军师](docs/multiplayer-advisor.md) 推荐本人的出牌和用药路线，最多推演七个敌方回合。队友行动后自行决定何时重算；推演假设队友后续不主动出牌或用药，但仍结算其被动效果。多人功能目前供试用，尚未完成真实联机验收。
 
-**English UI:** Set the game language to English and restart the game. In single-player, use **Play turn** for one turn or **Auto: On** for continuous play. Multiplayer in this development branch offers manual advice for up to seven enemy turns, including potions. Configure potions, growth and search budgets in the overlay. **Settings > Reports > Upload report** submits a bug report. Logs, raw errors and some detailed diagnostics retain their original text.
+**English UI:** Set the game language to English and restart the game. In single-player, use **Play turn** for one turn or **Auto: On** for continuous play. Fork version 0.40.3 adds manual multiplayer advice for up to seven enemy turns, including potions. It assumes teammates take no further active actions, and live multiplayer compatibility is not yet verified. Download the ready-to-install ZIP from the [fork release](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.40.3). Configure potions, growth and search budgets in the overlay. **Settings > Reports > Upload report** submits a bug report. Logs, raw errors and some detailed diagnostics retain their original text.
 
 界面跟随游戏语言：简体/繁体中文使用现有中文文案，其他语言使用英文。简化版不提供独立语言开关；卡牌胶囊、选牌和相关悬停说明支持运行中切换语言，其他既有窗口可通过重启统一刷新。
 
 ## 主要功能
 
+- **多人手动军师（试用）**：点击重新计算，基于当时全队状态建议本人的出牌和用药；显示实际推演深度和边界，最多七个敌方回合。多人只提供建议，以下执行和自动复用功能用于单人。
 - **跨回合搜索**：继续预测抽牌、洗牌、敌人行动、持续状态和后续资源，而不是只计算眼前一回合。
 - **路线与战损展示**：按回合展示出牌、目标、选牌、药水、结束回合和关键遗物触发，并显示当前路线的预计整场战损。
 - **三种使用方式**：仅查看路线、执行本回合、连续全自动。搜索期间可以立即停止，并暂停本场后续自动搜索。
@@ -26,7 +27,7 @@ Combat Solver 是一个面向《杀戮尖塔 2》单人模式的战斗路线求�
 - **问题反馈**：可以从设置中直接上传问题包，也可以导出到本地后手动提交。问题描述会附带本场自动分类，便于定位更优路线、计划外重算、执行中止和搜索失败。
 - **在线统计**：默认每 30 秒向作者发送随机安装标识、昵称、角色、楼层、当前战斗、预计战损和版本，可在设置中关闭；不上传完整路线，离线后清除昵称和战斗详情，保留历史人数及安装标识对应的累计在线时长。详见 [统计字段与关闭方式](docs/ONLINE_STATISTICS.md)。
 
-## 工作方式
+## 工作方式（单人）
 
 1. 游戏完成发牌并进入稳定的玩家操作阶段后，Combat Solver 在主线程捕获一次战斗根状态。
 2. 后台搜索只操作该根状态派生出的独立模拟分支，推进卡牌、牌堆、RNG、怪物 AI、药水、遗物和跨回合效果。
@@ -78,9 +79,9 @@ if (PreCombatForecastApi.IsAvailable)
 
 - 《杀戮尖塔 2》`0.111.0`
 - [RitsuLib](https://steamcommunity.com/sharedfiles/filedetails/?id=3747602295) `0.6.0` 或更高版本
-- 单人战斗模式
+- 单人战斗；多人可使用手动军师试用功能
 
-推荐通过 Steam 创意工坊订阅。使用 GitHub Release 手动安装时，在游戏目录的 `mods/CombatSolver` 下放置以下文件：
+安装本 fork 时，请从 [GitHub Release](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.40.3) 下载 `CombatSolver-0.40.3.zip`（不是源码压缩包），将其中的以下文件解压到游戏的 `mods/CombatSolver` 目录：
 
 ```text
 CombatSolver.dll
@@ -90,11 +91,13 @@ LICENSE
 THIRD_PARTY_NOTICES.md
 ```
 
-启用 RitsuLib 和 Combat Solver 后进入一场单人战斗。等待发牌和回合开始效果结算，路线面板会自动显示搜索进度和结果。
+RitsuLib 需要单独安装。替换旧版前退出游戏，并确保只启用一份 Combat Solver；已订阅上游版时先停用该副本，避免同时加载同名 Mod。`CombatSolver.MemoryCleaner.exe` 仅供 Windows 使用，其他系统无需运行它。
+
+启用 RitsuLib 和 Combat Solver 后进入战斗。单人等待发牌和回合开始效果结算，路线面板会自动显示搜索进度和结果；多人在这些效果和选择完成后，点击「重新计算」取得建议，自己按建议操作。
 
 ## 操作与设置
 
-路线面板提供三个主要入口：
+单人路线面板提供三个主要入口；多人仅保留手动重新计算和停止，不提供执行或全自动：
 
 - **重新计算**：从当前实机状态开始一次新搜索，并恢复本场自动搜索。
 - **执行本回合**：只执行计划中的当前回合；进入下一回合选牌页面后将控制权交还玩家。
@@ -135,7 +138,7 @@ THIRD_PARTY_NOTICES.md
 
 Combat Solver 使用受时间、节点和内存预算约束的 Beam Search。它展示的是当前预算内找到的最佳路线，不承诺数学意义上的全局最优解。单人路线视野没有固定回合数或洗牌次数上限；多人建议最多覆盖七个敌方回合。循环检测、状态合并和预算终止仍会限制实际搜索范围。
 
-已发布版本目标是覆盖 `0.111.0` 的单人战斗内容。运行时遇到尚未支持的新版本或第三方战斗语义时，求解器会明确停止在不支持边界，不会把未完成模拟误报为胜利。本分支多人军师的支持与验证范围见[专门说明](docs/multiplayer-advisor.md)；局外流程和第三方 Mod 的自定义战斗效果不在通用兼容范围内。
+单人模式目标是覆盖 `0.111.0` 的战斗内容。运行时遇到尚未支持的新版本或第三方战斗语义时，求解器会明确停止在不支持边界，不会把未完成模拟误报为胜利。本 fork 多人军师的支持与验证范围见[专门说明](docs/multiplayer-advisor.md)；局外流程和第三方 Mod 的自定义战斗效果不在通用兼容范围内。
 
 详细覆盖情况见 [战斗 Hook 覆盖报告](docs/COMBAT_HOOK_COVERAGE.md) 与 [适配验证记录](docs/ADAPTATION_VERIFICATION.md)。
 
