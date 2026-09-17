@@ -19,6 +19,7 @@ internal sealed record HarnessScenario(
     int ActIndexForTest)
 {
     public bool MultiplayerContracts { get; init; }
+    public bool MultiplayerStartContracts { get; init; }
 }
 
 /// <summary>
@@ -39,7 +40,7 @@ internal static class OfflineCombat
 
         UnlockState unlockState = SaveManager.Instance.GenerateUnlockStateFromProgress();
         RunState runState = RunState.CreateForNewRun(
-            scenario.MultiplayerContracts
+            scenario.MultiplayerContracts || scenario.MultiplayerStartContracts
                 ? [Player.CreateForNewRun(character, unlockState, 2uL), Player.CreateForNewRun(character, unlockState, 1uL)]
                 : [Player.CreateForNewRun(character, unlockState, 1uL)],
             ModelDb.ActsByIndex is { } ? ActModel.GetDefaultList().Select(act => act.ToMutable()).ToList() : [],

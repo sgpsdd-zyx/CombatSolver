@@ -122,7 +122,12 @@ internal static class Program
 
             if (options.Milestone != "M1")
             {
-                if (options.Scenario.MultiplayerContracts)
+                if (options.Scenario.MultiplayerStartContracts)
+                {
+                    Step(steps, "Multiplayer manual startup", () => MultiplayerStartContracts.Run(combat!, options, loop));
+                    reached = "M2";
+                }
+                else if (options.Scenario.MultiplayerContracts)
                 {
                     Step(steps, "多人模拟合同", () => MultiplayerContracts.Run(combat!, options, loop));
                     reached = "M2";
@@ -331,6 +336,7 @@ internal sealed record HarnessOptions
           --language <code>      本地化语言码（默认 eng）
           --verbose-game-log     把游戏 info/debug 日志也打到标准输出
           --multiplayer-contracts 原生双玩家回合与军师模拟对照（不建立网络连接）
+          --multiplayer-start-contracts Exercise the manual UI entry and native action waits without networking
         环境变量 OFFLINE_HARNESS_COMBATSOLVER_DLL 可以换掉运行时加载的 CombatSolver.dll。
         """;
 
@@ -362,7 +368,7 @@ internal sealed record HarnessOptions
         string character = "IRONCLAD", encounter = "FUZZY_WURM_CRAWLER_WEAK", seed = "OFFLINEHARNESS1";
         int ascension = 0, actIndex = 0, dop = 1, budget = 600_000;
         int? beam = null, nodes = null, cardBranches = null, pileBranches = null, handBranches = null;
-        bool usePortfolio = false, multiplayerContracts = false;
+        bool usePortfolio = false, multiplayerContracts = false, multiplayerStartContracts = false;
         string potionPolicy = "Smart", milestone = "M2", language = "eng";
         string profile = "Custom", searchMode = "Evaluate", label = "offline";
         string? output = null, requestPath = null;
@@ -400,6 +406,7 @@ internal sealed record HarnessOptions
                 case "--search-mode": searchMode = Value(); break;
                 case "--use-portfolio": usePortfolio = true; break;
                 case "--multiplayer-contracts": multiplayerContracts = true; break;
+                case "--multiplayer-start-contracts": multiplayerStartContracts = true; break;
                 case "--milestone": milestone = Value(); break;
                 case "--out": output = Value(); break;
                 case "--workspace": workspace = Value(); break;
@@ -416,6 +423,8 @@ internal sealed record HarnessOptions
             throw new ArgumentException("--search-mode 只接受 Evaluate 或 Coordinator。");
         if (usePortfolio && searchMode != "Coordinator")
             throw new ArgumentException("--use-portfolio 只对 --search-mode Coordinator 有效。");
+        if (multiplayerStartContracts && (multiplayerContracts || requestPath != null))
+            throw new ArgumentException("--multiplayer-start-contracts requires its own two-player fixture.");
         if (profile == "Custom" && requestPath == null)
         {
             beam ??= 24;
@@ -425,7 +434,7 @@ internal sealed record HarnessOptions
         return new HarnessOptions
         {
             Scenario = new HarnessScenario(character, encounter, seed, ascension, actIndex)
-                { MultiplayerContracts = multiplayerContracts },
+                { MultiplayerContracts = multiplayerContracts, MultiplayerStartContracts = multiplayerStartContracts },
             RequestPath = requestPath,
             Label = label,
             Profile = profile,

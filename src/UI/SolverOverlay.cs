@@ -758,6 +758,11 @@ internal static class SolverOverlay
         RefreshControls();
     }
 
+    public static void ShowPreparingSearch(Node host, bool waitingForAction)
+        => Show(host, waitingForAction
+            ? SolverText.Get("等待当前动作或选牌结算后开始计算。")
+            : SolverText.Get("正在准备计算，请稍候。"));
+
     public static void ShowSearching(
         Node host,
         int turn,

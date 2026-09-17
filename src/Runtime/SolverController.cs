@@ -852,149 +852,156 @@ internal static partial class SolverController
     public static void RequestSearch(NGame host, CombatState state, SearchReason reason, bool deployWhenReady = false)
     {
         AssertMainThread();
-        if (IsMultiplayerSession)
-        {
-            if (reason != SearchReason.Manual) return;
-            deployWhenReady = false;
-            if (_search is { } prior)
-            {
-                CancelSearch();
-                DeferSearchUntilRootCaptureBarrier(host, state, reason, false,
-                    prior.WorkerCompletion.ContinueWith(static completed => { _ = completed.Exception; },
-                        CancellationToken.None, TaskContinuationOptions.ExecuteSynchronously, TaskScheduler.Default));
-                return;
-            }
-            Task[] draining = PendingSearchReferenceReleases.Where(task => !task.IsCompleted).ToArray();
-            if (draining.Length > 0)
-            {
-                DeferSearchUntilRootCaptureBarrier(host, state, reason, false, Task.WhenAll(draining));
-                return;
-            }
-        }
-        if (_combat.ShowcaseMode && reason != SearchReason.AutoTurnStart)
-        {
-            StopShowcaseRoute(host, "战斗状态与录像路线不一致，已停止执行。");
-            return;
-        }
-        int? searchTurn = LocalContext.GetMe(state)?.PlayerCombatState?.TurnNumber;
-        // Turn setup and TurnStarted can complete in either order. The first accepted
-        // request owns this turn; a late automatic callback must keep its active plan.
-        if (reason == SearchReason.AutoTurnStart
-            && (ReferenceEquals(_combat.State, state)
-                    && (_combat.LatestResult?.StartTurnNumber == searchTurn || _combat.LastSolverDeployedTurn == searchTurn)
-                || _search is { } active && ReferenceEquals(active.State, state) && active.StartTurnNumber == searchTurn
-                || _deployment is { } deploying && ReferenceEquals(deploying.State, state) && deploying.StartTurnNumber == searchTurn))
-        {
-            Entry.Logger.Info($"[CombatSolver/Test] AUTO_SEARCH_ALREADY_OWNED turn={searchTurn}");
-            return;
-        }
-        _combat.StoppedSearch = null;
-        SolverDispatcher.Ensure(host);
-        if (_combat.DeployAfterTurnSetupTurn == searchTurn)
-        {
-            deployWhenReady = true;
-            _combat.DeployAfterTurnSetupTurn = null;
-            Entry.Logger.Info("[CombatSolver/Test] DEPLOY_RESUME reason=turn_setup_completed");
-        }
-        else if (_combat.DeployAfterTurnSetupTurn != null)
-        {
-            _combat.DeployAfterTurnSetupTurn = null;
-        }
-        Task rootCaptureBarrier = SearchGcPolicy.CaptureRootSnapshotBarrier();
-        if (!rootCaptureBarrier.IsCompleted)
-        {
-            DeferSearchUntilRootCaptureBarrier(
-                host,
-                state,
-                reason,
-                deployWhenReady,
-                rootCaptureBarrier);
-            return;
-        }
-        // A direct request can arrive after the barrier opened but before the deferred
-        // callback reached the dispatcher. The newest request owns the search slot.
-        CancelDeferredSearch();
-        if (reason == SearchReason.Manual)
-        {
-            if (_combat.AutomaticSearchPaused)
-                Entry.Logger.Info("[CombatSolver/Test] AUTOMATIC_SEARCH_RESUMED reason=manual_recalculate");
-            _combat.AutomaticSearchPaused = false;
-            if (PlayerTurnSetupCoordinator.TryRecalculatePendingChoice(host, state))
-            {
-                _combat.PendingCompleteProjectionBaseline = null;
-                _combat.PendingManualProjectionBaseline = null;
-                Entry.Logger.Info(
-                    "[CombatSolver/Test] SEARCH_RESTARTED reason=manual_recalculate_pending_turn_setup");
-                return;
-            }
-            bool queuedAfterTurnSetup = PlayerTurnSetupCoordinator.TryQueueManualRecalculation(state);
-            if (!queuedAfterTurnSetup && ReferenceEquals(_combat.TurnSetupResumeState, state))
-            {
-                QueueManualSearchAfterTurnSetup();
-                queuedAfterTurnSetup = true;
-                Entry.Logger.Info(
-                    "[CombatSolver/Test] TURN_SETUP_MANUAL_RECALCULATE_QUEUED phase=resuming_play");
-            }
-            if (queuedAfterTurnSetup)
-            {
-                _combat.PendingCompleteProjectionBaseline = null;
-                _combat.PendingManualProjectionBaseline = null;
-                SolverOverlay.Show(
-                    host,
-                    "[b]战斗路线求解器[/b]\n等待当前回合开始选择完成后重新计算。");
-                Entry.Logger.Info(
-                    "[CombatSolver/Test] SEARCH_DEFERRED reason=manual_recalculate_after_turn_setup");
-                return;
-            }
-        }
-        else if (_combat.AutomaticSearchPaused)
-        {
-            _combat.FullAutoEnabled = false;
-            Entry.Logger.Info($"[CombatSolver/Test] SEARCH_REJECT reason=user_stopped request={reason}");
-            SolverOverlay.ShowSearchStopped(host);
-            return;
-        }
-        // Queue completion includes post-action victory checks; a paused choice also keeps
-        // its action completion pending even when the queue temporarily has no ready work.
-        ActionExecutor actionExecutor = RunManager.Instance.ActionExecutor;
-        Task nativeActionBarrier = actionExecutor.CurrentlyRunningAction is { } runningAction
-            ? Task.WhenAll(actionExecutor.FinishedExecutingActions(), runningAction.CompletionTask)
-            : actionExecutor.FinishedExecutingActions();
-        if (!nativeActionBarrier.IsCompleted)
-        {
-            DeferSearchUntilRootCaptureBarrier(host, state, reason, deployWhenReady, nativeActionBarrier);
-            return;
-        }
-        nativeActionBarrier.GetAwaiter().GetResult();
-        ReplanCause replanCause = reason switch
-        {
-            SearchReason.AutoTurnStart => ReplanCause.InitialSearch,
-            SearchReason.DeploymentDrift => ReplanCause.DeploymentDrift,
-            SearchReason.PlanExhausted => ReplanCause.PlanExhausted,
-            _ => ReplanCause.ExplicitRequest,
-        };
-        SearchBoundaryReason? previousBoundary = _combat.ContinuationSource?.BoundaryReason;
-        if (reason != SearchReason.AutoTurnStart)
-        {
-            _combat.PendingCompleteProjectionBaseline = null;
-            _combat.PendingManualProjectionBaseline = null;
-        }
-        if (!CanSolve(state, out string rejection))
-        {
-            SolverOverlay.Show(host, $"[b]战斗路线求解器[/b]\n{rejection}");
-            Entry.Logger.Info($"[CombatSolver/Test] SEARCH_REJECT reason={rejection}");
-            return;
-        }
-        CombatShowcaseCollector.TryCaptureInitialRoot(state, reason);
-        CombatBugReportExporter.RecordCheckpoint(
-            state,
-            $"search_request_{reason}",
-            CurrentResultForBugReport,
-            DescribeReplanAudit());
-
-        string setupStage = "battle_damage";
+        string setupStage = "request";
         try
         {
+            if (IsMultiplayerSession)
+            {
+                if (reason != SearchReason.Manual) return;
+                deployWhenReady = false;
+                if (_search is { } prior)
+                {
+                    CancelSearch();
+                    DeferSearchUntilRootCaptureBarrier(host, state, reason, false,
+                        prior.WorkerCompletion.ContinueWith(static completed => { _ = completed.Exception; },
+                            CancellationToken.None, TaskContinuationOptions.ExecuteSynchronously, TaskScheduler.Default));
+                    return;
+                }
+                Task[] draining = PendingSearchReferenceReleases.Where(task => !task.IsCompleted).ToArray();
+                if (draining.Length > 0)
+                {
+                    DeferSearchUntilRootCaptureBarrier(host, state, reason, false, Task.WhenAll(draining));
+                    return;
+                }
+            }
+            if (_combat.ShowcaseMode && reason != SearchReason.AutoTurnStart)
+            {
+                StopShowcaseRoute(host, "战斗状态与录像路线不一致，已停止执行。");
+                return;
+            }
+            int? searchTurn = LocalContext.GetMe(state)?.PlayerCombatState?.TurnNumber;
+            // Turn setup and TurnStarted can complete in either order. The first accepted
+            // request owns this turn; a late automatic callback must keep its active plan.
+            if (reason == SearchReason.AutoTurnStart
+                && (ReferenceEquals(_combat.State, state)
+                        && (_combat.LatestResult?.StartTurnNumber == searchTurn || _combat.LastSolverDeployedTurn == searchTurn)
+                    || _search is { } active && ReferenceEquals(active.State, state) && active.StartTurnNumber == searchTurn
+                    || _deployment is { } deploying && ReferenceEquals(deploying.State, state) && deploying.StartTurnNumber == searchTurn))
+            {
+                Entry.Logger.Info($"[CombatSolver/Test] AUTO_SEARCH_ALREADY_OWNED turn={searchTurn}");
+                return;
+            }
+            _combat.StoppedSearch = null;
+            setupStage = "dispatcher";
+            SolverDispatcher.Ensure(host);
+            if (_combat.DeployAfterTurnSetupTurn == searchTurn)
+            {
+                deployWhenReady = true;
+                _combat.DeployAfterTurnSetupTurn = null;
+                Entry.Logger.Info("[CombatSolver/Test] DEPLOY_RESUME reason=turn_setup_completed");
+            }
+            else if (_combat.DeployAfterTurnSetupTurn != null)
+            {
+                _combat.DeployAfterTurnSetupTurn = null;
+            }
+            setupStage = "root_capture_barrier";
+            Task rootCaptureBarrier = SearchGcPolicy.CaptureRootSnapshotBarrier();
+            if (!rootCaptureBarrier.IsCompleted)
+            {
+                DeferSearchUntilRootCaptureBarrier(
+                    host,
+                    state,
+                    reason,
+                    deployWhenReady,
+                    rootCaptureBarrier);
+                return;
+            }
+            // A direct request can arrive after the barrier opened but before the deferred
+            // callback reached the dispatcher. The newest request owns the search slot.
+            CancelDeferredSearch();
+            setupStage = "turn_setup";
+            if (reason == SearchReason.Manual)
+            {
+                if (_combat.AutomaticSearchPaused)
+                    Entry.Logger.Info("[CombatSolver/Test] AUTOMATIC_SEARCH_RESUMED reason=manual_recalculate");
+                _combat.AutomaticSearchPaused = false;
+                if (PlayerTurnSetupCoordinator.TryRecalculatePendingChoice(host, state))
+                {
+                    _combat.PendingCompleteProjectionBaseline = null;
+                    _combat.PendingManualProjectionBaseline = null;
+                    Entry.Logger.Info(
+                        "[CombatSolver/Test] SEARCH_RESTARTED reason=manual_recalculate_pending_turn_setup");
+                    return;
+                }
+                bool queuedAfterTurnSetup = PlayerTurnSetupCoordinator.TryQueueManualRecalculation(state);
+                if (!queuedAfterTurnSetup && ReferenceEquals(_combat.TurnSetupResumeState, state))
+                {
+                    QueueManualSearchAfterTurnSetup();
+                    queuedAfterTurnSetup = true;
+                    Entry.Logger.Info(
+                        "[CombatSolver/Test] TURN_SETUP_MANUAL_RECALCULATE_QUEUED phase=resuming_play");
+                }
+                if (queuedAfterTurnSetup)
+                {
+                    _combat.PendingCompleteProjectionBaseline = null;
+                    _combat.PendingManualProjectionBaseline = null;
+                    SolverOverlay.Show(
+                        host,
+                        "[b]战斗路线求解器[/b]\n等待当前回合开始选择完成后重新计算。");
+                    Entry.Logger.Info(
+                        "[CombatSolver/Test] SEARCH_DEFERRED reason=manual_recalculate_after_turn_setup");
+                    return;
+                }
+            }
+            else if (_combat.AutomaticSearchPaused)
+            {
+                _combat.FullAutoEnabled = false;
+                Entry.Logger.Info($"[CombatSolver/Test] SEARCH_REJECT reason=user_stopped request={reason}");
+                SolverOverlay.ShowSearchStopped(host);
+                return;
+            }
+            // Queue completion includes post-action victory checks; a paused choice also keeps
+            // its action completion pending even when the queue temporarily has no ready work.
+            setupStage = "native_action_barrier";
+            ActionExecutor actionExecutor = RunManager.Instance.ActionExecutor;
+            Task nativeActionBarrier = actionExecutor.CurrentlyRunningAction is { } runningAction
+                ? Task.WhenAll(actionExecutor.FinishedExecutingActions(), runningAction.CompletionTask)
+                : actionExecutor.FinishedExecutingActions();
+            if (!nativeActionBarrier.IsCompleted)
+            {
+                DeferSearchUntilRootCaptureBarrier(host, state, reason, deployWhenReady,
+                    nativeActionBarrier, waitingForAction: true);
+                return;
+            }
+            nativeActionBarrier.GetAwaiter().GetResult();
+            ReplanCause replanCause = reason switch
+            {
+                SearchReason.AutoTurnStart => ReplanCause.InitialSearch,
+                SearchReason.DeploymentDrift => ReplanCause.DeploymentDrift,
+                SearchReason.PlanExhausted => ReplanCause.PlanExhausted,
+                _ => ReplanCause.ExplicitRequest,
+            };
+            SearchBoundaryReason? previousBoundary = _combat.ContinuationSource?.BoundaryReason;
+            if (reason != SearchReason.AutoTurnStart)
+            {
+                _combat.PendingCompleteProjectionBaseline = null;
+                _combat.PendingManualProjectionBaseline = null;
+            }
+            if (!CanSolve(state, out string rejection))
+            {
+                SolverOverlay.Show(host, $"[b]战斗路线求解器[/b]\n{rejection}");
+                Entry.Logger.Info($"[CombatSolver/Test] SEARCH_REJECT reason={rejection}");
+                return;
+            }
+            setupStage = "checkpoint";
+            CombatShowcaseCollector.TryCaptureInitialRoot(state, reason);
+            CombatBugReportExporter.RecordCheckpoint(
+                state,
+                $"search_request_{reason}",
+                CurrentResultForBugReport,
+                DescribeReplanAudit());
+
+            setupStage = "battle_damage";
             BattleDamageSnapshot battleDamage = BattleDamageTracker.Observe(state);
             setupStage = "live_stamp";
             LiveCombatStamp stamp = LiveCombatStamp.Capture(state);
@@ -1298,22 +1305,28 @@ internal static partial class SolverController
         }
         catch (Exception ex)
         {
-            _combat.BugReportIssues.RecordFailure(CombatBugReportIssueKind.SearchSetupFailure, ex);
-            CancelSearch();
-            _combat.State = null;
-            _combat.LatestResult = null;
-            _combat.LatestStamp = null;
-            _combat.ContinuationSource = null;
-            _combat.PendingCompleteProjectionBaseline = null;
-            _combat.PendingManualProjectionBaseline = null;
-            SolverOverlay.Show(
-                host,
-                FormatSearchSetupFailure(ex));
-            SearchCompletionNotifier.Notify(SearchCompletionNotificationKind.Failed);
-            Entry.Logger.Error(
-                $"[CombatSolver/Test] SEARCH_SETUP_FAILURE stage={setupStage} " +
-                $"reason={reason} exception={ex}");
+            FailSearchSetup(host, reason, setupStage, ex);
         }
+    }
+
+    private static void FailSearchSetup(NGame host, SearchReason reason, string stage, Exception exception)
+    {
+        _combat.BugReportIssues.RecordFailure(CombatBugReportIssueKind.SearchSetupFailure, exception);
+        CancelDeferredSearch();
+        CancelSearch();
+        _combat.State = null;
+        _combat.LatestResult = null;
+        _combat.LatestStamp = null;
+        _combat.ContinuationSource = null;
+        _combat.PendingCompleteProjectionBaseline = null;
+        _combat.PendingManualProjectionBaseline = null;
+        LastCompletedResultForTesting = null;
+        LastSearchFailureForTesting = exception;
+        Entry.Logger.Error(
+            $"[CombatSolver/Test] SEARCH_SETUP_FAILURE stage={stage} " +
+            $"reason={reason} exception={exception}");
+        SolverOverlay.Show(host, FormatSearchSetupFailure(exception));
+        SearchCompletionNotifier.Notify(SearchCompletionNotificationKind.Failed);
     }
 
     internal static string FormatSearchSetupFailure(Exception exception)
@@ -3167,7 +3180,8 @@ internal static partial class SolverController
         CombatState state,
         SearchReason reason,
         bool deployWhenReady,
-        Task barrier)
+        Task barrier,
+        bool waitingForAction = false)
     {
         CancelDeferredSearch();
         CancellationTokenSource cancellation = new();
@@ -3176,7 +3190,8 @@ internal static partial class SolverController
         int lifecycleGeneration = Volatile.Read(ref _combatLifecycleGeneration);
         Entry.Logger.Info(
             $"[CombatSolver/Test] SEARCH_ROOT_CAPTURE_DEFERRED reason={reason} " +
-            $"lifecycle_epoch={lifecycleGeneration}");
+            $"lifecycle_epoch={lifecycleGeneration} waiting_for={(waitingForAction ? "native_action" : "root_capture")}");
+        SolverOverlay.ShowPreparingSearch(host, waitingForAction);
         PendingDeferredSearchReleases.RemoveAll(static task => task.IsCompleted);
         Task operation = ResumeDeferredSearchAsync(
             host,
@@ -3186,7 +3201,8 @@ internal static partial class SolverController
             barrier,
             cancellation,
             requestId,
-            lifecycleGeneration);
+            lifecycleGeneration,
+            waitingForAction);
         PendingDeferredSearchReleases.Add(operation);
         TaskHelper.RunSafely(operation);
     }
@@ -3199,12 +3215,22 @@ internal static partial class SolverController
         Task barrier,
         CancellationTokenSource cancellation,
         int requestId,
-        int lifecycleGeneration)
+        int lifecycleGeneration,
+        bool waitingForAction)
     {
         CancellationToken token = cancellation.Token;
         try
         {
-            await barrier.WaitAsync(token).ConfigureAwait(false);
+            Exception? barrierFailure = null;
+            try
+            {
+                await barrier.WaitAsync(token).ConfigureAwait(false);
+            }
+            catch (Exception exception) when (!token.IsCancellationRequested)
+            {
+                // The owning request reports the failed barrier on the main thread.
+                barrierFailure = exception;
+            }
             token.ThrowIfCancellationRequested();
             TaskCompletionSource callbackCompleted = new(
                 TaskCreationOptions.RunContinuationsAsynchronously);
@@ -3224,6 +3250,12 @@ internal static partial class SolverController
                         return;
                     }
                     _deferredSearchCts = null;
+                    if (barrierFailure != null)
+                    {
+                        FailSearchSetup(host, reason,
+                            waitingForAction ? "native_action_barrier" : "root_capture_barrier", barrierFailure);
+                        return;
+                    }
                     Entry.Logger.Info(
                         $"[CombatSolver/Test] SEARCH_ROOT_CAPTURE_RESUMED reason={reason} " +
                         $"lifecycle_epoch={lifecycleGeneration}");

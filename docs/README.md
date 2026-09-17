@@ -1,5 +1,7 @@
 # CombatSolver 文档导航
 
+当前 fork 安装与多人计算启动修复：[0.40.4 更新日志](releases/0.40.4-RELEASE_NOTES.md)。
+
 通用随机/指定战斗测试入口：[场景生成与批量重跑](GENERATED_COMBAT_SCENARIOS.md)。
 
 

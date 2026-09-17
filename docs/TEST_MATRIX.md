@@ -1,5 +1,13 @@
 # CombatSolver 测试清单
 
+## 0.40.4（fork）：多人手动启动回归（2026-09-17）
+
+- 失败基线 `a56a84f`：从 `SolverOverlay.OnRecalculatePressed` 进入真实 `RequestSearch`，在 `CombatReplayOutcome` 的单玩家断言处抛错，未显示搜索或错误消息；证据 `.local/mp-start/baseline.log`。
+- `OfflineSearchHarness --multiplayer-start-contracts --encounter FOGMOG_NORMAL --beam 12 --nodes 100 --budget-ms 1000 --dop 1` Passed：Host/本机索引 0、Client/索引 1 分别完成手动请求；本人损失 3 HP、回复 2 HP，队友损失 7 HP 不混入本人记录；等待原生动作后恰好恢复一次搜索。记录初始化失败、同步动作失败、异步动作失败均终止并给出消息，清理后重试成功，共四次搜索返回建议且不部署。
+- 合同步骤 0.768 秒，每次等待上限 30 秒；产物 `.local/mp-start/fixed/harness-result.json`、`.local/mp-start/fixed/manual-startup-events.txt`、`.local/mp-start/fixed.log`。结构化记录 `MULTIPLAYER-ADVISOR-MANUAL-STARTUP`。
+- 宿主只模拟 Host/Client 类型及本机身份，保留真实托管战斗、记录会话、结果观察和 Runtime 请求；Godot 渲染/分发由隔离宿主代替，完整录像负载采集及网络传输不参与。因此不声称实际点击命中、真实网络或多人问题包回放通过。
+- 442 项中英模板无重复键且占位符一致，新增两条等待提示均有英文；Bash 结构门禁 `REFACTOR_BOUNDARIES_OK search_files=118` 通过。此前 `0.40.3` 的七回合语义与单人哨兵不是本轮重跑结果。
+
 ## 0.40.3（fork）：多人军师局部合同（2026-09-17）
 
 - 新入口 `OfflineSearchHarness --multiplayer-contracts`：双玩家，本机为第二位；Beam 12 / 350 节点 / 12 秒。最初三回合实现已通过两种遭遇的两回合原生托管命令与完整 ContinuationStamp 对照；该阶段记录保留在详细说明。

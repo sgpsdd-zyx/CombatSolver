@@ -1,4 +1,12 @@
 {
+  "MULTIPLAYER-ADVISOR-MANUAL-STARTUP": {
+    "status": "Passed",
+    "level": "OfflineRuntimeEntryContract",
+    "procedure": "OfflineSearchHarness --multiplayer-start-contracts --encounter FOGMOG_NORMAL --beam 12 --nodes 100 --budget-ms 1000 --dop 1; host/local index 0 and client/local index 1; native action completion and startup failure injection",
+    "expected": "Manual UI handler starts local advice; outcome excludes peer HP changes; pending actions show feedback and resume once; checkpoint and synchronous/asynchronous action failures stop, report and permit retry",
+    "observed": "2026-09-17: a56a84f button-entry baseline failed in CombatReplayOutcome.Players.Single before UI feedback. Fixed contract passed: local HP loss=3/healing=2, peer loss=7 excluded, host/client advice, pending resume, 3 visible startup failures, retry, 4 searches, no deployment; step 0.768 seconds. Godot rendering/dispatch, replay payload capture and networking are bypassed. No live multiplayer or visible UI validation.",
+    "evidence": "tools/OfflineSearchHarness/MultiplayerStartContracts.cs; docs/multiplayer-advisor.md; .local/mp-start/baseline.log; .local/mp-start/fixed/harness-result.json; .local/mp-start/fixed/manual-startup-events.txt; .local/mp-start/fixed.log"
+  },
   "MULTIPLAYER-ADVISOR-MANAGED-CONTRACTS": {
     "status": "Passed",
     "level": "OfflineManagedNativeDifferentialAndSearchContract",

@@ -11,6 +11,8 @@
 
 开发分支另有显式 `--multiplayer-contracts`，运行原生托管结算与模拟状态的局部合同，随后退出。它增加双玩家、动画时钟绕过和多人准备人数条件；不建立网络，也不验证可见 UI。其证据范围、输入与命令见 [多人军师](multiplayer-advisor.md)。普通性能模式的用途不变。
 
+`--multiplayer-start-contracts` 单独验证按钮处理函数到 Runtime 的手动启动链路：双玩家 Host/Client 身份、本机记录归属、等待原生动作、启动失败反馈及重试。它用隔离宿主替代 Godot 渲染/分发和完整录像负载采集，不建立真实网络；不能与 `--request` 或 `--multiplayer-contracts` 合用。最小输入为 `--encounter FOGMOG_NORMAL --beam 12 --nodes 100 --budget-ms 1000 --dop 1`，产物另含 `manual-startup-events.txt`。这不是可见 UI 或多人问题包回放验收。
+
 ## 构建
 
 ```

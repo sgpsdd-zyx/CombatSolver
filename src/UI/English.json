@@ -135,6 +135,8 @@
   "[color={0}]本回合计算已停止。可手动开始计算；进入下一回合后是否自动计算由设置决定。[/color]": "[color={0}]Search stopped for this turn. Start it manually; automatic search next turn follows your settings.[/color]",
   "[color={0}]计算已停止；下方保留停止时已经得到的当前候选路线。[/color]": "[color={0}]Search stopped. The current candidate route is retained below.[/color]",
   "等待手动计算": "Waiting for manual search",
+  "等待当前动作或选牌结算后开始计算。": "Waiting for the current action or card choice to finish before calculating.",
+  "正在准备计算，请稍候。": "Preparing to calculate. Please wait.",
   "[color={0}]自动计算已关闭。点击“{1}”生成当前回合路线。[/color]": "[color={0}]Auto-search is off. Click “{1}” to plan this turn.[/color]",
   "重新计算": "Recalculate",
   "开始计算": "Calculate",
