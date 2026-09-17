@@ -1080,6 +1080,9 @@ internal sealed record SearchNode(
 {
     private IReadOnlyList<PlanAction>? _actions;
 
+    public MultiplayerHpLossBudget AdvisoryHpLoss { get; } = MultiplayerHpLossBudget.Capture(Parent, Snapshot);
+    public double Score { get; init; } = MultiplayerHpLossBudget.ApplyScore(Score, Parent, Snapshot);
+
     // Cycle evidence is discovered only after the simulator snapshot has produced this node.
     // Keep the positional member (and therefore record equality/deconstruction/with semantics),
     // but allow the unpublished node to receive that evidence without cloning the whole node.
@@ -1235,6 +1238,9 @@ internal sealed class SimulationSnapshot(
     private CombatPredictionSimulator? _simulator = simulator;
     public int TeamSurvivors { get; init; }
     public int AdvisoryEnemyCycles { get; init; }
+    public int AdvisoryHpLossAllowance { get; init; } = -1;
+    public int AdvisoryRootHpLost { get; init; }
+    public int AdvisoryLastEnemyCycleHpLost { get; init; }
     private string? _releasedBy;
     private int _releasedAtLine;
 
@@ -1416,6 +1422,8 @@ internal sealed class SolverResult
 {
     public bool IsMultiplayerAdvice { get; internal set; }
     public int AdvisoryHorizon { get; internal set; }
+    public int AdvisoryHpLossAllowance { get; internal set; }
+    public int AdvisoryMaximumCycleHpLost { get; internal set; }
     public int ReplayedAdviceActions { get; internal set; }
     public bool WasRestoredFromCache { get; internal set; }
     public SolverResultScope ResultScope { get; internal set; } = SolverResultScope.SearchCompletion;

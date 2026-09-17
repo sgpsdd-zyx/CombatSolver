@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using MegaCrit.Sts2.Core.Combat;
+using MegaCrit.Sts2.Core.Combat.History.Entries;
 using MegaCrit.Sts2.Core.Context;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Players;
@@ -31,6 +32,7 @@ internal sealed class CombatRootSnapshot
     public int StartTurnNumber { get; }
     public int InitialPlayerHp { get; }
     public int InitialPlayerMaxHp { get; }
+    public int InitialPlayerRoundHpLost { get; }
     public int InitialBrightestFlameMaxHpSpent
         => ((SimulatedCombatState)_rootSimulator.State.CombatState).BrightestFlameMaxHpSpent;
     public int PotionSlotCount { get; }
@@ -86,7 +88,8 @@ internal sealed class CombatRootSnapshot
         bool capturedBaseLibCardModifiers,
         bool hasUnusedCardReplayAllocator,
         bool hasRenewablePotionShapedRock,
-        PostCombatRelicHealProfile postCombatRelicHeal)
+        PostCombatRelicHealProfile postCombatRelicHeal,
+        int initialPlayerRoundHpLost)
     {
         PlayerIdentity = playerIdentity;
         Enemies = enemies;
@@ -98,6 +101,7 @@ internal sealed class CombatRootSnapshot
         StartTurnNumber = startTurnNumber;
         InitialPlayerHp = initialPlayerHp;
         InitialPlayerMaxHp = initialPlayerMaxHp;
+        InitialPlayerRoundHpLost = initialPlayerRoundHpLost;
         PotionSlotCount = potionSlotCount;
         SearchablePotions = searchablePotions;
         SearchablePotionCount = searchablePotions.Count;
@@ -147,6 +151,11 @@ internal sealed class CombatRootSnapshot
             ?? throw new InvalidOperationException("找不到本地玩家。");
         PlayerCombatState playerState = player.PlayerCombatState
             ?? throw new InvalidOperationException("玩家没有战斗状态。");
+        int initialPlayerRoundHpLost = advisor
+            ? CombatManager.Instance.History.Entries.OfType<DamageReceivedEntry>()
+                .Where(entry => entry.Receiver == player.Creature && entry.RoundNumber == state.RoundNumber)
+                .Sum(entry => entry.Result.UnblockedDamage)
+            : 0;
         AbstractModel[] liveCombatHookListeners = state.IterateHookListeners().ToArray();
         if (liveCombatHookListeners.Any(PredictionModModelSupport.IsBaseLibCardModifier))
         {
@@ -246,7 +255,8 @@ internal sealed class CombatRootSnapshot
             simulatedCombat.RootHasBaseLibCardModifiers,
             hasUnusedCardReplayAllocator,
             hasRenewablePotionShapedRock,
-            postCombatRelicHeal);
+            postCombatRelicHeal,
+            initialPlayerRoundHpLost);
     }
 
     /// <summary>

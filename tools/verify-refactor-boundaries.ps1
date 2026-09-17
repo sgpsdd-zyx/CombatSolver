@@ -654,7 +654,7 @@ $beamStructureChecks = @(
     @{ File = "CombatBeamSolver.cs"; Text = "private readonly SearchRunContext _run = new(" },
     @{ File = "CombatBeamSolver.cs"; Text = "private BeamRetentionPolicy Retention =>" },
     @{ File = "CombatBeamSolver.cs"; Text = "private FinalPlanOrdering FinalOrdering =>" },
-    @{ File = "CombatBeamSolver.BeamRetentionPolicy.cs"; Text = "private sealed class BeamRetentionPolicy(" },
+    @{ File = "CombatBeamSolver.BeamRetentionPolicy.cs"; Text = "private sealed partial class BeamRetentionPolicy(" },
     @{ File = "CombatBeamSolver.BeamRetentionPolicy.cs"; Text = "public List<SearchNode> RankBest(" },
     @{ File = "CombatBeamSolver.BeamRetentionPolicy.cs"; Text = "private sealed class RoutingChoiceNodes(SearchNode first) : List<SearchNode>" },
     @{ File = "CombatBeamSolver.BeamRetentionPolicy.cs"; Text = "public void Clear() => NodesByChoice.Clear();" },
@@ -1460,6 +1460,8 @@ $multiplayerAdviceRules = @(
     @{ Path = 'src/Search/CombatBeamSolver.Models.cs'; Text = 'public int ReplayedAdviceActions;' }
     @{ Path = 'src/Search/SimulatedCombatState.Multiplayer.cs'; Text = 'throw new ExternalPlayerChoiceException' }
     @{ Path = 'src/Search/MultiplayerSearchPolicy.cs'; Text = 'StopAtAcceptableBattleHpLoss = false' }
+    @{ Path = 'src/Search/MultiplayerSearchPolicy.cs'; Text = 'internal readonly record struct MultiplayerHpLossBudget(' }
+    @{ Path = 'src/Search/CombatBeamSolver.Multiplayer.cs'; Text = 'private List<SearchNode> RankMultiplayer(' }
     @{ Path = 'src/UI/SolverActionBar.cs'; Text = '&& !state.AdviceOnly' }
 )
 foreach ($rule in $multiplayerAdviceRules) {

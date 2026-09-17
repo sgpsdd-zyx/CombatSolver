@@ -137,7 +137,7 @@ internal sealed partial class CombatBeamSolver
         int maxBlock)
     {
         double scoreWithoutSoldPenalty = outcome.Node.Score
-            - outcome.Node.FutureSoldHp * SoldHpPenalty();
+            - (IsMultiplayerAdvice ? 0 : outcome.Node.FutureSoldHp * SoldHpPenalty());
         return outcome.Node with
         {
             FutureSoldHp = futureSold,

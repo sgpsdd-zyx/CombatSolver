@@ -3485,8 +3485,12 @@ internal sealed partial class CombatBeamSolver
             if (simulator.CheckWinCondition(simulatedCombat.GetPlayerTurnNumber(_player)))
                 return SearchBoundaryReason.None;
             simulatedCombat.PrepareMonsterMovesForNextRound(simulator, performedMoves);
-            if (IsMultiplayerAdvice && ++simulatedCombat.AdvisorEnemyCycles >= policy.Multiplayer!.Horizon)
-                return SearchBoundaryReason.AdvisoryHorizon;
+            if (IsMultiplayerAdvice)
+            {
+                simulatedCombat.AdvisorLastEnemyCycleHpLost = simulatedCombat.GetCumulativeHpLost(_player.Creature);
+                if (++simulatedCombat.AdvisorEnemyCycles >= policy.Multiplayer!.Horizon)
+                    return SearchBoundaryReason.AdvisoryHorizon;
+            }
         }
         else if (!IsMultiplayerAdvice)
         {
@@ -4371,7 +4375,9 @@ internal sealed partial class CombatBeamSolver
             candidate.FutureSoldHp,
             candidate.Snapshot.CumulativePlayerHpLost,
             candidate.ActionCount,
-            candidate.Score);
+            candidate.Score,
+            candidate.AdvisoryHpLoss.CompletedExcessHpLost,
+            candidate.AdvisoryHpLoss.CurrentCycleHpLost);
         if (!_run.Transpositions.TryGetValue(candidate.StateKey, out TranspositionFrontier? frontier))
         {
             _run.Transpositions.Add(candidate.StateKey, new TranspositionFrontier(next));
@@ -4418,7 +4424,9 @@ internal sealed partial class CombatBeamSolver
             node.FutureSoldHp,
             node.Snapshot.CumulativePlayerHpLost,
             node.ActionCount,
-            node.Score);
+            node.Score,
+            node.AdvisoryHpLoss.CompletedExcessHpLost,
+            node.AdvisoryHpLoss.CurrentCycleHpLost);
         if (!_run.ExpandedTranspositions.TryGetValue(node.StateKey, out TranspositionFrontier? frontier))
         {
             _run.ExpandedTranspositions.Add(node.StateKey, new TranspositionFrontier(next));

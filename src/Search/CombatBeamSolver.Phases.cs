@@ -790,6 +790,8 @@ internal sealed partial class CombatBeamSolver
             };
             result.IsMultiplayerAdvice = IsMultiplayerAdvice;
             result.AdvisoryHorizon = policy.Multiplayer?.Horizon ?? 0;
+            result.AdvisoryHpLossAllowance = policy.Multiplayer?.AcceptableHpLossPerTurn ?? 0;
+            result.AdvisoryMaximumCycleHpLost = best.AdvisoryHpLoss.MaximumCycleHpLost;
             result.ReplayedAdviceActions = _run.ReplayedAdviceActions;
             finalSnapshot.ReleaseSimulator();
             return result;
@@ -1023,7 +1025,9 @@ internal sealed partial class CombatBeamSolver
                     0,
                     root.Snapshot.CumulativePlayerHpLost,
                     0,
-                    root.Score));
+                    root.Score,
+                    root.AdvisoryHpLoss.CompletedExcessHpLost,
+                    root.AdvisoryHpLoss.CurrentCycleHpLost));
             else
                 _run.Transpositions.Add(
                     root.StateKey,
@@ -1033,7 +1037,9 @@ internal sealed partial class CombatBeamSolver
                         0,
                         root.Snapshot.CumulativePlayerHpLost,
                         0,
-                        root.Score)));
+                        root.Score,
+                        root.AdvisoryHpLoss.CompletedExcessHpLost,
+                        root.AdvisoryHpLoss.CurrentCycleHpLost)));
         }
         if (frontier.Count == 0)
             throw new InvalidOperationException("固定搜索前缀与全部回合准备选牌分支都不相容。");

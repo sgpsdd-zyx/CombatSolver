@@ -517,11 +517,11 @@ internal sealed partial class CombatBeamSolver
             boundary);
         if (IsMultiplayerAdvice)
         {
-            // Intermediate guidance only; the final comparator uses ordered objectives.
-            // Actual enemy cycles, rather than the solo threat projection, establish safety.
+            // Nodes charge only per-cycle losses above the allowance. These terms guide
+            // unfinished actions; safety is checked using actual simulated enemy cycles.
             score = (dead ? -1e12 : 0) + (won ? 1e11 : 0)
-                - cumulativePlayerHpLost * 100000d - enemyHp * 100d
-                + Math.Min(player.Block, combat.CurrentMonsterMoves().Sum(move => move.AttackHits.Sum(hit => hit.Damage))) * 1000d
+                - enemyHp * 100d
+                + Math.Min(player.Block, combat.CurrentMonsterMoves().Sum(move => move.AttackHits.Sum(hit => hit.Damage))) * 5d
                 + persistentBuffValue * 20d + reachableHandValue + playerState.Energy * 2d
                 - potionUseCount * 0.1d - actionCount * 0.001d;
         }
@@ -604,6 +604,9 @@ internal sealed partial class CombatBeamSolver
             TeamSurvivors = IsMultiplayerAdvice
                 ? combat.Players.Count(peer => simulator.State.GetCreature(peer.Creature).IsAlive) : 0,
             AdvisoryEnemyCycles = IsMultiplayerAdvice ? combat.AdvisorEnemyCycles : 0,
+            AdvisoryHpLossAllowance = policy.Multiplayer?.AcceptableHpLossPerTurn ?? -1,
+            AdvisoryRootHpLost = IsMultiplayerAdvice ? root.InitialPlayerRoundHpLost : 0,
+            AdvisoryLastEnemyCycleHpLost = IsMultiplayerAdvice ? combat.AdvisorLastEnemyCycleHpLost : 0,
             GrowthHpCredit = growthHpCredit,
             RelicCounters = relicCounters,
             GrowthRewards = growthRewards,

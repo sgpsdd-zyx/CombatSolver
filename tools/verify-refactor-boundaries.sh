@@ -599,7 +599,7 @@ NoveltyPortfolioBudget.cs	profile.MaxExpandedNodes - (int)expandedNodes
 CombatBeamSolver.cs	private readonly SearchRunContext _run = new(
 CombatBeamSolver.cs	private BeamRetentionPolicy Retention =>
 CombatBeamSolver.cs	private FinalPlanOrdering FinalOrdering =>
-CombatBeamSolver.BeamRetentionPolicy.cs	private sealed class BeamRetentionPolicy(
+CombatBeamSolver.BeamRetentionPolicy.cs	private sealed partial class BeamRetentionPolicy(
 CombatBeamSolver.BeamRetentionPolicy.cs	public List<SearchNode> RankBest(
 CombatBeamSolver.BeamRetentionPolicy.cs	private sealed class RoutingChoiceNodes(SearchNode first) : List<SearchNode>
 CombatBeamSolver.BeamRetentionPolicy.cs	public void Clear() => NodesByChoice.Clear();
@@ -1156,6 +1156,8 @@ src/Search/CombatBeamSolver.Multiplayer.cs|!CanReplayMultiplayerAction(node, act
 src/Search/CombatBeamSolver.Models.cs|public int ReplayedAdviceActions;
 src/Search/SimulatedCombatState.Multiplayer.cs|throw new ExternalPlayerChoiceException
 src/Search/MultiplayerSearchPolicy.cs|StopAtAcceptableBattleHpLoss = false
+src/Search/MultiplayerSearchPolicy.cs|internal readonly record struct MultiplayerHpLossBudget(
+src/Search/CombatBeamSolver.Multiplayer.cs|private List<SearchNode> RankMultiplayer(
 src/UI/SolverActionBar.cs|&& !state.AdviceOnly
 MULTIPLAYER_ADVICE_RULES
 

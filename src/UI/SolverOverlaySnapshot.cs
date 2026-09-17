@@ -238,7 +238,10 @@ internal sealed record SolverOverlaySnapshot(
             ? SolverText.Format($"[color={SolverUiTokens.Palette.SuccessHex}]本回合结束战斗  │  {confidence}[/color]")
             : SolverText.Format($"[color={SolverUiTokens.Palette.TextSecondaryHex}]预计路线 [b]{searchedTurns}[/b] 回合  │  {confidence}[/color]");
         if (result.IsMultiplayerAdvice)
+        {
             summaryText += "\n" + SolverText.Format($"敌方回合：已推演 {result.Snapshot.AdvisoryEnemyCycles} / 上限 {result.AdvisoryHorizon}");
+            summaryText += "\n" + SolverText.Format($"输出优先：单回合扣血目标不超过 {result.AdvisoryHpLossAllowance} 点；当前预测最高 {result.AdvisoryMaximumCycleHpLost} 点。");
+        }
         string reviewSummaryText = result.WasRestoredFromCache
             ? SolverText.Get("已恢复本场战斗记录的路线")
             : result.WasReused

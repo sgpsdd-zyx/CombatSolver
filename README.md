@@ -4,17 +4,17 @@ Combat Solver 是《杀戮尖塔 2》的战斗路线求解器，本 fork 支持�
 
 单人模式下，玩家可以只查看建议，也可以让求解器执行当前回合，或连续接管整场战斗。多人模式只提供手动请求的建议。搜索不会修改游戏 RNG，也不会在后台操作真实战斗状态。
 
-当前 fork 版本为 **0.40.4**，基于上游 `0.40.2`，提供多人手动军师并修复点击「开始计算」无反馈的问题。可直接安装的 ZIP 见 [GitHub Release](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.40.4)，功能变化见 [更新日志](docs/releases/0.40.4-RELEASE_NOTES.md)。
+当前 fork 源码版本为 **0.40.5**，基于上游 `0.40.2`，多人军师在单回合 3 HP 扣血目标内优先输出。功能变化见 [更新日志](docs/releases/0.40.5-RELEASE_NOTES.md)；本次本地准备包为 `releases/CombatSolver-0.40.5.zip`。已公开的安装包见 [GitHub Releases](https://github.com/sgpsdd-zyx/CombatSolver/releases)（当前已发布 `0.40.4`）。
 
 [多人军师](docs/multiplayer-advisor.md) 推荐本人的出牌和用药路线，最多推演七个敌方回合。队友行动后自行决定何时重算；推演假设队友后续不主动出牌或用药，但仍结算其被动效果。多人功能目前供试用，尚未完成真实联机验收。
 
-**English UI:** Set the game language to English and restart the game. In single-player, use **Play turn** for one turn or **Auto: On** for continuous play. This fork adds manual multiplayer advice for up to seven enemy turns, including potions; version 0.40.4 fixes the Calculate button failing to start. It assumes teammates take no further active actions, and live multiplayer compatibility is not yet verified. Download the ready-to-install ZIP from the [fork release](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.40.4). Configure potions, growth and search budgets in the overlay. **Settings > Reports > Upload report** submits a bug report. Logs, raw errors and some detailed diagnostics retain their original text.
+**English UI:** Set the game language to English and restart the game. In single-player, use **Play turn** for one turn or **Auto: On** for continuous play. This fork adds manual multiplayer advice for up to seven enemy turns, including potions; version 0.40.5 prioritizes damage within a target of 3 HP lost per turn, while avoiding lethal damage. It assumes teammates take no further active actions, and live multiplayer compatibility is not yet verified. The locally prepared package is `releases/CombatSolver-0.40.5.zip`; published builds are on [fork releases](https://github.com/sgpsdd-zyx/CombatSolver/releases) (currently 0.40.4). Configure potions, growth and search budgets in the overlay. **Settings > Reports > Upload report** submits a bug report. Logs, raw errors and some detailed diagnostics retain their original text.
 
 界面跟随游戏语言：简体/繁体中文使用现有中文文案，其他语言使用英文。简化版不提供独立语言开关；卡牌胶囊、选牌和相关悬停说明支持运行中切换语言，其他既有窗口可通过重启统一刷新。
 
 ## 主要功能
 
-- **多人手动军师（试用）**：点击重新计算，基于当时全队状态建议本人的出牌和用药；显示实际推演深度和边界，最多七个敌方回合。多人只提供建议，以下执行和自动复用功能用于单人。
+- **多人手动军师（试用）**：点击重新计算，基于当时全队状态建议本人的出牌和用药；在单回合最多 3 HP 的扣血目标内优先输出，显示目标、预测最高扣血、实际推演深度和边界，最多七个敌方回合。多人只提供建议，以下执行和自动复用功能用于单人。
 - **跨回合搜索**：继续预测抽牌、洗牌、敌人行动、持续状态和后续资源，而不是只计算眼前一回合。
 - **路线与战损展示**：按回合展示出牌、目标、选牌、药水、结束回合和关键遗物触发，并显示当前路线的预计整场战损。
 - **三种使用方式**：仅查看路线、执行本回合、连续全自动。搜索期间可以立即停止，并暂停本场后续自动搜索。
@@ -81,7 +81,7 @@ if (PreCombatForecastApi.IsAvailable)
 - [RitsuLib](https://steamcommunity.com/sharedfiles/filedetails/?id=3747602295) `0.6.0` 或更高版本
 - 单人战斗；多人可使用手动军师试用功能
 
-安装本 fork 时，请从 [GitHub Release](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.40.3) 下载 `CombatSolver-0.40.3.zip`（不是源码压缩包），将其中的以下文件解压到游戏的 `mods/CombatSolver` 目录：
+安装本 fork 时，使用准备好的 `CombatSolver-0.40.5.zip`，或从 [GitHub Releases](https://github.com/sgpsdd-zyx/CombatSolver/releases) 下载所需公开版本的安装 ZIP（不是源码压缩包），将其中的以下文件解压到游戏的 `mods/CombatSolver` 目录：
 
 ```text
 CombatSolver.dll

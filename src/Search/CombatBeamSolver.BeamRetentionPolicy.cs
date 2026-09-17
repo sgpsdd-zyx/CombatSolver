@@ -410,7 +410,7 @@ internal sealed partial class CombatBeamSolver
         string FirstCardId,
         uint? FirstCardTargetCombatId);
 
-    private sealed class BeamRetentionPolicy(
+    private sealed partial class BeamRetentionPolicy(
         SolverSearchProfile _profile,
         bool _isActEndingBoss,
         BossHpRelief _bossHpRelief,
@@ -2591,6 +2591,8 @@ internal sealed partial class CombatBeamSolver
             bool useSecondRankBand = false,
             Action<GlobalRetentionDecision>? observe = null)
         {
+            if (_advisoryComparison != null)
+                return RankMultiplayer(nodes, limit, finalQualityFirst);
             Dictionary<SearchNode, RoutingChoiceSignature>? observedRoutingSignatures =
                 observe != null && preserveDefensiveRoute
                     ? new(ReferenceEqualityComparer.Instance)
@@ -2624,12 +2626,6 @@ internal sealed partial class CombatBeamSolver
                 ranked.Sort(FinalCandidateComparison);
             else
                 SortByBeamRank(ranked);
-            if (_advisoryComparison != null)
-            {
-                List<SearchNode> retained = ranked.Take(limit).ToList();
-                for (int index = 0; index < retained.Count; index++) retained[index].RetentionRank = index;
-                return retained;
-            }
             List<SearchNode> routingChoices = [];
             if (preserveDefensiveRoute)
             {

@@ -101,7 +101,7 @@ internal sealed partial class CombatBeamSolver
         }
         return fallback with
         {
-            Score = snapshot.Score,
+            Score = MultiplayerHpLossBudget.ApplyScore(snapshot.Score, fallback.Parent, snapshot),
             StateKey = snapshot.StateKey,
             HasPredictionRisk = snapshot.HasRisk,
             BoundaryReason = snapshot.BoundaryReason,

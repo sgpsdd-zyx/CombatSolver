@@ -19,27 +19,86 @@ internal sealed partial class CombatBeamSolver
         if (comparison != 0) return comparison;
         comparison = a.PlayerDead.CompareTo(b.PlayerDead);
         if (comparison != 0) return comparison;
+        // A short unfinished route has not established safety through the same window.
+        bool completeA = a.AllEnemiesDead || a.BoundaryReason == SearchBoundaryReason.AdvisoryHorizon;
+        bool completeB = b.AllEnemiesDead || b.BoundaryReason == SearchBoundaryReason.AdvisoryHorizon;
+        comparison = completeB.CompareTo(completeA);
+        if (comparison != 0) return comparison;
+        if (!completeA)
+        {
+            comparison = b.AdvisoryEnemyCycles.CompareTo(a.AdvisoryEnemyCycles);
+            if (comparison != 0) return comparison;
+        }
+        comparison = a.DeathSaveUseCount.CompareTo(b.DeathSaveUseCount);
+        if (comparison != 0) return comparison;
+        int allowance = policy.Multiplayer!.AcceptableHpLossPerTurn;
+        comparison = left.AdvisoryHpLoss.ExcessHpLost(allowance)
+            .CompareTo(right.AdvisoryHpLoss.ExcessHpLost(allowance));
+        if (comparison != 0) return comparison;
         comparison = b.AllEnemiesDead.CompareTo(a.AllEnemiesDead);
+        if (comparison != 0) return comparison;
+        comparison = a.EnemyHp.CompareTo(b.EnemyHp);
+        if (comparison != 0) return comparison;
+        comparison = a.CumulativePlayerHpLost.CompareTo(b.CumulativePlayerHpLost);
+        if (comparison != 0) return comparison;
+        comparison = b.TeamSurvivors.CompareTo(a.TeamSurvivors);
         if (comparison != 0) return comparison;
         if (a.AllEnemiesDead && b.AllEnemiesDead)
         {
             comparison = Nullable.Compare(a.CombatEndedTurn, b.CombatEndedTurn);
             if (comparison != 0) return comparison;
         }
-        // A partially searched first turn cannot outrank defense verified through the horizon.
-        comparison = (b.BoundaryReason == SearchBoundaryReason.AdvisoryHorizon)
-            .CompareTo(a.BoundaryReason == SearchBoundaryReason.AdvisoryHorizon);
-        if (comparison != 0) return comparison;
-        comparison = a.CumulativePlayerHpLost.CompareTo(b.CumulativePlayerHpLost);
-        if (comparison != 0) return comparison;
-        comparison = a.EnemyHp.CompareTo(b.EnemyHp);
-        if (comparison != 0) return comparison;
-        comparison = b.TeamSurvivors.CompareTo(a.TeamSurvivors);
-        if (comparison != 0) return comparison;
         comparison = left.PotionCount.CompareTo(right.PotionCount);
         if (comparison != 0) return comparison;
         comparison = right.Score.CompareTo(left.Score);
         return comparison != 0 ? comparison : left.ActionCount.CompareTo(right.ActionCount);
+    }
+
+    private sealed partial class BeamRetentionPolicy
+    {
+        private List<SearchNode> RankMultiplayer(IEnumerable<SearchNode> nodes, int limit, bool finalQualityFirst)
+        {
+            if (finalQualityFirst)
+            {
+                List<SearchNode> final = nodes.Order(Comparer<SearchNode>.Create(_advisoryComparison!)).Take(limit).ToList();
+                for (int index = 0; index < final.Count; index++) final[index].RetentionRank = index;
+                return final;
+            }
+            var ranked = nodes.GroupBy(node => (node.StateKey,
+                    node.AdvisoryHpLoss.CompletedExcessHpLost, node.AdvisoryHpLoss.CurrentCycleHpLost))
+                .Select(group => group.OrderByDescending(node => node.Score)
+                    .ThenBy(node => node.Snapshot.CumulativePlayerHpLost).ThenBy(node => node.ActionCount).First())
+                .ToList();
+            SortByBeamRank(ranked);
+            List<SearchNode> retained = [];
+            HashSet<SearchNode> selected = new(ReferenceEqualityComparer.Instance);
+            void Take(IEnumerable<SearchNode> lane, int count)
+            {
+                foreach (SearchNode node in lane)
+                {
+                    if (count == 0 || retained.Count == limit) break;
+                    if (!selected.Add(node)) continue;
+                    retained.Add(node);
+                    count--;
+                }
+            }
+            Take(ranked, 1);
+            // Reserve bounded alternatives before filling ordinary score slots. All lanes
+            // share the same beam width and request budget, and retain complete party states.
+            IEnumerable<SearchNode> living = ranked.Where(node => !node.Snapshot.PlayerDead);
+            int quota = Math.Max(1, limit / 4);
+            Take(living.OrderBy(node => node.AdvisoryHpLoss.ExcessHpLost(node.Snapshot.AdvisoryHpLossAllowance))
+                .ThenByDescending(node => node.Snapshot.PlayerHp).ThenByDescending(node => node.Snapshot.PlayerBlock)
+                .ThenByDescending(node => node.Score), quota);
+            Take(living.OrderBy(node => node.Snapshot.EnemyHp).ThenByDescending(node => node.Score), quota);
+            Take(living.OrderByDescending(node => node.Snapshot.PersistentBuffValue)
+                .ThenByDescending(node => node.Snapshot.LatentSetupValue)
+                .ThenByDescending(node => node.Snapshot.ReachableHandValue).ThenByDescending(node => node.Score), quota);
+            Take(ranked, limit);
+            SortByBeamRank(retained);
+            for (int index = 0; index < retained.Count; index++) retained[index].RetentionRank = index;
+            return retained;
+        }
     }
 
     private void SeedMultiplayerRoutes(List<SearchNode> frontier)

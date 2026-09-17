@@ -13,6 +13,8 @@
 
 `--multiplayer-start-contracts` 单独验证按钮处理函数到 Runtime 的手动启动链路：双玩家 Host/Client 身份、本机记录归属、等待原生动作、启动失败反馈及重试。它用隔离宿主替代 Godot 渲染/分发和完整录像负载采集，不建立真实网络；不能与 `--request` 或 `--multiplayer-contracts` 合用。最小输入为 `--encounter FOGMOG_NORMAL --beam 12 --nodes 100 --budget-ms 1000 --dop 1`，产物另含 `manual-startup-events.txt`。这不是可见 UI 或多人问题包回放验收。
 
+`--multiplayer-strategy-contracts` 验证每回合最多 3 HP 换输出的多人目标，最小输入为 `--encounter FUZZY_WURM_CRAWLER_WEAK --beam 2 --nodes 100 --budget-ms 1000 --dop 1`。双玩家且本机索引为 1，九个案例覆盖 1/2/3 HP 换输出、超额防御、低血量避死、无来伤、相同输出少扣血、立即击杀和重算前已付扣血。双卡案例固定 Beam 2，已付扣血的四卡案例用 Beam 12，其他预算不变；3 HP 案例启用增量等价。另对账原生下一回合状态，检查回合开始自损的周期归属、Fork 隔离、治疗不恢复额度及不跨周期结转。产物另含 `strategy-results.json` 与 `native-boundary.txt`；不能和 `--request` 或其他多人合同开关合用，不建立网络、不验证可见 UI。普通离线性能模式仍只产指标。
+
 ## 构建
 
 ```

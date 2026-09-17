@@ -1,5 +1,22 @@
 # CombatSolver 测试清单
 
+## 0.40.5（fork）：多人扣血额度与输出策略（2026-09-17）
+
+环境：游戏 `0.111.0`、macOS ARM64、.NET 9；真实托管战斗对象，本机玩家索引 1。没有 Godot 渲染或网络连接。
+
+| 检查 | 输入与预算 | 本轮结果 |
+|---|---|---|
+| 失败基线 | `c172621`；`FUZZY_WURM_CRAWLER_WEAK` 双卡，Beam 2、100 节点、1 秒、DOP 1 | 1 HP 可换 6 伤害时仍选择防御，扣血/伤害为 0/0 |
+| 输出与安全 | `--multiplayer-strategy-contracts`，前八案例双卡 Beam 2；第九案例四卡 Beam 12，其他预算同基线 | 9 项通过：1/2/3 HP 换 6 伤害，4 HP 时防御，剩余 3 HP 时避死，无来伤时输出，同输出少扣血，立即击杀，已付扣血不重复消费额度 |
+| 生命周期与增量 | 同一策略请求内；3 HP 案例增量重放，敌方周期后进入下一玩家回合 | 增量等价、完整原生状态全文对账、下一回合开始自损归属、Fork 隔离、治疗不恢复额度、动作间不重置及周期间不结转通过；完整步骤 0.862 秒 |
+| 七回合哨兵 | `--multiplayer-contracts --encounter FOGMOG_NORMAL --beam 12 --nodes 350 --budget-ms 12000 --dop 2` | 六次原生全文对账、五/七周期边界、23 动作/七回合、重验 1 个旧动作、四张多人卡/药水/选牌/额外回合及禁止自动操作均通过；步骤 5.382 秒 |
+| 单人哨兵 | `FUZZY_WURM_CRAWLER_WEAK`，Beam 12、350 节点、12 秒、DOP 1；独立 `8411164` 基线 | 61 项非时间指标、9 动作、根与目录，共 72 项一致、0 差异；126 节点、376 转移、T3 胜利、4 HP 损失 |
+| 静态与 UI 投影 | 两端门禁声明、本地化、CoverageCatalog 状态字段/分支读取 | Bash 门禁通过（118 个搜索文件），三条变更声明在两端一致；443 项模板占位符一致，九案例均检查 UI 目标/最高值投影；3035 项无未分类字段或 live 分支读取 |
+
+新合同入口、完整作用域及重跑命令见 [多人军师](multiplayer-advisor.md) 和 [离线宿主](OFFLINE_SEARCH_HARNESS.md)。主项目及宿主 Release 行为构建均 0 警告/0 错误；CoverageCatalog 使用本地隔离引用配置，构建 2 条依赖警告/0 错误，检查退出成功。最终版本/文档元数据同步后只做 Release 构建，不重复上述行为检查。
+
+证据：`.local/mp-strategy/baseline/`、`.local/mp-strategy/fixed/`、`.local/mp-strategy/window/`、`.local/mp-strategy/solo/`、`.local/mp-strategy/solo-comparison.json`、`.local/mp-strategy-coverage.log`；结构化条目 `MULTIPLAYER-ADVISOR-HP-ALLOWANCE`。未执行 Windows PowerShell、真实房主/客户端联机、可见 UI、三/四人全面回归或完整发布门禁。局部结果不外推为所有遭遇均更优，也不作为性能比较。
+
 ## 0.40.4（fork）：多人手动启动回归（2026-09-17）
 
 - 失败基线 `a56a84f`：从 `SolverOverlay.OnRecalculatePressed` 进入真实 `RequestSearch`，在 `CombatReplayOutcome` 的单玩家断言处抛错，未显示搜索或错误消息；证据 `.local/mp-start/baseline.log`。

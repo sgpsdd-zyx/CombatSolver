@@ -1,4 +1,12 @@
 {
+  "MULTIPLAYER-ADVISOR-HP-ALLOWANCE": {
+    "status": "Passed",
+    "level": "OfflineManagedNativeDifferentialAndSearchContract",
+    "procedure": "OfflineSearchHarness --multiplayer-strategy-contracts --encounter FUZZY_WURM_CRAWLER_WEAK --beam 2 --nodes 100 --budget-ms 1000 --dop 1; nine cases with local player index 1, final four-card case uses beam 12; seven-cycle FOGMOG_NORMAL and independent 8411164 solo sentinel comparisons",
+    "expected": "Prefer damage within 3 HP lost per enemy cycle, avoid death and excess loss, minimize HP loss for equal damage; no allowance carry or reset on healing/recalculation/extra player turns; native boundary, fork, seven-cycle controls and solo sentinel preserved",
+    "observed": "2026-09-17: c172621 baseline chose 0 damage/0 HP loss instead of 6 damage/1 HP loss. Final nine cases passed: 1/2/3 HP for 6 damage, 4 HP defended, lethal avoided, no-threat offense, equal-damage defense, immediate kill, already-paid HP; incremental=equal, full native next-turn stamp=equal, next-turn self-cost assigned correctly, fork=isolated, UI allowance=3, no carry/reset; step 0.862 seconds. Seven-cycle contract passed six native turns, horizons 5/7, 23 actions, 7 turns, reuse=1, cards/potions/choices/manual-only guards; step 5.382 seconds. Solo 72 comparisons equal, 0 mismatches. Bash boundaries and 443 localization templates passed; CoverageCatalog state fields/branch reads passed for 3035 entries. No Godot, network, visible UI or Windows PowerShell validation; no general quality/performance claim.",
+    "evidence": "tools/OfflineSearchHarness/MultiplayerStrategyContracts.cs; docs/multiplayer-advisor.md; .local/mp-strategy/baseline/strategy-results.json; .local/mp-strategy/fixed/harness-result.json; .local/mp-strategy/fixed/strategy-results.json; .local/mp-strategy/fixed/native-boundary.txt; .local/mp-strategy/window/harness-result.json; .local/mp-strategy/solo-comparison.json; .local/mp-strategy-coverage.log"
+  },
   "MULTIPLAYER-ADVISOR-MANUAL-STARTUP": {
     "status": "Passed",
     "level": "OfflineRuntimeEntryContract",

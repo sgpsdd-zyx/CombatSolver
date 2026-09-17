@@ -10,6 +10,7 @@
   "战场已变化，当前路线基于计算时的局面；由你决定何时重新计算。": "Combat has changed. This route uses the state captured when you started the search. Recalculate when you choose.",
   "假设队友不再主动出牌或用药；搜索包含后续回合与药水，仅提供建议。": "Assumes teammates take no further active card or potion actions. Includes future turns and potions; advice only.",
   "敌方回合：已推演 {0} / 上限 {1}": "Enemy turns: forecast {0} / limit {1}",
+  "输出优先：单回合扣血目标不超过 {0} 点；当前预测最高 {1} 点。": "Prioritize damage within {0} HP lost per turn; current forecast peaks at {1} HP.",
   "已达 {0} 个敌方回合预测上限": "Reached the {0}-enemy-turn forecast limit",
   "等待队友选择": "Waiting for a teammate's choice",
   "预测范围内扣血 {0} HP": "HP lost within forecast: {0}",

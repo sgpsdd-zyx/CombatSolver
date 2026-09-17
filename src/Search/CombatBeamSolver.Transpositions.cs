@@ -8,7 +8,9 @@ internal sealed partial class CombatBeamSolver
         int FutureSoldHp,
         int CumulativePlayerHpLost,
         int ActionCount,
-        double Score);
+        double Score,
+        int AdvisoryCompletedExcessHpLost = 0,
+        int AdvisoryCurrentCycleHpLost = 0);
 
     private sealed class TranspositionFrontier(TranspositionLabel first)
     {
@@ -49,6 +51,8 @@ internal sealed partial class CombatBeamSolver
                 && left.PotionStrategicCost <= right.PotionStrategicCost
                 && left.FutureSoldHp <= right.FutureSoldHp
                 && left.CumulativePlayerHpLost <= right.CumulativePlayerHpLost
+                && left.AdvisoryCompletedExcessHpLost <= right.AdvisoryCompletedExcessHpLost
+                && left.AdvisoryCurrentCycleHpLost <= right.AdvisoryCurrentCycleHpLost
                 && left.ActionCount <= right.ActionCount
                 && left.Score >= right.Score;
     }
