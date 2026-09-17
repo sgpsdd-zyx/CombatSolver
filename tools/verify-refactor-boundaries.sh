@@ -551,6 +551,8 @@ expected_beam_files=(
     CombatBeamSolver.Expansion.cs
     CombatBeamSolver.FinalPlanOrdering.cs
     CombatBeamSolver.Models.cs
+    CombatBeamSolver.Multiplayer.cs
+    CombatBeamSolver.MultiplayerRound.cs
     CombatBeamSolver.NoveltySearch.cs
     CombatBeamSolver.Transpositions.cs
     CombatBeamSolver.OrderedMutationRetention.cs
@@ -1144,6 +1146,18 @@ EOF
 for forbidden in 'Task<' 'Func<' 'Action<'; do
     forbid_fixed "$repository_root/src/Prediction/CardChoiceContinuation.cs" "$forbidden" 'continuation retained an executable closure:'
 done
+
+while IFS='|' read -r relative_path required; do
+    require_fixed "$repository_root/$relative_path" "$required" 'missing multiplayer advice boundary'
+done <<'MULTIPLAYER_ADVICE_RULES'
+src/Runtime/SolverController.cs|if (reason != SearchReason.Manual) return;
+src/Runtime/SolverController.cs|Multiplayer advice cannot deploy native actions.
+src/Search/CombatBeamSolver.Multiplayer.cs|!CanReplayMultiplayerAction(node, action)
+src/Search/CombatBeamSolver.Models.cs|public int ReplayedAdviceActions;
+src/Search/SimulatedCombatState.Multiplayer.cs|throw new ExternalPlayerChoiceException
+src/Search/MultiplayerSearchPolicy.cs|StopAtAcceptableBattleHpLoss = false
+src/UI/SolverActionBar.cs|&& !state.AdviceOnly
+MULTIPLAYER_ADVICE_RULES
 
 if ((${#violations[@]} > 0)); then
     printf '%s\n' "${violations[@]}" >&2

@@ -1175,7 +1175,7 @@ internal static class SolverOverlay
             && !SolverController.HasCalculatedThisCombat
                 ? SolverText.Get("开始计算")
                 : SolverText.Get("重新计算");
-        _recalculateButton.Disabled = solverDisabled || searching
+        _recalculateButton.Disabled = solverDisabled || searching && !SolverController.IsMultiplayerSession
             || SolverController.IsDeploying || adoptingRoute;
         _stopSearchButton.Disabled = solverDisabled || !searching || SolverController.IsStoppingSearch;
         _adoptRouteButton.Disabled = solverDisabled || !canAdoptRoute || adoptingRoute;
@@ -1217,7 +1217,8 @@ internal static class SolverOverlay
         _fullAutoButton.Disabled = solverDisabled || adoptingRoute;
         if (_autoEnableFullAutoSwitch != null)
             _autoEnableFullAutoSwitch.ButtonPressed = SolverSettings.Current.AutoEnableFullAuto;
-        _actionBar?.Refresh(new SolverActionBarState(_collapsed, searching, canAdoptRoute || adoptingRoute));
+        _actionBar?.Refresh(new SolverActionBarState(_collapsed, searching, canAdoptRoute || adoptingRoute,
+            SolverController.IsMultiplayerSession));
         _executeButton.TooltipText = SolverText.Get(solverDisabled ? "求解器已关闭，请从标题栏开启。"
             : adoptingRoute ? "正在采用路线，请等待完成。"
             : SolverController.IsDeploying ? "正在执行当前回合。"
@@ -1279,6 +1280,17 @@ internal static class SolverOverlay
                     : SolverButtonStyle.Secondary);
             _renderedTheftPolicy = activePolicy;
         }
+    }
+
+    internal static void ShowMultiplayerCondition(bool stale, bool searching)
+    {
+        SetStatus(SolverText.Get(searching ? "多人军师：正在计算" : "多人军师：路线建议"),
+            stale ? Warning : TextMuted);
+        string condition = SolverText.Get(stale
+            ? "战场已变化，当前路线基于计算时的局面；由你决定何时重新计算。"
+            : "假设队友不再主动出牌或用药；搜索包含后续回合与药水，仅提供建议。");
+        SetSearchLimitHint(!searching && _lastSnapshot?.SearchLimitWarningText is { } warning
+            ? condition + "\n" + warning : condition);
     }
 
     public static void Hide()
@@ -2362,7 +2374,7 @@ internal static class SolverOverlay
             || !GodotObject.IsInstanceValid(_layer)
             || !CombatManager.Instance.IsInProgress
             || state == null
-            || state.Players.Count != 1
+            || state.Players.Count != 1 && !SolverController.IsMultiplayerSession
             || BugReportUploadDialog.IsOpen)
         {
             return false;

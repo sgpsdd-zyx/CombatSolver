@@ -426,7 +426,8 @@ internal sealed partial class CombatBeamSolver
         bool _renewablePotionShapedRock,
         SearchRunContext _run,
         Func<SearchNode, StandPatEvaluation> _evaluateStandPat,
-        Action<IEnumerable<SearchNode>>? _prepareStandPat = null)
+        Action<IEnumerable<SearchNode>>? _prepareStandPat = null,
+        Comparison<SearchNode>? _advisoryComparison = null)
     {
         private void ForEachRetentionIndex(
             int count,
@@ -477,6 +478,11 @@ internal sealed partial class CombatBeamSolver
         public List<SearchNode> RankFinal(IEnumerable<SearchNode> nodes)
         {
             List<SearchNode> candidates = nodes.Distinct((IEqualityComparer<SearchNode>)ReferenceEqualityComparer.Instance).ToList();
+            if (_advisoryComparison != null)
+            {
+                candidates.Sort(_advisoryComparison);
+                return candidates.Take(_profile.BeamWidth * 4).ToList();
+            }
             List<SearchNode> ranked = RankBest(
                 candidates,
                 _profile.BeamWidth * 4,
@@ -2618,6 +2624,12 @@ internal sealed partial class CombatBeamSolver
                 ranked.Sort(FinalCandidateComparison);
             else
                 SortByBeamRank(ranked);
+            if (_advisoryComparison != null)
+            {
+                List<SearchNode> retained = ranked.Take(limit).ToList();
+                for (int index = 0; index < retained.Count; index++) retained[index].RetentionRank = index;
+                return retained;
+            }
             List<SearchNode> routingChoices = [];
             if (preserveDefensiveRoute)
             {
@@ -6712,6 +6724,8 @@ internal sealed partial class CombatBeamSolver
 
         private int CompareFinalCandidates(SearchNode left, SearchNode right)
         {
+            if (_advisoryComparison != null)
+                return _advisoryComparison(left, right);
             SimulationSnapshot leftSnapshot = left.Snapshot;
             SimulationSnapshot rightSnapshot = right.Snapshot;
             bool leftWon = IsCompleteVictory(left);
@@ -7514,6 +7528,8 @@ internal sealed partial class CombatBeamSolver
 
         private double BeamRankScore(SearchNode node)
         {
+            if (_advisoryComparison != null)
+                return node.Score;
             // 基础分成员（见 SolverSearchProfile.BaseScoreOnly）：中途排序只用基础分；未置位时下面逐位不变。
             if (_profile.BaseScoreOnly)
                 return node.Score;

@@ -330,7 +330,7 @@ internal sealed partial class CombatBeamSolver
     private List<SearchNode> ApplyPrimaryIncumbentBound(List<SearchNode> retained)
     {
         // Per-event growth can repeat; the HP-only floor is not a bound on this objective.
-        if (_hasGrowthTargets || _theftPolicy == SolverTheftPolicy.PreserveResources || _primaryIncumbent is not { } incumbent)
+        if (IsMultiplayerAdvice || _hasGrowthTargets || _theftPolicy == SolverTheftPolicy.PreserveResources || _primaryIncumbent is not { } incumbent)
             return retained;
 
         List<SearchNode> bounded = ApplyPrimaryIncumbentBound(
@@ -2037,6 +2037,8 @@ internal sealed partial class CombatBeamSolver
             SearchBoundaryReason.PendingChoice => 2,
             SearchBoundaryReason.UnsupportedEffect => 3,
             SearchBoundaryReason.EventDefeat => 4,
+            SearchBoundaryReason.AdvisoryHorizon => 1,
+            SearchBoundaryReason.ExternalPlayerChoice => 2,
             _ => throw new ArgumentOutOfRangeException(nameof(reason), reason, null),
         };
 

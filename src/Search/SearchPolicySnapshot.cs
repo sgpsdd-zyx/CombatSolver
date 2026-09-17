@@ -19,6 +19,7 @@ internal sealed record SearchPolicySnapshot(
     SearchFramePressureSignal FramePressureSignal,
     SearchMemoryPressureSignal MemoryPressureSignal)
 {
+    public MultiplayerSearchPolicy? Multiplayer { get; init; }
     public bool UseNoveltyPortfolio { get; init; }
     public NoveltySearchOptions? NoveltySearch { get; init; }
     public NoveltyPortfolioBudget NoveltyBudget { get; init; } = NoveltyPortfolioBudget.Default;

@@ -612,7 +612,7 @@ internal sealed partial class CombatBeamSolver
             foreach ((int targetIndex, Creature? target) in TargetsFor(card, simulator))
             {
                 // The first action after a partial-route restart still observes the live target gate.
-                if (node.ActionCount == 0 && !card.Original.CanPlayTargeting(target))
+                if (!IsMultiplayerAdvice && node.ActionCount == 0 && !card.Original.CanPlayTargeting(target))
                     continue;
                 string targetName = displayNames.Creature(target);
                 PlanAction action = new(
@@ -828,7 +828,7 @@ internal sealed partial class CombatBeamSolver
                 || !simulatedCombat.IsPotionAvailable(_player, potionSlot)
                 || !PotionOnUseSupport.CanSearch(potion)
                 || !AllowsPotionUse(potionSlot, potion.Id.Entry)
-                || PotionUsePolicy.RequiresOpeningUse(potion)
+                || !IsMultiplayerAdvice && PotionUsePolicy.RequiresOpeningUse(potion)
                     && node.HasNonPotionAction)
             {
                 continue;
@@ -2821,6 +2821,10 @@ internal sealed partial class CombatBeamSolver
                 simulatedCombat.LastActionChoicesConsumed,
                 simulator.CapturedExecutionFrame<PlayerStartFrame>()?.Progress));
         }
+        catch (ExternalPlayerChoiceException) when (IsMultiplayerAdvice)
+        {
+            boundary = SearchBoundaryReason.ExternalPlayerChoice;
+        }
         finally { if (capturingExecution) simulator.EndExecutionContinuationCapture(); }
         if ((cardChoiceFrame != null || potionChoiceFrame != null) && boundary == SearchBoundaryReason.PendingChoice)
         {
@@ -3209,12 +3213,27 @@ internal sealed partial class CombatBeamSolver
         simulatedCombat.SetActionChoiceTiming(PlanChoiceTiming.PlayerTurnEnd);
         try
         {
+        while (true)
+        {
+        cancellationToken.ThrowIfCancellationRequested();
         int roundHistoryEntryStart = simulator.History.Entries.Count;
+        bool takingExtraTurn;
+        bool hasActiveEmotionChip = false;
+        if (IsMultiplayerAdvice)
+        {
+            if (!EndMultiplayerPlayerTurn(simulator, simulatedCombat, processedEnemyDeaths,
+                    out takingExtraTurn))
+                return SearchBoundaryReason.PendingChoice;
+            if (!simulator.IsInProgress)
+                return SearchBoundaryReason.None;
+        }
+        else
+        {
         if (!simulatedCombat.TryPrepareExtraPlayerTurn(
                 simulator,
                 _player,
-                out bool takingExtraTurn,
-                out bool hasActiveEmotionChip))
+                out takingExtraTurn,
+                out hasActiveEmotionChip))
         {
             return SearchBoundaryReason.PendingChoice;
         }
@@ -3270,6 +3289,7 @@ internal sealed partial class CombatBeamSolver
             }
         }
 
+        }
         SimCreatureState simulatedPlayer = simulator.State.GetCreature(_player.Creature);
         if (!takingExtraTurn)
         {
@@ -3371,12 +3391,11 @@ internal sealed partial class CombatBeamSolver
                         performedMoves[actingEnemy] = move.Move;
                         if (forcedMove == "EXPLODE_MOVE")
                         {
-                            MonsterMoveSemantics.DamagePlayer(
-                                simulator,
-                                simulatedCombat,
-                                move.Owner,
-                                _player.Creature,
-                                forcedDamage);
+                            if (IsMultiplayerAdvice)
+                                MonsterMoveSemantics.DamagePlayers(simulator, simulatedCombat, move.Owner, forcedDamage);
+                            else
+                                MonsterMoveSemantics.DamagePlayer(simulator, simulatedCombat, move.Owner,
+                                    _player.Creature, forcedDamage);
                             if (simulatedCombat.HasPendingChoice)
                                 return SearchBoundaryReason.PendingChoice;
                             using (simulator.PushDamageSource(
@@ -3446,7 +3465,8 @@ internal sealed partial class CombatBeamSolver
                 if (!CorePowerSupport.TriggerPoison(
                         simulator,
                         simulatedCombat,
-                        [_player.Creature]))
+                        IsMultiplayerAdvice ? simulatedCombat.Players.Select(player => player.Creature).ToArray()
+                            : [_player.Creature]))
                 {
                     return SearchBoundaryReason.PendingChoice;
                 }
@@ -3456,14 +3476,19 @@ internal sealed partial class CombatBeamSolver
                     playerPoisonHistoryStart);
                 if (simulatedCombat.HasPendingChoice)
                     return SearchBoundaryReason.PendingChoice;
-                simulatedCombat.ClearNoDraw(_player.Creature);
-                simulatedCombat.RecordRelicRoundDamage(simulator, _player, roundHistoryEntryStart);
+                foreach (var participant in IsMultiplayerAdvice ? simulatedCombat.Players : [_player])
+                {
+                    simulatedCombat.ClearNoDraw(participant.Creature);
+                    simulatedCombat.RecordRelicRoundDamage(simulator, participant, roundHistoryEntryStart);
+                }
             }
             if (simulator.CheckWinCondition(simulatedCombat.GetPlayerTurnNumber(_player)))
                 return SearchBoundaryReason.None;
             simulatedCombat.PrepareMonsterMovesForNextRound(simulator, performedMoves);
+            if (IsMultiplayerAdvice && ++simulatedCombat.AdvisorEnemyCycles >= policy.Multiplayer!.Horizon)
+                return SearchBoundaryReason.AdvisoryHorizon;
         }
-        else
+        else if (!IsMultiplayerAdvice)
         {
             // An extra turn advances the player's turn number too, so damage from the
             // just-finished turn becomes Emotion Chip's "previous turn" window.
@@ -3472,9 +3497,22 @@ internal sealed partial class CombatBeamSolver
             simulatedCombat.ConsumeExtraTurnSources(_player);
         }
 
+        if (IsMultiplayerAdvice)
+        {
+            SearchBoundaryReason started = StartMultiplayerPlayerTurn(simulator, simulatedCombat,
+                processedEnemyDeaths, ref shufflesCrossed, roundChoices, takingExtraTurn);
+            if (started == SearchBoundaryReason.None && simulator.IsInProgress && takingExtraTurn
+                && !simulatedCombat.AdvisorExtraTurnPlayers.Contains(_player))
+            {
+                simulatedCombat.SetActionChoiceTiming(PlanChoiceTiming.PlayerTurnEnd);
+                continue;
+            }
+            return started;
+        }
         return AdvanceRoundPlayerStart(simulator, simulatedCombat, playerState, simulatedPlayer,
             roundIndex, processedEnemyDeaths, ref shufflesCrossed, roundChoices, takingExtraTurn,
             turnStartChoices is not { Count: > 0 } ? roundCheckpointCapture : null);
+        }
         }
         finally
         {
@@ -3877,6 +3915,9 @@ internal sealed partial class CombatBeamSolver
 
     private bool Dominates(ActionCandidate left, ActionCandidate right)
     {
+        // Solo action summaries do not encode effects on peers. Exact-state transpositions
+        // still deduplicate multiplayer branches using the complete party fingerprint.
+        if (IsMultiplayerAdvice && left.Node.StateKey != right.Node.StateKey) return false;
         bool leftHasCycleEvidence = left.Node.CycleProbeLease != null || left.Node.Cycle != null;
         bool rightHasCycleEvidence = right.Node.CycleProbeLease != null || right.Node.Cycle != null;
         bool leftHasCycleExitProbe = left.Node.CycleExitProbe != null
@@ -4398,6 +4439,14 @@ internal sealed partial class CombatBeamSolver
         PredictedCard card,
         CombatPredictionSimulator simulator)
     {
+        if (IsMultiplayerAdvice && simulator.GetTargetType(card) is TargetType.AnyAlly or TargetType.AnyPlayer)
+        {
+            foreach (var peer in simulator.State.CombatState.Players)
+                if (simulator.State.GetCreature(peer.Creature).IsAlive
+                    && (simulator.GetTargetType(card) != TargetType.AnyAlly || peer != _player))
+                    yield return (-1, peer.Creature);
+            yield break;
+        }
         if (simulator.GetTargetType(card) == TargetType.AnyEnemy)
         {
             IReadOnlyList<Creature> enemies = simulator.State.Enemies;
@@ -4417,6 +4466,13 @@ internal sealed partial class CombatBeamSolver
         PotionModel potion,
         CombatPredictionSimulator simulator)
     {
+        if (IsMultiplayerAdvice && potion.TargetType == TargetType.AnyPlayer)
+        {
+            foreach (var peer in simulator.State.CombatState.Players)
+                if (simulator.State.GetCreature(peer.Creature).IsAlive)
+                    yield return (-1, peer.Creature);
+            yield break;
+        }
         if (potion.TargetType == TargetType.AnyEnemy)
         {
             IReadOnlyList<Creature> enemies = simulator.State.Enemies;

@@ -163,6 +163,7 @@ internal sealed partial class CombatBeamSolver
         public int OrderedMutationColdAtomicCommitted;
         public int OrderedMutationColdAtomicRejected;
         public int Expanded;
+        public int ReplayedAdviceActions;
         public int DominatedActionsPruned;
         public int TopQueueActionsDropped;
         public int ActionAdmissionRepresentativesProtected;

@@ -190,6 +190,7 @@ internal static partial class TurnStartChoiceSupport
         if (options.Count == 0)
             return true;
 
+        combat.RequireLocalChoice(player);
         SimPlayerCombatState state = simulator.State.GetPlayerCombatState(player);
         IReadOnlyList<PredictedCard> sourceCards = state.GetCardPile(sourcePile)?.Cards
             ?? throw new InvalidOperationException($"丢弃选择不支持牌堆 {sourcePile}。");
@@ -302,6 +303,7 @@ internal static partial class TurnStartChoiceSupport
     internal static bool ResolveCapturedChoice(CombatPredictionSimulator simulator, SimulatedCombatState combat,
         Player player, TurnStartChoiceCursor? cursor, TurnStartChoiceRequest request)
     {
+        combat.RequireLocalChoice(player);
         CardChoiceSpec spec = request.Spec!;
         if (cursor == null || !cursor.TryTake(request, out PlanCardChoice? choice))
         {

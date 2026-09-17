@@ -72,6 +72,12 @@ internal sealed class SolverDisplayNames
             if (creature.CombatId is not uint combatId)
                 continue;
             string baseName = CaptureCreatureBaseName(creature, monsterNames);
+            if (state.Players.Count > 1 && creature.Player is { } participant)
+            {
+                int number = state.Players.ToList().IndexOf(participant) + 1;
+                creatureNames[combatId] = SolverText.Format($"玩家 {number}：{baseName}");
+                continue;
+            }
             if (creature.Side == CombatSide.Enemy
                 && enemyTypeCounts.GetValueOrDefault(baseName) > 1)
             {

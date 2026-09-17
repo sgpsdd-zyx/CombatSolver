@@ -16,7 +16,10 @@ internal sealed record HarnessScenario(
     string EncounterId,
     string Seed,
     int Ascension,
-    int ActIndexForTest);
+    int ActIndexForTest)
+{
+    public bool MultiplayerContracts { get; init; }
+}
 
 /// <summary>
 /// 用游戏自己的对象图建一场战斗并推进到玩家第一回合。步骤照
@@ -36,7 +39,9 @@ internal static class OfflineCombat
 
         UnlockState unlockState = SaveManager.Instance.GenerateUnlockStateFromProgress();
         RunState runState = RunState.CreateForNewRun(
-            [Player.CreateForNewRun(character, unlockState, 1uL)],
+            scenario.MultiplayerContracts
+                ? [Player.CreateForNewRun(character, unlockState, 2uL), Player.CreateForNewRun(character, unlockState, 1uL)]
+                : [Player.CreateForNewRun(character, unlockState, 1uL)],
             ModelDb.ActsByIndex is { } ? ActModel.GetDefaultList().Select(act => act.ToMutable()).ToList() : [],
             [],
             GameMode.Standard,

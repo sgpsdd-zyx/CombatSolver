@@ -575,6 +575,8 @@ $expectedBeamFiles = @(
     "CombatBeamSolver.Expansion.cs",
     "CombatBeamSolver.FinalPlanOrdering.cs",
     "CombatBeamSolver.Models.cs",
+    "CombatBeamSolver.Multiplayer.cs",
+    "CombatBeamSolver.MultiplayerRound.cs",
     "CombatBeamSolver.NoveltySearch.cs",
     "CombatBeamSolver.Transpositions.cs",
     "CombatBeamSolver.OrderedMutationRetention.cs",
@@ -1448,6 +1450,22 @@ foreach ($rule in @(
 foreach ($forbidden in @('Task<', 'Func<', 'Action<')) {
     if (Select-String -LiteralPath (Join-Path $repositoryRoot 'src/Prediction/CardChoiceContinuation.cs') -SimpleMatch $forbidden -Quiet) {
         $violations.Add("Continuation retained an executable closure: $forbidden")
+    }
+}
+
+$multiplayerAdviceRules = @(
+    @{ Path = 'src/Runtime/SolverController.cs'; Text = 'if (reason != SearchReason.Manual) return;' }
+    @{ Path = 'src/Runtime/SolverController.cs'; Text = 'Multiplayer advice cannot deploy native actions.' }
+    @{ Path = 'src/Search/CombatBeamSolver.Multiplayer.cs'; Text = '!CanReplayMultiplayerAction(node, action)' }
+    @{ Path = 'src/Search/CombatBeamSolver.Models.cs'; Text = 'public int ReplayedAdviceActions;' }
+    @{ Path = 'src/Search/SimulatedCombatState.Multiplayer.cs'; Text = 'throw new ExternalPlayerChoiceException' }
+    @{ Path = 'src/Search/MultiplayerSearchPolicy.cs'; Text = 'StopAtAcceptableBattleHpLoss = false' }
+    @{ Path = 'src/UI/SolverActionBar.cs'; Text = '&& !state.AdviceOnly' }
+)
+foreach ($rule in $multiplayerAdviceRules) {
+    $path = Join-Path $repositoryRoot $rule.Path
+    if (-not (Select-String -LiteralPath $path -SimpleMatch -Pattern $rule.Text -Quiet)) {
+        $violations.Add("${path}: missing multiplayer advice boundary '$($rule.Text)'")
     }
 }
 

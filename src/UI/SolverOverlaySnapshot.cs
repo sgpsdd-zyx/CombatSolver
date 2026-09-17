@@ -216,6 +216,8 @@ internal sealed record SolverOverlaySnapshot(
             || unmirrored.Count > 0
             || compensated.Count > 0;
         string confidence = ConfidenceText(result);
+        if (result.IsMultiplayerAdvice)
+            confidence = SolverText.Get("队友不主动行动的条件预测");
         SolverOverlayTone statusTone = pendingTurnSetup
             ? SolverOverlayTone.Accent
             : result.ProjectedBattleHpLossIncrease > 0
@@ -235,6 +237,8 @@ internal sealed record SolverOverlaySnapshot(
         string summaryText = result.CombatEndedTurn == startTurnNumber
             ? SolverText.Format($"[color={SolverUiTokens.Palette.SuccessHex}]本回合结束战斗  │  {confidence}[/color]")
             : SolverText.Format($"[color={SolverUiTokens.Palette.TextSecondaryHex}]预计路线 [b]{searchedTurns}[/b] 回合  │  {confidence}[/color]");
+        if (result.IsMultiplayerAdvice)
+            summaryText += "\n" + SolverText.Format($"敌方回合：已推演 {result.Snapshot.AdvisoryEnemyCycles} / 上限 {result.AdvisoryHorizon}");
         string reviewSummaryText = result.WasRestoredFromCache
             ? SolverText.Get("已恢复本场战斗记录的路线")
             : result.WasReused
@@ -249,6 +253,12 @@ internal sealed record SolverOverlaySnapshot(
                     ? SolverText.Format($"本局扣血  已 {result.BattleHpLostSoFar}    预计 {result.ProjectedBattleHpLost} HP    重算增加 {result.ProjectedBattleHpLossIncrease} HP")
                     : SolverText.Format($"本局扣血  已 {result.BattleHpLostSoFar}    预计 {result.ProjectedBattleHpLost} HP")
                 : SolverText.Get("本局扣血  0 HP");
+        if (result.IsMultiplayerAdvice)
+        {
+            hpOutcomeText = SolverText.Format($"预测范围内扣血 {result.Snapshot.CumulativePlayerHpLost} HP");
+            projectedBattleHpLossKnown = result.BoundaryReason == SearchBoundaryReason.AdvisoryHorizon
+                || result.CombatEndedTurn.HasValue;
+        }
 
         SolverOverlayTurnSnapshot[] turns = Enumerable.Range(0, searchedTurns)
             .Select(index => CaptureTurn(result, startTurnNumber + index))
@@ -269,7 +279,10 @@ internal sealed record SolverOverlaySnapshot(
             turns,
             BuildDetails(result, startTurnNumber, unmirrored, compensated, unexpectedReplan),
             hasRisk,
-            BuildSearchLimitWarning(result.BoundaryReason))
+            result.IsMultiplayerAdvice && result.BoundaryReason is SearchBoundaryReason.ExternalPlayerChoice
+                or SearchBoundaryReason.UnsupportedEffect or SearchBoundaryReason.PendingChoice
+                ? SolverText.Format($"预测停止于：{(result.BoundaryReason == SearchBoundaryReason.UnsupportedEffect ? SolverText.Get("未支持的战斗效果") : BoundaryText(result.BoundaryReason, result.AdvisoryHorizon))}")
+                : BuildSearchLimitWarning(result.BoundaryReason))
         {
             StrategyOutcomes = SolverStrategyOutcomeText.Capture(result.Snapshot.RelicCounters,
                 result.Snapshot.GrowthRewards, result.Snapshot.AllEnemiesDead),
@@ -432,9 +445,13 @@ internal sealed record SolverOverlaySnapshot(
             searchDetails,
             SolverText.Format($"[color={SolverUiTokens.Palette.TextMutedHex}]运行[/color]  后台分配 {FormatMegabytes(result.TotalWorkerAllocatedBytes)} MB  │  GC {result.TotalGen0Collections}/{result.TotalGen1Collections}/{result.TotalGen2Collections}  │  暂停 {result.TotalGcPauseDuration.TotalMilliseconds:F1} ms  │  延迟探测 {result.StandPatProbes}"),
             SolverText.Format($"[color={SolverUiTokens.Palette.TextMutedHex}]战损[/color]  本局已发生 {result.BattleHpLostSoFar}  │  路线未来卖血 {result.FutureSoldHp}  │  本局累计卖血 {result.SoldHp}"),
-            SolverText.Format($"[color={SolverUiTokens.Palette.TextMutedHex}]药水[/color]  本局已喝 {result.BattlePotionsUsedSoFar} 瓶  │  路线还要用 {result.PotionCount} 瓶  │  预计省血 {result.PotionHpSaved}/{result.PotionHpRequired} HP  │  门槛淘汰 {result.PotionBranchesRejected}"),
+            result.IsMultiplayerAdvice
+                ? SolverText.Format($"多人军师：预计用药 {result.PotionCount} 瓶，重新验证旧路线动作 {result.ReplayedAdviceActions} 个。")
+                : SolverText.Format($"[color={SolverUiTokens.Palette.TextMutedHex}]药水[/color]  本局已喝 {result.BattlePotionsUsedSoFar} 瓶  │  路线还要用 {result.PotionCount} 瓶  │  预计省血 {result.PotionHpSaved}/{result.PotionHpRequired} HP  │  门槛淘汰 {result.PotionBranchesRejected}"),
             SolverText.Format($"[color={SolverUiTokens.Palette.TextMutedHex}]防守[/color]  本回合最高可起防 {result.MaxBlockByTurn.GetValueOrDefault(displayedTurn)}  │  路线实际起防 {result.ActualBlockByTurn.GetValueOrDefault(displayedTurn)}  │  卖血 {result.SoldHpByTurn.GetValueOrDefault(displayedTurn)}"),
-            SolverText.Format($"[color={SolverUiTokens.Palette.TextMutedHex}]边界[/color]  {BoundaryText(result.BoundaryReason)}  │  停止洗牌分支 {result.ShuffleBranchesPruned}  │  不可避免战损 {result.UnavoidableHpLost}"),
+            result.IsMultiplayerAdvice
+                ? SolverText.Format($"预测停止于：{(result.BoundaryReason == SearchBoundaryReason.UnsupportedEffect ? SolverText.Get("未支持的战斗效果") : BoundaryText(result.BoundaryReason, result.AdvisoryHorizon))}")
+                : SolverText.Format($"[color={SolverUiTokens.Palette.TextMutedHex}]边界[/color]  {BoundaryText(result.BoundaryReason, result.AdvisoryHorizon)}  │  停止洗牌分支 {result.ShuffleBranchesPruned}  │  不可避免战损 {result.UnavoidableHpLost}"),
         ];
         if (result.TheftPolicy is { } theftPolicy)
         {
@@ -491,8 +508,10 @@ internal sealed record SolverOverlaySnapshot(
         _ => null,
     };
 
-    private static string BoundaryText(SearchBoundaryReason reason) => reason switch
+    private static string BoundaryText(SearchBoundaryReason reason, int advisoryHorizon) => reason switch
     {
+        SearchBoundaryReason.AdvisoryHorizon => SolverText.Format($"已达 {advisoryHorizon} 个敌方回合预测上限"),
+        SearchBoundaryReason.ExternalPlayerChoice => SolverText.Get("等待队友选择"),
         SearchBoundaryReason.Shuffle => SolverText.Get("下次洗牌"),
         SearchBoundaryReason.NoCards => SolverText.Get("无牌可抽"),
         SearchBoundaryReason.UnsupportedEffect => SolverText.Get("未镜像死亡效果"),

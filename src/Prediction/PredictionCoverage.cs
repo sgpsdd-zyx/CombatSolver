@@ -27,13 +27,14 @@ internal static partial class PredictionCoverage
                 continue;
             // Classify every original occurrence, preserving callback/lookup order.
             // Only the result object is delayed until after the same four-field dedup.
-            var gap = DescribeGap(risk);
+            var gap = DescribeGap(risk, simulator.State.CombatState is SimulatedCombatState { AdvisorPlayer: not null });
             if ((seen ??= []).Add(gap))
                 yield return new PredictionGap(gap.SourceId, gap.Method, gap.Reason, gap.Compensated);
         }
     }
 
-    private static (string SourceId, string Method, string Reason, bool Compensated) DescribeGap(CombatPredictionRiskEntry entry)
+    private static (string SourceId, string Method, string Reason, bool Compensated) DescribeGap(
+        CombatPredictionRiskEntry entry, bool multiplayer)
     {
         AbstractModel? source = entry.Trace?.Source;
         string sourceId = source?.Id.Entry ?? source?.GetType().Name ?? "UNKNOWN";
@@ -54,7 +55,8 @@ internal static partial class PredictionCoverage
             ConcoctPower when method == "AfterDamageGiven" => true,
             CorrosiveWavePower when method == "AfterCardDrawn" => true,
             CardModel card when method == "OnPlay"
-                && (CardOnPlayCompensationCatalog.Contains(card) || CardEffectSpecRegistry.Contains(card)) => true,
+                && (CardOnPlayCompensationCatalog.Contains(card) || CardEffectSpecRegistry.Contains(card)
+                    || multiplayer && CardOnPlaySupport.HasMultiplayerCompensation(card)) => true,
             Inky when method == "OnPlay" => true,
             RelicModel relic when IsVerifiedNativeRelicHook(relic, method) => true,
             Enthralled or Normality when method == "ShouldPlay" => true,

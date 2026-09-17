@@ -511,7 +511,7 @@ internal sealed partial class CombatBeamSolver
             }
             foreach ((int targetIndex, Creature? target) in TargetsFor(card, simulator))
             {
-                if (node.ActionCount == 0 && !card.Original.CanPlayTargeting(target))
+                if (!IsMultiplayerAdvice && node.ActionCount == 0 && !card.Original.CanPlayTargeting(target))
                     continue;
                 PlanAction planAction = new(
                     PlanActionKind.PlayCard,
@@ -795,7 +795,7 @@ internal sealed partial class CombatBeamSolver
                 || !simulatedCombat.IsPotionAvailable(_player, potionSlot)
                 || !PotionOnUseSupport.CanSearch(potion)
                 || !AllowsPotionUse(potionSlot, potion.Id.Entry)
-                || PotionUsePolicy.RequiresOpeningUse(potion)
+                || !IsMultiplayerAdvice && PotionUsePolicy.RequiresOpeningUse(potion)
                     && node.HasNonPotionAction)
             {
                 continue;

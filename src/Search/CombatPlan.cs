@@ -61,6 +61,8 @@ internal enum SearchBoundaryReason
     TurnLimit,
     NodeLimit,
     TimeLimit,
+    AdvisoryHorizon,
+    ExternalPlayerChoice,
 }
 
 internal enum SolverResultScope
@@ -1231,6 +1233,8 @@ internal sealed class SimulationSnapshot(
     CombatTerminalStamp? terminalStamp = null)
 {
     private CombatPredictionSimulator? _simulator = simulator;
+    public int TeamSurvivors { get; init; }
+    public int AdvisoryEnemyCycles { get; init; }
     private string? _releasedBy;
     private int _releasedAtLine;
 
@@ -1388,6 +1392,7 @@ internal sealed record SolverSnapshot(
     SearchBoundaryReason BoundaryReason,
     IReadOnlyList<PredictionGap> PredictionGaps)
 {
+    public int AdvisoryEnemyCycles { get; init; }
     public int DeathSavePotionHpRestored { get; init; }
     public int DeathSaveHpRestored => DeathSaveRelicHpRestored + DeathSavePotionHpRestored;
     public int DeathSaveUseCount { get; init; }
@@ -1409,6 +1414,9 @@ internal sealed record CachedContinuation(
 
 internal sealed class SolverResult
 {
+    public bool IsMultiplayerAdvice { get; internal set; }
+    public int AdvisoryHorizon { get; internal set; }
+    public int ReplayedAdviceActions { get; internal set; }
     public bool WasRestoredFromCache { get; internal set; }
     public SolverResultScope ResultScope { get; internal set; } = SolverResultScope.SearchCompletion;
     public bool DeterministicBlockPotionInserted { get; internal set; }

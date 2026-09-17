@@ -66,6 +66,14 @@ internal sealed partial class CombatBeamSolver
         out CardChoiceSpec? spec)
     {
         probe = null; spec = null;
+        if (IsMultiplayerAdvice && PotionChoiceSupport.RequiresChoice(potion)
+            && parent.Snapshot.Simulator.State.CombatState.GetCreature(action.TargetCombatId)?.Player is { } recipient
+            && recipient != _player)
+        {
+            probe = ReplayAction(parent, action);
+            choices = [null];
+            return null;
+        }
         PotionChoiceReplayCheckpoint? checkpoint = null;
         PotionChoiceReplayCheckpoint? previous = _potionChoiceReplayCheckpoint;
         try

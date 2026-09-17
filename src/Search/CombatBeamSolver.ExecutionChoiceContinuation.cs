@@ -17,6 +17,7 @@ internal sealed partial class CombatBeamSolver
         var combat = (SimulatedCombatState)simulator.State.CombatState;
         if (action.Kind == PlanActionKind.EndTurn)
         {
+            if (IsMultiplayerAdvice) return false;
             foreach (var power in combat.EffectivePowers())
                 if (power.Amount > 0 && ReferenceEquals(power.Owner, _player.Creature)
                     && power is ForegoneConclusionPower or EntropyPower or ToolsOfTheTradePower or TyrannyPower or StratagemPower or MayhemPower)

@@ -6,7 +6,9 @@ Combat Solver 是一个面向《杀戮尖塔 2》单人模式的战斗路线求�
 
 当前版本为 **0.40.2**：合入 ltlly 的卡牌变形长线搜索性能优化，并修正搜索进度与高战损引导。详见 [更新日志](docs/releases/0.40.2-RELEASE_NOTES.md)。
 
-**English UI:** Set the game language to English and restart the game. CombatSolver provides a recommended route; use **Play turn** for one turn or **Auto: On** for continuous play. Configure potions, growth and search budgets in the overlay. **Settings > Reports > Upload report** submits a bug report. Logs, raw errors and some detailed diagnostics retain their original text. Single-player only.
+本开发分支新增 [多人军师](docs/multiplayer-advisor.md)：手动重新计算，推荐本人的出牌和用药路线，最多推演七个敌方回合，不自动操作。队友行动后自行决定何时重算。尚未发布，也尚未完成真实联机验收。
+
+**English UI:** Set the game language to English and restart the game. In single-player, use **Play turn** for one turn or **Auto: On** for continuous play. Multiplayer in this development branch offers manual advice for up to seven enemy turns, including potions. Configure potions, growth and search budgets in the overlay. **Settings > Reports > Upload report** submits a bug report. Logs, raw errors and some detailed diagnostics retain their original text.
 
 界面跟随游戏语言：简体/繁体中文使用现有中文文案，其他语言使用英文。简化版不提供独立语言开关；卡牌胶囊、选牌和相关悬停说明支持运行中切换语言，其他既有窗口可通过重启统一刷新。
 
@@ -131,9 +133,9 @@ THIRD_PARTY_NOTICES.md
 
 最终路线依次比较生存、确认胜利、整场战损、药水消耗、主动卖血和敌方剩余状态。药水与普通出牌共同参与搜索，不使用独立的事后补算路线。
 
-Combat Solver 使用受时间、节点和内存预算约束的 Beam Search。它展示的是当前预算内找到的最佳路线，不承诺数学意义上的全局最优解。路线视野没有固定回合数或洗牌次数上限，但循环检测、状态合并和预算终止仍会限制实际搜索范围。
+Combat Solver 使用受时间、节点和内存预算约束的 Beam Search。它展示的是当前预算内找到的最佳路线，不承诺数学意义上的全局最优解。单人路线视野没有固定回合数或洗牌次数上限；多人建议最多覆盖七个敌方回合。循环检测、状态合并和预算终止仍会限制实际搜索范围。
 
-当前目标是覆盖 `0.111.0` 的单人战斗内容。运行时遇到尚未支持的新版本或第三方战斗语义时，求解器会明确停止在不支持边界，不会把未完成模拟误报为胜利。多人模式、局外流程和第三方 Mod 的自定义战斗效果不在通用兼容范围内。
+已发布版本目标是覆盖 `0.111.0` 的单人战斗内容。运行时遇到尚未支持的新版本或第三方战斗语义时，求解器会明确停止在不支持边界，不会把未完成模拟误报为胜利。本分支多人军师的支持与验证范围见[专门说明](docs/multiplayer-advisor.md)；局外流程和第三方 Mod 的自定义战斗效果不在通用兼容范围内。
 
 详细覆盖情况见 [战斗 Hook 覆盖报告](docs/COMBAT_HOOK_COVERAGE.md) 与 [适配验证记录](docs/ADAPTATION_VERIFICATION.md)。
 

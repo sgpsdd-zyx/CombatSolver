@@ -2,7 +2,7 @@ using Godot;
 
 namespace CombatSolver;
 
-internal readonly record struct SolverActionBarState(bool Collapsed, bool Searching, bool ShowAdopt);
+internal readonly record struct SolverActionBarState(bool Collapsed, bool Searching, bool ShowAdopt, bool AdviceOnly = false);
 
 // Owns layout only. The overlay retains command bindings and capability checks.
 internal sealed partial class SolverActionBar : VBoxContainer
@@ -51,11 +51,12 @@ internal sealed partial class SolverActionBar : VBoxContainer
 
     public void Refresh(SolverActionBarState state)
     {
-        _recalculate.Visible = !state.Searching;
+        _recalculate.Visible = !state.Searching || state.AdviceOnly;
         _stop.Visible = state.Searching;
-        _adopt.Visible = !state.Collapsed && state.ShowAdopt;
-        _execute.Visible = !state.Searching;
-        _autoStart.Visible = !state.Collapsed;
+        _adopt.Visible = !state.Collapsed && state.ShowAdopt && !state.AdviceOnly;
+        _execute.Visible = !state.Searching && !state.AdviceOnly;
+        _fullAuto.Visible = !state.AdviceOnly;
+        _autoStart.Visible = !state.Collapsed && !state.AdviceOnly;
         _memoryRow.Visible = !state.Collapsed;
         _memory.Visible = !state.Collapsed;
     }

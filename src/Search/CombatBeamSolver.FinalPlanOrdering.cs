@@ -16,7 +16,8 @@ internal sealed partial class CombatBeamSolver
         SearchDiagnosticsSink diagnostics,
         bool detailedDiagnostics,
         BattleDamageSnapshot battleDamage,
-        PotionStrategicCostLookup? potionStrategicCosts = null)
+        PotionStrategicCostLookup? potionStrategicCosts = null,
+        Comparison<SearchNode>? advisoryComparison = null)
     {
         private readonly PotionStrategicCostLookup _potionStrategicCosts = potionStrategicCosts ?? new();
         /// <summary>
@@ -32,6 +33,22 @@ internal sealed partial class CombatBeamSolver
             int initialHp,
             bool emitDiagnostics)
         {
+            if (advisoryComparison != null)
+            {
+                List<SearchNode> advice = evaluated.Select(candidate => candidate.Node)
+                    .Where(node => !enforcePotionDirectives || potionStrategy.EvaluateForcedUses(
+                        node.Actions, renewablePotionShapedRock, _potionStrategicCosts).AllForcedUsesSatisfied)
+                    .Where(node => ExplicitPotionUseCount(node) >= minimumPotionUses
+                        && (potionPolicy != SolverPotionPolicy.RequireAtLeastOne || ExplicitPotionUseCount(node) > 0))
+                    .ToList();
+                if (advice.Count == 0)
+                    throw new PotionPolicyUnsatisfiedException("No advisory route satisfies the selected potion directives.");
+                advice.Sort(advisoryComparison);
+                SearchNode best = advice[0];
+                return new FinalPlanSelection(new FinalPlanCandidate(best, best.Snapshot,
+                    SearchFeatures.Capture(best), best.FutureSoldHp,
+                    battleDamage.SoldHpCommitted + best.FutureSoldHp, best.PotionCount, best.Score), 0, 0, 0);
+            }
             var policyCandidates = evaluated
                 .Select(candidate =>
                 {

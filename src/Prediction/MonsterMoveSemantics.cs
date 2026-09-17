@@ -18,18 +18,24 @@ internal static class MonsterMoveSemantics
         IReadOnlyList<PlanCardChoice>? plannedChoices = null)
     {
         SimCreatureState simulatedPlayer = simulator.State.GetCreature(player);
-        MonsterMoveEffects.ApplyBeforeAttack(simulator, combat, move, player);
+        if (combat.AdvisorPlayer != null && move.Owner.Monster is ThievingHopper && move.Move.Id == "THIEVERY_MOVE")
+        {
+            foreach (var peer in combat.Players)
+                if (simulator.State.GetCreature(peer.Creature).IsAlive)
+                    MonsterMoveEffects.ApplyBeforeAttack(simulator, combat, move, peer.Creature);
+        }
+        else MonsterMoveEffects.ApplyBeforeAttack(simulator, combat, move, player);
         if (simulator.HasPendingChoice)
             return simulatedPlayer.IsDead;
         bool fullyBlockedAttack = false;
         bool playerDied = false;
-        AttackCommand? attackContext = move.AttackHits.Count > 0
-            ? simulator.BeginAttackContext(
-                new AttackCommand(0m)
-                    .FromMonster(move.Owner.Monster
-                        ?? throw new InvalidOperationException("预测攻击的所有者不是怪物。"))
-                    .WithHitCount(0))
-            : null;
+        AttackCommand? command = move.AttackHits.Count > 0
+            ? new AttackCommand(0m).FromMonster(move.Owner.Monster
+                ?? throw new InvalidOperationException("预测攻击的所有者不是怪物。"))
+                .WithHitCount(0) : null;
+        if (command != null && combat.AdvisorPlayer != null)
+            command._combatState = combat;
+        AttackCommand? attackContext = command == null ? null : simulator.BeginAttackContext(command);
         bool attackCompleted = attackContext == null;
         try
         {
@@ -39,7 +45,8 @@ internal static class MonsterMoveSemantics
             foreach (ForecastAttackHit hit in move.AttackHits)
             {
                 int baseDamage = combat.AdjustMonsterMoveDamage(move.Owner, move.Move.Id, hit.BaseDamage);
-                IReadOnlyList<DamageResult> results = DamagePlayer(
+                IReadOnlyList<DamageResult> results = combat.AdvisorPlayer != null
+                    ? DamagePlayers(simulator, combat, move.Owner, baseDamage) : DamagePlayer(
                     simulator,
                     combat,
                     move.Owner,
@@ -50,7 +57,7 @@ internal static class MonsterMoveSemantics
                 simulator.AddAttackContextHit(attackContext!, results);
                 foreach (DamageResult result in results)
                 {
-                    if (ReferenceEquals(result.Receiver, player) && result.WasFullyBlocked)
+                    if ((combat.AdvisorPlayer != null || ReferenceEquals(result.Receiver, player)) && result.WasFullyBlocked)
                         fullyBlockedAttack = true;
                 }
                 CorePowerSupport.ApplyEnemyDeathPowers(
@@ -60,7 +67,7 @@ internal static class MonsterMoveSemantics
                     processedEnemyDeaths);
                 if (simulator.HasPendingChoice)
                     return simulatedPlayer.IsDead;
-                if (simulatedPlayer.IsDead)
+                if (simulatedPlayer.IsDead && combat.AdvisorPlayer == null)
                 {
                     playerDied = true;
                     break;
@@ -144,6 +151,34 @@ internal static class MonsterMoveSemantics
         {
             if (suppressedDieForYou is { } restoredAmount)
                 combat.SetAmount<DieForYouPower>(osty!, restoredAmount);
+        }
+    }
+
+    internal static IReadOnlyList<DamageResult> DamagePlayers(CombatPredictionSimulator simulator,
+        SimulatedCombatState combat, Creature attacker, int damage)
+    {
+        List<(Creature Osty, int Amount)> suppressed = [];
+        foreach (var player in combat.Players)
+        {
+            Creature? osty = simulator.State.GetOsty(player);
+            if (osty != null && simulator.State.GetCreature(osty).IsDead
+                && combat.GetAmount<DieForYouPower>(osty) is > 0 and var amount)
+            {
+                suppressed.Add((osty, amount));
+                combat.SetAmount<DieForYouPower>(osty, 0);
+            }
+        }
+        try
+        {
+            using (simulator.PushDamageSource(
+                CombatDamageSource.For(CombatDamageSourceKind.MonsterMove, attacker.Monster?.Id.Entry)))
+                return simulator.Damage(combat.Players.Select(player => player.Creature)
+                    .Where(creature => simulator.State.GetCreature(creature).IsAlive).ToArray(),
+                    damage, ValueProp.Move, attacker);
+        }
+        finally
+        {
+            foreach (var (osty, amount) in suppressed) combat.SetAmount<DieForYouPower>(osty, amount);
         }
     }
 }

@@ -40,6 +40,7 @@ internal sealed partial class CombatBeamSolver(
     int? minimumPotionUses = null,
     PrimarySearchIncumbent? primaryIncumbent = null)
 {
+    private bool IsMultiplayerAdvice => policy.Multiplayer != null;
     private readonly SolverSearchProfile _profile = searchProfile ?? SolverSearchProfile.Default;
     private readonly SearchRunContext _run = new(
         policy.MeasurePhasePerformance,
@@ -101,7 +102,8 @@ internal sealed partial class CombatBeamSolver(
         root.HasRenewablePotionShapedRock,
         _run,
         EvaluateStandPat,
-        PrepareStandPatProbes);
+        PrepareStandPatProbes,
+        policy.Multiplayer != null ? CompareMultiplayerPlans : null);
     private FinalPlanOrdering? _finalOrdering;
     private FinalPlanOrdering FinalOrdering => _finalOrdering ??= new FinalPlanOrdering(
         _potionPolicy,
@@ -117,7 +119,8 @@ internal sealed partial class CombatBeamSolver(
         policy.Diagnostics,
         _detailedDiagnostics,
         battleDamage,
-        _run.PotionStrategicCosts);
+        _run.PotionStrategicCosts,
+        policy.Multiplayer != null ? CompareMultiplayerPlans : null);
 
     private bool AllowsPotionUse(int slot, string potionId)
         => _potionStrategy.AllowsExplicitUse(

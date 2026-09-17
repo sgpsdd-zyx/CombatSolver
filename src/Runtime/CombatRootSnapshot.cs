@@ -27,6 +27,7 @@ internal sealed class CombatRootSnapshot
     public LiveCombatStamp LiveStamp { get; }
     public ContinuationStamp ContinuationStamp { get; }
     public int PlayerCount { get; }
+    public bool IsMultiplayerAdvisor => ((SimulatedCombatState)_rootSimulator.State.CombatState).AdvisorPlayer != null;
     public int StartTurnNumber { get; }
     public int InitialPlayerHp { get; }
     public int InitialPlayerMaxHp { get; }
@@ -123,6 +124,9 @@ internal sealed class CombatRootSnapshot
     }
 
     public static CombatRootSnapshot Capture(CombatState state)
+        => Capture(state, SolverController.IsMultiplayerSession);
+
+    internal static CombatRootSnapshot Capture(CombatState state, bool multiplayerAdvisor)
     {
         if (!NGame.IsMainThread())
             throw new InvalidOperationException("Combat root snapshot must be captured on the main thread.");
@@ -135,7 +139,8 @@ internal sealed class CombatRootSnapshot
         // Listener enumeration and third-party owner discovery are part of root capture.
         // Take the baseline first so any semantic mutation in those callbacks is rejected by
         // the existing after-capture stamp without paying for another full serialization.
-        ContinuationStamp continuationBefore = ContinuationStamp.CaptureLive(state);
+        bool advisor = multiplayerAdvisor;
+        ContinuationStamp continuationBefore = ContinuationStamp.CaptureLive(state, advisor);
         LiveCombatStamp liveBefore = LiveCombatStamp.FromContinuation(continuationBefore);
 
         Player player = LocalContext.GetMe(state)
@@ -153,6 +158,9 @@ internal sealed class CombatRootSnapshot
         IntentForecast forecast = IntentForecaster.Build(state, SolverWeights.SetupValueHorizonTurns);
 
         SimulatedCombatState simulatedCombat = new(state, liveCombatHookListeners);
+        simulatedCombat.AdvisorPlayer = advisor ? player : null;
+        if (advisor)
+            simulatedCombat.AdvisorExtraTurnPlayers = CombatManager.Instance.PlayersTakingExtraTurn.ToArray();
         CombatPredictionSimulator simulator = new(simulatedCombat);
         ContinuationStamp projected = ContinuationStamp.CapturePredicted(
             player,
@@ -188,7 +196,7 @@ internal sealed class CombatRootSnapshot
                 continuationBefore.DescribeFirstDifference(projected));
         }
 
-        ContinuationStamp continuationAfter = ContinuationStamp.CaptureLive(state);
+        ContinuationStamp continuationAfter = ContinuationStamp.CaptureLive(state, advisor);
         LiveCombatStamp liveAfter = LiveCombatStamp.FromContinuation(continuationAfter);
         if (!string.Equals(liveBefore.StateText, liveAfter.StateText, StringComparison.Ordinal)
             || !string.Equals(

@@ -102,6 +102,12 @@ internal sealed partial class CombatBeamSolver
         CoverageSummary coverage = GetCoverageSummary(simulator);
         IReadOnlyList<PredictionGap> predictionGaps = coverage.Gaps;
         bool risk = coverage.HasUncompensatedRisk;
+        if (IsMultiplayerAdvice && risk)
+        {
+            won = false;
+            if (boundary is SearchBoundaryReason.None or SearchBoundaryReason.AdvisoryHorizon)
+                boundary = SearchBoundaryReason.UnsupportedEffect;
+        }
         bool uncertainVictory = won && HasUncompensatedDeathGap(predictionGaps);
         if (uncertainVictory)
             boundary = SearchBoundaryReason.UnsupportedEffect;
@@ -141,7 +147,7 @@ internal sealed partial class CombatBeamSolver
         int roundIndex = turn - _startTurnNumber;
         SearchMeasurement threatMeasurement = _run.Performance.Begin();
         ThreatProjection threat;
-        if (won)
+        if (won || IsMultiplayerAdvice)
         {
             // A lethal player action ends combat immediately. Enemy intent from that round must
             // never lower the route's projected HP or leak into battle-loss reporting.
@@ -509,6 +515,16 @@ internal sealed partial class CombatBeamSolver
             aliveEnemyMask,
             potionInventoryKey,
             boundary);
+        if (IsMultiplayerAdvice)
+        {
+            // Intermediate guidance only; the final comparator uses ordered objectives.
+            // Actual enemy cycles, rather than the solo threat projection, establish safety.
+            score = (dead ? -1e12 : 0) + (won ? 1e11 : 0)
+                - cumulativePlayerHpLost * 100000d - enemyHp * 100d
+                + Math.Min(player.Block, combat.CurrentMonsterMoves().Sum(move => move.AttackHits.Sum(hit => hit.Damage))) * 1000d
+                + persistentBuffValue * 20d + reachableHandValue + playerState.Energy * 2d
+                - potionUseCount * 0.1d - actionCount * 0.001d;
+        }
         return new SimulationSnapshot(
             score,
             key,
@@ -585,6 +601,9 @@ internal sealed partial class CombatBeamSolver
             simulator,
             simulator.TerminalStamp)
         {
+            TeamSurvivors = IsMultiplayerAdvice
+                ? combat.Players.Count(peer => simulator.State.GetCreature(peer.Creature).IsAlive) : 0,
+            AdvisoryEnemyCycles = IsMultiplayerAdvice ? combat.AdvisorEnemyCycles : 0,
             GrowthHpCredit = growthHpCredit,
             RelicCounters = relicCounters,
             GrowthRewards = growthRewards,
@@ -1548,6 +1567,42 @@ internal sealed partial class CombatBeamSolver
         key.Add((int)playerState.Phase);
         key.Add(playerState.Stars);
         key.Add(shufflesCrossed);
+        if (IsMultiplayerAdvice)
+        {
+            key.Add(_player.NetId);
+            key.Add(simulatedCombat.RoundNumber);
+            key.Add((int)simulatedCombat.CurrentSide);
+            key.Add(policy.Multiplayer!.Horizon - simulatedCombat.AdvisorEnemyCycles);
+            key.Add(simulatedCombat.AdvisorExtraTurnPlayers.Count);
+            foreach (Player extra in simulatedCombat.AdvisorExtraTurnPlayers) key.Add(extra.NetId);
+            foreach (Player peer in simulatedCombat.Players)
+            {
+                var creature = simulator.State.GetCreature(peer.Creature);
+                var peerState = simulator.State.GetPlayerCombatState(peer);
+                key.Add(peer.NetId);
+                key.Add(peer.Creature.CombatId ?? uint.MaxValue);
+                key.Add(creature.CurrentHp);
+                key.Add(creature.MaxHp);
+                key.Add(creature.Block);
+                key.Add(peerState.Energy);
+                key.Add(peerState.Stars);
+                key.Add((int)peerState.Phase);
+                key.Add(simulatedCombat.GetPlayerTurnNumber(peer));
+                key.Add(simulatedCombat.GetPlayerGold(peer));
+                AppendPile(ref key, peerState.Hand, 'H');
+                AppendPile(ref key, peerState.DrawPile, 'D');
+                AppendPile(ref key, peerState.DiscardPile, 'C');
+                AppendPile(ref key, peerState.ExhaustPile, 'X');
+                AppendPile(ref key, peerState.PlayPile, 'P');
+                AppendOrbs(ref key, simulator, peerState.OrbQueue);
+                if (simulatedCombat.GetOsty(peer) is { } peerOsty)
+                {
+                    key.Add(simulator.State.GetCreature(peerOsty).CurrentHp);
+                    key.Add(simulator.State.GetCreature(peerOsty).Block);
+                    key.Add(simulatedCombat.GetOstyMaxHp(simulator, peer));
+                }
+            }
+        }
         Player owner = _player;
         if (simulatedCombat.GetOsty(owner) is { } osty)
         {

@@ -21,6 +21,8 @@ internal static partial class CardOnPlaySupport
     {
         CardModel card = playedCard.Preview;
         Creature owner = card.Owner.Creature;
+        if (combat.AdvisorPlayer != null)
+            ApplyMultiplayer(simulator, combat, card, target);
         CardPowerOnPlaySupport.Apply(combat, card);
         if (simulator.HasPendingChoice)
             return;

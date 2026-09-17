@@ -13,7 +13,11 @@ internal static class PotionExecutionSupport
     {
         combat.ConsumePotion(potion.Owner, slot);
         combat.BeforePotionUsed(simulator, potion, target);
-        return !combat.HasPendingChoice && PotionOnUseSupport.Use(simulator, combat, potion, target);
+        bool completed = !combat.HasPendingChoice && PotionOnUseSupport.Use(simulator, combat, potion, target);
+        if (combat.AdvisorPlayer != null && target?.Player is { } recipient
+            && PotionChoiceSupport.RequiresChoice(potion))
+            combat.RequireLocalChoice(recipient);
+        return completed;
     }
 
     internal static bool Complete(CombatPredictionSimulator simulator, SimulatedCombatState combat,

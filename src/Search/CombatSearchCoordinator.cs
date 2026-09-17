@@ -13,6 +13,16 @@ internal static partial class CombatSearchCoordinator
         CancellationToken cancellationToken,
         Action<SolverProgress>? progressCallback)
     {
+        if (policy.Multiplayer != null)
+        {
+            SolverSearchProfile advisoryProfile = policy.BudgetOverrideMilliseconds is { } budget
+                ? policy.Profile with { SoftTimeBudgetMilliseconds = budget } : policy.Profile;
+            SolverResult advice = new CombatBeamSolver(root, displayNames, battleDamage, policy,
+                cancellationToken, progressCallback, advisoryProfile).Solve();
+            advice.TotalSearchElapsed = advice.Elapsed;
+            advice.SingleSessionSearch = true;
+            return advice;
+        }
         SearchRequestWorkTotals requestWorkTotals = new();
         BeamWidthPortfolioTelemetry portfolioTelemetry = new();
         policy = policy with

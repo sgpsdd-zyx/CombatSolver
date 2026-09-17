@@ -227,13 +227,15 @@ internal sealed partial class SimulatedCombatState
                      .SelectMany(RelicsOf)
                      .Where(relic => !relic.IsMelted && participants.Contains(relic.Owner.Creature)))
         {
+            int ownerEtherealCount = AdvisorEtherealCounts?.GetValueOrDefault(relic.Owner)
+                ?? etherealExhaustCount;
             switch (relic)
             {
-                case JossPaper value when etherealExhaustCount > 0:
+                case JossPaper value when ownerEtherealCount > 0:
                 {
                     int threshold = value.DynamicVars["ExhaustAmount"].IntValue;
                     int exhausted = RelicPredictionStateSupport.GetJossPaperCardsExhausted(simulator, value)
-                        + etherealExhaustCount;
+                        + ownerEtherealCount;
                     int draws = exhausted / threshold;
                     RelicPredictionStateSupport.SetJossPaperCardsExhausted(
                         simulator,

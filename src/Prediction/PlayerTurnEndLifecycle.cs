@@ -35,6 +35,8 @@ internal static class PlayerTurnEndLifecycle
         Player player,
         IReadOnlyList<Creature> participants)
     {
+        if (combat.AdvisorPlayer != null)
+            return RunMultiplayerPhaseOne(simulator, combat, participants);
         simulator.State.GetPlayerCombatState(player).Phase = PlayerTurnPhase.End;
         EndTurnPowerSupport.TriggerVeryEarly(combat, participants);
         if (combat.HasPendingChoice)
@@ -52,6 +54,27 @@ internal static class PlayerTurnEndLifecycle
         {
             return false;
         }
+        CorePowerSupport.CompletePlayerEarlySideTurnEndEffects(combat, participants);
+        return !combat.HasPendingChoice;
+    }
+
+    private static bool RunMultiplayerPhaseOne(CombatPredictionSimulator simulator,
+        SimulatedCombatState combat, IReadOnlyList<Creature> participants)
+    {
+        Player[] players = participants.Select(creature => creature.Player!).ToArray();
+        EndTurnPowerSupport.TriggerVeryEarly(combat, participants);
+        if (combat.HasPendingChoice) return false;
+        TurnStartRelicSupport.TriggerBeforeSideTurnEnd(simulator, combat, participants);
+        if (combat.HasPendingChoice || !simulator.SimulateEndPlayerTurnBeforeOrbPassives(
+                combat.GetPlayerTurnNumber(combat.AdvisorPlayer!), players)) return false;
+        if (simulator.IsOverOrEnding) return true;
+        foreach (Player participant in players)
+        {
+            if (!OrbLifecycleSupport.TriggerBeforeTurnEnd(simulator, combat, participant)
+                || combat.HasPendingChoice || !simulator.SimulatePlayerTurnEndCards(participant))
+                return false;
+        }
+        simulator.CheckWinCondition(combat.GetPlayerTurnNumber(combat.AdvisorPlayer!));
         CorePowerSupport.CompletePlayerEarlySideTurnEndEffects(combat, participants);
         return !combat.HasPendingChoice;
     }

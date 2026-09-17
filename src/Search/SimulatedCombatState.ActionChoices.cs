@@ -40,7 +40,7 @@ internal sealed partial class SimulatedCombatState :
     {
         TurnStartChoiceCursor cursor = _activeActionChoices
             ?? throw new InvalidOperationException("模拟状态没有活动的动作选择游标。");
-        if (PendingTurnStartChoice == null)
+        if (PendingTurnStartChoice == null && !ExternalChoiceReached)
             cursor.AssertConsumed();
         LastActionChoicesConsumed = cursor.ConsumedExplicitChoiceCount;
         _activeActionChoices = null;
@@ -113,6 +113,7 @@ internal sealed partial class SimulatedCombatState :
         ISet<uint> processedEnemyDeaths,
         string? contextIdOverride = null)
     {
+        RequireLocalChoice(playedCard.Preview.Owner);
         TurnStartChoiceCursor choices = _activeActionChoices
             ?? throw new InvalidOperationException($"{sourceId} 在动作选择作用域外请求卡牌选择。");
         TurnStartChoiceRequest request = new(

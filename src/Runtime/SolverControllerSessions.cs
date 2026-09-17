@@ -149,6 +149,9 @@ internal sealed class SolverCombatSession
     public int? LastSolverDeployedTurn { get; set; }
     public bool ManualControlObserved { get; set; }
     public bool ShowcaseMode { get; set; }
+    public List<IReadOnlyList<PlanAction>> AdvisoryRoutes { get; } = [];
+    public bool AdvisoryStale { get; set; }
+    public long AdvisoryCheckedAt { get; set; }
     public CombatBugReportIssueLedger BugReportIssues { get; } = new();
 }
 

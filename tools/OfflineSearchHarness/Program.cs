@@ -122,6 +122,13 @@ internal static class Program
 
             if (options.Milestone != "M1")
             {
+                if (options.Scenario.MultiplayerContracts)
+                {
+                    Step(steps, "多人模拟合同", () => MultiplayerContracts.Run(combat!, options, loop));
+                    reached = "M2";
+                }
+                else
+                {
                 ModRuntime.SearchOutcome? outcome = null;
                 using MemorySampler memory = new(TimeSpan.FromMilliseconds(100));
                 Step(steps, $"M2.1 跑一次固定预算搜索（{options.SearchMode}）", () =>
@@ -165,6 +172,7 @@ internal static class Program
 
                 reached = "M2";
                 WriteProgress(options, "M2", "ok", "搜索完成并产出指标");
+                }
             }
         }
         catch (Exception error)
@@ -322,6 +330,7 @@ internal sealed record HarnessOptions
           --workspace <dir>      工作区目录（默认 .local/offline-harness）
           --language <code>      本地化语言码（默认 eng）
           --verbose-game-log     把游戏 info/debug 日志也打到标准输出
+          --multiplayer-contracts 原生双玩家回合与军师模拟对照（不建立网络连接）
         环境变量 OFFLINE_HARNESS_COMBATSOLVER_DLL 可以换掉运行时加载的 CombatSolver.dll。
         """;
 
@@ -353,7 +362,7 @@ internal sealed record HarnessOptions
         string character = "IRONCLAD", encounter = "FUZZY_WURM_CRAWLER_WEAK", seed = "OFFLINEHARNESS1";
         int ascension = 0, actIndex = 0, dop = 1, budget = 600_000;
         int? beam = null, nodes = null, cardBranches = null, pileBranches = null, handBranches = null;
-        bool usePortfolio = false;
+        bool usePortfolio = false, multiplayerContracts = false;
         string potionPolicy = "Smart", milestone = "M2", language = "eng";
         string profile = "Custom", searchMode = "Evaluate", label = "offline";
         string? output = null, requestPath = null;
@@ -390,6 +399,7 @@ internal sealed record HarnessOptions
                 case "--potion-policy": potionPolicy = Value(); break;
                 case "--search-mode": searchMode = Value(); break;
                 case "--use-portfolio": usePortfolio = true; break;
+                case "--multiplayer-contracts": multiplayerContracts = true; break;
                 case "--milestone": milestone = Value(); break;
                 case "--out": output = Value(); break;
                 case "--workspace": workspace = Value(); break;
@@ -414,7 +424,8 @@ internal sealed record HarnessOptions
 
         return new HarnessOptions
         {
-            Scenario = new HarnessScenario(character, encounter, seed, ascension, actIndex),
+            Scenario = new HarnessScenario(character, encounter, seed, ascension, actIndex)
+                { MultiplayerContracts = multiplayerContracts },
             RequestPath = requestPath,
             Label = label,
             Profile = profile,

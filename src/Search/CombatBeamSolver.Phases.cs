@@ -119,7 +119,9 @@ internal sealed partial class CombatBeamSolver
                 nameof(_minimumPotionUses),
                 "最少用药数必须非负且不能超过最多用药数。");
         }
-        if (root.PlayerCount != 1)
+        if (root.IsMultiplayerAdvisor != IsMultiplayerAdvice)
+            throw new InvalidOperationException("Search policy does not match the captured combat mode.");
+        if (!IsMultiplayerAdvice && root.PlayerCount != 1)
             throw new NotSupportedException("第一版只支持单人战斗。");
         if (root.Enemies.Count > 64)
             throw new NotSupportedException("单场战斗超过 64 个敌人，无法编码路线存活位图。");
@@ -325,7 +327,9 @@ internal sealed partial class CombatBeamSolver
                     $"turn={candidate.CombatEndedTurn?.ToString() ?? "-"}");
             }
             if (currentBestResult != null
-                && !SolverInterimResultOrdering.IsBetter(candidate, currentBestResult))
+                && (IsMultiplayerAdvice && currentBestNode != null
+                    ? CompareMultiplayerPlans(node, currentBestNode) >= 0
+                    : !SolverInterimResultOrdering.IsBetter(candidate, currentBestResult)))
             {
                 return;
             }
@@ -429,7 +433,7 @@ internal sealed partial class CombatBeamSolver
                 ? publishedCandidate.Node
                 : RefreshReleasedFallback(publishedCandidate.Node);
             RouteAnnotations materializedAnnotations = BuildRouteAnnotations(materializedNode);
-            BlockPotionInsertion? blockPotionInsertion = TryInsertBlockPotion(
+            BlockPotionInsertion? blockPotionInsertion = IsMultiplayerAdvice ? null : TryInsertBlockPotion(
                 materializedNode,
                 materializedAnnotations,
                 resultScope);
@@ -594,6 +598,7 @@ internal sealed partial class CombatBeamSolver
                 finalSnapshot.BoundaryReason,
                 finalSnapshot.PredictionGaps.ToArray())
             {
+                AdvisoryEnemyCycles = finalSnapshot.AdvisoryEnemyCycles,
                 DeathSavePotionHpRestored = finalSnapshot.DeathSavePotionHpRestored,
                 DeathSaveUseCount = finalSnapshot.DeathSaveUseCount,
                 ProjectedDeathSaveUseCount = finalSnapshot.ProjectedDeathSaveUseCount,
@@ -783,6 +788,9 @@ internal sealed partial class CombatBeamSolver
                 Elapsed = stopwatch.Elapsed,
                 Continuations = resultScope == SolverResultScope.CurrentTurnAdoption ? [] : continuations,
             };
+            result.IsMultiplayerAdvice = IsMultiplayerAdvice;
+            result.AdvisoryHorizon = policy.Multiplayer?.Horizon ?? 0;
+            result.ReplayedAdviceActions = _run.ReplayedAdviceActions;
             finalSnapshot.ReleaseSimulator();
             return result;
         }
@@ -1030,6 +1038,7 @@ internal sealed partial class CombatBeamSolver
         if (frontier.Count == 0)
             throw new InvalidOperationException("固定搜索前缀与全部回合准备选牌分支都不相容。");
 
+        SeedMultiplayerRoutes(frontier);
         List<SearchNode> completed = [];
         SearchNode fallback = frontier.MaxBy(static node => node.Score)!;
         SearchNode? potionFreeBoundaryFallback = null;

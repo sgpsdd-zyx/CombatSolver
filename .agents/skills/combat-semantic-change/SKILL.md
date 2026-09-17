@@ -5,6 +5,8 @@ description: 修改 CombatSolver 的卡牌、Power、遗物、药水、球、怪
 
 # CombatSolver 战斗语义修改
 
+本分支的多人军师语义必须单独验证：决策者是本机玩家，全队可变状态属于根/分支；队友未来不主动行动，但其阶段、被动、抽牌和受击仍结算。队友选择显式形成边界，不代选。修改全队回合或额外回合时对账完整 `ContinuationStamp`，并保留单人入口原行为；离线合同不代表真实联机验收。入口见 `docs/multiplayer-advisor.md`。
+
 ## 适用边界
 
 本 skill 处理会改变合法动作或战斗结算的语义。纯 UI、职责移动、Beam/评分调优和发布工作分别使用对应 skill。

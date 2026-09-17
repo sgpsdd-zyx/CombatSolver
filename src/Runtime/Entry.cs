@@ -111,12 +111,17 @@ public static class Entry
     {
         if (!Enabled
             || state.CurrentSide != CombatSide.Player
-            || NGame.Instance == null
-            || SolverController.IsMultiplayerSession)
+            || NGame.Instance == null)
             return;
         if (SolverController.SolverDisabled)
         {
             SolverOverlay.ShowDisabled(NGame.Instance);
+            return;
+        }
+        if (SolverController.IsMultiplayerSession)
+        {
+            if (!SolverOverlay.IsVisible)
+                SolverOverlay.ShowManualCalculationReady(NGame.Instance, SolverController.HasCalculatedThisCombat);
             return;
         }
         if (!SolverController.PrepareAutomaticSearchForTurn(NGame.Instance, state))

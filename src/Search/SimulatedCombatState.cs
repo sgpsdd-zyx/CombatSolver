@@ -436,6 +436,10 @@ internal sealed partial class SimulatedCombatState
         ForkableList<Creature> escapedCreatures)
     {
         _runState = source._runState;
+        AdvisorPlayer = source.AdvisorPlayer;
+        AdvisorExtraTurnPlayers = source.AdvisorExtraTurnPlayers;
+        AdvisorEnemyCycles = source.AdvisorEnemyCycles;
+        AdvisorEtherealCounts = source.AdvisorEtherealCounts;
         _runRngSnapshot = source._runRngSnapshot;
         _currentActIndex = source._currentActIndex;
         _currentRoomType = source._currentRoomType;
@@ -899,7 +903,19 @@ internal sealed partial class SimulatedCombatState
 
     public void RecordThievery(CombatPredictionSimulator simulator, Creature owner)
     {
+        if (AdvisorPlayer != null)
+        {
+            foreach (ThieveryPower power in EffectivePowers().OfType<ThieveryPower>()
+                         .Where(power => power.Owner == owner).ToArray())
+                RecordPlayerThievery(simulator, power);
+            return;
+        }
         ThieveryPower? source = GetPower<ThieveryPower>(owner);
+        RecordPlayerThievery(simulator, source);
+    }
+
+    private void RecordPlayerThievery(CombatPredictionSimulator simulator, ThieveryPower? source)
+    {
         if (source?.Target?.Player is not { } target
             || simulator.State.GetCreature(source.Target).IsDead)
             return;
@@ -2136,7 +2152,7 @@ internal sealed partial class SimulatedCombatState
             ? relics
             : throw new InvalidOperationException($"Player {player.NetId} is outside the captured relic inventory.");
 
-    private int PotionSlotCount(Player player)
+    internal int PotionSlotCount(Player player)
         => _rootPotionSlotCounts.TryGetValue(player, out int count)
             ? count
             : throw new InvalidOperationException($"Player {player.NetId} is outside the captured potion inventory.");

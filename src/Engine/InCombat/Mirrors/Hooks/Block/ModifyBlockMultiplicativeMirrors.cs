@@ -76,6 +76,13 @@ internal static class ModifyBlockMultiplicativeMirrors
         ModifyBlockMultiplicativeMirrorContext context)
     {
         int playerCount = context.State.CombatState.Players.Count;
+        if (context.State.CombatState is SimulatedCombatState { AdvisorPlayer: not null } combat)
+        {
+            if (context.Target is { IsPrimaryEnemy: false, IsSecondaryEnemy: false }
+                || !context.Props.IsPoweredCardOrMonsterMoveBlock()) return 1m;
+            return playerCount <= 2 ? playerCount
+                : playerCount * MultiplayerScalingModel.GetMultiplayerScaling(combat.Encounter, combat.CurrentActIndex);
+        }
         if (playerCount != 1)
             throw new NotSupportedException($"CombatSolver only supports single-player combat, found {playerCount} players.");
         return 1m;

@@ -10,6 +10,10 @@
 
 ## 1. 运行链
 
+### 多人手动建议分支
+
+`SolverController` 在网络多人中只接受 Manual 请求，排空旧 worker 后主线程捕获整个战场。`SolverController.Multiplayer` 持有过期标记和有界纯动作路线，不做自动续用或部署；`ContinuationStamp.Multiplayer` 对账全队状态。`MultiplayerSearchPolicy` 注入最多七次敌方周期与独立建议排序，`CombatBeamSolver.Multiplayer` 重放旧前缀，重放计数属于 `SearchRunContext`；`MultiplayerRound` 编排全队回合，不接管实机。已推演的敌方周期从分支按值复制至 `SimulationSnapshot`、`SolverSnapshot` 和 UI，与窗口上限分开显示，不增加原节点/时间预算。`SimulatedCombatState.Multiplayer` 的身份、窗口和额外回合参与者随 Fork 复制，其他队员数值继续属于既有影子状态。队友选择通过显式边界退出，本人选择继续搜索。UI 仍只渲染 snapshot，单人调用原有路径。详见 [行为与验证](multiplayer-advisor.md)。
+
 ### 单一搜索预算与兼容边界
 
 遗物计数策略由 `RelicCounterCatalog` 声明已核对的跨战斗计数，Runtime 过滤总/单项开关与当前持有对象，冻结到 `SearchPolicySnapshot.RelicTargets`。`SimulatedCombatState.RelicCounters` 只投影既有分支状态，`RelicCounterPolicy` 生成范围达标掩码和一次性 HP 额度。快照的 `StrategicHpCredit` 汇总成长与计数额度，终局/中间排序、用药审计及保路共享；真实战损早停仍须同时满足成长、药水、偷窃和已启用的遗物目标。`SolverRelicStrategyPanel` 拥有 UI 输入，Overlay 只接线，Controller 使续用失效并按原自动计算偏好重算。设置导出、归档恢复与磁盘路线键携带同一策略，旧包默认关闭。见 [完整计数清单](relic-counters.md)。

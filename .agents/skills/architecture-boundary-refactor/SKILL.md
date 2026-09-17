@@ -5,6 +5,8 @@ description: 重构 CombatSolver 的 Search、Runtime 会话、UI snapshot、无
 
 # CombatSolver 架构边界重构
 
+本分支的多人军师由 Runtime 持有旧建议及过期标记，主线程捕获全队根；Search 只消费 `MultiplayerSearchPolicy` 与冻结状态，搜索期的重放计数属于 `SearchRunContext`，UI 只显示建议快照。多人部署禁令与仅手动重算入口必须保留，不能借结构调整改变单人路径。职责及验证范围见 `docs/multiplayer-advisor.md`。
+
 ## 适用边界
 
 本 skill 处理结构和所有权：拆分大类、迁移 run/session state、建立策略对象、隔离 renderer、整理测试编排、为工具提供稳定元数据。

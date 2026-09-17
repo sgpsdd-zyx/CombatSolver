@@ -13,9 +13,9 @@ internal sealed partial class CombatPredictionSimulator
     /// <summary>
     /// Currently mirrors the prediction-relevant parts of <see cref="CombatManager.EndPlayerTurnPhaseOneInternal()"/>.
     /// </summary>
-    internal bool SimulateEndPlayerTurnBeforeOrbPassives(int playerTurn)
+    internal bool SimulateEndPlayerTurnBeforeOrbPassives(int playerTurn, IReadOnlyList<Player>? participants = null)
     {
-        var playersEndingTurn = State.CombatState.Players;
+        var playersEndingTurn = participants ?? State.CombatState.Players;
 
         foreach (var player in playersEndingTurn)
         {
@@ -103,6 +103,8 @@ internal sealed partial class CombatPredictionSimulator
             return DoTurnEndCards(turnEndCards);
         return true;
     }
+
+    internal bool SimulatePlayerTurnEndCards(Player player) => DoTurnEnd(player);
 
     /// <summary>
     /// Mirrors the prediction-relevant parts of <see cref="CombatManager.DoTurnEndCards"/>.

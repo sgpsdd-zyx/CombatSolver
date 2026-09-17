@@ -1,4 +1,20 @@
 {
+  "MULTIPLAYER-ADVISOR-MANAGED-CONTRACTS": {
+    "status": "Passed",
+    "level": "OfflineManagedNativeDifferentialAndSearchContract",
+    "procedure": "OfflineSearchHarness --multiplayer-contracts --encounter FOGMOG_NORMAL --beam 12 --nodes 350 --budget-ms 12000 --dop 2; two players, local index 1, both players set to 500 HP for the long window",
+    "expected": "Frozen party state matches native managed combat through six full turns; five/seven enemy-turn limits, partial-budget depth, own choices, potions and manual-only controls remain valid",
+    "observed": "2026-09-17: native_turns=6:equal, horizons=5,7, frozen_root=equal, actions=23, turns=7, reuse=1, cards=4, peer_potion=equal, extra_turn=equal, peer_choice=boundary, potion_choice=native_equal, potion_directives=passed, native_controls=blocked, partial_depth_ui=passed; contract step 5.112 seconds. No Godot, network or visible UI verification.",
+    "evidence": "tools/OfflineSearchHarness/MultiplayerContracts.cs; docs/multiplayer-advisor.md; .local/mp-seven/harness-result.json; .local/mp-seven.log"
+  },
+  "MULTIPLAYER-ADVISOR-SOLO-SENTINEL": {
+    "status": "Passed",
+    "level": "OfflineSearchBaselineComparison",
+    "procedure": "Compare final single-player sentinel with the separately built unmodified 8411164 baseline, Beam 12 / 350 nodes / 12000 ms / DOP 1",
+    "expected": "Same non-timing search metrics, route actions, complete root state and catalog identity",
+    "observed": "2026-09-17: 61 solver metrics, 9 actions, 1 root state and 1 catalog comparison equal; 126 expanded nodes, 376 transitions, turn-3 victory, 4 HP cumulative loss. One sentinel, not a full single-player regression.",
+    "evidence": "tools/OfflineSearchHarness/compare_results.py; docs/multiplayer-advisor.md; .local/solo-seven/; .local/solo-seven-comparison.json"
+  },
   "REPORT-CARDS-ORBIT-ENERGY-GATE": {
     "status": "Passed",
     "level": "HeadlessNativeDifferentialAndForkContract",

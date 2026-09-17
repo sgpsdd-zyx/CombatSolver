@@ -18,7 +18,7 @@ namespace CombatSolver;
 /// <summary>
 /// 跨回合续用路线的逐项状态文本。它不是哈希；只有实际状态与预测状态文本完全相等才允许复用。
 /// </summary>
-internal sealed record ContinuationStamp(string StateText)
+internal sealed partial record ContinuationStamp(string StateText)
 {
     public string DescribeFirstDifference(ContinuationStamp actual)
         => DescribeDifferences(actual, maximumDifferences: 1).FirstOrDefault() ?? "none";
@@ -66,6 +66,9 @@ internal sealed record ContinuationStamp(string StateText)
     }
 
     public static ContinuationStamp CaptureLive(CombatState state)
+        => CaptureLive(state, SolverController.IsMultiplayerSession);
+
+    internal static ContinuationStamp CaptureLive(CombatState state, bool multiplayerAdvisor)
     {
         Player player = LocalContext.GetMe(state)
             ?? throw new InvalidOperationException("找不到本地玩家。");
@@ -110,6 +113,8 @@ internal sealed record ContinuationStamp(string StateText)
             state.RunState.Rng.CombatOrbGeneration.CaptureState(),
             state.RunState.Rng.MonsterAi.CaptureState(),
             state.RunState.Rng.Niche.CaptureState());
+        if (multiplayerAdvisor)
+            AppendMultiplayerLive(text, state, player);
         return new ContinuationStamp(text.ToString());
     }
 
@@ -152,7 +157,8 @@ internal sealed record ContinuationStamp(string StateText)
         AppendPredictedPile(text, pcs.ExhaustPile, 'X');
         combat.AppendPredictedTurnCardHistory(text, player);
         AppendPredictedOrbs(text, simulator, pcs.OrbQueue.Capacity, pcs.OrbQueue.Orbs);
-        AppendPotions(text, player, slot => combat.GetPotionAtSlot(player, slot));
+        AppendPotions(text, player, slot => combat.GetPotionAtSlot(player, slot),
+            combat.AdvisorPlayer == null ? null : combat.PotionSlotCount(player));
         combat.AppendPredictedStatefulRelics(text, player);
         RelicPredictionStateSupport.AppendPredictedContinuation(
             text,
@@ -173,6 +179,8 @@ internal sealed record ContinuationStamp(string StateText)
             simulator.Rng.CombatOrbGenerationState,
             simulator.Rng.MonsterAiState,
             simulator.Rng.NicheState);
+        if (combat.AdvisorPlayer != null)
+            AppendMultiplayerPredicted(text, simulator, combat, player);
         return new ContinuationStamp(text.ToString());
     }
 
@@ -278,10 +286,11 @@ internal sealed record ContinuationStamp(string StateText)
             .Append('/').Append(hp)
             .Append('/').Append(maxHp);
 
-    private static void AppendPotions(StringBuilder text, Player player, Func<int, PotionModel?> getPotion)
+    private static void AppendPotions(StringBuilder text, Player player, Func<int, PotionModel?> getPotion,
+        int? capturedSlotCount = null)
     {
         text.Append(";potions=");
-        for (int slot = 0; slot < player.PotionSlots.Count; slot++)
+        for (int slot = 0; slot < (capturedSlotCount ?? player.PotionSlots.Count); slot++)
         {
             if (slot > 0)
                 text.Append(',');
