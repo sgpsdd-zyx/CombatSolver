@@ -1,0 +1,15 @@
+尖塔军师 v0.1.3 安装说明
+
+1. 退出游戏。
+2. 将压缩包中的「尖塔军师」文件夹复制到游戏目录的 mods 文件夹。
+   已安装旧版时，覆盖 mods/尖塔军师 中的同名文件。
+3. 确认 DLL 路径为 mods/尖塔军师/尖塔军师.dll，然后启动游戏。
+   不要另建第二个模组文件夹同时加载旧版和新版。
+
+无需安装额外前置库。根目录的功能说明和修复说明可以留作参考。
+本次修复针对加入别人房间时误读其他玩家卡组的问题。
+原包功能说明里的版本文字同步为 v0.1.3。
+
+Install: close the game, then copy the mod folder into the game's mods directory,
+replacing the existing files in that same folder. Do not load two copies of the mod.
+No additional runtime dependency is required.
