@@ -12,7 +12,7 @@
 | 要查什么 | 入口 |
 |---|---|
 | 多人手动军师、单回合 3 HP 输出目标、七回合搜索与官方 0.41.0 兼容记录 | [多人军师](multiplayer-advisor.md) |
-| 多人策略研究回文、源码复核与分阶段实施取舍（尚未实施） | [研究原文](CombatSolver_Multiplayer_Strategy_Research_and_Design.md)、[实施评审](multiplayer-advisor.md#研究落地评审尚未实施) |
+| 多人研究原文归档、当前基线与分阶段实施取舍 | [策略索引](strategy/README.md#多人研究归档)、[实施评审](multiplayer-advisor.md#研究落地评审尚未实施) |
 | 交给 ChatGPT 6 Pro 的 GitHub 研究入口、多人专属修改与单人隔离验收 | [多人策略研究提示词](strategy/multiplayer-pro-research-prompt-20260917.md)、[固定基线资料](strategy/multiplayer-research-context-f220a6b.md) |
 | 能力牌逐卡建模、统一估值接口与后续独立搜索分支 | [能力牌优化计划](strategy/power-card-valuation-plan-20260917.md) |
 | 无需训练的有界新颖性／Beam 组合、实验开关和完整对照 | [有界多策略搜索](strategy/bounded-novelty-search-20260916.md) |
