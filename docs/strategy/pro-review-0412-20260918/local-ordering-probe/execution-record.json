@@ -1,0 +1,28 @@
+{
+  "date": "2026-09-18",
+  "sourceCommit": "2dc5d15b26f16d89436af0fb98650d8b4cf6b411",
+  "behaviorCommit": "b29d6fc",
+  "workspaceBase": "9885a75",
+  "productionAssembly": ".godot/mono/temp/bin/Release/CombatSolver.dll",
+  "productionAssemblyEvidence": "Reused successful 0.41.2 release build; relevant source and inputs equal to fixed release commit.",
+  "probeBuild": {
+    "exitCode": 0,
+    "elapsedSeconds": 1.54,
+    "errors": 0,
+    "warnings": [
+      "CS8625: synthetic SearchNode has no CombatProgressState; comparator does not read it."
+    ]
+  },
+  "probeExecution": {
+    "exitCode": 0,
+    "cases": 5,
+    "stderr": ""
+  },
+  "scope": "Direct production ordering on synthetic scalar candidate facts; not a native or simulated battle, full search, network replay, or performance benchmark.",
+  "commands": [
+    "dotnet build .local/mp-pro-review-0412-20260918/ordering-probe/OrderingProbe.csproj -c Release --nologo",
+    "dotnet .local/mp-pro-review-0412-20260918/ordering-probe/bin/Release/net9.0/OfflineSearchHarness.dll"
+  ],
+  "productionSourceChanged": false,
+  "existingBehaviorChecksRepeated": false
+}

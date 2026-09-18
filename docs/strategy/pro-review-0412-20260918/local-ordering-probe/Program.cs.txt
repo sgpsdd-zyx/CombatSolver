@@ -1,0 +1,161 @@
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Runtime.Loader;
+using System.Text.Json;
+using CombatSolver;
+
+internal static class Program
+{
+    public static int Main()
+    {
+        string dll = Path.GetFullPath((string)AppContext.GetData("CombatSolverDll")!);
+        string[] directories = [Path.GetDirectoryName(dll)!,
+            .. new[] { "Sts2DataDir", "RitsuLibDir", "RitsuLibCompatDir", "RitsuLibSharedDir" }
+                .Select(key => AppContext.GetData(key) as string).OfType<string>()
+                .Where(path => !string.IsNullOrWhiteSpace(path)).Select(Path.GetFullPath)];
+        AssemblyLoadContext.Default.Resolving += (context, name) =>
+        {
+            string? path = directories.Select(dir => Path.Combine(dir, name.Name + ".dll"))
+                .FirstOrDefault(File.Exists);
+            return path == null ? null : context.LoadFromAssemblyPath(path);
+        };
+        // Delay loading game-dependent types until the normal assembly resolver is installed.
+        typeof(Program).Assembly.GetType("OrderingProbe")!.GetMethod("Run")!.Invoke(null, null);
+        return 0;
+    }
+}
+
+internal static class OrderingProbe
+{
+    private const BindingFlags Private = BindingFlags.Instance | BindingFlags.NonPublic;
+    private static readonly List<object> Results = [];
+
+    public static void Run()
+    {
+        CombatBeamSolver solver = Bare<CombatBeamSolver>();
+        SearchPolicySnapshot policy = Bare<SearchPolicySnapshot>();
+        Set(policy, nameof(SearchPolicySnapshot.Multiplayer), new MultiplayerSearchPolicy());
+        Field(solver, "<root>P", Bare<CombatRootSnapshot>());
+        Field(solver, "<policy>P", policy);
+        Field(solver, "_profile", new SolverSearchProfile(1, 100, 8, 8, 8, 1000));
+        Field(solver, "_potionStrategy", new PotionStrategySnapshot(SolverPotionPolicy.Smart, []));
+        Field(solver, "_potionPolicy", SolverPotionPolicy.Smart);
+
+        MultiplayerCycleCheckpoint shared = Checkpoint(1, enemy: 100);
+        SearchNode win = Node(shared, won: true, enemy: 0, actions: 6);
+        SearchNode partial = Node(Checkpoint(1, enemy: 10), enemy: 10, actions: 6);
+        var mixed = Batch(solver, win, partial);
+        object winFacts = Facts(solver, win, mixed.Depth);
+        Require(mixed.Depth == 1 && !Get<bool>(winFacts, "Won") && ReferenceEquals(mixed.Nodes[0], partial),
+            "Expected the release comparator to project the known win to its non-winning checkpoint.");
+        var capped = Batch(solver, win, partial,
+            Node(Checkpoint(1, enemy: 20), enemy: 20),
+            Node(Checkpoint(1, enemy: 30), enemy: 30),
+            Node(Checkpoint(1, enemy: 40), enemy: 40));
+        Require(capped.Nodes.Count == 4 && !capped.Nodes.Contains(win), "Expected truncation to remove the win.");
+        var terminalOnly = Batch(solver, win);
+        Require(terminalOnly.Depth == 7 && Get<bool>(Facts(solver, win, terminalOnly.Depth), "Won"),
+            "The all-terminal control should retain the victory fact.");
+        SearchNode immediateWin = Node(null, won: true, enemy: 0);
+        var immediate = Batch(solver, immediateWin, partial);
+        Require(ReferenceEquals(immediate.Nodes[0], immediateWin), "An immediate victory must win the control.");
+        Results.Add(new { Case = "terminal_checkpoint_masks_victory", Evidence = "production_functions_on_synthetic_facts",
+            MixedDepth = mixed.Depth, SnapshotWon = win.Snapshot.AllEnemiesDead,
+            ProjectedWon = Get<bool>(winFacts, "Won"), RankedFirst = "unfinished_enemy_10",
+            WinRemovedByFourCandidateCap = !capped.Nodes.Contains(win),
+            TerminalOnlyDepth = terminalOnly.Depth, ImmediateVictoryControl = "preferred" });
+
+        SearchNode spendSave = Node(Checkpoint(1, enemy: 10, saves: 1), enemy: 10, saves: 1);
+        SearchNode loseFour = Node(Checkpoint(1, enemy: 10, loss: 4), enemy: 10, loss: 4,
+            budget: new MultiplayerHpLossBudget(1, 0, 4));
+        var resources = Batch(solver, spendSave, loseFour);
+        Require(ReferenceEquals(resources.Nodes[0], loseFour), "Death-save count should precede local excess HP.");
+        Results.Add(new { Case = "aggregate_save_before_local_budget", Evidence = "production_ordering_only_owner_not_encoded",
+            PreferredLocalHpLost = 4, PreferredDeathSaves = 0, RejectedLocalHpLost = 0, RejectedDeathSaves = 1,
+            Ownership = "The comparator cannot distinguish local and teammate death-save events." });
+
+        MultiplayerCycleCheckpoint first = Checkpoint(1, enemy: 50);
+        SearchNode shallow = Node(first, enemy: 50, actions: 3);
+        SearchNode deepRisk = Node(Checkpoint(2, enemy: 10, loss: 4, previous: first), enemy: 10, loss: 4,
+            actions: 6, budget: new MultiplayerHpLossBudget(1, 0, 4));
+        var asymmetric = Batch(solver, shallow, deepRisk);
+        Require(asymmetric.Depth == 1 && ReferenceEquals(asymmetric.Nodes[0], shallow),
+            "Later known excess should refute the continuation despite an equal shared checkpoint.");
+        Results.Add(new { Case = "known_tail_risk_vs_unknown_tail", Evidence = "production_ordering_policy_observation",
+            CommonDepth = asymmetric.Depth, Preferred = "shallow_unknown_tail", DeepKnownExcess = 1,
+            Classification = "Coverage/policy question; not proof of incorrect simulation." });
+
+        SearchNode deepGood = Node(Checkpoint(2, enemy: 10, previous: first), enemy: 10, actions: 6);
+        var extraWork = Batch(solver, shallow, deepGood);
+        Require(extraWork.Depth == 1 && ReferenceEquals(extraWork.Nodes[0], shallow),
+            "After projection, total action count should break the otherwise equal comparison.");
+        Results.Add(new { Case = "whole_route_action_count_after_common_depth", Evidence = "production_ordering_policy_observation",
+            CommonDepth = extraWork.Depth, SharedEnemyHp = 50, DeepCurrentEnemyHp = 10,
+            PreferredActionCount = shallow.ActionCount, RejectedActionCount = deepGood.ActionCount,
+            Classification = "Positive tail progress is ignored; longer suffix still loses the tie." });
+
+        SearchNode dead = Node(Checkpoint(1, enemy: 0, loss: 40), enemy: 0, loss: 40, dead: true,
+            budget: new MultiplayerHpLossBudget(37, 0, 40));
+        var deathControl = Batch(solver, partial, dead);
+        Require(ReferenceEquals(deathControl.Nodes[0], partial), "A dead local player must lose the control.");
+        Results.Add(new { Case = "local_death_control", Preferred = "alive_unfinished", Passed = true });
+
+        Console.WriteLine(JsonSerializer.Serialize(new {
+            SourceCommit = "2dc5d15b26f16d89436af0fb98650d8b4cf6b411",
+            Version = "0.41.2", BehaviorCommit = "b29d6fc", ProductionAssemblyRebuilt = false,
+            Scope = "Frozen candidate facts invoke existing production PrepareMultiplayerFinalCandidates and MultiplayerFactsAt. No root capture, simulator, search expansion, replay, native game, or network session.",
+            Cases = Results.Count, Results }, new JsonSerializerOptions { WriteIndented = true }));
+    }
+
+    private static (List<SearchNode> Nodes, int Depth) Batch(CombatBeamSolver solver, params SearchNode[] nodes)
+    {
+        object result = typeof(CombatBeamSolver).GetMethod("PrepareMultiplayerFinalCandidates", Private)!
+            .Invoke(solver, [nodes])!;
+        object ordering = Get<object>(result, "Ordering");
+        return (Get<List<SearchNode>>(result, "Candidates"), Get<int>(ordering, "EnemyCycles"));
+    }
+
+    private static object Facts(CombatBeamSolver solver, SearchNode node, int depth)
+        => typeof(CombatBeamSolver).GetMethod("MultiplayerFactsAt", Private)!.Invoke(solver, [node, depth])!;
+
+    private static MultiplayerCycleCheckpoint Checkpoint(int cycle, int enemy, int loss = 0, int saves = 0,
+        MultiplayerCycleCheckpoint? previous = null)
+        => new(cycle, 40 - loss, loss, saves, enemy, 2, 0, previous);
+
+    private static SearchNode Node(MultiplayerCycleCheckpoint? checkpoint, int enemy, bool won = false,
+        int loss = 0, int saves = 0, int actions = 3, bool dead = false, MultiplayerHpLossBudget budget = default)
+    {
+        // Only the values read by the production comparator are synthesized; no live game state exists.
+        SimulationSnapshot snapshot = Bare<SimulationSnapshot>();
+        Set(snapshot, nameof(SimulationSnapshot.AdvisoryLastEnemyCycle), checkpoint);
+        Set(snapshot, nameof(SimulationSnapshot.AdvisoryEnemyCycles), checkpoint?.Cycle ?? 0);
+        Set(snapshot, nameof(SimulationSnapshot.AdvisoryHpLossAllowance), 3);
+        Set(snapshot, nameof(SimulationSnapshot.AdvisoryLastEnemyCycleHpLost), checkpoint?.HpLost ?? 0);
+        Set(snapshot, nameof(SimulationSnapshot.AllEnemiesDead), won);
+        Set(snapshot, nameof(SimulationSnapshot.PlayerDead), dead);
+        Set(snapshot, nameof(SimulationSnapshot.PlayerHp), 40 - loss);
+        Set(snapshot, nameof(SimulationSnapshot.PlayerMaxHp), 80);
+        Set(snapshot, nameof(SimulationSnapshot.CumulativePlayerHpLost), loss);
+        Set(snapshot, nameof(SimulationSnapshot.EnemyHp), enemy);
+        Set(snapshot, nameof(SimulationSnapshot.TeamSurvivors), 2);
+        Set(snapshot, nameof(SimulationSnapshot.DeathSaveUseCount), saves);
+        SearchNode? node = null;
+        for (int i = 1; i <= actions; i++)
+            node = new SearchNode(new PlanAction(PlanActionKind.EndTurn, (checkpoint?.Cycle ?? 0) + 1),
+                i, 0, 0, (checkpoint?.Cycle ?? 0) + 1, default, 0, 0, default, false,
+                SearchBoundaryReason.None, won || dead, node, snapshot, default);
+        Set(node!, nameof(SearchNode.AdvisoryHpLoss), budget);
+        return node!;
+    }
+
+    private static T Bare<T>() where T : class => (T)RuntimeHelpers.GetUninitializedObject(typeof(T));
+    private static T Get<T>(object obj, string name) => (T)obj.GetType().GetProperty(name)!.GetValue(obj)!;
+    private static void Set(object obj, string name, object? value) => Field(obj, $"<{name}>k__BackingField", value);
+    private static void Field(object obj, string name, object? value)
+        => (obj.GetType().GetField(name, Private) ?? throw new MissingFieldException(obj.GetType().FullName, name))
+            .SetValue(obj, value);
+    private static void Require(bool condition, string message)
+    {
+        if (!condition) throw new InvalidOperationException(message);
+    }
+}

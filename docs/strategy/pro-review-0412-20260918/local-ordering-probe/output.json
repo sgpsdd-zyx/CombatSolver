@@ -1,0 +1,53 @@
+{
+  "SourceCommit": "2dc5d15b26f16d89436af0fb98650d8b4cf6b411",
+  "Version": "0.41.2",
+  "BehaviorCommit": "b29d6fc",
+  "ProductionAssemblyRebuilt": false,
+  "Scope": "Frozen candidate facts invoke existing production PrepareMultiplayerFinalCandidates and MultiplayerFactsAt. No root capture, simulator, search expansion, replay, native game, or network session.",
+  "Cases": 5,
+  "Results": [
+    {
+      "Case": "terminal_checkpoint_masks_victory",
+      "Evidence": "production_functions_on_synthetic_facts",
+      "MixedDepth": 1,
+      "SnapshotWon": true,
+      "ProjectedWon": false,
+      "RankedFirst": "unfinished_enemy_10",
+      "WinRemovedByFourCandidateCap": true,
+      "TerminalOnlyDepth": 7,
+      "ImmediateVictoryControl": "preferred"
+    },
+    {
+      "Case": "aggregate_save_before_local_budget",
+      "Evidence": "production_ordering_only_owner_not_encoded",
+      "PreferredLocalHpLost": 4,
+      "PreferredDeathSaves": 0,
+      "RejectedLocalHpLost": 0,
+      "RejectedDeathSaves": 1,
+      "Ownership": "The comparator cannot distinguish local and teammate death-save events."
+    },
+    {
+      "Case": "known_tail_risk_vs_unknown_tail",
+      "Evidence": "production_ordering_policy_observation",
+      "CommonDepth": 1,
+      "Preferred": "shallow_unknown_tail",
+      "DeepKnownExcess": 1,
+      "Classification": "Coverage/policy question; not proof of incorrect simulation."
+    },
+    {
+      "Case": "whole_route_action_count_after_common_depth",
+      "Evidence": "production_ordering_policy_observation",
+      "CommonDepth": 1,
+      "SharedEnemyHp": 50,
+      "DeepCurrentEnemyHp": 10,
+      "PreferredActionCount": 3,
+      "RejectedActionCount": 6,
+      "Classification": "Positive tail progress is ignored; longer suffix still loses the tie."
+    },
+    {
+      "Case": "local_death_control",
+      "Preferred": "alive_unfinished",
+      "Passed": true
+    }
+  ]
+}

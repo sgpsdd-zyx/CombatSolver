@@ -1,0 +1,59 @@
+{
+  "date": "2026-09-18",
+  "sourceCommit": "2dc5d15b26f16d89436af0fb98650d8b4cf6b411",
+  "version": "0.41.2",
+  "behaviorCommit": "b29d6fc",
+  "workspaceBase": "9885a75",
+  "reviewer": "ChatGPT 6 Pro",
+  "browserEnvironment": "Hubstudio 8",
+  "conversation": "https://chatgpt.com/c/6aacf71e-165c-83ec-896a-a77f789ad559",
+  "submittedUiTime": "2026-09-18 06:43 America/Los_Angeles",
+  "uiReportedWorkDuration": "45m 43s",
+  "status": "originals-received",
+  "sourceInput": {
+    "fileCount": 2017,
+    "archiveBytes": 7511645,
+    "request": "../multiplayer-pro-review-0412-request-20260918.md"
+  },
+  "downloadEvidence": "Native browser showed Done for the two Markdown reports and the 171 KB evidence ZIP.",
+  "originalFilesPreserved": [
+    "CombatSolver_0.41.2_Evidence_README.md",
+    "CombatSolver_0.41.2_Evidence_SHA256SUMS.txt",
+    "CombatSolver_0.41.2_Review_Conclusions.md",
+    "CombatSolver_0.41.2_abstract_checks.py",
+    "CombatSolver_0.41.2_abstract_output.txt",
+    "CombatSolver_0.41.2_abstract_results.json",
+    "CombatSolver_0.41.2_archive_diff.json",
+    "CombatSolver_0.41.2_integrity.json",
+    "CombatSolver_0.41.2_read_ranges.jsonl",
+    "CombatSolver_Multiplayer_Strategy_Optimization_0.41.2.md"
+  ],
+  "ignoredLocalMaterials": [
+    ".local/mp-pro-review-0412-20260918/CombatSolver-0.41.2-source.zip",
+    ".local/mp-pro-review-0412-20260918/CombatSolver_0.41.2_Review_Evidence.zip",
+    ".local/mp-pro-review-0412-20260918/CombatSolver_0.41.2_original_manifest.json"
+  ],
+  "proReportedExecution": {
+    "python": "3.13.5",
+    "abstractChecks": 18,
+    "sourceSubstringChecks": 6,
+    "permutations": 840,
+    "firstTripleChecks": 216,
+    "fixedContextTripleChecks": 55296,
+    "productionCSharpRun": false,
+    "nativeGameRun": false,
+    "realMultiplayerRun": false
+  },
+  "localExecution": {
+    "existingProductionDllScalarProbeGroups": 5,
+    "probeBuiltOnce": true,
+    "probeRunOnce": true,
+    "probeCompileWarnings": 1,
+    "probeExitCode": 0,
+    "mainDllRebuilt": false,
+    "externalAbstractScriptRerun": false,
+    "gameSimulatorRun": false,
+    "realMultiplayerRun": false
+  },
+  "scope": "Research, independent review, documentation and local commit only; no behavior implementation or release."
+}

@@ -1,0 +1,23 @@
+{
+  "baseline_commit": "2dc5d15b26f16d89436af0fb98650d8b4cf6b411",
+  "source_archive_sha256": "86bf0749dfc144ee9f7b3de0aa0d34a18e1824308a68a8e4527200b244c520b4",
+  "original_file_count": 2017,
+  "final_file_count": 2017,
+  "added": [],
+  "removed": [],
+  "changed": [],
+  "source_tree_unchanged": true,
+  "commit_identity_note": "Commit attribution follows supplied fixed archive; this checks archive/file contents, not a reconstruction of the Git object.",
+  "runtime": {
+    "python": "3.13.5",
+    "dotnet": null,
+    "csc": null,
+    "game_dlls_in_uploaded_source": []
+  },
+  "not_run": [
+    "production C# contracts",
+    "repository structural gates",
+    "native game differential",
+    "real multiplayer sessions"
+  ]
+}

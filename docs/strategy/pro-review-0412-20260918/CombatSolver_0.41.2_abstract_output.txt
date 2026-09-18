@@ -1,0 +1,23 @@
+Baseline: 2dc5d15b26f16d89436af0fb98650d8b4cf6b411
+Evidence: ABSTRACT_PYTHON_ONLY
+Python: 3.13.5; dotnet found: False
+PASS A01_R1_R2_fixed_pool: {"only_explicit_eligible": true, "permutations": 840, "triples": 216}
+PASS A02_victory_checkpoint_shadow: {"actual_completed_cycles_of_W": 1, "all_terminal_context": 7, "current_winner": "N_nonterminal", "depth": 1, "fixed_winner": "W_later_victory", "immediate_win_ok": true}
+PASS A03_premature_multiplayer_stop: {"abstract_better_suffix_not_ruled_out": "win_peer_alive", "stop_with_peer_dead": true, "stop_with_peer_fairy": true}
+PASS A04_cross_batch_loss: {"archive_after_cut": ["E", "D", "C", "B"], "compressed_winner": "B", "full_pool_winner": "A", "new_depth": 1, "old_depth": 2, "same_epoch_repair": "A"}
+PASS A05_tail_length_and_ties: {"after": "B", "before": "A", "distinct_routes_may_compare_equal": true, "scoped_tie_winner": "A"}
+PASS A06_fixed_context_preorder: {"antisymmetry_pairs": 2304, "depths": [0, 1, 2, 7], "nodes": 24, "triples": 55296}
+PASS A07_unknown_vs_bad_suffix: {"ancestor_not_proof_of_future_safety": true, "bad_suffix_loses_to_Q": true, "same_first_action_good_suffix_beats_Q": true, "unknown_beats_Q": true}
+PASS A08_resource_ownership_policy: {"current_winner": "local6_peerNoSave", "loser": "local3_peerFairy", "owner_observation_alone_changes_policy": false}
+PASS A09_last_parent_admission: {"accepted": 1, "already_simulated": 3, "discarded_paid_children": 2, "events": ["simulate:first", "simulate:second_better", "simulate:third_best", "release:second_better", "release:third_best"], "potion_endturn_not_started": true}
+PASS A10_asymmetric_threat: {"after_cycle": {"kill_dangerous_enemy_survivors": 2, "kill_safe_enemy_survivors": 1}, "aggregate_prefix_tie": true, "specific_game_reachability": "NOT_TESTED"}
+PASS A11_two_step_can_help: {"baseline_trace": ["search:root->A", "search:root->B", "search:a->a1", "search:a->a2", "search:a->a3", "search:a->a4", "replay:root->A", "replay:a->a1"], "baseline_value": 6, "both_final_replay_work": 2, "both_total_toy_work": 8, "challenge_trace": ["search:root->A", "search:root->B", "search:a->a1", "search:b->b1", "search:b->b2", "search:a->a2", "replay:root->B", "replay:b->b1"], "challenge_value": 20}
+PASS A12_two_step_can_hurt: {"baseline_trace": ["search:root->a", "search:a->b", "search:ab->c", "replay:root->a", "replay:a->b", "replay:ab->c"], "baseline_value": 10, "challenge_trace": ["search:root->x", "search:x->y", "search:root->a", "search:a->b", "replay:root->a", "replay:a->b"], "challenge_value": 2, "same_first_action_in_this_fixture": true, "same_total_work": 6}
+PASS A13_two_step_scope: {"a_second_action_is_not_one_simulation": true, "delayed_payoff": [0, 0, 30], "example_second_action_choice_fanout": 8, "three_step_best": 30, "two_step_best": 5}
+PASS A14_hp_budget: {"end3_next_start2_separate_excess": 0, "root2_self2_heal10_excess": 1, "three_plus_three_excess": 0, "zero_plus_six_excess": 3}
+PASS A15_shared_prefix_scenarios: {"best_shared_prefix": "Z", "invalid_clairvoyant_average": 10, "shared_toy_average": 6, "weights_are_not_probabilities": true}
+PASS A16_boundary_semantics: {"external_zero_and_two_context": 2, "mixed_zero_and_one_context": 1, "unknown_does_not_become_verified": true}
+PASS A17_won_flag_only_insufficient: {"all_terminal_winner": "WA_earlier_win", "flag_only_winner": "WB_later_win", "mixed_pool_winner": "WB_later_win", "terminal_facts_first_winner": "WA_earlier_win"}
+PASS A18_root_peer_potion_disables_requirement: {"R1_filter_function_itself_is_not_broken": true, "current_effective_policy": "Smart", "current_winner": "local_no_potion", "global_prior_uses": 1, "local_prior_uses": 0, "local_scoped_winner": "local_use_potion"}
+PASS total=18
+NOT RUN: production C#; native game differential; real multiplayer

@@ -1,0 +1,32 @@
+{
+  "date": "2026-09-18",
+  "status": "passed",
+  "scope": "Changed research and maintained documents only; no behavior tests, production build, source hashing or release verification.",
+  "markdownFilesChecked": 14,
+  "localPathsAndAnchorsChecked": 464,
+  "uniqueFixedCommitSourceReferencesChecked": 91,
+  "fixedSourceFilesRead": 40,
+  "jsonFilesParsed": 6,
+  "jsonlRecordsParsed": 82,
+  "externalPythonSyntax": "valid; not executed locally",
+  "externalResultsConsistency": "18 rows and 6 source-text checks; external execution only",
+  "originalMarkdownHardBreaksPreserved": {},
+  "maintainedDiffWhitespace": "passed",
+  "files": [
+    "AGENTS.md",
+    "docs/DEVELOPMENT_NOTES.md",
+    "docs/TEST_MATRIX.md",
+    "docs/README.md",
+    "docs/strategy/README.md",
+    "docs/strategy/pro-review-20260918/README.md",
+    "docs/multiplayer-advisor.md",
+    "docs/strategy/multiplayer-pro-review-0412-request-20260918.md",
+    "docs/strategy/pro-review-0412-20260918/CombatSolver_0.41.2_Evidence_README.md",
+    "docs/strategy/pro-review-0412-20260918/CombatSolver_0.41.2_Review_Conclusions.md",
+    "docs/strategy/pro-review-0412-20260918/CombatSolver_Multiplayer_Strategy_Optimization_0.41.2.md",
+    "docs/strategy/pro-review-0412-20260918/README.md",
+    "docs/strategy/pro-review-0412-20260918/local-ordering-probe/README.md",
+    "docs/strategy/pro-review-0412-20260918/local-review.md"
+  ],
+  "errors": []
+}

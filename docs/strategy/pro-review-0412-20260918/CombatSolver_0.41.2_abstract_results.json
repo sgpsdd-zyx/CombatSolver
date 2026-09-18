@@ -1,0 +1,228 @@
+{
+  "baseline_commit": "2dc5d15b26f16d89436af0fb98650d8b4cf6b411",
+  "evidence_level": "ABSTRACT_PYTHON_ONLY",
+  "python_version": "3.13.5",
+  "dotnet_found": false,
+  "tests_passed": 18,
+  "source_text_checks": {
+    "checkpoint_returns_won_false": true,
+    "final_batch_type": true,
+    "completed_compressed_independently": true,
+    "shared_zero_loss_stop": true,
+    "legacy_first_child_comment": true,
+    "solo_power_guard": true
+  },
+  "results": [
+    {
+      "test": "A01_R1_R2_fixed_pool",
+      "status": "PASS",
+      "permutations": 840,
+      "triples": 216,
+      "only_explicit_eligible": true
+    },
+    {
+      "test": "A02_victory_checkpoint_shadow",
+      "status": "PASS",
+      "depth": 1,
+      "current_winner": "N_nonterminal",
+      "fixed_winner": "W_later_victory",
+      "immediate_win_ok": true,
+      "all_terminal_context": 7,
+      "actual_completed_cycles_of_W": 1
+    },
+    {
+      "test": "A03_premature_multiplayer_stop",
+      "status": "PASS",
+      "stop_with_peer_dead": true,
+      "stop_with_peer_fairy": true,
+      "abstract_better_suffix_not_ruled_out": "win_peer_alive"
+    },
+    {
+      "test": "A04_cross_batch_loss",
+      "status": "PASS",
+      "old_depth": 2,
+      "new_depth": 1,
+      "archive_after_cut": [
+        "E",
+        "D",
+        "C",
+        "B"
+      ],
+      "compressed_winner": "B",
+      "full_pool_winner": "A",
+      "same_epoch_repair": "A"
+    },
+    {
+      "test": "A05_tail_length_and_ties",
+      "status": "PASS",
+      "before": "A",
+      "after": "B",
+      "scoped_tie_winner": "A",
+      "distinct_routes_may_compare_equal": true
+    },
+    {
+      "test": "A06_fixed_context_preorder",
+      "status": "PASS",
+      "nodes": 24,
+      "depths": [
+        0,
+        1,
+        2,
+        7
+      ],
+      "antisymmetry_pairs": 2304,
+      "triples": 55296
+    },
+    {
+      "test": "A07_unknown_vs_bad_suffix",
+      "status": "PASS",
+      "unknown_beats_Q": true,
+      "bad_suffix_loses_to_Q": true,
+      "same_first_action_good_suffix_beats_Q": true,
+      "ancestor_not_proof_of_future_safety": true
+    },
+    {
+      "test": "A08_resource_ownership_policy",
+      "status": "PASS",
+      "current_winner": "local6_peerNoSave",
+      "loser": "local3_peerFairy",
+      "owner_observation_alone_changes_policy": false
+    },
+    {
+      "test": "A09_last_parent_admission",
+      "status": "PASS",
+      "already_simulated": 3,
+      "accepted": 1,
+      "discarded_paid_children": 2,
+      "potion_endturn_not_started": true,
+      "events": [
+        "simulate:first",
+        "simulate:second_better",
+        "simulate:third_best",
+        "release:second_better",
+        "release:third_best"
+      ]
+    },
+    {
+      "test": "A10_asymmetric_threat",
+      "status": "PASS",
+      "aggregate_prefix_tie": true,
+      "after_cycle": {
+        "kill_safe_enemy_survivors": 1,
+        "kill_dangerous_enemy_survivors": 2
+      },
+      "specific_game_reachability": "NOT_TESTED"
+    },
+    {
+      "test": "A11_two_step_can_help",
+      "status": "PASS",
+      "baseline_value": 6,
+      "challenge_value": 20,
+      "both_total_toy_work": 8,
+      "both_final_replay_work": 2,
+      "baseline_trace": [
+        "search:root->A",
+        "search:root->B",
+        "search:a->a1",
+        "search:a->a2",
+        "search:a->a3",
+        "search:a->a4",
+        "replay:root->A",
+        "replay:a->a1"
+      ],
+      "challenge_trace": [
+        "search:root->A",
+        "search:root->B",
+        "search:a->a1",
+        "search:b->b1",
+        "search:b->b2",
+        "search:a->a2",
+        "replay:root->B",
+        "replay:b->b1"
+      ]
+    },
+    {
+      "test": "A12_two_step_can_hurt",
+      "status": "PASS",
+      "same_total_work": 6,
+      "baseline_value": 10,
+      "challenge_value": 2,
+      "baseline_trace": [
+        "search:root->a",
+        "search:a->b",
+        "search:ab->c",
+        "replay:root->a",
+        "replay:a->b",
+        "replay:ab->c"
+      ],
+      "challenge_trace": [
+        "search:root->x",
+        "search:x->y",
+        "search:root->a",
+        "search:a->b",
+        "replay:root->a",
+        "replay:a->b"
+      ],
+      "same_first_action_in_this_fixture": true
+    },
+    {
+      "test": "A13_two_step_scope",
+      "status": "PASS",
+      "delayed_payoff": [
+        0,
+        0,
+        30
+      ],
+      "two_step_best": 5,
+      "three_step_best": 30,
+      "example_second_action_choice_fanout": 8,
+      "a_second_action_is_not_one_simulation": true
+    },
+    {
+      "test": "A14_hp_budget",
+      "status": "PASS",
+      "three_plus_three_excess": 0,
+      "zero_plus_six_excess": 3,
+      "root2_self2_heal10_excess": 1,
+      "end3_next_start2_separate_excess": 0
+    },
+    {
+      "test": "A15_shared_prefix_scenarios",
+      "status": "PASS",
+      "invalid_clairvoyant_average": 10,
+      "best_shared_prefix": "Z",
+      "shared_toy_average": 6,
+      "weights_are_not_probabilities": true
+    },
+    {
+      "test": "A16_boundary_semantics",
+      "status": "PASS",
+      "mixed_zero_and_one_context": 1,
+      "external_zero_and_two_context": 2,
+      "unknown_does_not_become_verified": true
+    },
+    {
+      "test": "A17_won_flag_only_insufficient",
+      "status": "PASS",
+      "all_terminal_winner": "WA_earlier_win",
+      "mixed_pool_winner": "WB_later_win",
+      "flag_only_winner": "WB_later_win",
+      "terminal_facts_first_winner": "WA_earlier_win"
+    },
+    {
+      "test": "A18_root_peer_potion_disables_requirement",
+      "status": "PASS",
+      "global_prior_uses": 1,
+      "local_prior_uses": 0,
+      "current_effective_policy": "Smart",
+      "current_winner": "local_no_potion",
+      "local_scoped_winner": "local_use_potion",
+      "R1_filter_function_itself_is_not_broken": true
+    }
+  ],
+  "not_run": [
+    "production C# contracts",
+    "game native/simulator differential",
+    "real multiplayer sessions"
+  ]
+}
