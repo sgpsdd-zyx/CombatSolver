@@ -259,7 +259,10 @@ internal sealed partial class CombatBeamSolver
                         node.FutureSoldHp,
                         node.Snapshot.CumulativePlayerHpLost,
                         node.ActionCount,
-                        node.Score));
+                        node.Score,
+                        node.AdvisoryHpLoss.CompletedExcessHpLost,
+                        node.AdvisoryHpLoss.CurrentCycleHpLost,
+                        node.Snapshot.AdvisoryLastEnemyCycle));
             }
             ExpandedTranspositions = [];
             StandPatCache = [];
@@ -424,7 +427,8 @@ internal sealed partial class CombatBeamSolver
         FinalPlanCandidate Candidate,
         int PotionBranchesRejected,
         int PotionHpSaved,
-        int PotionHpRequired);
+        int PotionHpRequired,
+        int AdvisoryComparisonCycles = 0);
 
     private sealed record PendingTurnOutcome(
         SearchNode Node,

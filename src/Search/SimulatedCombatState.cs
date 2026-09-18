@@ -440,6 +440,7 @@ internal sealed partial class SimulatedCombatState
         AdvisorExtraTurnPlayers = source.AdvisorExtraTurnPlayers;
         AdvisorEnemyCycles = source.AdvisorEnemyCycles;
         AdvisorLastEnemyCycleHpLost = source.AdvisorLastEnemyCycleHpLost;
+        AdvisorLastEnemyCycle = source.AdvisorLastEnemyCycle;
         AdvisorEtherealCounts = source.AdvisorEtherealCounts;
         _runRngSnapshot = source._runRngSnapshot;
         _currentActIndex = source._currentActIndex;

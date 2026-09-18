@@ -427,7 +427,8 @@ internal sealed partial class CombatBeamSolver
         SearchRunContext _run,
         Func<SearchNode, StandPatEvaluation> _evaluateStandPat,
         Action<IEnumerable<SearchNode>>? _prepareStandPat = null,
-        Comparison<SearchNode>? _advisoryComparison = null)
+        Comparison<SearchNode>? _advisoryComparison = null,
+        Func<IReadOnlyList<SearchNode>, MultiplayerPlanOrdering>? _advisoryOrdering = null)
     {
         private void ForEachRetentionIndex(
             int count,
@@ -479,10 +480,7 @@ internal sealed partial class CombatBeamSolver
         {
             List<SearchNode> candidates = nodes.Distinct((IEqualityComparer<SearchNode>)ReferenceEqualityComparer.Instance).ToList();
             if (_advisoryComparison != null)
-            {
-                candidates.Sort(_advisoryComparison);
-                return candidates.Take(_profile.BeamWidth * 4).ToList();
-            }
+                return RankMultiplayerFinal(candidates, _profile.BeamWidth * 4);
             List<SearchNode> ranked = RankBest(
                 candidates,
                 _profile.BeamWidth * 4,

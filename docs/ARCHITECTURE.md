@@ -16,7 +16,9 @@
 
 多人默认以每个敌方周期 3 HP 扣血为输出目标范围。`CombatRootSnapshot` 在主线程冻结本机本轮已经发生的未格挡伤害；敌方周期结束、下一玩家回合准备之前，`Expansion` 将累计扣血检查点写入 `SimulatedCombatState.AdvisorLastEnemyCycleHpLost`，随 Fork 按值复制。该字段只记录原始观察，不决定政策；`SearchNode` 持有不可变的 `MultiplayerHpLossBudget`，区分已结束周期的超额扣血与当前周期的已用额度。治疗、重算和额外玩家回合不清除已用额度，下一回合准备的自损计入新周期。政策账本通过转置标签和去重标签保留，不进入战斗状态键或 `ContinuationStamp`。
 
-`CombatBeamSolver.Multiplayer` 中的 `BeamRetentionPolicy` 分片拥有多人进攻、防御、铺垫候选的有界保留，所有通道共用既有 Beam、节点和时间预算；同文件的多人终局比较器先检查生存与窗口完成度，再比较超额扣血、击杀、敌人剩余生命和累计扣血。`StateEvaluation` 只计算中间特征，UI 通过只读结果显示额度和当前路线的最高单周期扣血。
+`CombatBeamSolver.Multiplayer` 中的 `BeamRetentionPolicy` 分片先覆盖多人进攻、防御、铺垫代表，再补剩余席位，全部共用既有 Beam 与请求预算。`MultiplayerEvaluation` 在敌方结算后、下一玩家准备前捕获 `MultiplayerCycleCheckpoint`：它是最多七条、只含数值的不可变短链，归分支持有并由 Fork 共享历史；不含模型或模拟器。原始周期观察和扣血账本通过去重/转置标签区分，单人保持默认值；不加入战斗状态键或原生对账戳。
+
+多人 `RankFinal` 与最终选路先冻结整批共同敌方周期，再比较证据、本人风险、胜利、队友存活与输出；具体续行后来已出现的风险仍能否定其较早的安全观察。深度、未兑现铺垫和名义格挡不是最终收益。预算停止时 `Phases` 保留上一层的有界节点组，释放模拟器后仅对选中路线走原有物化重放，不新增第二套探针或预算。`StateEvaluation` 保留中间探索特征，UI 从只读结果分别投影实际推演深度、共同周期、额度与最高扣血；零共同周期明确提示受击评估未完成。
 
 官方 `0.41.0` 的 `PowerCardValuation` / `PowerCommitment` 和能力固定前缀组合用于单人。多人协调器继续在这些组合之前返回；`CombatBeamSolver._hasRegisteredPowerCards` 另以 `policy.Multiplayer == null` 隔离共享候选展开中的能力承诺入口，避免将单人牌流投影用于全队历史。此隔离不改变卡牌实际结算，也不改变单人的登记判断、保路或预算。
 
@@ -201,6 +203,8 @@ Smart 层间使用 `SmartLayerMemoryForecast` 的同窗分配和转移高水位�
 | `CombatBeamSolver.cs` | 构造参数、不可变根配置、`SearchRunContext` 与两个策略对象接线 |
 | `CombatPlan.cs` | `SearchNode`、`SimulationSnapshot`、动作与最终计划数据 |
 | `CombatBeamSolver.Models.cs` | `SearchFeatures`、单次运行 `SearchRunContext` |
+| `CombatBeamSolver.Multiplayer.cs` | 多人 Beam 代表配额与新根上的有界纯动作重验 |
+| `CombatBeamSolver.MultiplayerEvaluation.cs` / `MultiplayerCycleCheckpoint.cs` | 多人原始周期观察、固定批次共同边界和风险/收益比较；不可变记录不持有模拟器 |
 | `CombatBeamSolver.Transpositions.cs` | 转置标签与支配前沿；单标签内联，多标签保持原序List，缩回单标签即释放额外容器 |
 | `CombatBeamSolver.Phases.cs` | `Solve`、阶段循环、总预算与回合层预算保留、当前回合预览、约 `200 ms` 刷新的动态推演路线，以及玩家采用路线/执行当前回合的收束检查点；动态路线显式携带战斗是否结束，未完成路线不产生整场战损数值 |
 | `CombatBeamSolver.Expansion.cs` | 可执行卡牌/药水/结束回合候选展开和动作回放入口；识别选牌后手中实际可支付的能力。三层首领的首个搜索回合由Phases在普通父节点提交完成后提前展开这些中间态，复用Expand的去重/节点计数，不注入固定答案或终局奖励 |

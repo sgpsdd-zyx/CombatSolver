@@ -557,6 +557,7 @@ expected_beam_files=(
     CombatBeamSolver.FinalPlanOrdering.cs
     CombatBeamSolver.Models.cs
     CombatBeamSolver.Multiplayer.cs
+    CombatBeamSolver.MultiplayerEvaluation.cs
     CombatBeamSolver.MultiplayerRound.cs
     CombatBeamSolver.NoveltySearch.cs
     CombatBeamSolver.Transpositions.cs
@@ -1269,6 +1270,12 @@ src/Search/SimulatedCombatState.Multiplayer.cs|throw new ExternalPlayerChoiceExc
 src/Search/MultiplayerSearchPolicy.cs|StopAtAcceptableBattleHpLoss = false
 src/Search/MultiplayerSearchPolicy.cs|internal readonly record struct MultiplayerHpLossBudget(
 src/Search/CombatBeamSolver.Multiplayer.cs|private List<SearchNode> RankMultiplayer(
+src/Search/CombatBeamSolver.cs|policy.Multiplayer != null ? CreateMultiplayerOrdering : null
+src/Search/CombatBeamSolver.MultiplayerEvaluation.cs|private MultiplayerPlanOrdering CreateMultiplayerOrdering(
+src/Search/CombatBeamSolver.Expansion.cs|CaptureMultiplayerCycle(simulator, simulatedCombat);
+src/Search/SimulatedCombatState.cs|AdvisorLastEnemyCycle = source.AdvisorLastEnemyCycle;
+src/Search/MultiplayerCycleCheckpoint.cs|internal sealed record MultiplayerCycleCheckpoint(
+src/Search/CombatBeamSolver.Transpositions.cs|left.AdvisoryLastEnemyCycle == right.AdvisoryLastEnemyCycle
 src/UI/SolverActionBar.cs|&& !state.AdviceOnly
 MULTIPLAYER_ADVICE_RULES
 

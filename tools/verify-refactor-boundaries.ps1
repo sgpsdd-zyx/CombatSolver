@@ -580,6 +580,7 @@ $expectedBeamFiles = @(
     "CombatBeamSolver.FinalPlanOrdering.cs",
     "CombatBeamSolver.Models.cs",
     "CombatBeamSolver.Multiplayer.cs",
+    "CombatBeamSolver.MultiplayerEvaluation.cs",
     "CombatBeamSolver.MultiplayerRound.cs",
     "CombatBeamSolver.NoveltySearch.cs",
     "CombatBeamSolver.Transpositions.cs",
@@ -1582,6 +1583,12 @@ $multiplayerAdviceRules = @(
     @{ Path = 'src/Search/MultiplayerSearchPolicy.cs'; Text = 'StopAtAcceptableBattleHpLoss = false' }
     @{ Path = 'src/Search/MultiplayerSearchPolicy.cs'; Text = 'internal readonly record struct MultiplayerHpLossBudget(' }
     @{ Path = 'src/Search/CombatBeamSolver.Multiplayer.cs'; Text = 'private List<SearchNode> RankMultiplayer(' }
+    @{ Path = 'src/Search/CombatBeamSolver.cs'; Text = 'policy.Multiplayer != null ? CreateMultiplayerOrdering : null' }
+    @{ Path = 'src/Search/CombatBeamSolver.MultiplayerEvaluation.cs'; Text = 'private MultiplayerPlanOrdering CreateMultiplayerOrdering(' }
+    @{ Path = 'src/Search/CombatBeamSolver.Expansion.cs'; Text = 'CaptureMultiplayerCycle(simulator, simulatedCombat);' }
+    @{ Path = 'src/Search/SimulatedCombatState.cs'; Text = 'AdvisorLastEnemyCycle = source.AdvisorLastEnemyCycle;' }
+    @{ Path = 'src/Search/MultiplayerCycleCheckpoint.cs'; Text = 'internal sealed record MultiplayerCycleCheckpoint(' }
+    @{ Path = 'src/Search/CombatBeamSolver.Transpositions.cs'; Text = 'left.AdvisoryLastEnemyCycle == right.AdvisoryLastEnemyCycle' }
     @{ Path = 'src/UI/SolverActionBar.cs'; Text = '&& !state.AdviceOnly' }
 )
 foreach ($rule in $multiplayerAdviceRules) {

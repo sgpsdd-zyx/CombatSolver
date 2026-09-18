@@ -1,5 +1,28 @@
 # CombatSolver 测试清单
 
+## 多人策略首批实施（2026-09-17）
+
+实现基线为兼容合并 `7160d2f`，游戏 `0.111.0`，双玩家且本机索引 1。产物集中于 `.local/mp-strategy-implementation/`。以下为本批直接证据；原始研究中的抽象实验与下方历史通过记录不计入本批。
+
+| 检查 | 输入与结果 |
+|---|---|
+| 代表配额 | 由真实动作快照构造总榜/防御/进攻/铺垫候选池，只为配额断言指定评分；宽度 1、2 的三个轮换、3、4 和代表重合共七组。`retention-before/` 复现后两类饥饿；`tactics-final/retention-lanes.json` 七组通过，不将纯配额断言当作战斗质量结论 |
+| 共同周期 | 真实一周期攻击后敌方 494 HP、两周期空过仍 500 HP；`boundary-before/` 选深空过，修正后选浅攻击。未受击的高分动作不能冒充完整周期，额外深搜/估值不改变共同结果；三候选 27 组比较满足反对称和传递性。`tactics-final/common-boundary.json` |
+| 铺垫兑现 | `INFLAME` 升级加三张攻击和一张防御，首周期来伤已覆盖；Beam 2 / 100 节点 / 1 秒 / DOP 1。一周期选攻击，6 伤害、3 展开；两周期先能力，27 伤害、15 展开。早期未升级输入两条路线均 24 伤害，不作为收益反例。`tactics-final/realized-setup.json` |
+| 预算中断 | 同根改为七周期上限、4 节点；实际 4 展开，返回首周期攻击，共同比较与实际推演均为 1。`tactics-final/partial-cohort.json` |
+| 救援与格挡 | 本机已覆盖来伤、队友 1 HP，Beam 4 / 100 节点 / 1 秒 / DOP 1。`tactics-before/` 为 6 伤害放弃救援；最终 `LIFT` 指向队友，完整周期存活人数由 1 变 2，本机扣血 0。已有 `BufferPower` 时空过扣血 0，额外格挡中间分由错误的提升改为 -49904 → -49910.001，无名义格挡奖励。`tactics-final/effective-rescue.json`、`ineffective-block.json` |
+| 后续反证与终局 | 同首动作的具体续行随后自损致死，或累计 6 HP 自损超额 3，均不能靠旧安全检查点/高估值获选；立即击杀为真实胜利，敌方周期仍 0、不伪造检查点。`tactics-final/known-risk-and-victory.json` |
+| 原账本、能力隔离和 Fork | 同一个 `--multiplayer-strategy-contracts --encounter FUZZY_WURM_CRAWLER_WEAK --beam 2 --nodes 100 --budget-ms 1000 --dop 1` 请求完成原九例、增量/完整重放、完整原生下一回合对账、七项单人能力计数为 0；新观察在准备前捕获、Fork 共享不可变历史且子分支替换不影响父/根。最终步骤 2.307 秒，`tactics-final/` |
+| 七周期哨兵 | `--multiplayer-contracts --encounter FOGMOG_NORMAL --beam 12 --nodes 350 --budget-ms 12000 --dop 2`：六次原生完整状态一致，五/七周期、23 动作/七回合、重验 1 旧动作；四张多人卡、队友药水、本人/队友选择、额外回合不追加周期、药水指令及禁止自动操作均通过。单节点请求显示未完成受击评估；步骤 8.497 秒，`window-final/` |
+| 官方单人隔离 | 复用输入未变的独立官方 `0e6cc2d` 基线，只跑当前 DLL 的[五卡哨兵](../coverage/multiplayer/solo-power-compat.json)：Coordinator / Beam 12 / 每成员 350 节点 / 12 秒 / DOP 1。60 项非时间指标、17 动作、完整根/目录及完整路线 JSON 共 80 项一致；1820 总展开、4583 转移、2 HP。配置预算、组合成员、选择与目标继续比较，`solo-final/`、`solo-comparison.json` |
+| 转置标签 | `TranspositionFrontierChecks` 512008 项通过，包括 512000 次旧单人前沿决策比较，以及多人相同观察去重、不同观察/剩余额度不错误合并；未把当前状态相等当成历史比较事实相等 |
+| 构建与字段检查 | 最终生产 DLL 与宿主 Release 构建 0 警告/0 错误；CoverageCatalog 在独立输出目录检查状态字段与分支读取，3035 条、0 未分类、0 live 分支读取。工具构建保留 2 条 RitsuLib 路径/引用解析警告、0 错误，`coverage-build.log`、`coverage-final.log` |
+| 结构与文档 | Bash `REFACTOR_BOUNDARIES_OK search_files=198`；两端 16 条多人边界声明一致，PowerShell 保持 CRLF 但未执行。376 个相关本地链接/锚点和 102 组中英参数模板通过，证据 JSON 可解析，`static-doc-check.json`；当前改动空白检查通过。历史上游 40 处末尾空行及原始设计硬换行原样保留 |
+
+行为请求外层上限 120 秒；快速策略搜索固定短预算。上表步骤耗时含多次合同操作，不用作性能比较。补救援周期末存活断言后只重跑该策略合同，未重复已通过的七周期、单人或主项目构建；这些生产输入未改变。曾有一次宿主编译失败后运行旧 DLL 的 `setup-contracts/`，明确排除为证据，后续均先确认构建成功。
+
+本批没有改变 Runtime 启动流程，手动启动沿用上一兼容批次的证据，不声明本轮重新通过。未启动 Godot、可见 Steam 或真实网络；未验证三/四人、全角色/全遭遇、第三方 Mod、可见布局和普遍胜率。发布、远端同步与生成记忆写入不在本批范围；历史基线和复核现场保留。结构化条目为 `MULTIPLAYER-STRATEGY-COMMON-CYCLE`。
+
 ## 官方 0.41.0 与多人 fork 兼容（2026-09-17）
 
 官方基线为独立导出并编译的 `0e6cc2d`，游戏模型沿用 `0.111.0`。本节为当前合并的直接证据，不复用下方历史版本的通过结论。证据统一位于 `.local/upstream-0410-compat/`，未启动 Godot 或 Steam。

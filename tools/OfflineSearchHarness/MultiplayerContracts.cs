@@ -103,6 +103,9 @@ internal static class MultiplayerContracts
         Require(overlay.SummaryText.Contains(SolverText.Format(
             $"敌方回合：已推演 {limited.Snapshot.AdvisoryEnemyCycles} / 上限 {horizon}")),
             "advice displays achieved depth separately from the horizon");
+        Require(limited.AdvisoryComparisonCycles == 0 && overlay.SummaryText.Contains(
+            SolverText.Get("尚未完成首个敌方周期，当前建议缺少完整受击评估。")),
+            "unfinished first-cycle advice does not imply zero incoming damage");
         File.WriteAllText(Path.Combine(options.OutputDirectory, "multiplayer-route.json"),
             System.Text.Json.JsonSerializer.Serialize(result.BestNode.Actions, UnattendedTestFiles.JsonOptions));
         var reusedPolicy = new MultiplayerSearchPolicy(PreviousRoutes: [result.BestNode.Actions]).Apply(policy);
@@ -197,6 +200,7 @@ internal static class MultiplayerContracts
         var predicted = solver.ReplayMultiplayerForTesting([new(PlanActionKind.EndTurn, root.StartTurnNumber)]);
         Require(((SimulatedCombatState)predicted.Simulator.State.CombatState).AdvisorEnemyCycles == 0,
             "extra turn does not consume enemy horizon");
+        Require(predicted.AdvisoryLastEnemyCycle == null, "extra turn does not create an enemy-cycle observation");
         int oldTurn = local.PlayerCombatState!.TurnNumber;
         foreach (Player player in state.Players) CombatManager.Instance.SetReadyToEndTurn(player, false);
         DateTime deadline = DateTime.UtcNow.AddSeconds(20);

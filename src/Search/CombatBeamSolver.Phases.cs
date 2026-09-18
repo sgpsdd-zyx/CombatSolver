@@ -800,6 +800,7 @@ internal sealed partial class CombatBeamSolver
             result.AdvisoryHorizon = policy.Multiplayer?.Horizon ?? 0;
             result.AdvisoryHpLossAllowance = policy.Multiplayer?.AcceptableHpLossPerTurn ?? 0;
             result.AdvisoryMaximumCycleHpLost = best.AdvisoryHpLoss.MaximumCycleHpLost;
+            result.AdvisoryComparisonCycles = ordering.AdvisoryComparisonCycles;
             result.ReplayedAdviceActions = _run.ReplayedAdviceActions;
             finalSnapshot.ReleaseSimulator();
             return result;
@@ -1035,7 +1036,8 @@ internal sealed partial class CombatBeamSolver
                     0,
                     root.Score,
                     root.AdvisoryHpLoss.CompletedExcessHpLost,
-                    root.AdvisoryHpLoss.CurrentCycleHpLost));
+                    root.AdvisoryHpLoss.CurrentCycleHpLost,
+                    root.Snapshot.AdvisoryLastEnemyCycle));
             else
                 _run.Transpositions.Add(
                     root.StateKey,
@@ -1047,13 +1049,15 @@ internal sealed partial class CombatBeamSolver
                         0,
                         root.Score,
                         root.AdvisoryHpLoss.CompletedExcessHpLost,
-                        root.AdvisoryHpLoss.CurrentCycleHpLost)));
+                        root.AdvisoryHpLoss.CurrentCycleHpLost,
+                        root.Snapshot.AdvisoryLastEnemyCycle)));
         }
         if (frontier.Count == 0)
             throw new InvalidOperationException("固定搜索前缀与全部回合准备选牌分支都不相容。");
 
         SeedMultiplayerRoutes(frontier);
         List<SearchNode> completed = [];
+        List<SearchNode>? advisoryLastCohort = null;
         SearchNode fallback = frontier.MaxBy(static node => node.Score)!;
         SearchNode? potionFreeBoundaryFallback = null;
         double potionFreeBoundaryFallbackScore = double.NegativeInfinity;
@@ -1374,6 +1378,8 @@ internal sealed partial class CombatBeamSolver
         {
             cancellationToken.ThrowIfCancellationRequested();
             List<SearchNode> active = frontier.Where(node => !node.IsTerminal).ToList();
+            if (IsMultiplayerAdvice && active.Any(node => node.Snapshot.AdvisoryEnemyCycles > 0))
+                advisoryLastCohort = active;
             foreach (SearchNode terminal in frontier.Where(node => node.IsTerminal))
                 completed.Add(terminal);
             if (active.Count == 0)
@@ -2058,6 +2064,12 @@ internal sealed partial class CombatBeamSolver
             ReleaseDroppedSnapshots(finalPool, reached);
             finalPool = reached;
         }
+        // If a layer ran out of budget, compare against the preceding completed cohort.
+        // These nodes keep only released snapshots; the existing materializer replays the
+        // selected route once, rather than keeping another simulator tree alive.
+        if (IsMultiplayerAdvice && advisoryLastCohort != null
+            && (_run.Expanded >= _profile.MaxExpandedNodes || timeBudgetReached))
+            finalPool.AddRange(advisoryLastCohort);
         List<SearchNode> finalCandidates = Retention.RankFinal(finalPool);
         ReleaseDroppedSnapshots(finalPool, finalCandidates);
         ValidateHistoricalSimulatorsReleased(finalCandidates);

@@ -240,6 +240,10 @@ internal sealed record SolverOverlaySnapshot(
         if (result.IsMultiplayerAdvice)
         {
             summaryText += "\n" + SolverText.Format($"敌方回合：已推演 {result.Snapshot.AdvisoryEnemyCycles} / 上限 {result.AdvisoryHorizon}");
+            if (!result.CombatEndedTurn.HasValue)
+                summaryText += "\n" + (result.AdvisoryComparisonCycles > 0
+                    ? SolverText.Format($"选路比较范围：第 {result.AdvisoryComparisonCycles} 个敌方周期")
+                    : SolverText.Get("尚未完成首个敌方周期，当前建议缺少完整受击评估。"));
             summaryText += "\n" + SolverText.Format($"输出优先：单回合扣血目标不超过 {result.AdvisoryHpLossAllowance} 点；当前预测最高 {result.AdvisoryMaximumCycleHpLost} 点。");
         }
         string reviewSummaryText = result.WasRestoredFromCache

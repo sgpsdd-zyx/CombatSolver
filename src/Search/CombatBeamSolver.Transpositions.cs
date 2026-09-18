@@ -10,7 +10,8 @@ internal sealed partial class CombatBeamSolver
         int ActionCount,
         double Score,
         int AdvisoryCompletedExcessHpLost = 0,
-        int AdvisoryCurrentCycleHpLost = 0);
+        int AdvisoryCurrentCycleHpLost = 0,
+        MultiplayerCycleCheckpoint? AdvisoryLastEnemyCycle = null);
 
     private sealed class TranspositionFrontier(TranspositionLabel first)
     {
@@ -53,6 +54,7 @@ internal sealed partial class CombatBeamSolver
                 && left.CumulativePlayerHpLost <= right.CumulativePlayerHpLost
                 && left.AdvisoryCompletedExcessHpLost <= right.AdvisoryCompletedExcessHpLost
                 && left.AdvisoryCurrentCycleHpLost <= right.AdvisoryCurrentCycleHpLost
+                && left.AdvisoryLastEnemyCycle == right.AdvisoryLastEnemyCycle
                 && left.ActionCount <= right.ActionCount
                 && left.Score >= right.Score;
     }

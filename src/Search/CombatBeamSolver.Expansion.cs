@@ -3426,7 +3426,9 @@ internal sealed partial class CombatBeamSolver
             if (IsMultiplayerAdvice)
             {
                 simulatedCombat.AdvisorLastEnemyCycleHpLost = simulatedCombat.GetCumulativeHpLost(_player.Creature);
-                if (++simulatedCombat.AdvisorEnemyCycles >= policy.Multiplayer!.Horizon)
+                simulatedCombat.AdvisorEnemyCycles++;
+                CaptureMultiplayerCycle(simulator, simulatedCombat);
+                if (simulatedCombat.AdvisorEnemyCycles >= policy.Multiplayer!.Horizon)
                     return SearchBoundaryReason.AdvisoryHorizon;
             }
         }
@@ -4315,7 +4317,8 @@ internal sealed partial class CombatBeamSolver
             candidate.ActionCount,
             candidate.Score,
             candidate.AdvisoryHpLoss.CompletedExcessHpLost,
-            candidate.AdvisoryHpLoss.CurrentCycleHpLost);
+            candidate.AdvisoryHpLoss.CurrentCycleHpLost,
+            candidate.Snapshot.AdvisoryLastEnemyCycle);
         if (!_run.Transpositions.TryGetValue(candidate.StateKey, out TranspositionFrontier? frontier))
         {
             _run.Transpositions.Add(candidate.StateKey, new TranspositionFrontier(next));
@@ -4364,7 +4367,8 @@ internal sealed partial class CombatBeamSolver
             node.ActionCount,
             node.Score,
             node.AdvisoryHpLoss.CompletedExcessHpLost,
-            node.AdvisoryHpLoss.CurrentCycleHpLost);
+            node.AdvisoryHpLoss.CurrentCycleHpLost,
+            node.Snapshot.AdvisoryLastEnemyCycle);
         if (!_run.ExpandedTranspositions.TryGetValue(node.StateKey, out TranspositionFrontier? frontier))
         {
             _run.ExpandedTranspositions.Add(node.StateKey, new TranspositionFrontier(next));

@@ -29,6 +29,16 @@ internal sealed partial class CombatBeamSolver
         Require(!changing.TryAccept(middle), "Dominated label survived collapse.");
         Require(changing.TryAccept(new(1, 0, 0, 0, 0, 11)), "Expansion after collapse rejected.");
 
+        var checkpoint = new MultiplayerCycleCheckpoint(1, 40, 3, 0, 80, 2, 0, null);
+        TranspositionLabel history = middle with { AdvisoryLastEnemyCycle = checkpoint };
+        TranspositionFrontier multiplayer = new(history);
+        Require(!multiplayer.TryAccept(history with { AdvisoryLastEnemyCycle = checkpoint with { } }),
+            "Equal cycle observations did not deduplicate.");
+        Require(multiplayer.TryAccept(history with { AdvisoryLastEnemyCycle = checkpoint with { EnemyHp = 90 } }),
+            "Different comparison checkpoints merged despite equal current states.");
+        Require(multiplayer.TryAccept(history with { AdvisoryCurrentCycleHpLost = -1, Score = 2 }),
+            "Different remaining allowance was erased.");
+
         for (int i = 0; i < 1000; i++) { _ = new Baseline(middle); _ = new TranspositionFrontier(middle); }
         const int count = 100_000;
         object[] retained = new object[count];

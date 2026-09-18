@@ -109,7 +109,8 @@ internal sealed partial class CombatBeamSolver(
         _run,
         EvaluateStandPat,
         PrepareStandPatProbes,
-        policy.Multiplayer != null ? CompareMultiplayerPlans : null);
+        policy.Multiplayer != null ? CompareMultiplayerPlans : null,
+        policy.Multiplayer != null ? CreateMultiplayerOrdering : null);
     private FinalPlanOrdering? _finalOrdering;
     private FinalPlanOrdering FinalOrdering => _finalOrdering ??= new FinalPlanOrdering(
         _potionPolicy,
@@ -126,7 +127,8 @@ internal sealed partial class CombatBeamSolver(
         _detailedDiagnostics,
         battleDamage,
         _run.PotionStrategicCosts,
-        policy.Multiplayer != null ? CompareMultiplayerPlans : null);
+        policy.Multiplayer != null ? CompareMultiplayerPlans : null,
+        policy.Multiplayer != null ? CreateMultiplayerOrdering : null);
 
     private bool AllowsPotionUse(int slot, string potionId)
         => _potionStrategy.AllowsExplicitUse(

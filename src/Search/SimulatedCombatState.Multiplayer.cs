@@ -10,6 +10,7 @@ internal sealed partial class SimulatedCombatState
     internal int AdvisorEnemyCycles { get; set; }
     // Raw observation for Search's per-cycle allowance, before next-turn setup can cost HP.
     internal int AdvisorLastEnemyCycleHpLost { get; set; }
+    internal MultiplayerCycleCheckpoint? AdvisorLastEnemyCycle { get; set; }
     internal IReadOnlyDictionary<Player, int>? AdvisorEtherealCounts { get; set; }
     internal bool ExternalChoiceReached { get; private set; }
 

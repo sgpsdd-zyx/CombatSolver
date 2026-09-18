@@ -77,7 +77,7 @@ CombatSolver 是《杀戮尖塔 2》的单人战斗路线求解器 Mod，使用 
 
 - `CombatSearchCoordinator`：主搜索、无药和强制用药反事实审计。
 - `CombatBeamSolver.cs`：构造参数、不可变根配置及各策略对象接线，不承载 `Solve` 循环。
-- `CombatBeamSolver.Models.cs`：节点、快照、`SearchFeatures` 和单次运行的 `SearchRunContext`。
+- `CombatPlan.cs`：节点、快照、动作与最终计划数据；`CombatBeamSolver.Models.cs`：`SearchFeatures` 和单次运行的 `SearchRunContext`。
 - `CombatBeamSolver.Phases.cs`：`Solve` 与阶段推进。
 - `CombatBeamSolver.Expansion.cs`：候选展开与动作回放入口。
 - `CombatBeamSolver.ParallelExpansion.cs`：固定 worker lane、动作准备/原始候选物化与确定性串行提交。

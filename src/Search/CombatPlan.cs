@@ -1242,6 +1242,7 @@ internal sealed class SimulationSnapshot(
     public int AdvisoryHpLossAllowance { get; init; } = -1;
     public int AdvisoryRootHpLost { get; init; }
     public int AdvisoryLastEnemyCycleHpLost { get; init; }
+    public MultiplayerCycleCheckpoint? AdvisoryLastEnemyCycle { get; init; }
     private string? _releasedBy;
     private int _releasedAtLine;
 
@@ -1425,6 +1426,7 @@ internal sealed class SolverResult
     public int AdvisoryHorizon { get; internal set; }
     public int AdvisoryHpLossAllowance { get; internal set; }
     public int AdvisoryMaximumCycleHpLost { get; internal set; }
+    public int AdvisoryComparisonCycles { get; internal set; }
     public int ReplayedAdviceActions { get; internal set; }
     public bool WasRestoredFromCache { get; internal set; }
     public SolverResultScope ResultScope { get; internal set; } = SolverResultScope.SearchCompletion;

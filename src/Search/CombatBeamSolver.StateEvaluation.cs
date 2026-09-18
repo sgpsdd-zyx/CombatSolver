@@ -521,7 +521,6 @@ internal sealed partial class CombatBeamSolver
             // unfinished actions; safety is checked using actual simulated enemy cycles.
             score = (dead ? -1e12 : 0) + (won ? 1e11 : 0)
                 - enemyHp * 100d
-                + Math.Min(player.Block, combat.CurrentMonsterMoves().Sum(move => move.AttackHits.Sum(hit => hit.Damage))) * 5d
                 + persistentBuffValue * 20d + reachableHandValue + playerState.Energy * 2d
                 - potionUseCount * 0.1d - actionCount * 0.001d;
         }
@@ -607,6 +606,7 @@ internal sealed partial class CombatBeamSolver
             AdvisoryHpLossAllowance = policy.Multiplayer?.AcceptableHpLossPerTurn ?? -1,
             AdvisoryRootHpLost = IsMultiplayerAdvice ? root.InitialPlayerRoundHpLost : 0,
             AdvisoryLastEnemyCycleHpLost = IsMultiplayerAdvice ? combat.AdvisorLastEnemyCycleHpLost : 0,
+            AdvisoryLastEnemyCycle = IsMultiplayerAdvice ? combat.AdvisorLastEnemyCycle : null,
             GrowthHpCredit = growthHpCredit,
             RelicCounters = relicCounters,
             GrowthRewards = growthRewards,

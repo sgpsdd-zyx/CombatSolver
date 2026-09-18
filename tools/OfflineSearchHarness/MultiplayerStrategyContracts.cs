@@ -54,6 +54,8 @@ internal static class MultiplayerStrategyContracts
         if (incoming < 4 || incoming > 30)
             throw new InvalidOperationException($"Strategy fixture needs an opening attack of 4..30 HP, got {incoming}.");
 
+        VerifyRetentionLanes(state, local, policy, loop, options);
+        MultiplayerEvaluationContracts.Run(state, policy, options, loop);
         VerifyPowerStrategyIsolation(state, local, policy, incoming, loop, options);
 
         List<Outcome> outcomes = [];
@@ -137,6 +139,56 @@ internal static class MultiplayerStrategyContracts
             + "beam=2 for two-card cases, beam=12 for paid-HP setup; shared node/time limits; no networking";
     }
 
+    private static void VerifyRetentionLanes(CombatState state, Player local, SearchPolicySnapshot policy,
+        MainLoopContext loop, HarnessOptions options)
+    {
+        CardModel power = state.CreateCard(ModelDb.Card<Inflame>(), local);
+        loop.RunUntilCompleted(CardPileCmd.AddGeneratedCardToCombat(power, PileType.Hand, local),
+            TimeSpan.FromSeconds(20), "Retention setup");
+        CombatRootSnapshot root = CombatRootSnapshot.Capture(state, multiplayerAdvisor: true);
+        var solver = new CombatBeamSolver(root, SolverDisplayNames.Capture(state), BattleDamageTracker.Observe(state),
+            policy, searchProfile: policy.Profile);
+        PlanAction Play(string id, bool attack = false) => new(PlanActionKind.PlayCard, root.StartTurnNumber,
+            CardId: id, TargetCombatId: attack ? state.Enemies[0].CombatId : local.Creature.CombatId);
+        PlanAction defense = Play("DEFEND_IRONCLAD"), offense = Play("STRIKE_IRONCLAD", true), setup = Play("INFLAME");
+        SimulationSnapshot[] snapshots = [solver.ReplayMultiplayerForTesting([]),
+            solver.ReplayMultiplayerForTesting([defense]), solver.ReplayMultiplayerForTesting([offense]),
+            solver.ReplayMultiplayerForTesting([setup]), solver.ReplayMultiplayerForTesting([setup, offense, defense])];
+        SearchNode Node(int index, double score) => new(null, 0, 0, 0, snapshots[index].Turn,
+            SearchRouteTraits.None, 0, score, snapshots[index].StateKey, false, SearchBoundaryReason.None,
+            false, null, snapshots[index], CombatProgressState.Capture(snapshots[index]));
+        object retention = AccessTools.Property(typeof(CombatBeamSolver), "Retention").GetValue(solver)!;
+        var rank = AccessTools.Method(retention.GetType(), "RankMultiplayer");
+        List<SearchNode> Rank(IReadOnlyList<SearchNode> pool, int width)
+            => (List<SearchNode>)rank.Invoke(retention, [pool, width, false])!;
+        SearchNode[] distinct = [Node(0, 1000000), Node(1, 400), Node(2, 300), Node(3, 200)];
+        List<object> evidence = [];
+        List<string> failures = [];
+        void Check(string name, IReadOnlyList<SearchNode> pool, int width, params int[] expected)
+        {
+            List<SearchNode> actual = Rank(pool, width);
+            int[] indices = actual.Select(node => Enumerable.Range(0, pool.Count)
+                .Single(index => ReferenceEquals(pool[index], node))).Order().ToArray();
+            evidence.Add(new { name, width, expected = expected.Order().ToArray(), actual = indices });
+            if (!indices.SequenceEqual(expected.Order())) failures.Add(name);
+        }
+        Check("width_1", distinct, 1, 0);
+        for (int depth = 0; depth < 3; depth++)
+            Check($"width_2_depth_{depth}", distinct.Select(node => node with { ActionCount = depth }).ToArray(),
+                2, 0, depth + 1);
+        Check("width_3", distinct, 3, 1, 2, 3);
+        Check("width_4", distinct, 4, 0, 1, 2, 3);
+        SearchNode[] shared = [Node(4, 1000000), Node(0, 900000), Node(1, 800000), Node(2, 700000)];
+        Check("shared_representative", shared, 3, 0, 1, 2);
+        File.WriteAllText(Path.Combine(options.OutputDirectory, "retention-lanes.json"),
+            JsonSerializer.Serialize(evidence, new JsonSerializerOptions { WriteIndented = true }));
+        foreach (SimulationSnapshot snapshot in snapshots) snapshot.ReleaseSimulator();
+        loop.RunUntilCompleted(CardPileCmd.RemoveFromCombat([power], skipVisuals: true),
+            TimeSpan.FromSeconds(20), "Retention teardown");
+        if (failures.Count > 0)
+            throw new InvalidOperationException("Multiplayer retention coverage failed: " + string.Join(", ", failures));
+    }
+
     private static void VerifyPowerStrategyIsolation(CombatState state, Player local, SearchPolicySnapshot policy,
         int incoming, MainLoopContext loop, HarnessOptions options)
     {
@@ -217,10 +269,20 @@ internal static class MultiplayerStrategyContracts
             || next.AdvisoryHpLoss.CompletedExcessHpLost != 0 || next.AdvisoryHpLoss.CurrentCycleHpLost != startCost
             || next.AdvisoryHpLoss.MaximumCycleHpLost != Math.Max(3, startCost))
             throw new InvalidOperationException("Next-turn HP cost was charged to the previous enemy cycle.");
+        if (after.AdvisoryLastEnemyCycle is not { Cycle: 1, HpLost: 3 } checkpoint
+            || checkpoint.Hp != before.PlayerHp - 3 || checkpoint.Previous != null
+            || checkpoint.TeamSurvivors != 2 || checkpoint.EnemyHp != before.EnemyHp
+            || before.AdvisoryLastEnemyCycle != null)
+            throw new InvalidOperationException("Comparison facts were not frozen before next-turn setup.");
         var fork = after.Simulator.Fork();
         var forkCombat = (SimulatedCombatState)fork.State.CombatState;
         if (forkCombat.AdvisorLastEnemyCycleHpLost != 3)
             throw new InvalidOperationException("Cycle checkpoint was not copied into the fork.");
+        if (!ReferenceEquals(forkCombat.AdvisorLastEnemyCycle, checkpoint))
+            throw new InvalidOperationException("Fork did not share the immutable comparison checkpoint.");
+        forkCombat.AdvisorLastEnemyCycle = checkpoint with { HpLost = 99 };
+        if (after.AdvisoryLastEnemyCycle.HpLost != 3)
+            throw new InvalidOperationException("Comparison checkpoint replacement escaped its fork.");
         forkCombat.AdvisorLastEnemyCycleHpLost = 99;
         if (((SimulatedCombatState)after.Simulator.State.CombatState).AdvisorLastEnemyCycleHpLost != 3
             || ((SimulatedCombatState)before.Simulator.State.CombatState).AdvisorLastEnemyCycleHpLost != 0)
