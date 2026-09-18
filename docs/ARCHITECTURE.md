@@ -18,7 +18,9 @@
 
 `CombatBeamSolver.Multiplayer` 中的 `BeamRetentionPolicy` 分片先覆盖多人进攻、防御、铺垫代表，再补剩余席位，全部共用既有 Beam 与请求预算。`MultiplayerEvaluation` 在敌方结算后、下一玩家准备前捕获 `MultiplayerCycleCheckpoint`：它是最多七条、只含数值的不可变短链，归分支持有并由 Fork 共享历史；不含模型或模拟器。原始周期观察和扣血账本通过去重/转置标签区分，单人保持默认值；不加入战斗状态键或原生对账戳。
 
-多人 `RankFinal` 与最终选路分别冻结各自输入组的共同敌方周期，再比较证据、风险、胜利、队友存活与输出；具体续行后来已出现的风险仍能否定其较早的安全观察。0.41.1 的资格过滤晚于截断，两处排序上下文尚未贯通，救命计数仍为全队口径；源码证据与未实施方案见[外部复审本地核对](strategy/pro-review-20260918/local-review.md)。深度、未兑现铺垫和名义格挡不是最终收益。预算停止时 `Phases` 保留上一层的有界节点组，释放模拟器后仅对选中路线走原有物化重放，不新增第二套探针或预算。`StateEvaluation` 保留中间探索特征，UI 从只读结果分别投影实际推演深度、共同周期、额度与最高扣血；零共同周期明确提示受击评估未完成。
+多人发布候选由 `CombatBeamSolver.Multiplayer.PrepareMultiplayerFinalCandidates` 先按逐槽强制用药、最少显式用药和至少一瓶资格过滤，再冻结一个 `MultiplayerPlanOrdering`，排序并保留至多 `4B` 条。`MultiplayerFinalBatch` 只持有候选引用和本批排序上下文；预览与最终返回通过同一个 `SelectMultiplayerFinal` 消费该批次并传递共同周期，不在截断子集上重新定深度。已终止候选的中途压缩也先过滤资格，但可继续展开的前缀保路不受最终资格限制。空合格池由选路入口明确失败；中途没有合格终局可以继续搜索。`Phases` 继续独占候选模拟器的释放，批次对象不复制或释放模拟器，`FinalPlanOrdering` 保留原单人政策。
+
+具体续行后来已出现的风险仍能否定其较早的安全观察。救命计数仍为全队口径，资源归属和两步挑战尚待独立处理；0.41.1 的原始问题与采用边界见[外部复审本地核对](strategy/pro-review-20260918/local-review.md)。深度、未兑现铺垫和名义格挡不是最终收益。预算停止时 `Phases` 保留上一层的有界节点组，释放模拟器后仅对选中路线走原有物化重放，不新增第二套探针或预算。`StateEvaluation` 保留中间探索特征，UI 从只读结果分别投影实际推演深度、共同周期、额度与最高扣血；零共同周期明确提示受击评估未完成。
 
 官方 `0.41.0` 的 `PowerCardValuation` / `PowerCommitment` 和能力固定前缀组合用于单人。多人协调器继续在这些组合之前返回；`CombatBeamSolver._hasRegisteredPowerCards` 另以 `policy.Multiplayer == null` 隔离共享候选展开中的能力承诺入口，避免将单人牌流投影用于全队历史。此隔离不改变卡牌实际结算，也不改变单人的登记判断、保路或预算。
 
@@ -203,7 +205,7 @@ Smart 层间使用 `SmartLayerMemoryForecast` 的同窗分配和转移高水位�
 | `CombatBeamSolver.cs` | 构造参数、不可变根配置、`SearchRunContext` 与两个策略对象接线 |
 | `CombatPlan.cs` | `SearchNode`、`SimulationSnapshot`、动作与最终计划数据 |
 | `CombatBeamSolver.Models.cs` | `SearchFeatures`、单次运行 `SearchRunContext` |
-| `CombatBeamSolver.Multiplayer.cs` | 多人 Beam 代表配额与新根上的有界纯动作重验 |
+| `CombatBeamSolver.Multiplayer.cs` | 多人 Beam 代表配额、发布候选资格/固定批次选路、新根上的有界纯动作重验 |
 | `CombatBeamSolver.MultiplayerEvaluation.cs` / `MultiplayerCycleCheckpoint.cs` | 多人原始周期观察、固定批次共同边界和风险/收益比较；不可变记录不持有模拟器 |
 | `CombatBeamSolver.Transpositions.cs` | 转置标签与支配前沿；单标签内联，多标签保持原序List，缩回单标签即释放额外容器 |
 | `CombatBeamSolver.Phases.cs` | `Solve`、阶段循环、总预算与回合层预算保留、当前回合预览、约 `200 ms` 刷新的动态推演路线，以及玩家采用路线/执行当前回合的收束检查点；动态路线显式携带战斗是否结束，未完成路线不产生整场战损数值 |

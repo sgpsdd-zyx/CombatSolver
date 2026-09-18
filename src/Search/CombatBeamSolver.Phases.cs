@@ -887,10 +887,12 @@ internal sealed partial class CombatBeamSolver
             (SearchNode Node, int RetentionRank)[] savedRanks = viable
                 .Select(node => (node, node.RetentionRank))
                 .ToArray();
+            MultiplayerFinalBatch? advisoryBatch = IsMultiplayerAdvice
+                ? PrepareMultiplayerFinalCandidates(viable) : null;
             List<SearchNode> candidates;
             try
             {
-                candidates = Retention.RankFinal(viable);
+                candidates = advisoryBatch?.Candidates ?? Retention.RankFinal(viable);
             }
             finally
             {
@@ -903,7 +905,7 @@ internal sealed partial class CombatBeamSolver
             FinalPlanSelection ordering;
             try
             {
-                ordering = FinalOrdering.Select(
+                ordering = advisoryBatch != null ? SelectMultiplayerFinal(advisoryBatch) : FinalOrdering.Select(
                     evaluated,
                     root.InitialPlayerHp,
                     emitDiagnostics: false);
@@ -1384,7 +1386,8 @@ internal sealed partial class CombatBeamSolver
                 completed.Add(terminal);
             if (active.Count == 0)
             {
-                List<SearchNode> rankedCompleted = Retention.RankFinal(completed);
+                List<SearchNode> rankedCompleted = IsMultiplayerAdvice
+                    ? PrepareMultiplayerFinalCandidates(completed).Candidates : Retention.RankFinal(completed);
                 ReleaseDroppedSnapshots(completed, rankedCompleted);
                 completed = rankedCompleted;
                 break;
@@ -1911,7 +1914,8 @@ internal sealed partial class CombatBeamSolver
                 ReleaseDroppedSnapshots(completedCandidates, reached);
                 completedCandidates = reached;
             }
-            List<SearchNode> rankedCompletedCandidates = Retention.RankFinal(completedCandidates);
+            List<SearchNode> rankedCompletedCandidates = IsMultiplayerAdvice
+                ? PrepareMultiplayerFinalCandidates(completedCandidates).Candidates : Retention.RankFinal(completedCandidates);
             ReleaseDroppedSnapshots(completedCandidates, rankedCompletedCandidates);
             completed = rankedCompletedCandidates;
             // Only complete victories can tighten this incumbent, and every terminal candidate
@@ -2070,7 +2074,9 @@ internal sealed partial class CombatBeamSolver
         if (IsMultiplayerAdvice && advisoryLastCohort != null
             && (_run.Expanded >= _profile.MaxExpandedNodes || timeBudgetReached))
             finalPool.AddRange(advisoryLastCohort);
-        List<SearchNode> finalCandidates = Retention.RankFinal(finalPool);
+        MultiplayerFinalBatch? advisoryBatch = IsMultiplayerAdvice
+            ? PrepareMultiplayerFinalCandidates(finalPool) : null;
+        List<SearchNode> finalCandidates = advisoryBatch?.Candidates ?? Retention.RankFinal(finalPool);
         ReleaseDroppedSnapshots(finalPool, finalCandidates);
         ValidateHistoricalSimulatorsReleased(finalCandidates);
         PublishProgress(_startTurnNumber + searchedTurnLayers, searchedTurnLayers, 0,
@@ -2081,7 +2087,7 @@ internal sealed partial class CombatBeamSolver
         bool onlyDeathRoutesFound = evaluated.All(candidate =>
             candidate.Snapshot.PlayerDead || candidate.Snapshot.ProjectedPlayerHp <= 0);
         _run.ReusedNodeSnapshots += evaluated.Count;
-        FinalPlanSelection ordering = FinalOrdering.Select(
+        FinalPlanSelection ordering = advisoryBatch != null ? SelectMultiplayerFinal(advisoryBatch) : FinalOrdering.Select(
             evaluated,
             initialHp,
             emitDiagnostics: true);

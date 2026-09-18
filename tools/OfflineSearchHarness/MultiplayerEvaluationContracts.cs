@@ -110,10 +110,15 @@ internal static class MultiplayerEvaluationContracts
         foreach (int horizon in new[] { 1, 2 })
         {
             SearchPolicySnapshot candidate = new MultiplayerSearchPolicy(Horizon: horizon).Apply(policy);
-            var search = Task.Run(new CombatBeamSolver(root, names, damage, candidate,
-                searchProfile: candidate.Profile).Solve);
-            loop.RunUntilCompleted(search, TimeSpan.FromSeconds(30), "Realized setup search");
-            SolverResult result = search.GetAwaiter().GetResult();
+            SolverResult Search()
+            {
+                var search = Task.Run(new CombatBeamSolver(root, names, damage, candidate,
+                    progressCallback: horizon == 1 ? _ => { } : null, searchProfile: candidate.Profile).Solve);
+                loop.RunUntilCompleted(search, TimeSpan.FromSeconds(30), "Realized setup search");
+                return search.GetAwaiter().GetResult();
+            }
+            SolverResult result = horizon == 1
+                ? MultiplayerFinalSelectionContracts.VerifyPreviewAndFinal(Search, options) : Search();
             string first = result.BestNode.Actions.First().CardId;
             int dealt = 500 - result.Snapshot.EnemyHp;
             evidence.Add(new { horizon, first, dealt, result.ExpandedNodes, result.AdvisoryComparisonCycles });

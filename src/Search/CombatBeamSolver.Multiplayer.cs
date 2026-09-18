@@ -13,6 +13,38 @@ internal sealed partial class CombatBeamSolver
     private int CompareMultiplayerPlans(SearchNode left, SearchNode right)
         => CompareMultiplayerAtCycle(left, right, int.MaxValue);
 
+    private sealed record MultiplayerFinalBatch(
+        List<SearchNode> Candidates, MultiplayerPlanOrdering Ordering);
+
+    private MultiplayerFinalBatch PrepareMultiplayerFinalCandidates(IEnumerable<SearchNode> nodes)
+    {
+        // Final eligibility must precede both the common-cycle decision and the 4B cut.
+        // Expandable prefixes still use the unfiltered intermediate retention policy.
+        List<SearchNode> eligible = nodes
+            .Distinct((IEqualityComparer<SearchNode>)ReferenceEqualityComparer.Instance)
+            .Where(node => !_enforcePotionDirectives || _potionStrategy.EvaluateForcedUses(
+                node.Actions, root.HasRenewablePotionShapedRock, _run.PotionStrategicCosts).AllForcedUsesSatisfied)
+            .Where(node => ExplicitPotionUseCount(node) >= _minimumPotionUses
+                && (_potionPolicy != SolverPotionPolicy.RequireAtLeastOne || ExplicitPotionUseCount(node) > 0))
+            .ToList();
+        MultiplayerPlanOrdering ordering = CreateMultiplayerOrdering(eligible);
+        eligible.Sort(ordering.Compare);
+        int limit = _profile.BeamWidth * 4;
+        if (eligible.Count > limit) eligible.RemoveRange(limit, eligible.Count - limit);
+        return new(eligible, ordering);
+    }
+
+    private FinalPlanSelection SelectMultiplayerFinal(MultiplayerFinalBatch batch)
+    {
+        if (batch.Candidates.Count == 0)
+            throw new PotionPolicyUnsatisfiedException("No advisory route satisfies the selected potion directives.");
+        SearchNode best = batch.Candidates[0];
+        return new FinalPlanSelection(new FinalPlanCandidate(best, best.Snapshot,
+            SearchFeatures.Capture(best), best.FutureSoldHp,
+            battleDamage.SoldHpCommitted + best.FutureSoldHp, best.PotionCount, best.Score), 0, 0, 0,
+            batch.Ordering.EnemyCycles);
+    }
+
     private sealed partial class BeamRetentionPolicy
     {
         private List<SearchNode> RankMultiplayerFinal(List<SearchNode> nodes, int limit)

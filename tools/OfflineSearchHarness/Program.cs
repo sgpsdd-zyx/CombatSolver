@@ -141,6 +141,7 @@ internal static class Program
                 {
                 ModRuntime.SearchOutcome? outcome = null;
                 using MemorySampler memory = new(TimeSpan.FromMilliseconds(100));
+                MultiplayerFinalSelectionContracts.VerifySinglePlayerIsolation(() =>
                 Step(steps, $"M2.1 跑一次固定预算搜索（{options.SearchMode}）", () =>
                 {
                     outcome = ModRuntime.RunSearchDetailed(combat!, options, loop, session);
@@ -149,7 +150,7 @@ internal static class Program
                         + $"total_transitions={solver["totalTransitions"]} score={solver["score"]} "
                         + $"projected_battle_hp_lost={solver["projectedBattleHpLost"]} "
                         + $"wall_s={outcome.WallSeconds:0.00}";
-                });
+                }), options);
                 payload["search"] = new Dictionary<string, object?>
                 {
                     ["rootContinuationStamp"] = outcome!.RootContinuationStamp,

@@ -1270,6 +1270,11 @@ src/Search/SimulatedCombatState.Multiplayer.cs|throw new ExternalPlayerChoiceExc
 src/Search/MultiplayerSearchPolicy.cs|StopAtAcceptableBattleHpLoss = false
 src/Search/MultiplayerSearchPolicy.cs|internal readonly record struct MultiplayerHpLossBudget(
 src/Search/CombatBeamSolver.Multiplayer.cs|private List<SearchNode> RankMultiplayer(
+src/Search/CombatBeamSolver.Multiplayer.cs|private MultiplayerFinalBatch PrepareMultiplayerFinalCandidates(
+src/Search/CombatBeamSolver.Multiplayer.cs|batch.Ordering.EnemyCycles
+src/Search/CombatBeamSolver.Phases.cs|? PrepareMultiplayerFinalCandidates(viable) : null;
+src/Search/CombatBeamSolver.Phases.cs|? PrepareMultiplayerFinalCandidates(finalPool) : null;
+src/Search/CombatBeamSolver.Phases.cs|? PrepareMultiplayerFinalCandidates(completedCandidates).Candidates
 src/Search/CombatBeamSolver.cs|policy.Multiplayer != null ? CreateMultiplayerOrdering : null
 src/Search/CombatBeamSolver.MultiplayerEvaluation.cs|private MultiplayerPlanOrdering CreateMultiplayerOrdering(
 src/Search/CombatBeamSolver.Expansion.cs|CaptureMultiplayerCycle(simulator, simulatedCombat);

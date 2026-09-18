@@ -15,6 +15,8 @@
 
 `--multiplayer-strategy-contracts` 验证每回合最多 3 HP 换输出的多人目标，最小输入为 `--encounter FUZZY_WURM_CRAWLER_WEAK --beam 2 --nodes 100 --budget-ms 1000 --dop 1`。双玩家且本机索引为 1，九个案例覆盖 1/2/3 HP 换输出、超额防御、低血量避死、无来伤、相同输出少扣血、立即击杀和重算前已付扣血。双卡案例固定 Beam 2，已付扣血的四卡案例用 Beam 12，其他预算不变；3 HP 案例启用增量等价。另对账原生下一回合状态，检查回合开始自损的周期归属、Fork 隔离、治疗不恢复额度及不跨周期结转。产物另含 `strategy-results.json` 与 `native-boundary.txt`；不能和 `--request` 或其他多人合同开关合用，不建立网络、不验证可见 UI。普通离线性能模式仍只产指标。
 
+同一策略入口还调用 `MultiplayerFinalSelectionContracts`：用无模拟器的指定排名事实调用生产候选准备/选择函数，检查 `4B` 前用药资格、五/六候选的 840 种排列、固定比较器、空集与可展开前缀，输出 `final-selection.json`。这些纯政策反例不代表游戏触发频率；一周期真实托管短搜另以 `preview-final-selection.json` 核对相同候选池的预览、最终选择和结果深度。普通单人搜索在宿主中观察当前 DLL 的多人候选入口，输出 `single-player-isolation.json` 并断言零进入；官方旧 DLL 缺少这些方法时记录空观察列表。完整路线质量仍按固定场景单独比较。
+
 ## 构建
 
 ```

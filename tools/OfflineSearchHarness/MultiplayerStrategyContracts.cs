@@ -54,6 +54,7 @@ internal static class MultiplayerStrategyContracts
         if (incoming < 4 || incoming > 30)
             throw new InvalidOperationException($"Strategy fixture needs an opening attack of 4..30 HP, got {incoming}.");
 
+        MultiplayerFinalSelectionContracts.Run(state, policy, options);
         VerifyRetentionLanes(state, local, policy, loop, options);
         MultiplayerEvaluationContracts.Run(state, policy, options, loop);
         VerifyPowerStrategyIsolation(state, local, policy, incoming, loop, options);

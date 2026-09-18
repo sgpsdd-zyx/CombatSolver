@@ -1583,6 +1583,11 @@ $multiplayerAdviceRules = @(
     @{ Path = 'src/Search/MultiplayerSearchPolicy.cs'; Text = 'StopAtAcceptableBattleHpLoss = false' }
     @{ Path = 'src/Search/MultiplayerSearchPolicy.cs'; Text = 'internal readonly record struct MultiplayerHpLossBudget(' }
     @{ Path = 'src/Search/CombatBeamSolver.Multiplayer.cs'; Text = 'private List<SearchNode> RankMultiplayer(' }
+    @{ Path = 'src/Search/CombatBeamSolver.Multiplayer.cs'; Text = 'private MultiplayerFinalBatch PrepareMultiplayerFinalCandidates(' }
+    @{ Path = 'src/Search/CombatBeamSolver.Multiplayer.cs'; Text = 'batch.Ordering.EnemyCycles' }
+    @{ Path = 'src/Search/CombatBeamSolver.Phases.cs'; Text = '? PrepareMultiplayerFinalCandidates(viable) : null;' }
+    @{ Path = 'src/Search/CombatBeamSolver.Phases.cs'; Text = '? PrepareMultiplayerFinalCandidates(finalPool) : null;' }
+    @{ Path = 'src/Search/CombatBeamSolver.Phases.cs'; Text = '? PrepareMultiplayerFinalCandidates(completedCandidates).Candidates' }
     @{ Path = 'src/Search/CombatBeamSolver.cs'; Text = 'policy.Multiplayer != null ? CreateMultiplayerOrdering : null' }
     @{ Path = 'src/Search/CombatBeamSolver.MultiplayerEvaluation.cs'; Text = 'private MultiplayerPlanOrdering CreateMultiplayerOrdering(' }
     @{ Path = 'src/Search/CombatBeamSolver.Expansion.cs'; Text = 'CaptureMultiplayerCycle(simulator, simulatedCombat);' }

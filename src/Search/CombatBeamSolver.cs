@@ -126,9 +126,7 @@ internal sealed partial class CombatBeamSolver(
         policy.Diagnostics,
         _detailedDiagnostics,
         battleDamage,
-        _run.PotionStrategicCosts,
-        policy.Multiplayer != null ? CompareMultiplayerPlans : null,
-        policy.Multiplayer != null ? CreateMultiplayerOrdering : null);
+        _run.PotionStrategicCosts);
 
     private bool AllowsPotionUse(int slot, string potionId)
         => _potionStrategy.AllowsExplicitUse(

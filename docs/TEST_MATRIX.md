@@ -1,5 +1,22 @@
 # CombatSolver 测试清单
 
+## 多人最终候选管线第一批（2026-09-18）
+
+本批基于 `7d216fc`，行为基线为已发布 `5ad98a9 / 0.41.1`，只处理外部复审 R1/R2。游戏托管模型 `0.111.0`；所有新产物位于 `.local/mp-final-selection-20260918/`。原文抽象实验、旧行为测试和静态阅读不计入本批通过。
+
+| 检查 | 本轮直接证据 |
+|---|---|
+| R1 生产失败基线 | 新宿主合同调用未修改的 `Retention.RankFinal` → `FinalPlanOrdering.Select`。Beam 1 下四条无药路线裁掉唯一一瓶/两瓶合格路线，均报 `PotionPolicyUnsatisfiedException`；`baseline/final-selection.json`。构造的是排名事实，不冒充原生战斗复现 |
+| R2 生产失败基线 | 五候选敌方 HP 检查点 `(40,35),(41,25),(42,15),(43,5),(99)`，六候选再加 `(44,1)`；裁剪后从周期 1 改为 2，错误选择 D。120/720 种排列全部违反预期，非空选路两次创建排序上下文；固定比较器本身的 216 组三元比较通过 |
+| 资格与共同周期修正 | 合同改调实际 `PrepareMultiplayerFinalCandidates` → `SelectMultiplayerFinal`。唯一合格的一瓶/两瓶路线均保留；强制槽位、自动用药不算显式、资格过滤先于共同深度、空集明确失败和重复引用通过。五/六候选的 840 种排列都以周期 1 选 A；独立新批可以在周期 2 选 X。每批只创建一次排序上下文、至多 `4B`，216 组三元比较通过；`fixed/final-selection.json` 共 14 组记录 |
+| 未完成前缀与实际预览 | 未用药前缀在普通及 `finalQualityFirst` 中间保路均保留。实际一周期短搜启用预览回调，观察同一组三个候选从预览到最终选中同一节点，预览/最终/结果共同周期均为 1，3 展开；`fixed/preview-final-selection.json`。纯候选副本不持有模拟器；实际搜索沿原释放/重放路径完成 |
+| 相关短搜回归 | `--multiplayer-strategy-contracts --encounter FUZZY_WURM_CRAWLER_WEAK --beam 2 --nodes 100 --budget-ms 1000 --dop 1`。新合同加既有配额、九个扣血例、增量/完整回放、完整原生下一回合、Fork 和单人能力隔离通过，整个合同步骤 2.291 秒。一/两周期铺垫仍为 6/27 伤害、3/15 展开；四节点中断仍返回周期 1，已知坏续行与立即胜利哨兵通过。`fixed/` |
+| 七周期哨兵 | `--multiplayer-contracts --encounter FOGMOG_NORMAL --beam 12 --nodes 350 --budget-ms 12000 --dop 2`。六次原生完整状态一致、五/七周期、23 动作/七回合、旧动作重验一次、多人卡/药水/选择/额外回合及手动操作边界通过，合同步骤 8.234 秒；`window/` |
+| 官方单人对照 | [五卡输入](../coverage/multiplayer/solo-power-compat.json)，Coordinator / Beam 12 / 每成员 350 节点 / 12 秒 / DOP 1。复用输入未变的官方 `0e6cc2d` 独立基线，当前 DLL 的 60 项非时间指标、17 动作、根/目录及完整路线共 80 项一致，1820 总展开、4583 转移、2 HP。三个多人准备/选择/共同周期入口调用次数为 0；当前 `FinalPlanOrdering.cs` 与官方源码完全一致。`solo/solo-power/`、`solo-comparison.json` |
+| 构建与结构 | 本批生产 DLL Release 19.65 秒、宿主 Release 2.58 秒，均 0 警告/0 错误；Bash `REFACTOR_BOUNDARIES_OK search_files=198`，见 `boundaries.log`。两端增加相同的候选批次/预览/最终接入声明，PowerShell 只核对文本等价、未执行 |
+
+各宿主请求外层上限 120 秒；步骤时间只描述本次执行，不作性能比较。无新增战斗状态字段，未重跑无关的全量 CoverageCatalog、转置或 Runtime 启动测试。未启动 Godot/可见 Steam/网络，未验证真实联机胜率、可见布局、三/四人、所有角色/第三方 Mod 或完整部署/发布门禁。本批不发布；版本和研究原文保持冻结。结构化条目为 `MULTIPLAYER-FINAL-CANDIDATE-PIPELINE`。
+
 ## 0.41.1（fork）定版验证范围（2026-09-18）
 
 本次只同步版本、玩家说明与发布元数据，行为源码仍为 `6e28485`。沿用下方多人策略首批和官方兼容批次的直接证据，不把历史运行改写成本次重跑。发布从定版提交构建主 DLL 与 Windows 辅助程序，最小包包含 manifest、两份许可文件及这两项产物；不启动游戏，不执行完整发布门禁。
