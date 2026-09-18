@@ -13,7 +13,7 @@
 |---|---|
 | 多人手动军师、3 HP 周期目标、共同周期选路、救援与官方 0.41.0 兼容 | [多人军师](multiplayer-advisor.md) |
 | 多人研究原文归档、已采用改进与暂缓方案 | [策略索引](strategy/README.md#多人研究归档)、[首批实施](multiplayer-advisor.md#首批策略优化已实施) |
-| 0.41.1 的 ChatGPT 6 Pro 源码复审、下一轮多人策略研究与回文 | [本轮请求](strategy/multiplayer-pro-review-request-20260918.md)、[复审归档](strategy/pro-review-20260918/README.md)；旧版输入见[历史索引](strategy/README.md#多人研究归档) |
+| 0.41.1 的 ChatGPT 6 Pro 审查结论、策略设计原文与本地复核 | [复审归档](strategy/pro-review-20260918/README.md)、[本地复核与采用边界](strategy/pro-review-20260918/local-review.md)；旧版输入见[历史索引](strategy/README.md#多人研究归档) |
 | 能力牌逐卡建模、统一估值接口与后续独立搜索分支 | [能力牌优化计划](strategy/power-card-valuation-plan-20260917.md) |
 | 无需训练的有界新颖性／Beam 组合、实验开关和完整对照 | [有界多策略搜索](strategy/bounded-novelty-search-20260916.md) |
 | 不启动 Godot 批量跑搜索、量宽度与预算 | [离线搜索宿主](OFFLINE_SEARCH_HARNESS.md) |
