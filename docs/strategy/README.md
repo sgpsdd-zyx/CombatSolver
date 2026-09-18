@@ -4,7 +4,8 @@
 
 当前搜索职责见 [架构地图](../ARCHITECTURE.md)，实际测试与未验证范围见 [测试矩阵](../TEST_MATRIX.md)。
 
-- [多人策略研究提示词（ChatGPT 6 Pro）](multiplayer-pro-research-prompt-20260917.md)：面向单人安装、多人手动建议的研究任务，冻结 0.40.5 基线，要求算法比较、可实施设计和验证方案。
+- [多人策略研究提示词（ChatGPT 6 Pro）](multiplayer-pro-research-prompt-20260917.md)：仅通过 GitHub 读取材料，面向单人安装、多人手动建议；要求算法比较、可实施设计及单人路径强隔离。
+- [多人研究固定基线](multiplayer-research-context-f220a6b.md)：从 0.40.5 行为提交导出的源码与历史验证摘录，供外部研究使用；不作为滚动架构地图或新增测试证据。
 - [策略优化日志](STRATEGY_OPTIMIZATION_LOG.md)：样例、策略认识与数值记录。
 - [当前搜索逻辑详解](search-logic-explained-20260912.md)：2026-09-12 开发快照，解释评分、保路、剪枝、预算与最终排序，并区分未提交实验。
 - [有界新颖性与 Beam 组合](bounded-novelty-search-20260916.md)：默认关闭的实验开关、紧凑增量新颖性、共享预算、选型反例和本轮验证。
