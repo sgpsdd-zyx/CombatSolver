@@ -19,6 +19,20 @@
 
 未验证真实主机/客户端网络事件、任意历史重置、三/四人、所有角色/第三方 Mod、可见 UI、性能、普遍胜率及完整自动部署。F04/F05/F06/F07 和旧当前回合预览旁路仍暂缓；固定小局的搜索耗时不用于性能结论。结构化条目为 `MULTIPLAYER-REVIEW-TERMINAL-AND-LOCAL-ELIGIBILITY`。
 
+## 多人长线收益诊断（2026-09-18）
+
+本批按 6 Pro 设计的首批边界执行：只新增有界路径观察，不改变多人评分、Beam 席位、最终排序、状态键或预算。原始材料、抽象复跑和采用边界见[长线收益归档](strategy/pro-long-term-20260918/README.md)。
+
+| 检查 | 本次输入、结果与证据 |
+|---|---|
+| 生产路径诊断 | `--multiplayer-long-term-contracts --encounter FUZZY_WURM_CRAWLER_WEAK --beam 8 --nodes 120 --budget-ms 500 --dop 1`；双玩家、本机索引 1，真实 `Inflame`、Dark 球和 3 点星能根。1,383 个观察事件、12 个阶段、91 个展开节点、202 次转移；`PruneInput -> PruneFinal` 丢失 51 条，外层保路池丢失 51 条；`ranking_unchanged=true`、`state_key_unchanged=true`，根状态全文保持一致。最终现场 `.local/mp-longterm-production-final2/`，结构化输出由归档复制。 |
+| 评估事实覆盖 | 最新主 DLL 运行中 231 个观察快照携带评估值；星能最大值 3，持续效果非零 231 个，战略保留非零 171 个；本夹具未来资源/延迟伤害为零，不将其写成所有长线消费者已覆盖。Dark 初始激发值 12，证明真实根事实进入诊断，不证明完整储值/激发差分。 |
+| 多人回归 | 同宿主 `--multiplayer-strategy-contracts` 通过 9 个扣血/能力隔离案例，现场 `.local/mp-longterm-production-strategy/`。 |
+| 官方单人隔离 | 五卡能力请求 Coordinator / Beam 12 / 350 节点 / 12 秒 / DOP 1；1,820 总展开、4,583 次转移、2 HP 投影战损，与独立官方 `0e6cc2d / 0.41.0` 哨兵一致，现场 `.local/mp-longterm-solo/`。 |
+| 构建与输入失败记录 | 主项目与宿主 Release 构建均 0 警告/0 错误。第一次 80 节点命令被既有最小值 100 的设置校验拒绝，记录在 `.local/mp-longterm-production-r1/`；随后 120 节点运行通过，不把参数失败计为行为失败。 |
+
+未验证完整 Dark 储值/激发、储君星能获得与花费的原生差分、真实主机/客户端网络、可见 UI、三/四人、全角色/第三方 Mod、普遍胜率或性能；无头结果不外推。Pro 的 C# 探针保持未编译、未运行，默认 C 席位替换未启用。结构化条目为 `MULTIPLAYER-LONG-TERM-PATH-DIAGNOSTICS`。
+
 ## 0.41.2 第二轮多人策略研究（2026-09-18）
 
 固定研究输入 `2dc5d15 / 0.41.2`，本地起点 `9885a75`，生产行为仍为 `b29d6fc`。两份 6 Pro 原文、完整实验材料与本地意见见[本轮归档](strategy/pro-review-0412-20260918/README.md)。本轮证据分开记账：

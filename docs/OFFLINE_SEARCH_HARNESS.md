@@ -15,6 +15,8 @@
 
 `--multiplayer-strategy-contracts` 验证每回合最多 3 HP 换输出的多人目标，最小输入为 `--encounter FUZZY_WURM_CRAWLER_WEAK --beam 2 --nodes 100 --budget-ms 1000 --dop 1`。双玩家且本机索引为 1，九个案例覆盖 1/2/3 HP 换输出、超额防御、低血量避死、无来伤、相同输出少扣血、立即击杀和重算前已付扣血。双卡案例固定 Beam 2，已付扣血的四卡案例用 Beam 12，其他预算不变；3 HP 案例启用增量等价。另对账原生下一回合状态，检查回合开始自损的周期归属、Fork 隔离、治疗不恢复额度及不跨周期结转。产物另含 `strategy-results.json` 与 `native-boundary.txt`；不能和 `--request` 或其他多人合同开关合用，不建立网络、不验证可见 UI。普通离线性能模式仍只产指标。
 
+`--multiplayer-long-term-contracts` 是首批多人长线收益诊断入口：固定双玩家、本机索引 1，用真实 Dark 球、星能和能力牌根捕获路径观察。它只消费已有 `SearchPathObserver` 的有界副本，记录路径在父内和保路边界的首次消失及已有评估字段；不改评分、Beam 席位、最终排序、状态键或预算。不能和 `--request` 或其他多人合同开关合用，不建立网络、不验证可见 UI；结果与限制见[长线收益归档](strategy/pro-long-term-20260918/README.md)。
+
 同一策略入口还调用 `MultiplayerFinalSelectionContracts`：用无模拟器的指定排名事实调用生产候选准备/选择函数，检查 `4B` 前用药资格、五/六候选的 840 种排列、固定比较器、空集与可展开前缀，输出 `final-selection.json`。这些纯政策反例不代表游戏触发频率；一周期真实托管短搜另以 `preview-final-selection.json` 核对相同候选池的预览、最终选择和结果深度。普通单人搜索在宿主中观察当前 DLL 的多人候选入口，输出 `single-player-isolation.json` 并断言零进入；官方旧 DLL 缺少这些方法时记录空观察列表。完整路线质量仍按固定场景单独比较。
 
 `--multiplayer-review-contracts facts` 使用双玩家、本机索引 1、双打击与敌方 10 HP 的固定小局，验证真实终局与旧检查点混合、实际搜索继续展开、原生本机/队友药水历史和资格。内部固定 Beam 4 / 120 节点 / 1 秒 / DOP 1 / 三周期，输出 `review-facts.json`；单独复核提前停止可用 `--multiplayer-review-contracts stopping`，输出 `review-stopping.json`，只观察搜索实际展开到的回合。该入口不能与 `--request` 或其他多人合同合用。`SearchedTurns` 是最终选中路线的长度，不是所有搜索层的覆盖量。终局被截断、两条真胜利的结束回合和本机死亡优先控制另由现有 `final-selection.json` 覆盖。普通离线指标、原生托管合同、真实联机验收的边界不变。

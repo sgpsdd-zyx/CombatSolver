@@ -21,6 +21,7 @@ internal sealed record HarnessScenario(
     public bool MultiplayerContracts { get; init; }
     public bool MultiplayerStartContracts { get; init; }
     public bool MultiplayerStrategyContracts { get; init; }
+    public bool MultiplayerLongTermContracts { get; init; }
     public string? MultiplayerReviewStage { get; init; }
 }
 
@@ -43,6 +44,7 @@ internal static class OfflineCombat
         UnlockState unlockState = SaveManager.Instance.GenerateUnlockStateFromProgress();
         RunState runState = RunState.CreateForNewRun(
             scenario.MultiplayerContracts || scenario.MultiplayerStartContracts || scenario.MultiplayerStrategyContracts
+                || scenario.MultiplayerLongTermContracts
                 || scenario.MultiplayerReviewStage != null
                 ? [Player.CreateForNewRun(character, unlockState, 2uL), Player.CreateForNewRun(character, unlockState, 1uL)]
                 : [Player.CreateForNewRun(character, unlockState, 1uL)],

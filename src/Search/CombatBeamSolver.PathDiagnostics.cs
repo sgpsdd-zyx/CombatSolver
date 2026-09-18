@@ -206,10 +206,25 @@ internal sealed partial class CombatBeamSolver
             {
                 Retention = new SearchPathRetentionDetails(
                     PoolIndex: index,
-                    ParentRetentionRank: node.Parent?.RetentionRank),
+                    ParentRetentionRank: node.Parent?.RetentionRank,
+                    Evaluation: policy.Multiplayer != null
+                        ? CaptureSearchPathEvaluation(node.Snapshot)
+                        : null),
             });
         }
     }
+
+    private static SearchPathEvaluationValues CaptureSearchPathEvaluation(SimulationSnapshot snapshot)
+        => new(
+            snapshot.Energy, snapshot.Stars, snapshot.PlayerBlock,
+            snapshot.ProjectedPlayerHp, snapshot.HandCount, snapshot.ReachableHandValue,
+            snapshot.ZeroCostPlayableCount, snapshot.LiveDeckSize, snapshot.LiveDeckClutter,
+            snapshot.PersistentBuffValue, snapshot.StrategicEffects.RetentionValue,
+            snapshot.LatentSetupValue, snapshot.RetainedAttackValue, snapshot.ReplayPotentialValue,
+            snapshot.FutureResourceValue, snapshot.DelayedDamageValue, snapshot.ReactiveDamageValue,
+            snapshot.EnemyStrengthSuppression, snapshot.EnemyWeakTurns, snapshot.EnemyVulnerableTurns,
+            snapshot.SandpitRemaining, snapshot.FocusTargetPressure,
+            snapshot.ProjectedShuffleOrderValue, snapshot.LongTermResourceValue);
 
     private void ObserveGlobalRetentionDecision(GlobalRetentionDecision decision, int boundaryId)
     {

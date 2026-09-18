@@ -26,6 +26,7 @@ python3 tools/OfflineSearchHarness/compare_results.py \
 | 文件 | 作用 |
 |---|---|
 | `Program.cs` | 命令行、分步时间线、产物落盘 |
+| `MultiplayerLongTermContracts.cs` | 多人长线收益的有界路径丢失诊断；不改变排序或状态键 |
 | `AssemblyBootstrap.cs` | 运行期解析 `sts2` / `RitsuLib` / `CombatSolver` |
 | `GameBootstrap.cs` | 游戏静态状态初始化与**全部** Godot 绕过（类头有表） |
 | `ModRuntime.cs` | 模组侧初始化、离线会话、搜索正确性补丁、一次求解 |
