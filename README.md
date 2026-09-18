@@ -4,11 +4,11 @@ Combat Solver 是《杀戮尖塔 2》的战斗路线求解器，本 fork 支持�
 
 单人模式下，玩家可以只查看建议，也可以让求解器执行当前回合，或连续接管整场战斗。多人模式只提供手动请求的建议。搜索不会修改游戏 RNG，也不会在后台操作真实战斗状态。
 
-当前 fork 源码版本为 **0.40.5**，基于上游 `0.40.2`，多人军师在单回合 3 HP 扣血目标内优先输出。功能变化见 [更新日志](docs/releases/0.40.5-RELEASE_NOTES.md)；本次本地准备包为 `releases/CombatSolver-0.40.5.zip`。已公开的安装包见 [GitHub Releases](https://github.com/sgpsdd-zyx/CombatSolver/releases)（当前已发布 `0.40.4`）。
+当前 fork 开发源码已同步官方 **0.41.0**，保留单回合 3 HP 扣血目标和七周期多人军师，兼容范围见 [多人军师](docs/multiplayer-advisor.md#官方-0410-兼容同步)。本次同步不发布安装包；此前本地准备包为 `releases/CombatSolver-0.40.5.zip`，已公开的安装包见 [GitHub Releases](https://github.com/sgpsdd-zyx/CombatSolver/releases)（此前发布 `0.40.4`）。
 
 [多人军师](docs/multiplayer-advisor.md) 推荐本人的出牌和用药路线，最多推演七个敌方回合。队友行动后自行决定何时重算；推演假设队友后续不主动出牌或用药，但仍结算其被动效果。多人功能目前供试用，尚未完成真实联机验收。
 
-**English UI:** Set the game language to English and restart the game. In single-player, use **Play turn** for one turn or **Auto: On** for continuous play. This fork adds manual multiplayer advice for up to seven enemy turns, including potions; version 0.40.5 prioritizes damage within a target of 3 HP lost per turn, while avoiding lethal damage. It assumes teammates take no further active actions, and live multiplayer compatibility is not yet verified. The locally prepared package is `releases/CombatSolver-0.40.5.zip`; published builds are on [fork releases](https://github.com/sgpsdd-zyx/CombatSolver/releases) (currently 0.40.4). Configure potions, growth and search budgets in the overlay. **Settings > Reports > Upload report** submits a bug report. Logs, raw errors and some detailed diagnostics retain their original text.
+**English UI:** Set the game language to English and restart the game. In single-player, use **Play turn** for one turn or **Auto: On** for continuous play. This fork adds manual multiplayer advice for up to seven enemy turns, including potions, prioritizing damage within a target of 3 HP lost per turn while avoiding lethal damage. It assumes teammates take no further active actions, and live multiplayer compatibility is not yet verified. Development source now incorporates upstream 0.41.0; this sync does not publish a new package. The earlier locally prepared package is `releases/CombatSolver-0.40.5.zip`; published builds are on [fork releases](https://github.com/sgpsdd-zyx/CombatSolver/releases) (previously 0.40.4). Configure potions, growth and search budgets in the overlay. **Settings > Reports > Upload report** submits a bug report. Logs, raw errors and some detailed diagnostics retain their original text.
 
 界面跟随游戏语言：简体/繁体中文使用现有中文文案，其他语言使用英文。简化版不提供独立语言开关；卡牌胶囊、选牌和相关悬停说明支持运行中切换语言，其他既有窗口可通过重启统一刷新。
 

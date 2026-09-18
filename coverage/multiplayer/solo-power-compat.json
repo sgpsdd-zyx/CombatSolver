@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "seed": "MULTIPLAYER-UPSTREAM-0410-COMPAT",
+  "characterId": "IRONCLAD",
+  "ascension": 0,
+  "actIndex": 0,
+  "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+  "encounterKind": "Monster",
+  "includeStartingDeck": false,
+  "includeStartingRelics": false,
+  "includeAscendersBane": false,
+  "characterCards": {
+    "count": 5,
+    "ids": ["INFLAME", "STRIKE_IRONCLAD", "STRIKE_IRONCLAD", "DEFEND_IRONCLAD", "DEFEND_IRONCLAD"]
+  },
+  "colorlessCards": { "count": 0 },
+  "relics": { "count": 0 },
+  "potions": { "count": 0 },
+  "mode": "Search",
+  "fixedSearchBudget": true
+}

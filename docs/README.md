@@ -1,6 +1,6 @@
 # CombatSolver 文档导航
 
-当前 fork 准备包与多人输出策略：[0.40.5 更新日志](releases/0.40.5-RELEASE_NOTES.md)。
+当前 fork 开发源码已同步官方 0.41.0，见 [兼容记录](multiplayer-advisor.md#官方-0410-兼容同步)。此前本地准备包见 [0.40.5 更新日志](releases/0.40.5-RELEASE_NOTES.md)；源码同步不代表新增安装包已发布。
 
 通用随机/指定战斗测试入口：[场景生成与批量重跑](GENERATED_COMBAT_SCENARIOS.md)。
 
@@ -11,9 +11,10 @@
 
 | 要查什么 | 入口 |
 |---|---|
-| 多人手动军师、单回合 3 HP 输出目标、七回合搜索与局部模拟证据 | [多人军师（fork 0.40.5）](multiplayer-advisor.md) |
+| 多人手动军师、单回合 3 HP 输出目标、七回合搜索与官方 0.41.0 兼容记录 | [多人军师](multiplayer-advisor.md) |
 | 多人策略研究回文、源码复核与分阶段实施取舍（尚未实施） | [研究原文](CombatSolver_Multiplayer_Strategy_Research_and_Design.md)、[实施评审](multiplayer-advisor.md#研究落地评审尚未实施) |
 | 交给 ChatGPT 6 Pro 的 GitHub 研究入口、多人专属修改与单人隔离验收 | [多人策略研究提示词](strategy/multiplayer-pro-research-prompt-20260917.md)、[固定基线资料](strategy/multiplayer-research-context-f220a6b.md) |
+| 能力牌逐卡建模、统一估值接口与后续独立搜索分支 | [能力牌优化计划](strategy/power-card-valuation-plan-20260917.md) |
 | 无需训练的有界新颖性／Beam 组合、实验开关和完整对照 | [有界多策略搜索](strategy/bounded-novelty-search-20260916.md) |
 | 不启动 Godot 批量跑搜索、量宽度与预算 | [离线搜索宿主](OFFLINE_SEARCH_HARNESS.md) |
 | 完整性能优化正式 PR、路线控件复用、0.38.6 合并验证与对照 | [正式 PR 验收](performance/performance-pr-20260915.md) |

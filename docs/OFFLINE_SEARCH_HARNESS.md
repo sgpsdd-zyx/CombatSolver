@@ -73,6 +73,8 @@ plan 每项的字段：`label`（必填，简单目录名）、`request`（必�
 与时间/内存/GC 无关的字段、选中路线每个动作的 `turn/kind/cardId/potionId/targetCombatId/cardStateKey`、
 根 `ContinuationStamp`、生成场景目录指纹），全等返回 0，有差异返回 1 并把明细写进 `--out`。
 
+官方 0.41.0 新增的首条路线耗时、峰值堆大小，以及 `portfolioMembers` / `powerRouteMembers` 内的实际耗时、分配和堆大小同样排除；成员顺序、配置的节点/时间预算、策略开关、实际展开/转移和战斗结果仍参与比较。需要验证完整选择链时额外对照完整 `route.json`，不能把上述六个动作字段的相等扩大为所有计划字段相等。
+
 ## 产物
 
 每根一个目录：

@@ -54,6 +54,8 @@ internal static class MultiplayerStrategyContracts
         if (incoming < 4 || incoming > 30)
             throw new InvalidOperationException($"Strategy fixture needs an opening attack of 4..30 HP, got {incoming}.");
 
+        VerifyPowerStrategyIsolation(state, local, policy, incoming, loop, options);
+
         List<Outcome> outcomes = [];
         void Check(string name, int remainingIncoming, int hp, int energy, int expectedLoss, int expectedDamage,
             int enemyHp = 500)
@@ -131,7 +133,53 @@ internal static class MultiplayerStrategyContracts
         }
         return $"cases={outcomes.Count} allowance=1,2,3 above_limit=defend lethal=avoid equal_damage=save_hp "
             + "incremental=equal native_next_turn=equal healing=no_reset allowance=no_carry fork=isolated; "
+            + "single_player_power_strategy=isolated; "
             + "beam=2 for two-card cases, beam=12 for paid-HP setup; shared node/time limits; no networking";
+    }
+
+    private static void VerifyPowerStrategyIsolation(CombatState state, Player local, SearchPolicySnapshot policy,
+        int incoming, MainLoopContext loop, HarnessOptions options)
+    {
+        void Native(Task task) => loop.RunUntilCompleted(task, TimeSpan.FromSeconds(20), "Power isolation setup");
+        CardModel power = state.CreateCard(ModelDb.Card<Inflame>(), local);
+        CardModel attack = state.CreateCard(ModelDb.Card<StrikeIronclad>(), local);
+        Native(CardPileCmd.AddGeneratedCardToCombat(power, PileType.Hand, local));
+        Native(CardPileCmd.AddGeneratedCardToCombat(attack, PileType.Hand, local));
+        Native(CreatureCmd.GainBlock(local.Creature, incoming, ValueProp.Unpowered, null, fast: true));
+        Native(RunManager.Instance.ActionExecutor.FinishedExecutingActions());
+        var diagnostics = new System.Collections.Concurrent.ConcurrentQueue<string>();
+        SearchPolicySnapshot advisory = new MultiplayerSearchPolicy(Horizon: 1).Apply(policy with
+        {
+            UseBeamWidthPortfolio = true,
+            UseNoveltyPortfolio = true,
+            Profile = policy.Profile with { BeamWidth = 12, AggressivePowerCommitment = true },
+            Diagnostics = new SearchDiagnosticsSink(message =>
+            {
+                if (message.Contains("POWER_COMMITMENTS scope=solver", StringComparison.Ordinal))
+                    diagnostics.Enqueue(message);
+            }, _ => { }),
+        });
+        CombatRootSnapshot root = CombatRootSnapshot.Capture(state, multiplayerAdvisor: true);
+        SolverDisplayNames names = SolverDisplayNames.Capture(state);
+        BattleDamageSnapshot damage = BattleDamageTracker.Observe(state);
+        Task<SolverResult> search = Task.Run(() => CombatSearchCoordinator.Solve(
+            root, names, damage, advisory, CancellationToken.None, progressCallback: null));
+        loop.RunUntilCompleted(search, TimeSpan.FromSeconds(30), "Multiplayer power isolation");
+        SolverResult result = search.GetAwaiter().GetResult();
+        string summary = diagnostics.Single();
+        File.WriteAllText(Path.Combine(options.OutputDirectory, "power-strategy-isolation.txt"), summary + "\n"
+            + $"single_session={result.SingleSessionSearch} expanded={result.ExpandedNodes} "
+            + $"cards={string.Join(',', result.BestNode.Actions.Select(action => action.CardId))}\n");
+        if (!result.SingleSessionSearch || result.ExpandedNodes > advisory.Profile.MaxExpandedNodes
+            || !result.BestNode.Actions.Any(action => action.CardId == power.Id.Entry))
+            throw new InvalidOperationException("Power isolation fixture did not produce a bounded advisory power route.");
+        foreach (string counter in new[] { "candidates", "frontier_evaluations", "created", "admitted",
+                     "expired", "realized", "seats_peak" })
+        {
+            if (!summary.Split(' ').Contains($"{counter}=0", StringComparer.Ordinal))
+                throw new InvalidOperationException($"Single-player power strategy entered multiplayer advice: {summary}");
+        }
+        Native(CardPileCmd.RemoveFromCombat([power, attack], skipVisuals: true));
     }
 
     private static void VerifyBudgetBookkeeping()

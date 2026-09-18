@@ -1,6 +1,6 @@
 # CombatSolver 仓库工作指令
 
-> **多人策略研究与隔离追加（2026-09-17）：** 用户要求将当前多人实现和研究材料推送到 fork，供 ChatGPT 6 Pro 仅通过 GitHub 调研；本次同步源码与文档，不创建新版本、标签或 Release。后续只允许修改多人策略，原版单人策略必须保留原路径、原参数和原行为。新增评分、保路、剪枝、预算、队友情景和缓存由多人专属政策/对象拥有，单人请求不得启用；公共文件只允许必要的显式多人接入，不能顺带修改单人或公共战斗语义。需要越界的依赖单列，不混入本批。研究任务与隔离验收见 [多人策略研究提示词](docs/strategy/multiplayer-pro-research-prompt-20260917.md)，研究回文的采用取舍见 [多人军师实施评审](docs/multiplayer-advisor.md#研究落地评审尚未实施)。
+> **多人策略与上游兼容（2026-09-17）：** 按用户要求，当前任务分支合入官方 `0e6cc2d / 0.41.0`；单人以该官方版本为基线保持原路径、原参数和原行为，fork 自有策略改动仍只允许用于多人。新增多人评分、保路、剪枝、预算、队友情景和缓存由多人专属政策/对象拥有，单人请求不得启用；公共文件只允许必要的显式接入，不能顺带修改单人或公共战斗语义。官方单人能力承诺不得进入多人候选展开；需要越界的依赖单列。源码同步不创建新的 fork 版本、标签、Release 或安装包。研究材料的 `f220a6b / 0.40.5` 保留为固定历史输入，后续实施从当前兼容分支出发。研究任务见 [研究提示词](docs/strategy/multiplayer-pro-research-prompt-20260917.md)，采用取舍与兼容证据见 [多人军师](docs/multiplayer-advisor.md)。
 
 > **当前分支（2026-09-17）：** 用户授权实现多人手动军师并做适当模拟测试，随后要求扩大预测至 5～7 回合。本分支默认最多推演七个敌方回合，只在手动重新计算时捕获全队状态并规划本机出牌/用药，不自动操作或重算，保持单人原路径。用户随后明确授权推送至 `sgpsdd-zyx/CombatSolver` fork 并提供可直接安装的 GitHub Release，初版定版为 `0.40.3`，后续手动启动修复定版为 `0.40.4`；该授权结束本分支此前不提升版本、不发包的批次。实现与验证见 [多人军师](docs/multiplayer-advisor.md)。本次发布范围仅为该 fork 的分支、版本标签和 GitHub Release；不启动可见 Steam，不发布上游创意工坊或夸克网盘。
 
@@ -185,12 +185,14 @@ CombatSolver 是《杀戮尖塔 2》的单人战斗路线求解器 Mod，使用 
 
 需要完整部署时固定 `Instant / 0 秒` 并断言计划外重算数量。一个 headless 进程复用同一批最小请求；重新编译后退出仍加载旧 DLL 的进程。
 
+Coding agent 启动无头游戏测试时，PowerShell 必须使用 `-CleanupInstanceOnExit`，Bash 必须使用 `--cleanup-instance-on-exit`。实例默认且必须位于当前仓库 `.local/headless-instances/<实例>`；不得把游戏/Mod 快照放进 `%LOCALAPPDATA%/CombatSolver/headless-instances` 或其他用户目录。只有用户显式指定 `COMBATSOLVER_HEADLESS_ROOT` 时才可改用另一个精确实例目录。同一批次确需复用实例时，只能在批次内部保留，最后一项必须带清理开关并确认启动器成功删除整个实例目录；`ExitOnComplete` 只退出进程，不满足目录清理要求。明确为人工性能分析保留现场时例外，但必须在测试证据中记录实例路径和后续清理责任。
+
 Windows（PowerShell 7）常用命令：
 
 ```powershell
 dotnet build CombatSolver.csproj -c Release
 pwsh -NoProfile -File tools\verify-refactor-boundaries.ps1
-pwsh -NoProfile -File tools\run-unattended-test.ps1 <fixture 参数>
+pwsh -NoProfile -File tools\run-unattended-test.ps1 <fixture 参数> -CleanupInstanceOnExit
 dotnet run --project tools\CoverageCatalog\CoverageCatalog.csproj -c Release -- . <verify 参数>
 pwsh -NoProfile -File tools\run-visible-steam-benchmark.ps1 <固定基准参数>
 ```
@@ -200,7 +202,7 @@ Linux（Bash）等价命令：
 ```bash
 dotnet build CombatSolver.csproj -c Release
 ./tools/verify-refactor-boundaries.sh
-./tools/run-unattended-test.sh <fixture 参数>
+./tools/run-unattended-test.sh <fixture 参数> --cleanup-instance-on-exit
 dotnet run --project tools/CoverageCatalog/CoverageCatalog.csproj -c Release -- . <verify 参数>
 ./tools/run-visible-steam-benchmark.sh <固定基准参数>
 ```

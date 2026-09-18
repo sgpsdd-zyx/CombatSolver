@@ -12,6 +12,8 @@ description: 在战斗语义已证明正确后，审计或修改 CombatSolver �
 
 ## 适用边界
 
+合入官方 `0.41.0` 后，单人能力估值、能力承诺和固定前缀组合保持官方行为；多人协调器的提前返回与 `CombatBeamSolver._hasRegisteredPowerCards` 的 `policy.Multiplayer == null` 判断共同保证隔离。不能仅因协调器已旁路就让共享候选展开读取单人能力投影。兼容合同必须包含实际打出能力牌的多人请求和该官方版本的单人对照。
+
 先证明同一起点、同一动作的 actual/simulated 状态一致。存在根快照、语义或续用偏差时转 `combat-semantic-change`，不要调搜索掩盖。
 
 读取 `docs/ARCHITECTURE.md` 的 Search 章节。当前搜索职责已拆开：

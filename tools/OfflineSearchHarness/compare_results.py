@@ -32,7 +32,9 @@ EXCLUDED = {
     'totalGcPauseMilliseconds', 'maxGcPauseMilliseconds', 'gcLifecycle',
     'gcLifecycleAttribution', 'gcLatencyMode', 'noGcRegionActive', 'noGcRegionBudgetBytes',
     'noGcRegionRolloverCount', 'configuredNoGcRegionEnabled', 'configuredNoGcRegionBudgetBytes',
+    'firstRoutePublishedMilliseconds', 'peakManagedHeapBytes',
 }
+MEMBER_OBSERVATIONS = {'elapsedMilliseconds', 'allocatedBytes', 'managedHeapBytesAfter'}
 ROUTE_FIELDS = ('turn', 'kind', 'cardId', 'potionId', 'targetCombatId', 'cardStateKey')
 # 文案是纯显示字段。离线本地化返回键名（见 docs/OFFLINE_SEARCH_HARNESS.md 的「已知限制」），
 # 与游戏内比时天然不同，不参与比较。
@@ -64,6 +66,18 @@ def diff_dict(left, right, excluded=frozenset()):
     return rows
 
 
+def comparable_metrics(metrics):
+    result = dict(metrics or {})
+    # Keep member order, configured budgets and decisions; exclude measured time/memory only.
+    for key in ('portfolioMembers', 'powerRouteMembers'):
+        if isinstance(result.get(key), list):
+            result[key] = [
+                {name: value for name, value in member.items() if name not in MEMBER_OBSERVATIONS}
+                for member in result[key]
+            ]
+    return result
+
+
 def diff_route(left, right):
     left, right = left or [], right or []
     rows = []
@@ -79,7 +93,8 @@ def compare_root(root, left, right):
     right_result, right_route = right
     groups = {
         'solverMetrics': diff_dict(
-            left_result.get('solverMetrics'), right_result.get('solverMetrics'),
+            comparable_metrics(left_result.get('solverMetrics')),
+            comparable_metrics(right_result.get('solverMetrics')),
             EXCLUDED | DISPLAY_FIELDS),
         'route': diff_route(left_route, right_route),
         'rootState': diff_dict(
