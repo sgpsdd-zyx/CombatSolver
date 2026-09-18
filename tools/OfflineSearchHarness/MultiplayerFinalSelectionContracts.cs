@@ -1,6 +1,7 @@
 using System.Reflection;
 using System.Text.Json;
 using CombatSolver;
+using CombatSolver.Engine.InCombat.Simulation;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Combat;
 
@@ -180,6 +181,24 @@ internal static class MultiplayerFinalSelectionContracts
                     throw new InvalidOperationException("Final potion eligibility removed an expandable prefix.");
             }
             evidence.Add(new { name = "expandable_prefix_kept", finalQualityFirst = "both", passed = true });
+
+            SearchNode Victory(string name, int checkpointEnemyHp, int endedTurn)
+            {
+                SearchNode node = Node(name, [checkpointEnemyHp]);
+                void Set(string property, object value) => AccessTools.Field(typeof(SimulationSnapshot),
+                    $"<{property}>k__BackingField").SetValue(node.Snapshot, value);
+                Set(nameof(SimulationSnapshot.AllEnemiesDead), true);
+                Set(nameof(SimulationSnapshot.EnemyHp), 0);
+                Set(nameof(SimulationSnapshot.TerminalStamp), new CombatTerminalStamp(endedTurn, CombatTerminalOutcome.Victory));
+                return node;
+            }
+            SearchNode earlyWin = Victory("early_win", 99, 2), lateWin = Victory("late_win", 10, 3);
+            Check("terminal_survives_common_cycle_cut", solver, [.. dry, earlyWin], earlyWin, 1);
+            Check("terminal_end_facts_before_old_checkpoint", solver, [earlyWin, lateWin, dry[0]], earlyWin, 1);
+            Check("all_terminal_end_turn_control", solver, [lateWin, earlyWin], earlyWin, 3);
+            SearchNode deadWin = Victory("dead_win", 1, 1);
+            AccessTools.Field(typeof(SimulationSnapshot), "<PlayerDead>k__BackingField").SetValue(deadWin.Snapshot, true);
+            Check("local_death_still_precedes_victory", solver, [deadWin, earlyWin, dry[0]], earlyWin, 1);
 
             SearchNode a = Node("A", [40, 35]), b = Node("B", [41, 25]), c = Node("C", [42, 15]);
             SearchNode d = Node("D", [43, 5]), shallow = Node("S", [99]), x = Node("X", [44, 1]);

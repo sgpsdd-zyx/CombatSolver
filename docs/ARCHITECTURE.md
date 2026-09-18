@@ -20,6 +20,8 @@
 
 多人发布候选由 `CombatBeamSolver.Multiplayer.PrepareMultiplayerFinalCandidates` 先按逐槽强制用药、最少显式用药和至少一瓶资格过滤，再冻结一个 `MultiplayerPlanOrdering`，排序并保留至多 `4B` 条。`MultiplayerFinalBatch` 只持有候选引用和本批排序上下文；预览与最终返回通过同一个 `SelectMultiplayerFinal` 消费该批次并传递共同周期，不在截断子集上重新定深度。已终止候选的中途压缩也先过滤资格，但可继续展开的前缀保路不受最终资格限制。空合格池由选路入口明确失败；中途没有合格终局可以继续搜索。`Phases` 继续独占候选模拟器的释放，批次对象不复制或释放模拟器，`FinalPlanOrdering` 保留原单人政策。
 
+`MultiplayerEvaluation.MultiplayerFactsAt` 只对未结束路线读取历史检查点，真实胜利/死亡投影完整结束状态；原风险顺序继续有效。`Phases` 的本机无损满血胜利捷径只允许单人进入。主线程 `BattleDamageTracker.Observe` 在多人时沿原 `Begin` 追踪窗口按 `PotionUsedEntry.Actor` 统计本机用药，将结果写入既有不可变 `BattleDamageSnapshot`；后台不读实时历史，也不增加重复的根字段。缺少本机身份或药水历史退到追踪基线之前显式失败，单人计数路径不改。
+
 具体续行后来已出现的风险仍能否定其较早的安全观察。救命计数仍为全队口径，资源归属和两步挑战尚待独立处理；0.41.1 的原始问题与采用边界见[外部复审本地核对](strategy/pro-review-20260918/local-review.md)。深度、未兑现铺垫和名义格挡不是最终收益。预算停止时 `Phases` 保留上一层的有界节点组，释放模拟器后仅对选中路线走原有物化重放，不新增第二套探针或预算。`StateEvaluation` 保留中间探索特征，UI 从只读结果分别投影实际推演深度、共同周期、额度与最高扣血；零共同周期明确提示受击评估未完成。
 
 官方 `0.41.0` 的 `PowerCardValuation` / `PowerCommitment` 和能力固定前缀组合用于单人。多人协调器继续在这些组合之前返回；`CombatBeamSolver._hasRegisteredPowerCards` 另以 `policy.Multiplayer == null` 隔离共享候选展开中的能力承诺入口，避免将单人牌流投影用于全队历史。此隔离不改变卡牌实际结算，也不改变单人的登记判断、保路或预算。

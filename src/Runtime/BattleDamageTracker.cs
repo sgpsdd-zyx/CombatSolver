@@ -1,5 +1,6 @@
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Combat.History.Entries;
+using MegaCrit.Sts2.Core.Context;
 using MegaCrit.Sts2.Core.Entities.Players;
 
 namespace CombatSolver;
@@ -38,7 +39,8 @@ internal static class BattleDamageTracker
 
         Player? player = GetSinglePlayer(combat);
         if (player == null)
-            return new BattleDamageSnapshot(_hpLostSoFar, _soldHpCommitted, PotionsUsedSoFar());
+            return new BattleDamageSnapshot(_hpLostSoFar, _soldHpCommitted,
+                combat.Players.Count > 1 ? MultiplayerPotionsUsedSoFar(combat) : PotionsUsedSoFar());
 
         int currentHp = player.Creature.CurrentHp;
         var historyEntries = CombatManager.Instance.History.Entries;
@@ -100,6 +102,22 @@ internal static class BattleDamageTracker
 
     private static int CountPotionHistoryEntries()
         => CombatManager.Instance.History.Entries.OfType<PotionUsedEntry>().Count();
+
+    private static int MultiplayerPotionsUsedSoFar(CombatState combat)
+    {
+        Player local = LocalContext.GetMe(combat)
+            ?? throw new InvalidOperationException("Multiplayer potion history requires the local player.");
+        int total = 0, localUses = 0;
+        foreach (PotionUsedEntry entry in CombatManager.Instance.History.Entries.OfType<PotionUsedEntry>())
+        {
+            // Keep Begin's existing window; a teammate's potion cannot pay the local requirement.
+            if (total++ >= _potionHistoryCountAtStart && ReferenceEquals(entry.Actor, local.Creature))
+                localUses++;
+        }
+        if (total < _potionHistoryCountAtStart)
+            throw new InvalidOperationException("Multiplayer potion history moved behind its tracking baseline.");
+        return localUses;
+    }
 
     private static void ClearPlan()
     {

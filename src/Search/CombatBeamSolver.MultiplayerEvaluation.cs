@@ -49,9 +49,10 @@ internal sealed partial class CombatBeamSolver
     private MultiplayerPlanFacts MultiplayerFactsAt(SearchNode node, int depth)
     {
         SimulationSnapshot snapshot = node.Snapshot;
+        bool terminal = snapshot.AllEnemiesDead || snapshot.PlayerDead;
         MultiplayerCycleCheckpoint? checkpoint = snapshot.AdvisoryLastEnemyCycle;
         while (checkpoint != null && checkpoint.Cycle > depth) checkpoint = checkpoint.Previous;
-        if (depth > 0 && checkpoint?.Cycle == depth)
+        if (!terminal && depth > 0 && checkpoint?.Cycle == depth)
         {
             int excess = 0;
             for (MultiplayerCycleCheckpoint? cycle = checkpoint; cycle != null; cycle = cycle.Previous)
@@ -62,7 +63,6 @@ internal sealed partial class CombatBeamSolver
             return new(true, false, checkpoint.Hp, checkpoint.HpLost, checkpoint.DeathSaves,
                 excess, checkpoint.EnemyHp, checkpoint.TeamSurvivors, checkpoint.Potions);
         }
-        bool terminal = snapshot.AllEnemiesDead || snapshot.PlayerDead;
         return new(terminal, snapshot.AllEnemiesDead, snapshot.PlayerHp, snapshot.CumulativePlayerHpLost,
             snapshot.DeathSaveUseCount, node.AdvisoryHpLoss.ExcessHpLost(policy.Multiplayer!.AcceptableHpLossPerTurn),
             snapshot.EnemyHp, snapshot.TeamSurvivors, node.PotionCount);

@@ -17,6 +17,8 @@
 
 同一策略入口还调用 `MultiplayerFinalSelectionContracts`：用无模拟器的指定排名事实调用生产候选准备/选择函数，检查 `4B` 前用药资格、五/六候选的 840 种排列、固定比较器、空集与可展开前缀，输出 `final-selection.json`。这些纯政策反例不代表游戏触发频率；一周期真实托管短搜另以 `preview-final-selection.json` 核对相同候选池的预览、最终选择和结果深度。普通单人搜索在宿主中观察当前 DLL 的多人候选入口，输出 `single-player-isolation.json` 并断言零进入；官方旧 DLL 缺少这些方法时记录空观察列表。完整路线质量仍按固定场景单独比较。
 
+`--multiplayer-review-contracts facts` 使用双玩家、本机索引 1、双打击与敌方 10 HP 的固定小局，验证真实终局与旧检查点混合、实际搜索继续展开、原生本机/队友药水历史和资格。内部固定 Beam 4 / 120 节点 / 1 秒 / DOP 1 / 三周期，输出 `review-facts.json`；单独复核提前停止可用 `--multiplayer-review-contracts stopping`，输出 `review-stopping.json`，只观察搜索实际展开到的回合。该入口不能与 `--request` 或其他多人合同合用。`SearchedTurns` 是最终选中路线的长度，不是所有搜索层的覆盖量。终局被截断、两条真胜利的结束回合和本机死亡优先控制另由现有 `final-selection.json` 覆盖。普通离线指标、原生托管合同、真实联机验收的边界不变。
+
 ## 构建
 
 ```

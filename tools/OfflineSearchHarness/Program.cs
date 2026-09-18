@@ -122,7 +122,12 @@ internal static class Program
 
             if (options.Milestone != "M1")
             {
-                if (options.Scenario.MultiplayerStrategyContracts)
+                if (options.Scenario.MultiplayerReviewStage != null)
+                {
+                    Step(steps, "Multiplayer review regressions", () => MultiplayerReviewContracts.Run(combat!, options, loop));
+                    reached = "M2";
+                }
+                else if (options.Scenario.MultiplayerStrategyContracts)
                 {
                     Step(steps, "Multiplayer damage allowance", () => MultiplayerStrategyContracts.Run(combat!, options, loop));
                     reached = "M2";
@@ -344,6 +349,7 @@ internal sealed record HarnessOptions
           --multiplayer-contracts 原生双玩家回合与军师模拟对照（不建立网络连接）
           --multiplayer-start-contracts Exercise the manual UI entry and native action waits without networking
           --multiplayer-strategy-contracts Check offense within the per-turn HP allowance and survival guards
+          --multiplayer-review-contracts <facts|stopping> Check terminal facts, stopping and local potion history
         环境变量 OFFLINE_HARNESS_COMBATSOLVER_DLL 可以换掉运行时加载的 CombatSolver.dll。
         """;
 
@@ -377,6 +383,7 @@ internal sealed record HarnessOptions
         int? beam = null, nodes = null, cardBranches = null, pileBranches = null, handBranches = null;
         bool usePortfolio = false, multiplayerContracts = false, multiplayerStartContracts = false;
         bool multiplayerStrategyContracts = false;
+        string? multiplayerReviewStage = null;
         string potionPolicy = "Smart", milestone = "M2", language = "eng";
         string profile = "Custom", searchMode = "Evaluate", label = "offline";
         string? output = null, requestPath = null;
@@ -416,6 +423,7 @@ internal sealed record HarnessOptions
                 case "--multiplayer-contracts": multiplayerContracts = true; break;
                 case "--multiplayer-start-contracts": multiplayerStartContracts = true; break;
                 case "--multiplayer-strategy-contracts": multiplayerStrategyContracts = true; break;
+                case "--multiplayer-review-contracts": multiplayerReviewStage = Value(); break;
                 case "--milestone": milestone = Value(); break;
                 case "--out": output = Value(); break;
                 case "--workspace": workspace = Value(); break;
@@ -436,6 +444,9 @@ internal sealed record HarnessOptions
             throw new ArgumentException("--multiplayer-start-contracts requires its own two-player fixture.");
         if (multiplayerStrategyContracts && (multiplayerContracts || multiplayerStartContracts || requestPath != null))
             throw new ArgumentException("--multiplayer-strategy-contracts requires its own two-player fixture.");
+        if (multiplayerReviewStage != null && (multiplayerReviewStage is not ("facts" or "stopping") || multiplayerContracts
+            || multiplayerStartContracts || multiplayerStrategyContracts || requestPath != null))
+            throw new ArgumentException("--multiplayer-review-contracts requires a facts or stopping fixture of its own.");
         if (profile == "Custom" && requestPath == null)
         {
             beam ??= 24;
@@ -446,7 +457,7 @@ internal sealed record HarnessOptions
         {
             Scenario = new HarnessScenario(character, encounter, seed, ascension, actIndex)
                 { MultiplayerContracts = multiplayerContracts, MultiplayerStartContracts = multiplayerStartContracts,
-                  MultiplayerStrategyContracts = multiplayerStrategyContracts },
+                  MultiplayerStrategyContracts = multiplayerStrategyContracts, MultiplayerReviewStage = multiplayerReviewStage },
             RequestPath = requestPath,
             Label = label,
             Profile = profile,

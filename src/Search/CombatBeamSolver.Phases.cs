@@ -1992,7 +1992,7 @@ internal sealed partial class CombatBeamSolver
                 frontier = [];
                 break;
             }
-            if (!_hasGrowthTargets && completed.Any(node =>
+            if (!IsMultiplayerAdvice && !_hasGrowthTargets && completed.Any(node =>
                     node.Snapshot.AllEnemiesDead
                     && ExplicitPotionUseCount(node) == 0
                     && node.FutureSoldHp == 0

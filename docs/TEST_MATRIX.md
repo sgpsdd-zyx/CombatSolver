@@ -1,5 +1,24 @@
 # CombatSolver 测试清单
 
+## 多人复审事实与入口修正（2026-09-18）
+
+本批从 `db8289e` 实施第二轮复审 F01/F02/F03，生产失败基线使用保留的 0.41.2 DLL，单人对照复用已独立构建的官方 `0e6cc2d` 结果。新运行产物统一在 `.local/mp-pro-implementation-20260918/`；[实施与归档](strategy/pro-review-0412-20260918/implementation.md)记录采用和暂缓边界。普通 .NET 宿主，每请求外层 120 秒，没有 Godot/Steam 实例。
+
+| 检查 | 本次输入、结果与证据 |
+|---|---|
+| 终局真实模拟反例 | `--multiplayer-review-contracts facts`，本机索引 1、两张打击、敌方 10 HP、双方格挡、Beam 4 / 120 节点 / 1 秒 / DOP 1 / H=3。旧版选择敌方还剩 4 HP 的未胜路线，把真正胜利投影成旧 CP 的 10 HP；修正后获胜路线当选，终局整体事实及全终局控制通过。`facts-before/review-facts.json`、`facts-after/review-facts.json` |
+| 实际提前停止 | `--multiplayer-review-contracts stopping` 复用同一建局，只在实际 `Expand` 入口观察回合。旧 DLL 最后展开 T1 / 2 节点，新 DLL T3 / 9 节点，均在原 120 节点预算内；约 151/161 ms。`stopping-before/review-stopping.json`、`stopping-after/review-stopping.json` |
+| 原生根前用药与资格 | `facts` 模式用原生 `OnUseWrapper`，先本机用药再 `Begin`，队友向本机用药后捕获新根。旧版计数 1、Require 变 Smart、0 次显式用药；新版计数 0、Require 保留、实际路线显式用药 1 次。随后本机向队友用药只计本机 1 次；原窗口与冻结请求、Force 和保护控制通过。合并新证据为 `review-summary.json` 的 9 项，不以整份初次运行退出码掩盖下述 fixture 修正 |
+| 终局排序补充控制 | 当前 `MultiplayerFinalSelectionContracts` 新增混合池 `4B` 保留胜利、两条真胜利用完整终局事实比较结束回合、全终局、本机死亡优先，共 4 组通过；仍保留 R1/R2 的资格/空集/自动用药排除/前缀、840 排列、216 三元关系和实际同池预览/最终选择。`strategy-final/final-selection.json`、`strategy-final/preview-final-selection.json` |
+| 多人不可退化哨兵 | `--multiplayer-strategy-contracts --beam 2 --nodes 100 --budget-ms 1000 --dop 1`；现有扣血、救援、铺垫、四节点截止、能力隔离、增量等价、原生下一开始阶段与 Fork 合同全部通过，步骤 1.338 秒。`strategy-final/` |
+| 五/七周期与全队状态 | `--multiplayer-contracts --encounter FOGMOG_NORMAL --beam 12 --nodes 350 --budget-ms 12000 --dop 2`；六次原生完整状态相等、23 动作/七回合、旧前缀 1 动作、卡牌/药水、额外回合、本人/队友选择及手动控制全部通过，步骤 5.217 秒。`window/` |
+| 官方单人哨兵 | 五卡能力场景 Coordinator / Beam 12 / 每成员 350 节点 / 12 秒 / DOP 1；新结果与官方基线 80 项一致、0 差异，含完整路线 JSON、根状态、目标、选择与 RNG。1820 总展开、4583 总转移、17 动作、2 HP 损失。三个多人选路入口零进入。`solo/solo-power/`、`solo-comparison.json` |
+| 构建与静态边界 | 主 DLL 与最终宿主 Release 构建均 0 警告/0 错误。两端门禁添加相同的终局、单人早停和本机 Actor 声明；Bash 输出 `REFACTOR_BOUNDARIES_OK search_files=198`，见 `boundaries.log`，PowerShell 环境不可用，未执行。文档、JSON 与差异检查见 `closeout-check.json` |
+
+初版早停断言误用 `SolverResult.SearchedTurns`，该字段描述最终选中路线，故 `facts-after` 中这一项仍失败；生产搜索已经展开 9 个节点。修正观测后单独取得 `stopping` 失败/通过证据，其他已通过用例没有重跑。扩展终局控制时还修正了 fixture 对计算属性的反射写入，初次 `strategy/` 不计通过，实际通过为 `strategy-final/`。
+
+未验证真实主机/客户端网络事件、任意历史重置、三/四人、所有角色/第三方 Mod、可见 UI、性能、普遍胜率及完整自动部署。F04/F05/F06/F07 和旧当前回合预览旁路仍暂缓；固定小局的搜索耗时不用于性能结论。结构化条目为 `MULTIPLAYER-REVIEW-TERMINAL-AND-LOCAL-ELIGIBILITY`。
+
 ## 0.41.2 第二轮多人策略研究（2026-09-18）
 
 固定研究输入 `2dc5d15 / 0.41.2`，本地起点 `9885a75`，生产行为仍为 `b29d6fc`。两份 6 Pro 原文、完整实验材料与本地意见见[本轮归档](strategy/pro-review-0412-20260918/README.md)。本轮证据分开记账：
