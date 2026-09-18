@@ -1,6 +1,6 @@
 # CombatSolver 文档导航
 
-当前 fork 定版为 [0.41.1](releases/0.41.1-RELEASE_NOTES.md)，包含基于官方 0.41.0 的多人策略改进；见 [多人指南与兼容记录](multiplayer-advisor.md)。对应源码使用 `v0.41.1`，官方 `v0.41.0` 保留原指向。
+当前 fork 定版为 [0.41.2](releases/0.41.2-RELEASE_NOTES.md)，包含基于官方 0.41.0 的多人策略改进及用药条件/共同周期选路修正；见 [多人指南与兼容记录](multiplayer-advisor.md)。对应源码使用 `v0.41.2`，官方 `v0.41.0` 保留原指向。
 
 通用随机/指定战斗测试入口：[场景生成与批量重跑](GENERATED_COMBAT_SCENARIOS.md)。
 

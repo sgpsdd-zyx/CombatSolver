@@ -4,11 +4,11 @@ Combat Solver 是《杀戮尖塔 2》的战斗路线求解器，本 fork 支持�
 
 单人模式下，玩家可以只查看建议，也可以让求解器执行当前回合，或连续接管整场战斗。多人模式只提供手动请求的建议。搜索不会修改游戏 RNG，也不会在后台操作真实战斗状态。
 
-当前 fork 定版为 **0.41.1**，基于官方 **0.41.0**，包含单回合 3 HP 扣血目标、七周期多人军师，以及共同周期选路和有效救援改进。安装包与说明见 [GitHub Release](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.41.1) 和 [更新日志](docs/releases/0.41.1-RELEASE_NOTES.md)，兼容范围见 [多人军师](docs/multiplayer-advisor.md#官方-0410-兼容同步)。
+当前 fork 定版为 **0.41.2**，基于官方 **0.41.0**，包含单回合 3 HP 扣血目标、七周期多人军师，以及用药条件和共同周期选路修正。安装包与说明见 [GitHub Release](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.41.2) 和 [更新日志](docs/releases/0.41.2-RELEASE_NOTES.md)，兼容范围见 [多人军师](docs/multiplayer-advisor.md#官方-0410-兼容同步)。
 
 [多人军师](docs/multiplayer-advisor.md) 推荐本人的出牌和用药路线，最多推演七个敌方回合。队友行动后自行决定何时重算；推演假设队友后续不主动出牌或用药，但仍结算其被动效果。多人功能目前供试用，尚未完成真实联机验收。
 
-**English UI:** Set the game language to English and restart the game. In single-player, use **Play turn** for one turn or **Auto: On** for continuous play. This fork adds manual multiplayer advice for up to seven enemy turns, including potions, prioritizing damage within a target of 3 HP lost per turn while avoiding lethal damage. It assumes teammates take no further active actions, and live multiplayer compatibility is not yet verified. Fork **0.41.1** incorporates upstream **0.41.0**, common-cycle route comparison and effective teammate rescue. See the [GitHub Release](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.41.1) and [release notes](docs/releases/0.41.1-RELEASE_NOTES.md). Configure potions, growth and search budgets in the overlay. **Settings > Reports > Upload report** submits a bug report. Logs, raw errors and some detailed diagnostics retain their original text.
+**English UI:** Set the game language to English and restart the game. In single-player, use **Play turn** for one turn or **Auto: On** for continuous play. This fork adds manual multiplayer advice for up to seven enemy turns, including potions, prioritizing damage within a target of 3 HP lost per turn while avoiding lethal damage. It assumes teammates take no further active actions, and live multiplayer compatibility is not yet verified. Fork **0.41.2** incorporates upstream **0.41.0** and fixes multiplayer potion requirements and common-cycle route selection. See the [GitHub Release](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.41.2) and [release notes](docs/releases/0.41.2-RELEASE_NOTES.md). Configure potions, growth and search budgets in the overlay. **Settings > Reports > Upload report** submits a bug report. Logs, raw errors and some detailed diagnostics retain their original text.
 
 界面跟随游戏语言：简体/繁体中文使用现有中文文案，其他语言使用英文。简化版不提供独立语言开关；卡牌胶囊、选牌和相关悬停说明支持运行中切换语言，其他既有窗口可通过重启统一刷新。
 

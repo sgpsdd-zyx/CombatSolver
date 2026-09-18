@@ -1,5 +1,11 @@
 # CombatSolver 测试清单
 
+## 0.41.2（fork）定版验证范围（2026-09-18）
+
+发布行为源码为 `b29d6fc`，只修改版本号、玩家更新说明及现役文档。复用下方第一批直接证据：840 种排列、216 组三元比较、实际预览/最终选择、相关短搜、七周期与 80 项官方单人对照；这些场景不因版本同步而重跑。
+
+从定版提交完成一次主 DLL 与 Windows 辅助程序 Release 构建，再将 manifest、两项产物、`LICENSE` 和 `THIRD_PARTY_NOTICES.md` 写入最小 ZIP。发布范围为当前 GitHub fork；未执行真实联机、可见性能或完整发布门禁。
+
 ## 多人最终候选管线第一批（2026-09-18）
 
 本批基于 `7d216fc`，行为基线为已发布 `5ad98a9 / 0.41.1`，只处理外部复审 R1/R2。游戏托管模型 `0.111.0`；所有新产物位于 `.local/mp-final-selection-20260918/`。原文抽象实验、旧行为测试和静态阅读不计入本批通过。
@@ -15,7 +21,7 @@
 | 官方单人对照 | [五卡输入](../coverage/multiplayer/solo-power-compat.json)，Coordinator / Beam 12 / 每成员 350 节点 / 12 秒 / DOP 1。复用输入未变的官方 `0e6cc2d` 独立基线，当前 DLL 的 60 项非时间指标、17 动作、根/目录及完整路线共 80 项一致，1820 总展开、4583 转移、2 HP。三个多人准备/选择/共同周期入口调用次数为 0；当前 `FinalPlanOrdering.cs` 与官方源码完全一致。`solo/solo-power/`、`solo-comparison.json` |
 | 构建与结构 | 本批生产 DLL Release 19.65 秒、宿主 Release 2.58 秒，均 0 警告/0 错误；Bash `REFACTOR_BOUNDARIES_OK search_files=198`，见 `boundaries.log`。两端增加相同的候选批次/预览/最终接入声明，PowerShell 只核对文本等价、未执行 |
 
-各宿主请求外层上限 120 秒；步骤时间只描述本次执行，不作性能比较。无新增战斗状态字段，未重跑无关的全量 CoverageCatalog、转置或 Runtime 启动测试。未启动 Godot/可见 Steam/网络，未验证真实联机胜率、可见布局、三/四人、所有角色/第三方 Mod 或完整部署/发布门禁。本批不发布；版本和研究原文保持冻结。结构化条目为 `MULTIPLAYER-FINAL-CANDIDATE-PIPELINE`。
+各宿主请求外层上限 120 秒；步骤时间只描述本次执行，不作性能比较。无新增战斗状态字段，未重跑无关的全量 CoverageCatalog、转置或 Runtime 启动测试。未启动 Godot/可见 Steam/网络，未验证真实联机胜率、可见布局、三/四人、所有角色/第三方 Mod 或完整部署/发布门禁。实施阶段未发布，用户后续要求定版为 0.41.2，范围见本页定版章节；研究原文保持冻结。结构化条目为 `MULTIPLAYER-FINAL-CANDIDATE-PIPELINE`。
 
 ## 0.41.1（fork）定版验证范围（2026-09-18）
 
