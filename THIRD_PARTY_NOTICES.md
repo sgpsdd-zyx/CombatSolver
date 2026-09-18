@@ -1,6 +1,6 @@
 # Third-Party Notices
 
-Last updated: 2026-09-16
+Last updated: 2026-09-17
 
 ## Random Foreseer
 
@@ -37,3 +37,15 @@ Random Foreseer code and the portions of Combat Solver derived from it remain su
 Combat Solver does not load or distribute the Random Foreseer assembly as a runtime dependency. This runtime separation does not alter the source relationship described above.
 
 At the time the permission above was granted, the Random Foreseer repository did not contain a public software license. Random Foreseer now publishes its repository under the MIT License. The earlier permission record remains here to preserve the attribution and source history under which the integration began.
+
+## neat-freak Development Skill
+
+The project includes the neat-freak knowledge and governance skill from
+[KKKKhazix/khazix-skills](https://github.com/KKKKhazix/khazix-skills), revision
+`4f2db09802736ac8130ddf8dd6121435b5a41b55`, under the MIT License. The original
+copyright notice and license are retained in
+[.agents/skills/neat-freak/LICENSE](.agents/skills/neat-freak/LICENSE); installation
+scope and local adaptations are recorded in
+[UPSTREAM.md](.agents/skills/neat-freak/UPSTREAM.md).
+
+This skill is a source-only development aid and is not part of the Mod binary.

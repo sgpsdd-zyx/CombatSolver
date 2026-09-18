@@ -1,6 +1,6 @@
 # CombatSolver 仓库工作指令
 
-> **多人策略研究与隔离追加（2026-09-17）：** 用户要求将当前多人实现和研究材料推送到 fork，供 ChatGPT 6 Pro 仅通过 GitHub 调研；本次同步源码与文档，不创建新版本、标签或 Release。后续只允许修改多人策略，原版单人策略必须保留原路径、原参数和原行为。新增评分、保路、剪枝、预算、队友情景和缓存由多人专属政策/对象拥有，单人请求不得启用；公共文件只允许必要的显式多人接入，不能顺带修改单人或公共战斗语义。需要越界的依赖单列，不混入本批。研究任务与隔离验收见 [多人策略研究提示词](docs/strategy/multiplayer-pro-research-prompt-20260917.md)。
+> **多人策略研究与隔离追加（2026-09-17）：** 用户要求将当前多人实现和研究材料推送到 fork，供 ChatGPT 6 Pro 仅通过 GitHub 调研；本次同步源码与文档，不创建新版本、标签或 Release。后续只允许修改多人策略，原版单人策略必须保留原路径、原参数和原行为。新增评分、保路、剪枝、预算、队友情景和缓存由多人专属政策/对象拥有，单人请求不得启用；公共文件只允许必要的显式多人接入，不能顺带修改单人或公共战斗语义。需要越界的依赖单列，不混入本批。研究任务与隔离验收见 [多人策略研究提示词](docs/strategy/multiplayer-pro-research-prompt-20260917.md)，研究回文的采用取舍见 [多人军师实施评审](docs/multiplayer-advisor.md#研究落地评审尚未实施)。
 
 > **当前分支（2026-09-17）：** 用户授权实现多人手动军师并做适当模拟测试，随后要求扩大预测至 5～7 回合。本分支默认最多推演七个敌方回合，只在手动重新计算时捕获全队状态并规划本机出牌/用药，不自动操作或重算，保持单人原路径。用户随后明确授权推送至 `sgpsdd-zyx/CombatSolver` fork 并提供可直接安装的 GitHub Release，初版定版为 `0.40.3`，后续手动启动修复定版为 `0.40.4`；该授权结束本分支此前不提升版本、不发包的批次。实现与验证见 [多人军师](docs/multiplayer-advisor.md)。本次发布范围仅为该 fork 的分支、版本标签和 GitHub Release；不启动可见 Steam，不发布上游创意工坊或夸克网盘。
 
@@ -47,6 +47,7 @@ CombatSolver 是《杀戮尖塔 2》的单人战斗路线求解器 Mod，使用 
 - Search/Runtime/UI/Testing/registry 的职责迁移、结构拆分和依赖边界：`.agents/skills/architecture-boundary-refactor/SKILL.md`。
 - 玩家可见 UI 文案、胶囊附加信息和中英本地化：`.agents/skills/ui-localization/SKILL.md`；新增文案同时维护中文与英文。
 - 版本提升、发布 ZIP、版本标签、创意工坊上传、GitHub 同步、干净安装或“可发布”结论：`.agents/skills/release-gate/SKILL.md`。
+- 开发后的文档、规则与实现一致性收尾：`.agents/skills/neat-freak/SKILL.md`；不据此扩大重构、发布或清理范围。
 
 同一任务可以依次使用多个 skill。先确定语义是否正确，再处理搜索或结构，最后只在用户要求时发布。
 
