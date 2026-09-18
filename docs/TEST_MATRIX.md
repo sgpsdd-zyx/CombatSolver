@@ -1,5 +1,9 @@
 # CombatSolver 测试清单
 
+## 归档 L0（2026-09-18）
+
+本次只同步文档、规则与根目录 ZIP 忽略项，验证本地引用/锚点、文档入口、规则链、归档范围和差异空白；结果记录于 `.local/neat-freak-0.41.2/static-check.json`。盘点与完成状态见[归档记录](DEVELOPMENT_NOTES.md#归档状态2026-09-18)。未改变行为源码、编译配置、依赖或测试输入，复用下方两项工作的原成功证据，不将旧结果写成本轮重跑。原始包、发布包和复核材料均保留；没有安装、追加发布或执行清场。
+
 ## 独立模组尖塔军师本机玩家修复（2026-09-18）
 
 独立拿牌推荐模组的输入、构建和重跑方式见 [SpireAdvisorMultiplayerFix](../tools/SpireAdvisorMultiplayerFix/README.md)。原 ZIP 文件名 v0.1.2，manifest v0.1.0，程序集 0.0.0.0；修复包统一为 0.1.3。本项不属于 CombatSolver 0.41.2 验收。
@@ -12,13 +16,13 @@
 | 二进制改动范围 | 三个数据读取方法之外的 913 个方法及 8 份内嵌资源保持一致；未将修复工具或 Mono.Cecil 加入 Mod 的运行依赖 |
 | 总结果 | `PASSED seat_cases=20 assertions=1013 native_models=true game_started=false`；首次宿主运行在安装程序集解析器之前加载游戏类型而失败，修正启动顺序后才取得此条成功证据，失败运行不计入验证 |
 
-这是独立 .NET 9 进程中的数据访问验证，使用当前游戏 0.111.0 托管模型，不是完整游戏回放。没有调用 Mod 初始化、Godot 主循环、Steam、网络或存档入口；真实联机、可见 UI、Windows 实机和推荐质量未验证。验证后仅补充说明及打包工具，最终从提交构建 Release 修复工具并生成一次修正 DLL/ZIP，不重跑相同测试。
+这是独立 .NET 9 进程中的数据访问验证，使用当前游戏 0.111.0 托管模型，不是完整游戏回放。没有调用 Mod 初始化、Godot 主循环、Steam、网络或存档入口；真实联机、可见 UI、Windows 实机和推荐质量未验证。验证后仅补充说明及打包工具，最终从 `7ec629d` 完成一次 Release 构建，1.41 秒、0 警告/0 错误；随后 `PATCHED version=0.1.3 methods=3` 与 `PACKAGED version=0.1.3 files=7` 两个命令成功，修正 DLL/ZIP 各生成一次。这些原执行记录已在归档时从任务「修复多人卡组推荐串线」读取，没有重跑测试或重新打开 ZIP。
 
 ## 0.41.2（fork）定版验证范围（2026-09-18）
 
 发布行为源码为 `b29d6fc`，只修改版本号、玩家更新说明及现役文档。复用下方第一批直接证据：840 种排列、216 组三元比较、实际预览/最终选择、相关短搜、七周期与 80 项官方单人对照；这些场景不因版本同步而重跑。
 
-从定版提交完成一次主 DLL 与 Windows 辅助程序 Release 构建，再将 manifest、两项产物、`LICENSE` 和 `THIRD_PARTY_NOTICES.md` 写入最小 ZIP。发布范围为当前 GitHub fork；未执行真实联机、可见性能或完整发布门禁。
+从定版提交 `2dc5d15` 完成一次主 DLL 与 Windows 辅助程序 Release 构建，分别为 10.93 秒、0.78 秒，均 0 警告/0 错误；日志为 `.local/release-0.41.2/build-main.log` 与 `build-memory-cleaner.log`。随后将 manifest、两项产物、`LICENSE` 和 `THIRD_PARTY_NOTICES.md` 一次写入最小 ZIP，来源记录为同目录 `package-result.json`。分支、标签及 GitHub Release/附件上传的成功记录见[发布凭证](DEVELOPMENT_NOTES.md#0412fork多人最终候选管线2026-09-18)。未执行真实联机、可见性能或完整发布门禁。
 
 ## 多人最终候选管线第一批（2026-09-18）
 

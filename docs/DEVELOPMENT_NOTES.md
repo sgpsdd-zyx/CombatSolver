@@ -1,18 +1,37 @@
 # CombatSolver 开发笔记与未来构想
 
+## 归档状态（2026-09-18）
+
+本次归档以 `7ec629d` 为入口，纳入 CombatSolver 0.41.2 发布、外部复审第一批实施，以及独立尖塔军师 0.1.3 修复和原始 ZIP。两项工作的版本、产物和证据分别维护；此次只更新文档、规则和忽略项，独立工具与归档提交保留在本地任务分支。
+
+| 事实面 | 状态 | 当前事实与权威入口 |
+|---|---|---|
+| 代码 | `verified-current` | CombatSolver 行为为 `b29d6fc`，定版为 `2dc5d15`；独立工具为 `7ec629d`，由主项目的 `tools/**/*.cs` 排除规则隔离。实现分别见本页对应章节 |
+| 发布与运行态 | `verified-current` / `pending` | CombatSolver 的 GitHub Release、标签、分支和附件上传已有成功凭证；尖塔军师只有本地修复包。真实联机、可见界面和安装验收仍未验证，交付成功不等于这些检查通过 |
+| 文档 | `changed-and-verified` | 本页维护归档与发布状态，[多人指南](multiplayer-advisor.md)维护现役行为，[独立工具说明](../tools/SpireAdvisorMultiplayerFix/README.md)维护输入与重跑方式；原始 Pro 回文保持冻结 |
+| 规则 | `changed-and-verified` | 根 `AGENTS.md` 是本项目规则入口，无子目录 override；顶部发布口令改为历史凭证指针，发布路径按当前仓库解析，根目录 ZIP 纳入忽略规则 |
+| 生成记忆 | `out-of-scope` | 平台生成记忆为只读管理范围，未改写内容；未扩展到其他项目或平台配置 |
+| 工作区 | `verified-current` | 盘点覆盖 315 份 Markdown 和唯一工作树；原始 ZIP、两项产物及本地复核现场保留，归档不代表已清场 |
+
+归档 L0 检查见[测试矩阵](TEST_MATRIX.md#归档-l02026-09-18)。既有测试、构建、打包和上传成功记录继续作为直接证据，没有重跑游戏、重新解包或打开远端页面。资源归属优先级与两步挑战仍待独立评审。
+
+清场预览：保留根目录的原始尖塔军师 ZIP、`releases/` 中两项安装包、`.local/mp-final-selection-20260918/`、`.local/release-0.41.2/`、`.local/issue-bundles/spire-advisor-v0.1.2-multiplayer/` 和 `.local/neat-freak-0.41.2/`。可再生成的 `tools/SpireAdvisorMultiplayerFix/bin/`、`tools/SpireAdvisorMultiplayerFix/obj/` 仅列为后续清场候选；复核现场仍保留，等待用户确认后清场。
+
 ## 独立模组：尖塔军师本机玩家修复（2026-09-18）
 
 用户另行提供「尖塔军师」拿牌推荐模组的 v0.1.2 ZIP，要求修复客机误读房主卡组。此项为独立模组工具，不属于已冻结的 CombatSolver 0.41.2 行为或发布批次。包内没有源码，manifest 实际为 v0.1.0、程序集为 0.0.0.0；[修复工具与输入说明](../tools/SpireAdvisorMultiplayerFix/README.md)保留这一来源差异。
 
 - 根因是 `GameAccess.ReadDeckCards` 递归读取玩家列表的第一副非空卡组，没有识别本机。修复仅替换卡组、血量、遗物三个数据入口，统一使用原版 `LocalContext.GetMe`，并去掉无玩家归属的遗物缓存读取；不改评分或内置数据。
 - 已直接复现旧入口为索引 1 客机返回索引 0 房主卡组。使用游戏 0.111.0 的托管模型完成 20 种座位／顺序组合与身份切换、空牌组、零血量等边界；913 个无关方法、8 份内嵌资源保持一致。详情见[本轮验证](TEST_MATRIX.md#独立模组尖塔军师本机玩家修复2026-09-18)。
-- 独立修复包定为 0.1.3；从本次工具提交完成 Release 构建、生成修正 DLL 与最小 ZIP，不改变 CombatSolver 版本、不推送或上传。未启动游戏、Steam 或网络，真实联机与可见界面未验证。
+- 独立修复包定为 0.1.3；从 `7ec629d` 完成 Release 构建、生成修正 DLL 与最小 ZIP，三个阶段均成功。产物位置与来源见[工具说明](../tools/SpireAdvisorMultiplayerFix/README.md)。没有推送、标签或外部上传；未启动游戏、Steam 或网络，真实联机与可见界面未验证。
 
 ## 0.41.2（fork）：多人最终候选管线（2026-09-18）
 
 用户在外部复审归档后要求开始实施并避免过度工程化。本批只采用设计第一批 R1/R2：资格过滤与同批共同周期贯通；资源归属优先级、两步挑战与新的预算政策留待独立评审。以 `7d216fc` 为开发起点、已发布 `5ad98a9 / 0.41.1` 为行为基线，完成实现提交 `b29d6fc`。实施阶段按计划只作本地提交；用户随后发出“发布”，将本批定版为 `0.41.2`，玩家说明见[更新日志](releases/0.41.2-RELEASE_NOTES.md)。
 
-本次沿用当前多人 fork 的 GitHub 发布范围：同步 `sgpsdd-zyx/CombatSolver` 的任务分支、新 annotated tag 和 GitHub Release，不移动官方 `v0.41.0`，不上传官方创意工坊或夸克网盘。官方三渠道脚本要求 `main` 与官方渠道配置，不用于本分支。行为代码保持 `b29d6fc`，复用下方已通过的验证；只同步版本和文档，从定版提交构建主 DLL 与 Windows 辅助程序并生成一次最小 ZIP，不启动游戏或执行完整发布门禁。
+定版提交为 `2dc5d15`。任务分支 `codex/multiplayer-advisor` 与新 annotated tag `v0.41.2` 已在一次原子推送中同步到 `sgpsdd-zyx/CombatSolver`，随后成功创建 [GitHub Release 0.41.2](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.41.2)，上传 `CombatSolver-0.41.2.zip`（2,107,818 字节）及中英更新说明。官方 `v0.41.0` 保持原指向；没有上传创意工坊或夸克网盘，官方三渠道脚本要求 `main` 与官方渠道配置，不用于本分支。
+
+行为代码保持 `b29d6fc`，复用下方已通过的验证；从定版提交完成一次主 DLL 与 Windows 辅助程序 Release 构建，再一次写入最小 ZIP。构建和打包记录见 `.local/release-0.41.2/`，具体结果见[定版验证](TEST_MATRIX.md#0412fork定版验证范围2026-09-18)。没有启动游戏或执行完整发布门禁，归档未追加任何发布操作。
 
 - `CombatBeamSolver.Multiplayer` 在完整发布池先检查逐槽强制用药、最少显式用药及至少一瓶要求，再冻结共同周期、排序并截断到原 `4B`。已有终局候选的中途压缩同样先过滤；仍可展开的未用药前缀不受最终资格限制。
 - 复用现有 `MultiplayerPlanOrdering`，一个小批次记录携带候选引用和上下文；预览与最终结果共享准备/选择函数，结果深度沿用截断前的周期。没有新增排序维度、策略开关、模拟器、缓存或预算。空合格池仍明确失败，候选释放继续归 `Phases`，已释放的上一层候选仍由原结果物化入口重放。

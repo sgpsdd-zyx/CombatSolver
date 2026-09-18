@@ -24,6 +24,7 @@ Thumbs.db
 # Local evidence output and release artifacts
 /outputs/
 /releases/
+/*.zip
 
 # Scratch images kept in the working tree but never committed
 新封面1.png

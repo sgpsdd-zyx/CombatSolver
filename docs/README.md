@@ -11,6 +11,7 @@
 
 | 要查什么 | 入口 |
 |---|---|
+| 0.41.2 发布、独立尖塔军师修复及本地材料的归档状态 | [2026-09-18 归档记录](DEVELOPMENT_NOTES.md#归档状态2026-09-18) |
 | 多人手动军师、3 HP 周期目标、共同周期选路、救援与官方 0.41.0 兼容 | [多人军师](multiplayer-advisor.md) |
 | 独立「尖塔军师」拿牌推荐模组误读房主卡组的修复与重跑 | [本机玩家修复工具](../tools/SpireAdvisorMultiplayerFix/README.md) |
 | 多人研究原文归档、已采用改进与暂缓方案 | [策略索引](strategy/README.md#多人研究归档)、[首批实施](multiplayer-advisor.md#首批策略优化已实施) |
