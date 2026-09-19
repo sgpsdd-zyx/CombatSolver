@@ -22,6 +22,8 @@ internal static class MultiplayerReviewContracts
 
     public static string Run(CombatState state, HarnessOptions options, MainLoopContext loop)
     {
+        if (options.Scenario.MultiplayerReviewStage is "horizon" or "horizon-native" or "horizon-ordering")
+            return MultiplayerHorizonContracts.Run(state, options, loop);
         GameBootstrap.Harmony.Patch(AccessTools.Method(typeof(Godot.Time), nameof(Godot.Time.GetTicksMsec)),
             prefix: new HarmonyMethod(typeof(MultiplayerReviewContracts), nameof(ClockPrefix)));
         Player local = LocalContext.GetMe(state)!;

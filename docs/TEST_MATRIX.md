@@ -1,5 +1,22 @@
 # CombatSolver 测试清单
 
+## 多人窗口研究与共同周期动作成本（2026-09-19）
+
+生产基线 `3ccac17`，本轮现场统一位于 `.local/mp-horizon-20260919/`。默认窗口决策、外部研究与状态矩阵见[归档](strategy/pro-horizon-20260919/README.md)。以下为本轮直接执行；普通 .NET 托管宿主，没有 Godot/Steam 实例或游戏网络会话。
+
+| 检查 | 输入、结果与本轮证据 |
+|---|---|
+| 固定窗口与外部评价 | `--multiplayer-review-contracts horizon --encounter FUZZY_WURM_CRAWLER_WEAK --beam 8 --nodes 350 --budget-ms 3000 --dop 1`。六根乘 3/5/7/9 上限，基线 `baseline-complete/` 与修正后 `horizon-after/` 各 24 次。分别记录真实展开分布、选中深度、共同周期及外部回放；两者当前动作、节点、转移与统一评价结果相同。4 节点根仅后缀终点敌 HP 从 494 到 488，不算当前动作收益。实验铺垫牌显式加 Ethereal，队友攻击仅属外部扰动，详见归档。 |
+| 共同周期动作成本 | `horizon-ordering` 同根回放四条真实父链。`ordering-before/` 的后缀牌/周期比较都是 -1；修正后的 `ordering-final/` 均为 0，周期内额外成本仍为 -1。模拟器释放后可比较，64 组三元关系通过；Ambergris 额外玩家回合的周期仍为 0，首个实际敌方周期内/外成本分别区分，见 `extra-turn-action-cost.json`。 |
+| 原生基础 | `horizon-native` 仅运行本机 `Inflame`、队友 `Bludgeon` 两个非终局原生手动动作，每步完整多人 `ContinuationStamp` 相等。`native-r1/` 保留证据；时钟使用既有同类合同的 Godot 桥接。未声称九周期整场原生差分通过。 |
+| 多人不可退化哨兵 | `--multiplayer-strategy-contracts --encounter FUZZY_WURM_CRAWLER_WEAK --beam 2 --nodes 100 --budget-ms 1000 --dop 1`，`strategy-final/`。9 个扣血/单人能力隔离案例、完整资格与终局控制、840 种排列、216 组三元比较、预览与最终同批选择、后续风险、救援、铺垫、增量、原生下一回合状态和 Fork 隔离通过。 |
+| 官方单人隔离 | 既有五卡能力根，Coordinator / Beam 12 / 350 节点 / 12000ms / DOP 1。`solo/solo-power/` 与独立官方 `0e6cc2d / 0.41.0` 比较 79 项及完整 17 动作/选择 JSON，一共 80 项一致；1,820 展开、4,583 转移、2 HP，3 个多人入口进入次数为零。见 `solo-comparison.json` 与 `solo-full-route.json`。 |
+| 构建与静态边界 | 主项目 `build-main-r1.log` 与最终宿主 `build-harness-r10.log` 均 Release 0 警告/0 错误。Bash 结构门禁通过 `REFACTOR_BOUNDARIES_OK search_files=198`；PowerShell 声明同步，本机无 `pwsh`，未执行。知识收尾的链接、JSON 与 Python 语法检查见[归档检查](strategy/pro-horizon-20260919/archive-check.json)。 |
+
+初始实验的 JSON 命名冲突、胜利后追加动作及原生时钟缺失均保留失败日志，没有计为通过。`strategy/` 失败源于旧断言强制选择较短后缀；已改为严格同分，后续风险控制保持并通过。生产行为修正后只重跑受影响的最小合同，原生基础不重复。未执行真实联机、可见 Steam、全角色/第三方 Mod、普遍胜率或可见性能验证。结构化条目为 `MULTIPLAYER-HORIZON-COMMON-CYCLE-ACTION-COST`。
+
+6 Pro 的 132 主对照、177 预算网格运行、16 微型检查及旧脚本复跑来自其研究环境，原始数据已收取，本地未重复执行。它们使用外部第十二周期，以上生产对照使用第九周期；两者不混记。原生两步差分不覆盖真实队友网络行为或完整九周期战斗。
+
 ## 多人复审事实与入口修正（2026-09-18）
 
 本批从 `db8289e` 实施第二轮复审 F01/F02/F03，生产失败基线使用保留的 0.41.2 DLL，单人对照复用已独立构建的官方 `0e6cc2d` 结果。新运行产物统一在 `.local/mp-pro-implementation-20260918/`；[实施与归档](strategy/pro-review-0412-20260918/implementation.md)记录采用和暂缓边界。普通 .NET 宿主，每请求外层 120 秒，没有 Godot/Steam 实例。

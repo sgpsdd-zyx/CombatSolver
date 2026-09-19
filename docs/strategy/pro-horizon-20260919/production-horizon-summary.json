@@ -1,0 +1,801 @@
+{
+  "baseline": "3ccac172dd55ad4a8d97074b7129cbf4155add65",
+  "change": "Multiplayer action-count tiebreak uses the exact common enemy-cycle boundary in the existing parent chain.",
+  "scope": "Offline managed models and native nonterminal actions; no Godot, game networking, deployment or visible Steam.",
+  "comparisonCount": 24,
+  "comparisons": [
+    {
+      "case": "late_setup",
+      "horizon": 3,
+      "currentTurnEqual": true,
+      "externalEvaluationEqual": true,
+      "selectedCycles": [
+        3,
+        3
+      ],
+      "commonCycles": [
+        3,
+        3
+      ],
+      "selectedSuffixEnemyHp": [
+        482,
+        482
+      ],
+      "searchCountersEqual": true
+    },
+    {
+      "case": "late_setup",
+      "horizon": 5,
+      "currentTurnEqual": true,
+      "externalEvaluationEqual": true,
+      "selectedCycles": [
+        5,
+        5
+      ],
+      "commonCycles": [
+        5,
+        5
+      ],
+      "selectedSuffixEnemyHp": [
+        468,
+        468
+      ],
+      "searchCountersEqual": true
+    },
+    {
+      "case": "late_setup",
+      "horizon": 7,
+      "currentTurnEqual": true,
+      "externalEvaluationEqual": true,
+      "selectedCycles": [
+        7,
+        7
+      ],
+      "commonCycles": [
+        7,
+        7
+      ],
+      "selectedSuffixEnemyHp": [
+        452,
+        452
+      ],
+      "searchCountersEqual": true
+    },
+    {
+      "case": "late_setup",
+      "horizon": 9,
+      "currentTurnEqual": true,
+      "externalEvaluationEqual": true,
+      "selectedCycles": [
+        9,
+        9
+      ],
+      "commonCycles": [
+        9,
+        9
+      ],
+      "selectedSuffixEnemyHp": [
+        436,
+        436
+      ],
+      "searchCountersEqual": true
+    },
+    {
+      "case": "early_finish",
+      "horizon": 3,
+      "currentTurnEqual": true,
+      "externalEvaluationEqual": true,
+      "selectedCycles": [
+        1,
+        1
+      ],
+      "commonCycles": [
+        3,
+        3
+      ],
+      "selectedSuffixEnemyHp": [
+        0,
+        0
+      ],
+      "searchCountersEqual": true
+    },
+    {
+      "case": "early_finish",
+      "horizon": 5,
+      "currentTurnEqual": true,
+      "externalEvaluationEqual": true,
+      "selectedCycles": [
+        1,
+        1
+      ],
+      "commonCycles": [
+        5,
+        5
+      ],
+      "selectedSuffixEnemyHp": [
+        0,
+        0
+      ],
+      "searchCountersEqual": true
+    },
+    {
+      "case": "early_finish",
+      "horizon": 7,
+      "currentTurnEqual": true,
+      "externalEvaluationEqual": true,
+      "selectedCycles": [
+        1,
+        1
+      ],
+      "commonCycles": [
+        7,
+        7
+      ],
+      "selectedSuffixEnemyHp": [
+        0,
+        0
+      ],
+      "searchCountersEqual": true
+    },
+    {
+      "case": "early_finish",
+      "horizon": 9,
+      "currentTurnEqual": true,
+      "externalEvaluationEqual": true,
+      "selectedCycles": [
+        1,
+        1
+      ],
+      "commonCycles": [
+        9,
+        9
+      ],
+      "selectedSuffixEnemyHp": [
+        0,
+        0
+      ],
+      "searchCountersEqual": true
+    },
+    {
+      "case": "budget_four",
+      "horizon": 3,
+      "currentTurnEqual": true,
+      "externalEvaluationEqual": true,
+      "selectedCycles": [
+        1,
+        1
+      ],
+      "commonCycles": [
+        1,
+        1
+      ],
+      "selectedSuffixEnemyHp": [
+        494,
+        488
+      ],
+      "searchCountersEqual": true
+    },
+    {
+      "case": "budget_four",
+      "horizon": 5,
+      "currentTurnEqual": true,
+      "externalEvaluationEqual": true,
+      "selectedCycles": [
+        1,
+        1
+      ],
+      "commonCycles": [
+        1,
+        1
+      ],
+      "selectedSuffixEnemyHp": [
+        494,
+        488
+      ],
+      "searchCountersEqual": true
+    },
+    {
+      "case": "budget_four",
+      "horizon": 7,
+      "currentTurnEqual": true,
+      "externalEvaluationEqual": true,
+      "selectedCycles": [
+        1,
+        1
+      ],
+      "commonCycles": [
+        1,
+        1
+      ],
+      "selectedSuffixEnemyHp": [
+        494,
+        488
+      ],
+      "searchCountersEqual": true
+    },
+    {
+      "case": "budget_four",
+      "horizon": 9,
+      "currentTurnEqual": true,
+      "externalEvaluationEqual": true,
+      "selectedCycles": [
+        1,
+        1
+      ],
+      "commonCycles": [
+        1,
+        1
+      ],
+      "selectedSuffixEnemyHp": [
+        494,
+        488
+      ],
+      "searchCountersEqual": true
+    },
+    {
+      "case": "peer_finisher",
+      "horizon": 3,
+      "currentTurnEqual": true,
+      "externalEvaluationEqual": true,
+      "selectedCycles": [
+        3,
+        3
+      ],
+      "commonCycles": [
+        3,
+        3
+      ],
+      "selectedSuffixEnemyHp": [
+        20,
+        20
+      ],
+      "searchCountersEqual": true
+    },
+    {
+      "case": "peer_finisher",
+      "horizon": 5,
+      "currentTurnEqual": true,
+      "externalEvaluationEqual": true,
+      "selectedCycles": [
+        5,
+        5
+      ],
+      "commonCycles": [
+        5,
+        5
+      ],
+      "selectedSuffixEnemyHp": [
+        6,
+        6
+      ],
+      "searchCountersEqual": true
+    },
+    {
+      "case": "peer_finisher",
+      "horizon": 7,
+      "currentTurnEqual": true,
+      "externalEvaluationEqual": true,
+      "selectedCycles": [
+        5,
+        5
+      ],
+      "commonCycles": [
+        7,
+        7
+      ],
+      "selectedSuffixEnemyHp": [
+        0,
+        0
+      ],
+      "searchCountersEqual": true
+    },
+    {
+      "case": "peer_finisher",
+      "horizon": 9,
+      "currentTurnEqual": true,
+      "externalEvaluationEqual": true,
+      "selectedCycles": [
+        5,
+        5
+      ],
+      "commonCycles": [
+        9,
+        9
+      ],
+      "selectedSuffixEnemyHp": [
+        0,
+        0
+      ],
+      "searchCountersEqual": true
+    },
+    {
+      "case": "payback_seven",
+      "horizon": 3,
+      "currentTurnEqual": true,
+      "externalEvaluationEqual": true,
+      "selectedCycles": [
+        3,
+        3
+      ],
+      "commonCycles": [
+        3,
+        3
+      ],
+      "selectedSuffixEnemyHp": [
+        470,
+        470
+      ],
+      "searchCountersEqual": true
+    },
+    {
+      "case": "payback_seven",
+      "horizon": 5,
+      "currentTurnEqual": true,
+      "externalEvaluationEqual": true,
+      "selectedCycles": [
+        5,
+        5
+      ],
+      "commonCycles": [
+        5,
+        5
+      ],
+      "selectedSuffixEnemyHp": [
+        450,
+        450
+      ],
+      "searchCountersEqual": true
+    },
+    {
+      "case": "payback_seven",
+      "horizon": 7,
+      "currentTurnEqual": true,
+      "externalEvaluationEqual": true,
+      "selectedCycles": [
+        7,
+        7
+      ],
+      "commonCycles": [
+        7,
+        7
+      ],
+      "selectedSuffixEnemyHp": [
+        428,
+        428
+      ],
+      "searchCountersEqual": true
+    },
+    {
+      "case": "payback_seven",
+      "horizon": 9,
+      "currentTurnEqual": true,
+      "externalEvaluationEqual": true,
+      "selectedCycles": [
+        9,
+        9
+      ],
+      "commonCycles": [
+        9,
+        9
+      ],
+      "selectedSuffixEnemyHp": [
+        404,
+        404
+      ],
+      "searchCountersEqual": true
+    },
+    {
+      "case": "payback_nine",
+      "horizon": 3,
+      "currentTurnEqual": true,
+      "externalEvaluationEqual": true,
+      "selectedCycles": [
+        3,
+        3
+      ],
+      "commonCycles": [
+        3,
+        3
+      ],
+      "selectedSuffixEnemyHp": [
+        458,
+        458
+      ],
+      "searchCountersEqual": true
+    },
+    {
+      "case": "payback_nine",
+      "horizon": 5,
+      "currentTurnEqual": true,
+      "externalEvaluationEqual": true,
+      "selectedCycles": [
+        5,
+        5
+      ],
+      "commonCycles": [
+        5,
+        5
+      ],
+      "selectedSuffixEnemyHp": [
+        430,
+        430
+      ],
+      "searchCountersEqual": true
+    },
+    {
+      "case": "payback_nine",
+      "horizon": 7,
+      "currentTurnEqual": true,
+      "externalEvaluationEqual": true,
+      "selectedCycles": [
+        7,
+        7
+      ],
+      "commonCycles": [
+        7,
+        7
+      ],
+      "selectedSuffixEnemyHp": [
+        402,
+        402
+      ],
+      "searchCountersEqual": true
+    },
+    {
+      "case": "payback_nine",
+      "horizon": 9,
+      "currentTurnEqual": true,
+      "externalEvaluationEqual": true,
+      "selectedCycles": [
+        9,
+        9
+      ],
+      "commonCycles": [
+        9,
+        9
+      ],
+      "selectedSuffixEnemyHp": [
+        372,
+        372
+      ],
+      "searchCountersEqual": true
+    }
+  ],
+  "orderingBefore": {
+    "depth": 1,
+    "suffixCard": -1,
+    "suffixCycle": -1,
+    "prefixCost": -1,
+    "actionCounts": [
+      2,
+      3,
+      3,
+      3
+    ],
+    "cycles": [
+      1,
+      1,
+      2,
+      1
+    ],
+    "checkpointEnemyHp": [
+      117,
+      117,
+      117,
+      117
+    ]
+  },
+  "orderingAfter": {
+    "depth": 1,
+    "suffixCard": 0,
+    "suffixCycle": 0,
+    "prefixCost": -1,
+    "simulatorsReleased": true,
+    "actionCounts": [
+      2,
+      3,
+      3,
+      3
+    ],
+    "cycles": [
+      1,
+      1,
+      2,
+      1
+    ],
+    "checkpointEnemyHp": [
+      117,
+      117,
+      117,
+      117
+    ]
+  },
+  "extraTurn": {
+    "extraTurnCycles": 0,
+    "firstCycle": 1,
+    "extraPrefix": -1,
+    "extraSuffix": 0,
+    "actionCount": 2,
+    "turn": 3
+  },
+  "nativeActions": {
+    "count": 2,
+    "fullContinuationEqual": true,
+    "source": "native-r1/harness-result.json",
+    "scope": "Inflame and peer Bludgeon, nonterminal manual plays; Godot monotonic clock bypassed."
+  },
+  "multiplayerRegression": {
+    "allowanceCases": 9,
+    "finalSelection": {
+      "evidence": [
+        {
+          "name": "F01_require_potion_before_truncation",
+          "passed": true,
+          "input": [
+            "dry0",
+            "dry1",
+            "dry2",
+            "dry3",
+            "used"
+          ],
+          "selected": "used",
+          "depth": 1,
+          "retained": 1,
+          "orderingCalls": 1,
+          "Error": null
+        },
+        {
+          "name": "F02_minimum_two_before_truncation",
+          "passed": true,
+          "input": [
+            "dry0",
+            "dry1",
+            "dry2",
+            "dry3",
+            "used",
+            "twice"
+          ],
+          "selected": "twice",
+          "depth": 1,
+          "retained": 1,
+          "orderingCalls": 1,
+          "Error": null
+        },
+        {
+          "name": "empty_eligible_pool",
+          "passed": true,
+          "input": [
+            "dry0",
+            "dry1",
+            "dry2",
+            "dry3"
+          ],
+          "selected": null,
+          "depth": 0,
+          "retained": 0,
+          "orderingCalls": 1,
+          "Error": "PotionPolicyUnsatisfiedException"
+        },
+        {
+          "name": "automatic_potion_is_not_explicit",
+          "passed": true,
+          "input": [
+            "automatic"
+          ],
+          "selected": null,
+          "depth": 0,
+          "retained": 0,
+          "orderingCalls": 1,
+          "Error": "PotionPolicyUnsatisfiedException"
+        },
+        {
+          "name": "eligibility_precedes_common_cycle",
+          "passed": true,
+          "input": [
+            "dry0",
+            "dry1",
+            "dry2",
+            "dry3",
+            "deep_use"
+          ],
+          "selected": "deep_use",
+          "depth": 2,
+          "retained": 1,
+          "orderingCalls": 1,
+          "Error": null
+        },
+        {
+          "name": "forced_slot_directive",
+          "passed": true,
+          "input": [
+            "dry0",
+            "dry1",
+            "dry2",
+            "dry3",
+            "used",
+            "forced_slot1"
+          ],
+          "selected": "forced_slot1",
+          "depth": 1,
+          "retained": 1,
+          "orderingCalls": 1,
+          "Error": null
+        },
+        {
+          "name": "expandable_prefix_kept",
+          "finalQualityFirst": "both",
+          "passed": true
+        },
+        {
+          "name": "terminal_survives_common_cycle_cut",
+          "passed": true,
+          "input": [
+            "dry0",
+            "dry1",
+            "dry2",
+            "dry3",
+            "early_win"
+          ],
+          "selected": "early_win",
+          "depth": 1,
+          "retained": 4,
+          "orderingCalls": 1,
+          "Error": null
+        },
+        {
+          "name": "terminal_end_facts_before_old_checkpoint",
+          "passed": true,
+          "input": [
+            "early_win",
+            "late_win",
+            "dry0"
+          ],
+          "selected": "early_win",
+          "depth": 1,
+          "retained": 3,
+          "orderingCalls": 1,
+          "Error": null
+        },
+        {
+          "name": "all_terminal_end_turn_control",
+          "passed": true,
+          "input": [
+            "late_win",
+            "early_win"
+          ],
+          "selected": "early_win",
+          "depth": 3,
+          "retained": 2,
+          "orderingCalls": 1,
+          "Error": null
+        },
+        {
+          "name": "local_death_still_precedes_victory",
+          "passed": true,
+          "input": [
+            "dead_win",
+            "early_win",
+            "dry0"
+          ],
+          "selected": "early_win",
+          "depth": 1,
+          "retained": 3,
+          "orderingCalls": 1,
+          "Error": null
+        },
+        {
+          "name": "F03_five_candidate_frozen_depth",
+          "passed": true,
+          "input": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "S"
+          ],
+          "selected": "A",
+          "depth": 1,
+          "retained": 4,
+          "orderingCalls": 1,
+          "Error": null
+        },
+        {
+          "name": "F04_six_candidate_frozen_depth",
+          "passed": true,
+          "input": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "S",
+            "X"
+          ],
+          "selected": "A",
+          "depth": 1,
+          "retained": 4,
+          "orderingCalls": 1,
+          "Error": null
+        },
+        {
+          "name": "new_batch_can_advance_depth",
+          "passed": true,
+          "input": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "X"
+          ],
+          "selected": "X",
+          "depth": 2,
+          "retained": 4,
+          "orderingCalls": 1,
+          "Error": null
+        },
+        {
+          "name": "reference_duplicates_do_not_fill_limit",
+          "passed": true,
+          "input": [
+            "A",
+            "A",
+            "B",
+            "C",
+            "D",
+            "S"
+          ],
+          "selected": "A",
+          "depth": 1,
+          "retained": 4,
+          "orderingCalls": 1,
+          "Error": null
+        },
+        {
+          "name": "permutations_5",
+          "permutations": 120,
+          "wrong": 0
+        },
+        {
+          "name": "permutations_6",
+          "permutations": 720,
+          "wrong": 0
+        },
+        {
+          "name": "fixed_cycle_comparator",
+          "triples": 216
+        }
+      ],
+      "failures": []
+    },
+    "source": "strategy-final/"
+  },
+  "singleplayer": {
+    "routeActions": 17,
+    "fullRouteEqual": true,
+    "isolation": {
+      "observedMethods": [
+        "PrepareMultiplayerFinalCandidates",
+        "SelectMultiplayerFinal",
+        "CreateMultiplayerOrdering"
+      ],
+      "multiplayerEntries": 0
+    },
+    "comparisonFields": 79,
+    "totalChecksWithFullRoute": 80,
+    "totalExpanded": 1820,
+    "totalTransitions": 4583,
+    "hpLost": 2
+  },
+  "evidenceRoot": ".local/mp-horizon-20260919/",
+  "notVerified": [
+    "Real multiplayer behavior probabilities",
+    "Nine-cycle full native battle equivalence",
+    "Visible performance",
+    "General win rate"
+  ],
+  "searchCounterFields": [
+    "ExpandedNodes",
+    "TransitionCount",
+    "expandedCycles"
+  ],
+  "searchCounterScope": "Equality covers recorded search counters only; parent-chain reads, wall clock and visible performance are not claimed equal."
+}

@@ -1,0 +1,1015 @@
+{
+  "baseline": "3ccac172dd55ad4a8d97074b7129cbf4155add65",
+  "source": ".local/mp-horizon-20260919/baseline-complete/horizon-comparison.json",
+  "fixture": "native_models_ethereal_inflame_one_strike",
+  "localPlayerIndex": 1,
+  "evaluationProtocol": "Selected current-turn cards, then one legal Strike per turn through cycle 9; teammates pass. Evaluation work is separate from search.",
+  "peerProtocol": "Only peer_finisher: the teammate legally plays one Bludgeon before the first enemy cycle, then passes. This is a fixed perturbation, not a human probability model.",
+  "humanPolicyValidated": false,
+  "evidence": [
+    {
+      "name": "late_setup",
+      "rootEnemyHp": 500,
+      "strength": 0,
+      "isUpgraded": false,
+      "horizon": 3,
+      "nodeLimit": 350,
+      "expandedNodes": 21,
+      "transitionCount": 32,
+      "expandedCycles": {
+        "0": 3,
+        "1": 6,
+        "2": 12
+      },
+      "advisoryComparisonCycles": 3,
+      "selectedCycles": 3,
+      "boundaryReason": "AdvisoryHorizon",
+      "endEnemyHp": 482,
+      "cumulativePlayerHpLost": 0,
+      "currentTurn": [
+        {
+          "kind": "PlayCard",
+          "cardId": "STRIKE_IRONCLAD",
+          "targetCombatId": 2
+        }
+      ],
+      "evaluation": {
+        "cycles": 9,
+        "enemyHp": 446,
+        "hpLost": 0,
+        "teamSurvivors": 2,
+        "won": false,
+        "endedTurn": null,
+        "replayCalls": 18,
+        "peerReplayActions": 0
+      },
+      "peerEvaluation": null
+    },
+    {
+      "name": "late_setup",
+      "rootEnemyHp": 500,
+      "strength": 0,
+      "isUpgraded": false,
+      "horizon": 5,
+      "nodeLimit": 350,
+      "expandedNodes": 61,
+      "transitionCount": 92,
+      "expandedCycles": {
+        "0": 3,
+        "1": 6,
+        "2": 12,
+        "3": 20,
+        "4": 20
+      },
+      "advisoryComparisonCycles": 5,
+      "selectedCycles": 5,
+      "boundaryReason": "AdvisoryHorizon",
+      "endEnemyHp": 468,
+      "cumulativePlayerHpLost": 0,
+      "currentTurn": [
+        {
+          "kind": "PlayCard",
+          "cardId": "INFLAME",
+          "targetCombatId": null
+        }
+      ],
+      "evaluation": {
+        "cycles": 9,
+        "enemyHp": 436,
+        "hpLost": 0,
+        "teamSurvivors": 2,
+        "won": false,
+        "endedTurn": null,
+        "replayCalls": 18,
+        "peerReplayActions": 0
+      },
+      "peerEvaluation": null
+    },
+    {
+      "name": "late_setup",
+      "rootEnemyHp": 500,
+      "strength": 0,
+      "isUpgraded": false,
+      "horizon": 7,
+      "nodeLimit": 350,
+      "expandedNodes": 101,
+      "transitionCount": 152,
+      "expandedCycles": {
+        "0": 3,
+        "1": 6,
+        "2": 12,
+        "3": 20,
+        "4": 20,
+        "5": 20,
+        "6": 20
+      },
+      "advisoryComparisonCycles": 7,
+      "selectedCycles": 7,
+      "boundaryReason": "AdvisoryHorizon",
+      "endEnemyHp": 452,
+      "cumulativePlayerHpLost": 0,
+      "currentTurn": [
+        {
+          "kind": "PlayCard",
+          "cardId": "INFLAME",
+          "targetCombatId": null
+        }
+      ],
+      "evaluation": {
+        "cycles": 9,
+        "enemyHp": 436,
+        "hpLost": 0,
+        "teamSurvivors": 2,
+        "won": false,
+        "endedTurn": null,
+        "replayCalls": 18,
+        "peerReplayActions": 0
+      },
+      "peerEvaluation": null
+    },
+    {
+      "name": "late_setup",
+      "rootEnemyHp": 500,
+      "strength": 0,
+      "isUpgraded": false,
+      "horizon": 9,
+      "nodeLimit": 350,
+      "expandedNodes": 141,
+      "transitionCount": 212,
+      "expandedCycles": {
+        "0": 3,
+        "1": 6,
+        "2": 12,
+        "3": 20,
+        "4": 20,
+        "5": 20,
+        "6": 20,
+        "7": 20,
+        "8": 20
+      },
+      "advisoryComparisonCycles": 9,
+      "selectedCycles": 9,
+      "boundaryReason": "AdvisoryHorizon",
+      "endEnemyHp": 436,
+      "cumulativePlayerHpLost": 0,
+      "currentTurn": [
+        {
+          "kind": "PlayCard",
+          "cardId": "INFLAME",
+          "targetCombatId": null
+        }
+      ],
+      "evaluation": {
+        "cycles": 9,
+        "enemyHp": 436,
+        "hpLost": 0,
+        "teamSurvivors": 2,
+        "won": false,
+        "endedTurn": null,
+        "replayCalls": 18,
+        "peerReplayActions": 0
+      },
+      "peerEvaluation": null
+    },
+    {
+      "name": "early_finish",
+      "rootEnemyHp": 12,
+      "strength": 0,
+      "isUpgraded": false,
+      "horizon": 3,
+      "nodeLimit": 350,
+      "expandedNodes": 15,
+      "transitionCount": 25,
+      "expandedCycles": {
+        "0": 3,
+        "1": 5,
+        "2": 7
+      },
+      "advisoryComparisonCycles": 3,
+      "selectedCycles": 1,
+      "boundaryReason": "None",
+      "endEnemyHp": 0,
+      "cumulativePlayerHpLost": 0,
+      "currentTurn": [
+        {
+          "kind": "PlayCard",
+          "cardId": "STRIKE_IRONCLAD",
+          "targetCombatId": 2
+        }
+      ],
+      "evaluation": {
+        "cycles": 1,
+        "enemyHp": 0,
+        "hpLost": 0,
+        "teamSurvivors": 2,
+        "won": true,
+        "endedTurn": 2,
+        "replayCalls": 3,
+        "peerReplayActions": 0
+      },
+      "peerEvaluation": null
+    },
+    {
+      "name": "early_finish",
+      "rootEnemyHp": 12,
+      "strength": 0,
+      "isUpgraded": false,
+      "horizon": 5,
+      "nodeLimit": 350,
+      "expandedNodes": 35,
+      "transitionCount": 61,
+      "expandedCycles": {
+        "0": 3,
+        "1": 5,
+        "2": 7,
+        "3": 9,
+        "4": 11
+      },
+      "advisoryComparisonCycles": 5,
+      "selectedCycles": 1,
+      "boundaryReason": "None",
+      "endEnemyHp": 0,
+      "cumulativePlayerHpLost": 0,
+      "currentTurn": [
+        {
+          "kind": "PlayCard",
+          "cardId": "STRIKE_IRONCLAD",
+          "targetCombatId": 2
+        }
+      ],
+      "evaluation": {
+        "cycles": 1,
+        "enemyHp": 0,
+        "hpLost": 0,
+        "teamSurvivors": 2,
+        "won": true,
+        "endedTurn": 2,
+        "replayCalls": 3,
+        "peerReplayActions": 0
+      },
+      "peerEvaluation": null
+    },
+    {
+      "name": "early_finish",
+      "rootEnemyHp": 12,
+      "strength": 0,
+      "isUpgraded": false,
+      "horizon": 7,
+      "nodeLimit": 350,
+      "expandedNodes": 57,
+      "transitionCount": 101,
+      "expandedCycles": {
+        "0": 3,
+        "1": 5,
+        "2": 7,
+        "3": 9,
+        "4": 11,
+        "5": 11,
+        "6": 11
+      },
+      "advisoryComparisonCycles": 7,
+      "selectedCycles": 1,
+      "boundaryReason": "None",
+      "endEnemyHp": 0,
+      "cumulativePlayerHpLost": 0,
+      "currentTurn": [
+        {
+          "kind": "PlayCard",
+          "cardId": "STRIKE_IRONCLAD",
+          "targetCombatId": 2
+        }
+      ],
+      "evaluation": {
+        "cycles": 1,
+        "enemyHp": 0,
+        "hpLost": 0,
+        "teamSurvivors": 2,
+        "won": true,
+        "endedTurn": 2,
+        "replayCalls": 3,
+        "peerReplayActions": 0
+      },
+      "peerEvaluation": null
+    },
+    {
+      "name": "early_finish",
+      "rootEnemyHp": 12,
+      "strength": 0,
+      "isUpgraded": false,
+      "horizon": 9,
+      "nodeLimit": 350,
+      "expandedNodes": 80,
+      "transitionCount": 143,
+      "expandedCycles": {
+        "0": 3,
+        "1": 5,
+        "2": 7,
+        "3": 9,
+        "4": 11,
+        "5": 11,
+        "6": 11,
+        "7": 11,
+        "8": 12
+      },
+      "advisoryComparisonCycles": 9,
+      "selectedCycles": 1,
+      "boundaryReason": "None",
+      "endEnemyHp": 0,
+      "cumulativePlayerHpLost": 0,
+      "currentTurn": [
+        {
+          "kind": "PlayCard",
+          "cardId": "STRIKE_IRONCLAD",
+          "targetCombatId": 2
+        }
+      ],
+      "evaluation": {
+        "cycles": 1,
+        "enemyHp": 0,
+        "hpLost": 0,
+        "teamSurvivors": 2,
+        "won": true,
+        "endedTurn": 2,
+        "replayCalls": 3,
+        "peerReplayActions": 0
+      },
+      "peerEvaluation": null
+    },
+    {
+      "name": "budget_four",
+      "rootEnemyHp": 500,
+      "strength": 0,
+      "isUpgraded": false,
+      "horizon": 3,
+      "nodeLimit": 4,
+      "expandedNodes": 4,
+      "transitionCount": 6,
+      "expandedCycles": {
+        "0": 3,
+        "1": 1
+      },
+      "advisoryComparisonCycles": 1,
+      "selectedCycles": 1,
+      "boundaryReason": "NodeLimit",
+      "endEnemyHp": 494,
+      "cumulativePlayerHpLost": 0,
+      "currentTurn": [
+        {
+          "kind": "PlayCard",
+          "cardId": "STRIKE_IRONCLAD",
+          "targetCombatId": 2
+        }
+      ],
+      "evaluation": {
+        "cycles": 9,
+        "enemyHp": 446,
+        "hpLost": 0,
+        "teamSurvivors": 2,
+        "won": false,
+        "endedTurn": null,
+        "replayCalls": 18,
+        "peerReplayActions": 0
+      },
+      "peerEvaluation": null
+    },
+    {
+      "name": "budget_four",
+      "rootEnemyHp": 500,
+      "strength": 0,
+      "isUpgraded": false,
+      "horizon": 5,
+      "nodeLimit": 4,
+      "expandedNodes": 4,
+      "transitionCount": 6,
+      "expandedCycles": {
+        "0": 3,
+        "1": 1
+      },
+      "advisoryComparisonCycles": 1,
+      "selectedCycles": 1,
+      "boundaryReason": "NodeLimit",
+      "endEnemyHp": 494,
+      "cumulativePlayerHpLost": 0,
+      "currentTurn": [
+        {
+          "kind": "PlayCard",
+          "cardId": "STRIKE_IRONCLAD",
+          "targetCombatId": 2
+        }
+      ],
+      "evaluation": {
+        "cycles": 9,
+        "enemyHp": 446,
+        "hpLost": 0,
+        "teamSurvivors": 2,
+        "won": false,
+        "endedTurn": null,
+        "replayCalls": 18,
+        "peerReplayActions": 0
+      },
+      "peerEvaluation": null
+    },
+    {
+      "name": "budget_four",
+      "rootEnemyHp": 500,
+      "strength": 0,
+      "isUpgraded": false,
+      "horizon": 7,
+      "nodeLimit": 4,
+      "expandedNodes": 4,
+      "transitionCount": 6,
+      "expandedCycles": {
+        "0": 3,
+        "1": 1
+      },
+      "advisoryComparisonCycles": 1,
+      "selectedCycles": 1,
+      "boundaryReason": "NodeLimit",
+      "endEnemyHp": 494,
+      "cumulativePlayerHpLost": 0,
+      "currentTurn": [
+        {
+          "kind": "PlayCard",
+          "cardId": "STRIKE_IRONCLAD",
+          "targetCombatId": 2
+        }
+      ],
+      "evaluation": {
+        "cycles": 9,
+        "enemyHp": 446,
+        "hpLost": 0,
+        "teamSurvivors": 2,
+        "won": false,
+        "endedTurn": null,
+        "replayCalls": 18,
+        "peerReplayActions": 0
+      },
+      "peerEvaluation": null
+    },
+    {
+      "name": "budget_four",
+      "rootEnemyHp": 500,
+      "strength": 0,
+      "isUpgraded": false,
+      "horizon": 9,
+      "nodeLimit": 4,
+      "expandedNodes": 4,
+      "transitionCount": 6,
+      "expandedCycles": {
+        "0": 3,
+        "1": 1
+      },
+      "advisoryComparisonCycles": 1,
+      "selectedCycles": 1,
+      "boundaryReason": "NodeLimit",
+      "endEnemyHp": 494,
+      "cumulativePlayerHpLost": 0,
+      "currentTurn": [
+        {
+          "kind": "PlayCard",
+          "cardId": "STRIKE_IRONCLAD",
+          "targetCombatId": 2
+        }
+      ],
+      "evaluation": {
+        "cycles": 9,
+        "enemyHp": 446,
+        "hpLost": 0,
+        "teamSurvivors": 2,
+        "won": false,
+        "endedTurn": null,
+        "replayCalls": 18,
+        "peerReplayActions": 0
+      },
+      "peerEvaluation": null
+    },
+    {
+      "name": "peer_finisher",
+      "rootEnemyHp": 38,
+      "strength": 0,
+      "isUpgraded": false,
+      "horizon": 3,
+      "nodeLimit": 350,
+      "expandedNodes": 21,
+      "transitionCount": 32,
+      "expandedCycles": {
+        "0": 3,
+        "1": 6,
+        "2": 12
+      },
+      "advisoryComparisonCycles": 3,
+      "selectedCycles": 3,
+      "boundaryReason": "AdvisoryHorizon",
+      "endEnemyHp": 20,
+      "cumulativePlayerHpLost": 0,
+      "currentTurn": [
+        {
+          "kind": "PlayCard",
+          "cardId": "STRIKE_IRONCLAD",
+          "targetCombatId": 2
+        }
+      ],
+      "evaluation": {
+        "cycles": 6,
+        "enemyHp": 0,
+        "hpLost": 0,
+        "teamSurvivors": 2,
+        "won": true,
+        "endedTurn": 7,
+        "replayCalls": 13,
+        "peerReplayActions": 0
+      },
+      "peerEvaluation": {
+        "cycles": 0,
+        "enemyHp": 0,
+        "hpLost": 0,
+        "teamSurvivors": 2,
+        "won": true,
+        "endedTurn": 1,
+        "replayCalls": 2,
+        "peerReplayActions": 1
+      }
+    },
+    {
+      "name": "peer_finisher",
+      "rootEnemyHp": 38,
+      "strength": 0,
+      "isUpgraded": false,
+      "horizon": 5,
+      "nodeLimit": 350,
+      "expandedNodes": 61,
+      "transitionCount": 92,
+      "expandedCycles": {
+        "0": 3,
+        "1": 6,
+        "2": 12,
+        "3": 20,
+        "4": 20
+      },
+      "advisoryComparisonCycles": 5,
+      "selectedCycles": 5,
+      "boundaryReason": "AdvisoryHorizon",
+      "endEnemyHp": 6,
+      "cumulativePlayerHpLost": 0,
+      "currentTurn": [
+        {
+          "kind": "PlayCard",
+          "cardId": "INFLAME",
+          "targetCombatId": null
+        }
+      ],
+      "evaluation": {
+        "cycles": 5,
+        "enemyHp": 0,
+        "hpLost": 0,
+        "teamSurvivors": 2,
+        "won": true,
+        "endedTurn": 6,
+        "replayCalls": 11,
+        "peerReplayActions": 0
+      },
+      "peerEvaluation": {
+        "cycles": 1,
+        "enemyHp": 0,
+        "hpLost": 0,
+        "teamSurvivors": 2,
+        "won": true,
+        "endedTurn": 2,
+        "replayCalls": 3,
+        "peerReplayActions": 2
+      }
+    },
+    {
+      "name": "peer_finisher",
+      "rootEnemyHp": 38,
+      "strength": 0,
+      "isUpgraded": false,
+      "horizon": 7,
+      "nodeLimit": 350,
+      "expandedNodes": 93,
+      "transitionCount": 143,
+      "expandedCycles": {
+        "0": 3,
+        "1": 6,
+        "2": 12,
+        "3": 20,
+        "4": 20,
+        "5": 19,
+        "6": 13
+      },
+      "advisoryComparisonCycles": 7,
+      "selectedCycles": 5,
+      "boundaryReason": "None",
+      "endEnemyHp": 0,
+      "cumulativePlayerHpLost": 0,
+      "currentTurn": [
+        {
+          "kind": "PlayCard",
+          "cardId": "INFLAME",
+          "targetCombatId": null
+        }
+      ],
+      "evaluation": {
+        "cycles": 5,
+        "enemyHp": 0,
+        "hpLost": 0,
+        "teamSurvivors": 2,
+        "won": true,
+        "endedTurn": 6,
+        "replayCalls": 11,
+        "peerReplayActions": 0
+      },
+      "peerEvaluation": {
+        "cycles": 1,
+        "enemyHp": 0,
+        "hpLost": 0,
+        "teamSurvivors": 2,
+        "won": true,
+        "endedTurn": 2,
+        "replayCalls": 3,
+        "peerReplayActions": 2
+      }
+    },
+    {
+      "name": "peer_finisher",
+      "rootEnemyHp": 38,
+      "strength": 0,
+      "isUpgraded": false,
+      "horizon": 9,
+      "nodeLimit": 350,
+      "expandedNodes": 117,
+      "transitionCount": 185,
+      "expandedCycles": {
+        "0": 3,
+        "1": 6,
+        "2": 12,
+        "3": 20,
+        "4": 20,
+        "5": 19,
+        "6": 13,
+        "7": 12,
+        "8": 12
+      },
+      "advisoryComparisonCycles": 9,
+      "selectedCycles": 5,
+      "boundaryReason": "None",
+      "endEnemyHp": 0,
+      "cumulativePlayerHpLost": 0,
+      "currentTurn": [
+        {
+          "kind": "PlayCard",
+          "cardId": "INFLAME",
+          "targetCombatId": null
+        }
+      ],
+      "evaluation": {
+        "cycles": 5,
+        "enemyHp": 0,
+        "hpLost": 0,
+        "teamSurvivors": 2,
+        "won": true,
+        "endedTurn": 6,
+        "replayCalls": 11,
+        "peerReplayActions": 0
+      },
+      "peerEvaluation": {
+        "cycles": 1,
+        "enemyHp": 0,
+        "hpLost": 0,
+        "teamSurvivors": 2,
+        "won": true,
+        "endedTurn": 2,
+        "replayCalls": 3,
+        "peerReplayActions": 2
+      }
+    },
+    {
+      "name": "payback_seven",
+      "rootEnemyHp": 500,
+      "strength": 1,
+      "isUpgraded": true,
+      "horizon": 3,
+      "nodeLimit": 350,
+      "expandedNodes": 21,
+      "transitionCount": 32,
+      "expandedCycles": {
+        "0": 3,
+        "1": 6,
+        "2": 12
+      },
+      "advisoryComparisonCycles": 3,
+      "selectedCycles": 3,
+      "boundaryReason": "AdvisoryHorizon",
+      "endEnemyHp": 470,
+      "cumulativePlayerHpLost": 0,
+      "currentTurn": [
+        {
+          "kind": "PlayCard",
+          "cardId": "STRIKE_IRONCLAD",
+          "targetCombatId": 2
+        }
+      ],
+      "evaluation": {
+        "cycles": 9,
+        "enemyHp": 410,
+        "hpLost": 0,
+        "teamSurvivors": 2,
+        "won": false,
+        "endedTurn": null,
+        "replayCalls": 18,
+        "peerReplayActions": 0
+      },
+      "peerEvaluation": null
+    },
+    {
+      "name": "payback_seven",
+      "rootEnemyHp": 500,
+      "strength": 1,
+      "isUpgraded": true,
+      "horizon": 5,
+      "nodeLimit": 350,
+      "expandedNodes": 61,
+      "transitionCount": 92,
+      "expandedCycles": {
+        "0": 3,
+        "1": 6,
+        "2": 12,
+        "3": 20,
+        "4": 20
+      },
+      "advisoryComparisonCycles": 5,
+      "selectedCycles": 5,
+      "boundaryReason": "AdvisoryHorizon",
+      "endEnemyHp": 450,
+      "cumulativePlayerHpLost": 0,
+      "currentTurn": [
+        {
+          "kind": "PlayCard",
+          "cardId": "STRIKE_IRONCLAD",
+          "targetCombatId": 2
+        }
+      ],
+      "evaluation": {
+        "cycles": 9,
+        "enemyHp": 410,
+        "hpLost": 0,
+        "teamSurvivors": 2,
+        "won": false,
+        "endedTurn": null,
+        "replayCalls": 18,
+        "peerReplayActions": 0
+      },
+      "peerEvaluation": null
+    },
+    {
+      "name": "payback_seven",
+      "rootEnemyHp": 500,
+      "strength": 1,
+      "isUpgraded": true,
+      "horizon": 7,
+      "nodeLimit": 350,
+      "expandedNodes": 101,
+      "transitionCount": 152,
+      "expandedCycles": {
+        "0": 3,
+        "1": 6,
+        "2": 12,
+        "3": 20,
+        "4": 20,
+        "5": 20,
+        "6": 20
+      },
+      "advisoryComparisonCycles": 7,
+      "selectedCycles": 7,
+      "boundaryReason": "AdvisoryHorizon",
+      "endEnemyHp": 428,
+      "cumulativePlayerHpLost": 0,
+      "currentTurn": [
+        {
+          "kind": "PlayCard",
+          "cardId": "INFLAME",
+          "targetCombatId": null
+        }
+      ],
+      "evaluation": {
+        "cycles": 9,
+        "enemyHp": 404,
+        "hpLost": 0,
+        "teamSurvivors": 2,
+        "won": false,
+        "endedTurn": null,
+        "replayCalls": 18,
+        "peerReplayActions": 0
+      },
+      "peerEvaluation": null
+    },
+    {
+      "name": "payback_seven",
+      "rootEnemyHp": 500,
+      "strength": 1,
+      "isUpgraded": true,
+      "horizon": 9,
+      "nodeLimit": 350,
+      "expandedNodes": 141,
+      "transitionCount": 212,
+      "expandedCycles": {
+        "0": 3,
+        "1": 6,
+        "2": 12,
+        "3": 20,
+        "4": 20,
+        "5": 20,
+        "6": 20,
+        "7": 20,
+        "8": 20
+      },
+      "advisoryComparisonCycles": 9,
+      "selectedCycles": 9,
+      "boundaryReason": "AdvisoryHorizon",
+      "endEnemyHp": 404,
+      "cumulativePlayerHpLost": 0,
+      "currentTurn": [
+        {
+          "kind": "PlayCard",
+          "cardId": "INFLAME",
+          "targetCombatId": null
+        }
+      ],
+      "evaluation": {
+        "cycles": 9,
+        "enemyHp": 404,
+        "hpLost": 0,
+        "teamSurvivors": 2,
+        "won": false,
+        "endedTurn": null,
+        "replayCalls": 18,
+        "peerReplayActions": 0
+      },
+      "peerEvaluation": null
+    },
+    {
+      "name": "payback_nine",
+      "rootEnemyHp": 500,
+      "strength": 5,
+      "isUpgraded": true,
+      "horizon": 3,
+      "nodeLimit": 350,
+      "expandedNodes": 21,
+      "transitionCount": 32,
+      "expandedCycles": {
+        "0": 3,
+        "1": 6,
+        "2": 12
+      },
+      "advisoryComparisonCycles": 3,
+      "selectedCycles": 3,
+      "boundaryReason": "AdvisoryHorizon",
+      "endEnemyHp": 458,
+      "cumulativePlayerHpLost": 0,
+      "currentTurn": [
+        {
+          "kind": "PlayCard",
+          "cardId": "STRIKE_IRONCLAD",
+          "targetCombatId": 2
+        }
+      ],
+      "evaluation": {
+        "cycles": 9,
+        "enemyHp": 374,
+        "hpLost": 0,
+        "teamSurvivors": 2,
+        "won": false,
+        "endedTurn": null,
+        "replayCalls": 18,
+        "peerReplayActions": 0
+      },
+      "peerEvaluation": null
+    },
+    {
+      "name": "payback_nine",
+      "rootEnemyHp": 500,
+      "strength": 5,
+      "isUpgraded": true,
+      "horizon": 5,
+      "nodeLimit": 350,
+      "expandedNodes": 61,
+      "transitionCount": 92,
+      "expandedCycles": {
+        "0": 3,
+        "1": 6,
+        "2": 12,
+        "3": 20,
+        "4": 20
+      },
+      "advisoryComparisonCycles": 5,
+      "selectedCycles": 5,
+      "boundaryReason": "AdvisoryHorizon",
+      "endEnemyHp": 430,
+      "cumulativePlayerHpLost": 0,
+      "currentTurn": [
+        {
+          "kind": "PlayCard",
+          "cardId": "STRIKE_IRONCLAD",
+          "targetCombatId": 2
+        }
+      ],
+      "evaluation": {
+        "cycles": 9,
+        "enemyHp": 374,
+        "hpLost": 0,
+        "teamSurvivors": 2,
+        "won": false,
+        "endedTurn": null,
+        "replayCalls": 18,
+        "peerReplayActions": 0
+      },
+      "peerEvaluation": null
+    },
+    {
+      "name": "payback_nine",
+      "rootEnemyHp": 500,
+      "strength": 5,
+      "isUpgraded": true,
+      "horizon": 7,
+      "nodeLimit": 350,
+      "expandedNodes": 101,
+      "transitionCount": 152,
+      "expandedCycles": {
+        "0": 3,
+        "1": 6,
+        "2": 12,
+        "3": 20,
+        "4": 20,
+        "5": 20,
+        "6": 20
+      },
+      "advisoryComparisonCycles": 7,
+      "selectedCycles": 7,
+      "boundaryReason": "AdvisoryHorizon",
+      "endEnemyHp": 402,
+      "cumulativePlayerHpLost": 0,
+      "currentTurn": [
+        {
+          "kind": "PlayCard",
+          "cardId": "STRIKE_IRONCLAD",
+          "targetCombatId": 2
+        }
+      ],
+      "evaluation": {
+        "cycles": 9,
+        "enemyHp": 374,
+        "hpLost": 0,
+        "teamSurvivors": 2,
+        "won": false,
+        "endedTurn": null,
+        "replayCalls": 18,
+        "peerReplayActions": 0
+      },
+      "peerEvaluation": null
+    },
+    {
+      "name": "payback_nine",
+      "rootEnemyHp": 500,
+      "strength": 5,
+      "isUpgraded": true,
+      "horizon": 9,
+      "nodeLimit": 350,
+      "expandedNodes": 141,
+      "transitionCount": 212,
+      "expandedCycles": {
+        "0": 3,
+        "1": 6,
+        "2": 12,
+        "3": 20,
+        "4": 20,
+        "5": 20,
+        "6": 20,
+        "7": 20,
+        "8": 20
+      },
+      "advisoryComparisonCycles": 9,
+      "selectedCycles": 9,
+      "boundaryReason": "AdvisoryHorizon",
+      "endEnemyHp": 372,
+      "cumulativePlayerHpLost": 0,
+      "currentTurn": [
+        {
+          "kind": "PlayCard",
+          "cardId": "INFLAME",
+          "targetCombatId": null
+        }
+      ],
+      "evaluation": {
+        "cycles": 9,
+        "enemyHp": 372,
+        "hpLost": 0,
+        "teamSurvivors": 2,
+        "won": false,
+        "endedTurn": null,
+        "replayCalls": 18,
+        "peerReplayActions": 0
+      },
+      "peerEvaluation": null
+    }
+  ]
+}

@@ -1,0 +1,682 @@
+{
+  "baseline": "3ccac172dd55ad4a8d97074b7129cbf4155add65",
+  "channel": "current uploaded ZIP, extracted separately",
+  "read_receipt_count": 59,
+  "unique_logged_files": 29,
+  "reads": [
+    {
+      "path": "docs/ARCHITECTURE.md",
+      "physical_lines": 507,
+      "requested_read_ranges_merged": [
+        [
+          130,
+          174
+        ]
+      ],
+      "scope": "沿调用链的定向阅读；部分早期大输出存在截断，关键引用段已复读；不是整文件通读承诺",
+      "sha256": "20d3f84ae48f1e41d5914e817c642944e51e86a0eea4622a8aa7c1787ab4d100"
+    },
+    {
+      "path": "docs/TEST_MATRIX.md",
+      "physical_lines": 3777,
+      "requested_read_ranges_merged": [
+        [
+          1,
+          145
+        ]
+      ],
+      "scope": "沿调用链的定向阅读；部分早期大输出存在截断，关键引用段已复读；不是整文件通读承诺",
+      "sha256": "9a41a5afda92af1239dd5b929223e027cb3e0f05f5056acc6fb4f8ee4548a5e7"
+    },
+    {
+      "path": "docs/multiplayer-advisor.md",
+      "physical_lines": 215,
+      "requested_read_ranges_merged": [
+        [
+          1,
+          100
+        ]
+      ],
+      "scope": "沿调用链的定向阅读；部分早期大输出存在截断，关键引用段已复读；不是整文件通读承诺",
+      "sha256": "66021d627cf8527b21f92dfd0f5da4f1dbfb05e4ee25c9450cb74c52dd0e4f7b"
+    },
+    {
+      "path": "docs/strategy/pro-long-term-20260918/CombatSolver_Multiplayer_LongTerm_Experiments_20260918.py",
+      "physical_lines": 618,
+      "requested_read_ranges_merged": [
+        [
+          1,
+          115
+        ],
+        [
+          261,
+          334
+        ],
+        [
+          439,
+          477
+        ],
+        [
+          554,
+          618
+        ]
+      ],
+      "scope": "沿调用链的定向阅读；部分早期大输出存在截断，关键引用段已复读；不是整文件通读承诺",
+      "sha256": "f20ed0ee2631b35374071e1e1ab587087dde3ee5b4fab715d5803062e502ad52"
+    },
+    {
+      "path": "src/Runtime/CombatRootSnapshot.cs",
+      "physical_lines": 311,
+      "requested_read_ranges_merged": [
+        [
+          130,
+          206
+        ]
+      ],
+      "scope": "沿调用链的定向阅读；部分早期大输出存在截断，关键引用段已复读；不是整文件通读承诺",
+      "sha256": "21c42313fa393ccf9c412b231057af46a592adb69bc6473bc42215c8a0f39276"
+    },
+    {
+      "path": "src/Runtime/SolverController.Multiplayer.cs",
+      "physical_lines": 44,
+      "requested_read_ranges_merged": [
+        [
+          1,
+          44
+        ]
+      ],
+      "scope": "沿调用链的定向阅读；部分早期大输出存在截断，关键引用段已复读；不是整文件通读承诺",
+      "sha256": "4ed2a2eb27818fb553eff02a97fa0c218207707cd07197194a96e83e7c363136"
+    },
+    {
+      "path": "src/Runtime/SolverController.cs",
+      "physical_lines": 3539,
+      "requested_read_ranges_merged": [
+        [
+          1120,
+          1250
+        ]
+      ],
+      "scope": "沿调用链的定向阅读；部分早期大输出存在截断，关键引用段已复读；不是整文件通读承诺",
+      "sha256": "8e4859c96c269d0dc080bdf9f892b0c9c7f9f20b4f169c4e7bbb0d126b2c2f93"
+    },
+    {
+      "path": "src/Search/CombatBeamSolver.Expansion.cs",
+      "physical_lines": 4464,
+      "requested_read_ranges_merged": [
+        [
+          1,
+          155
+        ],
+        [
+          460,
+          710
+        ],
+        [
+          3134,
+          3245
+        ],
+        [
+          3390,
+          3460
+        ]
+      ],
+      "scope": "沿调用链的定向阅读；部分早期大输出存在截断，关键引用段已复读；不是整文件通读承诺",
+      "sha256": "7fc00527af636c3e3285a5b5889e7355072ab71393aa502e18b83c0b2ec7351c"
+    },
+    {
+      "path": "src/Search/CombatBeamSolver.Multiplayer.cs",
+      "physical_lines": 161,
+      "requested_read_ranges_merged": [
+        [
+          1,
+          161
+        ]
+      ],
+      "scope": "沿调用链的定向阅读；部分早期大输出存在截断，关键引用段已复读；不是整文件通读承诺",
+      "sha256": "3778a6642d23042823e912fd08cef4e1a868da379a3e3a1e48d6b85558138e21"
+    },
+    {
+      "path": "src/Search/CombatBeamSolver.MultiplayerEvaluation.cs",
+      "physical_lines": 117,
+      "requested_read_ranges_merged": [
+        [
+          1,
+          117
+        ]
+      ],
+      "scope": "沿调用链的定向阅读；部分早期大输出存在截断，关键引用段已复读；不是整文件通读承诺",
+      "sha256": "4732705d3e244fc156c773b4b0e25dc52f0068a21c944b3a876ade702e090fbb"
+    },
+    {
+      "path": "src/Search/CombatBeamSolver.MultiplayerRound.cs",
+      "physical_lines": 156,
+      "requested_read_ranges_merged": [
+        [
+          1,
+          156
+        ]
+      ],
+      "scope": "沿调用链的定向阅读；部分早期大输出存在截断，关键引用段已复读；不是整文件通读承诺",
+      "sha256": "52271de06f6be05296e9a5b4cf01f9b52f0f1ddcd81308f270831b02a82885e7"
+    },
+    {
+      "path": "src/Search/CombatBeamSolver.PathDiagnostics.cs",
+      "physical_lines": 414,
+      "requested_read_ranges_merged": [
+        [
+          1,
+          155
+        ]
+      ],
+      "scope": "沿调用链的定向阅读；部分早期大输出存在截断，关键引用段已复读；不是整文件通读承诺",
+      "sha256": "a57623b25a7b19ef758efc1597103dd0d81c5ca385b46dfe1e35a8b52f1748bf"
+    },
+    {
+      "path": "src/Search/CombatBeamSolver.Phases.cs",
+      "physical_lines": 2427,
+      "requested_read_ranges_merged": [
+        [
+          146,
+          240
+        ],
+        [
+          345,
+          535
+        ],
+        [
+          790,
+          940
+        ],
+        [
+          1030,
+          1080
+        ],
+        [
+          1300,
+          1468
+        ],
+        [
+          1524,
+          1704
+        ],
+        [
+          1870,
+          2008
+        ],
+        [
+          2028,
+          2135
+        ]
+      ],
+      "scope": "沿调用链的定向阅读；部分早期大输出存在截断，关键引用段已复读；不是整文件通读承诺",
+      "sha256": "9e41a1687f1e6a937985ffac0ae06cbedf481d0b86b374e80719134da8549a8c"
+    },
+    {
+      "path": "src/Search/CombatBeamSolver.Retention.cs",
+      "physical_lines": 2039,
+      "requested_read_ranges_merged": [
+        [
+          82,
+          116
+        ],
+        [
+          273,
+          330
+        ],
+        [
+          370,
+          572
+        ]
+      ],
+      "scope": "沿调用链的定向阅读；部分早期大输出存在截断，关键引用段已复读；不是整文件通读承诺",
+      "sha256": "44c56616e681c914c5dfaa2643e7e83ddf45c909c35a467b8e325741141cc476"
+    },
+    {
+      "path": "src/Search/CombatBeamSolver.RoundTransition.cs",
+      "physical_lines": 364,
+      "requested_read_ranges_merged": [
+        [
+          1,
+          364
+        ]
+      ],
+      "scope": "沿调用链的定向阅读；部分早期大输出存在截断，关键引用段已复读；不是整文件通读承诺",
+      "sha256": "d10a3cb5a8b967894fb4f63b3221a72695775db7f34f0d34907a7272d2302db7"
+    },
+    {
+      "path": "src/Search/CombatBeamSolver.StateEvaluation.cs",
+      "physical_lines": 1875,
+      "requested_read_ranges_merged": [
+        [
+          1550,
+          1605
+        ]
+      ],
+      "scope": "沿调用链的定向阅读；部分早期大输出存在截断，关键引用段已复读；不是整文件通读承诺",
+      "sha256": "b44066e0bab48385ec806ec778662d98ac9bffa8f8c29d198a77af0cfccc378a"
+    },
+    {
+      "path": "src/Search/CombatBeamSolver.cs",
+      "physical_lines": 179,
+      "requested_read_ranges_merged": [
+        [
+          40,
+          60
+        ]
+      ],
+      "scope": "沿调用链的定向阅读；部分早期大输出存在截断，关键引用段已复读；不是整文件通读承诺",
+      "sha256": "f5aca314810ae695d81f3c7197f2489fb2af9e72f3ef40fba234313504cd8696"
+    },
+    {
+      "path": "src/Search/CombatPlan.cs",
+      "physical_lines": 1890,
+      "requested_read_ranges_merged": [
+        [
+          1060,
+          1165
+        ]
+      ],
+      "scope": "沿调用链的定向阅读；部分早期大输出存在截断，关键引用段已复读；不是整文件通读承诺",
+      "sha256": "d6241e8f4276ba2eb8f7708e82c19d452856d49344e0cb444c02cac2be5ddc00"
+    },
+    {
+      "path": "src/Search/CombatSearchCoordinator.cs",
+      "physical_lines": 2044,
+      "requested_read_ranges_merged": [
+        [
+          1,
+          100
+        ]
+      ],
+      "scope": "沿调用链的定向阅读；部分早期大输出存在截断，关键引用段已复读；不是整文件通读承诺",
+      "sha256": "1e84c6e59de19f6f54e57675b424e7b0f5e4191379627368389f4613343ccd7b"
+    },
+    {
+      "path": "src/Search/MultiplayerCycleCheckpoint.cs",
+      "physical_lines": 6,
+      "requested_read_ranges_merged": [
+        [
+          1,
+          6
+        ]
+      ],
+      "scope": "沿调用链的定向阅读；部分早期大输出存在截断，关键引用段已复读；不是整文件通读承诺",
+      "sha256": "cec6d58808a7106c2cf47aa2dad172a8244390ea247774f0d2911a6fcce9f8c0"
+    },
+    {
+      "path": "src/Search/MultiplayerSearchPolicy.cs",
+      "physical_lines": 74,
+      "requested_read_ranges_merged": [
+        [
+          1,
+          74
+        ]
+      ],
+      "scope": "沿调用链的定向阅读；部分早期大输出存在截断，关键引用段已复读；不是整文件通读承诺",
+      "sha256": "131a7beb30d7bfefd2dfbf6027c5fb259451dbd1b50d2829ca7021fed34e8610"
+    },
+    {
+      "path": "src/Search/SearchDiagnosticsSink.cs",
+      "physical_lines": 163,
+      "requested_read_ranges_merged": [
+        [
+          1,
+          163
+        ]
+      ],
+      "scope": "沿调用链的定向阅读；部分早期大输出存在截断，关键引用段已复读；不是整文件通读承诺",
+      "sha256": "064212300f097d6ad442b9d6cb030c9e26ddfa3351b58af93a8ec61759f1e9d9"
+    },
+    {
+      "path": "src/Search/SimulatedCombatState.Multiplayer.cs",
+      "physical_lines": 62,
+      "requested_read_ranges_merged": [
+        [
+          1,
+          62
+        ]
+      ],
+      "scope": "沿调用链的定向阅读；部分早期大输出存在截断，关键引用段已复读；不是整文件通读承诺",
+      "sha256": "1f8182a172673298717ab2acb7afa25f784826a4d4d2d3dd9059ce68fb24e04e"
+    },
+    {
+      "path": "src/Search/SimulatedCombatState.cs",
+      "physical_lines": 2936,
+      "requested_read_ranges_merged": [
+        [
+          426,
+          452
+        ]
+      ],
+      "scope": "沿调用链的定向阅读；部分早期大输出存在截断，关键引用段已复读；不是整文件通读承诺",
+      "sha256": "f4883bd2dc1a7fb429732a4729d813fa406e182c1fbf3c9df47f979fdd030f16"
+    },
+    {
+      "path": "src/Search/SolverWeights.cs",
+      "physical_lines": 137,
+      "requested_read_ranges_merged": [
+        [
+          77,
+          89
+        ]
+      ],
+      "scope": "沿调用链的定向阅读；部分早期大输出存在截断，关键引用段已复读；不是整文件通读承诺",
+      "sha256": "52716675cf904ac2777c9a3cf2d16775018e5c287db09c83b1be3c30ea6d1d5a"
+    },
+    {
+      "path": "tools/OfflineSearchHarness/MultiplayerContracts.cs",
+      "physical_lines": 326,
+      "requested_read_ranges_merged": [
+        [
+          1,
+          140
+        ]
+      ],
+      "scope": "沿调用链的定向阅读；部分早期大输出存在截断，关键引用段已复读；不是整文件通读承诺",
+      "sha256": "1126979aaf659fbde803d2802f9f9e1f2dfba8f9ce055ceeb8fee5644ef2b04d"
+    },
+    {
+      "path": "tools/OfflineSearchHarness/MultiplayerEvaluationContracts.cs",
+      "physical_lines": 277,
+      "requested_read_ranges_merged": [
+        [
+          1,
+          277
+        ]
+      ],
+      "scope": "沿调用链的定向阅读；部分早期大输出存在截断，关键引用段已复读；不是整文件通读承诺",
+      "sha256": "89f02ab6ad39ce0e83163cdaeeaec2551d0191953532c8659b4dbbb398294d14"
+    },
+    {
+      "path": "tools/OfflineSearchHarness/MultiplayerLongTermContracts.cs",
+      "physical_lines": 277,
+      "requested_read_ranges_merged": [
+        [
+          1,
+          180
+        ]
+      ],
+      "scope": "沿调用链的定向阅读；部分早期大输出存在截断，关键引用段已复读；不是整文件通读承诺",
+      "sha256": "8d1d3dbcc40c7377a1e49cc9f13e88dd4477be62c937fb234b520fe8ad6fb6ed"
+    },
+    {
+      "path": "tools/OfflineSearchHarness/Program.cs",
+      "physical_lines": 492,
+      "requested_read_ranges_merged": [
+        [
+          118,
+          160
+        ]
+      ],
+      "scope": "沿调用链的定向阅读；部分早期大输出存在截断，关键引用段已复读；不是整文件通读承诺",
+      "sha256": "4772d1d7d3308524936e97b284133e912ac948095167719d17660c99fc2412fd"
+    }
+  ],
+  "additional_context": [
+    {
+      "path": "docs/multiplayer-advisor.md",
+      "scope": "另有全文件读取尝试；关键1–100行的复读已记入上表"
+    },
+    {
+      "path": "docs/ARCHITECTURE.md",
+      "scope": "另读前部架构背景；非本题全部内容未审计；关键130–174行已记入上表"
+    },
+    {
+      "path": "docs/strategy/pro-long-term-20260918/README.md",
+      "scope": "通过直接读取核对归档与已知限制"
+    },
+    {
+      "path": "CombatSolver.json",
+      "scope": "版本／游戏模型元数据定向核对"
+    }
+  ],
+  "source_path_lookup_corrections": {
+    "SearchNode.cs": "src/Search/CombatPlan.cs",
+    "SearchPathObservation.cs": "src/Search/SearchDiagnosticsSink.cs",
+    "CombatBeamSolver.Diagnostics.cs": "src/Search/CombatBeamSolver.PathDiagnostics.cs",
+    "HarnessOptions.cs": "tools/OfflineSearchHarness/Program.cs"
+  },
+  "necessary_source_files_unavailable": [],
+  "not_exhaustively_read": [
+    "全部2056文件",
+    "全部卡牌／遗物镜像",
+    "完整多人网络及同步实现",
+    "完整转置实现",
+    "全部官方单人分支",
+    "完整3777行TEST_MATRIX",
+    "原生资源消费者全路径"
+  ],
+  "original_papers_read": [
+    {
+      "name": "Janner et al. 2019 MBPO",
+      "url": "https://proceedings.neurips.cc/paper/2019/file/5faf461eff3099671ad63c6f3f094f7f-Paper.pdf",
+      "scope": "§4–5；PDF第4、6页截图，非逐页全文审计"
+    },
+    {
+      "name": "Talvitie 2017 Self-Correcting Models",
+      "url": "https://ojs.aaai.org/index.php/AAAI/article/view/10850/10709",
+      "scope": "摘要、引言与组合误差讨论；PDF第1页截图"
+    },
+    {
+      "name": "Rawlings/Mayne/Diehl MPC textbook",
+      "url": "https://sites.engineering.ucsb.edu/~jbraw/mpc/MPC-book-2nd-edition-3rd-printing.pdf",
+      "scope": "印刷页90、164，PDF索引137、211截图；不是整本通读"
+    },
+    {
+      "name": "Nau 1982 Investigation of Pathology",
+      "url": "https://www.cs.umd.edu/~nau/papers/nau1982investigation.pdf",
+      "scope": "摘要、引言；PDF第1页截图"
+    }
+  ],
+  "external_access_failures": [
+    "L’Ecuyer streams00.pdf访问被拒，未引用其内容",
+    "Nau最初猜测pathology.pdf路径失败，改用作者正确investigation.pdf路径后成功"
+  ],
+  "python_method_map": [
+    {
+      "name": "Action",
+      "line": 35,
+      "end_line": 46,
+      "kind": "ClassDef"
+    },
+    {
+      "name": "Fixture",
+      "line": 49,
+      "end_line": 69,
+      "kind": "ClassDef"
+    },
+    {
+      "name": "CP",
+      "line": 72,
+      "end_line": 80,
+      "kind": "ClassDef"
+    },
+    {
+      "name": "State",
+      "line": 83,
+      "end_line": 104,
+      "kind": "ClassDef"
+    },
+    {
+      "name": "Exhausted",
+      "line": 106,
+      "end_line": 107,
+      "kind": "ClassDef"
+    },
+    {
+      "name": "Work",
+      "line": 109,
+      "end_line": 131,
+      "kind": "ClassDef"
+    },
+    {
+      "name": "__init__",
+      "line": 110,
+      "end_line": 116,
+      "kind": "FunctionDef"
+    },
+    {
+      "name": "spend",
+      "line": 118,
+      "end_line": 125,
+      "kind": "FunctionDef"
+    },
+    {
+      "name": "sort",
+      "line": 127,
+      "end_line": 131,
+      "kind": "FunctionDef"
+    },
+    {
+      "name": "compare",
+      "line": 128,
+      "end_line": 130,
+      "kind": "FunctionDef"
+    },
+    {
+      "name": "root",
+      "line": 134,
+      "end_line": 136,
+      "kind": "FunctionDef"
+    },
+    {
+      "name": "action_by_name",
+      "line": 139,
+      "end_line": 140,
+      "kind": "FunctionDef"
+    },
+    {
+      "name": "loss",
+      "line": 143,
+      "end_line": 144,
+      "kind": "FunctionDef"
+    },
+    {
+      "name": "excess",
+      "line": 147,
+      "end_line": 148,
+      "kind": "FunctionDef"
+    },
+    {
+      "name": "team",
+      "line": 151,
+      "end_line": 152,
+      "kind": "FunctionDef"
+    },
+    {
+      "name": "damage",
+      "line": 155,
+      "end_line": 164,
+      "kind": "FunctionDef"
+    },
+    {
+      "name": "legal",
+      "line": 167,
+      "end_line": 179,
+      "kind": "FunctionDef"
+    },
+    {
+      "name": "transition",
+      "line": 182,
+      "end_line": 295,
+      "kind": "FunctionDef"
+    },
+    {
+      "name": "common_cycle",
+      "line": 298,
+      "end_line": 316,
+      "kind": "FunctionDef"
+    },
+    {
+      "name": "final_key",
+      "line": 319,
+      "end_line": 343,
+      "kind": "FunctionDef"
+    },
+    {
+      "name": "eligible",
+      "line": 346,
+      "end_line": 352,
+      "kind": "FunctionDef"
+    },
+    {
+      "name": "batch",
+      "line": 355,
+      "end_line": 366,
+      "kind": "FunctionDef"
+    },
+    {
+      "name": "retain",
+      "line": 369,
+      "end_line": 408,
+      "kind": "FunctionDef"
+    },
+    {
+      "name": "snapshot",
+      "line": 411,
+      "end_line": 420,
+      "kind": "FunctionDef"
+    },
+    {
+      "name": "solve",
+      "line": 423,
+      "end_line": 543,
+      "kind": "FunctionDef"
+    },
+    {
+      "name": "causal_tail",
+      "line": 546,
+      "end_line": 559,
+      "kind": "FunctionDef"
+    },
+    {
+      "name": "external",
+      "line": 562,
+      "end_line": 579,
+      "kind": "FunctionDef"
+    },
+    {
+      "name": "attach_evaluation",
+      "line": 582,
+      "end_line": 588,
+      "kind": "FunctionDef"
+    },
+    {
+      "name": "fixtures",
+      "line": 591,
+      "end_line": 638,
+      "kind": "FunctionDef"
+    },
+    {
+      "name": "micro_checks",
+      "line": 641,
+      "end_line": 741,
+      "kind": "FunctionDef"
+    },
+    {
+      "name": "add",
+      "line": 643,
+      "end_line": 646,
+      "kind": "FunctionDef"
+    },
+    {
+      "name": "node",
+      "line": 647,
+      "end_line": 654,
+      "kind": "FunctionDef"
+    },
+    {
+      "name": "strip_timing",
+      "line": 744,
+      "end_line": 749,
+      "kind": "FunctionDef"
+    },
+    {
+      "name": "main",
+      "line": 752,
+      "end_line": 843,
+      "kind": "FunctionDef"
+    }
+  ]
+}

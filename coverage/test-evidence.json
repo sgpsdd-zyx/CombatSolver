@@ -1,4 +1,12 @@
 {
+  "MULTIPLAYER-HORIZON-COMMON-CYCLE-ACTION-COST": {
+    "status": "Passed",
+    "level": "OfflineManagedPolicyNativeActionAndUpstreamComparison",
+    "procedure": "From 3ccac17, run horizon, horizon-native and horizon-ordering stages in OfflineSearchHarness with two players/local index 1, FUZZY_WURM_CRAWLER_WEAK, Beam 8, 350 nodes, 3000 ms and DOP 1. Compare six roots at H=3/5/7/9 under one external nine-cycle-or-terminal protocol; run existing multiplayer strategy and the independent official solo sentinel.",
+    "expected": "Count nonterminal tiebreak actions only through the exact shared enemy-cycle boundary; keep full terminal facts and later known risk. Preserve root state, 3 HP allowance, potion eligibility, node/time budgets and the official singleplayer path. Report horizon caps, actual expanded depths, selected depths and comparison cycles separately.",
+    "observed": "2026-09-19: baseline penalized both an additional suffix card and an extra suffix cycle by -1 despite identical cycle-1 facts. Fixed comparison returns 0 for both and -1 for extra prefix cost; released-simulator comparison, 64 triples and extra-player-turn cursor pass. Before/after 24 searches have identical current-turn actions, external outcomes and search work; four tiny-budget cases retain more validated suffix damage without current-turn quality gain. Two nonterminal native manual actions match full multiplayer ContinuationStamp. Existing 9-case strategy/native/incremental suite, 840 permutations, 216 triples, preview/final and later-risk controls pass. Solo matches 79 fields plus full 17-action/choice JSON, 1820 expanded/4583 transitions/2 HP, zero entries into three multiplayer ordering functions. Release main and harness builds have zero warnings/errors; Bash boundaries pass with 198 search files. PowerShell, real multiplayer, full nine-cycle native battles, visible performance and win rates are not validated. The window experiment includes explicit Ethereal fixture modification and a fixed peer Bludgeon perturbation; neither is a human probability model.",
+    "evidence": "tools/OfflineSearchHarness/MultiplayerHorizonContracts.cs; docs/strategy/pro-horizon-20260919/production-horizon-baseline.json; docs/strategy/pro-horizon-20260919/production-horizon-summary.json; docs/TEST_MATRIX.md; .local/mp-horizon-20260919/"
+  },
   "MULTIPLAYER-REVIEW-TERMINAL-AND-LOCAL-ELIGIBILITY": {
     "status": "Passed",
     "level": "OfflineManagedPolicyNativeHistoryAndUpstreamComparison",

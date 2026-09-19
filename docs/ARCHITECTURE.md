@@ -22,6 +22,8 @@
 
 `MultiplayerEvaluation.MultiplayerFactsAt` 只对未结束路线读取历史检查点，真实胜利/死亡投影完整结束状态；原风险顺序继续有效。`Phases` 的本机无损满血胜利捷径只允许单人进入。主线程 `BattleDamageTracker.Observe` 在多人时沿原 `Begin` 追踪窗口按 `PotionUsedEntry.Actor` 统计本机用药，将结果写入既有不可变 `BattleDamageSnapshot`；后台不读实时历史，也不增加重复的根字段。缺少本机身份或药水历史退到追踪基线之前显式失败，单人计数路径不改。
 
+多人同分动作成本由 `MultiplayerEvaluation.MultiplayerActionCountAt` 沿已有 `SearchNode.Parent` 链定位首次跨入共同敌方周期的动作；不使用玩家回合号估算，额外玩家回合自然计入该周期之前的前缀。模拟器释放后仍只读节点/快照标量，缺失精确边界显式失败。完整终局使用完整动作数，尚无共同周期时保留原估值/动作数后备。后续死亡、救命消耗、超额与队友死亡仍先于动作成本比较；不增加检查点字段、战斗状态键、重放、缓存或候选席位。窗口研究与证据见[本轮归档](strategy/pro-horizon-20260919/README.md)。
+
 具体续行后来已出现的风险仍能否定其较早的安全观察。救命计数仍为全队口径，资源归属和两步挑战尚待独立处理；0.41.1 的原始问题与采用边界见[外部复审本地核对](strategy/pro-review-20260918/local-review.md)。深度、未兑现铺垫和名义格挡不是最终收益。预算停止时 `Phases` 保留上一层的有界节点组，释放模拟器后仅对选中路线走原有物化重放，不新增第二套探针或预算。`StateEvaluation` 保留中间探索特征，UI 从只读结果分别投影实际推演深度、共同周期、额度与最高扣血；零共同周期明确提示受击评估未完成。
 
 官方 `0.41.0` 的 `PowerCardValuation` / `PowerCommitment` 和能力固定前缀组合用于单人。多人协调器继续在这些组合之前返回；`CombatBeamSolver._hasRegisteredPowerCards` 另以 `policy.Multiplayer == null` 隔离共享候选展开中的能力承诺入口，避免将单人牌流投影用于全队历史。此隔离不改变卡牌实际结算，也不改变单人的登记判断、保路或预算。

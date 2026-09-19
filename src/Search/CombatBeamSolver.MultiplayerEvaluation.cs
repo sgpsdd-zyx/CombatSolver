@@ -70,6 +70,7 @@ internal sealed partial class CombatBeamSolver
 
     private int CompareMultiplayerAtCycle(SearchNode left, SearchNode right, int depth)
     {
+        if (ReferenceEquals(left, right)) return 0;
         bool forcedA = _potionStrategy.EvaluateForcedUses(left.Actions, root.HasRenewablePotionShapedRock).AllForcedUsesSatisfied;
         bool forcedB = _potionStrategy.EvaluateForcedUses(right.Actions, root.HasRenewablePotionShapedRock).AllForcedUsesSatisfied;
         int comparison = forcedB.CompareTo(forcedA);
@@ -112,6 +113,20 @@ internal sealed partial class CombatBeamSolver
             if (comparison != 0) return comparison;
         }
         // Unspent block, setup estimates and work beyond the common depth are not rewards.
-        return left.ActionCount.CompareTo(right.ActionCount);
+        return MultiplayerActionCountAt(left, depth).CompareTo(MultiplayerActionCountAt(right, depth));
+    }
+
+    private static int MultiplayerActionCountAt(SearchNode node, int depth)
+    {
+        if (node.Snapshot.AllEnemiesDead || node.Snapshot.PlayerDead) return node.ActionCount;
+        SearchNode boundary = node;
+        while (boundary.Parent is { } parent && parent.Snapshot.AdvisoryEnemyCycles >= depth)
+            boundary = parent;
+        // The crossing action includes the enemy cycle and possibly the next turn's setup.
+        // Its parent chain keeps an exact action cursor even after simulators are released.
+        if (depth < 1 || boundary.Snapshot.AdvisoryEnemyCycles != depth
+            || boundary.Parent == null || boundary.Parent.Snapshot.AdvisoryEnemyCycles != depth - 1)
+            throw new InvalidOperationException("Advisory comparison is missing its enemy-cycle action boundary.");
+        return boundary.ActionCount;
     }
 }

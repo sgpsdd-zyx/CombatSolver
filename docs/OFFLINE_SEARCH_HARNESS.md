@@ -21,6 +21,8 @@
 
 `--multiplayer-review-contracts facts` 使用双玩家、本机索引 1、双打击与敌方 10 HP 的固定小局，验证真实终局与旧检查点混合、实际搜索继续展开、原生本机/队友药水历史和资格。内部固定 Beam 4 / 120 节点 / 1 秒 / DOP 1 / 三周期，输出 `review-facts.json`；单独复核提前停止可用 `--multiplayer-review-contracts stopping`，输出 `review-stopping.json`，只观察搜索实际展开到的回合。该入口不能与 `--request` 或其他多人合同合用。`SearchedTurns` 是最终选中路线的长度，不是所有搜索层的覆盖量。终局被截断、两条真胜利的结束回合和本机死亡优先控制另由现有 `final-selection.json` 覆盖。普通离线指标、原生托管合同、真实联机验收的边界不变。
 
+窗口专项复用该入口的三个阶段：`horizon` 对六个固定根运行 3/5/7/9 上限，输出 `horizon-comparison.json`；`horizon-native` 只核对本机铺垫与队友攻击两个原生手动动作的完整状态；`horizon-ordering` 核对共同周期内外的动作成本。固定输入为 `--encounter FUZZY_WURM_CRAWLER_WEAK --beam 8 --nodes 350 --budget-ms 3000 --dop 1`，要求单 worker、时间不超过 5000ms。`horizon` 把相同当前回合动作交给统一九周期评价器，队友攻击仅是测试侧的固定扰动；输出区分搜索工作与评价回放。Ethereal 铺垫牌是明确的实验改造，不是原版默认效果。窗口数字与首动作结果见[研究归档](strategy/pro-horizon-20260919/README.md)，不能把这些条件世界线当作真人策略或胜率验收。
+
 ## 构建
 
 ```

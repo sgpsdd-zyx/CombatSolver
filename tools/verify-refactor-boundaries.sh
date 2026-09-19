@@ -1277,6 +1277,7 @@ src/Search/CombatBeamSolver.Phases.cs|? PrepareMultiplayerFinalCandidates(finalP
 src/Search/CombatBeamSolver.Phases.cs|? PrepareMultiplayerFinalCandidates(completedCandidates).Candidates
 src/Search/CombatBeamSolver.cs|policy.Multiplayer != null ? CreateMultiplayerOrdering : null
 src/Search/CombatBeamSolver.MultiplayerEvaluation.cs|private MultiplayerPlanOrdering CreateMultiplayerOrdering(
+src/Search/CombatBeamSolver.MultiplayerEvaluation.cs|private static int MultiplayerActionCountAt(
 src/Search/CombatBeamSolver.MultiplayerEvaluation.cs|if (!terminal && depth > 0 && checkpoint?.Cycle == depth)
 src/Search/CombatBeamSolver.Phases.cs|if (!IsMultiplayerAdvice && !_hasGrowthTargets && completed.Any(node =>
 src/Runtime/BattleDamageTracker.cs|combat.Players.Count > 1 ? MultiplayerPotionsUsedSoFar(combat) : PotionsUsedSoFar()

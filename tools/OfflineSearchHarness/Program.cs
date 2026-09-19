@@ -355,7 +355,7 @@ internal sealed record HarnessOptions
           --multiplayer-start-contracts Exercise the manual UI entry and native action waits without networking
           --multiplayer-strategy-contracts Check offense within the per-turn HP allowance and survival guards
           --multiplayer-long-term-contracts Record bounded multiplayer path-loss diagnostics without changing ranking
-          --multiplayer-review-contracts <facts|stopping> Check terminal facts, stopping and local potion history
+          --multiplayer-review-contracts <facts|stopping|horizon|horizon-native|horizon-ordering> Check multiplayer review contracts
         环境变量 OFFLINE_HARNESS_COMBATSOLVER_DLL 可以换掉运行时加载的 CombatSolver.dll。
         """;
 
@@ -454,9 +454,9 @@ internal sealed record HarnessOptions
         if (multiplayerLongTermContracts && (multiplayerContracts || multiplayerStartContracts
             || multiplayerStrategyContracts || requestPath != null))
             throw new ArgumentException("--multiplayer-long-term-contracts requires its own two-player fixture.");
-        if (multiplayerReviewStage != null && (multiplayerReviewStage is not ("facts" or "stopping") || multiplayerContracts
+        if (multiplayerReviewStage != null && (multiplayerReviewStage is not ("facts" or "stopping" or "horizon" or "horizon-native" or "horizon-ordering") || multiplayerContracts
             || multiplayerStartContracts || multiplayerStrategyContracts || multiplayerLongTermContracts || requestPath != null))
-            throw new ArgumentException("--multiplayer-review-contracts requires a facts or stopping fixture of its own.");
+            throw new ArgumentException("--multiplayer-review-contracts requires a facts, stopping, horizon, horizon-native or horizon-ordering fixture of its own.");
         if (profile == "Custom" && requestPath == null)
         {
             beam ??= 24;

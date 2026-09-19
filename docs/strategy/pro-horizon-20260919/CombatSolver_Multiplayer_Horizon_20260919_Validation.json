@@ -1,0 +1,617 @@
+{
+  "status": "PASSED_WITH_EXPLICIT_ABSTRACT_ONLY_SCOPE",
+  "python": "3.13.5",
+  "source_commit": "3ccac172dd55ad4a8d97074b7129cbf4155add65",
+  "checks": [
+    {
+      "check": "current_source_2056_files_unchanged",
+      "passed": true,
+      "details": 2056
+    },
+    {
+      "check": "main_fixture_policy_cardinality",
+      "passed": true
+    },
+    {
+      "check": "all_16_micro_checks_passed",
+      "passed": true
+    },
+    {
+      "check": "budget_grid_complete_510_to_1960_step25",
+      "passed": true
+    },
+    {
+      "check": "all_309_searches_within_declared_work_limit",
+      "passed": true
+    },
+    {
+      "check": "all_cost_counters_reconcile",
+      "passed": true
+    },
+    {
+      "check": "common_final_reserve_never_added",
+      "passed": true
+    },
+    {
+      "check": "per_fixture_budget_beam_rng_equal",
+      "passed": true
+    },
+    {
+      "check": "node_cap_H01",
+      "passed": true
+    },
+    {
+      "check": "fallback_identity_H01",
+      "passed": true
+    },
+    {
+      "check": "node_cap_H02",
+      "passed": true
+    },
+    {
+      "check": "fallback_identity_H02",
+      "passed": true
+    },
+    {
+      "check": "node_cap_H03",
+      "passed": true
+    },
+    {
+      "check": "fallback_identity_H03",
+      "passed": true
+    },
+    {
+      "check": "node_cap_H04",
+      "passed": true
+    },
+    {
+      "check": "fallback_identity_H04",
+      "passed": true
+    },
+    {
+      "check": "node_cap_H05",
+      "passed": true
+    },
+    {
+      "check": "fallback_identity_H05",
+      "passed": true
+    },
+    {
+      "check": "node_cap_H06",
+      "passed": true
+    },
+    {
+      "check": "fallback_identity_H06",
+      "passed": true
+    },
+    {
+      "check": "node_cap_H07",
+      "passed": true
+    },
+    {
+      "check": "fallback_identity_H07",
+      "passed": true
+    },
+    {
+      "check": "node_cap_H08",
+      "passed": true
+    },
+    {
+      "check": "fallback_identity_H08",
+      "passed": true
+    },
+    {
+      "check": "node_cap_H09",
+      "passed": true
+    },
+    {
+      "check": "fallback_identity_H09",
+      "passed": true
+    },
+    {
+      "check": "node_cap_H10",
+      "passed": true
+    },
+    {
+      "check": "fallback_identity_H10",
+      "passed": true
+    },
+    {
+      "check": "node_cap_H11",
+      "passed": true
+    },
+    {
+      "check": "fallback_identity_H11",
+      "passed": true
+    },
+    {
+      "check": "node_cap_H12",
+      "passed": true
+    },
+    {
+      "check": "fallback_identity_H12",
+      "passed": true
+    },
+    {
+      "check": "node_cap_H13",
+      "passed": true
+    },
+    {
+      "check": "fallback_identity_H13",
+      "passed": true
+    },
+    {
+      "check": "node_cap_H14",
+      "passed": true
+    },
+    {
+      "check": "fallback_identity_H14",
+      "passed": true
+    },
+    {
+      "check": "node_cap_H15",
+      "passed": true
+    },
+    {
+      "check": "fallback_identity_H15",
+      "passed": true
+    },
+    {
+      "check": "node_cap_H16",
+      "passed": true
+    },
+    {
+      "check": "fallback_identity_H16",
+      "passed": true
+    },
+    {
+      "check": "node_cap_H17",
+      "passed": true
+    },
+    {
+      "check": "fallback_identity_H17",
+      "passed": true
+    },
+    {
+      "check": "node_cap_H18",
+      "passed": true
+    },
+    {
+      "check": "fallback_identity_H18",
+      "passed": true
+    },
+    {
+      "check": "node_cap_H19",
+      "passed": true
+    },
+    {
+      "check": "fallback_identity_H19",
+      "passed": true
+    },
+    {
+      "check": "node_cap_H20",
+      "passed": true
+    },
+    {
+      "check": "fallback_identity_H20",
+      "passed": true
+    },
+    {
+      "check": "node_cap_H21",
+      "passed": true
+    },
+    {
+      "check": "fallback_identity_H21",
+      "passed": true
+    },
+    {
+      "check": "node_cap_H22",
+      "passed": true
+    },
+    {
+      "check": "fallback_identity_H22",
+      "passed": true
+    },
+    {
+      "check": "grid_nodes_at_most_100",
+      "passed": true
+    },
+    {
+      "check": "deterministic_payload_hash_recomputed",
+      "passed": true,
+      "details": "715ba48b768548bd329204c0bf9991bc2e4b31b244bc27ae9d30c5dd3ca92128"
+    },
+    {
+      "check": "second_complete_run_same_payload",
+      "passed": true,
+      "details": "715ba48b768548bd329204c0bf9991bc2e4b31b244bc27ae9d30c5dd3ca92128"
+    },
+    {
+      "check": "archived_python_copied_without_modification",
+      "passed": true
+    },
+    {
+      "check": "legacy_actual_51_main_12_wide_13_checks",
+      "passed": true
+    },
+    {
+      "check": "F10_Beam8_counterevidence_explicit",
+      "passed": true
+    },
+    {
+      "check": "H07_independent_payoff_same_T12",
+      "passed": true
+    },
+    {
+      "check": "H21_target_perturbation_same_T12",
+      "passed": true
+    },
+    {
+      "check": "H19_adaptive_false_negative",
+      "passed": true
+    },
+    {
+      "check": "budget760_more_work_worse_first",
+      "passed": true
+    },
+    {
+      "check": "H13_same_first_no_external_gain",
+      "passed": true
+    },
+    {
+      "check": "external_judging_not_planner_input",
+      "passed": true
+    },
+    {
+      "check": "no_production_execution_claim",
+      "passed": true
+    },
+    {
+      "check": "balanced_code_fences_CombatSolver_Multiplayer_Horizon_20260919_Review.md",
+      "passed": true
+    },
+    {
+      "check": "balanced_code_fences_CombatSolver_Multiplayer_Horizon_20260919_Strategy_Design.md",
+      "passed": true
+    },
+    {
+      "check": "all_fixed_commit_physical_anchors_valid",
+      "passed": true,
+      "details": 52
+    },
+    {
+      "check": "both_python_files_ast_parse",
+      "passed": true
+    },
+    {
+      "check": "no_dotnet_in_environment",
+      "passed": true
+    },
+    {
+      "check": "no_game_DLL_in_source_attachment",
+      "passed": true
+    }
+  ],
+  "source_anchor_count": 52,
+  "source_anchors": [
+    {
+      "document": "CombatSolver_Multiplayer_Horizon_20260919_Review.md",
+      "source": "src/Search/MultiplayerSearchPolicy.cs",
+      "start": 3,
+      "end": 24
+    },
+    {
+      "document": "CombatSolver_Multiplayer_Horizon_20260919_Review.md",
+      "source": "src/Runtime/SolverController.cs",
+      "start": 1140,
+      "end": 1162
+    },
+    {
+      "document": "CombatSolver_Multiplayer_Horizon_20260919_Review.md",
+      "source": "src/Runtime/SolverController.cs",
+      "start": 1210,
+      "end": 1246
+    },
+    {
+      "document": "CombatSolver_Multiplayer_Horizon_20260919_Review.md",
+      "source": "src/Search/CombatSearchCoordinator.cs",
+      "start": 13,
+      "end": 26
+    },
+    {
+      "document": "CombatSolver_Multiplayer_Horizon_20260919_Review.md",
+      "source": "src/Runtime/CombatRootSnapshot.cs",
+      "start": 137,
+      "end": 204
+    },
+    {
+      "document": "CombatSolver_Multiplayer_Horizon_20260919_Review.md",
+      "source": "src/Search/CombatBeamSolver.Expansion.cs",
+      "start": 3154,
+      "end": 3169
+    },
+    {
+      "document": "CombatSolver_Multiplayer_Horizon_20260919_Review.md",
+      "source": "src/Search/CombatBeamSolver.Expansion.cs",
+      "start": 3232,
+      "end": 3245
+    },
+    {
+      "document": "CombatSolver_Multiplayer_Horizon_20260919_Review.md",
+      "source": "src/Search/CombatBeamSolver.Expansion.cs",
+      "start": 3423,
+      "end": 3457
+    },
+    {
+      "document": "CombatSolver_Multiplayer_Horizon_20260919_Review.md",
+      "source": "src/Search/CombatBeamSolver.MultiplayerRound.cs",
+      "start": 12,
+      "end": 65
+    },
+    {
+      "document": "CombatSolver_Multiplayer_Horizon_20260919_Review.md",
+      "source": "src/Search/SimulatedCombatState.Multiplayer.cs",
+      "start": 51,
+      "end": 60
+    },
+    {
+      "document": "CombatSolver_Multiplayer_Horizon_20260919_Review.md",
+      "source": "src/Search/CombatBeamSolver.Expansion.cs",
+      "start": 469,
+      "end": 491
+    },
+    {
+      "document": "CombatSolver_Multiplayer_Horizon_20260919_Review.md",
+      "source": "src/Search/SearchDiagnosticsSink.cs",
+      "start": 131,
+      "end": 163
+    },
+    {
+      "document": "CombatSolver_Multiplayer_Horizon_20260919_Review.md",
+      "source": "src/Search/CombatBeamSolver.Phases.cs",
+      "start": 478,
+      "end": 496
+    },
+    {
+      "document": "CombatSolver_Multiplayer_Horizon_20260919_Review.md",
+      "source": "docs/TEST_MATRIX.md",
+      "start": 18,
+      "end": 20
+    },
+    {
+      "document": "CombatSolver_Multiplayer_Horizon_20260919_Review.md",
+      "source": "src/Search/CombatBeamSolver.Phases.cs",
+      "start": 1326,
+      "end": 1328
+    },
+    {
+      "document": "CombatSolver_Multiplayer_Horizon_20260919_Review.md",
+      "source": "src/Search/SolverWeights.cs",
+      "start": 82,
+      "end": 89
+    },
+    {
+      "document": "CombatSolver_Multiplayer_Horizon_20260919_Review.md",
+      "source": "src/Search/CombatBeamSolver.Phases.cs",
+      "start": 1397,
+      "end": 1419
+    },
+    {
+      "document": "CombatSolver_Multiplayer_Horizon_20260919_Review.md",
+      "source": "src/Search/CombatBeamSolver.Multiplayer.cs",
+      "start": 19,
+      "end": 45
+    },
+    {
+      "document": "CombatSolver_Multiplayer_Horizon_20260919_Review.md",
+      "source": "src/Search/CombatBeamSolver.Multiplayer.cs",
+      "start": 57,
+      "end": 102
+    },
+    {
+      "document": "CombatSolver_Multiplayer_Horizon_20260919_Review.md",
+      "source": "src/Search/CombatBeamSolver.MultiplayerEvaluation.cs",
+      "start": 49,
+      "end": 100
+    },
+    {
+      "document": "CombatSolver_Multiplayer_Horizon_20260919_Review.md",
+      "source": "src/Search/CombatBeamSolver.Phases.cs",
+      "start": 1995,
+      "end": 2004
+    },
+    {
+      "document": "CombatSolver_Multiplayer_Horizon_20260919_Review.md",
+      "source": "src/Search/CombatBeamSolver.cs",
+      "start": 44,
+      "end": 57
+    },
+    {
+      "document": "CombatSolver_Multiplayer_Horizon_20260919_Review.md",
+      "source": "src/Search/CombatBeamSolver.Retention.cs",
+      "start": 287,
+      "end": 299
+    },
+    {
+      "document": "CombatSolver_Multiplayer_Horizon_20260919_Review.md",
+      "source": "src/Search/CombatBeamSolver.Phases.cs",
+      "start": 1909,
+      "end": 1947
+    },
+    {
+      "document": "CombatSolver_Multiplayer_Horizon_20260919_Review.md",
+      "source": "src/Search/CombatBeamSolver.Phases.cs",
+      "start": 2049,
+      "end": 2090
+    },
+    {
+      "document": "CombatSolver_Multiplayer_Horizon_20260919_Review.md",
+      "source": "src/Search/CombatBeamSolver.MultiplayerEvaluation.cs",
+      "start": 101,
+      "end": 115
+    },
+    {
+      "document": "CombatSolver_Multiplayer_Horizon_20260919_Review.md",
+      "source": "src/Search/CombatBeamSolver.MultiplayerEvaluation.cs",
+      "start": 32,
+      "end": 43
+    },
+    {
+      "document": "CombatSolver_Multiplayer_Horizon_20260919_Review.md",
+      "source": "src/Search/CombatBeamSolver.Multiplayer.cs",
+      "start": 105,
+      "end": 159
+    },
+    {
+      "document": "CombatSolver_Multiplayer_Horizon_20260919_Review.md",
+      "source": "src/Search/CombatBeamSolver.Phases.cs",
+      "start": 1526,
+      "end": 1548
+    },
+    {
+      "document": "CombatSolver_Multiplayer_Horizon_20260919_Review.md",
+      "source": "src/Search/CombatBeamSolver.Retention.cs",
+      "start": 82,
+      "end": 112
+    },
+    {
+      "document": "CombatSolver_Multiplayer_Horizon_20260919_Review.md",
+      "source": "src/Search/CombatBeamSolver.Phases.cs",
+      "start": 430,
+      "end": 515
+    },
+    {
+      "document": "CombatSolver_Multiplayer_Horizon_20260919_Review.md",
+      "source": "src/Search/CombatBeamSolver.Expansion.cs",
+      "start": 509,
+      "end": 570
+    },
+    {
+      "document": "CombatSolver_Multiplayer_Horizon_20260919_Review.md",
+      "source": "src/Search/CombatBeamSolver.Expansion.cs",
+      "start": 620,
+      "end": 697
+    },
+    {
+      "document": "CombatSolver_Multiplayer_Horizon_20260919_Review.md",
+      "source": "src/Search/CombatBeamSolver.Phases.cs",
+      "start": 1648,
+      "end": 1694
+    },
+    {
+      "document": "CombatSolver_Multiplayer_Horizon_20260919_Review.md",
+      "source": "src/Search/CombatBeamSolver.StateEvaluation.cs",
+      "start": 1570,
+      "end": 1585
+    },
+    {
+      "document": "CombatSolver_Multiplayer_Horizon_20260919_Review.md",
+      "source": "src/Search/CombatBeamSolver.Expansion.cs",
+      "start": 3428,
+      "end": 3432
+    },
+    {
+      "document": "CombatSolver_Multiplayer_Horizon_20260919_Strategy_Design.md",
+      "source": "src/Search/CombatBeamSolver.MultiplayerEvaluation.cs",
+      "start": 71,
+      "end": 115
+    },
+    {
+      "document": "CombatSolver_Multiplayer_Horizon_20260919_Strategy_Design.md",
+      "source": "src/Search/CombatBeamSolver.Phases.cs",
+      "start": 868,
+      "end": 938
+    },
+    {
+      "document": "CombatSolver_Multiplayer_Horizon_20260919_Strategy_Design.md",
+      "source": "src/Search/CombatBeamSolver.Phases.cs",
+      "start": 1909,
+      "end": 1947
+    },
+    {
+      "document": "CombatSolver_Multiplayer_Horizon_20260919_Strategy_Design.md",
+      "source": "src/Search/CombatBeamSolver.Phases.cs",
+      "start": 2049,
+      "end": 2104
+    },
+    {
+      "document": "CombatSolver_Multiplayer_Horizon_20260919_Strategy_Design.md",
+      "source": "src/Search/CombatBeamSolver.Multiplayer.cs",
+      "start": 16,
+      "end": 45
+    },
+    {
+      "document": "CombatSolver_Multiplayer_Horizon_20260919_Strategy_Design.md",
+      "source": "src/Search/SimulatedCombatState.cs",
+      "start": 436,
+      "end": 447
+    },
+    {
+      "document": "CombatSolver_Multiplayer_Horizon_20260919_Strategy_Design.md",
+      "source": "src/Search/MultiplayerCycleCheckpoint.cs",
+      "start": 1,
+      "end": 6
+    },
+    {
+      "document": "CombatSolver_Multiplayer_Horizon_20260919_Strategy_Design.md",
+      "source": "src/Search/SearchDiagnosticsSink.cs",
+      "start": 129,
+      "end": 163
+    },
+    {
+      "document": "CombatSolver_Multiplayer_Horizon_20260919_Strategy_Design.md",
+      "source": "src/Search/CombatPlan.cs",
+      "start": 1060,
+      "end": 1084
+    },
+    {
+      "document": "CombatSolver_Multiplayer_Horizon_20260919_Strategy_Design.md",
+      "source": "src/Search/CombatPlan.cs",
+      "start": 1129,
+      "end": 1159
+    },
+    {
+      "document": "CombatSolver_Multiplayer_Horizon_20260919_Strategy_Design.md",
+      "source": "tools/OfflineSearchHarness/MultiplayerLongTermContracts.cs",
+      "start": 45,
+      "end": 97
+    },
+    {
+      "document": "CombatSolver_Multiplayer_Horizon_20260919_Strategy_Design.md",
+      "source": "tools/OfflineSearchHarness/MultiplayerLongTermContracts.cs",
+      "start": 100,
+      "end": 158
+    },
+    {
+      "document": "CombatSolver_Multiplayer_Horizon_20260919_Strategy_Design.md",
+      "source": "tools/OfflineSearchHarness/MultiplayerContracts.cs",
+      "start": 35,
+      "end": 123
+    },
+    {
+      "document": "CombatSolver_Multiplayer_Horizon_20260919_Strategy_Design.md",
+      "source": "tools/OfflineSearchHarness/MultiplayerEvaluationContracts.cs",
+      "start": 85,
+      "end": 140
+    },
+    {
+      "document": "CombatSolver_Multiplayer_Horizon_20260919_Strategy_Design.md",
+      "source": "tools/OfflineSearchHarness/MultiplayerEvaluationContracts.cs",
+      "start": 214,
+      "end": 275
+    },
+    {
+      "document": "CombatSolver_Multiplayer_Horizon_20260919_Strategy_Design.md",
+      "source": "docs/TEST_MATRIX.md",
+      "start": 5,
+      "end": 34
+    }
+  ],
+  "not_verified": [
+    "production C# execution",
+    "native/simulation difference",
+    "actual human multiplayer",
+    "production latency or win rate"
+  ],
+  "deterministic_payload_sha256": "715ba48b768548bd329204c0bf9991bc2e4b31b244bc27ae9d30c5dd3ca92128"
+}
