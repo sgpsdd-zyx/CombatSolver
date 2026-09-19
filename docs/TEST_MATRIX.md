@@ -10,7 +10,7 @@
 | 正式排序与实验分离 | `--multiplayer-review-contracts horizon-ordering --encounter FUZZY_WURM_CRAWLER_WEAK --beam 8 --nodes 350 --budget-ms 3000 --dop 1`。正式后缀牌/后续周期/前缀成本为 -1/-1/-1，实验派生值为 0/0/-1，`experimentAffectsProduction=false`；64 组三元关系、释放后父链及额外玩家回合通过。步骤 248 ms，`ordering/horizon-ordering.json`、`ordering/extra-turn-action-cost.json` |
 | 多人不可退化哨兵 | `--multiplayer-strategy-contracts --encounter FUZZY_WURM_CRAWLER_WEAK --beam 2 --nodes 100 --budget-ms 1000 --dop 1`，步骤 1,258 ms。9 个扣血/单人能力隔离案例，以及资格、终局、840 排列、216 三元关系、预览/最终选择、救援、铺垫、已知风险、增量、原生下一回合与 Fork 控制通过，见 `strategy/` |
 | 未变输入的既有证据 | F01/F02/F03 复用 `.local/mp-pro-implementation-20260918/`；固定 H=3/5/7/9 的 24 个基线复用 `.local/mp-horizon-20260919/baseline-complete/`，两个原生手动动作复用 `native-r1/`，官方单人 80 项复用既有对照。没有重跑，也不把 `cb427b5` 的实验排序当作本版行为 |
-| 构建 | 行为 DLL `build-behavior.log` 与宿主 `build-harness.log` 均 Release 0 警告、0 错误；版本同步后最终 DLL 与辅助程序构建待执行，不重复行为测试 |
+| 构建 | 行为 DLL `build-behavior.log` 与宿主 `build-harness.log` 均 Release 0 警告、0 错误；版本同步并提交 `aaf53fd` 后，最终主 DLL `build-main.log` 与 Windows 辅助程序 `build-memory-cleaner.log` 均 0 警告、0 错误，没有重复行为测试 |
 | 结构与文档 | 两端移除生产动作游标声明；Bash `REFACTOR_BOUNDARIES_OK search_files=198`，`boundaries.log`。版本一致、39 个新增/修改的本地引用、证据 JSON、PowerShell CRLF 与差异空白检查通过，`static-check.json`；PowerShell 不可用，未执行 |
 
 结构化条目为 `MULTIPLAYER-0413-DEFAULT-AND-EXPERIMENT-SEPARATION`。可见 Steam、真实联机、三/四人、全角色/第三方 Mod、完整发布门禁、干净安装、普遍胜率和可见性能均未验证。构建、最小 ZIP 与上传的实际结果见[发布记录](DEVELOPMENT_NOTES.md#0413fork多人建议修复2026-09-19)，不以交付成功替代这些验收。

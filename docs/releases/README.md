@@ -4,7 +4,7 @@
 
 按版本倒序列出已有玩家更新日志，包括历史草案。是否正式发布以对应 Git 标签和发布记录为准；未发布改动见 [开发笔记](../DEVELOPMENT_NOTES.md)。发布 ZIP 存放在仓库根目录的 `releases/`，此处只保存文档。
 
-当前 fork 定版为 **0.41.3**；本次 GitHub 发布进度与证据见[发布记录](../DEVELOPMENT_NOTES.md#0413fork多人建议修复2026-09-19)。独立尖塔军师的 0.1.3 修复包由[工具目录](../../tools/SpireAdvisorMultiplayerFix/README.md#已交付产物)单独维护，不属于此版本序列。
+当前 fork 已发布 **0.41.3**，定版提交 `aaf53fd`；GitHub 发布凭证见[发布记录](../DEVELOPMENT_NOTES.md#0413fork多人建议修复2026-09-19)。独立尖塔军师的 0.1.3 修复包由[工具目录](../../tools/SpireAdvisorMultiplayerFix/README.md#已交付产物)单独维护，不属于此版本序列。
 
 | 版本系列 | 更新日志 |
 |---|---|

@@ -4,7 +4,7 @@ Combat Solver 是《杀戮尖塔 2》的战斗路线求解器，本 fork 支持�
 
 单人模式下，玩家可以只查看建议，也可以让求解器执行当前回合，或连续接管整场战斗。多人模式只提供手动请求的建议。搜索不会修改游戏 RNG，也不会在后台操作真实战斗状态。
 
-当前 fork 定版为 **0.41.3**，基于官方 **0.41.0**，修复多人胜利路线判断、搜索过早结束和本机用药要求，保留单回合 3 HP 扣血目标与七周期多人军师。安装包与说明见 [GitHub Release](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.41.3) 和 [更新日志](docs/releases/0.41.3-RELEASE_NOTES.md)，兼容范围见 [多人军师](docs/multiplayer-advisor.md#官方-0410-兼容同步)。
+当前 fork 已发布 **0.41.3**，基于官方 **0.41.0**，修复多人胜利路线判断、搜索过早结束和本机用药要求，保留单回合 3 HP 扣血目标与七周期多人军师。安装包与说明见 [GitHub Release](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.41.3) 和 [更新日志](docs/releases/0.41.3-RELEASE_NOTES.md)，兼容范围见 [多人军师](docs/multiplayer-advisor.md#官方-0410-兼容同步)。
 
 [多人军师](docs/multiplayer-advisor.md) 推荐本人的出牌和用药路线，最多推演七个敌方回合。队友行动后自行决定何时重算；推演假设队友后续不主动出牌或用药，但仍结算其被动效果。多人功能目前供试用，尚未完成真实联机验收。
 
