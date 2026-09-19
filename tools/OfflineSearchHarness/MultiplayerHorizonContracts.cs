@@ -109,7 +109,7 @@ internal static class MultiplayerHorizonContracts
             Native(CardPileCmd.AddGeneratedCardToCombat(state.CreateCard(ModelDb.Card<Deflect>(), local),
                 PileType.Hand, local));
             VerifyCommonCycleActionCost(state, template, options, Native);
-            return "common_cycle_action_cost=equal suffix_card_and_cycle=ignored current_prefix_cost=ordered triples=64 extra_player_turn=equal";
+            return "production_total_action_cost=preserved experimental_common_cycle_cost=equal triples=64 extra_player_turn=equal";
         }
         var observation = AccessTools.Method(typeof(CombatBeamSolver), "ObserveSearchPath");
         var prefix = AccessTools.Method(typeof(MultiplayerHorizonContracts), nameof(ObserveExpansion));
@@ -361,8 +361,15 @@ internal static class MultiplayerHorizonContracts
             int suffixCard = compare(plain, futureCard);
             int suffixCycle = compare(plain, futureCycle);
             int prefixCost = compare(plain, costlyPrefix);
+            int ExperimentalCompare(SearchNode a, SearchNode b) => ExperimentalActionCountAt(a, depth)
+                .CompareTo(ExperimentalActionCountAt(b, depth));
+            int experimentalSuffixCard = ExperimentalCompare(plain, futureCard);
+            int experimentalSuffixCycle = ExperimentalCompare(plain, futureCycle);
+            int experimentalPrefixCost = ExperimentalCompare(plain, costlyPrefix);
             File.WriteAllText(Path.Combine(options.OutputDirectory, "horizon-ordering.json"),
                 JsonSerializer.Serialize(new { depth, suffixCard, suffixCycle, prefixCost,
+                    experimentalSuffixCard, experimentalSuffixCycle, experimentalPrefixCost,
+                    experimentAffectsProduction = false,
                     simulatorsReleased = owned.All(node => !node.Snapshot.HasSimulator),
                     actionCounts = cohort.Select(node => node.ActionCount),
                     cycles = cohort.Select(node => node.Snapshot.AdvisoryEnemyCycles),
@@ -372,13 +379,17 @@ internal static class MultiplayerHorizonContracts
                         while (checkpoint.Cycle > depth) checkpoint = checkpoint.Previous!;
                         return checkpoint.EnemyHp;
                     }) }, UnattendedTestFiles.JsonOptions));
-            if (depth != 1 || suffixCard != 0 || suffixCycle != 0 || prefixCost >= 0)
-                throw new InvalidOperationException("Actions outside the common cycle changed a tied comparison.");
+            if (depth != 1 || suffixCard >= 0 || suffixCycle >= 0 || prefixCost >= 0
+                || experimentalSuffixCard != 0 || experimentalSuffixCycle != 0 || experimentalPrefixCost >= 0)
+                throw new InvalidOperationException("Production action cost or its offline comparison changed unexpectedly.");
             foreach (SearchNode a in cohort)
             foreach (SearchNode b in cohort)
             foreach (SearchNode c in cohort)
                 if (Math.Sign(compare(a, b)) != -Math.Sign(compare(b, a))
-                    || compare(a, b) <= 0 && compare(b, c) <= 0 && compare(a, c) > 0)
+                    || compare(a, b) <= 0 && compare(b, c) <= 0 && compare(a, c) > 0
+                    || Math.Sign(ExperimentalCompare(a, b)) != -Math.Sign(ExperimentalCompare(b, a))
+                    || ExperimentalCompare(a, b) <= 0 && ExperimentalCompare(b, c) <= 0
+                        && ExperimentalCompare(a, c) > 0)
                     throw new InvalidOperationException("Horizon ordering is not a consistent total preorder.");
 
             native(PowerCmd.Apply<AmbergrisPower>(new ThrowingPlayerChoiceContext(),
@@ -399,14 +410,34 @@ internal static class MultiplayerHorizonContracts
                 .GetValue(extraOrdering)!;
             int extraPrefix = extraCompare(clean, costly);
             int extraSuffix = extraCompare(clean, tail);
+            int extraDepth = (int)AccessTools.Property(extraOrdering.GetType(), "EnemyCycles").GetValue(extraOrdering)!;
+            int experimentalExtraPrefix = ExperimentalActionCountAt(clean, extraDepth)
+                .CompareTo(ExperimentalActionCountAt(costly, extraDepth));
+            int experimentalExtraSuffix = ExperimentalActionCountAt(clean, extraDepth)
+                .CompareTo(ExperimentalActionCountAt(tail, extraDepth));
             File.WriteAllText(Path.Combine(options.OutputDirectory, "extra-turn-action-cost.json"),
                 JsonSerializer.Serialize(new { extraTurnCycles = extraTurn.Snapshot.AdvisoryEnemyCycles,
                     firstCycle = clean.Snapshot.AdvisoryEnemyCycles, extraPrefix, extraSuffix,
+                    extraDepth, experimentalExtraPrefix, experimentalExtraSuffix,
                     clean.ActionCount, clean.Turn }, UnattendedTestFiles.JsonOptions));
             if (extraTurn.Snapshot.AdvisoryEnemyCycles != 0 || clean.Snapshot.AdvisoryEnemyCycles != 1
-                || extraPrefix >= 0 || extraSuffix != 0)
+                || extraDepth != 1 || extraPrefix >= 0 || extraSuffix >= 0
+                || experimentalExtraPrefix >= 0 || experimentalExtraSuffix != 0)
                 throw new InvalidOperationException("Extra player turns changed the enemy-cycle action cursor.");
         }
         finally { foreach (SearchNode node in owned) node.Snapshot.ReleaseSimulator(); }
+    }
+
+    // Compare the proposed cost on the tied fixture only; it is not a production ordering policy.
+    private static int ExperimentalActionCountAt(SearchNode node, int depth)
+    {
+        if (node.Snapshot.AllEnemiesDead || node.Snapshot.PlayerDead) return node.ActionCount;
+        SearchNode boundary = node;
+        while (boundary.Parent is { } parent && parent.Snapshot.AdvisoryEnemyCycles >= depth)
+            boundary = parent;
+        if (depth < 1 || boundary.Snapshot.AdvisoryEnemyCycles != depth
+            || boundary.Parent == null || boundary.Parent.Snapshot.AdvisoryEnemyCycles != depth - 1)
+            throw new InvalidOperationException("Advisory comparison is missing its enemy-cycle action boundary.");
+        return boundary.ActionCount;
     }
 }

@@ -1590,7 +1590,6 @@ $multiplayerAdviceRules = @(
     @{ Path = 'src/Search/CombatBeamSolver.Phases.cs'; Text = '? PrepareMultiplayerFinalCandidates(completedCandidates).Candidates' }
     @{ Path = 'src/Search/CombatBeamSolver.cs'; Text = 'policy.Multiplayer != null ? CreateMultiplayerOrdering : null' }
     @{ Path = 'src/Search/CombatBeamSolver.MultiplayerEvaluation.cs'; Text = 'private MultiplayerPlanOrdering CreateMultiplayerOrdering(' }
-    @{ Path = 'src/Search/CombatBeamSolver.MultiplayerEvaluation.cs'; Text = 'private static int MultiplayerActionCountAt(' }
     @{ Path = 'src/Search/CombatBeamSolver.MultiplayerEvaluation.cs'; Text = 'if (!terminal && depth > 0 && checkpoint?.Cycle == depth)' }
     @{ Path = 'src/Search/CombatBeamSolver.Phases.cs'; Text = 'if (!IsMultiplayerAdvice && !_hasGrowthTargets && completed.Any(node =>' }
     @{ Path = 'src/Runtime/BattleDamageTracker.cs'; Text = 'combat.Players.Count > 1 ? MultiplayerPotionsUsedSoFar(combat) : PotionsUsedSoFar()' }

@@ -61,8 +61,7 @@ internal static class MultiplayerEvaluationContracts
                 || compare(a, b) <= 0 && compare(b, c) <= 0 && compare(a, c) > 0)
                 throw new InvalidOperationException("Common-cycle ordering is not a consistent total preorder.");
         }
-        int suffixComparison = compare(extendedAttack with { Score = 1e50 }, shallow);
-        if (depth != 1 || suffixComparison != 0)
+        if (depth != 1 || !ReferenceEquals(Rank(extendedAttack with { Score = 1e50 }, shallow)[0], shallow))
             throw new InvalidOperationException("Later work or an unearned estimate changed common-cycle quality.");
         File.WriteAllText(Path.Combine(options.OutputDirectory, "common-boundary.json"), JsonSerializer.Serialize(new
         {
@@ -72,7 +71,6 @@ internal static class MultiplayerEvaluationContracts
             deepEnemyHp = deep.Snapshot.EnemyHp,
             selected = ReferenceEquals(ranked[0], shallow) ? "shallow_attack" : "deep_pass",
             commonDepth = depth,
-            suffixComparison,
             tripleComparisons = 27,
         }, new JsonSerializerOptions { WriteIndented = true }));
         foreach (SearchNode node in nodes) node.Snapshot.ReleaseSimulator();

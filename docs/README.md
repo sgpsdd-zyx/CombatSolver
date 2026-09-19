@@ -1,6 +1,6 @@
 # CombatSolver 文档导航
 
-当前 fork 定版为 [0.41.2](releases/0.41.2-RELEASE_NOTES.md)，包含基于官方 0.41.0 的多人策略改进及用药条件/共同周期选路修正；见 [多人指南与兼容记录](multiplayer-advisor.md)。对应源码使用 `v0.41.2`，官方 `v0.41.0` 保留原指向。
+当前 fork 定版为 [0.41.3](releases/0.41.3-RELEASE_NOTES.md)，修复基于官方 0.41.0 的多人胜利路线判断、搜索早停和本机用药要求；见 [多人指南与兼容记录](multiplayer-advisor.md)。对应源码使用 `v0.41.3`，官方 `v0.41.0` 保留原指向。
 
 通用随机/指定战斗测试入口：[场景生成与批量重跑](GENERATED_COMBAT_SCENARIOS.md)。
 
@@ -15,8 +15,8 @@
 | 多人手动军师、3 HP 周期目标、共同周期选路、救援与官方 0.41.0 兼容 | [多人军师](multiplayer-advisor.md) |
 | 独立「尖塔军师」拿牌推荐模组误读房主卡组的修复与重跑 | [本机玩家修复工具](../tools/SpireAdvisorMultiplayerFix/README.md) |
 | 多人研究原文归档、已采用改进与暂缓方案 | [策略索引](strategy/README.md#多人研究归档)、[首批实施](multiplayer-advisor.md#首批策略优化已实施) |
-| 七周期窗口、真人队友偏移与共同周期动作成本 | [2026-09-19 研究与实现](strategy/pro-horizon-20260919/README.md)；下一版本开发批次 |
-| 0.41.2 的第二轮 6 Pro 复审与首批修正 | [第二轮归档](strategy/pro-review-0412-20260918/README.md)、[本地复核](strategy/pro-review-0412-20260918/local-review.md)、[实施与收尾](strategy/pro-review-0412-20260918/implementation.md)；F01/F02/F03 已实施，尚未发布 |
+| 七周期窗口、真人队友偏移与共同周期动作成本 | [2026-09-19 研究与实验](strategy/pro-horizon-20260919/README.md)；保留七周期，动作成本调整仅留离线实验 |
+| 0.41.2 的第二轮 6 Pro 复审与首批修正 | [第二轮归档](strategy/pro-review-0412-20260918/README.md)、[本地复核](strategy/pro-review-0412-20260918/local-review.md)、[实施与收尾](strategy/pro-review-0412-20260918/implementation.md)；F01/F02/F03 纳入 0.41.3 定版 |
 | 0.41.1 的 ChatGPT 6 Pro 审查结论、策略设计原文与本地复核 | [复审归档](strategy/pro-review-20260918/README.md)、[本地复核与采用边界](strategy/pro-review-20260918/local-review.md)；旧版输入见[历史索引](strategy/README.md#多人研究归档) |
 | 能力牌逐卡建模、统一估值接口与后续独立搜索分支 | [能力牌优化计划](strategy/power-card-valuation-plan-20260917.md) |
 | 无需训练的有界新颖性／Beam 组合、实验开关和完整对照 | [有界多策略搜索](strategy/bounded-novelty-search-20260916.md) |

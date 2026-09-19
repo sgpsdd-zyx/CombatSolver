@@ -1,6 +1,23 @@
 # CombatSolver 测试清单
 
+## 0.41.3（fork）定版验证范围（2026-09-19）
+
+本版发布 F01/F02/F03，撤回 `cb427b5` 的动作成本生产接入；默认仍用完整路线动作数，实验只在离线宿主内派生。现场为 `.local/release-0.41.3/`。本轮普通 .NET 宿主不启动 Godot、Steam 或网络；两个请求分别限制在 120 秒内。
+
+| 检查 | 本次直接证据与复用范围 |
+|---|---|
+| 生产来源 | 一次 `git diff --exit-code 3ccac172dd55ad4a8d97074b7129cbf4155add65 -- src` 成功，`source-equivalence.json` 记录整个生产目录相同；没有修改三项修复、官方单人路径或风险顺序 |
+| 正式排序与实验分离 | `--multiplayer-review-contracts horizon-ordering --encounter FUZZY_WURM_CRAWLER_WEAK --beam 8 --nodes 350 --budget-ms 3000 --dop 1`。正式后缀牌/后续周期/前缀成本为 -1/-1/-1，实验派生值为 0/0/-1，`experimentAffectsProduction=false`；64 组三元关系、释放后父链及额外玩家回合通过。步骤 248 ms，`ordering/horizon-ordering.json`、`ordering/extra-turn-action-cost.json` |
+| 多人不可退化哨兵 | `--multiplayer-strategy-contracts --encounter FUZZY_WURM_CRAWLER_WEAK --beam 2 --nodes 100 --budget-ms 1000 --dop 1`，步骤 1,258 ms。9 个扣血/单人能力隔离案例，以及资格、终局、840 排列、216 三元关系、预览/最终选择、救援、铺垫、已知风险、增量、原生下一回合与 Fork 控制通过，见 `strategy/` |
+| 未变输入的既有证据 | F01/F02/F03 复用 `.local/mp-pro-implementation-20260918/`；固定 H=3/5/7/9 的 24 个基线复用 `.local/mp-horizon-20260919/baseline-complete/`，两个原生手动动作复用 `native-r1/`，官方单人 80 项复用既有对照。没有重跑，也不把 `cb427b5` 的实验排序当作本版行为 |
+| 构建 | 行为 DLL `build-behavior.log` 与宿主 `build-harness.log` 均 Release 0 警告、0 错误；版本同步后最终 DLL 与辅助程序构建待执行，不重复行为测试 |
+| 结构与文档 | 两端移除生产动作游标声明；Bash `REFACTOR_BOUNDARIES_OK search_files=198`，`boundaries.log`。版本一致、39 个新增/修改的本地引用、证据 JSON、PowerShell CRLF 与差异空白检查通过，`static-check.json`；PowerShell 不可用，未执行 |
+
+结构化条目为 `MULTIPLAYER-0413-DEFAULT-AND-EXPERIMENT-SEPARATION`。可见 Steam、真实联机、三/四人、全角色/第三方 Mod、完整发布门禁、干净安装、普遍胜率和可见性能均未验证。构建、最小 ZIP 与上传的实际结果见[发布记录](DEVELOPMENT_NOTES.md#0413fork多人建议修复2026-09-19)，不以交付成功替代这些验收。
+
 ## 多人窗口研究与共同周期动作成本（2026-09-19）
+
+本节保留研究提交 `cb427b5` 的历史证据；其动作成本生产接入已在 0.41.3 定版时撤回，当前默认规则与实验隔离检查见上一节。
 
 生产基线 `3ccac17`，本轮现场统一位于 `.local/mp-horizon-20260919/`。默认窗口决策、外部研究与状态矩阵见[归档](strategy/pro-horizon-20260919/README.md)。以下为本轮直接执行；普通 .NET 托管宿主，没有 Godot/Steam 实例或游戏网络会话。
 
