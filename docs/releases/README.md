@@ -4,7 +4,7 @@
 
 按版本倒序列出已有玩家更新日志，包括历史草案。是否正式发布以对应 Git 标签和发布记录为准；未发布改动见 [开发笔记](../DEVELOPMENT_NOTES.md)。发布 ZIP 存放在仓库根目录的 `releases/`，此处只保存文档。
 
-当前 fork **0.43.1** 正在定版，基于官方 **0.43.0**；发布凭证见[开发笔记](../DEVELOPMENT_NOTES.md)。独立尖塔军师的 0.1.3 修复包由[工具目录](../../tools/SpireAdvisorMultiplayerFix/README.md#已交付产物)单独维护，不属于此版本序列。
+当前 fork 已发布 **0.43.1**，定版提交 `56b8ad4e`，基于官方 **0.43.0**；见 [GitHub Release](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.43.1)，发布凭证见[开发笔记](../DEVELOPMENT_NOTES.md)。独立尖塔军师的 0.1.3 修复包由[工具目录](../../tools/SpireAdvisorMultiplayerFix/README.md#已交付产物)单独维护，不属于此版本序列。
 
 | 版本系列 | 更新日志 |
 |---|---|

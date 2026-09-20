@@ -12,7 +12,9 @@
 
 上游新增 macOS 启动器原来使用固定 `.local/headless-mac` 且不清理。本分支改为仓库内唯一实例、必须携带清理开关、每请求最多 120 秒、同批多请求复用及实例外保存结果；两批均成功删除整个实例。无可见 Steam、真实联机、三/四人、全遭遇质量或默认转置上限触顶质量结论；没有执行完整发布门禁或干净安装。行为验证后只同步版本/文档，再从提交构建最终 Release 并打包。
 
-发布阶段尚待最终提交、构建、一次最小 ZIP、标签和 GitHub 上传；完成后在本节追加直接命令凭证。
+定版合并提交为 `56b8ad4e5c88f93aee488dbea85601a9c4c9974b`。从该提交完成主 DLL 与 Windows 辅助程序 Release 构建，均 0 警告、0 错误；一次创建 `releases/CombatSolver-0.43.1.zip`（2,144,060 字节），仅包含 manifest、DLL、辅助程序、LICENSE 和 THIRD_PARTY_NOTICES.md。新 annotated tag `v0.43.1` 与 `codex/multiplayer-advisor` 在一次原子推送中成功同步，随后成功创建 [GitHub Release 0.43.1](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.43.1)，上传该 ZIP 和中英更新说明。直接凭证为现场的 `build-release-main.log`、`build-release-memory-cleaner.log`、`package-receipt.json`、`github-release-create.log` 和 `release-receipt.json`。
+
+发布后只补记本段及当前版本索引并同步分支，没有重跑行为测试、重复构建/打包、打开 ZIP 或重新读取远端页面。未上传官方创意工坊或夸克，未执行安装验收。
 
 以下 0.43.0、0.42.0 及其紧随的“未发布”标题是从固定上游输入保留的历史记录，原运行证据归上游，不计为本轮通过，也不构成新的开发或发布授权。
 
