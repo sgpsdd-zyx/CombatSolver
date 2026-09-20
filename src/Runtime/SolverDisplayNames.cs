@@ -23,6 +23,7 @@ internal sealed class SolverDisplayNames
     private readonly bool _english;
     private readonly Dictionary<string, string> _monsters;
     private readonly Dictionary<uint, string> _creatures;
+    private readonly Dictionary<ulong, int>? _playerNumbers;
 
     private SolverDisplayNames(
         Dictionary<(string Id, int Upgrade), string> cards,
@@ -32,6 +33,7 @@ internal sealed class SolverDisplayNames
         Dictionary<string, string> orbs,
         Dictionary<string, string> monsters,
         Dictionary<uint, string> creatures,
+        Dictionary<ulong, int>? playerNumbers,
         bool english)
     {
         _cards = cards;
@@ -42,6 +44,7 @@ internal sealed class SolverDisplayNames
         _english = english;
         _monsters = monsters;
         _creatures = creatures;
+        _playerNumbers = playerNumbers;
     }
 
     public static SolverDisplayNames Capture(CombatState state)
@@ -103,6 +106,19 @@ internal sealed class SolverDisplayNames
         Dictionary<string, string> relicNames = new(StringComparer.Ordinal);
         foreach (RelicModel relic in player.Relics)
             relicNames.TryAdd(relic.Id.Entry, relic.Title.GetFormattedText());
+        Dictionary<ulong, int>? playerNumbers = null;
+        if (state.Players.Count > 1)
+        {
+            playerNumbers = [];
+            for (int index = 0; index < state.Players.Count; index++)
+            {
+                Player participant = state.Players[index];
+                playerNumbers.Add(participant.NetId, index + 1);
+                if (participant == player) continue;
+                foreach (RelicModel relic in participant.Relics)
+                    relicNames.TryAdd(relic.Id.Entry, relic.Title.GetFormattedText());
+            }
+        }
         Dictionary<string, string> powerNames = new(StringComparer.Ordinal);
         foreach (PowerModel power in ModelDb.AllPowers)
         {
@@ -117,7 +133,7 @@ internal sealed class SolverDisplayNames
             orbNames.TryAdd(orb.Id.Entry, title);
             orbNames.TryAdd(orb.GetType().Name, title);
         }
-        return new SolverDisplayNames(cardNames, potionNames, relicNames, powerNames, orbNames, monsterNames, creatureNames,
+        return new SolverDisplayNames(cardNames, potionNames, relicNames, powerNames, orbNames, monsterNames, creatureNames, playerNumbers,
             LocManager.Instance.Language is not ("zhs" or "zht"));
     }
 
@@ -170,6 +186,11 @@ internal sealed class SolverDisplayNames
 
     public string Relic(string relicId)
         => _relics.GetValueOrDefault(relicId, relicId);
+
+    public int PlayerNumber(ulong netId)
+        => _playerNumbers != null && _playerNumbers.TryGetValue(netId, out int number)
+            ? number
+            : throw new InvalidOperationException($"Relic owner {netId} is absent from the captured multiplayer roster.");
 
     public string Monster(string monsterId)
         => _monsters.GetValueOrDefault(monsterId, monsterId);

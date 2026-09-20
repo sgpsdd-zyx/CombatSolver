@@ -1,5 +1,7 @@
 {
   "玩家 {0}：{1}": "Player {0}: {1}",
+  "自己：{0}": "You: {0}",
+  "队友 {0}：{1}": "Teammate {0}: {1}",
   "多人军师：预计用药 {0} 瓶，重新验证旧路线动作 {1} 个。": "Multiplayer advice: {0} potions planned; {1} previous route actions revalidated.",
   "预测停止于：{0}": "Forecast boundary: {0}",
   "未支持的战斗效果": "Unsupported combat effect",

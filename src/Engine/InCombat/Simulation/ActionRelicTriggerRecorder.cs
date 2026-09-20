@@ -2,7 +2,7 @@ using MegaCrit.Sts2.Core.Models;
 
 namespace CombatSolver.Engine.InCombat.Simulation;
 
-internal readonly record struct RecordedRelicTrigger(string RelicId, string Summary);
+internal readonly record struct RecordedRelicTrigger(string RelicId, string Summary, ulong OwnerNetId);
 internal readonly record struct RecordedKill(uint CombatId, string TargetId, CombatDamageSource Source);
 internal readonly record struct RecordedHealthChange(int ActionIndex, string Kind, uint? Target,
     CombatDamageSource Source, decimal Requested, decimal Modified, int Before, int After);
@@ -28,7 +28,7 @@ internal sealed class ActionRelicTriggerRecorder
     {
         if (_actionIndex < 0)
             throw new InvalidOperationException("Relic trigger was recorded outside a planned action.");
-        RecordedRelicTrigger trigger = new(relic.Id.Entry, summary);
+        RecordedRelicTrigger trigger = new(relic.Id.Entry, summary, relic.Owner.NetId);
         if (!_triggers.TryGetValue(_actionIndex, out List<RecordedRelicTrigger>? entries))
         {
             entries = [];

@@ -307,6 +307,22 @@ internal sealed partial class SimulatedCombatState
         CombatSide side,
         IReadOnlyList<Creature> participants)
     {
+        if (AdvisorPlayer != null)
+        {
+            // Pael's Eye also observes turns its owner sits out; the native hook clears eligibility.
+            foreach (Player player in Players)
+            {
+                if (side != player.Creature.Side) continue;
+                foreach (RelicModel relic in RelicsOf(player))
+                {
+                    if (relic is not PaelsEye || relic.IsMelted) continue;
+                    StatefulRelicState state = GetStatefulRelicState(relic);
+                    if (state.Current == 0)
+                        SetStatefulRelicState(relic, state with
+                            { Previous = participants.Contains(player.Creature) ? 1 : 0 });
+                }
+            }
+        }
         foreach (RelicModel relic in RelicsParticipatingInSideTurn(participants))
         {
             int turn = GetPlayerTurnNumber(relic.Owner);
@@ -391,7 +407,7 @@ internal sealed partial class SimulatedCombatState
                             .GetUnlockedCards(relic.Owner.UnlockState, _cardMultiplayerConstraint),
                         relic.DynamicVars.Cards.IntValue);
                     break;
-                case PaelsEye:
+                case PaelsEye when AdvisorPlayer == null:
                 {
                     StatefulRelicState state = GetStatefulRelicState(relic);
                     SetStatefulRelicState(relic, state with { Previous = 1 });

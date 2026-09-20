@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "scenarioId": "MULTIPLAYER-RELIC-OWNERSHIP",
+  "characterId": "IRONCLAD",
+  "encounterId": "FOGMOG_NORMAL",
+  "enemyCurrentHp": 1000,
+  "seed": "MPRELICOWNER20260920",
+  "timeoutSeconds": 120,
+  "headlessFastModeForTest": "Instant",
+  "fixedSearchBudget": true,
+  "searchBudgetOverrideMilliseconds": 1000,
+  "searchMaxDegreeOfParallelism": 1
+}

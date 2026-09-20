@@ -1,5 +1,22 @@
 # CombatSolver 测试清单
 
+## 0.43.3（fork）：多人遗物归属与佩尔之眼（2026-09-20）
+
+输入基线为本地 0.43.2 源码 `744ccecf`。本轮现场 `.local/mp-relic-ownership-20260920/`；先仅增加双玩家夹具，在未改生产行为时建立失败基线。原生 macOS 无头使用两名铁甲战士，本机为列表第二位，单人传输配合测试专用多人 ready quorum；不建立真实网络。测试补丁在 finally 移除，没有改原版遗物 Hook。
+
+| 检查 | 本轮输入、结果与证据 |
+|---|---|
+| 0.43.2 失败基线 | `native-baseline-r5/`，runId `macos-3d02f3bce88d4a629c8fbfcefbd2d64a`，22 项中 4 项失败：队友独有提示缺归属、双方持有而仅本机额外回合时完整状态与队友触发资格不符、双方同时触发被合并。差异 `PAELS_EYE/0/1` 对原版 `PAELS_EYE/0/0`。只有队友持有时完整状态和「本机不借到额外回合」已通过 |
+| 双玩家最终语义 | `coverage/unattended/multiplayer-relic-ownership.json`；短搜 Beam4/100 节点/1000ms/DOP1，三组持有/出牌组合。最终 `extra-source-final/02-result.json`，runId `macos-9d8144ac883346bcb830b13e705b945b` Passed；26 项包含三次完整 ContinuationStamp、额外回合参与者、持有者记录、同名不合并、Fork 参与状态隔离、根冻结、队友独有不借回合和生产路线提示。没有完整自动战斗或增量标志 |
+| 其他来源额外回合 | `coverage/unattended/multiplayer-relic-extra-turn-source.json`：本机先手动打出防御，额外回合由 AmbergrisPower 提供，再执行原生 `Hook.AfterTakingExtraTurn`。`extra-source-baseline/` 的 `macos-a155c9afcd1b448bb427dd22ba9a2990` 失败，本机预测未消耗眼睛、原版已消耗。修复后 `extra-source-final/01-result.json`，`macos-3c218d457c804b0bbc76235d3e9f5403` Passed；完整状态相等、自己消耗、队友未消耗、旧根不变。只比对单 Hook 边界，不声称整轮来源组合已遍历 |
+| 本地化与恢复 | `native-final/02-result.json`，`macos-3e7b02914fd04e7abcfaee78c82bf68d` Passed，eng/zhs/zht 各 448 项模板；自己/队友编号、同名双遗物、JSON、tooltip、持有者变化导致身份不等，以及存活胶囊中文→英文→中文保持归属。后续只改多人消耗条件，未重复语言场景 |
+| 官方单人哨兵 | 当前 `solo-final/` 对照已有独立官方 `cccc270` 的 `.local/upstream-merge-20260919/solo-official/`；Coordinator、Beam12/350 节点/12000ms/DOP1、`coverage/multiplayer/solo-power-compat.json`。`solo-comparison.json` 的 80 项非时序字段及完整路线 JSON 相同。后续消耗修复由 `AdvisorPlayer != null` 限定，仅多人 fixture 重跑 |
+| 构建与边界 | 行为构建 `build-candidate.log`、`build-extra-source-fixed.log` 和宿主 `build-harness.log` 均 0 警告/0 错误。两端结构规则保留持有者从 recorder→Plan→snapshot 的接线；Bash `boundaries.log` 通过，`search_files=210`。PowerShell 未执行；没有新增 mirror 支持类别或登记入口，不跑全量 CoverageCatalog |
+
+第一次夹具缺动作选择游标；r2/r3 在新档洗牌教学等待耗尽 120 秒，没有结果，未延长超时。r4 切换 LocalContext 导致单人遗物栏动画失败，随后固定本机列表第二位。基线 r5 队友卡牌入队触发单人 UI 回调异常，但原版出牌和三个状态边界均完成；最终改为相同原生 `SpendResources`/`OnPlayWrapper(isAutoPlay:false)`，避开队友入队视觉回调。首次批处理把遗物注入数组误作完整请求，在启动游戏前报错；上述夹具/启动失败均留存，不计为生产验证通过。
+
+最终语义批次的完整实例 `.local/headless-instances/macos.VGwY58` 已由带 `--cleanup-instance-on-exit` 的启动器删除；语言批次 `macos.4MZyPC` 同样删除，直接凭证 `extra-source-final-launch.log`、`native-final-launch.log`。修复使用原有逐遗物状态表和全队对账，不新增字段或放宽等价性。版本/文档同步后只构建最终 Release 并打包，不重跑已通过行为。结构化条目 `MULTIPLAYER-RELIC-OWNERSHIP-PAELS-EYE`。未验证真实联网、玩家列表第一位的原生 UI、三/四人、全部遗物组合、可见排版、性能、干净安装或完整发布门禁。
+
 ## 0.43.2（fork）：十四周期长线规划（2026-09-20）
 
 基线为 0.43.1 的已成功 Release DLL（源码 `56b8ad4e`，本轮开始 HEAD `fa11efa6`），证据目录 `.local/mp-fourteen-20260920/`。实际输入使用原生游戏 0.111.0 托管模型；下面的离线合同不建立网络。

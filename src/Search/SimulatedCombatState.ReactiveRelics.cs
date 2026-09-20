@@ -92,9 +92,10 @@ internal sealed partial class SimulatedCombatState
         foreach (PaelsEye relic in RelicsOf(player).OfType<PaelsEye>().Where(static relic => !relic.IsMelted))
         {
             StatefulRelicState state = GetStatefulRelicState(relic);
-            if (state.Current == 0
+            // Native AfterTakingExtraTurn consumes the owner's eye even when another source granted the turn.
+            if (AdvisorPlayer != null || (state.Current == 0
                 && state.Previous != 0
-                && GetManualCardsPlayedThisTurn(player.Creature) == 0)
+                && GetManualCardsPlayedThisTurn(player.Creature) == 0))
             {
                 SetStatefulRelicState(relic, state with { Current = 1 });
             }

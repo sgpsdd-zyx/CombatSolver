@@ -11,6 +11,7 @@ using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Cards;
 using MegaCrit.Sts2.Core.Models.Orbs;
 using MegaCrit.Sts2.Core.Models.Powers;
+using MegaCrit.Sts2.Core.Models.Relics;
 
 namespace CombatSolver;
 
@@ -227,6 +228,24 @@ internal sealed partial class UnattendedTestRunner
             || !snapshot.Tooltip.Contains(english ? "(Potion)" : "（药水）", StringComparison.Ordinal)
             || snapshot.Kills.Single() != kill)
             throw new InvalidOperationException("Secondary capsule labels and tooltips disagree.");
+        PlanRelicEffect localEye = new("PAELS_EYE", "Pael's Eye", "：额外回合")
+            { OwnerPlayerNumber = 2, OwnerIsLocal = true };
+        PlanRelicEffect peerEye = localEye with { OwnerPlayerNumber = 1, OwnerIsLocal = false };
+        PlanAction ownedAction = new(PlanActionKind.EndTurn, 1, RelicEffects: [localEye, peerEye]);
+        PlanAction restoredAction = JsonSerializer.Deserialize<PlanAction>(JsonSerializer.Serialize(ownedAction))!;
+        SolverOverlayActionSnapshot owned = SolverOverlaySnapshot.CaptureAction(restoredAction, []);
+        string eyeLabel = ModelDb.Relic<PaelsEye>().Title.GetFormattedText() + (english ? ": Extra turn" : "：额外回合");
+        string[] expectedRelics = [english ? "You: " + eyeLabel : "自己：" + eyeLabel,
+            english ? "Teammate 1: " + eyeLabel : "队友 1：" + eyeLabel];
+        if (!owned.RelicLabels.SequenceEqual(expectedRelics)
+            || expectedRelics.Any(label => !owned.Tooltip.Contains(label, StringComparison.Ordinal))
+            || !restoredAction.RelicEffects!.SequenceEqual(ownedAction.RelicEffects!))
+            throw new InvalidOperationException("Relic owner or effect was lost during JSON/UI projection.");
+        SolverOverlayActionSnapshot changedOwner = SolverOverlaySnapshot.CaptureAction(
+            restoredAction with { RelicEffects = [peerEye, localEye] }, []);
+        if (owned.TextIdentity!.HasSameIdentity(changedOwner.TextIdentity))
+            throw new InvalidOperationException("Route identity ignored a relic owner change.");
+        _completedChecks.Add($"RelicOwnership:{language}:Self:PeerNumber:SameRelic:Json:Tooltip:Identity");
         _completedChecks.Add($"ActionAnnotations:{language}:CapturedDamageSources:{effects.Length}RelicFormats:NestedChoices:Tooltip");
     }
 
@@ -239,7 +258,9 @@ internal sealed partial class UnattendedTestRunner
         PlanAction plan = new(PlanActionKind.PlayCard, 1, CardId: upgraded.Id.Entry,
             CardTitle: upgraded.Title, CardUpgradeLevel: 1,
             Choice: new PlanCardChoice(PlanChoiceEffect.Discard, PileType.Hand,
-                [new(upgraded.Id.Entry, 1, "unchanged", 0, 0, upgraded.Title)]));
+                [new(upgraded.Id.Entry, 1, "unchanged", 0, 0, upgraded.Title)]),
+            RelicEffects: [new("PAELS_EYE", "Pael's Eye", "：额外回合")
+                { OwnerPlayerNumber = 1, OwnerIsLocal = false }]);
         string serialized = JsonSerializer.Serialize(plan);
         PlanAction restored = JsonSerializer.Deserialize<PlanAction>(serialized)!;
         SolverOverlayActionSnapshot englishSnapshot = SolverOverlaySnapshot.CaptureAction(restored, []);
@@ -256,8 +277,13 @@ internal sealed partial class UnattendedTestRunner
                 await _host.ToSignal(_host.GetTree(), SceneTree.SignalName.ProcessFrame);
                 await _host.ToSignal(_host.GetTree(), SceneTree.SignalName.ProcessFrame);
                 string expected = upgraded.Title;
+                string expectedRelic = language == "eng"
+                    ? "Teammate 1: " + ModelDb.Relic<PaelsEye>().Title.GetFormattedText() + ": Extra turn"
+                    : "队友 1：" + ModelDb.Relic<PaelsEye>().Title.GetFormattedText() + "：额外回合";
                 Label title = (Label)pill.GetChild(0).GetChild(1);
                 if (title.Text != expected || !pill.TooltipText.Contains(expected, StringComparison.Ordinal)
+                    || !pill.TooltipText.Contains(expectedRelic, StringComparison.Ordinal)
+                    || SolverActionTextIdentity.Refresh(englishSnapshot).RelicLabels.Single() != expectedRelic
                     || !SolverActionTextIdentity.Refresh(englishSnapshot).ChoiceText!.Contains(expected, StringComparison.Ordinal)
                     || SolverOverlaySnapshot.CaptureAction(restored, []).Title != expected)
                     throw new InvalidOperationException($"Retained or restored card name stayed in the previous language: {language}");
@@ -271,7 +297,7 @@ internal sealed partial class UnattendedTestRunner
         finally { pill.Free(); }
         if (SolverLocaleRefresh.SubscriptionCountForTesting != subscriptions)
             throw new InvalidOperationException("Freed pill retained a locale subscription.");
-        _completedChecks.Add("CardLocaleRoundTrip:EnglishSnapshot:ChineseEnglishChinese:Upgrade:Choice:SerializedPlan:LivePill:SubscriptionCleanup:NoReplan");
+        _completedChecks.Add("CardLocaleRoundTrip:EnglishSnapshot:ChineseEnglishChinese:Upgrade:Choice:RelicOwner:SerializedPlan:LivePill:SubscriptionCleanup:NoReplan");
     }
 
     private static void AssertEnglishControls(Node node)

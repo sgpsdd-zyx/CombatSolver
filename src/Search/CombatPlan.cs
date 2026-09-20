@@ -2,6 +2,7 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using CombatSolver.Engine.InCombat.Simulation;
 using System.Globalization;
 using System.Runtime.CompilerServices;
+using System.Text.Json.Serialization;
 
 namespace CombatSolver;
 
@@ -129,7 +130,14 @@ internal sealed record PredictionGap(
 internal sealed record PlanRelicEffect(
     string RelicId,
     string RelicTitle,
-    string Summary);
+    string Summary)
+{
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public int? OwnerPlayerNumber { get; init; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public bool OwnerIsLocal { get; init; }
+}
 
 internal sealed record PlanAction(
     PlanActionKind Kind,
@@ -1895,9 +1903,12 @@ internal sealed class SolverResult
     }
 
     private static string DescribeRelicEffect(PlanRelicEffect effect)
-        => string.IsNullOrEmpty(effect.Summary)
-            ? effect.RelicTitle
-            : $"{effect.RelicTitle}{effect.Summary}";
+    {
+        string label = $"{effect.RelicTitle}{effect.Summary}";
+        return effect.OwnerPlayerNumber is { } number
+            ? effect.OwnerIsLocal ? $"自己：{label}" : $"队友 {number}：{label}"
+            : label;
+    }
 
     public string DescribeWithKills(PlanAction action, int actionIndex)
     {

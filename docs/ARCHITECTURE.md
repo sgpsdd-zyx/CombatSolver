@@ -437,6 +437,8 @@ Mod 准入，具体契约见[模型状态适配](third-party-model-state.md)。
 
 击杀括号来源通过 `SolverDisplayNames.Capture` 在主线程捕获语言、能力/充能球标题以及稳定 ID 和类型名别名；worker 仅查询这份冻结名称表。`SolverOverlaySnapshot.CaptureAction` 独占胶囊及悬停文字，按执行顺序展示嵌套选择，并交给 UI 的 `SolverRelicEffectText` 格式化内置遗物记录的紧凑效果语法。第三方自定义摘要保持原文，日志中的原始摘要仍由 Search 输出；翻译不进入效果模拟和普通分支枚举。
 
+多人遗物注释从 `ActionRelicTriggerRecorder` 保留 `OwnerNetId`，去重包含持有者，不能合并不同玩家的同名效果。主线程 `SolverDisplayNames` 冻结全队遗物名称及玩家编号；最终路线将编号和本机标志写入 `PlanRelicEffect`，UI 投影到 `SolverRelicTextIdentity` 后显示自己/队友编号。归属随 JSON、路线身份比较和语言刷新保留，不作为战斗状态或搜索评分；单人不写附加字段，保持原有提示。佩尔之眼的多人参与标志仍属于既有逐遗物分支状态，回合开始必须更新未参加者；不得用 UI 归属替代实际结算修正。
+
 卡牌热切换使用 snapshot 中独立的 `SolverActionTextIdentity`，只含稳定 ID、升级和显示摘要，不保留 PlanAction/Model 引用。`SolverUiModelNames` 在主线程投影时查询当前游戏译名并按语言缓存；`SolverLocaleRefresh` 合并语言事件，在控件存活期刷新标签并在退出树时解除登记。卡牌名不再以搜索时的格式化字符串为 UI 权威来源；搜索只携带显示升级标量，禁止引用上述 UI 服务。其余静态界面仍以重启作为完整刷新入口。
 
 以下 renderer 只接受不可变 snapshot：

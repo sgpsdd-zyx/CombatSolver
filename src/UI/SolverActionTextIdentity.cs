@@ -4,7 +4,8 @@ using MegaCrit.Sts2.Core.Models;
 namespace CombatSolver;
 
 internal sealed record SolverCardTextIdentity(string Id, int Upgrade, string OriginalTitle);
-internal sealed record SolverRelicTextIdentity(string Id, string OriginalTitle, string Summary);
+internal sealed record SolverRelicTextIdentity(string Id, string OriginalTitle, string Summary,
+    int? OwnerPlayerNumber = null, bool OwnerIsLocal = false);
 
 // Stable presentation metadata survives route reuse; it carries no live model or search node.
 internal sealed record SolverActionTextIdentity(
@@ -36,8 +37,7 @@ internal sealed record SolverActionTextIdentity(
             choice.Count == 0 ? SolverText.Get("不选") : SolverText.Format($"选 {string.Join("、", choice.Select(card => SolverUiModelNames.Card(card.Id, card.Upgrade, card.OriginalTitle)))}")));
         if (identity.CardEnchantmentId == "INKY")
             title += $"（{ModelDb.Enchantment<MegaCrit.Sts2.Core.Models.Enchantments.Inky>().Title.GetFormattedText()}）";
-        string[] relics = identity.Relics.Select(relic => SolverUiModelNames.Relic(relic.Id, relic.OriginalTitle)
-            + SolverRelicEffectText.Format(relic.Summary)).ToArray();
+        string[] relics = identity.Relics.Select(RelicLabel).ToArray();
         string tooltip = (identity.EndTurn ? SolverText.Get("结束回合") : title)
             + (identity.PotionId.Length > 0 || snapshot.VisualKind == SolverOverlayActionVisualKind.Potion ? SolverText.Get("（药水）") : "")
             + (snapshot.TargetName.Length > 0 ? $"→{snapshot.TargetName}" : "")
@@ -45,6 +45,15 @@ internal sealed record SolverActionTextIdentity(
             + (choices == null ? "" : $"（{choices}）")
             + (snapshot.Kills.Count > 0 ? SolverText.Format($"，击杀 {string.Join("、", snapshot.Kills)}") : "");
         return snapshot with { Title = title, ChoiceText = choices, RelicLabels = relics, Tooltip = tooltip };
+    }
+
+    private static string RelicLabel(SolverRelicTextIdentity relic)
+    {
+        string label = SolverUiModelNames.Relic(relic.Id, relic.OriginalTitle)
+            + SolverRelicEffectText.Format(relic.Summary);
+        return relic.OwnerPlayerNumber is { } number
+            ? relic.OwnerIsLocal ? SolverText.Format($"自己：{label}") : SolverText.Format($"队友 {number}：{label}")
+            : label;
     }
 }
 

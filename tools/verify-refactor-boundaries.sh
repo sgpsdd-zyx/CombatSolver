@@ -1052,6 +1052,10 @@ src/UI/SolverOverlaySnapshot.cs	public static SolverOverlaySnapshot Capture(Solv
 src/UI/SolverOverlay.cs	public static void ShowResult(Node host, SolverOverlaySnapshot snapshot)
 src/UI/SolverRouteRow.cs	public void Populate(SolverOverlayTurnSnapshot turn)
 src/UI/SolverActionPill.cs	public static Control Create(SolverOverlayActionSnapshot action)
+src/Engine/InCombat/Simulation/ActionRelicTriggerRecorder.cs	new(relic.Id.Entry, summary, relic.Owner.NetId)
+src/Search/CombatBeamSolver.Phases.cs	OwnerPlayerNumber = IsMultiplayerAdvice ? displayNames.PlayerNumber(trigger.OwnerNetId) : null
+src/UI/SolverOverlaySnapshot.cs	effect.OwnerPlayerNumber, effect.OwnerIsLocal
+src/UI/SolverActionTextIdentity.cs	int? OwnerPlayerNumber = null, bool OwnerIsLocal = false
 src/Runtime/SolverController.cs	SolverOverlaySnapshot.CaptureWithReviewedWorldlines(
 EOF
 overlay_renderer_paths=(

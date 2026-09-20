@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "scenarioId": "MULTIPLAYER-RELIC-EXTRA-TURN-SOURCE",
+  "characterId": "IRONCLAD",
+  "encounterId": "FOGMOG_NORMAL",
+  "enemyCurrentHp": 1000,
+  "seed": "MPRELICSOURCE20260920",
+  "timeoutSeconds": 120,
+  "headlessFastModeForTest": "Instant"
+}

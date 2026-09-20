@@ -191,6 +191,16 @@ internal sealed partial class UnattendedTestRunner
                 runner._host.RootSceneContainer.SetCurrentScene(NRun.Create(savedState));
                 await RunManager.Instance.GenerateMap();
             }
+            else if (request.ScenarioId is "MULTIPLAYER-RELIC-OWNERSHIP" or "MULTIPLAYER-RELIC-EXTRA-TURN-SOURCE")
+            {
+                var unlocks = SaveManager.Instance.GenerateUnlockStateFromProgress();
+                RunState multiplayer = RunState.CreateForNewRun(
+                    [Player.CreateForNewRun(character, unlocks, 2uL), Player.CreateForNewRun(character, unlocks, 1uL)],
+                    ActModel.GetDefaultList().Select(act => act.ToMutable()).ToList(), modifiers,
+                    GameMode.Standard, request.Ascension, request.Seed);
+                RunManager.Instance.SetUpNewSingleplayer(multiplayer, shouldSave: false);
+                await runner._host.StartRun(multiplayer);
+            }
             else
                 await runner._host.StartNewSingleplayerRun(
                 character,

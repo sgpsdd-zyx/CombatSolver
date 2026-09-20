@@ -39,6 +39,16 @@ internal sealed partial class UnattendedTestRunner
             bool expectedCardPlayed = request.ExpectedPlayedCardId == null;
             bool expectedPotionUsed = request.ExpectedUsedPotionId == null;
             bool expectedPlayerPowerObserved = request.ExpectedObservedPlayerPowerId == null;
+            if (request.ScenarioId == "MULTIPLAYER-RELIC-OWNERSHIP")
+            {
+                await runner.AssertMultiplayerRelicOwnershipAsync(combatState);
+                return Observation(combatEnded: false);
+            }
+            if (request.ScenarioId == "MULTIPLAYER-RELIC-EXTRA-TURN-SOURCE")
+            {
+                await runner.AssertMultiplayerRelicExtraTurnSourceAsync(combatState);
+                return Observation(combatEnded: false);
+            }
             if (request.ScenarioId == "GENERATED-NOVELTY-SEARCH")
             {
                 _ = ApplySettingsOverrides();

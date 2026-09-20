@@ -2335,7 +2335,9 @@ internal sealed partial class UnattendedTestRunner
     private static bool RelicEffectEquivalent(PlanRelicEffect expected, PlanRelicEffect actual)
         => string.Equals(expected.RelicId, actual.RelicId, StringComparison.Ordinal)
             && string.Equals(expected.RelicTitle, actual.RelicTitle, StringComparison.Ordinal)
-            && string.Equals(expected.Summary, actual.Summary, StringComparison.Ordinal);
+            && string.Equals(expected.Summary, actual.Summary, StringComparison.Ordinal)
+            && expected.OwnerPlayerNumber == actual.OwnerPlayerNumber
+            && expected.OwnerIsLocal == actual.OwnerIsLocal;
 
     private static bool PredictionGapsEquivalent(
         IReadOnlyList<PredictionGap> expected,

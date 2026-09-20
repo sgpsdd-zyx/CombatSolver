@@ -594,7 +594,11 @@ internal sealed partial class CombatBeamSolver
                                 .Select(trigger => new PlanRelicEffect(
                                     trigger.RelicId,
                                     displayNames.Relic(trigger.RelicId),
-                                    trigger.Summary))
+                                    trigger.Summary)
+                                {
+                                    OwnerPlayerNumber = IsMultiplayerAdvice ? displayNames.PlayerNumber(trigger.OwnerNetId) : null,
+                                    OwnerIsLocal = IsMultiplayerAdvice && trigger.OwnerNetId == _player.NetId,
+                                })
                                 .ToArray(),
                         })
                         .ToArray();

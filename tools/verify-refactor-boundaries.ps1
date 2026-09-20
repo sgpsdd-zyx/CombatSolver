@@ -1317,6 +1317,10 @@ foreach ($check in @(
     @{ Path = Join-Path $repositoryRoot "src\UI\SolverOverlay.cs"; Text = "public static void ShowResult(Node host, SolverOverlaySnapshot snapshot)" },
     @{ Path = Join-Path $repositoryRoot "src\UI\SolverRouteRow.cs"; Text = "public void Populate(SolverOverlayTurnSnapshot turn)" },
     @{ Path = Join-Path $repositoryRoot "src\UI\SolverActionPill.cs"; Text = "public static Control Create(SolverOverlayActionSnapshot action)" },
+    @{ Path = Join-Path $repositoryRoot "src\Engine\InCombat\Simulation\ActionRelicTriggerRecorder.cs"; Text = "new(relic.Id.Entry, summary, relic.Owner.NetId)" },
+    @{ Path = Join-Path $repositoryRoot "src\Search\CombatBeamSolver.Phases.cs"; Text = "OwnerPlayerNumber = IsMultiplayerAdvice ? displayNames.PlayerNumber(trigger.OwnerNetId) : null" },
+    @{ Path = $overlaySnapshotPath; Text = "effect.OwnerPlayerNumber, effect.OwnerIsLocal" },
+    @{ Path = Join-Path $repositoryRoot "src\UI\SolverActionTextIdentity.cs"; Text = "int? OwnerPlayerNumber = null, bool OwnerIsLocal = false" },
     @{ Path = Join-Path $repositoryRoot "src\Runtime\SolverController.cs"; Text = "SolverOverlaySnapshot.CaptureWithReviewedWorldlines(" })) {
     if (-not (Select-String -LiteralPath $check.Path -SimpleMatch $check.Text -Quiet)) {
         $violations.Add("$($check.Path): missing overlay snapshot boundary '$($check.Text)'")

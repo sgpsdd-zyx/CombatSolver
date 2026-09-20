@@ -1,6 +1,6 @@
 # CombatSolver 文档导航
 
-当前源码和本地准备版 [0.43.2](releases/0.43.2-RELEASE_NOTES.md) 基于官方 0.43.0，手动多人军师扩为十四周期、普通时间/节点额度乘二，单人保持官方行为。GitHub 已发布版本仍为 0.43.1。见 [多人指南与兼容记录](multiplayer-advisor.md#官方-0430-兼容同步)；发布凭证见[开发笔记](DEVELOPMENT_NOTES.md)。官方标签保持原指向。
+当前源码和本地准备版 [0.43.3](releases/0.43.3-RELEASE_NOTES.md) 基于官方 0.43.0，修复多人遗物归属提示与佩尔之眼状态，保留十四周期和普通时间/节点双倍额度，单人保持官方行为。GitHub 已发布版本仍为 0.43.1。见 [多人指南与兼容记录](multiplayer-advisor.md#官方-0430-兼容同步)；发布凭证见[开发笔记](DEVELOPMENT_NOTES.md)。官方标签保持原指向。
 
 通用随机/指定战斗测试入口：[场景生成与批量重跑](GENERATED_COMBAT_SCENARIOS.md)。
 
