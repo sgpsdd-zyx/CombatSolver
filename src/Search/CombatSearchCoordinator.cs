@@ -429,6 +429,13 @@ internal static partial class CombatSearchCoordinator
         BeamWidthPortfolioBaseline baseline = default;
         bool baselineObserved = false;
         long expandedByMembers = 0;
+        BeamPortfolioExperiment? experiment = policy.PortfolioExperiment;
+        SolverResult? baselineResult = null;
+        SolverResult? incumbent = null;
+        double[]? pendingFeatures = null;
+        string pendingDecision = "Observe";
+        string solverAssemblyId = typeof(CombatSearchCoordinator).Module.ModuleVersionId.ToString();
+        string gameAssemblyId = typeof(CombatState).Module.ModuleVersionId.ToString();
         bool hasReachablePower = root.PlayerCardIds.Any(
             PowerCardValuationModels.Registry.ContainsCardId);
 
@@ -477,8 +484,30 @@ internal static partial class CombatSearchCoordinator
             costs.Add(new BeamWidthPortfolioMemberCost(memberElapsed, memberAllocated, managedHeapAfter));
             bool won = IsCompleteVictory(memberResult);
             bool terminal = won || memberResult.Snapshot.PlayerDead;
+            // 与组合器同一条可比性规则。撞节点上限又没到终局的结果不参与质量比较，
+            // 否则它既会污染后续成员的 improved 标签，也会让 incumbent 不再代表当前最佳；
+            // 被内存回收提前截断的结果同理。
+            bool comparable = terminal
+                || memberResult.BoundaryReason is not (SearchBoundaryReason.NodeLimit
+                    or SearchBoundaryReason.MemoryNoProgress);
+            if (experiment != null && baselineObserved && pendingFeatures != null)
+            {
+                bool improved = comparable && incumbent != null
+                    && IsBetterPotionPolicyResult(root, policy, memberResult, incumbent);
+                bool usable = won && memberResult.BoundaryReason == SearchBoundaryReason.None
+                    && !memberResult.Snapshot.HasRisk && pendingDecision != "UnsupportedSemantics";
+                experiment.Observe?.Invoke(new BeamPortfolioObservation(
+                    pendingFeatures, pendingDecision, true, improved, usable,
+                    memberElapsed, memberResult.BoundaryReason.ToString()));
+                pendingFeatures = null;
+            }
+            if (experiment != null && comparable && (incumbent == null
+                || IsBetterPotionPolicyResult(root, policy, memberResult, incumbent)))
+                incumbent = memberResult;
             if (!baselineObserved)
             {
+                if (experiment != null)
+                    baselineResult = memberResult;
                 baseline = new BeamWidthPortfolioBaseline(
                     memberResult.BoundaryReason == SearchBoundaryReason.None,
                     IsProvenZeroDamageRoute(root, policy, memberResult),
@@ -501,27 +530,74 @@ internal static partial class CombatSearchCoordinator
                 memberResult.PotionCount)
             {
                 StopPortfolio = memberResult.ResultScope != SolverResultScope.SearchCompletion,
+                MemoryTruncated = memberResult.BoundaryReason == SearchBoundaryReason.MemoryNoProgress,
             };
         }
 
         string? RejectMember(BeamWidthPortfolioMemberSpec member)
-            => baselineObserved
-                ? member.AggressivePowerCommitment
-                    ? PowerCommitmentPortfolioGate.Reject(hasReachablePower)
-                    : BeamWidthPortfolioGate.RejectRefinement(
-                        baseline,
-                        member.BeamWidth,
-                        profile.MaxExpandedNodes - expandedByMembers,
-                        RemainingMilliseconds(),
-                        profile.SoftTimeBudgetMilliseconds,
-                        policy.MemoryPressureSignal.RemainingBytes)
-                : null;
+        {
+            if (!baselineObserved)
+                return null;
+            // 能力牌成员走自己的门控（它只要求确实存在可达的能力牌），其余成员走宽度余量门控。
+            string? rejection = member.AggressivePowerCommitment
+                ? PowerCommitmentPortfolioGate.Reject(hasReachablePower)
+                : BeamWidthPortfolioGate.RejectRefinement(
+                    baseline, member.BeamWidth, profile.MaxExpandedNodes - expandedByMembers,
+                    RemainingMilliseconds(), profile.SoftTimeBudgetMilliseconds,
+                    policy.MemoryPressureSignal.RemainingBytes);
+            // 学习型跳过器只在宽度成员上训练过，能力牌成员不由它裁决。
+            if (rejection != null || experiment == null || member.AggressivePowerCommitment)
+                return rejection;
+            // 门控已经放行，说明基线没被任何上限截断，因此两边都已经有可比结果。
+            SolverResult first = baselineResult
+                ?? throw new InvalidOperationException("成员准入已放行，但基线结果未记录。");
+            SolverResult best = incumbent
+                ?? throw new InvalidOperationException("成员准入已放行，但当前最佳结果未记录。");
+            pendingFeatures =
+            [
+                root.InitialPlayerHp, root.InitialPlayerMaxHp, root.CapturedCardCount,
+                root.CapturedPowerCount, root.Enemies.Count, root.StartTurnNumber,
+                root.SearchablePotionCount, root.IsActEndingBoss ? 1 : 0,
+                profile.BeamWidth, profile.MaxExpandedNodes, profile.MaxCardBranchesPerNode,
+                profile.MaxPileChoiceBranchesPerAction, profile.MaxHandChoiceBranchesPerAction,
+                IsCompleteVictory(first) ? 1 : 0, first.ProjectedBattleHpLost,
+                first.BestNode.ActionCount, first.CombatEndedTurn ?? 0,
+                baseline.ExpandedNodes, first.TransitionCount, baseline.ElapsedMilliseconds,
+                best.ProjectedBattleHpLost, best.PotionCount,
+                (double)(profile.MaxExpandedNodes - expandedByMembers) / profile.MaxExpandedNodes,
+                Math.Max(0d, (double)RemainingMilliseconds() / profile.SoftTimeBudgetMilliseconds),
+                (double)member.BeamWidth / profile.BeamWidth,
+                member.SecondRankBand ? 1 : 0, member.BaseScoreOnly ? 1 : 0,
+                policy.MaxDegreeOfParallelism,
+                policy.EffectiveHasGrowthTargets ? 1 : 0, policy.RelicTargets.Count,
+                policy.TheftPolicy == null ? 0 : 1,
+                policy.PotionStrategy.HasForcedDirectives ? 1 : 0,
+            ];
+            // The label is the production comparator, so policy shape does not disqualify an
+            // observation; it becomes input. Only captures that change simulation fidelity do.
+            bool eligible = IsCompleteVictory(first) && !first.Snapshot.HasRisk
+                && !policy.UseNoveltyPortfolio && policy.BeamWidthPortfolioWidths == null
+                && policy.BeamWidthPortfolioPlainBaselineMember
+                && root.CapturedRunModSubscriberCount == 0 && root.CapturedCombatModSubscriberCount == 0
+                && !root.CapturedBaseLibCardModifiers;
+            pendingDecision = !eligible ? "UnsupportedSemantics"
+                : experiment.Model?.Decide(pendingFeatures, solverAssemblyId, gameAssemblyId) ?? "Observe";
+            if (experiment.Model != null)
+                policy.Diagnostics.Info($"[CombatSolver/Test] PORTFOLIO_SELECTOR_DECISION model={experiment.Model.ModelId} member={member} decision={pendingDecision}");
+            if (pendingDecision != "LearnedNoImprovement")
+                return null;
+            experiment.Observe?.Invoke(new BeamPortfolioObservation(
+                pendingFeatures, pendingDecision, false, null, null, 0, null));
+            pendingFeatures = null;
+            return pendingDecision;
+        }
 
         BeamWidthPortfolioOutcome<SolverResult> outcome = policy.UseBeamWidthPortfolio || hasReachablePower
             ? BeamWidthPortfolio.Run(
                 BeamWidthPortfolio.ProductionMembers(
                     profile.BeamWidth,
                     policy.UseBeamWidthPortfolio ? policy.BeamWidthPortfolioWidths : [profile.BeamWidth],
+                    policy.BeamWidthPortfolioPlainBaselineMember,
                     includePowerCommitmentMember: hasReachablePower),
                 profile.MaxExpandedNodes,
                 profile,
@@ -531,6 +607,10 @@ internal static partial class CombatSearchCoordinator
                 policy.Diagnostics.Info)
             : SingleMemberOutcome(profile, RunMember);
         RecordPortfolioMembers(policy, telemetry, outcome, costs);
+        // 组合路径也要出阶段表：novelty 分支那条打印覆盖不到这里，于是开了 MeasurePhasePerformance
+        // 的组合跑批拿不到逐阶段耗时/分配归属。
+        if (policy.MeasurePhasePerformance)
+            policy.Diagnostics.Info(SolverDiagnostics.DescribeSearchPhasePerformance(outcome.Selected));
         return outcome.Selected;
     }
 
@@ -544,8 +624,9 @@ internal static partial class CombatSearchCoordinator
     {
         BeamWidthPortfolioRun<SolverResult> run = runMember(profile);
         bool comparable = run.Terminal
-            || !string.Equals(
-                run.Termination, BeamWidthPortfolio.NodeLimitTermination, StringComparison.Ordinal);
+            || (!run.MemoryTruncated
+                && !string.Equals(
+                    run.Termination, BeamWidthPortfolio.NodeLimitTermination, StringComparison.Ordinal));
         string selectionReason = run.StopPortfolio
             ? BeamWidthPortfolio.SelectionStopped
             : comparable
@@ -568,7 +649,9 @@ internal static partial class CombatSearchCoordinator
             Compared: run.StopPortfolio || comparable,
             SkippedReason: run.StopPortfolio || comparable
                 ? null
-                : BeamWidthPortfolio.SkippedNodeLimitNotTerminal);
+                : run.MemoryTruncated
+                    ? BeamWidthPortfolio.SkippedMemoryTruncated
+                    : BeamWidthPortfolio.SkippedNodeLimitNotTerminal);
         return new BeamWidthPortfolioOutcome<SolverResult>(
             run.Result, 0, selectionReason, [member], run.ExpandedNodes, run.TransitionCount);
     }
@@ -1645,6 +1728,10 @@ internal static partial class CombatSearchCoordinator
         }
     }
 
+    internal static SolverInterimResult CapturePortfolioQuality(
+        CombatRootSnapshot root, SearchPolicySnapshot policy, SolverResult result)
+        => BuildInterimResult(root, policy, result);
+
     private static SolverInterimResult BuildInterimResult(
         CombatRootSnapshot root,
         SearchPolicySnapshot policy,
@@ -1879,8 +1966,13 @@ internal static partial class CombatSearchCoordinator
         int ambergrisCount = result.BestNode.Actions.Count(action =>
             action.Kind == PlanActionKind.UsePotion
             && string.Equals(action.PotionId, "AMBERGRIS", StringComparison.Ordinal));
+        int explicitPotionCount = result.BestNode.Actions.Count(action =>
+            action.Kind == PlanActionKind.UsePotion);
         int strategicHpCost = PotionUsePolicy.EffectiveStrategicHpCost(
-            result.PotionStrategicCostByTurn.Values.Sum(),
+            PotionUsePolicy.ApplyReplacementCredit(
+                result.PotionStrategicCostByTurn.Values.Sum(),
+                explicitPotionCount,
+                root.PotionRewardOutlook.ReplacementHpCredit),
             ambergrisCount,
             root.InitialPlayerMaxHp);
         return PotionUsePolicy.SmartRequiredHpSaved(
@@ -1946,12 +2038,22 @@ internal static partial class CombatSearchCoordinator
             .ToArray();
         if (!potionFreeWon || policy.TheftPolicy == SolverTheftPolicy.PreserveResources)
             return allowedPotions.Length;
+        BossHpRelief bossHpRelief = StrategicBossHpRelief(root, policy);
         int paidPotionHpRequired = PotionUsePolicy.SmartRequiredHpSaved(
             SolverWeights.PotionMinimumHpSaved,
-            StrategicBossHpRelief(root, policy));
+            bossHpRelief);
+        // The reward credit is taken off a route once, so only the first paid potion gets the cheaper bar.
+        int firstPaidPotionHpRequired = PotionUsePolicy.SmartRequiredHpSaved(
+            PotionUsePolicy.ApplyReplacementCredit(
+                SolverWeights.PotionMinimumHpSaved,
+                1,
+                root.PotionRewardOutlook.ReplacementHpCredit),
+            bossHpRelief);
         int paidPotionCapacity = paidPotionHpRequired >= int.MaxValue / 4
             ? 0
-            : Math.Max(0, potionFreeHpDeficit) / paidPotionHpRequired;
+            : Math.Max(0, potionFreeHpDeficit) < firstPaidPotionHpRequired
+                ? 0
+                : 1 + (Math.Max(0, potionFreeHpDeficit) - firstPaidPotionHpRequired) / paidPotionHpRequired;
         return Math.Min(
             allowedPotions.Length,
             allowedPotions.Count(potion => potion.StrategicHpCost == 0) + paidPotionCapacity);

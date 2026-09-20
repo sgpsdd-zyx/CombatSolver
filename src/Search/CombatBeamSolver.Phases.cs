@@ -1,23 +1,17 @@
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
 using MegaCrit.Sts2.Core.Combat;
-using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.Hooks;
 using MegaCrit.Sts2.Core.Models;
-using MegaCrit.Sts2.Core.Models.Cards;
 using MegaCrit.Sts2.Core.Models.Events;
 using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.Models.Relics;
 using MegaCrit.Sts2.Core.MonsterMoves.MonsterMoveStateMachine;
 using MegaCrit.Sts2.Core.Rooms;
-using MegaCrit.Sts2.Core.ValueProps;
 using CombatSolver.Engine.Common;
-using CombatSolver.Engine.InCombat.Mirrors;
 using CombatSolver.Engine.InCombat.Simulation;
-using BufferCard = MegaCrit.Sts2.Core.Models.Cards.Buffer;
 
 namespace CombatSolver;
 
@@ -67,6 +61,16 @@ internal sealed partial class CombatBeamSolver
                 $"[CombatSolver/Test] HOOK_LAYOUT_CACHE scope=root_cumulative " +
                 $"hits={hookLayouts.Hits} misses={hookLayouts.Misses} " +
                 $"collisions={hookLayouts.Collisions} bypasses={hookLayouts.Bypasses}");
+            if (root.PotionRewardOutlook.Forecast != PotionRewardForecast.Unknown
+                || root.PotionRewardOutlook.ReplacementHpCredit > 0)
+            {
+                PotionRewardOutlook outlook = root.PotionRewardOutlook;
+                policy.Diagnostics.Info(
+                    $"[CombatSolver/Test] POTION_REWARD_OUTLOOK " +
+                    $"chance={outlook.DropChance:0.###} forecast={outlook.Forecast} " +
+                    $"potion={outlook.ForecastPotionId ?? "-"} belt_full={outlook.BeltFull} " +
+                    $"blocked={outlook.ProcureBlocked} credit={outlook.ReplacementHpCredit}");
+            }
             if (_run.PotionStrategicCosts.Misses > 0)
             {
                 policy.Diagnostics.Info(
@@ -117,6 +121,9 @@ internal sealed partial class CombatBeamSolver
     {
         using IDisposable notificationIsolation = SimulationNotificationIsolation.Enter();
         cancellationToken.ThrowIfCancellationRequested();
+        // 每一次搜索（组合成员、补充审计、抬上限重搜）各拿一份连续无进展额度，
+        // 上一份搜索用剩的计数不能把下一份搜索提前截断。
+        policy.MemoryPressureSignal.ResetNoProgressReclaimTracking();
         if (policy.Diagnostics.PathObserver != null)
             _run.PathDiagnosticsSolverId = Guid.NewGuid();
         if (_minimumPotionUses < 0
@@ -191,6 +198,8 @@ internal sealed partial class CombatBeamSolver
         int initialHp = root.InitialPlayerHp;
         int searchedTurnLayers = 0;
         bool timeBudgetReached = false;
+        // 连续无进展的内存回收已用尽本搜索的额度：提前收手，交给既有终局发布当前前沿的最优路线。
+        bool memoryNoProgressTruncated = false;
         bool acceptableBattleHpLossReached = false;
 
         SolverInterimResult SummarizeCandidate(SearchNode node, bool won)
@@ -256,7 +265,14 @@ internal sealed partial class CombatBeamSolver
                     materialized.Outcome.HpRecovered,
                     materialized.Outcome.EnemyHpLost,
                     materialized.Outcome.EnergyLeft,
-                    materialized.CombatEnded));
+                    materialized.CombatEnded)
+                {
+                    TurnStartChoices = SolverFrontierTurn.ChoicesForTurn(
+                        actions.Key,
+                        _startTurnNumber,
+                        candidate.GetTurnSetupChoices(),
+                        candidate.Actions).Select(WithDisplayNames).ToArray(),
+                });
             }
             turns.Sort((a, b) => a.Turn.CompareTo(b.Turn));
             return turns.Count == 0 ? null : turns;
@@ -276,7 +292,8 @@ internal sealed partial class CombatBeamSolver
                 SolverFrontierTurn b = next[i];
                 if (a.Turn != b.Turn || a.HpLost != b.HpLost || a.EnemyHpLost != b.EnemyHpLost
                     || a.EnergyLeft != b.EnergyLeft || a.CombatEnded != b.CombatEnded
-                    || !a.Actions.SequenceEqual(b.Actions))
+                    || !a.Actions.SequenceEqual(b.Actions)
+                    || !a.TurnStartChoices.SequenceEqual(b.TurnStartChoices))
                 {
                     return false;
                 }
@@ -422,7 +439,10 @@ internal sealed partial class CombatBeamSolver
                 outcome.EnemyHpLost,
                 outcome.EnergyLeft,
                 combatEnded,
-                frontierTurns);
+                frontierTurns)
+            {
+                TurnStartChoices = candidate.GetTurnSetupChoices().Select(WithDisplayNames).ToArray(),
+            };
         }
 
 
@@ -433,6 +453,7 @@ internal sealed partial class CombatBeamSolver
             SolverResultScope resultScope,
             int candidateSearchedTurnLayers,
             bool candidateTimeBudgetReached,
+            bool candidateMemoryNoProgress = false,
             IReadOnlyList<PlanAction>? routeAdoptionActions = null)
         {
             SearchMeasurement finalMeasurement = _run.Performance.Begin();
@@ -486,7 +507,12 @@ internal sealed partial class CombatBeamSolver
             SearchBoundaryReason boundary = finalSnapshot.BoundaryReason;
             if (resultScope != SolverResultScope.RouteAdoption)
             {
-                if (boundary == SearchBoundaryReason.None && candidateTimeBudgetReached)
+                // 内存截断是本轮搜索真正停下的原因，优先于收尾候选自带的边界；组合器
+                // 只凭这个归类判断成员是否可比，不能因为最后一个候选恰好是终局/异常边界
+                // 就把截断成员重新放回整条选优。
+                if (candidateMemoryNoProgress)
+                    boundary = SearchBoundaryReason.MemoryNoProgress;
+                else if (boundary == SearchBoundaryReason.None && candidateTimeBudgetReached)
                     boundary = SearchBoundaryReason.TimeLimit;
                 else if (boundary == SearchBoundaryReason.None && _run.Expanded >= _profile.MaxExpandedNodes)
                     boundary = SearchBoundaryReason.NodeLimit;
@@ -550,6 +576,13 @@ internal sealed partial class CombatBeamSolver
             RouteAnnotations replayAnnotations = BuildRouteAnnotations(best, relicTriggerRecorder);
             replayEvidence.Publish(policy.Diagnostics, "selected_route", relicTriggerRecorder);
             annotations = annotations with { KillsAfterAction = replayAnnotations.KillsAfterAction };
+            string[] plannedPotionIds = ((SimulatedCombatState)((CombatPredictionSimulator)annotationReplay.Simulator)
+                .State.CombatState).PotionUses.Select(use => use.PotionId).ToArray();
+            if (plannedPotionIds.Length != selectedCandidate.PotionCount)
+            {
+                annotationReplay.ReleaseSimulator();
+                throw new InvalidOperationException("路线用药数量与回放药水身份不一致。");
+            }
             annotationReplay.ReleaseSimulator();
             IReadOnlyList<PlanAction> annotatedActions = resultScope == SolverResultScope.RouteAdoption
                 && routeAdoptionActions != null
@@ -655,6 +688,12 @@ internal sealed partial class CombatBeamSolver
                 PruneMetric = _run.Performance.Snapshot(SearchMetricPhase.Prune),
                 FinalSelectionMetric = _run.Performance.Snapshot(SearchMetricPhase.FinalSelection),
                 StartTurnNumber = _startTurnNumber,
+                TranspositionCount = _run.Transpositions.Count,
+                ExpandedTranspositionCount = _run.ExpandedTranspositions.Count,
+                TranspositionLimitBypasses = _run.TranspositionLimitBypasses,
+                StandPatCacheCount = _run.StandPatCache.Count,
+                ThreatProjectionCacheCount = _run.ThreatProjectionCache.Count,
+                CoverageCacheCount = _run.CoverageCache.Count,
                 TurnSetupChoices = best.GetTurnSetupChoices().Select(WithDisplayNames).ToArray(),
                 TurnSetupPlayState = best.GetTurnSetupPlayState(),
                 BestNode = selectedPlan,
@@ -759,8 +798,12 @@ internal sealed partial class CombatBeamSolver
                 SoldHp = selectedCandidate.BattleSold,
                 FutureSoldHp = selectedCandidate.FutureSold,
                 BattleHpLostSoFar = battleDamage.HpLostSoFar,
+                BattleHpRecoveredOrGainedSoFar = battleDamage.HpRecoveredOrGainedSoFar,
                 ProjectedBattleHpLost = battleDamage.HpLostSoFar + futureHpLost,
                 BattlePotionsUsedSoFar = battleDamage.PotionsUsedSoFar,
+                BattlePotionIdsUsedSoFar = battleDamage.PotionIdsUsedSoFar,
+                PlannedPotionIds = plannedPotionIds,
+                PotionRewardOutlook = root.PotionRewardOutlook,
                 PotionCount = selectedCandidate.PotionCount,
                 ExplicitPotionCount = annotatedActions.Count(action =>
                     action.Kind == PlanActionKind.UsePotion),
@@ -851,7 +894,14 @@ internal sealed partial class CombatBeamSolver
                         annotations.HpRecoveredByTurn.GetValueOrDefault(group.Key),
                         enemyHpLost,
                         energyLeft,
-                        annotations.CombatEndedTurn == group.Key);
+                        annotations.CombatEndedTurn == group.Key)
+                    {
+                        TurnStartChoices = SolverFrontierTurn.ChoicesForTurn(
+                            group.Key,
+                            _startTurnNumber,
+                            selected.Node.GetTurnSetupChoices(),
+                            selected.Node.Actions).Select(WithDisplayNames).ToArray(),
+                    };
                 })
                 .ToArray();
             return new SolverSpeculativeRoutePreview(
@@ -1111,6 +1161,23 @@ internal sealed partial class CombatBeamSolver
             }
         }
 
+        bool ObserveNoProgressReclaim(string reason, int playDepth)
+        {
+            SearchMemoryPressureSignal signal = policy.MemoryPressureSignal;
+            if (!signal.ShouldStopForNoProgressReclaims(policy.MemoryNoProgressRecoveryLimit))
+                return false;
+            // 重建区域后仍然腾不出余量：再重试只是把同一份压力循环一遍，
+            // 因此提前收手，让既有终局发布当前前沿的最优路线。
+            memoryNoProgressTruncated = true;
+            policy.Diagnostics.Info(
+                $"[CombatSolver/Test] SEARCH_MEMORY_NO_PROGRESS_STOP " +
+                $"reason={reason} limit={policy.MemoryNoProgressRecoveryLimit} " +
+                $"consecutive={signal.ConsecutiveNoProgressReclaims} " +
+                $"regained={signal.LastReclaimRegainedBytes} " +
+                $"expanded={_run.Expanded} turn_layer={searchedTurnLayers} play_depth={playDepth}");
+            return true;
+        }
+
         void ReclaimAtCommittedBoundary(
             string reason,
             int playDepth,
@@ -1151,6 +1218,8 @@ internal sealed partial class CombatBeamSolver
             {
                 _run.WorkPacer.ObserveGcPause(signal.LastReclaimMaxObservedGcPause);
             }
+            if (ObserveNoProgressReclaim(reason, playDepth))
+                return;
             policy.Diagnostics.Info(
                 $"[CombatSolver/Test] SEARCH_MEMORY_RESUMED " +
                 $"reason={reason} checkpoint={signal.ReclaimCount} " +
@@ -1376,7 +1445,8 @@ internal sealed partial class CombatBeamSolver
             && (!policy.VerifyIncrementalSearch
                 || searchedTurnLayers < SolverWeights.IncrementalVerificationMaxTurns)
             && _run.Expanded < _profile.MaxExpandedNodes
-            && !timeBudgetReached)
+            && !timeBudgetReached
+            && !memoryNoProgressTruncated)
         {
             cancellationToken.ThrowIfCancellationRequested();
             List<SearchNode> active = frontier.Where(node => !node.IsTerminal).ToList();
@@ -1424,6 +1494,19 @@ internal sealed partial class CombatBeamSolver
                  playDepth++)
             {
                 cancellationToken.ThrowIfCancellationRequested();
+                if (memoryNoProgressTruncated)
+                {
+                    // 和时间预算同一条收尾路径：把当前前沿推进到回合末，再由既有终局发布；
+                    // 外层回合层循环随标志一起退出，不再往下搜新回合。
+                    foreach (SearchNode node in active)
+                    {
+                        foreach (SearchNode endNode in BuildAcceptedEndTurnNodes(node))
+                            ended.Add(endNode);
+                        node.Snapshot.ReleaseSimulator();
+                    }
+                    active = [];
+                    break;
+                }
                 BeginCyclePlanningLayer();
                 SearchTakeoverRequest? takeover = _interaction?.CurrentTakeoverRequest;
                 if (takeover?.Kind == SearchTakeoverKind.AdoptRoute
@@ -1522,6 +1605,7 @@ internal sealed partial class CombatBeamSolver
                         ended.Count,
                         "继续搜索",
                         force: true);
+                    ObserveNoProgressReclaim("before_play_depth", playDepth);
                 }
                 if (!policy.VerifyIncrementalSearch
                     && playDepth > 0
@@ -1670,7 +1754,9 @@ internal sealed partial class CombatBeamSolver
 
                 if (expansionParallelism == 1)
                 {
-                    while (activeIndex < active.Count && !acceptableBattleHpLossReached)
+                    while (activeIndex < active.Count
+                           && !acceptableBattleHpLossReached
+                           && !memoryNoProgressTruncated)
                     {
                         cancellationToken.ThrowIfCancellationRequested();
                         ExpandNextSerially();
@@ -1682,7 +1768,8 @@ internal sealed partial class CombatBeamSolver
                 {
                     while (activeIndex < active.Count
                            && !acceptableBattleHpLossReached
-                           && _run.Expanded < _profile.MaxExpandedNodes)
+                           && _run.Expanded < _profile.MaxExpandedNodes
+                           && !memoryNoProgressTruncated)
                     {
                         cancellationToken.ThrowIfCancellationRequested();
                         int remainingBudget = _profile.MaxExpandedNodes - _run.Expanded;
@@ -1839,6 +1926,7 @@ internal sealed partial class CombatBeamSolver
                     foreach (SearchNode commitment in commitments)
                     {
                         if (_run.Expanded >= _profile.MaxExpandedNodes || acceptableBattleHpLossReached
+                            || memoryNoProgressTruncated
                             || !policy.VerifyIncrementalSearch
                                 && stopwatch.ElapsedMilliseconds >= _profile.SoftTimeBudgetMilliseconds)
                             break;
@@ -1934,8 +2022,7 @@ internal sealed partial class CombatBeamSolver
                 ? []
                 : PruneAtMemoryBoundary(ended.Where(node => !node.IsTerminal),
                     turnPruneCandidateCount, "before_turn_prune", playDepth: 0, ended.Count);
-            foreach (SearchNode node in frontier)
-                CaptureContinuation(node);
+            // 续用戳只供最终选中路线，淘汰候选无需提前拼接字符串。
             List<SearchNode> retainedAfterRound = [.. completed, .. frontier];
             ReleaseDroppedSnapshots(ended, retainedAfterRound);
             foreach (SearchNode candidate in retainedAfterRound)
@@ -2098,7 +2185,8 @@ internal sealed partial class CombatBeamSolver
                 ? SolverResultScope.CurrentTurnAdoption
                 : SolverResultScope.SearchCompletion,
             searchedTurnLayers,
-            timeBudgetReached);
+            timeBudgetReached,
+            memoryNoProgressTruncated);
         foreach (SearchNode candidate in finalCandidates)
             candidate.Snapshot.ReleaseSimulator();
         return result;

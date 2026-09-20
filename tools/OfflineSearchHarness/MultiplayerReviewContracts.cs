@@ -166,7 +166,11 @@ internal static class MultiplayerReviewContracts
             throw new InvalidOperationException("Native potion history did not record the actual owner.");
         BattleDamageSnapshot peerPaid = BattleDamageTracker.Observe(state);
         PotionModel held = Procure(local);
-        var potionRoot = CombatRootSnapshot.Capture(state, multiplayerAdvisor: true);
+        var potionRoot = CombatRootSnapshot.Capture(state, multiplayerAdvisor: true, predictPotionReward: true);
+        Check("single_player_reward_forecast_excluded",
+            potionRoot.PotionRewardOutlook == PotionRewardOutlook.None
+            && !new MultiplayerSearchPolicy().Apply(policy with { PredictPotionReward = true }).PredictPotionReward,
+            new { potionRoot.PotionRewardOutlook.ForecastPotionId, potionRoot.PotionRewardOutlook.ReplacementHpCredit });
         SearchPolicySnapshot required = policy with
         { PotionPolicy = SolverPotionPolicy.RequireAtLeastOne, PotionStrategy = new(SolverPotionPolicy.RequireAtLeastOne, []) };
         CombatBeamSolver PotionSolver(BattleDamageSnapshot damage, PotionStrategySnapshot? strategy = null)
@@ -178,6 +182,7 @@ internal static class MultiplayerReviewContracts
         SolverResult requiredResult = Search(requiredSolver);
         int explicitUses = requiredResult.BestNode.Actions.Count(action => action.Kind == PlanActionKind.UsePotion);
         Check("peer_potion_does_not_satisfy_local_requirement", peerPaid.PotionsUsedSoFar == 0
+            && peerPaid.PotionIdsUsedSoFar.Length == 0
             && Effective(requiredSolver) == SolverPotionPolicy.RequireAtLeastOne && explicitUses > 0,
             new { before.PotionsUsedSoFar, afterPeer = peerPaid.PotionsUsedSoFar,
                 effective = Effective(requiredSolver).ToString(), explicitUses, requiredResult.ExpandedNodes });
@@ -196,9 +201,12 @@ internal static class MultiplayerReviewContracts
         Native(held.OnUseWrapper(new ThrowingPlayerChoiceContext(), peer.Creature));
         BattleDamageSnapshot localPaid = BattleDamageTracker.Observe(state);
         Check("local_prior_use_satisfies_requirement", localPaid.PotionsUsedSoFar == 1
+            && localPaid.PotionIdsUsedSoFar.SequenceEqual(new[] { held.Id.Entry })
             && Effective(PotionSolver(localPaid)) == SolverPotionPolicy.Smart,
-            new { localPaid.PotionsUsedSoFar, effective = Effective(PotionSolver(localPaid)).ToString() });
-        Check("tracking_window_and_frozen_request", before.PotionsUsedSoFar == 0 && peerPaid.PotionsUsedSoFar == 0,
+            new { localPaid.PotionsUsedSoFar, localPaid.PotionIdsUsedSoFar,
+                effective = Effective(PotionSolver(localPaid)).ToString() });
+        Check("tracking_window_and_frozen_request", before.PotionsUsedSoFar == 0 && peerPaid.PotionsUsedSoFar == 0
+            && before.PotionIdsUsedSoFar.Length == 0 && peerPaid.PotionIdsUsedSoFar.Length == 0,
             new { before.PotionsUsedSoFar, frozenPeerRequest = peerPaid.PotionsUsedSoFar });
 
         return Finish();

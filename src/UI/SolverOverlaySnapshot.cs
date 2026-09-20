@@ -72,6 +72,16 @@ internal sealed record SolverOverlaySnapshot(
     string? SearchLimitWarningText)
 {
     public string? UnrecoveredLootText { get; init; }
+    internal static (int ProjectedLoss, int TotalRecovered) BattleHpTotalsForDisplay(
+        int lostSoFar, int recoveredSoFar,
+        IReadOnlyDictionary<int, int> lossByTurn,
+        IReadOnlyDictionary<int, int> recoveredByTurn,
+        int startTurnNumber)
+        => (lostSoFar + lossByTurn.Where(item => item.Key >= startTurnNumber).Sum(item => item.Value),
+            recoveredSoFar + recoveredByTurn.Where(item => item.Key >= startTurnNumber).Sum(item => item.Value));
+    public string? RewardOutcomeText { get; init; }
+    public string? UsedPotionOutcomeText { get; init; }
+    public string? PlannedPotionOutcomeText { get; init; }
     public IReadOnlyList<SolverStrategyOutcome> StrategyOutcomes { get; init; } = [];
     public static SolverOverlaySnapshot Capture(SolverResult result, bool unexpectedReplan)
         => CaptureWithReviewedWorldlines(result, unexpectedReplan, reviewedWorldlinesTotal: 0);
@@ -85,14 +95,17 @@ internal sealed record SolverOverlaySnapshot(
             result.StartTurnNumber,
             unexpectedReplan,
             pendingTurnSetup: false,
-            reviewedWorldlinesTotal);
+            reviewedWorldlinesTotal,
+            observedBattleDamage: null);
 
     public static SolverOverlaySnapshot CapturePendingTurnSetup(
         SolverResult result,
+        BattleDamageSnapshot observedBattleDamage,
         int turn,
         bool unexpectedReplan,
         long reviewedWorldlinesTotal = 0)
-        => Capture(result, turn, unexpectedReplan, pendingTurnSetup: true, reviewedWorldlinesTotal);
+        => Capture(result, turn, unexpectedReplan, pendingTurnSetup: true,
+            reviewedWorldlinesTotal, observedBattleDamage);
 
 
     public static SolverOverlaySnapshot CaptureCurrentTurn(SolverCurrentTurnPreview preview)
@@ -105,7 +118,7 @@ internal sealed record SolverOverlaySnapshot(
             .LastOrDefault(action => action.Kind == PlanActionKind.EndTurn);
         SolverOverlayTurnSnapshot currentTurn = new(
             preview.Turn,
-            TurnStartChoices: [],
+            TurnStartChoices: FormatTurnStartChoices(preview.TurnStartChoices),
             actions,
             endTurn == null ? null : CaptureAction(endTurn, [], actions.Length == 0),
             EnemyHpDamageLost: preview.EnemyHpLost,
@@ -187,7 +200,7 @@ internal sealed record SolverOverlaySnapshot(
             .LastOrDefault(action => action.Kind == PlanActionKind.EndTurn);
         return new SolverOverlayTurnSnapshot(
             frontier.Turn,
-            TurnStartChoices: [],
+            TurnStartChoices: FormatTurnStartChoices(frontier.TurnStartChoices),
             frontierActions,
             frontierEndTurn == null ? null : CaptureAction(frontierEndTurn, [], frontierActions.Length == 0),
             EnemyHpDamageLost: frontier.EnemyHpLost,
@@ -202,7 +215,8 @@ internal sealed record SolverOverlaySnapshot(
         int startTurnNumber,
         bool unexpectedReplan,
         bool pendingTurnSetup,
-        long reviewedWorldlinesTotal)
+        long reviewedWorldlinesTotal,
+        BattleDamageSnapshot? observedBattleDamage)
     {
         int searchedTurns = result.StartTurnNumber + result.SearchedTurns - startTurnNumber;
         if (searchedTurns <= 0)
@@ -252,13 +266,18 @@ internal sealed record SolverOverlaySnapshot(
             ? SolverText.Format($"路线已复用，共查阅了 {reviewedWorldlinesTotal:N0} 条世界线")
             : SolverText.Format($"花费了 {result.TotalSearchElapsed.TotalSeconds:F1} 秒，共查阅了 {reviewedWorldlinesTotal:N0} 条世界线");
         bool projectedBattleHpLossKnown = result.CombatEndedTurn.HasValue;
-        int routeHpRecovered = result.HpRecoveredByTurn.Values.Sum();
+        int alreadyLost = observedBattleDamage?.HpLostSoFar ?? result.BattleHpLostSoFar;
+        int alreadyRecovered = observedBattleDamage?.HpRecoveredOrGainedSoFar
+            ?? result.BattleHpRecoveredOrGainedSoFar;
+        (int projectedLost, int routeHpRecovered) = BattleHpTotalsForDisplay(
+            alreadyLost, alreadyRecovered,
+            result.HpLostByTurn, result.HpRecoveredByTurn, startTurnNumber);
         string hpOutcomeText = !projectedBattleHpLossKnown
             ? SolverText.Get("预计战损 未知")
-            : result.ProjectedBattleHpLost > 0
+            : projectedLost > 0 || alreadyLost > 0
                 ? result.ProjectedBattleHpLossIncrease > 0
-                    ? SolverText.Format($"本局扣血  已 {result.BattleHpLostSoFar}    预计 {result.ProjectedBattleHpLost} HP    重算增加 {result.ProjectedBattleHpLossIncrease} HP")
-                    : SolverText.Format($"本局扣血  已 {result.BattleHpLostSoFar}    预计 {result.ProjectedBattleHpLost} HP")
+                    ? SolverText.Format($"本局扣血  已 {alreadyLost}    预计 {projectedLost} HP    重算增加 {result.ProjectedBattleHpLossIncrease} HP")
+                    : SolverText.Format($"本局扣血  已 {alreadyLost}    预计 {projectedLost} HP")
                 : SolverText.Get("本局扣血  0 HP");
         if (result.IsMultiplayerAdvice)
         {
@@ -277,20 +296,23 @@ internal sealed record SolverOverlaySnapshot(
             summaryText,
             reviewSummaryText,
             result.ProjectedBattlePotionCount,
-            result.ProjectedBattleHpLost,
+            projectedLost,
             projectedBattleHpLossKnown,
             hpOutcomeText,
             routeHpRecovered,
             result.PostCombatRelicHeal,
             result.OnlyDeathRoutesFound,
             turns,
-            BuildDetails(result, startTurnNumber, unmirrored, compensated, unexpectedReplan),
+            BuildDetails(result, startTurnNumber, alreadyLost, unmirrored, compensated, unexpectedReplan),
             hasRisk,
             result.IsMultiplayerAdvice && result.BoundaryReason is SearchBoundaryReason.ExternalPlayerChoice
                 or SearchBoundaryReason.UnsupportedEffect or SearchBoundaryReason.PendingChoice
                 ? SolverText.Format($"预测停止于：{(result.BoundaryReason == SearchBoundaryReason.UnsupportedEffect ? SolverText.Get("未支持的战斗效果") : BoundaryText(result.BoundaryReason, result.AdvisoryHorizon))}")
                 : BuildSearchLimitWarning(result.BoundaryReason))
         {
+            RewardOutcomeText = RewardOutcome(result),
+            UsedPotionOutcomeText = UsedPotionOutcome(result),
+            PlannedPotionOutcomeText = PlannedPotionOutcome(result),
             StrategyOutcomes = SolverStrategyOutcomeText.Capture(result.Snapshot.RelicCounters,
                 result.Snapshot.GrowthRewards, result.Snapshot.AllEnemiesDead),
             UnrecoveredLootText = result.OutstandingStolenResource <= 0 ? null
@@ -298,6 +320,45 @@ internal sealed record SolverOverlaySnapshot(
                     ? SolverText.Format($"预计未追回：{cards} 张牌 / {gold} 金币")
                     : SolverText.Format($"路线结束时未追回 {result.OutstandingStolenResource}"),
         };
+    }
+
+    private static string? RewardOutcome(SolverResult result)
+    {
+        PotionRewardOutlook outlook = result.PotionRewardOutlook;
+        if (!outlook.Enabled || result.CombatEndedTurn == null
+            || !result.Snapshot.AllEnemiesDead || result.Snapshot.PlayerDead)
+            return null;
+        return outlook.Forecast switch
+        {
+            PotionRewardForecast.Drop => SolverText.Format($"预计掉落：{SolverUiModelNames.Potion(outlook.ForecastPotionId!, outlook.ForecastPotionId!)}"),
+            PotionRewardForecast.NoDrop => SolverText.Get("预计不掉落药水"),
+            PotionRewardForecast.NoRewards => SolverText.Get("本场无战后奖励"),
+            PotionRewardForecast.Unknown => SolverText.Get("战后掉药未知"),
+            _ => throw new ArgumentOutOfRangeException(nameof(outlook.Forecast)),
+        };
+    }
+
+    private static string? UsedPotionOutcome(SolverResult result)
+    {
+        if (result.BattlePotionsUsedSoFar == 0)
+            return null;
+        if (result.BattlePotionsUsedSoFar != result.BattlePotionIdsUsedSoFar.Length)
+            throw new InvalidOperationException("已用药水数量与身份不一致。");
+        string names = string.Join("、", result.BattlePotionIdsUsedSoFar.Select(id => SolverUiModelNames.Potion(id, id)));
+        return SolverText.Format($"已用药：{result.BattlePotionsUsedSoFar}瓶（{names}）");
+    }
+
+    private static string? PlannedPotionOutcome(SolverResult result)
+    {
+        string[] ids = result.PlannedPotionIds;
+        if (ids.Length != result.PotionCount)
+            throw new InvalidOperationException("路线用药数量与药水身份不一致。");
+        if (ids.Length == 0)
+            return null;
+        string names = string.Join("、", ids.Select(id => SolverUiModelNames.Potion(id, id)));
+        return result.BattlePotionsUsedSoFar == 0
+            ? SolverText.Format($"预计用药：{ids.Length}瓶（{names}）")
+            : SolverText.Format($"还要用：{ids.Length}瓶（{names}）");
     }
 
     private static SolverOverlayTurnSnapshot CaptureTurn(SolverResult result, int turn)
@@ -309,11 +370,8 @@ internal sealed record SolverOverlaySnapshot(
             .FirstOrDefault(action => action.Turn == turn - 1 && action.TurnStartChoices is { Count: > 0 })
             ?.TurnStartChoices
             ?? [];
-        IReadOnlyList<string> turnStartChoices = initialSetupChoices
-            .Concat(continuedTurnChoices)
-            .Where(choice => choice.Effect != PlanChoiceEffect.ApplyKnowledgeCurse)
-            .Select(FormatTurnStartChoice)
-            .ToArray();
+        IReadOnlyList<string> turnStartChoices = FormatTurnStartChoices(
+            initialSetupChoices.Concat(continuedTurnChoices));
         SolverOverlayActionSnapshot[] actions = result.BestNode.Actions
             .Select((action, actionIndex) => (Action: action, Index: actionIndex))
             .Where(item => item.Action.Turn == turn && item.Action.IsExecutable)
@@ -413,6 +471,11 @@ internal sealed record SolverOverlaySnapshot(
         return index;
     }
 
+    private static IReadOnlyList<string> FormatTurnStartChoices(IEnumerable<PlanCardChoice> choices)
+        => choices.Where(choice => choice.Effect != PlanChoiceEffect.ApplyKnowledgeCurse)
+            .Select(FormatTurnStartChoice)
+            .ToArray();
+
     private static string FormatTurnStartChoice(PlanCardChoice choice)
     {
         string source = choice.SourceId switch
@@ -438,6 +501,7 @@ internal sealed record SolverOverlaySnapshot(
     private static string BuildDetails(
         SolverResult result,
         int displayedTurn,
+        int alreadyLost,
         IReadOnlyList<string> unmirrored,
         IReadOnlyList<string> compensated,
         bool unexpectedReplan)
@@ -451,7 +515,7 @@ internal sealed record SolverOverlaySnapshot(
         [
             searchDetails,
             SolverText.Format($"[color={SolverUiTokens.Palette.TextMutedHex}]运行[/color]  后台分配 {FormatMegabytes(result.TotalWorkerAllocatedBytes)} MB  │  GC {result.TotalGen0Collections}/{result.TotalGen1Collections}/{result.TotalGen2Collections}  │  暂停 {result.TotalGcPauseDuration.TotalMilliseconds:F1} ms  │  延迟探测 {result.StandPatProbes}"),
-            SolverText.Format($"[color={SolverUiTokens.Palette.TextMutedHex}]战损[/color]  本局已发生 {result.BattleHpLostSoFar}  │  路线未来卖血 {result.FutureSoldHp}  │  本局累计卖血 {result.SoldHp}"),
+            SolverText.Format($"[color={SolverUiTokens.Palette.TextMutedHex}]战损[/color]  本局已发生 {alreadyLost}  │  路线未来卖血 {result.FutureSoldHp}  │  本局累计卖血 {result.SoldHp}"),
             result.IsMultiplayerAdvice
                 ? SolverText.Format($"多人军师：预计用药 {result.PotionCount} 瓶，重新验证旧路线动作 {result.ReplayedAdviceActions} 个。")
                 : SolverText.Format($"[color={SolverUiTokens.Palette.TextMutedHex}]药水[/color]  本局已喝 {result.BattlePotionsUsedSoFar} 瓶  │  路线还要用 {result.PotionCount} 瓶  │  预计省血 {result.PotionHpSaved}/{result.PotionHpRequired} HP  │  门槛淘汰 {result.PotionBranchesRejected}"),

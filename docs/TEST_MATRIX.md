@@ -1,5 +1,96 @@
 # CombatSolver 测试清单
 
+## 0.43.1（fork）：上游融合验证（2026-09-19）
+
+固定输入：官方 `cccc270 / v0.43.0`，fork 起点 `adfd71e / 0.41.3`；本轮证据统一保存在 `.local/upstream-merge-20260919/`。官方源码由固定引用独立导出并构建，与本分支在独立进程使用相同请求对照。行为 DLL 验证时元数据为 0.43.0，随后仅将版本/发布文档同步为 0.43.1，最终 Release 构建后不重复行为场景。
+
+| 检查 | 本轮输入与直接证据 |
+|---|---|
+| 单人兼容 | `coverage/multiplayer/solo-power-compat.json`，Coordinator、Beam 12、350 节点、12 秒、DOP1。`solo-official/` 与 `solo-merged/`：80 项非时序比较一致，完整 `route.json`（包括选牌）相同，展开 1820、转移 4583、预计扣血 2；见 `solo-comparison.json`。不外推到全部单人路线 |
+| 多人策略 | `--multiplayer-strategy-contracts`，FUZZY_WURM_CRAWLER_WEAK、Beam2、100 节点、1 秒、DOP1。9 个扣血/能力隔离案例，保路、共同周期、用药资格/终局、840 排列、216 三元关系、有效救援、铺垫、已知风险、增量/原生下一回合及 Fork 合同通过；`strategy/` |
+| 终局、早停和药水 | `--multiplayer-review-contracts facts`，10 项通过。完整胜利覆盖旧检查点；满血无损胜利后实际展开至 T3；队友用药不满足本机要求，本机 BLOCK_POTION 同时记录数量 1 与名称，强制/保护/追踪窗口和快照保持；显式打开预测的多人根仍无奖励预读和补货抵扣；`facts/review-facts.json` |
+| 全队跨回合 | `--multiplayer-contracts`，FOGMOG_NORMAL、Beam12、350 节点、12 秒、DOP2。六次原生完整 ContinuationStamp 对账、五/七周期、额外回合、根冻结、队友药水/选择、四张多人卡、药水指令及手动控制通过。23 动作、7 周期、旧前缀重验 1；`multiplayer/` |
+| 手动启动 | `--multiplayer-start-contracts`，FOGMOG_NORMAL、Beam12、100 节点、1 秒、DOP1。本机索引 0/1、结果归属、挂起恢复、三种失败/重试和四次搜索通过；`manual-start/`。网络传输和 Godot 渲染被离线宿主旁路 |
+| 原生 UI 与历史键 | macOS 无头批次 `native/`：`UI-COMPACT-QOL` Passed，runId `macos-0de094f38d7d450fb3034a8143568e6e`，真实按钮节点覆盖普通/建议、搜索、折叠、采用/冻结和独立禁用状态，及原紧凑摘要合同；`COMBAT-HISTORY-COUNTER-KEY` Passed，runId `macos-475e80f91a7c49619d7081d84d317445`，金斧子分支多一次已完成出牌使值/状态键不同，父分支与跨代 Fork 稳定。固定夹具位于 `coverage/unattended/ui-compact-multiplayer-boundary.json` 和 `combat-history-counter-key.json` |
+| 原生冻结与本地化 | macOS 无头批次 `native-continuation/`：`TOASTY-QOL-FROZEN-DIFFERENT` Passed，runId `macos-bbfcd176a87b44a7ad6e321cbe09755c`，沿既有固定夹具将请求上限设为 120 秒、Instant/0 秒，T2 原生手牌页异选后冻结路线只读，拒绝执行/搜索，手动重算恢复；`UI-LOCALIZATION` Passed，runId `macos-566566280a4d46109be6523c85229b9e`，445 项目录、中英简繁、实时能力/遗物选牌及卡牌切换合同通过 |
+| 实例清理 | 两个批次使用仓库 `.local/headless-instances/macos.zcYbee`、`macos.Jqp2OZ`，均带 `--cleanup-instance-on-exit`，启动器成功删除整个实例。直接凭证为 `native-launch.log`、`native-continuation-launch.log`；没有可见 Steam 或用户存档写入 |
+| 构建与边界 | 官方主项目/宿主与最终行为主项目/宿主 Release 均 0 警告、0 错误。Bash `REFACTOR_BOUNDARIES_OK search_files=210`，`boundaries-r1.log`；两端移动入口/药水名称检查已同步，PowerShell 环境不可用，未执行；macOS 启动器语法和实际批次成功；86 个新增本地文档引用、版本一致和 PowerShell CRLF 检查通过。导入的一处文档末尾空行修正后，暂存差异空白检查通过 |
+
+上述 .NET 离线每进程最多 120 秒，原生每请求最多 120 秒。合同含真实托管模型的原生结算，但没有真实网络主机/客户端会话。未验证可见布局、帧性能、所有角色/第三方组合、三/四人、默认百万条转置记录触顶后的广泛质量、完整发布门禁或干净安装。不将静态门禁、编译或上游历史数字当作这些验收。最终构建/发布凭证另记[开发笔记](DEVELOPMENT_NOTES.md)。
+
+以下导入的 0.43.0、0.42.0 与其“未发布”段落均保留上游原始运行历史，不属于本轮执行结果。
+
+## 0.43.0：路线连续性与操作体验（2026-09-19）
+
+- 两回合原生场景 `TOASTY-QOL-MANUAL-SAME` Passed（runId `c82b3f8125cc4b8998047ccabaf3ca7a`）：第 2 回合烘焙手套手牌页按计划手动删牌，精确续用，新增搜索 0、计划外重算 0。`TOASTY-QOL-MANUAL-DIFFERENT` Passed（runId `f42cc57ca55e4c8e8a91a64a42f951a8`）：选另一张牌严格失配并重新计算。固定夹具位于 `coverage/unattended/toasty-qol-*.json`，可用 `pwsh -NoProfile -File tools/run-qol-contracts.ps1 -Case manual-same`（或 `manual-different`）重跑。最初误将生成场景输出路径用作输入的启动失败不计入上述通过结果，隔离实例已清理。
+- `TOASTY-QOL-FROZEN-SAME` Passed（runId `4726fb1c0b1444c58e15a912f604be06`）：第 2 回合原生手牌页冻结后，玩家按计划手动选牌，精确续用且无新搜索。`TOASTY-QOL-FROZEN-DIFFERENT` Passed（runId `9a9e04b913f64057806f8e849255d223`）：异选后旧路线仅供参考，直接请求执行也不搜索、不执行；手动重新计算解除冻结并从真实状态得到可执行路线。
+- `TOASTY-QOL-AUTO-OFF-FULLAUTO` Passed（runId `f19b059e55d5488e9971fa20b3e5a042`）：第 2 回合原生选牌页关闭自动计算后明确开启全自动，计划选择后无搜索续用并开始出牌，计划外重算 0；全自动保持开、自动计算保持关。上述五场均为隔离无头实例，退出后实例删除；未测试可见 Steam。
+- 上一版 `UI-COMPACT-QOL` 曾 Passed（runId `44dd21643d604c6a95c1a0527aa816fe`），但把战损拆成累计受伤、回血和净变化后，界面实际过于冗长。恢复旧摘要前先增加“无回血时仍紧凑”的断言；旧实现按预期失败（runId `6bd1cb09ba2d4785a4c869656de0da17`）。上一轮修正后 `UI-COMPACT-QOL` Passed（runId `a9fafeccff0e45c4956d21c61b93f6ee`），但后来玩家可见实机显示首回合“路线回血 14”，续用到下一回合显示“路线回血 9”；旧实现把实际回血从后续预测中删去、并从“已扣／预计扣”扣除。新增“回血不改累计受伤”断言后原实现按预期 Failed（runId `537783e8716a43f784fa2d8257af71c1`），隔离实例已删除。修正后 `UI-COMPACT-QOL` Passed（runId `ebd827a759f84a0fab2d74aeef662b0c`）：核对本场已受伤加未来逐回合受伤、本场已恢复加未来逐回合恢复；精确续用的纯显示合同中，已发生的 5 HP 回血与余下 9 HP 合计仍是 14，累计扣血不因单纯回血跳变；折叠及无回血时的标签规则也通过。此合同没有真实打完两回合再生药战斗，可见会话新画面仍待玩家验收。模拟不支持 NoGC 的入口仍核对未调用区域启动且未取得/恢复延迟模式所有权；该模拟不等于 Android/iOS 真机验证。`UI-PRIORITY-FEEDBACK` Passed（runId `508238b1cbd74c21bbb41f7459118d52`）：展开和小窗“采用／执行／冻结”各自的可见与禁用状态合同通过。
+- `UI-LOCALIZATION` 修正后 Passed（runId `af8f282e828c4bc486105ff617975849`）：中英简繁 426 项目录占位符与原有路线标签一致；两项隔离无头实例都已删除。可见界面的遮挡和点击体验未验收。
+- 花园幽灵鳗问题定位：本机 CombatSolver 独立日志 `combat-4b7cdbd07e434de0b9f448456daca5be.jsonl` 中首次 `projected_battle_hp_lost=12`，随后第 2–5 回合 `SEARCH_REUSED validation=exact_state_text`，逐回合受伤 7/0/2/0/3；第 3 回合先 `TURN_SETUP_RESULT_PREVIEW` 后 `SEARCH_REUSED`，旧选牌预览源已受伤 0 + 后续 5 与实况 7 + 后续 5 不同。`UI-COMPACT-QOL` 补充当前选牌预览需保留已观察 7 HP 的断言后，旧代码按预期 Failed（runId `d9ccbebf72b343479b6b62cc7ff8448e`，实例已删除）。修正后 `UI-COMPACT-QOL` Passed（runId `0f41076362304db9886cccbc0ab36432`），`TOASTY-QOL-MANUAL-SAME` 的真实第 2 回合原生选牌与精确续用 Passed（runId `28d2a9acedfb48a6ac4387c6745d80da`），其中定向注入“已受伤 7、已回血 2”的预览快照断言通过，新增搜索 0；均用 `-CleanupInstanceOnExit` 删除隔离实例。改动只涉及 UI 主线程快照，原日志不含界面文字或遗物逐效果结算；花园幽灵鳗可见会话新画面仍待玩家验收。
+- 单步执行后原生选牌页按钮回归：本机日志 `combat-5fe601b09c3d4aaab663622187640132.jsonl` 中第 3 回合 `TURN_SETUP_RESULT_PREVIEW` 先于 `NATIVE_CHOICE_VISIBLE` / `TURN_SETUP_PLAN_READY driving=false`，期间没有 `UI_ACTION action=deploy`。新增固定 `coverage/unattended/toasty-qol-single-step-execute.json`，命令 `pwsh -NoProfile -File tools/run-qol-contracts.ps1 -Case single-step-execute`：等待选牌表面准备完毕后，旧版按钮仍禁用，Failed（runId `d69e63aedbde424191ccc2c3d74102f9`）；在准备完成时刷新控件后，触发按钮本身，原生选牌先完成且下一回合开始部署，精确续用、搜索次数不增加、计划外重算 0、全自动保持关闭，最终 Passed（runId `0ae649cacf8d4dc6876f19113764db9e`），实例已删除。首次红灯 `8a42cd9b0bdd47ab961f3040f5a9725c` 发生于页面可见而计划尚未准备好的更早时点，不计为最终失败基线；未追加零受伤场景以外的整场质量结论。可见 Steam 点击与该花园幽灵鳗原场景未复跑。
+- 实时路线的回合开始选牌：`UI-LOCALIZATION` 扩展合同用候选根遗物选牌、下一回合能力选牌、再下一回合遗物选牌核对中英简繁显示；同时核对前沿预览和候选切换后移除旧选择。修复前 Failed（runId `1e1930dbf02b4625b2e50d8e59390ada`，英文的能力/遗物选择均为空），修复后 Passed（runId `4410cb175cef4f569f0efec3b561b4d0`），隔离实例已删除。该合成投影合同不等于可见实机中整场搜索帧时序验收。
+- 路线有效性定时刷新及小窗独立禁用状态接线后，`UI-PRIORITY-FEEDBACK` 再次 Passed（runId `508238b1cbd74c21bbb41f7459118d52`）；`TOASTY-QOL-FROZEN-DIFFERENT` 再次 Passed（runId `b1a30ec68a76481ab16058b2fec312d2`），过期路线没有出牌或计划外搜索，手动重算仍恢复可执行路线。
+- 本机目前没有连接的 Android 设备，也没有本次玩家异常栈；手机端实机未验证。可见界面的实际遮挡、长译文排版与点击体验留作人工验收。未验证的场景不计为通过。
+
+## 0.42.0：发布构建
+
+- 合入 #109、#111、#112、#113、#114 与 #115 后，相关语义、界面、搜索和内存定向验证见下方各节；版本提升只改 manifest、项目版本与发布文案，不重复行为场景。已知未验证范围包括默认转置表触顶后的广泛整场质量，以及可见 Steam 会话性能与排版。
+
+## 未发布：PR #114 原始分支与 #115 集成
+
+- 原分支的 `PortfolioSelectorChecks` 12 组 410 断言、`BeamOrderingKeyChecks` 8 组 549747 断言、`BeamWidthPortfolioChecks` 93 项，以及 No-GC 和内存截断、转置表上下限的原始对照均属 PR #114 基线证据，见各研究报告；不能当作现行主线组合已通过。当前整合后的验证和未通过项在本节续记。
+- 默认值核对：转置支配表合计上限 1,000,000 为唯一新增的默认搜索决策；无进展截断=0、基线组合成员=true、状态键盐/牌堆顺序商/转置消融=0；无有效环境模型时学习型门控不启用。低于上限的原分支对照不能证明触顶后的路线质量，完整关闭剪枝的消融也不是质量代价上界。
+- 本次原分支并入现行 main 后，Windows 结构门禁 `REFACTOR_BOUNDARIES_OK search_files=204`；主 DLL Release 编译 0 警告，完整工程只因本机缺 .NET Framework 4.8 引用程序集停在 MemoryCleaner；离线宿主 Release 0 警告/错误。`GcPolicyChecks` 基础 26 项和 `recovery` 9 项、`PortfolioSelectorChecks` 12 组 410 断言、`BeamOrderingKeyChecks` 8 组 549747 断言、`BeamWidthPortfolioChecks` 93 项通过。
+- 当前合并组合的固定故障机器人/FUZZY_WURM 根（Custom、beam 30、nodes 2000、DOP1、Coordinator+组合）对已合入 #115 的同根产物比较 72 字段 `IDENTICAL`，包含路线和续用文本；默认 100 万条对同一代码的无限制版也是 72 字段 `IDENTICAL`、展开 236、转移 832。测试上限设为 50 时两表恰好 34+16 条、`transpositionLimitBypasses=957`；这一个根的 72 个决策字段仍相同，不代表其他根的触顶质量。原 #114 新宿主不能直接加载旧 #115 DLL（实验策略接口不同），跨版本对照沿用此前 #115 宿主产物，不把失败的直接加载记为通过。
+- 内存截断受控样本（铁甲战士/FUZZY_WURM、1 GB No-GC、600 MiB 活压力、阈值 1）得到 `MemoryNoProgress`、展开 1、可执行的防御牌 + EndTurn 两步路线、组合成员 `MemoryTruncated`；这是注入压力，不代表真实长搜的质量。DOP2 组合测量完整结束，实际最大并发 2，`phasePerformance` 写入宿主结果；首次整合时该字段为空，已修复并复测。尚无默认 100 万条触顶后的广泛整场质量对照，也未跑可见 Steam/正常会话性能。
+
+## 未发布：选中路线续用戳与诊断指标收口（从 PR #114 提取）
+
+- 本轮只提取最终选中路径的续用戳构造和显式度量失败路径；不引入内存无进展截断、转置表默认上限或实验开关。Windows 隔离无头 `SINGLE-SEARCH-PROFILE -MeasureSearchPhases` Passed，覆盖四档预设、单一进度阶段与固定工作量；离线宿主当前 main 对提取组合的故障机器人/FUZZY_WURM 单根（DOP 1、beam 30、2000 节点）72 个字段 `IDENTICAL`，包含第 2/3 回合两份非空续用状态文本，双方展开 236、转移 832。重型 `SEARCH-POLICY-SNAPSHOT` 在 120 秒上限内未完成，未将失败 lane 排空的原生合同记作通过；原生实例已清理。
+
+## 未发布：生成卡池复用（从 PR #114 提取）
+
+- 原分支 Crossbow 站点的定向 A/B 与其它遗物站点回退依据见[遗物印牌站点复用](performance/relic-generation-pool-reuse-20260919.md)。本轮 Windows 隔离无头 `TURN-START-GENERATION-CACHE` Passed（27 项对照：顺序、Fork 共享、可变约束回退、完整 RNG/历史、独立生成卡和父/实况不变）；`POTION-GENERATION-CACHE` Passed（8 项对照：卡牌状态、五字段 RNG、升级和父/实况不变）。这两项不代表当前 main 的受控提速或可见帧结论。
+
+## 未发布：模型 ID 纯值缓存（从 PR #114 提取）
+
+- 原分支的定向根及 A/B 范围见[ModelDb.GetId 记忆化](performance/defect-modeldb-getid-cache-20260919.md)；本轮组合离线单根字段级对照见上方，不将旧分支的时间、分配数字外推到本次 main 或可见帧。
+
+## 未发布：No-GC 区域准入下限（从 PR #114 提取）
+
+- `tools/CombatSolver.GcPolicyChecks` 在本轮提取组合上全部 26 项通过，其中 `admission` 6 项覆盖 12 GiB 配置在系统余量下只得到 2.97 GiB 时拒绝、平台尺寸回退保持准入及边界值；原分支结果见[报告](performance/no-gc-region-admission-20260917.md)。Windows 结构门禁 `REFACTOR_BOUNDARIES_OK search_files=203`，主 DLL Release 编译 0 警告；完整工程构建因本机缺少 .NET Framework 4.8 参考程序集停在 MemoryCleaner 辅助程序。未做可见 Steam、广泛战斗质量或受控墙钟对照。
+
+## 未发布：状态键补整场历史计数（2026-09-19）
+
+- 离线宿主对上游 0.41.0（High 90/50000、Coordinator、Smart、DOP 1、`fixedSearchBudget`，`compare_results.py` 排除耗时/内存字段）：EQ 10 根只有 `NECROBINDER-ELITE-00`（牌组含亡魂牵引）不一致，其余 9 根 983 字段一致；FULL 40 根只有 4 根不一致（`NECROBINDER-ELITE-00`、`SILENT-BOSS-01`、`SILENT-ELITE-03`、`SILENT-BOSS-03`），按生成场景 loadout 核对正是全部含金斧/亡魂牵引/谋杀的根，其余 36 根一致；GA 10 根（EQ 规格 + 无色牌固定含一张金斧）全部不一致。15 根受影响根：战损 2 根下降（48→29、9→8）、0 根上升、0 根胜负翻转，展开量比 0.997–1.000。
+- 无条件追加的对照（未采用）：46/50 根路线变化、胜负 3 负 1 正，见[状态键历史计数报告](strategy/state-key-history-counters-20260919.md)。
+- PR 原分支 Release 编译 0 警告 0 错误（`CopyModOnBuild=false`）；Bash 结构门禁 `REFACTOR_BOUNDARIES_OK search_files=193`。以上是合并前证据；本次合并后的验证另记于下方。
+- 合并到含 #111/#112 的 main 后，`COMBAT-HISTORY-COUNTER-KEY` 在 Windows 仓库内隔离无人实例 Passed：根手牌含金斧与防御，两个同根分支只有子分支追加一次已完成出牌历史；金斧动态伤害相差 1，完整搜索状态键不同，Fork 后子键不变、父键不变。命令：`pwsh -NoProfile -File tools/run-unattended-test.ps1 -ScenarioId COMBAT-HISTORY-COUNTER-KEY -CharacterId IRONCLAD -EncounterId FUZZY_WURM_CRAWLER_WEAK -EnemyCurrentHp 100 -ClearPlayerPiles -CardsJson '[{"CardId":"GOLD_AXE","Pile":"Hand"},{"CardId":"DEFEND_IRONCLAD","Pile":"Hand"}]' -CleanupInstanceOnExit -TimeoutSeconds 120`；结果 `UNATTENDED_INSTANCE_REMOVED`。夹具比较搜索 Snapshot 的真实 `StateKey`，不声称这份合成历史是原生完整出牌差分。
+- 本轮 Windows 结构门禁 `REFACTOR_BOUNDARIES_OK search_files=203`。主 DLL Release 编译 0 警告；完整 `dotnet build` 因本机缺少 .NET Framework 4.8 参考程序集，停在 MemoryCleaner 辅助程序。未跑整场、可见 Steam 或合并组合的离线 EQ/FULL 对照；历史性能没有受控墙钟结论。
+
+## 未发布：预测战后掉药与满栏用药门槛（2026-09-18）
+
+- `POTION-REWARD-FORECAST` 新场景（`coverage/unattended/potion-reward-forecast.json`）：开战捕获根后，让原版 `RewardsSet` 在同一条奖励 RNG 上真实生成奖励并逐项比对掉落结论与药水 ID。macOS 隔离无头实例（`.local/headless-mac/run_mac_unattended.sh`，`--headless --force-steam=off`，HOME 隔离）8/8 Passed：SILENT / FUZZY_WURM_CRAWLER_WEAK / Monster 四个种子（Drop FRUIT_JUICE、NoDrop、Drop FLEX_POTION、NoDrop）、BYGONE_EFFIGY_ELITE / Elite 两个种子（Drop FRUIT_JUICE、NoDrop）、QUEEN_BOSS / Boss（Drop FRUIT_JUICE）、未满栏 1 瓶（NoDrop）。铁甲战士在全新 profile 下前几场是教程奖励集，镜像退回 `Unknown`，场景据此改用静默猎手。
+- `PR15-POTION-VALUE-TIERS` Passed（同一无头实例）：新增概率镜像（精英 +0.125、夹在 [0,1]）、额度（Drop 按档位、NoDrop/NoRewards 为 0、Unknown 按概率 × 9、未满栏或 Sozu 为 0）、路线级扣减（只扣一次、下限 1 HP）与 1 HP 门槛挡住零收益用药的断言，以及根快照前景字段与实况一致。
+- 离线宿主等价性：`EQ` 10 根（5 角色 × 精英/Boss，A10，1 瓶药未满栏，High 90/50000，Coordinator，Smart，DOP 1），上游 0.41.0 DLL 对本分支 DLL `compare_results.py` 983 字段 `IDENTICAL`。比较脚本本轮新增排除首条路线发布时间、峰值堆与组合成员内嵌的耗时/分配字段。
+- 离线宿主满栏对照：`FULL` 40 根（同语料 × 4 种子，2 瓶药 = A10 满栏）：3 根变化，全部战损下降（27→22、52→32、18→14，合计 −29），用药 +4，完整胜利 25/25 不变，两版搜索工作量逐根相同。额度扣到 0 的第一版有 2 根坏变化（多掉 15 血；白用一瓶），改为下限 1 HP 后消失。详见[战后掉药预测报告](strategy/potion-reward-outlook-20260918.md)。
+- Release 编译 0 警告 0 错误；Bash 结构门禁 `REFACTOR_BOUNDARIES_OK search_files=193`。未运行可见 Steam、未运行 Windows/Linux 无人入口。
+- 合并接入（2026-09-19，Windows 仓库内隔离无头）：`PR15-POTION-VALUE-TIERS` 静默猎手默认关闭 1 场 Passed，断言设置默认/持久化、关闭时根无前景、零成本药水不被抬价；同场 `RequireAtLeastOne` 强制一瓶另跑 1 场 Passed，终局回放与摘要的用药身份/数量一致。`POTION-REWARD-FORECAST` 静默猎手、A10、满栏两瓶 1 场 Passed：原生奖励与预测同为 `FRUIT_JUICE`，开启时完整胜利摘要显示掉药；`UI-LOCALIZATION` 1 场 Passed，eng/zhs/zht 共 438 个模板并核对新设置控件。四场均报告 `UNATTENDED_INSTANCE_REMOVED`。首次使用全新铁甲战士档案跑 PR15 时旧断言把教程 `Unknown` 当失败；改用非教程角色后通过，本批未改教程规则。
+- 主 DLL 使用 Windows 游戏依赖、跳过本机未安装的 .NET Framework 4.8 辅助程序目标完成 Release 编译，0 警告 0 错误；Windows 结构门禁 `REFACTOR_BOUNDARIES_OK search_files=193`。完整 Windows `dotnet build` 因缺少 .NET Framework 4.8 引用程序集失败；无头入口使用同仓库现成的 MemoryCleaner 辅助程序副本。未做可见 Steam 人工排版验收，历史离线 FULL 对照是原始无开关的开启前景实验，不作为本次默认关闭质量结论。
+
+## 未发布：技术债静态审计与分片整理
+
+- 安全清理仅普通Release与门禁；克隆复用、保路纯移动、展开纯移动各一次EQ10，均IDENTICAL（每批983项字段、600项剪枝计数）。
+- 最终仅一次EQ10+FULL40，IDENTICAL（4673项字段、3000项剪枝计数），双侧100份有效、无时间边界；复用指定0.41.0基线结果与比较器，未重跑基线。固定High 90/50000、Coordinator、Smart、DOP1、workers=2。
+- 229/100项保路/展开成员文本分别由Roslyn核对；保路5项字段声明顺序不变。BeamRankSortChecks独立合同720组/167280条目通过。最终Release 0警告/0错误，CopyModOnBuild=false；Bash门禁search_files=201。
+- 本轮没有原生游戏/无人场景验收；审计工具复跑说明在[CodeDebt](../tools/CodeDebt/README.md)，逐批产物位置见[技术债审计](refactoring/tech-debt-audit-2026-09-18.md)。
+
+## 未发布：代码整洁度清理
+
+- 私有死代码与多余using清理：EQ 10根对上游0.41.0为 `IDENTICAL`（983项比较字段、600项剪枝计数）；循环出口共享排序后缀：EQ 10 + FULL 40根为 `IDENTICAL`（4673项比较字段、3000项剪枝计数），双侧100份结果有效且未触及时间边界。
+- 两阶段Release构建均为0警告/0错误，均带 `CopyModOnBuild=false`；Bash结构门禁均为 `REFACTOR_BOUNDARIES_OK search_files=192`。固定High 90/50000、Coordinator、Smart、DOP1，离线宿主workers=2；未运行原生游戏场景。
+- 比较器沿用已修正的递归遥测排除口径，保留路线、根状态、目录指纹、组合成员选择和确定性工作指标；不比较时间/内存。基线末根曾受一次误启动后取消的构建干扰，已排除并仅补跑该根。详细范围、原始失败记录、保留项及本地证据路径见[代码整洁度报告](refactoring/code-hygiene-review-2026-09-18.md)。
 ## 0.41.3（fork）定版验证范围（2026-09-19）
 
 本版发布 F01/F02/F03，撤回 `cb427b5` 的动作成本生产接入；默认仍用完整路线动作数，实验只在离线宿主内派生。现场为 `.local/release-0.41.3/`。本轮普通 .NET 宿主不启动 Godot、Steam 或网络；两个请求分别限制在 120 秒内。

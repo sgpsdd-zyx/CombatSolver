@@ -138,7 +138,7 @@ internal static class MultiplayerContracts
             Native(CardPileCmd.AddGeneratedCardToCombat(card, PileType.Hand, local));
             Native(PlayerCmd.GainEnergy(3, local));
             var target = card.TargetType == TargetType.AnyAlly ? peer.Creature : state.Enemies[0];
-            var actionRoot = CombatRootSnapshot.Capture(state, true);
+            var actionRoot = CombatRootSnapshot.Capture(state, multiplayerAdvisor: true);
             var branch = actionRoot.ForkSimulator();
             var combat = (SimulatedCombatState)branch.State.CombatState;
             combat.BeginActionChoices((IReadOnlyList<PlanCardChoice>?)null);
@@ -151,7 +151,7 @@ internal static class MultiplayerContracts
         foreach (var potion in local.PotionSlots.ToArray()) potion?.Discard();
         PotionModel block = ModelDb.Potion<BlockPotion>().ToMutable();
         Native(PotionCmd.TryToProcure(block, local));
-        var potionRoot = CombatRootSnapshot.Capture(state, true);
+        var potionRoot = CombatRootSnapshot.Capture(state, multiplayerAdvisor: true);
         int slot = local.GetPotionSlotIndex(block);
         var potionSolver = new CombatBeamSolver(potionRoot, SolverDisplayNames.Capture(state),
             BattleDamageTracker.Observe(state), policy, searchProfile: policy.Profile);
@@ -163,7 +163,7 @@ internal static class MultiplayerContracts
         AssertNativeState(state, potionRoot, predicted.Simulator, "potion thrown at peer");
         predicted.ReleaseSimulator();
 
-        var choiceRoot = CombatRootSnapshot.Capture(state, true);
+        var choiceRoot = CombatRootSnapshot.Capture(state, multiplayerAdvisor: true);
         var choiceBranch = choiceRoot.ForkSimulator();
         var choiceCombat = (SimulatedCombatState)choiceBranch.State.CombatState;
         bool refused = false;
@@ -194,7 +194,7 @@ internal static class MultiplayerContracts
     {
         loop.RunUntilCompleted(PowerCmd.Apply<AmbergrisPower>(new ThrowingPlayerChoiceContext(),
             local.Creature, 1, local.Creature, null), TimeSpan.FromSeconds(20), "Extra turn setup");
-        var root = CombatRootSnapshot.Capture(state, true);
+        var root = CombatRootSnapshot.Capture(state, multiplayerAdvisor: true);
         var solver = new CombatBeamSolver(root, SolverDisplayNames.Capture(state),
             BattleDamageTracker.Observe(state), policy, searchProfile: policy.Profile);
         var predicted = solver.ReplayMultiplayerForTesting([new(PlanActionKind.EndTurn, root.StartTurnNumber)]);
@@ -219,7 +219,7 @@ internal static class MultiplayerContracts
         void Native(Task task) => loop.RunUntilCompleted(task, TimeSpan.FromSeconds(20), "Potion/choice setup");
         Player peer = state.Players.First(player => player != local);
         Native(PowerCmd.Apply<ToolsOfTheTradePower>(new ThrowingPlayerChoiceContext(), peer.Creature, 1, peer.Creature, null));
-        var choiceRoot = CombatRootSnapshot.Capture(state, true);
+        var choiceRoot = CombatRootSnapshot.Capture(state, multiplayerAdvisor: true);
         var solver = new CombatBeamSolver(choiceRoot, SolverDisplayNames.Capture(state),
             BattleDamageTracker.Observe(state), policy, searchProfile: policy.Profile);
         var choice = solver.ReplayMultiplayerForTesting([new(PlanActionKind.EndTurn, choiceRoot.StartTurnNumber)]);
@@ -227,7 +227,7 @@ internal static class MultiplayerContracts
         choice.ReleaseSimulator();
         Native(PowerCmd.Remove(peer.Creature.GetPower<ToolsOfTheTradePower>()!));
         Native(PowerCmd.Apply<ToolsOfTheTradePower>(new ThrowingPlayerChoiceContext(), local.Creature, 1, local.Creature, null));
-        SolverResult localChoice = Solve(CombatRootSnapshot.Capture(state, true),
+        SolverResult localChoice = Solve(CombatRootSnapshot.Capture(state, multiplayerAdvisor: true),
             policy with { VerifyIncrementalSearch = true }, loop);
         Require(localChoice.BestNode.Actions.Any(action => action.TurnStartChoices is { Count: > 0 }),
             "local turn-start choices remain searchable");
@@ -236,7 +236,7 @@ internal static class MultiplayerContracts
         foreach (PotionModel? held in local.PotionSlots.ToArray()) held?.Discard();
         PotionModel attack = ModelDb.Potion<AttackPotion>().ToMutable();
         Native(PotionCmd.TryToProcure(attack, local));
-        var generationRoot = CombatRootSnapshot.Capture(state, true);
+        var generationRoot = CombatRootSnapshot.Capture(state, multiplayerAdvisor: true);
         solver = new CombatBeamSolver(generationRoot, SolverDisplayNames.Capture(state),
             BattleDamageTracker.Observe(state), policy, searchProfile: policy.Profile);
         var options = solver.BuildOpeningPotionActions();
@@ -260,7 +260,7 @@ internal static class MultiplayerContracts
         foreach (var enemy in state.Enemies) enemy.SetCurrentHpInternal(10);
         PotionModel fire = ModelDb.Potion<FirePotion>().ToMutable();
         Native(PotionCmd.TryToProcure(fire, local));
-        var root = CombatRootSnapshot.Capture(state, true);
+        var root = CombatRootSnapshot.Capture(state, multiplayerAdvisor: true);
         int slot = local.GetPotionSlotIndex(fire);
         SolverResult lethal = Solve(root, policy, loop);
         Require(lethal.Snapshot.AllEnemiesDead && lethal.CombatEndedTurn == root.StartTurnNumber

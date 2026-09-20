@@ -2,9 +2,7 @@ using System.Reflection;
 using Godot;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Context;
-using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Helpers;
-using MegaCrit.Sts2.Core.Logging;
 using MegaCrit.Sts2.Core.Modding;
 using MegaCrit.Sts2.Core.Nodes;
 using MegaCrit.Sts2.Core.Runs;
@@ -12,7 +10,6 @@ using STS2RitsuLib;
 using STS2RitsuLib.Interop;
 using STS2RitsuLib.Patching.Core;
 using CombatSolver.Api;
-using CombatSolver.Engine.InCombat.Simulation;
 
 namespace CombatSolver;
 
@@ -72,6 +69,7 @@ public static class Entry
         patcher.RegisterPatch<BaseLibDynamicVarCloneMetadataPatch>();
         patcher.RegisterPatch<RitsuDynamicVarCloneMetadataPatch>();
         patcher.RegisterPatch<PowerDynamicVarMaterializationGuardPatch>();
+        patcher.RegisterPatch<ModelDbGetIdCachePatch>();
         patcher.RegisterPatch<PowerAmountComparisonPatch>();
         patcher.RegisterPatch<RichTextEnvironmentLifetimePatch>();
         patcher.RegisterPatch<NodePoolSignalLifetimePatch>();
@@ -170,7 +168,7 @@ public static class Entry
             || SolverController.SolverDisabled
             || SolverController.IsMultiplayerSession
             || !UnattendedTestRunner.AutomaticTurnSearchEnabled
-            || !SolverController.AutomaticCalculationEnabled
+            || !SolverController.ShouldAutomaticallySearchNextTurn
             || SolverController.AutomaticSearchPaused
             || !CombatManager.Instance.IsInProgress
             || !ReferenceEquals(CombatManager.Instance.DebugOnlyGetState(), state)

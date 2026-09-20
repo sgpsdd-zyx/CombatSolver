@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "scenarioId": "COMBAT-HISTORY-COUNTER-KEY",
+  "enemyCurrentHp": 999,
+  "clearPlayerPiles": true,
+  "cards": [
+    { "cardId": "GOLD_AXE", "pile": "Hand", "count": 1 },
+    { "cardId": "DEFEND_IRONCLAD", "pile": "Hand", "count": 1 }
+  ],
+  "timeoutSeconds": 120,
+  "notes": "A finished card play changes Gold Axe and the child state key while preserving its parent and grandchild fork invariants."
+}

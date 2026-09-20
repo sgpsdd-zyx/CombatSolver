@@ -59,6 +59,7 @@ internal sealed class CombatRootSnapshot
     public bool HasUnusedCardReplayAllocator { get; }
     public bool HasRenewablePotionShapedRock { get; }
     public PostCombatRelicHealProfile PostCombatRelicHeal { get; }
+    public PotionRewardOutlook PotionRewardOutlook { get; }
     internal HookLayoutCacheStatistics HookLayoutCacheStatistics
         => ((SimulatedCombatState)_rootSimulator.State.CombatState).HookLayoutCacheStatistics;
     internal HookListenerSegmentStatistics HookListenerSegmentStatistics
@@ -94,7 +95,8 @@ internal sealed class CombatRootSnapshot
         bool hasUnusedCardReplayAllocator,
         bool hasRenewablePotionShapedRock,
         PostCombatRelicHealProfile postCombatRelicHeal,
-        int initialPlayerRoundHpLost)
+        int initialPlayerRoundHpLost,
+        PotionRewardOutlook potionRewardOutlook)
     {
         PlayerIdentity = playerIdentity;
         Enemies = enemies;
@@ -132,12 +134,14 @@ internal sealed class CombatRootSnapshot
         HasUnusedCardReplayAllocator = hasUnusedCardReplayAllocator;
         HasRenewablePotionShapedRock = hasRenewablePotionShapedRock;
         PostCombatRelicHeal = postCombatRelicHeal;
+        PotionRewardOutlook = potionRewardOutlook;
     }
 
-    public static CombatRootSnapshot Capture(CombatState state)
-        => Capture(state, SolverController.IsMultiplayerSession);
+    public static CombatRootSnapshot Capture(CombatState state, bool predictPotionReward = false)
+        => Capture(state, SolverController.IsMultiplayerSession, predictPotionReward);
 
-    internal static CombatRootSnapshot Capture(CombatState state, bool multiplayerAdvisor)
+    internal static CombatRootSnapshot Capture(CombatState state, bool multiplayerAdvisor,
+        bool predictPotionReward = false)
     {
         if (!NGame.IsMainThread())
             throw new InvalidOperationException("Combat root snapshot must be captured on the main thread.");
@@ -192,6 +196,9 @@ internal sealed class CombatRootSnapshot
             .Any(relic => !relic.IsMelted);
         PostCombatRelicHealProfile postCombatRelicHeal = CapturePostCombatRelicHeal(
             simulatedCombat.RelicsOf(player));
+        PotionRewardOutlook potionRewardOutlook = predictPotionReward && !advisor
+            ? PotionRewardOutlook.Capture(player, state, simulatedCombat.RelicsOf(player))
+            : PotionRewardOutlook.None;
         SearchablePotionSlotSnapshot[] searchablePotions = player.PotionSlots
             .Select((potion, slot) => (Potion: potion, Slot: slot))
             .Where(item => item.Potion != null && PotionOnUseSupport.CanSearch(item.Potion))
@@ -270,7 +277,8 @@ internal sealed class CombatRootSnapshot
             hasUnusedCardReplayAllocator,
             hasRenewablePotionShapedRock,
             postCombatRelicHeal,
-            initialPlayerRoundHpLost);
+            initialPlayerRoundHpLost,
+            potionRewardOutlook);
     }
 
     /// <summary>

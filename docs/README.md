@@ -1,6 +1,6 @@
 # CombatSolver 文档导航
 
-当前 fork 已发布 [0.41.3](releases/0.41.3-RELEASE_NOTES.md)，修复基于官方 0.41.0 的多人胜利路线判断、搜索早停和本机用药要求；见 [多人指南与兼容记录](multiplayer-advisor.md)。对应源码使用 `v0.41.3`，官方 `v0.41.0` 保留原指向。
+当前 fork [0.43.1](releases/0.43.1-RELEASE_NOTES.md) 基于官方 0.43.0，融合冻结路线、原生选牌续用、可选战后药水预测与历史/内存处理更新，保留手动七周期多人军师。见 [多人指南与兼容记录](multiplayer-advisor.md#官方-0430-兼容同步)；发布凭证见[开发笔记](DEVELOPMENT_NOTES.md)。官方标签保持原指向。
 
 通用随机/指定战斗测试入口：[场景生成与批量重跑](GENERATED_COMBAT_SCENARIOS.md)。
 
@@ -18,6 +18,10 @@
 | 七周期窗口、真人队友偏移与共同周期动作成本 | [2026-09-19 研究与实验](strategy/pro-horizon-20260919/README.md)；保留七周期，动作成本调整仅留离线实验 |
 | 0.41.2 的第二轮 6 Pro 复审与首批修正 | [第二轮归档](strategy/pro-review-0412-20260918/README.md)、[本地复核](strategy/pro-review-0412-20260918/local-review.md)、[实施与收尾](strategy/pro-review-0412-20260918/implementation.md)；F01/F02/F03 纳入 0.41.3 定版 |
 | 0.41.1 的 ChatGPT 6 Pro 审查结论、策略设计原文与本地复核 | [复审归档](strategy/pro-review-20260918/README.md)、[本地复核与采用边界](strategy/pro-review-20260918/local-review.md)；旧版输入见[历史索引](strategy/README.md#多人研究归档) |
+| 状态键为什么要含整场历史计数、条件式与无条件追加的对照 | [状态键历史计数报告](strategy/state-key-history-counters-20260919.md) |
+| 战后掉药预测（奖励 RNG 镜像）与满栏用药门槛 | [战后掉药预测报告](strategy/potion-reward-outlook-20260918.md) |
+| 0.41.0代码体量、死代码诊断与保持行为的轻度清理 | [代码整洁度审查](refactoring/code-hygiene-review-2026-09-18.md) |
+| 全量静态诊断、克隆、耦合与技术债分批清理 | [技术债深挖](refactoring/tech-debt-audit-2026-09-18.md) |
 | 能力牌逐卡建模、统一估值接口与后续独立搜索分支 | [能力牌优化计划](strategy/power-card-valuation-plan-20260917.md) |
 | 无需训练的有界新颖性／Beam 组合、实验开关和完整对照 | [有界多策略搜索](strategy/bounded-novelty-search-20260916.md) |
 | 不启动 Godot 批量跑搜索、量宽度与预算 | [离线搜索宿主](OFFLINE_SEARCH_HARNESS.md) |
@@ -35,6 +39,12 @@
 | 女王原包为何恢复失败、为何频繁GC及本轮优化取舍 | [恢复与性能报告](performance/queen-replay-optimization-20260913.md) |
 | 未变状态共享、标签/大牌堆容器优化与女王GC问题 | [调查与实测](performance/state-sharing-20260913.md) |
 | 内存主要花在哪里，什么条件才能缩至十分之一 | [分配与峰值研究](performance/memory-tenfold-20260913.md) |
+| 重型根的纯值模型 ID 缓存与定向 A/B | [ModelDb.GetId 记忆化](performance/defect-modeldb-getid-cache-20260919.md) |
+| 遗物印牌站点仅 Crossbow 复用根生成池 | [遗物印牌站点复用](performance/relic-generation-pool-reuse-20260919.md) |
+| PR #114 转置表上限的决策代价和固定根证据 | [搜索保留表](performance/search-retention-bounds-20260919.md) |
+| PR #114 内存截断、续用戳与排他阶段测量 | [搜索内存恢复](performance/search-memory-recovery-20260919.md) |
+| PR #114 离线宿主保真与 16 并行基线 | [16 并行阶段归因](performance/dop16-veryhigh-fidelity-20260919.md) |
+| 默认关闭的学习型组合选择器和训练反例 | [学习型门控](strategy/learned-portfolio-gate-20260917.md) |
 | 943份计划外重算报告、16类已修机制及证据缺口 | [2026-09-13批次结果](issues/report-replans-20260913.md) |
 | 环绕轨道、自动化的持续返能估值与实战对照 | [返能能力估值](issues/recurring-energy-valuation-20260913.md) |
 | 后续六方向的当前诊断、逐项实现与对照 | [六方向开发记录](performance/six-directions-20260913.md) |

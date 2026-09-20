@@ -1,5 +1,4 @@
 using MegaCrit.Sts2.Core.Entities.Cards;
-using MegaCrit.Sts2.Core.Models;
 using CombatSolver.Engine.InCombat.Simulation;
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -63,6 +62,8 @@ internal enum SearchBoundaryReason
     TimeLimit,
     AdvisoryHorizon,
     ExternalPlayerChoice,
+    /// <summary>搜索内连续回收未腾出余量，本成员发布当前前沿后停止。</summary>
+    MemoryNoProgress,
 }
 
 internal enum SolverResultScope
@@ -1345,16 +1346,12 @@ internal sealed class SimulationSnapshot(
     public IReadOnlySet<uint> ProcessedEnemyDeaths { get; } = processedEnemyDeaths;
     public SearchBoundaryReason BoundaryReason { get; } = boundaryReason;
     public IReadOnlyList<PredictionGap> PredictionGaps { get; } = predictionGaps;
-    public ContinuationStamp? Continuation { get; private set; }
 
     public CombatPredictionSimulator Simulator => _simulator
         ?? throw new InvalidOperationException(
             $"搜索快照的模拟器已经释放：{_releasedBy ?? "unknown"}:{_releasedAtLine}。");
 
     public bool HasSimulator => _simulator != null;
-
-    public void SetContinuation(ContinuationStamp continuation)
-        => Continuation = continuation;
 
     public void ReleaseSimulator(
         [CallerMemberName] string caller = "",
@@ -1576,8 +1573,12 @@ internal sealed class SolverResult
     public required int SoldHp { get; init; }
     public required int FutureSoldHp { get; init; }
     public required int BattleHpLostSoFar { get; init; }
+    public int BattleHpRecoveredOrGainedSoFar { get; init; }
     public required int ProjectedBattleHpLost { get; init; }
     public required int BattlePotionsUsedSoFar { get; init; }
+    public required string[] BattlePotionIdsUsedSoFar { get; init; }
+    public required string[] PlannedPotionIds { get; init; }
+    public required PotionRewardOutlook PotionRewardOutlook { get; init; }
     public required int PotionCount { get; init; }
     public required int ExplicitPotionCount { get; init; }
     public int ProjectedBattlePotionCount => BattlePotionsUsedSoFar + PotionCount;
@@ -1612,6 +1613,12 @@ internal sealed class SolverResult
     public required BossHpRelief BossHpRelief { get; init; }
     public required TimeSpan Elapsed { get; init; }
     public required IReadOnlyList<CachedContinuation> Continuations { get; init; }
+    public int TranspositionCount { get; init; }
+    public int ExpandedTranspositionCount { get; init; }
+    public int TranspositionLimitBypasses { get; init; }
+    public int StandPatCacheCount { get; init; }
+    public int ThreatProjectionCacheCount { get; init; }
+    public int CoverageCacheCount { get; init; }
     public bool WasReused { get; init; }
     public int? ReusedFromTurn { get; init; }
     public bool RecalculatedAfterCompleteProjection { get; internal set; }
@@ -1674,6 +1681,12 @@ internal sealed class SolverResult
             StartTurnNumber = cached.StartTurnNumber,
             TurnSetupChoices = TurnSetupChoices,
             TurnSetupPlayState = TurnSetupPlayState,
+            TranspositionCount = TranspositionCount,
+            ExpandedTranspositionCount = ExpandedTranspositionCount,
+            TranspositionLimitBypasses = TranspositionLimitBypasses,
+            StandPatCacheCount = StandPatCacheCount,
+            ThreatProjectionCacheCount = ThreatProjectionCacheCount,
+            CoverageCacheCount = CoverageCacheCount,
             BestNode = BestNode,
             Snapshot = Snapshot,
             Forecast = slicedForecast,
@@ -1727,8 +1740,12 @@ internal sealed class SolverResult
             SoldHp = battleDamage.SoldHpCommitted + remainingSold,
             FutureSoldHp = remainingSold,
             BattleHpLostSoFar = battleDamage.HpLostSoFar,
+            BattleHpRecoveredOrGainedSoFar = battleDamage.HpRecoveredOrGainedSoFar,
             ProjectedBattleHpLost = battleDamage.HpLostSoFar + totalRemainingLoss,
             BattlePotionsUsedSoFar = battleDamage.PotionsUsedSoFar,
+            BattlePotionIdsUsedSoFar = battleDamage.PotionIdsUsedSoFar,
+            PlannedPotionIds = PlannedPotionIds.Skip(PotionCount - remainingPotionCount).ToArray(),
+            PotionRewardOutlook = PotionRewardOutlook,
             PotionCount = remainingPotionCount,
             ExplicitPotionCount = remainingExplicitPotionCount,
             PotionHpSaved = remainingPotionCount == 0 ? 0 : PotionHpSaved,

@@ -1,8 +1,5 @@
-using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Entities.Cards;
-using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.Hooks;
@@ -15,9 +12,7 @@ using MegaCrit.Sts2.Core.MonsterMoves.MonsterMoveStateMachine;
 using MegaCrit.Sts2.Core.Rooms;
 using MegaCrit.Sts2.Core.ValueProps;
 using CombatSolver.Engine.Common;
-using CombatSolver.Engine.InCombat.Mirrors;
 using CombatSolver.Engine.InCombat.Simulation;
-using BufferCard = MegaCrit.Sts2.Core.Models.Cards.Buffer;
 
 namespace CombatSolver;
 
@@ -116,6 +111,8 @@ internal sealed partial class CombatBeamSolver
         public ParallelExpansionExecutor? ActiveParallelExpansion;
         public Dictionary<StateFingerprint, TranspositionFrontier> Transpositions = [];
         public Dictionary<StateFingerprint, TranspositionFrontier> ExpandedTranspositions = [];
+        /// <summary>诊断计数：因为合并条目上限而没有写入的新转置状态数。</summary>
+        public int TranspositionLimitBypasses;
         public Dictionary<StateFingerprint, StandPatEvaluation> StandPatCache = [];
         // Only the coordinator owns a prune checkpoint; probe lanes never receive it.
         public Action<long>? EnsurePruneMemory;

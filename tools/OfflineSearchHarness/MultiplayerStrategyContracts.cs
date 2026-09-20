@@ -107,16 +107,16 @@ internal static class MultiplayerStrategyContracts
         // Damage already paid before a manual recalculation must not grant a fresh allowance.
         CardModel bloodletting = state.CreateCard(ModelDb.Card<Bloodletting>(), local);
         Native(CardPileCmd.AddGeneratedCardToCombat(bloodletting, PileType.Hand, local));
-        int priorLoss = CombatRootSnapshot.Capture(state, true).InitialPlayerRoundHpLost;
+        int priorLoss = CombatRootSnapshot.Capture(state, multiplayerAdvisor: true).InitialPlayerRoundHpLost;
         Native(CardCmd.AutoPlay(new ThrowingPlayerChoiceContext(), bloodletting, null, skipCardPileVisuals: true));
         Native(CardPileCmd.RemoveFromCombat([bloodletting], skipVisuals: true));
         Native(CreatureCmd.Heal(local.Creature, 5));
-        var paidRoot = CombatRootSnapshot.Capture(state, true);
+        var paidRoot = CombatRootSnapshot.Capture(state, multiplayerAdvisor: true);
         if (paidRoot.InitialPlayerRoundHpLost != priorLoss + 3)
             throw new InvalidOperationException("Recalculation/healing reset damage already paid this round.");
         if (local.Creature.Block > 0)
             Native(CreatureCmd.LoseBlock(new ThrowingPlayerChoiceContext(), local.Creature, local.Creature.Block, null));
-        paidRoot = CombatRootSnapshot.Capture(state, true);
+        paidRoot = CombatRootSnapshot.Capture(state, multiplayerAdvisor: true);
         var paidProbe = Solver(paidRoot).ReplayMultiplayerForTesting([new(PlanActionKind.EndTurn, paidRoot.StartTurnNumber)]);
         incoming = paidProbe.CumulativePlayerHpLost;
         paidProbe.ReleaseSimulator();
@@ -254,7 +254,7 @@ internal static class MultiplayerStrategyContracts
         loop.RunUntilCompleted(PowerCmd.Apply<CrimsonMantlePower>(new ThrowingPlayerChoiceContext(), local.Creature, 1,
             local.Creature, null), TimeSpan.FromSeconds(20), "Add next-turn HP cost");
         int startCost = ModelDb.Power<CrimsonMantlePower>().DynamicVars["SelfDamage"].IntValue;
-        var root = CombatRootSnapshot.Capture(state, true);
+        var root = CombatRootSnapshot.Capture(state, multiplayerAdvisor: true);
         SearchPolicySnapshot boundaryPolicy = new MultiplayerSearchPolicy(Horizon: 2).Apply(policy);
         var solver = new CombatBeamSolver(root, SolverDisplayNames.Capture(state), BattleDamageTracker.Observe(state),
             boundaryPolicy, searchProfile: boundaryPolicy.Profile);

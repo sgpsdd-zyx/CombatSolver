@@ -1,8 +1,8 @@
 # CombatSolver 仓库工作指令
 
-> **当前多人分支（2026-09-19）：** `codex/multiplayer-advisor` 基于官方 `0e6cc2d / 0.41.0`。单人保持该官方版本的原路径、参数和行为；fork 自有评分、保路、剪枝、预算和缓存只归多人政策/对象所有，公共文件仅允许显式多人接入。官方单人能力承诺不得进入多人候选；涉及公共战斗语义的依赖单列，不混入策略优化。现役行为见[多人军师](docs/multiplayer-advisor.md)。
+> **当前多人分支（2026-09-19）：** `codex/multiplayer-advisor` 基于官方 `cccc270 / 0.43.0`。单人保持该官方版本的原路径、参数和行为；fork 自有评分、保路、剪枝、预算和缓存只归多人政策/对象所有，公共文件仅允许显式多人接入。官方单人能力承诺不得进入多人候选；涉及公共战斗语义的依赖单列，不混入策略优化。现役行为见[多人军师](docs/multiplayer-advisor.md)。
 >
-> 多人保持手动请求与手动操作、最多七个敌方周期、每周期 3 HP 本机扣血目标；治疗、手动重算和额外玩家回合不刷新额度。fork `0.41.3` 已发布到 GitHub，发布凭证见[开发笔记](docs/DEVELOPMENT_NOTES.md)；官方 `v0.41.0` 不移动。[第二轮复审首批](docs/strategy/pro-review-0412-20260918/implementation.md)的终局事实、多人早停和本机根前用药输入修复纳入本版；[窗口研究](docs/strategy/pro-horizon-20260919/README.md)保留默认七周期、不启用自适应，共同周期动作成本仅留离线实验，正式版恢复完整动作数同分项。联合压缩与资源观察等条件项暂缓，风险次序未改；研究不自动授权实施。独立[尖塔军师修复工具](tools/SpireAdvisorMultiplayerFix/README.md)另有版本与产物，不属于 CombatSolver 发布。禁止启动可见 Steam；无头结果不外推可见性能或联机胜率。
+> 多人保持手动请求与手动操作、最多七个敌方周期、每周期 3 HP 本机扣血目标；治疗、手动重算和额外玩家回合不刷新额度。fork `0.43.1` 正在按本次用户授权定版，合入官方 `0.42.0` 与 `0.43.0`；发布状态见[开发笔记](docs/DEVELOPMENT_NOTES.md)，官方标签不移动。[第二轮复审首批](docs/strategy/pro-review-0412-20260918/implementation.md)的终局事实、多人早停和本机根前用药输入修复继续保留；[窗口研究](docs/strategy/pro-horizon-20260919/README.md)保留默认七周期、不启用自适应，共同周期动作成本仅留离线实验，正式版恢复完整动作数同分项。联合压缩与资源观察等条件项暂缓，风险次序未改；研究不自动授权实施。独立[尖塔军师修复工具](tools/SpireAdvisorMultiplayerFix/README.md)另有版本与产物，不属于 CombatSolver 发布。禁止启动可见 Steam；无头结果不外推可见性能或联机胜率。
 >
 > 历史批次、发布授权与证据归 [开发笔记](docs/DEVELOPMENT_NOTES.md)、[版本日志](docs/releases/README.md) 和专题文档，不作为新的操作授权。外部研究固定输入与采用情况见 [策略索引](docs/strategy/README.md)。
 

@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "scenarioId": "UI-COMPACT-QOL",
+  "enemyCurrentHp": 999,
+  "timeoutSeconds": 120,
+  "notes": "Exercise compact UI and real action-bar nodes across single-player and advice-only display states. This does not establish live network compatibility."
+}

@@ -2,7 +2,6 @@ using System.Diagnostics;
 using System.Text;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Context;
-using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Players;
 
 namespace CombatSolver;
@@ -404,6 +403,12 @@ internal static class SolverDiagnostics
             .Append(" combat_fingerprint=").Append(Metric(result.CombatFingerprintMetric))
             .Append(" prune=").Append(Metric(result.PruneMetric))
             .Append(" final=").Append(Metric(result.FinalSelectionMetric))
+            .Append(" transpositions=").Append(result.TranspositionCount)
+            .Append(" expanded_transpositions=").Append(result.ExpandedTranspositionCount)
+            .Append(" transposition_limit_bypass=").Append(result.TranspositionLimitBypasses)
+            .Append(" stand_pat_cache=").Append(result.StandPatCacheCount)
+            .Append(" threat_cache=").Append(result.ThreatProjectionCacheCount)
+            .Append(" coverage_cache=").Append(result.CoverageCacheCount)
             .ToString();
     }
 

@@ -14,7 +14,7 @@
 
 `SolverController` 在网络多人中只接受 Manual 请求，排空旧 worker 后主线程捕获整个战场。`SolverController.Multiplayer` 持有过期标记和有界纯动作路线，不做自动续用或部署；`ContinuationStamp.Multiplayer` 对账全队状态。`MultiplayerSearchPolicy` 注入最多七次敌方周期与独立建议排序，`CombatBeamSolver.Multiplayer` 重放旧前缀，重放计数属于 `SearchRunContext`；`MultiplayerRound` 编排全队回合，不接管实机。已推演的敌方周期从分支按值复制至 `SimulationSnapshot`、`SolverSnapshot` 和 UI，与窗口上限分开显示，不增加原节点/时间预算。`SimulatedCombatState.Multiplayer` 的身份、窗口和额外回合参与者随 Fork 复制，其他队员数值继续属于既有影子状态。队友选择通过显式边界退出，本人选择继续搜索。UI 仍只渲染 snapshot，单人调用原有路径。详见 [行为与验证](multiplayer-advisor.md)。
 
-多人默认以每个敌方周期 3 HP 扣血为输出目标范围。`CombatRootSnapshot` 在主线程冻结本机本轮已经发生的未格挡伤害；敌方周期结束、下一玩家回合准备之前，`Expansion` 将累计扣血检查点写入 `SimulatedCombatState.AdvisorLastEnemyCycleHpLost`，随 Fork 按值复制。该字段只记录原始观察，不决定政策；`SearchNode` 持有不可变的 `MultiplayerHpLossBudget`，区分已结束周期的超额扣血与当前周期的已用额度。治疗、重算和额外玩家回合不清除已用额度，下一回合准备的自损计入新周期。政策账本通过转置标签和去重标签保留，不进入战斗状态键或 `ContinuationStamp`。
+多人默认以每个敌方周期 3 HP 扣血为输出目标范围。`CombatRootSnapshot` 在主线程冻结本机本轮已经发生的未格挡伤害；敌方周期结束、下一玩家回合准备之前，`Expansion.Replay` 将累计扣血检查点写入 `SimulatedCombatState.AdvisorLastEnemyCycleHpLost`，随 Fork 按值复制。该字段只记录原始观察，不决定政策；`SearchNode` 持有不可变的 `MultiplayerHpLossBudget`，区分已结束周期的超额扣血与当前周期的已用额度。治疗、重算和额外玩家回合不清除已用额度，下一回合准备的自损计入新周期。政策账本通过转置标签和去重标签保留，不进入战斗状态键或 `ContinuationStamp`。
 
 `CombatBeamSolver.Multiplayer` 中的 `BeamRetentionPolicy` 分片先覆盖多人进攻、防御、铺垫代表，再补剩余席位，全部共用既有 Beam 与请求预算。`MultiplayerEvaluation` 在敌方结算后、下一玩家准备前捕获 `MultiplayerCycleCheckpoint`：它是最多七条、只含数值的不可变短链，归分支持有并由 Fork 共享历史；不含模型或模拟器。原始周期观察和扣血账本通过去重/转置标签区分，单人保持默认值；不加入战斗状态键或原生对账戳。
 
@@ -26,7 +26,9 @@
 
 具体续行后来已出现的风险仍能否定其较早的安全观察。救命计数仍为全队口径，资源归属和两步挑战尚待独立处理；0.41.1 的原始问题与采用边界见[外部复审本地核对](strategy/pro-review-20260918/local-review.md)。深度、未兑现铺垫和名义格挡不是最终收益。预算停止时 `Phases` 保留上一层的有界节点组，释放模拟器后仅对选中路线走原有物化重放，不新增第二套探针或预算。`StateEvaluation` 保留中间探索特征，UI 从只读结果分别投影实际推演深度、共同周期、额度与最高扣血；零共同周期明确提示受击评估未完成。
 
-官方 `0.41.0` 的 `PowerCardValuation` / `PowerCommitment` 和能力固定前缀组合用于单人。多人协调器继续在这些组合之前返回；`CombatBeamSolver._hasRegisteredPowerCards` 另以 `policy.Multiplayer == null` 隔离共享候选展开中的能力承诺入口，避免将单人牌流投影用于全队历史。此隔离不改变卡牌实际结算，也不改变单人的登记判断、保路或预算。
+当前单人基线为官方 `cccc270 / 0.43.0`。`PowerCardValuation` / `PowerCommitment` 和能力固定前缀组合用于单人。多人协调器继续在这些组合之前返回；`CombatBeamSolver._hasRegisteredPowerCards` 另以 `policy.Multiplayer == null` 隔离共享候选展开中的能力承诺入口，避免将单人牌流投影用于全队历史。此隔离不改变卡牌实际结算，也不改变单人的登记判断、保路或预算。
+
+上游文件拆分后，全队回合与周期捕获位于 `Expansion.Replay`，队友目标与多人支配保护位于 `Expansion.Candidates`，多人排序分派位于 `BeamRetentionPolicy.Ranking`；多人账本仍进入两类转置标签。共享的整场历史键、惰性续用信息和默认 1,000,000 条转置记录上限沿用官方实现，不属于新的多人评分。`MultiplayerSearchPolicy` 关闭战后药水预测和单人组合实验，`CombatRootSnapshot` 也不在多人根预读奖励。`BattleDamageSnapshot.PotionIdsUsedSoFar` 在多人时只包含追踪窗口内本机 Actor 的药水 ID。冻结、采用和执行能力继续由 Runtime 拒绝多人调用；Overlay 两个刷新入口都向 `SolverActionBarState.AdviceOnly` 传递多人状态。全局单人奖励预测偏好的更改只保存设置，不使多人建议失效。
 
 ### 单一搜索预算与兼容边界
 
@@ -91,6 +93,7 @@ Entry / turn hooks
 | `src/Runtime/PowerDynamicVarWarmup.cs` | 主线程根捕获时物化规范 Power 与当前战斗 Power 的显示变量 | 搜索评分、Power 语义与 worker 本地化 |
 | `src/Runtime/PowerDynamicVarMaterializationGuardPatch.cs` | 搜索模拟惰性创建 Power 显示变量时立即报告根捕获缺失 | Power 语义、显示内容与搜索阶段串行化 |
 | `src/Runtime/PowerAmountComparisonPatch.cs` | 将原生 `GetTypeForAmount` 中两处精确匹配的同枚举装箱比较改为整数比较；保留虚 getter、decimal 分支和调用顺序，未知 IL 原样保留 | Power 状态缓存、跳过类型 getter 或改变显示类型规则 |
+| `src/Runtime/ModelDbGetIdCachePatch.cs` | 缓存原生 `ModelDb.GetId(Type)` 的纯类型→`ModelId` 映射（`GetEntry`/`GetCategory` 只由类型名决定）；缓存不可变 `ModelId` 值，不保存模型实例 | `ModelDb` 内容字典、`Inject`/`Remove`/`ResetForTest` 语义、模型实例身份与显示字段 |
 | `src/Runtime/SearchGcPolicy.cs` | 管理玩家显式开关的进程级 GC 模式：开启时按原样预算建立战斗级 NoGC、执行搜索内安全检查点与引用释放后的压力回收；稳定关闭时使用 CLR 常规分代 GC 且不新增自动补账压力，从开启切换时仍结清此前义务；模式切换和手动释放与活动搜索计数共用安全边界 | Beam 剪枝、候选评分、模拟语义与同步阻塞 UI |
 | `src/Runtime/SearchGcPolicy.Recovery.cs` | 在已排空的提交边界评估可恢复 NoGC 回退；拥有完成 Gen2/冷却/次数上限、物理余量、scope 代次与恢复后区域上限 | 强制回收、等待搜索退出、搜索预算或候选策略 |
 | `src/Runtime/SearchGcLifecycleMetrics.cs` | 记录显式回收与 NoGC 启停/丢失；在 Runtime 准入 Gate 内冻结 scope 起止，区分独占搜索与共享进程窗口；暂停最大值仅为观测值 | 线程级 CLR 事件归因与 trace 最大值 |
@@ -99,6 +102,7 @@ Entry / turn hooks
 | `src/Runtime/SearchMemoryPressureSignal.cs` | 将 Runtime 的进程分配边界、回收入口、已排空边界的恢复探针和低系统余量下的保守并行标记注入搜索；不让 Search 直接操作 GC 模式 | 设置读取与搜索评分 |
 | `src/Runtime/SolverControllerSessions.cs` | 除会话状态外，向 UI 提供当前进程占用与活动搜索分配检查点的只读快照 | UI 样式与搜索内存政策 |
 | `src/Runtime/SolverSettings.cs` | 持久化性能、执行、搜索并行度、NoGC 开关与独立预算、逐槽药水策略和搜索结束通知设置，并在主线程捕获不可变搜索 snapshot | 搜索期读取全局设置 |
+| `src/Runtime/PortfolioSelectorRuntime.cs` | 仅当环境变量 `COMBATSOLVER_PORTFOLIO_SELECTOR` 指向模型文件时解析并缓存实验用组合成员选择器，把不可变实例挂到策略快照；文件缺失、超限或 schema 不合法时禁用并记一条日志 | 搜索期读文件或环境变量、放宽既有成员门控、参与搜索评分 |
 | `src/Runtime/PlayerTurnSetupPatches.cs` | 准备阶段稳定根搜索与既有选择重放；原生会话独占生命周期，每次搜索独立取消并排空，页面等待后原子确定唯一 worker 所有者；结果发布结束接管标志，手动提交淘汰旧根；后续回合无既有选择时捕获准备根；进入 Play 后交给 continuation 核对 | 普通 Play 阶段搜索与动作部署 |
 | `src/Runtime/NativeChoiceRuntime.cs` | 观测原生选择 Task 完成及页面序号，按卡牌语义状态匹配计划实例；搜索期间保留手动输入，实际驱动期间持有页面锁，清除尚未提交的手动勾选后选择计划实例 | 选择分支枚举和战斗结算 |
 | `src/Runtime/ClientUpdateNotice.cs` | 解析现有心跳响应、严格比较三段版本、发布线程安全纯值提醒；OnlinePresence 在主线程通知 Overlay 刷新 | 网络请求调度、安装更新或战斗操作 |
@@ -180,6 +184,8 @@ RitsuLib 0.6.0 自身拥有 BaseLib 目标类型的外部登记查询、按程�
 
 `CombatSearchCoordinator.PowerRoutes.cs` 在主搜索后、可接受战损提前返回之前，为当前可打的每张已登记能力运行固定前缀完整搜索，并有限补充双能力前缀。前缀结束后重建 `CombatProgressState`、清除临时承诺与有序变异调度元数据，后续按普通 Beam 搜索；能力已经真实在场，不继续套激进承诺。最多三个前缀时分别运行普通宽度、1.5倍宽度、次排名段和基础分四种后验，更多前缀时运行普通与宽 Beam。所有成员只以完整终局和既有战损政策选优。
 
+`BeamPortfolioSelector.cs` 是实验用的组合成员选择器（默认不启用）：Runtime 只有在显式给出模型文件时才注入，Search 只收到解析后的不可变实例。它只在 `BeamWidthPortfolioGate` 已经放行之后决定“这一位成员不跑”，不改评分、状态键、保路通道、必保候选或终局排序；模型缺失、求解器或游戏程序集 MVID 不一致、特征长度不符、特征非有限，或状态与配置超出训练范围时一律运行成员，计时与剩余预算字段不设范围约束，避免把负载漂移当成分布外。判定只用模型自带的常量树，不做 IO、不持有搜索对象。离线宿主用 `--observe-portfolio` 经同一路径导出特征与真实政策标签、用 `--portfolio-model` 应用模型；采集、划分、训练与对照见 [PortfolioSelector 工具](../tools/PortfolioSelector/README.md)，实测取舍见[学习型组合门控](strategy/learned-portfolio-gate-20260917.md)。
+
 周期候选在最多 32 步的窗口内比较重复动作、控制形状及伤害发生相位，避免把较长周期中的安静阶段当成整个循环。每周期伤害数值可以变化：动作、形状和伤害相位重复且实际刷新敌人耐久低点时，可取得伤害进展证据；精确转移增量是否一致仍单独记录，不把增长伤害伪装成相同增量。已证明刷新逐敌人历史最低耐久的路线可使用独立进展通道：每个 region 每层至多一个代表，最多保留该周期余下的 31 个安静动作，且只由实际保留节点的一个直接后代消费。只有新的最低耐久能续期；普通停滞、试探和顺序选择预算不因此重置。进展准入在最终仲裁后结算，并解除已经完成目标的旧出口探针；所有动作仍逐步模拟并受请求节点与时间限制。
 
 主 incumbent 只能由满足硬政策、且没有消耗或预计消耗保命资源的完整胜利建立。无主动用药入口要求实际生效政策为 `Disabled` 或 `Smart`、最少用药数为0、候选显式用药数为0；若启用逐槽指令，还必须实际满足全部强制使用要求。正数精确药水层保留原条件：最少与最多药量相等、有已审计无药基线、未启用需另证的逐槽强制指令，且完整胜利严格改善基线主质量。未完成路线、死亡路线或仅满足中间评分的候选不能建界。
@@ -213,7 +219,11 @@ Smart 层间使用 `SmartLayerMemoryForecast` 的同窗分配和转移高水位�
 | `CombatBeamSolver.MultiplayerEvaluation.cs` / `MultiplayerCycleCheckpoint.cs` | 多人原始周期观察、固定批次共同边界和风险/收益比较；不可变记录不持有模拟器 |
 | `CombatBeamSolver.Transpositions.cs` | 转置标签与支配前沿；单标签内联，多标签保持原序List，缩回单标签即释放额外容器 |
 | `CombatBeamSolver.Phases.cs` | `Solve`、阶段循环、总预算与回合层预算保留、当前回合预览、约 `200 ms` 刷新的动态推演路线，以及玩家采用路线/执行当前回合的收束检查点；动态路线显式携带战斗是否结束，未完成路线不产生整场战损数值 |
-| `CombatBeamSolver.Expansion.cs` | 可执行卡牌/药水/结束回合候选展开和动作回放入口；识别选牌后手中实际可支付的能力。三层首领的首个搜索回合由Phases在普通父节点提交完成后提前展开这些中间态，复用Expand的去重/节点计数，不注入固定答案或终局奖励 |
+| `CombatBeamSolver.Expansion.cs` | 可执行卡牌/药水/结束回合候选展开与跨回合无进展剪枝；三层首领首个搜索回合由Phases在普通父节点提交后提前展开中间态，复用Expand去重/节点计数，不注入固定答案或终局奖励 |
+| `CombatBeamSolver.Expansion.Opening.cs` | 开局能力/药水/资源及后续动作构造；识别选牌后手中实际可支付的能力，保留各调用方的筛选和快照生命周期 |
+| `CombatBeamSolver.Expansion.Choices.cs` | 首层与挂起选择枚举、完整动作选择预算、实体补充和既有预算合同验证 |
+| `CombatBeamSolver.Expansion.Replay.cs` | 回合准备根、动作/前缀回放、增量等价与回合推进；原失败、暂停及释放顺序不变 |
+| `CombatBeamSolver.Expansion.Candidates.cs` | 动作候选构造/选择、路线特征、支配、转置准入租约与目标枚举 |
 | `CombatBeamSolver.ParallelExpansion.cs` | 固定 worker lane、卡牌/药水动作准备与原始候选物化、按输入顺序串行提交 |
 | `CombatBeamSolver.AdmittedExpansion.cs` | 已准入父节点的准备、动作探测、选择准备/回放/续接、药水/目标与回合尾部作业；有界派发、快照移交、取消/异常排空 |
 | `CombatBeamSolver.PrimaryChoiceReplay.cs` | 原预算保证必经的首层回放、唯一快照暂存与原序消费；动态预算和实例补充仍由一个续接作业独占 |
@@ -229,7 +239,12 @@ Smart 层间使用 `SmartLayerMemoryForecast` 的同窗分配和转移高水位�
 | `ParallelExpansionWorkProfile.cs` | coordinator 所有的作业经过时间分布与 wave/等待/提交计时；不代表 CPU 时间 |
 | `CombatBeamSolver.PathDiagnostics.cs` | 可选路径观察的值复制与边界配对；分别记录生成、两类转置、实际展开、动作准入、完整保留及回合注释，不写搜索策略或账本 |
 | `CombatBeamSolver.Retention.cs` | prune/retention 调用边界与相关小型辅助 |
-| `CombatBeamSolver.BeamRetentionPolicy.cs` | 状态去重、中间分数排序、多样性通道、动作/回合开始选牌保路、药水配额和小型 Pareto |
+| `CombatBeamSolver.BeamRetentionPolicy.cs` | 保路主构造与字段、既有合同类型、RankFinal/RankBest协调、状态去重、多样性通道及路由分组；初始化顺序保持在此文件 |
+| `CombatBeamSolver.BeamRetentionPolicy.OrderedMutation.cs` | 有序变异组合的统一准入、服务额度与续接群组结算 |
+| `CombatBeamSolver.BeamRetentionPolicy.OrderedMutationScheduling.cs` | 有序变异代表质量、包/声明公平调度、迟到初始项节奏、租约交接与确定性键 |
+| `CombatBeamSolver.BeamRetentionPolicy.Routing.cs` | 路由签名、上下文交错、保留选择识别及药水配额 |
+| `CombatBeamSolver.BeamRetentionPolicy.Ranking.cs` | 防御/进攻/资源代表、终局候选比较与Beam分数计算 |
+| `CombatBeamSolver.BeamRetentionPolicy.Testing.cs` | 既有保路合同验证入口；仍属于Search，不依赖Testing runner |
 | `CombatBeamSolver.CyclePlanning.cs` | 精确动作周期、通用收益与出口探针；按周期族和回合记账的有限观察与成长预算 |
 | `CombatBeamSolver.CycleRegionRetention.cs` | 合并同回合、同控制形状的动作排列；对最终存活候选事务式提交区域保留预算与进展证据 |
 | `CombatBeamSolver.OrderedMutationRetention.cs` | 有序操作碰撞的谱系、租约、成对激活和预算账本；统一处理续接、到期与普通通道回退 |
@@ -242,7 +257,19 @@ Smart 层间使用 `SmartLayerMemoryForecast` 的同窗分配和转移高水位�
 
 `SearchRunContext` 只活于一次 solver：计数器、性能指标、节流器、转置表、stand-pat/威胁/coverage/路由缓存和 `OwnedExpansionBatch` 容器池均在这里。每个 lane 最多保留两个已清空 storage，单容器容量上限 4096；批次 lease 独立且 Dispose 幂等，检查点丢弃空闲池，不池化 simulator/model。根配置留在 solver，不把可变运行状态退回入口文件。 `SnapshotListBuffer<PredictedCard>` 也归各自 `_run` 所有，只缓存一个已清空、实际容量不超过 4096 的临时列表；快照内用栈上 lease，嵌套租用取独立 storage，generation 防止旧 lease 触碰新租户。牌序与 Shuffle RNG 克隆照旧，列表不得逃出 Snapshot，worker 排空后的缓存检查点丢弃空闲 storage。
 
-`PotionStrategicCostLookup` 同样归单次 `SearchRunContext` 所有，中间保路与终局排序共用规范药水 ID/可再生条件对应的只读代价值；未命中仍调用原目录的 `Single` 查询，保留缺失/重复 ID 的失败行为。每个 worker 有独立表，不存药水实例或分支值，也不跨并发 solver 共享修改。快照内 Power 是否贡献战略估值只判定一次并暂存在当前调用的栈/数组中，需求收集与评分复用同一判定，不跨快照缓存。
+`Expansion.Candidates` 在准入与展开两处让 `Transpositions` 和 `ExpandedTranspositions` 共用每次 solver 默认 1,000,000 条的预算：旧状态仍按原支配标签更新，额度满后只对新状态停止记账并放行。它改变超长搜索的剪枝，不约束一个请求里多个成员的总字节数；实验用关闭剪枝、状态键盐与牌堆顺序商均由默认零值隔离。
+
+回合前沿不再为每个候选构造续用戳；`Terminal.BuildContinuations` 从最终选中路线的动作前缀重放并生成戳记，释放重放快照后只保存纯值 `CachedContinuation`。`SearchPerformanceMetrics` 在显式阶段度量启用时按后进先出收口并记排他时间/分配；失败 lane 排空但不合并未完成的指标，保留首因异常。普通生产搜索不启用逐阶段度量。
+
+`PotionStrategicCostLookup` 同样归单次 `SearchRunContext` 所有，中间保路与终局排序共用规范药水 ID/可再生条件对应的只读代价值；未命中仍调用原目录的 `Single` 查询，保留缺失/重复 ID 的失败行为。每个 worker 有独立表，不存药水实例或分支值，也不跨并发 solver 共享修改。
+
+`PotionRewardOutlook` 在主线程根捕获时读取战后药水掉落前景：先取玩家存档里的 `PotionRewardOdds` 概率（精英 +12.5%，白兽像强制），再克隆玩家的奖励 RNG，按原版 `RewardsSet` 的顺序（掉落判定 → 金币数量 → 药水稀有度与池内抽取）重放，得到确定的掉落结论与药水身份；教程奖励集不镜像，最终 Boss 无奖励。它冻结在 `CombatRootSnapshot.PotionRewardOutlook`，后台不再读取 live。`ReplacementHpCredit` 只在药水栏已满且未被 Sozu 阻断时非零：镜像出掉落按那瓶药的档位计，镜像出不掉为 0，只有概率时按基线档位乘概率。额度按**路线**扣一次、门槛最低保留 1 HP（`PotionUsePolicy.ApplyReplacementCredit`；额度只让用药变得不花钱，用药路线仍必须严格优于无药基线），终局排序、Beam 保路的资格事实与 Smart 梯度的用药上限三处共用同一份，不进入节点分数、状态键或转置比较。快照内 Power 是否贡献战略估值只判定一次并暂存在当前调用的栈/数组中，需求收集与评分复用同一判定，不跨快照缓存。
+
+状态键（`BuildStateKey`）必须覆盖模拟会读到的全部输入。`CalculatedVarSpecRegistry` 里六张牌（金斧、电流相生、扯碎、亡魂牵引、谋杀、超质量体）读的是整场历史计数，不在逐回合计数里；`CombatHistoryCounterKey` 在根牌组含其中任一张时遍历一次模拟历史，把这六个计数追加进键，其余战斗的键逐位不变。根牌组不含战斗中途才生成的读者牌，也不含根捕获时已在消耗堆、之后可能回收的读者牌；这两种情况是条件式修法的已知缺口。根之前的实况历史整场恒定，不进键。
+
+“预知战后药水奖励”是常规设置的显式开关，默认关闭；关闭时根不读取奖励 RNG 前景，所有搜索层取得零折抵，摘要也不显示预测。设置冻结进请求政策和路线缓存键；切换时废弃旧续用并重新计算或提示手动重算。开启时只在完整获胜路线显示掉落结论。零成本药水维持零门槛，不被折抵函数抬高。`BattleDamageTracker` 冻结本场已用药水身份，终局精确回放冻结后续消耗身份；`SolverResult` 只保留字符串数组，续用按已消费数量切分，UI 投影本地化药名并分别显示已用/后续用药。
+
+循环出口的族内、在途和最新候选比较器保留各自租约优先级前缀；仅在前缀同分后调用 `CombatBeamSolver.Retention.cs` 中的 `CompareCycleExitQuality`，按健康风险、药水成本、回合、动作数升序，再按玩家HP、分数降序及原确定性指纹排序。待准入候选直接复用同一质量顺序。该私有方法属于既有保路分片，不承担区域、跨回合或终局排序；这些入口的键次序不同。
 
 长期资源保路先在冻结候选池上扫描最高资源值和数量；全池同值（包括非零和空池）原本不产生独立资源路线，因此 `Retention` 在此时直接跳过祖先排名暂存。非均匀池继续按原序保存全局/祖先排名、应用资源祖先排名、选择最高资源群组，再恢复祖先和全局排名。不缓存跨调用的排名或资源群组，不改变剪枝回收检查点。
 
@@ -335,7 +362,7 @@ Search在首回合、EndTurn及已知可能嵌套/重复的卡牌回放建立捕
 
 `CombatPredictionRngSet` 的九条流共享不可变完整状态值，真正随机操作时才物化当前分支独占的原生 Rng。已经物化的流在 Fork 当时立即捕获计数器及四段内部状态，不能共享调用方可能仍持有的可变引用。指纹、续用与只读投影读取 `*State`，不触发物化；原生算法与序列保持不变。根捕获只读取主线程的 RunRngSet，后续子分支不访问 live RNG。
 
-`RootCombatCardGenerationPoolSnapshot` 在主线程冻结无色、原生角色攻击及逐项核对的非Basic/Ancient、Power、Common候选；后三类分别保持原CardPoolModel.GetUnlockedCards来源与调用方谓词。`CombatCardGenerationExtensions` 通过内部快照接口读取只读候选；`TurnStartPowerSupport` 每次Power触发准备一次，回退路径仍仅取一次GetUnlockedCards结果，谓词/战斗过滤在每次抽取时执行。CallOfTheVoid与CreativeAi保留逐次取一张，HelloWorld保留一次取多张；`BundleOfJoyOnPlay`、`InfernalBladeOnPlay` 等既有入口不变。所有distinct入口仍使用TakeRandom及原RNG顺序，不换成NextItem；来源模型只读，PredictedCard.Create逐分支生成独占卡牌。角色、规范池、AllCards引用身份、约束及原生模型门禁不变，自定义/可变池走原路径，其他过滤不会自动获得缓存资格。
+`RootCombatCardGenerationPoolSnapshot` 在主线程冻结无色、原生角色攻击及逐项核对的非Basic/Ancient、Power、Common候选；后三类分别保持原CardPoolModel.GetUnlockedCards来源与调用方谓词。`CombatCardGenerationExtensions` 通过内部快照接口读取只读候选；`TurnStartPowerSupport` 每次Power触发准备一次，回退路径仍仅取一次GetUnlockedCards结果，谓词/战斗过滤在每次抽取时执行。CallOfTheVoid与CreativeAi保留逐次取一张，HelloWorld保留一次取多张；`BundleOfJoyOnPlay`、`InfernalBladeOnPlay` 等既有入口不变。所有distinct入口仍使用TakeRandom及原RNG顺序，不换成NextItem；来源模型只读，PredictedCard.Create逐分支生成独占卡牌。角色、规范池、AllCards引用身份、约束及原生模型门禁不变，自定义/可变池走原路径，其他过滤不会自动获得缓存资格。遗物侧只有 `SimulatedCombatState.RelicTurnStart` 的 `Crossbow`（无回合守卫、每回合触发）复用同一角色攻击牌候选；`ChoicesParadox`、`VexingPuzzlebox`、`BigHat`、`OrangeDough`、`Toolbox` 的守卫是 `turn <= 1`，而搜索根在玩家第一回合 Play 阶段捕获，这些块在搜索里不会执行，保持原 `GetUnlockedCards` 实现。
 
 `SimulatedCombatState.GetBaseHookListeners` 对可分段且注册卡牌数至少256的分支，先计数当前分支球、未移除卡牌及其附魔/灾厄，按确切容量分配后段列表，避免大附魔牌堆立即扩容。计数不运行Hook/追加器，不新增共享状态、缓存或失效规则；小牌堆及不透明附着监听根沿用单遍路径。
 
@@ -400,7 +427,7 @@ Mod 准入，具体契约见[模型状态适配](third-party-model-state.md)。
 
 状态摘要采用首行徽章/路线摘要/右侧详情，次行搜索上下文/耗时/统计的结构；`ShowResult` 使用已有 SummaryText 中的回合信息，不重复显示规划回合上下文。搜索中的上下文标签关闭内部换行，流式统计行负责整项换行；`SolverDetailsButton` 保留展开事件与箭头，使用轻量无背景样式。
 
-常规设置按开始计算、出牌速度、自动执行暂停条件、幕末 Boss、显示与通知、在线统计分组；性能设置按搜索预算、搜索停止条件、内存管理及折叠自定义参数分组。`Controls.AddSettingsSection` 提供统一分组容器，输入仍使用原保存/重载事件，页面滚动沿用伸展布局。结果卡片位于状态摘要上方，以流式排列显示原快照的扣血、药水、失窃与回血；收起时迁移同一结果卡片，展开时恢复正文首位，避免重复结果状态。
+常规设置按开始计算、出牌速度、自动执行暂停条件、幕末 Boss、药水奖励预测、显示与通知、在线统计分组；性能设置按搜索预算、搜索停止条件、内存管理及折叠自定义参数分组。`Controls.AddSettingsSection` 提供统一分组容器，输入仍使用原保存/重载事件，页面滚动沿用伸展布局。结果卡片位于状态摘要上方，以流式排列显示原快照的扣血、药水、失窃与回血；收起时迁移同一结果卡片，展开时恢复正文首位，避免重复结果状态。
 
 `SolverActionBar` 独占底部动作行、自动模式行及收起布局，通过只读 `SolverActionBarState` 更新可见性。它不读取 Controller、搜索结果或战斗对象；Overlay 保留命令绑定、可用性判断和按钮文案。全局启停位于标题栏，偷窃策略位于路线摘要之后。全自动作为绿色主按钮固定在动作行首位，执行与采用为次级按钮；“自动开启全自动”偏好开关位于按钮行最右侧；下一行左侧为纯显示内存条，右侧为“强制释放内存”按钮。Overlay 沿用原释放流程，等待期间按钮显示进行状态并禁用重复触发。当前阶段只迁移布局所有权，未把 Runtime 操作能力重复实现为新的状态机。
 

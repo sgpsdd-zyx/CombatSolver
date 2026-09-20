@@ -1,4 +1,12 @@
 {
+  "MULTIPLAYER-UPSTREAM-0430-COMPAT": {
+    "status": "Passed",
+    "level": "OfflineManagedCompatibilityAndNativeHeadlessBoundaries",
+    "procedure": "Merge upstream cccc270d3837a5d053460cf850c8a578e6c4ccc7 (v0.43.0) from fork adfd71e. Build an independent official archive and the merged source. Compare the solo-power Coordinator sentinel (Beam12, 350 nodes, 12000ms, DOP1); run multiplayer strategy, facts, full-party and manual-start contracts. Run native macOS UI-COMPACT-QOL, COMBAT-HISTORY-COUNTER-KEY, TOASTY-QOL-FROZEN-DIFFERENT and UI-LOCALIZATION in two isolated batches, 120 seconds per request, cleanup mandatory.",
+    "expected": "Official 0.43.0 single-player sentinel remains identical. Multiplayer retains manual ownership, local potion identity/counts, no reward forecasting, seven enemy cycles, 3 HP cycle accounting and existing risk ordering. Moved search hooks and both compact/expanded advice-only UI paths remain connected.",
+    "observed": "2026-09-19: 80 solo comparison fields and complete route JSON identical (1820 expanded, 4583 transitions, 2 projected HP lost). Multiplayer 9-case strategy and selection/permutation/incremental/native/Fork controls pass; 10 facts contracts pass, including actual T3 expansion, local BLOCK_POTION identity and no multiplayer reward credit. Six complete native party state comparisons, 5/7-cycle caps, extra turns, potion/choice controls and startup/ownership/failure-retry contracts pass. Native UI and Gold Axe history key/Fork contracts pass; frozen turn-2 mismatch remains reference-only until manual recalculation; localization catalog 445 passes for eng/zhs/zht. Both native instances are deleted by the launcher. Release behavior builds have zero warnings/errors; Bash boundaries pass with 210 search files. PowerShell, visible Steam, real networking, 3/4-player combinations, transposition-cap quality, full release gate and clean install are unverified.",
+    "evidence": "docs/TEST_MATRIX.md; coverage/unattended/ui-compact-multiplayer-boundary.json; coverage/unattended/combat-history-counter-key.json; .local/upstream-merge-20260919/solo-comparison.json; .local/upstream-merge-20260919/offline-receipts.json; .local/upstream-merge-20260919/native/; .local/upstream-merge-20260919/native-continuation/; .local/upstream-merge-20260919/native-launch.log; .local/upstream-merge-20260919/native-continuation-launch.log"
+  },
   "MULTIPLAYER-0413-DEFAULT-AND-EXPERIMENT-SEPARATION": {
     "status": "Passed",
     "level": "OfflineManagedPolicyAndSourceEquivalence",
@@ -311,6 +319,14 @@
     "expected": "黑暗之拥按实际虚无消耗次数延迟抽牌，包含自动打牌期间新生成的牌。",
     "observed": "基线5dc660636a54439c9ae036755c11e582下一回合手牌预测5/原生6；最终88166b32b56541479cb7fa666adeee09 Passed。",
     "evidence": "src/Testing/UnattendedTestRunner.ReportRound.cs；docs/TEST_MATRIX.md；2026-09-10。"
+  },
+  "COMBAT-HISTORY-COUNTER-KEY": {
+    "status": "Passed",
+    "level": "HeadlessStateKeyAndForkContract",
+    "procedure": "根手牌含金斧与防御，同根子分支额外记录一次完整出牌；比较金斧计算值与搜索 Snapshot 状态键，再 Fork 并复核父分支。",
+    "expected": "计算值差一且状态键不同；子分支 Fork 后键不变，父分支保持原键。",
+    "observed": "2026-09-19 Windows 无人实例 Passed，completedChecks=CombatHistoryCounterKey:GoldAxe:DifferentFinishedPlaysDistinctKeys:ForkStable:ParentUnchanged；UNATTENDED_INSTANCE_REMOVED。",
+    "evidence": "src/Testing/UnattendedTestRunner.CombatHistoryCounterKey.cs；docs/TEST_MATRIX.md。"
   },
   "MURDER-ROOT-HISTORY": {
     "status": "Passed",

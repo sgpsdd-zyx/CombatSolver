@@ -18,8 +18,10 @@ internal sealed record MultiplayerSearchPolicy(
             TheftPolicy = null,
             Act3BossStrategy = false,
             StopAtAcceptableBattleHpLoss = false,
+            PredictPotionReward = false,
             UseNoveltyPortfolio = false,
             UseBeamWidthPortfolio = false,
+            PortfolioExperiment = null,
             NoveltySearch = null,
         };
     }
