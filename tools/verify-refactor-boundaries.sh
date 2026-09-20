@@ -1292,6 +1292,11 @@ src/Search/CombatBeamSolver.Models.cs|public int ReplayedAdviceActions;
 src/Search/CombatBeamSolver.cs|_hasRegisteredPowerCards = policy.Multiplayer == null
 src/Search/SimulatedCombatState.Multiplayer.cs|throw new ExternalPlayerChoiceException
 src/Search/MultiplayerSearchPolicy.cs|StopAtAcceptableBattleHpLoss = false
+src/Search/MultiplayerSearchPolicy.cs|int Horizon = 14,
+src/Search/MultiplayerSearchPolicy.cs|if (policy.FixedBudget) return profile;
+src/Search/CombatSearchCoordinator.cs|policy.Multiplayer.ResolveSearchProfile(policy)
+src/Search/CombatBeamSolver.Phases.cs|policy.Multiplayer?.RemainingCycleLayers(
+src/Search/CombatBeamSolver.Phases.cs|result.AdvisoryTimeBudgetMilliseconds = IsMultiplayerAdvice ? _profile.SoftTimeBudgetMilliseconds : 0;
 src/Search/MultiplayerSearchPolicy.cs|internal readonly record struct MultiplayerHpLossBudget(
 src/Search/CombatBeamSolver.Multiplayer.cs|private List<SearchNode> RankMultiplayer(
 src/Search/CombatBeamSolver.Multiplayer.cs|private MultiplayerFinalBatch PrepareMultiplayerFinalCandidates(

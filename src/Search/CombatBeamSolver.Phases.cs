@@ -841,6 +841,8 @@ internal sealed partial class CombatBeamSolver
             };
             result.IsMultiplayerAdvice = IsMultiplayerAdvice;
             result.AdvisoryHorizon = policy.Multiplayer?.Horizon ?? 0;
+            result.AdvisoryTimeBudgetMilliseconds = IsMultiplayerAdvice ? _profile.SoftTimeBudgetMilliseconds : 0;
+            result.AdvisoryNodeBudget = IsMultiplayerAdvice ? _profile.MaxExpandedNodes : 0;
             result.AdvisoryHpLossAllowance = policy.Multiplayer?.AcceptableHpLossPerTurn ?? 0;
             result.AdvisoryMaximumCycleHpLost = best.AdvisoryHpLoss.MaximumCycleHpLost;
             result.AdvisoryComparisonCycles = ordering.AdvisoryComparisonCycles;
@@ -1465,7 +1467,9 @@ internal sealed partial class CombatBeamSolver
 
             List<SearchNode> ended = [];
             long turnLayerStartedMs = stopwatch.ElapsedMilliseconds;
-            int remainingReservedLayers = Math.Max(1, reservedTurnLayers - searchedTurnLayers);
+            int remainingReservedLayers = policy.Multiplayer?.RemainingCycleLayers(
+                active.Min(node => node.Snapshot.AdvisoryEnemyCycles))
+                ?? Math.Max(1, reservedTurnLayers - searchedTurnLayers);
             long remainingSearchMs = Math.Max(
                 1,
                 _profile.SoftTimeBudgetMilliseconds - turnLayerStartedMs);
@@ -1534,7 +1538,7 @@ internal sealed partial class CombatBeamSolver
                     && turnLayerElapsedMs >= turnLayerBudgetMs;
                 bool turnLayerNodesSpent = turnLayerExpanded >= turnLayerNodeBudget;
                 if (!policy.VerifyIncrementalSearch
-                    && searchedTurnLayers < reservedTurnLayers - 1
+                    && (IsMultiplayerAdvice ? remainingReservedLayers > 1 : searchedTurnLayers < reservedTurnLayers - 1)
                     && playDepth > 0
                     && ended.Count > 0
                     && (turnLayerTimeSpent || turnLayerNodesSpent))

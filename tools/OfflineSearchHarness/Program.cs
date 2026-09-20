@@ -387,7 +387,7 @@ internal sealed record HarnessOptions
           --multiplayer-start-contracts Exercise the manual UI entry and native action waits without networking
           --multiplayer-strategy-contracts Check offense within the per-turn HP allowance and survival guards
           --multiplayer-long-term-contracts Record bounded multiplayer path-loss diagnostics without changing ranking
-          --multiplayer-review-contracts <facts|stopping|horizon|horizon-native|horizon-ordering> Check multiplayer review contracts
+          --multiplayer-review-contracts <facts|stopping|horizon|horizon-fourteen|horizon-budget|horizon-native|horizon-ordering> Check multiplayer review contracts
         环境变量 OFFLINE_HARNESS_COMBATSOLVER_DLL 可以换掉运行时加载的 CombatSolver.dll。
         """;
 
@@ -527,9 +527,9 @@ internal sealed record HarnessOptions
         if (multiplayerLongTermContracts && (multiplayerContracts || multiplayerStartContracts
             || multiplayerStrategyContracts || requestPath != null))
             throw new ArgumentException("--multiplayer-long-term-contracts requires its own two-player fixture.");
-        if (multiplayerReviewStage != null && (multiplayerReviewStage is not ("facts" or "stopping" or "horizon" or "horizon-native" or "horizon-ordering") || multiplayerContracts
+        if (multiplayerReviewStage != null && (multiplayerReviewStage is not ("facts" or "stopping" or "horizon" or "horizon-fourteen" or "horizon-budget" or "horizon-native" or "horizon-ordering") || multiplayerContracts
             || multiplayerStartContracts || multiplayerStrategyContracts || multiplayerLongTermContracts || requestPath != null))
-            throw new ArgumentException("--multiplayer-review-contracts requires a facts, stopping, horizon, horizon-native or horizon-ordering fixture of its own.");
+            throw new ArgumentException("--multiplayer-review-contracts requires a facts, stopping, horizon, horizon-fourteen, horizon-budget, horizon-native or horizon-ordering fixture of its own.");
         if ((observePortfolio || portfolioModelPath != null) && (!usePortfolio || searchMode != "Coordinator"))
             throw new ArgumentException("选择器实验需要 --search-mode Coordinator --use-portfolio。");
         if (noPlainBaseline && (!usePortfolio || searchMode != "Coordinator"))

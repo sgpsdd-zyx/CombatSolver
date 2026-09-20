@@ -1,6 +1,6 @@
 # CombatSolver 文档导航
 
-当前 fork [0.43.1](releases/0.43.1-RELEASE_NOTES.md) 基于官方 0.43.0，融合冻结路线、原生选牌续用、可选战后药水预测与历史/内存处理更新，保留手动七周期多人军师。见 [多人指南与兼容记录](multiplayer-advisor.md#官方-0430-兼容同步)；发布凭证见[开发笔记](DEVELOPMENT_NOTES.md)。官方标签保持原指向。
+当前源码和本地准备版 [0.43.2](releases/0.43.2-RELEASE_NOTES.md) 基于官方 0.43.0，手动多人军师扩为十四周期、普通时间/节点额度乘二，单人保持官方行为。GitHub 已发布版本仍为 0.43.1。见 [多人指南与兼容记录](multiplayer-advisor.md#官方-0430-兼容同步)；发布凭证见[开发笔记](DEVELOPMENT_NOTES.md)。官方标签保持原指向。
 
 通用随机/指定战斗测试入口：[场景生成与批量重跑](GENERATED_COMBAT_SCENARIOS.md)。
 
@@ -15,7 +15,7 @@
 | 多人手动军师、3 HP 周期目标、共同周期选路、救援与官方 0.41.0 兼容 | [多人军师](multiplayer-advisor.md) |
 | 独立「尖塔军师」拿牌推荐模组误读房主卡组的修复与重跑 | [本机玩家修复工具](../tools/SpireAdvisorMultiplayerFix/README.md) |
 | 多人研究原文归档、已采用改进与暂缓方案 | [策略索引](strategy/README.md#多人研究归档)、[首批实施](multiplayer-advisor.md#首批策略优化已实施) |
-| 七周期窗口、真人队友偏移与共同周期动作成本 | [2026-09-19 研究与实验](strategy/pro-horizon-20260919/README.md)；保留七周期，动作成本调整仅留离线实验 |
+| 十四周期规划、计算额度与队友偏移 | [2026-09-20 对照与采用](strategy/multiplayer-fourteen-cycles-20260920.md)；[旧七周期研究](strategy/pro-horizon-20260919/README.md)保留原始结果，动作成本调整仍仅为实验 |
 | 0.41.2 的第二轮 6 Pro 复审与首批修正 | [第二轮归档](strategy/pro-review-0412-20260918/README.md)、[本地复核](strategy/pro-review-0412-20260918/local-review.md)、[实施与收尾](strategy/pro-review-0412-20260918/implementation.md)；F01/F02/F03 纳入 0.41.3 定版 |
 | 0.41.1 的 ChatGPT 6 Pro 审查结论、策略设计原文与本地复核 | [复审归档](strategy/pro-review-20260918/README.md)、[本地复核与采用边界](strategy/pro-review-20260918/local-review.md)；旧版输入见[历史索引](strategy/README.md#多人研究归档) |
 | 状态键为什么要含整场历史计数、条件式与无条件追加的对照 | [状态键历史计数报告](strategy/state-key-history-counters-20260919.md) |

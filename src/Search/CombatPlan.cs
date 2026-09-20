@@ -1421,6 +1421,8 @@ internal sealed class SolverResult
 {
     public bool IsMultiplayerAdvice { get; internal set; }
     public int AdvisoryHorizon { get; internal set; }
+    public int AdvisoryTimeBudgetMilliseconds { get; internal set; }
+    public int AdvisoryNodeBudget { get; internal set; }
     public int AdvisoryHpLossAllowance { get; internal set; }
     public int AdvisoryMaximumCycleHpLost { get; internal set; }
     public int AdvisoryComparisonCycles { get; internal set; }

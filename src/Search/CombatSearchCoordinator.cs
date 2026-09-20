@@ -15,8 +15,7 @@ internal static partial class CombatSearchCoordinator
     {
         if (policy.Multiplayer != null)
         {
-            SolverSearchProfile advisoryProfile = policy.BudgetOverrideMilliseconds is { } budget
-                ? policy.Profile with { SoftTimeBudgetMilliseconds = budget } : policy.Profile;
+            SolverSearchProfile advisoryProfile = policy.Multiplayer.ResolveSearchProfile(policy);
             SolverResult advice = new CombatBeamSolver(root, displayNames, battleDamage, policy,
                 cancellationToken, progressCallback, advisoryProfile).Solve();
             advice.TotalSearchElapsed = advice.Elapsed;

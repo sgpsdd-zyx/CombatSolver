@@ -4,17 +4,17 @@ Combat Solver 是《杀戮尖塔 2》的战斗路线求解器，本 fork 支持�
 
 单人模式下，玩家可以只查看建议，也可以让求解器执行当前回合，或连续接管整场战斗。多人模式只提供手动请求的建议。搜索不会修改游戏 RNG，也不会在后台操作真实战斗状态。
 
-当前 fork **0.43.1** 基于官方 **0.43.0**，合入单人冻结路线、回合开始选牌续用、可选战后药水预测、历史计数与内存处理更新，同时保留七周期、单回合 3 HP 扣血目标的手动多人军师。安装包与说明见 [GitHub Release](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.43.1) 和 [更新日志](docs/releases/0.43.1-RELEASE_NOTES.md)，同步范围见 [多人军师](docs/multiplayer-advisor.md#官方-0430-兼容同步)。
+当前源码与本地准备版 **0.43.2** 基于官方 **0.43.0**，多人军师扩为十四个敌方周期，普通计算的时间和节点上限乘二，保留每周期 3 HP 扣血目标。单人保持官方路径。见 [更新日志](docs/releases/0.43.2-RELEASE_NOTES.md) 与 [多人军师](docs/multiplayer-advisor.md)；GitHub 已发布版本仍为 [0.43.1](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.43.1)。
 
-[多人军师](docs/multiplayer-advisor.md) 推荐本人的出牌和用药路线，最多推演七个敌方回合。队友行动后自行决定何时重算；推演假设队友后续不主动出牌或用药，但仍结算其被动效果。多人功能目前供试用，尚未完成真实联机验收。
+[多人军师](docs/multiplayer-advisor.md) 推荐本人的出牌和用药路线，最多推演十四个敌方回合。队友行动后自行决定何时重算；推演假设队友后续不主动出牌或用药，但仍结算其被动效果。多人功能目前供试用，尚未完成真实联机验收。
 
-**English UI:** Set the game language to English and restart the game. In single-player, use **Play turn** for one turn or **Auto: On** for continuous play. This fork adds manual multiplayer advice for up to seven enemy turns, including potions, prioritizing damage within a target of 3 HP lost per turn while avoiding lethal damage. It assumes teammates take no further active actions, and live multiplayer compatibility is not yet verified. Fork **0.43.1** incorporates upstream **0.43.0**, including single-player route freezing, turn-start continuation, optional potion reward forecasts, combat-history fixes and memory handling, while retaining manual multiplayer advice. See the [GitHub Release](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.43.1) and [release notes](docs/releases/0.43.1-RELEASE_NOTES.md). Configure potions, growth and search budgets in the overlay. **Settings > Reports > Upload report** submits a bug report. Logs, raw errors and some detailed diagnostics retain their original text.
+**English UI:** Set the game language to English and restart the game. In single-player, use **Play turn** for one turn or **Auto: On** for continuous play. This fork adds manual multiplayer advice for up to fourteen enemy turns, including potions, prioritizing damage within a target of 3 HP lost per turn while avoiding lethal damage. It assumes teammates take no further active actions, and live multiplayer compatibility is not yet verified. Local preparation **0.43.2** doubles the ordinary multiplayer time and node limits; single-player settings are unchanged. Published fork **0.43.1** incorporates upstream **0.43.0**, including single-player route freezing, turn-start continuation, optional potion reward forecasts, combat-history fixes and memory handling, while retaining manual multiplayer advice. See the [GitHub Release](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.43.1) and [release notes](docs/releases/0.43.1-RELEASE_NOTES.md). Configure potions, growth and search budgets in the overlay. **Settings > Reports > Upload report** submits a bug report. Logs, raw errors and some detailed diagnostics retain their original text.
 
 界面跟随游戏语言：简体/繁体中文使用现有中文文案，其他语言使用英文。简化版不提供独立语言开关；卡牌胶囊、选牌和相关悬停说明支持运行中切换语言，其他既有窗口可通过重启统一刷新。
 
 ## 主要功能
 
-- **多人手动军师（试用）**：点击重新计算，基于当时全队状态建议本人的出牌和用药；在单回合最多 3 HP 的扣血目标内优先输出，显示目标、预测最高扣血、实际推演深度和边界，最多七个敌方回合。多人只提供建议，以下执行和自动复用功能用于单人。
+- **多人手动军师（试用）**：点击重新计算，基于当时全队状态建议本人的出牌和用药；在单回合最多 3 HP 的扣血目标内优先输出，显示目标、预测最高扣血、实际推演深度和边界，最多十四个敌方回合。多人只提供建议，以下执行和自动复用功能用于单人。
 - **跨回合搜索**：继续预测抽牌、洗牌、敌人行动、持续状态和后续资源，而不是只计算眼前一回合。
 - **路线与战损展示**：按回合展示出牌、目标、选牌、药水、结束回合和关键遗物触发，并显示当前路线的预计整场战损。
 - **三种使用方式**：仅查看路线、执行本回合、连续全自动。搜索期间可以立即停止，并暂停本场后续自动搜索。
@@ -136,7 +136,7 @@ RitsuLib 需要单独安装。替换旧版前退出游戏，并确保只启用�
 
 最终路线依次比较生存、确认胜利、整场战损、药水消耗、主动卖血和敌方剩余状态。药水与普通出牌共同参与搜索，不使用独立的事后补算路线。
 
-Combat Solver 使用受时间、节点和内存预算约束的 Beam Search。它展示的是当前预算内找到的最佳路线，不承诺数学意义上的全局最优解。单人路线视野没有固定回合数或洗牌次数上限；多人建议最多覆盖七个敌方回合。循环检测、状态合并和预算终止仍会限制实际搜索范围。
+Combat Solver 使用受时间、节点和内存预算约束的 Beam Search。它展示的是当前预算内找到的最佳路线，不承诺数学意义上的全局最优解。单人路线视野没有固定回合数或洗牌次数上限；多人建议最多覆盖十四个敌方回合。循环检测、状态合并和预算终止仍会限制实际搜索范围。
 
 单人模式目标是覆盖 `0.111.0` 的战斗内容。运行时遇到尚未支持的新版本或第三方战斗语义时，求解器会明确停止在不支持边界，不会把未完成模拟误报为胜利。本 fork 多人军师的支持与验证范围见[专门说明](docs/multiplayer-advisor.md)；局外流程和第三方 Mod 的自定义战斗效果不在通用兼容范围内。
 

@@ -1,5 +1,22 @@
 # CombatSolver 测试清单
 
+## 0.43.2（fork）：十四周期长线规划（2026-09-20）
+
+基线为 0.43.1 的已成功 Release DLL（源码 `56b8ad4e`，本轮开始 HEAD `fa11efa6`），证据目录 `.local/mp-fourteen-20260920/`。实际输入使用原生游戏 0.111.0 托管模型；下面的离线合同不建立网络。
+
+| 检查 | 输入与本轮直接结果 |
+|---|---|
+| H7/H14 长线对照 | `--multiplayer-review-contracts horizon-fourteen --encounter FUZZY_WURM_CRAWLER_WEAK --beam 8 --nodes 350 --budget-ms 3000 --dop 1`；七个根各两次。旧/新 DLL 分别输出 `horizon-baseline/`、`horizon-candidate/`，非时序工作及首动作一致。统一十四周期外部评价中后期两根敌方 HP 从 304/164 降到 292/162，首动作从攻击转铺垫；短战斗仍 T2 胜利；四节点仍只完成一周期。明确的 Ethereal/缓冲试验输入，不代表正常卡组频率 |
+| 预算受限复杂牌组 | `horizon-budget`，十张原版牌，H7/原额度、H14/原额度、H14/双倍额度。Beam24、1200 节点、3000ms：H14 原额度只到 7 周期，双倍完成 14。Beam96、7000 节点、5000ms：原层分摊只到 11，新分摊到 12；双倍均完成 14，终点敌方 HP 9234。`budget-wide-baseline/`、`budget-wide-candidate/`、`budget-draw-baseline/`、`budget-draw-candidate/`。跨深度终点伤害不作质量提升比较；墙钟受冷热/构建干扰，不作性能结论 |
+| 十四周期与实际额度 | `--multiplayer-contracts --encounter FOGMOG_NORMAL --beam 12 --nodes 700 --budget-ms 12000 --dop 2`，`multiplayer-contracts/`。十三次原生完整 ContinuationStamp 一致，显式 H7/默认 H14 停止、旧根稳定、额外回合、四张多人牌、队友用药/选牌、本人原生选牌与增量、用药指令、禁止自动操作通过；44 动作 / 14 回合，旧前缀重验 1。生产协调器的 40 节点/1000ms 输入变为 80/2000；固定/显式覆盖不倍增，重复 Apply 不叠加，整数极值无溢出，实际额度文本一致 |
+| 防守与选路哨兵 | `--multiplayer-strategy-contracts --encounter FUZZY_WURM_CRAWLER_WEAK --beam 2 --nodes 100 --budget-ms 1000 --dop 1`，`strategy-final/`。九个扣血目标、同输出少损、避死、原生下一回合/治疗不刷新、Fork 与能力隔离通过；既有救援/铺垫/未来风险、完整资格、840 排列、216 三元组及预览/最终入口合同通过 |
+| 官方单人哨兵 | Coordinator、Beam12 / 350 节点 / 12000ms / DOP1，生成输入 `coverage/multiplayer/solo-power-compat.json`。只跑当前 `solo-final/`，复用已成功的独立官方 `solo-official/`；`solo-comparison.json` 80 项非时序/根/目录/动作字段和完整 `route.json` 相同，1820 展开、4583 转移、预计扣血 2，多人入口零进入 |
+| 原生本地化 | `UI-LOCALIZATION` Passed，runId `macos-810634608c29465cb15d3dace4e80ecf`，eng/zhs/zht 的 446 项模板及现有卡牌/路线/控件合同通过；`native-ui/`。实例 `.local/headless-instances/macos.U6QqJn` 已由带 `--cleanup-instance-on-exit` 的启动器删除，凭证 `native-ui-launch.log` |
+
+行为主项目及最终宿主编译均 0 警告/0 错误，日志 `build-candidate.log`、`build-validation.log`、`build-harness-contracts.log`。第一次未带本仓库 SDK 路径的宿主构建没有启动（命令不存在），改用 `.local/dotnet/dotnet` 后通过，失败日志保留。版本同步后只执行最终 Release 构建，不重跑行为测试。
+
+两端结构规则同步多人上限、显式预算旁路及政策所有权；Bash 已通过（`REFACTOR_BOUNDARIES_OK search_files=210`），直接凭证 `boundaries.log`，PowerShell 未执行。完整原始数据见[专项记录](strategy/multiplayer-fourteen-cycles-20260920.md)，结构化条目 `MULTIPLAYER-FOURTEEN-CYCLE-PLANNING`。没有可见 Steam、真实主机/客户端、三/四人、全遭遇性能/质量、干净安装或完整发布门禁结论。
+
 ## 0.43.1（fork）：上游融合验证（2026-09-19）
 
 固定输入：官方 `cccc270 / v0.43.0`，fork 起点 `adfd71e / 0.41.3`；本轮证据统一保存在 `.local/upstream-merge-20260919/`。官方源码由固定引用独立导出并构建，与本分支在独立进程使用相同请求对照。行为 DLL 验证时元数据为 0.43.0，随后仅将版本/发布文档同步为 0.43.1，最终 Release 构建后不重复行为场景。

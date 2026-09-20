@@ -23,6 +23,8 @@
 
 窗口专项复用该入口的三个阶段：`horizon` 对六个固定根运行 3/5/7/9 上限，输出 `horizon-comparison.json`；`horizon-native` 只核对本机铺垫与队友攻击两个原生手动动作的完整状态；`horizon-ordering` 分别记录现役完整动作数比较和仅在宿主中计算的共同周期成本提案，不改变生产比较器。固定输入为 `--encounter FUZZY_WURM_CRAWLER_WEAK --beam 8 --nodes 350 --budget-ms 3000 --dop 1`，要求单 worker、时间不超过 5000ms。`horizon` 把相同当前回合动作交给统一九周期评价器，队友攻击仅是测试侧的固定扰动；输出区分搜索工作与评价回放。Ethereal 铺垫牌是明确的实验改造，不是原版默认效果。窗口数字与首动作结果见[研究归档](strategy/pro-horizon-20260919/README.md)，不能把这些条件世界线当作真人策略或胜率验收。
 
+`horizon-fourteen` 复用窗口根，比较 7/14 周期并加入第十四周期才回本的输入；当前回合动作统一交给十四周期外部评价器。`horizon-budget` 用十张原版卡牌、抽牌与生成牌的固定长战斗，对照 H7/原额度、H14/原额度、H14/双倍额度，记录实际展开分布、选中周期、共同周期和动作；第三级显式倍增测试上限，不触发生产默认倍增。可用 Beam24/1200 节点/3000ms 或 Beam96/7000 节点/5000ms，单搜索最多等待 20 秒。十四周期语义与有效请求额度由 `--multiplayer-contracts --encounter FOGMOG_NORMAL --beam 12 --nodes 700 --budget-ms 12000 --dop 2` 验证，包含十三次原生完整状态对账、旧七周期控制、额外回合、边界及 UI 投影。结果和限制见[十四周期记录](strategy/multiplayer-fourteen-cycles-20260920.md)。
+
 ## 构建
 
 ```

@@ -1606,6 +1606,11 @@ $multiplayerAdviceRules = @(
     @{ Path = 'src/Search/CombatBeamSolver.cs'; Text = '_hasRegisteredPowerCards = policy.Multiplayer == null' }
     @{ Path = 'src/Search/SimulatedCombatState.Multiplayer.cs'; Text = 'throw new ExternalPlayerChoiceException' }
     @{ Path = 'src/Search/MultiplayerSearchPolicy.cs'; Text = 'StopAtAcceptableBattleHpLoss = false' }
+    @{ Path = 'src/Search/MultiplayerSearchPolicy.cs'; Text = 'int Horizon = 14,' }
+    @{ Path = 'src/Search/MultiplayerSearchPolicy.cs'; Text = 'if (policy.FixedBudget) return profile;' }
+    @{ Path = 'src/Search/CombatSearchCoordinator.cs'; Text = 'policy.Multiplayer.ResolveSearchProfile(policy)' }
+    @{ Path = 'src/Search/CombatBeamSolver.Phases.cs'; Text = 'policy.Multiplayer?.RemainingCycleLayers(' }
+    @{ Path = 'src/Search/CombatBeamSolver.Phases.cs'; Text = 'result.AdvisoryTimeBudgetMilliseconds = IsMultiplayerAdvice ? _profile.SoftTimeBudgetMilliseconds : 0;' }
     @{ Path = 'src/Search/MultiplayerSearchPolicy.cs'; Text = 'internal readonly record struct MultiplayerHpLossBudget(' }
     @{ Path = 'src/Search/CombatBeamSolver.Multiplayer.cs'; Text = 'private List<SearchNode> RankMultiplayer(' }
     @{ Path = 'src/Search/CombatBeamSolver.Multiplayer.cs'; Text = 'private MultiplayerFinalBatch PrepareMultiplayerFinalCandidates(' }

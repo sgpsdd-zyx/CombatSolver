@@ -104,6 +104,10 @@ internal static class MultiplayerHorizonContracts
             Profile = ModRuntime.ResolveProfile(options),
             MaxDegreeOfParallelism = 1,
         };
+        bool extended = options.Scenario.MultiplayerReviewStage == "horizon-fourteen";
+        int evaluationHorizon = extended ? 14 : 9;
+        if (options.Scenario.MultiplayerReviewStage == "horizon-budget")
+            return VerifyLongHorizonBudget(state, local, template, options, loop, Native);
         if (options.Scenario.MultiplayerReviewStage == "horizon-ordering")
         {
             Native(CardPileCmd.AddGeneratedCardToCombat(state.CreateCard(ModelDb.Card<Deflect>(), local),
@@ -120,7 +124,7 @@ internal static class MultiplayerHorizonContracts
         List<object> evidence = [];
         try
         {
-            foreach ((string name, int enemyHp, int nodes, int strength) in new[]
+            (string Name, int EnemyHp, int Nodes, int Strength)[] cases =
             {
                 ("late_setup", 500, template.Profile.MaxExpandedNodes, 0),
                 ("early_finish", 12, template.Profile.MaxExpandedNodes, 0),
@@ -128,7 +132,10 @@ internal static class MultiplayerHorizonContracts
                 ("peer_finisher", 38, template.Profile.MaxExpandedNodes, 0),
                 ("payback_seven", 500, template.Profile.MaxExpandedNodes, 1),
                 ("payback_nine", 500, template.Profile.MaxExpandedNodes, 5),
-            })
+            };
+            if (extended)
+                cases = [.. cases, ("payback_fourteen", 500, template.Profile.MaxExpandedNodes, 15)];
+            foreach ((string name, int enemyHp, int nodes, int strength) in cases)
             {
                 if (strength > 0)
                 {
@@ -147,7 +154,7 @@ internal static class MultiplayerHorizonContracts
                 ContinuationStamp live = ContinuationStamp.CaptureLive(state, multiplayerAdvisor: true);
                 SolverDisplayNames names = SolverDisplayNames.Capture(state);
                 BattleDamageSnapshot damage = BattleDamageTracker.Observe(state);
-                foreach (int horizon in new[] { 3, 5, 7, 9 })
+                foreach (int horizon in extended ? new[] { 7, 14 } : new[] { 3, 5, 7, 9 })
                 {
                     SearchPolicySnapshot policy = new MultiplayerSearchPolicy(Horizon: horizon).Apply(template) with
                     {
@@ -172,10 +179,10 @@ internal static class MultiplayerHorizonContracts
                         .TakeWhile(action => action.Turn == root.StartTurnNumber)
                         .Where(action => action.Kind != PlanActionKind.EndTurn).ToArray();
                     Evaluation evaluated = EvaluateCurrentTurn(root, names, damage, template, local,
-                        state.Enemies[0].CombatId, currentTurn);
+                        state.Enemies[0].CombatId, currentTurn, evaluationHorizon: evaluationHorizon);
                     Evaluation? peerEvaluation = name == "peer_finisher"
                         ? EvaluateCurrentTurn(root, names, damage, template, local,
-                            state.Enemies[0].CombatId, currentTurn, peer) : null;
+                            state.Enemies[0].CombatId, currentTurn, peer, evaluationHorizon) : null;
                     evidence.Add(new
                     {
                         name, rootEnemyHp = enemyHp, strength, strike.IsUpgraded, horizon, nodeLimit = nodes,
@@ -206,14 +213,14 @@ internal static class MultiplayerHorizonContracts
             GameBootstrap.Harmony.Unpatch(observation, prefix);
             GameBootstrap.Harmony.Unpatch(turnEnd, peerPrefix);
         }
-        return $"horizon_runs={evidence.Count} same_budget=true common_evaluation_cycles=9 live_root_unchanged=true";
+        return $"horizon_runs={evidence.Count} same_budget=true common_evaluation_cycles={evaluationHorizon} live_root_unchanged=true";
 
         void WriteEvidence() => File.WriteAllText(Path.Combine(options.OutputDirectory, "horizon-comparison.json"),
             JsonSerializer.Serialize(new
             {
                 fixture = "native_models_ethereal_inflame_one_strike",
                 localPlayerIndex = 1,
-                evaluationProtocol = "Selected current-turn cards, then one legal Strike per turn through cycle 9; teammates pass. Evaluation work is separate from search.",
+                evaluationProtocol = $"Selected current-turn cards, then one legal Strike per turn through cycle {evaluationHorizon}; teammates pass. Evaluation work is separate from search.",
                 peerProtocol = "Only peer_finisher: the teammate legally plays one Bludgeon before the first enemy cycle, then passes. This is a fixed perturbation, not a human probability model.",
                 humanPolicyValidated = false,
                 evidence,
@@ -222,14 +229,14 @@ internal static class MultiplayerHorizonContracts
 
     private static Evaluation EvaluateCurrentTurn(CombatRootSnapshot root, SolverDisplayNames names,
         BattleDamageSnapshot damage, SearchPolicySnapshot template, Player local, uint? enemyId,
-        IReadOnlyList<PlanAction> currentTurn, Player? peer = null)
+        IReadOnlyList<PlanAction> currentTurn, Player? peer = null, int evaluationHorizon = 9)
     {
         if (_scriptedPeer != null) throw new InvalidOperationException("Nested horizon evaluation.");
         _scriptedPeer = peer;
         _peerReplayActions = 0;
         try
         {
-            SearchPolicySnapshot policy = new MultiplayerSearchPolicy(Horizon: 9).Apply(template);
+            SearchPolicySnapshot policy = new MultiplayerSearchPolicy(Horizon: evaluationHorizon).Apply(template);
             var solver = new CombatBeamSolver(root, names, damage, policy, searchProfile: policy.Profile);
             List<PlanAction> actions = [.. currentTurn];
             bool needsEndTurn = true;
@@ -274,6 +281,85 @@ internal static class MultiplayerHorizonContracts
             throw new InvalidOperationException("Fixed horizon evaluator exceeded its action bound.");
         }
         finally { _scriptedPeer = null; }
+    }
+
+    private static string VerifyLongHorizonBudget(CombatState state, Player local, SearchPolicySnapshot template,
+        HarnessOptions options, MainLoopContext loop, Action<Task> native)
+    {
+        native(CardPileCmd.RemoveFromCombat(local.PlayerCombatState!.AllCards.ToArray(), skipVisuals: true));
+        native(PlayerCmd.GainEnergy(3 - local.PlayerCombatState.Energy, local));
+        foreach (var (model, pile) in new (CardModel, PileType)[]
+        {
+            (ModelDb.Card<Anger>(), PileType.Hand),
+            (ModelDb.Card<PommelStrike>(), PileType.Hand),
+            (ModelDb.Card<ShrugItOff>(), PileType.Hand),
+            (ModelDb.Card<Inflame>(), PileType.Hand),
+            (ModelDb.Card<BattleTrance>(), PileType.Hand),
+            (ModelDb.Card<StrikeIronclad>(), PileType.Draw),
+            (ModelDb.Card<StrikeIronclad>(), PileType.Draw),
+            (ModelDb.Card<DefendIronclad>(), PileType.Draw),
+            (ModelDb.Card<Bash>(), PileType.Draw),
+            (ModelDb.Card<TwinStrike>(), PileType.Draw),
+        })
+            native(CardPileCmd.AddGeneratedCardToCombat(state.CreateCard(model, local), pile, local));
+        state.Enemies[0].SetMaxHpInternal(10_000);
+        state.Enemies[0].SetCurrentHpInternal(10_000);
+        native(RunManager.Instance.ActionExecutor.FinishedExecutingActions());
+        CombatRootSnapshot root = CombatRootSnapshot.Capture(state, multiplayerAdvisor: true);
+        ContinuationStamp live = ContinuationStamp.CaptureLive(state, multiplayerAdvisor: true);
+        SolverDisplayNames names = SolverDisplayNames.Capture(state);
+        BattleDamageSnapshot damage = BattleDamageTracker.Observe(state);
+        var observation = AccessTools.Method(typeof(CombatBeamSolver), "ObserveSearchPath");
+        var prefix = AccessTools.Method(typeof(MultiplayerHorizonContracts), nameof(ObserveExpansion));
+        GameBootstrap.Harmony.Patch(observation, prefix: new HarmonyMethod(prefix));
+        List<object> evidence = [];
+        try
+        {
+            foreach (var (horizon, multiplier) in new[] { (7, 1), (14, 1), (14, 2) })
+            {
+                int nodes = checked(template.Profile.MaxExpandedNodes * multiplier);
+                int budget = checked(options.BudgetMilliseconds * multiplier);
+                SearchPolicySnapshot policy = new MultiplayerSearchPolicy(Horizon: horizon).Apply(template) with
+                {
+                    Profile = template.Profile with { MaxExpandedNodes = nodes, SoftTimeBudgetMilliseconds = budget },
+                    BudgetOverrideMilliseconds = budget,
+                };
+                ExpandedCycles.Clear();
+                _collecting = true;
+                SolverResult result;
+                try
+                {
+                    var search = Task.Run(() => CombatSearchCoordinator.Solve(root, names, damage, policy,
+                        CancellationToken.None, null));
+                    loop.RunUntilCompleted(search, TimeSpan.FromSeconds(20), $"Budget h={horizon} x{multiplier}");
+                    result = search.GetAwaiter().GetResult();
+                }
+                finally { _collecting = false; }
+                if (result.ExpandedNodes > nodes || ExpandedCycles.Values.Sum() != result.ExpandedNodes
+                    || result.Snapshot.AdvisoryEnemyCycles > horizon
+                    || ContinuationStamp.CaptureLive(state, multiplayerAdvisor: true).StateText != live.StateText)
+                    throw new InvalidOperationException("Long-horizon budget search violated its limits or changed the live root.");
+                evidence.Add(new
+                {
+                    horizon, multiplier, nodeLimit = nodes, timeLimitMilliseconds = budget,
+                    expandedCycles = ExpandedCycles.ToDictionary(), result.ExpandedNodes, result.TransitionCount,
+                    result.Elapsed, result.AdvisoryComparisonCycles, selectedCycles = result.Snapshot.AdvisoryEnemyCycles,
+                    result.BoundaryReason, result.Snapshot.EnemyHp, result.Snapshot.CumulativePlayerHpLost,
+                    result.AdvisoryMaximumCycleHpLost, result.BestNode.Actions,
+                });
+                File.WriteAllText(Path.Combine(options.OutputDirectory, "horizon-budget.json"),
+                    JsonSerializer.Serialize(new { fixture = "native_ten_card_draw_and_anger", evidence }, UnattendedTestFiles.JsonOptions));
+                Console.WriteLine($"[horizon-budget] h={horizon} x{multiplier} expanded={result.ExpandedNodes} "
+                    + $"common={result.AdvisoryComparisonCycles} selected={result.Snapshot.AdvisoryEnemyCycles} "
+                    + $"enemy_hp={result.Snapshot.EnemyHp} boundary={result.BoundaryReason}");
+            }
+        }
+        finally
+        {
+            _collecting = false;
+            GameBootstrap.Harmony.Unpatch(observation, prefix);
+        }
+        return $"budget_runs={evidence.Count} live_root_unchanged=true teammates=passive";
     }
 
     private static void VerifyNativeActions(CombatState state, Player local, CardModel setup,

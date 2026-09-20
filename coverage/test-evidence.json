@@ -1,4 +1,12 @@
 {
+  "MULTIPLAYER-FOURTEEN-CYCLE-PLANNING": {
+    "status": "Passed",
+    "level": "OfflineManagedPolicyNativeCyclesAndNativeHeadlessLocalization",
+    "procedure": "From fork 0.43.1 run the horizon-fourteen 7/14 comparison with Beam8/350 nodes/3000ms/DOP1, and horizon-budget with Beam24/1200 nodes/3000ms and Beam96/7000 nodes/5000ms (H7 x1, H14 x1, H14 x2). Run final multiplayer native contracts with FOGMOG_NORMAL/Beam12/700 nodes/12000ms/DOP2, existing strategy contracts, the official solo Coordinator sentinel, and UI-LOCALIZATION in an isolated macOS headless instance.",
+    "expected": "Fourteen enemy cycles with twice the ordinary multiplayer time/node limits, preserving exact fixed/override budgets, settings and solo behavior. Reserve by completed enemy cycles, preserve 3 HP risk ordering and partial-result boundaries, display effective budgets.",
+    "observed": "2026-09-20: seven fixed roots compared through the same external 14-cycle protocol; two delayed-payback roots improve damage by 12 and 2, short-fight first action unchanged, four-node results remain at cycle 1. Beam24 H14 needs doubled budget to reach 14; Beam96 capped depth rises 11 to 12 with cycle allocation, doubled budget reaches 14. Thirteen native full-party state comparisons match; 7/14 boundaries, extra turn, choices, potions, fixed/override/idempotent/saturating budget and UI projection pass; final route 44 actions/14 turns. Nine strategy cases plus selection/permutation/incremental/Fork controls pass. Eighty official solo comparison fields and full route JSON equal (1820 expanded/4583 transitions/2 HP). UI-LOCALIZATION passes 446 templates in eng/zhs/zht; run macos-810634608c29465cb15d3dace4e80ecf, entire macos.U6QqJn instance removed. No visible Steam or live-network, 3/4-player, all-encounter quality/performance guarantees.",
+    "evidence": "docs/TEST_MATRIX.md; docs/strategy/multiplayer-fourteen-cycles-20260920.md; .local/mp-fourteen-20260920/horizon-baseline/; .local/mp-fourteen-20260920/horizon-candidate/; .local/mp-fourteen-20260920/budget-wide-baseline/; .local/mp-fourteen-20260920/budget-wide-candidate/; .local/mp-fourteen-20260920/budget-draw-baseline/; .local/mp-fourteen-20260920/budget-draw-candidate/; .local/mp-fourteen-20260920/multiplayer-contracts/; .local/mp-fourteen-20260920/strategy-final/; .local/mp-fourteen-20260920/solo-comparison.json; .local/mp-fourteen-20260920/native-ui-launch.log"
+  },
   "MULTIPLAYER-UPSTREAM-0430-COMPAT": {
     "status": "Passed",
     "level": "OfflineManagedCompatibilityAndNativeHeadlessBoundaries",

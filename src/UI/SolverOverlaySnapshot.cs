@@ -524,6 +524,8 @@ internal sealed record SolverOverlaySnapshot(
                 ? SolverText.Format($"预测停止于：{(result.BoundaryReason == SearchBoundaryReason.UnsupportedEffect ? SolverText.Get("未支持的战斗效果") : BoundaryText(result.BoundaryReason, result.AdvisoryHorizon))}")
                 : SolverText.Format($"[color={SolverUiTokens.Palette.TextMutedHex}]边界[/color]  {BoundaryText(result.BoundaryReason, result.AdvisoryHorizon)}  │  停止洗牌分支 {result.ShuffleBranchesPruned}  │  不可避免战损 {result.UnavoidableHpLost}"),
         ];
+        if (result.IsMultiplayerAdvice && result.AdvisoryTimeBudgetMilliseconds > 0)
+            detailLines.Insert(1, SolverText.Format($"本次多人计算上限：{result.AdvisoryTimeBudgetMilliseconds / 1000d:F1} 秒 / {result.AdvisoryNodeBudget:N0} 节点。"));
         if (result.TheftPolicy is { } theftPolicy)
         {
             detailLines.Insert(

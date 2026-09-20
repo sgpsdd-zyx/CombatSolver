@@ -10,6 +10,7 @@
   "战场已变化，当前路线基于计算时的局面；由你决定何时重新计算。": "Combat has changed. This route uses the state captured when you started the search. Recalculate when you choose.",
   "假设队友不再主动出牌或用药；搜索包含后续回合与药水，仅提供建议。": "Assumes teammates take no further active card or potion actions. Includes future turns and potions; advice only.",
   "敌方回合：已推演 {0} / 上限 {1}": "Enemy turns: forecast {0} / limit {1}",
+  "本次多人计算上限：{0:F1} 秒 / {1:N0} 节点。": "Multiplayer search limits: {0:F1} seconds / {1:N0} nodes.",
   "选路比较范围：第 {0} 个敌方周期": "Routes compared through enemy cycle {0}",
   "尚未完成首个敌方周期，当前建议缺少完整受击评估。": "No full enemy cycle evaluated yet; incoming damage is not fully assessed.",
   "输出优先：单回合扣血目标不超过 {0} 点；当前预测最高 {1} 点。": "Prioritize damage within {0} HP lost per turn; current forecast peaks at {1} HP.",

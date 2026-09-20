@@ -12,11 +12,11 @@
 
 ### 多人手动建议分支
 
-`SolverController` 在网络多人中只接受 Manual 请求，排空旧 worker 后主线程捕获整个战场。`SolverController.Multiplayer` 持有过期标记和有界纯动作路线，不做自动续用或部署；`ContinuationStamp.Multiplayer` 对账全队状态。`MultiplayerSearchPolicy` 注入最多七次敌方周期与独立建议排序，`CombatBeamSolver.Multiplayer` 重放旧前缀，重放计数属于 `SearchRunContext`；`MultiplayerRound` 编排全队回合，不接管实机。已推演的敌方周期从分支按值复制至 `SimulationSnapshot`、`SolverSnapshot` 和 UI，与窗口上限分开显示，不增加原节点/时间预算。`SimulatedCombatState.Multiplayer` 的身份、窗口和额外回合参与者随 Fork 复制，其他队员数值继续属于既有影子状态。队友选择通过显式边界退出，本人选择继续搜索。UI 仍只渲染 snapshot，单人调用原有路径。详见 [行为与验证](multiplayer-advisor.md)。
+`SolverController` 在网络多人中只接受 Manual 请求，排空旧 worker 后主线程捕获整个战场。`SolverController.Multiplayer` 持有过期标记和有界纯动作路线，不做自动续用或部署；`ContinuationStamp.Multiplayer` 对账全队状态。`MultiplayerSearchPolicy` 注入最多十四次敌方周期与独立建议排序，`CombatBeamSolver.Multiplayer` 重放旧前缀，重放计数属于 `SearchRunContext`；`MultiplayerRound` 编排全队回合，不接管实机。已推演的敌方周期从分支按值复制至 `SimulationSnapshot`、`SolverSnapshot` 和 UI，与窗口上限分开显示。`MultiplayerSearchPolicy.ResolveSearchProfile` 在多人协调器入口解析一次有效额度：普通请求时间/节点乘二，固定或显式覆盖保持原值，不改持久化设置。`RemainingCycleLayers` 供 `Phases` 按前沿实际完成的敌方周期分摊原请求剩余额度，额外玩家回合不当作周期；单人保持官方 4/8 层。有效额度经 `SolverResult` 纯值传到 UI 详情，窗口、预算均只归多人政策所有。`SimulatedCombatState.Multiplayer` 的身份、窗口和额外回合参与者随 Fork 复制，其他队员数值继续属于既有影子状态。队友选择通过显式边界退出，本人选择继续搜索。UI 仍只渲染 snapshot，单人调用原有路径。详见 [行为与验证](multiplayer-advisor.md)。
 
 多人默认以每个敌方周期 3 HP 扣血为输出目标范围。`CombatRootSnapshot` 在主线程冻结本机本轮已经发生的未格挡伤害；敌方周期结束、下一玩家回合准备之前，`Expansion.Replay` 将累计扣血检查点写入 `SimulatedCombatState.AdvisorLastEnemyCycleHpLost`，随 Fork 按值复制。该字段只记录原始观察，不决定政策；`SearchNode` 持有不可变的 `MultiplayerHpLossBudget`，区分已结束周期的超额扣血与当前周期的已用额度。治疗、重算和额外玩家回合不清除已用额度，下一回合准备的自损计入新周期。政策账本通过转置标签和去重标签保留，不进入战斗状态键或 `ContinuationStamp`。
 
-`CombatBeamSolver.Multiplayer` 中的 `BeamRetentionPolicy` 分片先覆盖多人进攻、防御、铺垫代表，再补剩余席位，全部共用既有 Beam 与请求预算。`MultiplayerEvaluation` 在敌方结算后、下一玩家准备前捕获 `MultiplayerCycleCheckpoint`：它是最多七条、只含数值的不可变短链，归分支持有并由 Fork 共享历史；不含模型或模拟器。原始周期观察和扣血账本通过去重/转置标签区分，单人保持默认值；不加入战斗状态键或原生对账戳。
+`CombatBeamSolver.Multiplayer` 中的 `BeamRetentionPolicy` 分片先覆盖多人进攻、防御、铺垫代表，再补剩余席位，全部共用既有 Beam 与请求预算。`MultiplayerEvaluation` 在敌方结算后、下一玩家准备前捕获 `MultiplayerCycleCheckpoint`：它是最多十四条、只含数值的不可变短链，归分支持有并由 Fork 共享历史；不含模型或模拟器。原始周期观察和扣血账本通过去重/转置标签区分，单人保持默认值；不加入战斗状态键或原生对账戳。
 
 多人发布候选由 `CombatBeamSolver.Multiplayer.PrepareMultiplayerFinalCandidates` 先按逐槽强制用药、最少显式用药和至少一瓶资格过滤，再冻结一个 `MultiplayerPlanOrdering`，排序并保留至多 `4B` 条。`MultiplayerFinalBatch` 只持有候选引用和本批排序上下文；预览与最终返回通过同一个 `SelectMultiplayerFinal` 消费该批次并传递共同周期，不在截断子集上重新定深度。已终止候选的中途压缩也先过滤资格，但可继续展开的前缀保路不受最终资格限制。空合格池由选路入口明确失败；中途没有合格终局可以继续搜索。`Phases` 继续独占候选模拟器的释放，批次对象不复制或释放模拟器，`FinalPlanOrdering` 保留原单人政策。
 

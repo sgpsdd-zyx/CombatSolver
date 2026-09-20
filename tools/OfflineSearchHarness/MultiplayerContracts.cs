@@ -38,7 +38,8 @@ internal static class MultiplayerContracts
         BattleDamageSnapshot damage = BattleDamageTracker.Observe(state);
         SearchPolicySnapshot policy = new MultiplayerSearchPolicy().Apply(SolverController.CaptureSearchPolicy(
             SolverSettings.Capture(), state, includeTurnSetup: false, theftPolicy: null));
-        Require(policy.Multiplayer!.Horizon == 7, "default seven-enemy-turn horizon");
+        Require(policy.Multiplayer!.Horizon == 14, "default fourteen-enemy-cycle horizon");
+        VerifyRequestBudget(root, names, damage, policy, loop);
         int horizon = policy.Multiplayer.Horizon;
         var solver = new CombatBeamSolver(root, names, damage, policy, searchProfile: policy.Profile);
         var predictions = new List<SimulationSnapshot>();
@@ -49,16 +50,16 @@ internal static class MultiplayerContracts
             predictions.Add(solver.ReplayMultiplayerForTesting(actions));
         }
         Require(predictions[^1].BoundaryReason == SearchBoundaryReason.AdvisoryHorizon
-            && predictions[^1].AdvisoryEnemyCycles == horizon, "seventh enemy cycle reaches the horizon");
+            && predictions[^1].AdvisoryEnemyCycles == horizon, "fourteenth enemy cycle reaches the horizon");
         Require(predictions.Take(horizon - 1).All(prediction => prediction.BoundaryReason == SearchBoundaryReason.None),
             "earlier enemy cycles remain searchable");
-        SearchPolicySnapshot fiveTurnPolicy = new MultiplayerSearchPolicy(Horizon: 5).Apply(policy);
-        var fiveTurnSolver = new CombatBeamSolver(root, names, damage, fiveTurnPolicy, searchProfile: policy.Profile);
-        var fiveTurnPrediction = fiveTurnSolver.ReplayMultiplayerForTesting(
-            Enumerable.Range(root.StartTurnNumber, 5).Select(turn => new PlanAction(PlanActionKind.EndTurn, turn)).ToArray());
-        Require(fiveTurnPrediction.BoundaryReason == SearchBoundaryReason.AdvisoryHorizon
-            && fiveTurnPrediction.AdvisoryEnemyCycles == 5, "five-turn policy has its own horizon");
-        fiveTurnPrediction.ReleaseSimulator();
+        SearchPolicySnapshot sevenCyclePolicy = new MultiplayerSearchPolicy(Horizon: 7).Apply(policy);
+        var sevenCycleSolver = new CombatBeamSolver(root, names, damage, sevenCyclePolicy, searchProfile: policy.Profile);
+        var sevenCyclePrediction = sevenCycleSolver.ReplayMultiplayerForTesting(
+            Enumerable.Range(root.StartTurnNumber, 7).Select(turn => new PlanAction(PlanActionKind.EndTurn, turn)).ToArray());
+        Require(sevenCyclePrediction.BoundaryReason == SearchBoundaryReason.AdvisoryHorizon
+            && sevenCyclePrediction.AdvisoryEnemyCycles == 7, "explicit seven-cycle control keeps its horizon");
+        sevenCyclePrediction.ReleaseSimulator();
         for (int round = 0; round < horizon - 1; round++)
         {
             int turn = local.PlayerCombatState!.TurnNumber;
@@ -91,6 +92,8 @@ internal static class MultiplayerContracts
         loop.RunUntilCompleted(task, TimeSpan.FromSeconds(90), "Multiplayer search");
         SolverResult result = task.GetAwaiter().GetResult();
         Require(result.IsMultiplayerAdvice && result.AdvisoryHorizon == horizon, "advisory result metadata");
+        Require(result.AdvisoryTimeBudgetMilliseconds == policy.Profile.SoftTimeBudgetMilliseconds
+            && result.AdvisoryNodeBudget == policy.Profile.MaxExpandedNodes, "actual advisory budget metadata");
         Require(result.BestNode.Actions.All(action => action.Turn >= current.StartTurnNumber), "local action turns");
         Require(result.ExpandedNodes <= policy.Profile.MaxExpandedNodes, "longer horizon keeps the node budget");
         SolverResult limited = Solve(current, policy with
@@ -121,10 +124,47 @@ internal static class MultiplayerContracts
         VerifyExtraTurn(state, local, loop, policy);
         VerifyChoicesAndPotions(state, local, loop, policy);
         VerifyRuntimeIsolation(state);
-        return $"native_turns={horizon - 1}:equal horizons=5,7 frozen_root=equal local_index=1 boundary={result.BoundaryReason} "
+        return $"native_turns={horizon - 1}:equal horizons=7,{horizon} frozen_root=equal local_index=1 boundary={result.BoundaryReason} "
             + $"actions={result.BestNode.ActionCount} turns={result.SearchedTurns} reuse={reused.ReplayedAdviceActions} "
             + "cards=4 peer_potion=equal extra_turn=equal peer_choice=boundary potion_choice=native_equal "
             + "potion_directives=passed native_controls=blocked partial_depth_ui=passed";
+    }
+
+    private static void VerifyRequestBudget(CombatRootSnapshot root, SolverDisplayNames names,
+        BattleDamageSnapshot damage, SearchPolicySnapshot policy, MainLoopContext loop)
+    {
+        SearchPolicySnapshot request = policy with
+        {
+            FixedBudget = false,
+            BudgetOverrideMilliseconds = null,
+            Profile = new SolverSearchProfile(4, 40, 12, 4, 4, 1000),
+        };
+        SolverSearchProfile resolved = request.Multiplayer!.ResolveSearchProfile(request);
+        Require(resolved.MaxExpandedNodes == 80 && resolved.SoftTimeBudgetMilliseconds == 2000
+            && resolved.BeamWidth == 4 && request.Profile.MaxExpandedNodes == 40,
+            "ordinary multiplayer requests double time and nodes without widening the beam or mutating settings");
+        Require(request.Multiplayer.Apply(request).Multiplayer!.ResolveSearchProfile(request) == resolved,
+            "reapplying multiplayer policy does not compound the budget");
+        SolverSearchProfile fixedProfile = request.Multiplayer.ResolveSearchProfile(request with { FixedBudget = true });
+        Require(fixedProfile == request.Profile, "fixed test budgets are not multiplied");
+        SolverSearchProfile explicitTime = request.Multiplayer.ResolveSearchProfile(request with { BudgetOverrideMilliseconds = 750 });
+        Require(explicitTime.SoftTimeBudgetMilliseconds == 750 && explicitTime.MaxExpandedNodes == 40,
+            "explicit time and node budgets are honored");
+        SolverSearchProfile saturated = request.Multiplayer.ResolveSearchProfile(request with
+        {
+            Profile = request.Profile with { MaxExpandedNodes = int.MaxValue, SoftTimeBudgetMilliseconds = int.MaxValue },
+        });
+        Require(saturated.MaxExpandedNodes == int.MaxValue && saturated.SoftTimeBudgetMilliseconds == int.MaxValue,
+            "large custom budgets do not overflow");
+        var search = Task.Run(() => CombatSearchCoordinator.Solve(root, names, damage, request,
+            CancellationToken.None, null));
+        loop.RunUntilCompleted(search, TimeSpan.FromSeconds(20), "Multiplayer effective request budget");
+        SolverResult result = search.GetAwaiter().GetResult();
+        Require(result.AdvisoryNodeBudget == 80 && result.AdvisoryTimeBudgetMilliseconds == 2000
+            && result.ExpandedNodes <= 80, "coordinator uses the resolved multiplayer request budget");
+        SolverOverlaySnapshot overlay = SolverOverlaySnapshot.Capture(result, unexpectedReplan: false);
+        Require(overlay.DetailsText.Contains(SolverText.Format($"本次多人计算上限：{2d:F1} 秒 / {80:N0} 节点。")),
+            "advisory details show the effective limits");
     }
 
     private static void VerifyActions(CombatState state, Player local, HarnessOptions options,
