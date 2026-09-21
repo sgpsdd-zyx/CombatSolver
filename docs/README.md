@@ -1,6 +1,6 @@
 # CombatSolver 文档导航
 
-当前源码和本地准备版 [0.43.5](releases/0.43.5-RELEASE_NOTES.md) 基于官方 0.43.2，合入其用药、生成牌、缓存、历史计数与英文面板更新；保留多人完整回合覆盖选路、十四周期、普通双倍额度、遗物归属与佩尔之眼修复。GitHub 已发布版本仍为 fork 0.43.1。现役机制见[多人指南](multiplayer-advisor.md)，[合并记录](strategy/upstream-0432-merge-20260920.md)区分本轮验证与上游历史；官方标签不移动。
+当前 GitHub 已发布 fork [0.43.5](releases/0.43.5-RELEASE_NOTES.md)，基于官方 0.43.2，合入其用药、生成牌、缓存、历史计数与英文面板更新；包含多人完整回合覆盖选路、十四周期、普通双倍额度、遗物归属与佩尔之眼修复。现役机制见[多人指南](multiplayer-advisor.md)，[合并记录](strategy/upstream-0432-merge-20260920.md)区分本轮验证与上游历史，[发布归档](releases/0.43.5-PUBLISH.md)保留渠道凭证和未验证范围；官方标签不移动。
 
 - [增量历史计数](strategy/incremental-history-counters.md)：生命周期、测试构建与构键计时。
 - [转置表触顶证据](performance/transposition-cap-evidence-20260920.md)：默认条目上限、标签分布与逐根观测。
@@ -14,6 +14,7 @@
 
 | 要查什么 | 入口 |
 |---|---|
+| 0.43.5 发布来源、GitHub 交付与知识收尾 | [发布归档](releases/0.43.5-PUBLISH.md) |
 | 0.41.2 发布、独立尖塔军师修复及本地材料的归档状态 | [2026-09-18 归档记录](DEVELOPMENT_NOTES.md#归档状态2026-09-18) |
 | 多人手动军师、3 HP 周期目标、共同周期选路、救援与官方 0.43.2 兼容 | [多人军师](multiplayer-advisor.md) |
 | 独立「尖塔军师」拿牌推荐模组误读房主卡组的修复与重跑 | [本机玩家修复工具](../tools/SpireAdvisorMultiplayerFix/README.md) |

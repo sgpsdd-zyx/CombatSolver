@@ -2,7 +2,7 @@
 
 日期：2026-09-20（America/Los_Angeles）。用户要求检查并尝试合入 fork 原仓库的新更新。本轮从 `7b52ac8c / fork 0.43.4` 合并官方 `3f4002bd / 0.43.2`，共同基线为 `cccc270 / 0.43.0`，包含官方此后的 27 个提交。远端为 `Torch1230/CombatSolver`。
 
-当前行为见[多人指南](../multiplayer-advisor.md)，面向玩家的变化见[fork 0.43.5](../releases/0.43.5-RELEASE_NOTES.md)。本轮只准备本地补丁和提交；已知 GitHub 发布版仍为 fork 0.43.1，不创建新标签或上传渠道。官方新标签抓取到 `refs/upstream-tags/*`，已有 fork 标签不移动。
+当前行为见[多人指南](../multiplayer-advisor.md)，面向玩家的变化见[fork 0.43.5](../releases/0.43.5-RELEASE_NOTES.md)。本合并阶段只准备本地补丁和提交；用户随后单独授权发布，0.43.5 已上传 GitHub，见[发布归档](../releases/0.43.5-PUBLISH.md)。下文保留合并阶段原有的验证范围与状态，不把后续发布计为行为验收。官方新标签抓取到 `refs/upstream-tags/*`，已有 fork 标签不移动。
 
 ## 合并取舍
 

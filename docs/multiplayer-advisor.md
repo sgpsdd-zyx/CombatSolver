@@ -1,6 +1,6 @@
 # 多人军师（基于官方 0.43.2）
 
-当前源码与本地准备版本为 [0.43.5](releases/0.43.5-RELEASE_NOTES.md)，合入官方 `3f4002bd / 0.43.2`，保留完整当前回合覆盖后的长线比较、多人遗物归属与佩尔之眼修复。GitHub 已发布版本仍为 fork 0.43.1。上限十四个敌方周期，普通手动请求时间/节点上限仍为原值两倍；单人保持该官方版本路径。官方标签不含 fork 多人功能。原始研究与历史版本见[策略索引](strategy/README.md#多人研究归档)，本轮兼容修正与验证见[上游合并记录](strategy/upstream-0432-merge-20260920.md)，长线策略见[实施归档](strategy/pro-window-selection-20260920/implementation.md)。真实联机尚未验收。
+当前源码与 GitHub 发布版本为 [0.43.5](releases/0.43.5-RELEASE_NOTES.md)，合入官方 `3f4002bd / 0.43.2`，包含完整当前回合覆盖后的长线比较、多人遗物归属与佩尔之眼修复。上限十四个敌方周期，普通手动请求时间/节点上限仍为原值两倍；单人保持该官方版本路径。官方标签不含 fork 多人功能。原始研究与历史版本见[策略索引](strategy/README.md#多人研究归档)，本轮兼容修正与验证见[上游合并记录](strategy/upstream-0432-merge-20260920.md)，长线策略见[实施归档](strategy/pro-window-selection-20260920/implementation.md)，渠道凭证见[发布归档](releases/0.43.5-PUBLISH.md)。真实联机尚未验收。
 
 ## 使用方式
 
