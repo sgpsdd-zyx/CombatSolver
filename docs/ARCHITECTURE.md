@@ -18,7 +18,7 @@
 
 `CombatBeamSolver.Multiplayer` 中的 `BeamRetentionPolicy` 分片先覆盖多人进攻、防御、铺垫代表，再补剩余席位，全部共用既有 Beam 与请求预算。`MultiplayerEvaluation` 在敌方结算后、下一玩家准备前捕获 `MultiplayerCycleCheckpoint`：它是最多十四条、只含数值的不可变短链，归分支持有并由 Fork 共享历史；不含模型或模拟器。原始周期观察和扣血账本通过去重/转置标签区分，单人保持默认值；不加入战斗状态键或原生对账戳。
 
-多人发布候选由 `CombatBeamSolver.Multiplayer.PrepareMultiplayerFinalCandidates` 先按逐槽强制用药、最少显式用药和至少一瓶资格过滤，再冻结一个 `MultiplayerPlanOrdering`，排序并保留至多 `4B` 条。`MultiplayerFinalBatch` 只持有候选引用和本批排序上下文；预览与最终返回通过同一个 `SelectMultiplayerFinal` 消费该批次并传递共同周期，不在截断子集上重新定深度。已终止候选的中途压缩也先过滤资格，但可继续展开的前缀保路不受最终资格限制。空合格池由选路入口明确失败；中途没有合格终局可以继续搜索。`Phases` 继续独占候选模拟器的释放，批次对象不复制或释放模拟器，`FinalPlanOrdering` 保留原单人政策。
+多人 `CombatBeamSolver.Multiplayer.PrepareMultiplayerFinalCandidates` 保留 A：逐槽强制用药、最少显式用药和至少一瓶资格先过滤，再冻结 `MultiplayerPlanOrdering` 并截至 `4B`；中途终止池压缩继续走此入口。既有预览/最终发布经 `MultiplayerWindow.PrepareMultiplayerPublicationCandidates` 从截断前候选与仍保留的回合/上一层冻结完整本回合代表，满足全部覆盖、预算与已知风险门禁时升级共同周期，否则返回 A。局部动作路径索引不跨发布存活，不改变战斗键、转置或分支模拟；具体机制由[多人指南](multiplayer-advisor.md#未击杀时如何选择长线方案)维护。`MultiplayerFinalBatch` 只持有候选、冻结排序上下文及纯值决策说明，预览/最终经 `SelectMultiplayerFinal` 透传周期，不从截断子集重算。可继续展开的前缀保路不受最终资格限制，空合格池仍显式失败。`Phases` 独占模拟器释放，`FinalPlanOrdering` 保留官方单人政策。
 
 `MultiplayerEvaluation.MultiplayerFactsAt` 只对未结束路线读取历史检查点，真实胜利/死亡投影完整结束状态；原风险顺序继续有效。`Phases` 的本机无损满血胜利捷径只允许单人进入。主线程 `BattleDamageTracker.Observe` 在多人时沿原 `Begin` 追踪窗口按 `PotionUsedEntry.Actor` 统计本机用药，将结果写入既有不可变 `BattleDamageSnapshot`；后台不读实时历史，也不增加重复的根字段。缺少本机身份或药水历史退到追踪基线之前显式失败，单人计数路径不改。
 
@@ -217,6 +217,7 @@ Smart 层间使用 `SmartLayerMemoryForecast` 的同窗分配和转移高水位�
 | `CombatBeamSolver.Models.cs` | `SearchFeatures`、单次运行 `SearchRunContext` |
 | `CombatBeamSolver.Multiplayer.cs` | 多人 Beam 代表配额、发布候选资格/固定批次选路、新根上的有界纯动作重验 |
 | `CombatBeamSolver.MultiplayerEvaluation.cs` / `MultiplayerCycleCheckpoint.cs` | 多人原始周期观察、固定批次共同边界和风险/收益比较；不可变记录不持有模拟器 |
+| `CombatBeamSolver.MultiplayerWindow.cs` | 多人发布内完整当前回合身份和代表覆盖、具体祖先抑制、共同周期动作成本与 A 回退；纯临时元数据，不执行模拟或跨请求缓存 |
 | `CombatBeamSolver.Transpositions.cs` | 转置标签与支配前沿；单标签内联，多标签保持原序List，缩回单标签即释放额外容器 |
 | `CombatBeamSolver.Phases.cs` | `Solve`、阶段循环、总预算与回合层预算保留、当前回合预览、约 `200 ms` 刷新的动态推演路线，以及玩家采用路线/执行当前回合的收束检查点；动态路线显式携带战斗是否结束，未完成路线不产生整场战损数值 |
 | `CombatBeamSolver.Expansion.cs` | 可执行卡牌/药水/结束回合候选展开与跨回合无进展剪枝；三层首领首个搜索回合由Phases在普通父节点提交后提前展开中间态，复用Expand去重/节点计数，不注入固定答案或终局奖励 |

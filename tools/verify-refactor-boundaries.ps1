@@ -606,6 +606,7 @@ $expectedBeamFiles = @(
     "CombatBeamSolver.Models.cs",
     "CombatBeamSolver.Multiplayer.cs",
     "CombatBeamSolver.MultiplayerEvaluation.cs",
+    "CombatBeamSolver.MultiplayerWindow.cs",
     "CombatBeamSolver.MultiplayerRound.cs",
     "CombatBeamSolver.NoveltySearch.cs",
     "CombatBeamSolver.Transpositions.cs",
@@ -1619,9 +1620,14 @@ $multiplayerAdviceRules = @(
     @{ Path = 'src/Search/CombatBeamSolver.Multiplayer.cs'; Text = 'private List<SearchNode> RankMultiplayer(' }
     @{ Path = 'src/Search/CombatBeamSolver.Multiplayer.cs'; Text = 'private MultiplayerFinalBatch PrepareMultiplayerFinalCandidates(' }
     @{ Path = 'src/Search/CombatBeamSolver.Multiplayer.cs'; Text = 'batch.Ordering.EnemyCycles' }
-    @{ Path = 'src/Search/CombatBeamSolver.Phases.cs'; Text = '? PrepareMultiplayerFinalCandidates(viable) : null;' }
-    @{ Path = 'src/Search/CombatBeamSolver.Phases.cs'; Text = '? PrepareMultiplayerFinalCandidates(finalPool) : null;' }
+    @{ Path = 'src/Search/CombatBeamSolver.Phases.cs'; Text = '? PrepareMultiplayerPublicationCandidates(viable,' }
+    @{ Path = 'src/Search/CombatBeamSolver.Phases.cs'; Text = '? PrepareMultiplayerPublicationCandidates(finalPool, advisoryLastCohort, stopwatch.ElapsedMilliseconds) : null;' }
     @{ Path = 'src/Search/CombatBeamSolver.Phases.cs'; Text = '? PrepareMultiplayerFinalCandidates(completedCandidates).Candidates' }
+    @{ Path = 'src/Search/MultiplayerSearchPolicy.cs'; Text = 'public bool UseCoveredWindowSelection { get; init; } = true;' }
+    @{ Path = 'src/Search/CombatBeamSolver.MultiplayerWindow.cs'; Text = 'int commonDepth = Math.Min(policy.Multiplayer.Horizon, representatives.Min(id => depths[id]));' }
+    @{ Path = 'src/Search/CombatBeamSolver.MultiplayerWindow.cs'; Text = 'CompareMultiplayerKnownRisk(best, incumbent) > 0' }
+    @{ Path = 'src/Search/CombatBeamSolver.MultiplayerWindow.cs'; Text = 'if (pending > 0) return KeepBaseline("pending_eligibility");' }
+    @{ Path = 'src/Search/CombatBeamSolver.MultiplayerWindow.cs'; Text = 'if (work.RemainingMilliseconds < replayReserve) return KeepBaseline("replay_budget");' }
     @{ Path = 'src/Search/CombatBeamSolver.cs'; Text = 'policy.Multiplayer != null ? CreateMultiplayerOrdering : null' }
     @{ Path = 'src/Search/CombatBeamSolver.MultiplayerEvaluation.cs'; Text = 'private MultiplayerPlanOrdering CreateMultiplayerOrdering(' }
     @{ Path = 'src/Search/CombatBeamSolver.MultiplayerEvaluation.cs'; Text = 'if (!terminal && depth > 0 && checkpoint?.Cycle == depth)' }

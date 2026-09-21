@@ -1,0 +1,2067 @@
+{
+  "baselineCommit": "fc7225d8e512511ad4beb9a6cff27394f3dcd70a",
+  "behaviorAssemblyVersion": "0.43.3",
+  "preparedVersion": "0.43.4",
+  "productionSimulationAdded": false,
+  "cases": {
+    "payback": {
+      "source": ".local/mp-window-implementation-20260920/payback-final/window-selection.json",
+      "records": [
+        {
+          "withPotion": false,
+          "nodes": 52,
+          "strength": 1,
+          "useCoverage": false,
+          "verify": false,
+          "horizon": 14,
+          "beam": 8,
+          "expandedNodes": 52,
+          "transitionCount": 83,
+          "elapsed": "00:00:00.1808675",
+          "expandedCycles": {
+            "0": 3,
+            "1": 6,
+            "2": 12,
+            "3": 20,
+            "4": 11
+          },
+          "generatedDepth": 5,
+          "maximumObservedPool": 19,
+          "advisoryComparisonCycles": 4,
+          "window": {
+            "reason": "disabled",
+            "baselineCycles": 4,
+            "comparisonCycles": 4,
+            "requiredRepresentatives": 0,
+            "coveredRepresentatives": 0,
+            "pendingEligibility": 0,
+            "suppressedAncestors": 0,
+            "metadataWork": 0,
+            "elapsedMilliseconds": 0.6588
+          },
+          "boundaryReason": "NodeLimit",
+          "selected": {
+            "cycles": 4,
+            "actionCount": 8,
+            "enemyHp": 472,
+            "cumulativePlayerHpLost": 0,
+            "deathSaveUseCount": 0,
+            "excess": 0,
+            "teamSurvivors": 2,
+            "playerDead": false,
+            "allEnemiesDead": false,
+            "potionCount": 0,
+            "boundaryReason": "None",
+            "firstTurn": [
+              "1:PlayCard:STRIKE_IRONCLAD:0:2:"
+            ],
+            "checkpoints": [
+              {
+                "cycle": 1,
+                "enemyHp": 493,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 2,
+                "enemyHp": 486,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 3,
+                "enemyHp": 479,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 4,
+                "enemyHp": 472,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              }
+            ]
+          },
+          "evaluation": {
+            "points": [
+              {
+                "cycle": 1,
+                "enemyHp": 493,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 2,
+                "enemyHp": 486,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 3,
+                "enemyHp": 479,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 4,
+                "enemyHp": 472,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 5,
+                "enemyHp": 465,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 6,
+                "enemyHp": 458,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 7,
+                "enemyHp": 451,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 8,
+                "enemyHp": 444,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 9,
+                "enemyHp": 437,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 10,
+                "enemyHp": 430,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 11,
+                "enemyHp": 423,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 12,
+                "enemyHp": 416,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 13,
+                "enemyHp": 409,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 14,
+                "enemyHp": 402,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              }
+            ],
+            "replays": 28,
+            "replayedActions": 406,
+            "currentTurn": [
+              "1:PlayCard:STRIKE_IRONCLAD:0:2:"
+            ]
+          },
+          "groupedCandidateScans": 0,
+          "distinctExternalEvaluations": 1
+        },
+        {
+          "withPotion": false,
+          "nodes": 52,
+          "strength": 1,
+          "useCoverage": true,
+          "verify": false,
+          "horizon": 14,
+          "beam": 8,
+          "expandedNodes": 52,
+          "transitionCount": 83,
+          "elapsed": "00:00:00.0182297",
+          "expandedCycles": {
+            "0": 3,
+            "1": 6,
+            "2": 12,
+            "3": 20,
+            "4": 11
+          },
+          "generatedDepth": 5,
+          "maximumObservedPool": 19,
+          "advisoryComparisonCycles": 5,
+          "window": {
+            "reason": "covered",
+            "baselineCycles": 4,
+            "comparisonCycles": 5,
+            "requiredRepresentatives": 3,
+            "coveredRepresentatives": 3,
+            "pendingEligibility": 0,
+            "suppressedAncestors": 8,
+            "metadataWork": 3772,
+            "elapsedMilliseconds": 1.9789
+          },
+          "boundaryReason": "NodeLimit",
+          "selected": {
+            "cycles": 5,
+            "actionCount": 10,
+            "enemyHp": 464,
+            "cumulativePlayerHpLost": 0,
+            "deathSaveUseCount": 0,
+            "excess": 0,
+            "teamSurvivors": 2,
+            "playerDead": false,
+            "allEnemiesDead": false,
+            "potionCount": 0,
+            "boundaryReason": "None",
+            "firstTurn": [
+              "1:PlayCard:INFLAME:0::"
+            ],
+            "checkpoints": [
+              {
+                "cycle": 1,
+                "enemyHp": 500,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 2,
+                "enemyHp": 491,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 3,
+                "enemyHp": 482,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 4,
+                "enemyHp": 473,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 5,
+                "enemyHp": 464,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              }
+            ]
+          },
+          "evaluation": {
+            "points": [
+              {
+                "cycle": 1,
+                "enemyHp": 500,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 2,
+                "enemyHp": 491,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 3,
+                "enemyHp": 482,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 4,
+                "enemyHp": 473,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 5,
+                "enemyHp": 464,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 6,
+                "enemyHp": 455,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 7,
+                "enemyHp": 446,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 8,
+                "enemyHp": 437,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 9,
+                "enemyHp": 428,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 10,
+                "enemyHp": 419,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 11,
+                "enemyHp": 410,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 12,
+                "enemyHp": 401,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 13,
+                "enemyHp": 392,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 14,
+                "enemyHp": 383,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              }
+            ],
+            "replays": 28,
+            "replayedActions": 406,
+            "currentTurn": [
+              "1:PlayCard:INFLAME:0::"
+            ]
+          },
+          "groupedCandidateScans": 0,
+          "distinctExternalEvaluations": 2
+        }
+      ]
+    },
+    "missingRepresentative": {
+      "source": ".local/mp-window-implementation-20260920/sentinel-final/window-selection.json",
+      "records": [
+        {
+          "withPotion": true,
+          "nodes": 180,
+          "strength": 0,
+          "useCoverage": false,
+          "verify": false,
+          "horizon": 14,
+          "beam": 8,
+          "expandedNodes": 180,
+          "transitionCount": 301,
+          "elapsed": "00:00:00.2825296",
+          "expandedCycles": {
+            "0": 6,
+            "1": 17,
+            "2": 22,
+            "3": 21,
+            "4": 21,
+            "5": 21,
+            "6": 21,
+            "7": 21,
+            "8": 21,
+            "9": 9
+          },
+          "generatedDepth": 10,
+          "maximumObservedPool": 19,
+          "advisoryComparisonCycles": 1,
+          "window": {
+            "reason": "disabled",
+            "baselineCycles": 1,
+            "comparisonCycles": 1,
+            "requiredRepresentatives": 0,
+            "coveredRepresentatives": 0,
+            "pendingEligibility": 0,
+            "suppressedAncestors": 0,
+            "metadataWork": 0,
+            "elapsedMilliseconds": 0.8692
+          },
+          "boundaryReason": "NodeLimit",
+          "selected": {
+            "cycles": 9,
+            "actionCount": 18,
+            "enemyHp": 424,
+            "cumulativePlayerHpLost": 0,
+            "deathSaveUseCount": 0,
+            "excess": 0,
+            "teamSurvivors": 2,
+            "playerDead": false,
+            "allEnemiesDead": false,
+            "potionCount": 1,
+            "boundaryReason": "None",
+            "firstTurn": [
+              "1:UsePotion::0:2:FIRE_POTION",
+              "1:PlayCard:INFLAME:0::"
+            ],
+            "checkpoints": [
+              {
+                "cycle": 1,
+                "enemyHp": 480,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 2,
+                "enemyHp": 472,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 3,
+                "enemyHp": 464,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 4,
+                "enemyHp": 456,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 5,
+                "enemyHp": 448,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 6,
+                "enemyHp": 440,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 7,
+                "enemyHp": 432,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 8,
+                "enemyHp": 432,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 9,
+                "enemyHp": 424,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              }
+            ]
+          },
+          "evaluation": {
+            "points": [
+              {
+                "cycle": 1,
+                "enemyHp": 480,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 2,
+                "enemyHp": 472,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 3,
+                "enemyHp": 464,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 4,
+                "enemyHp": 456,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 5,
+                "enemyHp": 448,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 6,
+                "enemyHp": 440,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 7,
+                "enemyHp": 432,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 8,
+                "enemyHp": 424,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 9,
+                "enemyHp": 416,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 10,
+                "enemyHp": 408,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 11,
+                "enemyHp": 400,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 12,
+                "enemyHp": 392,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 13,
+                "enemyHp": 384,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 14,
+                "enemyHp": 376,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              }
+            ],
+            "replays": 28,
+            "replayedActions": 434,
+            "currentTurn": [
+              "1:UsePotion::0:2:FIRE_POTION",
+              "1:PlayCard:INFLAME:0::"
+            ]
+          },
+          "groupedCandidateScans": 0,
+          "distinctExternalEvaluations": 1
+        },
+        {
+          "withPotion": true,
+          "nodes": 180,
+          "strength": 0,
+          "useCoverage": true,
+          "verify": false,
+          "horizon": 14,
+          "beam": 8,
+          "expandedNodes": 180,
+          "transitionCount": 301,
+          "elapsed": "00:00:00.0537574",
+          "expandedCycles": {
+            "0": 6,
+            "1": 17,
+            "2": 22,
+            "3": 21,
+            "4": 21,
+            "5": 21,
+            "6": 21,
+            "7": 21,
+            "8": 21,
+            "9": 9
+          },
+          "generatedDepth": 10,
+          "maximumObservedPool": 19,
+          "advisoryComparisonCycles": 1,
+          "window": {
+            "reason": "coverage_not_deeper",
+            "baselineCycles": 1,
+            "comparisonCycles": 1,
+            "requiredRepresentatives": 4,
+            "coveredRepresentatives": 4,
+            "pendingEligibility": 0,
+            "suppressedAncestors": 8,
+            "metadataWork": 6531,
+            "elapsedMilliseconds": 2.0409
+          },
+          "boundaryReason": "NodeLimit",
+          "selected": {
+            "cycles": 9,
+            "actionCount": 18,
+            "enemyHp": 424,
+            "cumulativePlayerHpLost": 0,
+            "deathSaveUseCount": 0,
+            "excess": 0,
+            "teamSurvivors": 2,
+            "playerDead": false,
+            "allEnemiesDead": false,
+            "potionCount": 1,
+            "boundaryReason": "None",
+            "firstTurn": [
+              "1:UsePotion::0:2:FIRE_POTION",
+              "1:PlayCard:INFLAME:0::"
+            ],
+            "checkpoints": [
+              {
+                "cycle": 1,
+                "enemyHp": 480,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 2,
+                "enemyHp": 472,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 3,
+                "enemyHp": 464,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 4,
+                "enemyHp": 456,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 5,
+                "enemyHp": 448,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 6,
+                "enemyHp": 440,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 7,
+                "enemyHp": 432,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 8,
+                "enemyHp": 432,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 9,
+                "enemyHp": 424,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              }
+            ]
+          },
+          "evaluation": {
+            "points": [
+              {
+                "cycle": 1,
+                "enemyHp": 480,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 2,
+                "enemyHp": 472,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 3,
+                "enemyHp": 464,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 4,
+                "enemyHp": 456,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 5,
+                "enemyHp": 448,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 6,
+                "enemyHp": 440,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 7,
+                "enemyHp": 432,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 8,
+                "enemyHp": 424,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 9,
+                "enemyHp": 416,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 10,
+                "enemyHp": 408,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 11,
+                "enemyHp": 400,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 12,
+                "enemyHp": 392,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 13,
+                "enemyHp": 384,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 14,
+                "enemyHp": 376,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              }
+            ],
+            "replays": 28,
+            "replayedActions": 434,
+            "currentTurn": [
+              "1:UsePotion::0:2:FIRE_POTION",
+              "1:PlayCard:INFLAME:0::"
+            ]
+          },
+          "groupedCandidateScans": 0,
+          "distinctExternalEvaluations": 1
+        }
+      ]
+    },
+    "defense": {
+      "source": ".local/mp-window-implementation-20260920/defense-final/window-selection.json",
+      "records": [
+        {
+          "withPotion": false,
+          "nodes": 180,
+          "strength": 0,
+          "useCoverage": false,
+          "verify": false,
+          "defense": true,
+          "horizon": 14,
+          "beam": 8,
+          "expandedNodes": 180,
+          "transitionCount": 364,
+          "elapsed": "00:00:00.1730776",
+          "expandedCycles": {
+            "0": 4,
+            "1": 20,
+            "2": 28,
+            "3": 36,
+            "4": 36,
+            "5": 36,
+            "6": 20
+          },
+          "generatedDepth": 7,
+          "maximumObservedPool": 21,
+          "advisoryComparisonCycles": 6,
+          "window": {
+            "reason": "disabled",
+            "baselineCycles": 6,
+            "comparisonCycles": 6,
+            "requiredRepresentatives": 0,
+            "coveredRepresentatives": 0,
+            "pendingEligibility": 0,
+            "suppressedAncestors": 0,
+            "metadataWork": 0,
+            "elapsedMilliseconds": 0.7337
+          },
+          "boundaryReason": "NodeLimit",
+          "selected": {
+            "cycles": 6,
+            "actionCount": 15,
+            "enemyHp": 460,
+            "cumulativePlayerHpLost": 3,
+            "deathSaveUseCount": 0,
+            "excess": 0,
+            "teamSurvivors": 2,
+            "playerDead": false,
+            "allEnemiesDead": false,
+            "potionCount": 0,
+            "boundaryReason": "None",
+            "firstTurn": [
+              "1:PlayCard:INFLAME:0::"
+            ],
+            "checkpoints": [
+              {
+                "cycle": 1,
+                "enemyHp": 500,
+                "hpLost": 3,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 2,
+                "enemyHp": 492,
+                "hpLost": 3,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 3,
+                "enemyHp": 484,
+                "hpLost": 3,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 4,
+                "enemyHp": 476,
+                "hpLost": 3,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 5,
+                "enemyHp": 468,
+                "hpLost": 3,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 6,
+                "enemyHp": 460,
+                "hpLost": 3,
+                "teamSurvivors": 2
+              }
+            ]
+          },
+          "evaluation": {
+            "points": [
+              {
+                "cycle": 1,
+                "enemyHp": 500,
+                "hpLost": 3,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 2,
+                "enemyHp": 492,
+                "hpLost": 3,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 3,
+                "enemyHp": 484,
+                "hpLost": 3,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 4,
+                "enemyHp": 476,
+                "hpLost": 3,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 5,
+                "enemyHp": 468,
+                "hpLost": 3,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 6,
+                "enemyHp": 460,
+                "hpLost": 3,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 7,
+                "enemyHp": 452,
+                "hpLost": 3,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 8,
+                "enemyHp": 444,
+                "hpLost": 3,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 9,
+                "enemyHp": 436,
+                "hpLost": 8,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 10,
+                "enemyHp": 428,
+                "hpLost": 13,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 11,
+                "enemyHp": 420,
+                "hpLost": 13,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 12,
+                "enemyHp": 412,
+                "hpLost": 25,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 13,
+                "enemyHp": 404,
+                "hpLost": 37,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 14,
+                "enemyHp": 396,
+                "hpLost": 37,
+                "teamSurvivors": 2
+              }
+            ],
+            "replays": 41,
+            "replayedActions": 861,
+            "currentTurn": [
+              "1:PlayCard:INFLAME:0::"
+            ]
+          },
+          "groupedCandidateScans": 0,
+          "distinctExternalEvaluations": 1
+        },
+        {
+          "withPotion": false,
+          "nodes": 180,
+          "strength": 0,
+          "useCoverage": true,
+          "verify": false,
+          "defense": true,
+          "horizon": 14,
+          "beam": 8,
+          "expandedNodes": 180,
+          "transitionCount": 364,
+          "elapsed": "00:00:00.0583993",
+          "expandedCycles": {
+            "0": 4,
+            "1": 20,
+            "2": 28,
+            "3": 36,
+            "4": 36,
+            "5": 36,
+            "6": 20
+          },
+          "generatedDepth": 7,
+          "maximumObservedPool": 21,
+          "advisoryComparisonCycles": 7,
+          "window": {
+            "reason": "covered",
+            "baselineCycles": 6,
+            "comparisonCycles": 7,
+            "requiredRepresentatives": 3,
+            "coveredRepresentatives": 3,
+            "pendingEligibility": 0,
+            "suppressedAncestors": 6,
+            "metadataWork": 9729,
+            "elapsedMilliseconds": 2.289
+          },
+          "boundaryReason": "NodeLimit",
+          "selected": {
+            "cycles": 7,
+            "actionCount": 17,
+            "enemyHp": 460,
+            "cumulativePlayerHpLost": 3,
+            "deathSaveUseCount": 0,
+            "excess": 0,
+            "teamSurvivors": 2,
+            "playerDead": false,
+            "allEnemiesDead": false,
+            "potionCount": 0,
+            "boundaryReason": "None",
+            "firstTurn": [
+              "1:PlayCard:INFLAME:0::"
+            ],
+            "checkpoints": [
+              {
+                "cycle": 1,
+                "enemyHp": 500,
+                "hpLost": 3,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 2,
+                "enemyHp": 492,
+                "hpLost": 3,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 3,
+                "enemyHp": 484,
+                "hpLost": 3,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 4,
+                "enemyHp": 476,
+                "hpLost": 3,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 5,
+                "enemyHp": 468,
+                "hpLost": 3,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 6,
+                "enemyHp": 460,
+                "hpLost": 3,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 7,
+                "enemyHp": 460,
+                "hpLost": 3,
+                "teamSurvivors": 2
+              }
+            ]
+          },
+          "evaluation": {
+            "points": [
+              {
+                "cycle": 1,
+                "enemyHp": 500,
+                "hpLost": 3,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 2,
+                "enemyHp": 492,
+                "hpLost": 3,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 3,
+                "enemyHp": 484,
+                "hpLost": 3,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 4,
+                "enemyHp": 476,
+                "hpLost": 3,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 5,
+                "enemyHp": 468,
+                "hpLost": 3,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 6,
+                "enemyHp": 460,
+                "hpLost": 3,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 7,
+                "enemyHp": 452,
+                "hpLost": 3,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 8,
+                "enemyHp": 444,
+                "hpLost": 3,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 9,
+                "enemyHp": 436,
+                "hpLost": 8,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 10,
+                "enemyHp": 428,
+                "hpLost": 13,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 11,
+                "enemyHp": 420,
+                "hpLost": 13,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 12,
+                "enemyHp": 412,
+                "hpLost": 25,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 13,
+                "enemyHp": 404,
+                "hpLost": 37,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 14,
+                "enemyHp": 396,
+                "hpLost": 37,
+                "teamSurvivors": 2
+              }
+            ],
+            "replays": 41,
+            "replayedActions": 861,
+            "currentTurn": [
+              "1:PlayCard:INFLAME:0::"
+            ]
+          },
+          "groupedCandidateScans": 0,
+          "distinctExternalEvaluations": 1
+        }
+      ]
+    },
+    "incremental": {
+      "source": ".local/mp-window-implementation-20260920/incremental-preview-final/window-selection.json",
+      "records": [
+        {
+          "withPotion": false,
+          "nodes": 52,
+          "strength": 1,
+          "useCoverage": true,
+          "verify": true,
+          "defense": false,
+          "horizon": 14,
+          "beam": 8,
+          "expandedNodes": 52,
+          "transitionCount": 83,
+          "elapsed": "00:00:00.2809891",
+          "expandedCycles": {
+            "0": 3,
+            "1": 6,
+            "2": 12,
+            "3": 20,
+            "4": 11
+          },
+          "generatedDepth": 5,
+          "maximumObservedPool": 19,
+          "advisoryComparisonCycles": 5,
+          "window": {
+            "reason": "covered",
+            "baselineCycles": 4,
+            "comparisonCycles": 5,
+            "requiredRepresentatives": 3,
+            "coveredRepresentatives": 3,
+            "pendingEligibility": 0,
+            "suppressedAncestors": 8,
+            "metadataWork": 3772,
+            "elapsedMilliseconds": 2.007
+          },
+          "coveredPublications": 1,
+          "publicationReasons": [
+            "first_cycle_incomplete",
+            "no_deeper_evidence",
+            "no_deeper_evidence",
+            "no_deeper_evidence",
+            "no_deeper_evidence",
+            "no_deeper_evidence",
+            "covered"
+          ],
+          "boundaryReason": "NodeLimit",
+          "selected": {
+            "cycles": 5,
+            "actionCount": 10,
+            "enemyHp": 464,
+            "cumulativePlayerHpLost": 0,
+            "deathSaveUseCount": 0,
+            "excess": 0,
+            "teamSurvivors": 2,
+            "playerDead": false,
+            "allEnemiesDead": false,
+            "potionCount": 0,
+            "boundaryReason": "None",
+            "firstTurn": [
+              "1:PlayCard:INFLAME:0::"
+            ],
+            "checkpoints": [
+              {
+                "cycle": 1,
+                "enemyHp": 500,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 2,
+                "enemyHp": 491,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 3,
+                "enemyHp": 482,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 4,
+                "enemyHp": 473,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 5,
+                "enemyHp": 464,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              }
+            ]
+          },
+          "evaluation": {
+            "points": [
+              {
+                "cycle": 1,
+                "enemyHp": 500,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 2,
+                "enemyHp": 491,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 3,
+                "enemyHp": 482,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 4,
+                "enemyHp": 473,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 5,
+                "enemyHp": 464,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 6,
+                "enemyHp": 455,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 7,
+                "enemyHp": 446,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 8,
+                "enemyHp": 437,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 9,
+                "enemyHp": 428,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 10,
+                "enemyHp": 419,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 11,
+                "enemyHp": 410,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 12,
+                "enemyHp": 401,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 13,
+                "enemyHp": 392,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 14,
+                "enemyHp": 383,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              }
+            ],
+            "replays": 28,
+            "replayedActions": 406,
+            "currentTurn": [
+              "1:PlayCard:INFLAME:0::"
+            ]
+          },
+          "groupedCandidateScans": 0,
+          "distinctExternalEvaluations": 1
+        }
+      ]
+    }
+  },
+  "contracts": {
+    "syntheticRankingFacts": true,
+    "nativeSimulation": false,
+    "cases": 43,
+    "evidence": [
+      {
+        "name": "covered_delayed_payback",
+        "passed": true,
+        "selected": "setup2",
+        "depth": 2,
+        "decision": {
+          "reason": "covered",
+          "baselineCycles": 1,
+          "comparisonCycles": 2,
+          "requiredRepresentatives": 2,
+          "coveredRepresentatives": 2,
+          "pendingEligibility": 0,
+          "suppressedAncestors": 2,
+          "metadataWork": 165,
+          "elapsedMilliseconds": 3.6483
+        }
+      },
+      {
+        "name": "missing_own_continuation",
+        "passed": true,
+        "selected": "attack1",
+        "depth": 1,
+        "decision": {
+          "reason": "coverage_not_deeper",
+          "baselineCycles": 1,
+          "comparisonCycles": 1,
+          "requiredRepresentatives": 2,
+          "coveredRepresentatives": 2,
+          "pendingEligibility": 0,
+          "suppressedAncestors": 1,
+          "metadataWork": 131,
+          "elapsedMilliseconds": 0.0664
+        }
+      },
+      {
+        "name": "retained_missing_representative",
+        "passed": true,
+        "selected": "attack1",
+        "depth": 1,
+        "decision": {
+          "reason": "missing_representative",
+          "baselineCycles": 1,
+          "comparisonCycles": 1,
+          "requiredRepresentatives": 3,
+          "coveredRepresentatives": 2,
+          "pendingEligibility": 0,
+          "suppressedAncestors": 2,
+          "metadataWork": 204,
+          "elapsedMilliseconds": 0.0401
+        }
+      },
+      {
+        "name": "incomplete_current_turn",
+        "passed": true,
+        "selected": "attack1",
+        "depth": 1,
+        "decision": {
+          "reason": "first_turn_incomplete",
+          "baselineCycles": 1,
+          "comparisonCycles": 1,
+          "requiredRepresentatives": 2,
+          "coveredRepresentatives": 0,
+          "pendingEligibility": 0,
+          "suppressedAncestors": 0,
+          "metadataWork": 178,
+          "elapsedMilliseconds": 0.0196
+        }
+      },
+      {
+        "name": "blocked_ExternalPlayerChoice",
+        "passed": true,
+        "selected": "attack1",
+        "depth": 1,
+        "decision": {
+          "reason": "blocked_continuation",
+          "baselineCycles": 1,
+          "comparisonCycles": 1,
+          "requiredRepresentatives": 0,
+          "coveredRepresentatives": 0,
+          "pendingEligibility": 0,
+          "suppressedAncestors": 0,
+          "metadataWork": 10,
+          "elapsedMilliseconds": 0.0058
+        }
+      },
+      {
+        "name": "blocked_PendingChoice",
+        "passed": true,
+        "selected": "attack1",
+        "depth": 1,
+        "decision": {
+          "reason": "blocked_continuation",
+          "baselineCycles": 1,
+          "comparisonCycles": 1,
+          "requiredRepresentatives": 0,
+          "coveredRepresentatives": 0,
+          "pendingEligibility": 0,
+          "suppressedAncestors": 0,
+          "metadataWork": 10,
+          "elapsedMilliseconds": 0.0061
+        }
+      },
+      {
+        "name": "blocked_UnsupportedEffect",
+        "passed": true,
+        "selected": "attack1",
+        "depth": 1,
+        "decision": {
+          "reason": "blocked_continuation",
+          "baselineCycles": 1,
+          "comparisonCycles": 1,
+          "requiredRepresentatives": 0,
+          "coveredRepresentatives": 0,
+          "pendingEligibility": 0,
+          "suppressedAncestors": 0,
+          "metadataWork": 10,
+          "elapsedMilliseconds": 0.0042
+        }
+      },
+      {
+        "name": "expired_time",
+        "passed": true,
+        "selected": "attack1",
+        "depth": 1,
+        "decision": {
+          "reason": "metadata_budget",
+          "baselineCycles": 1,
+          "comparisonCycles": 1,
+          "requiredRepresentatives": 0,
+          "coveredRepresentatives": 0,
+          "pendingEligibility": 0,
+          "suppressedAncestors": 0,
+          "metadataWork": 0,
+          "elapsedMilliseconds": 0.0107
+        }
+      },
+      {
+        "name": "materialization_reserve",
+        "passed": true,
+        "selected": "attack1",
+        "depth": 1,
+        "decision": {
+          "reason": "replay_budget",
+          "baselineCycles": 1,
+          "comparisonCycles": 1,
+          "requiredRepresentatives": 2,
+          "coveredRepresentatives": 2,
+          "pendingEligibility": 0,
+          "suppressedAncestors": 2,
+          "metadataWork": 165,
+          "elapsedMilliseconds": 0.0197
+        }
+      },
+      {
+        "name": "representative_cap",
+        "passed": true,
+        "selected": "attack1",
+        "depth": 1,
+        "decision": {
+          "reason": "representative_limit",
+          "baselineCycles": 1,
+          "comparisonCycles": 1,
+          "requiredRepresentatives": 2,
+          "coveredRepresentatives": 0,
+          "pendingEligibility": 0,
+          "suppressedAncestors": 0,
+          "metadataWork": 107,
+          "elapsedMilliseconds": 0.0112
+        }
+      },
+      {
+        "name": "metadata_ceiling",
+        "passed": true,
+        "selected": "attack1",
+        "depth": 1,
+        "decision": {
+          "reason": "metadata_budget",
+          "baselineCycles": 1,
+          "comparisonCycles": 1,
+          "requiredRepresentatives": 2,
+          "coveredRepresentatives": 0,
+          "pendingEligibility": 0,
+          "suppressedAncestors": 0,
+          "metadataWork": 156,
+          "elapsedMilliseconds": 0.015
+        }
+      },
+      {
+        "name": "eligibility_before_coverage",
+        "passed": true,
+        "selected": "used_attack1",
+        "depth": 1,
+        "decision": {
+          "reason": "pending_eligibility",
+          "baselineCycles": 1,
+          "comparisonCycles": 1,
+          "requiredRepresentatives": 0,
+          "coveredRepresentatives": 0,
+          "pendingEligibility": 4,
+          "suppressedAncestors": 0,
+          "metadataWork": 17,
+          "elapsedMilliseconds": 0.0136
+        }
+      },
+      {
+        "name": "dead_suffix_cannot_hide",
+        "passed": true,
+        "selected": "attack2",
+        "depth": 2,
+        "decision": {
+          "reason": "covered",
+          "baselineCycles": 1,
+          "comparisonCycles": 2,
+          "requiredRepresentatives": 2,
+          "coveredRepresentatives": 2,
+          "pendingEligibility": 0,
+          "suppressedAncestors": 3,
+          "metadataWork": 189,
+          "elapsedMilliseconds": 0.0203
+        }
+      },
+      {
+        "name": "death_save_cannot_hide",
+        "passed": true,
+        "selected": "attack2",
+        "depth": 2,
+        "decision": {
+          "reason": "covered",
+          "baselineCycles": 1,
+          "comparisonCycles": 2,
+          "requiredRepresentatives": 2,
+          "coveredRepresentatives": 2,
+          "pendingEligibility": 0,
+          "suppressedAncestors": 3,
+          "metadataWork": 190,
+          "elapsedMilliseconds": 0.0195
+        }
+      },
+      {
+        "name": "excess_loss_cannot_hide",
+        "passed": true,
+        "selected": "attack2",
+        "depth": 2,
+        "decision": {
+          "reason": "covered",
+          "baselineCycles": 1,
+          "comparisonCycles": 2,
+          "requiredRepresentatives": 2,
+          "coveredRepresentatives": 2,
+          "pendingEligibility": 0,
+          "suppressedAncestors": 3,
+          "metadataWork": 190,
+          "elapsedMilliseconds": 0.0185
+        }
+      },
+      {
+        "name": "teammate_risk_cannot_hide",
+        "passed": true,
+        "selected": "attack2",
+        "depth": 2,
+        "decision": {
+          "reason": "covered",
+          "baselineCycles": 1,
+          "comparisonCycles": 2,
+          "requiredRepresentatives": 2,
+          "coveredRepresentatives": 2,
+          "pendingEligibility": 0,
+          "suppressedAncestors": 3,
+          "metadataWork": 190,
+          "elapsedMilliseconds": 0.0182
+        }
+      },
+      {
+        "name": "good_sibling_survives_bad_suffix",
+        "passed": true,
+        "selected": "setup_good_branch",
+        "depth": 2,
+        "decision": {
+          "reason": "covered",
+          "baselineCycles": 1,
+          "comparisonCycles": 2,
+          "requiredRepresentatives": 2,
+          "coveredRepresentatives": 2,
+          "pendingEligibility": 0,
+          "suppressedAncestors": 3,
+          "metadataWork": 248,
+          "elapsedMilliseconds": 0.0231
+        }
+      },
+      {
+        "name": "known_risk_incumbent_guard",
+        "passed": true,
+        "selected": "attack1",
+        "depth": 1,
+        "decision": {
+          "reason": "known_risk_regression",
+          "baselineCycles": 1,
+          "comparisonCycles": 1,
+          "requiredRepresentatives": 2,
+          "coveredRepresentatives": 2,
+          "pendingEligibility": 0,
+          "suppressedAncestors": 4,
+          "metadataWork": 210,
+          "elapsedMilliseconds": 0.0207
+        }
+      },
+      {
+        "name": "true_victory_keeps_priority",
+        "passed": true,
+        "selected": "won",
+        "depth": 2,
+        "decision": {
+          "reason": "covered",
+          "baselineCycles": 1,
+          "comparisonCycles": 2,
+          "requiredRepresentatives": 2,
+          "coveredRepresentatives": 2,
+          "pendingEligibility": 0,
+          "suppressedAncestors": 2,
+          "metadataWork": 192,
+          "elapsedMilliseconds": 0.075
+        }
+      },
+      {
+        "name": "all_terminal_keeps_baseline",
+        "passed": true,
+        "selected": "won",
+        "depth": 3,
+        "decision": {
+          "reason": "all_terminal",
+          "baselineCycles": 3,
+          "comparisonCycles": 3,
+          "requiredRepresentatives": 0,
+          "coveredRepresentatives": 0,
+          "pendingEligibility": 0,
+          "suppressedAncestors": 0,
+          "metadataWork": 3,
+          "elapsedMilliseconds": 1.0874
+        }
+      },
+      {
+        "name": "post_checkpoint_damage_and_actions_not_rewarded",
+        "passed": true
+      },
+      {
+        "name": "complete_identity_0",
+        "passed": true,
+        "selected": "identity_0",
+        "depth": 1,
+        "decision": {
+          "reason": "coverage_not_deeper",
+          "baselineCycles": 1,
+          "comparisonCycles": 1,
+          "requiredRepresentatives": 2,
+          "coveredRepresentatives": 2,
+          "pendingEligibility": 0,
+          "suppressedAncestors": 0,
+          "metadataWork": 226,
+          "elapsedMilliseconds": 0.3321
+        }
+      },
+      {
+        "name": "complete_identity_1",
+        "passed": true,
+        "selected": "identity_1",
+        "depth": 1,
+        "decision": {
+          "reason": "coverage_not_deeper",
+          "baselineCycles": 1,
+          "comparisonCycles": 1,
+          "requiredRepresentatives": 2,
+          "coveredRepresentatives": 2,
+          "pendingEligibility": 0,
+          "suppressedAncestors": 0,
+          "metadataWork": 226,
+          "elapsedMilliseconds": 0.015
+        }
+      },
+      {
+        "name": "complete_identity_2",
+        "passed": true,
+        "selected": "identity_2",
+        "depth": 1,
+        "decision": {
+          "reason": "coverage_not_deeper",
+          "baselineCycles": 1,
+          "comparisonCycles": 1,
+          "requiredRepresentatives": 2,
+          "coveredRepresentatives": 2,
+          "pendingEligibility": 0,
+          "suppressedAncestors": 0,
+          "metadataWork": 226,
+          "elapsedMilliseconds": 0.0139
+        }
+      },
+      {
+        "name": "complete_identity_3",
+        "passed": true,
+        "selected": "identity_3",
+        "depth": 1,
+        "decision": {
+          "reason": "coverage_not_deeper",
+          "baselineCycles": 1,
+          "comparisonCycles": 1,
+          "requiredRepresentatives": 2,
+          "coveredRepresentatives": 2,
+          "pendingEligibility": 0,
+          "suppressedAncestors": 0,
+          "metadataWork": 233,
+          "elapsedMilliseconds": 0.013
+        }
+      },
+      {
+        "name": "complete_identity_4",
+        "passed": true,
+        "selected": "identity_4",
+        "depth": 1,
+        "decision": {
+          "reason": "coverage_not_deeper",
+          "baselineCycles": 1,
+          "comparisonCycles": 1,
+          "requiredRepresentatives": 2,
+          "coveredRepresentatives": 2,
+          "pendingEligibility": 0,
+          "suppressedAncestors": 0,
+          "metadataWork": 226,
+          "elapsedMilliseconds": 0.0126
+        }
+      },
+      {
+        "name": "complete_identity_5",
+        "passed": true,
+        "selected": "identity_5",
+        "depth": 1,
+        "decision": {
+          "reason": "coverage_not_deeper",
+          "baselineCycles": 1,
+          "comparisonCycles": 1,
+          "requiredRepresentatives": 2,
+          "coveredRepresentatives": 2,
+          "pendingEligibility": 0,
+          "suppressedAncestors": 0,
+          "metadataWork": 237,
+          "elapsedMilliseconds": 0.0125
+        }
+      },
+      {
+        "name": "complete_identity_6",
+        "passed": true,
+        "selected": "identity_6",
+        "depth": 1,
+        "decision": {
+          "reason": "coverage_not_deeper",
+          "baselineCycles": 1,
+          "comparisonCycles": 1,
+          "requiredRepresentatives": 2,
+          "coveredRepresentatives": 2,
+          "pendingEligibility": 0,
+          "suppressedAncestors": 0,
+          "metadataWork": 226,
+          "elapsedMilliseconds": 0.0125
+        }
+      },
+      {
+        "name": "complete_identity_7",
+        "passed": true,
+        "selected": "identity_7",
+        "depth": 1,
+        "decision": {
+          "reason": "coverage_not_deeper",
+          "baselineCycles": 1,
+          "comparisonCycles": 1,
+          "requiredRepresentatives": 2,
+          "coveredRepresentatives": 2,
+          "pendingEligibility": 0,
+          "suppressedAncestors": 0,
+          "metadataWork": 226,
+          "elapsedMilliseconds": 0.0123
+        }
+      },
+      {
+        "name": "complete_identity_8",
+        "passed": true,
+        "selected": "identity_8",
+        "depth": 1,
+        "decision": {
+          "reason": "coverage_not_deeper",
+          "baselineCycles": 1,
+          "comparisonCycles": 1,
+          "requiredRepresentatives": 2,
+          "coveredRepresentatives": 2,
+          "pendingEligibility": 0,
+          "suppressedAncestors": 0,
+          "metadataWork": 224,
+          "elapsedMilliseconds": 0.0121
+        }
+      },
+      {
+        "name": "complete_identity_9",
+        "passed": true,
+        "selected": "identity_9",
+        "depth": 1,
+        "decision": {
+          "reason": "coverage_not_deeper",
+          "baselineCycles": 1,
+          "comparisonCycles": 1,
+          "requiredRepresentatives": 2,
+          "coveredRepresentatives": 2,
+          "pendingEligibility": 0,
+          "suppressedAncestors": 0,
+          "metadataWork": 275,
+          "elapsedMilliseconds": 0.0243
+        }
+      },
+      {
+        "name": "complete_identity_10",
+        "passed": true,
+        "selected": "identity_10",
+        "depth": 1,
+        "decision": {
+          "reason": "coverage_not_deeper",
+          "baselineCycles": 1,
+          "comparisonCycles": 1,
+          "requiredRepresentatives": 2,
+          "coveredRepresentatives": 2,
+          "pendingEligibility": 0,
+          "suppressedAncestors": 0,
+          "metadataWork": 275,
+          "elapsedMilliseconds": 0.0137
+        }
+      },
+      {
+        "name": "entire_card_order",
+        "passed": true,
+        "selected": "AB",
+        "depth": 1,
+        "decision": {
+          "reason": "coverage_not_deeper",
+          "baselineCycles": 1,
+          "comparisonCycles": 1,
+          "requiredRepresentatives": 2,
+          "coveredRepresentatives": 2,
+          "pendingEligibility": 0,
+          "suppressedAncestors": 0,
+          "metadataWork": 166,
+          "elapsedMilliseconds": 0.0143
+        }
+      },
+      {
+        "name": "potion_slot_identity",
+        "passed": true,
+        "selected": "slot0",
+        "depth": 1,
+        "decision": {
+          "reason": "coverage_not_deeper",
+          "baselineCycles": 1,
+          "comparisonCycles": 1,
+          "requiredRepresentatives": 2,
+          "coveredRepresentatives": 2,
+          "pendingEligibility": 0,
+          "suppressedAncestors": 0,
+          "metadataWork": 140,
+          "elapsedMilliseconds": 0.0117
+        }
+      },
+      {
+        "name": "different_root_rejected",
+        "passed": true,
+        "selected": "attack1",
+        "depth": 1,
+        "decision": {
+          "reason": "root_or_path_mismatch",
+          "baselineCycles": 1,
+          "comparisonCycles": 1,
+          "requiredRepresentatives": 2,
+          "coveredRepresentatives": 0,
+          "pendingEligibility": 0,
+          "suppressedAncestors": 0,
+          "metadataWork": 154,
+          "elapsedMilliseconds": 0.0156
+        }
+      },
+      {
+        "name": "extra_turn_is_not_enemy_cycle",
+        "passed": true,
+        "selected": "attack1",
+        "depth": 1,
+        "decision": {
+          "reason": "first_cycle_incomplete",
+          "baselineCycles": 1,
+          "comparisonCycles": 1,
+          "requiredRepresentatives": 2,
+          "coveredRepresentatives": 0,
+          "pendingEligibility": 0,
+          "suppressedAncestors": 0,
+          "metadataWork": 176,
+          "elapsedMilliseconds": 0.0164
+        }
+      },
+      {
+        "name": "forced_end_and_extra_turn_coverage",
+        "passed": true,
+        "selected": "extra_b2",
+        "depth": 2,
+        "decision": {
+          "reason": "covered",
+          "baselineCycles": 1,
+          "comparisonCycles": 2,
+          "requiredRepresentatives": 2,
+          "coveredRepresentatives": 2,
+          "pendingEligibility": 0,
+          "suppressedAncestors": 2,
+          "metadataWork": 170,
+          "elapsedMilliseconds": 0.0173
+        }
+      },
+      {
+        "name": "annotation_clone_is_same_path",
+        "passed": true,
+        "selected": "cloned_setup_deep",
+        "depth": 2,
+        "decision": {
+          "reason": "covered",
+          "baselineCycles": 1,
+          "comparisonCycles": 2,
+          "requiredRepresentatives": 2,
+          "coveredRepresentatives": 2,
+          "pendingEligibility": 0,
+          "suppressedAncestors": 2,
+          "metadataWork": 186,
+          "elapsedMilliseconds": 0.0193
+        }
+      },
+      {
+        "name": "coverage_precedes_4b_cut",
+        "passed": true,
+        "selected": "setup2",
+        "depth": 2,
+        "decision": {
+          "reason": "covered",
+          "baselineCycles": 1,
+          "comparisonCycles": 2,
+          "requiredRepresentatives": 2,
+          "coveredRepresentatives": 2,
+          "pendingEligibility": 0,
+          "suppressedAncestors": 13,
+          "metadataWork": 439,
+          "elapsedMilliseconds": 0.0654
+        }
+      },
+      {
+        "name": "same_pool_preview_final",
+        "passed": true,
+        "selected": "setup2",
+        "depth": 2,
+        "decision": {
+          "reason": "covered",
+          "baselineCycles": 1,
+          "comparisonCycles": 2,
+          "requiredRepresentatives": 2,
+          "coveredRepresentatives": 2,
+          "pendingEligibility": 0,
+          "suppressedAncestors": 2,
+          "metadataWork": 165,
+          "elapsedMilliseconds": 0.0189
+        }
+      },
+      {
+        "name": "covered_order_transitive",
+        "triples": 27,
+        "passed": true
+      },
+      {
+        "name": "input_permutations",
+        "permutations": 24,
+        "passed": true
+      },
+      {
+        "name": "cancellation_propagates",
+        "passed": true
+      }
+    ],
+    "failures": []
+  },
+  "solo": {
+    "compared": 80,
+    "mismatches": [],
+    "fullRouteEqual": true,
+    "multiplayerIsolation": {
+      "observedMethods": [
+        "PrepareMultiplayerFinalCandidates",
+        "SelectMultiplayerFinal",
+        "CreateMultiplayerOrdering",
+        "PrepareMultiplayerPublicationCandidates"
+      ],
+      "multiplayerEntries": 0
+    }
+  },
+  "limits": [
+    "Native managed models, not live networking",
+    "Buffer payback isolates damage; defense root uses explicit Dexterity",
+    "External evaluation is separate paid work and assumes passive teammates",
+    "Metadata milliseconds include baseline selection, instrumentation and JIT; not visible-game performance"
+  ]
+}

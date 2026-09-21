@@ -2,7 +2,7 @@
 
 > **当前多人分支（2026-09-20）：** `codex/multiplayer-advisor` 基于官方 `cccc270 / 0.43.0`。单人保持该官方版本的原路径、参数和行为；fork 自有评分、保路、剪枝、预算和缓存只归多人政策/对象所有，公共文件仅允许显式多人接入。官方单人能力承诺不得进入多人候选；涉及公共战斗语义的依赖单列，不混入策略优化。现役行为见[多人军师](docs/multiplayer-advisor.md)。
 >
-> 多人保持手动请求与手动操作、最多十四个敌方周期、每周期 3 HP 本机扣血目标；治疗、手动重算和额外玩家回合不刷新额度。`0.43.3` 为本地准备版，修复多人佩尔之眼状态和遗物提示归属；沿用 `0.43.2` 的十四周期、普通多人请求时间/节点上限乘二、按剩余敌方周期分摊，固定测试预算不变；[本轮对照](docs/strategy/multiplayer-fourteen-cycles-20260920.md)。fork `0.43.1` 已发布到 GitHub，合入官方 `0.42.0` 与 `0.43.0`；发布状态见[开发笔记](docs/DEVELOPMENT_NOTES.md)，官方标签不移动。[第二轮复审首批](docs/strategy/pro-review-0412-20260918/implementation.md)的终局事实、多人早停和本机根前用药输入修复继续保留；[旧窗口研究](docs/strategy/pro-horizon-20260919/README.md)保留当时默认七周期的取舍；当前十四周期仍不启用自适应，共同周期动作成本仅留离线实验，正式版恢复完整动作数同分项。联合压缩与资源观察等条件项暂缓，风险次序未改；研究不自动授权实施。独立[尖塔军师修复工具](tools/SpireAdvisorMultiplayerFix/README.md)另有版本与产物，不属于 CombatSolver 发布。禁止启动可见 Steam；无头结果不外推可见性能或联机胜率。
+> 多人保持手动请求与操作、最多十四个敌方周期、每周期 3 HP 本机扣血目标；治疗、手动重算和额外玩家回合不刷新额度。普通请求时间/节点上限乘二，固定预算不变。`0.43.4` 为本地准备版：完整当前回合代表都有更深证据时统一延长比较，否则保留 A 回退；仅 C 使用共同周期动作成本。资格、风险顺序和单人路径不改，发布内索引不得追加模拟/节点或跨根缓存。实现与证据见[长线选路收尾](docs/strategy/pro-window-selection-20260920/implementation.md)，历史十四周期取舍见[对照](docs/strategy/multiplayer-fourteen-cycles-20260920.md)。沿用佩尔之眼/遗物归属及第二轮终局事实、多人早停、本机根前用药修复。fork `0.43.1` 已发布到 GitHub；官方标签不移动，联合压缩/主动补齐/队友情景暂缓，研究不自动授权实施。独立[尖塔军师修复工具](tools/SpireAdvisorMultiplayerFix/README.md)另有产物。禁止启动可见 Steam；无头结果不外推可见性能或联机胜率。
 >
 > 历史批次、发布授权与证据归 [开发笔记](docs/DEVELOPMENT_NOTES.md)、[版本日志](docs/releases/README.md) 和专题文档，不作为新的操作授权。外部研究固定输入与采用情况见 [策略索引](docs/strategy/README.md)。
 

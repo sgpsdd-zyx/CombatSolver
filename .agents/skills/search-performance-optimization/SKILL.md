@@ -9,9 +9,9 @@ description: 在战斗语义已证明正确后，审计或修改 CombatSolver �
 
 多人输出目标允许每个敌方周期最多 3 HP 扣血；同等本人风险先救队友，再比较输出，同输出少扣血。`SearchNode.AdvisoryHpLoss` 的账本包含根已付扣血，治疗、重算和额外玩家回合不返还额度。`MultiplayerEvaluation` 用整批候选的共同敌方周期比较，检查点在下一玩家准备前捕获；不能在两两比较时临时取较浅深度，也不能奖励更深或未兑现的估值。具体续行已出现的死亡、复活消耗、超额和队友死亡不能被旧检查点隐藏，但不封禁同首动作的其他续行。未完成首周期明确报告缺少受击评估。
 
-多人发布池先在 `Multiplayer.PrepareMultiplayerFinalCandidates` 检查完整用药资格，再冻结共同周期和截断至 `4B`；预览、最终选择与结果元数据共享该 `MultiplayerFinalBatch`。禁止在截断后的子集上重建排序上下文。已终止候选压缩也先检查资格；可继续展开但尚未用药的前缀仍由原中间保路处理。批次只持有引用，模拟器仍由 `Phases` 释放。修改该管线时运行 `MultiplayerFinalSelectionContracts` 的生产函数反例、排列与实际预览/最终入口合同，并检查单人零进入。
+多人 `Multiplayer.PrepareMultiplayerFinalCandidates` 保留 A 的完整资格、共同周期与 `4B` 压缩；终止池局部压缩继续走 A。只有既有预览/最终发布经 `MultiplayerWindow.PrepareMultiplayerPublicationCandidates` 尝试 C：从截断前候选及仍保留的回合/上一层冻结完整当前回合代表，全部具备更深实际检查点且预算/风险门禁允许时提高共同比较周期。范围含未完成/未满足用药资格的活动前缀，不能只删掉它们制造覆盖；外部阻断、缺代表、超过 Beam、同深或预算不足返回 A。不能从 `4B` 子集重算深度，不能将一条坏后缀扩为整个首回合黑名单。批次与临时索引不拥有模拟器，释放继续归 `Phases`；修改入口时用 `MultiplayerCoveredWindowContracts`、真实晚回本/缺代表/来伤对照和 `MultiplayerFinalSelectionContracts`，检查单人四入口零进入。详见 `docs/multiplayer-advisor.md`。
 
-默认比较器末级同分继续使用完整动作数。共同周期动作成本只保留在 `OfflineSearchHarness.MultiplayerHorizonContracts.ExperimentalActionCountAt`，由 `--multiplayer-review-contracts horizon-ordering` 同时记录现役比较与实验成本，覆盖后缀牌、后续周期、前缀、释放后的父链及额外玩家回合。该实验不修改生产排序；若以后启用，须单独证明成本和取舍，不能把同分变化当作战斗质量收益。
+A 与中间比较器末级同分继续使用完整动作数。C 仅在覆盖周期严格提高后按该检查点的真实父链动作边界计费，终局用完整动作数；不得把额外玩家回合当成敌方周期，不奖励检查点后的伤害或动作。原 `horizon-ordering` 仍是 A/B 历史实验，C 由 `window-covered-contracts` 和 `window-covered-incremental` 验证；同分变化不算质量收益。扫描上限与估计重放成本必须从同一请求余量消费，不追加 solver/Beam/节点额度。
 
 多人保路先覆盖防御、进攻、铺垫代表，重合代表不抢第二席；Beam 1/2/3/4 的边界见指南。格挡只作防御探索特征，最终价值由实际周期结果决定，不加名义格挡分。不可变周期观察与扣血账本进入去重/转置标签，不进入战斗状态键；单人两者保持默认值。修改时用现有多人策略合同覆盖配额、浅好深差、后续反证、救援、铺垫与 3 HP 账本，并保留官方单人哨兵；不增加第二套探针或请求预算。
 
@@ -134,7 +134,7 @@ description: 在战斗语义已证明正确后，审计或修改 CombatSolver �
 - 修 GC 策略前先确认保留集是否有界：`SearchRunContext` 的转置、StandPat、Coverage、ThreatProjection 等结构无裁剪、无上限，托管堆 52% 碎片时非紧凑回收中位只能拿回 0 MiB。**这类问题改 GC 策略治不了**，把内存从「输出」变成「输入」要落到 `BeamRetentionPolicy` 的容量维度，属语义改动，需完整等价性门禁。不要用准入/回收的复杂度去补保留集的无界。
 - 收益小且扩大语义验证面的微优化保留简单实现。
 - **按类型归因时必须取该类型的调用栈，不能从类型名猜调用点。** 分配 trace 只给出「哪个类型分配了多少」；`Func<CardPile,bool>` 这类泛型名会误导人去找同名形态的代码。先对目标类型取栈定位文件与行号，再改；改完必须用**同一类型**的前后字节数验证是否真的下降（总分配可能被其它来源淹没而看不出变化）。凭类型名推断曾把 `PredictedCard` 谓词当成 `CardPile` 谓词，改错文件：213 行改动换来总分配 +0.069%，只能回退。仓库自带的 `tools/GcTraceAnalysis` 每类型条目不带栈，需要加大 `--top` 后在 `topSearchStacks` 里按类型过滤，或按类别条目交叉核对。
-- 反编译核对游戏类型用 `.local/decompiled-tmp/sts2/`（按命名空间分目录）；`ilspycmd` 在本机安装失败（NuGet 包缺 `DotnetToolSettings.xml`），不要重复尝试。核对该目录时要用「实测调用栈里的方法链」交叉验证版本一致性。
+- 调查原版语义时定向读取 `AGENTS.md` 指定的当前版本反编译目录，并沿实测调用链核对；普通策略扫描不加载该目录，不把历史机器的安装失败当作现役环境限制。
 
 ## 5. 实验与验证
 

@@ -7,6 +7,9 @@ internal sealed record MultiplayerSearchPolicy(
 {
     internal const int LongHorizonBudgetMultiplier = 2;
 
+    // Request-local A/C control for contracts; ordinary multiplayer requests use coverage.
+    public bool UseCoveredWindowSelection { get; init; } = true;
+
     public SolverSearchProfile ResolveSearchProfile(SearchPolicySnapshot policy)
     {
         SolverSearchProfile profile = policy.Profile;

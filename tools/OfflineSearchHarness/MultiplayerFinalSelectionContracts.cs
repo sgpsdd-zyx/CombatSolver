@@ -51,7 +51,8 @@ internal static class MultiplayerFinalSelectionContracts
 
     public static void VerifySinglePlayerIsolation(Action search, HarnessOptions options)
     {
-        string[] names = ["PrepareMultiplayerFinalCandidates", "SelectMultiplayerFinal", "CreateMultiplayerOrdering"];
+        string[] names = ["PrepareMultiplayerFinalCandidates", "SelectMultiplayerFinal", "CreateMultiplayerOrdering",
+            "PrepareMultiplayerPublicationCandidates"];
         MethodInfo[] methods = typeof(CombatBeamSolver).GetMethods(BindingFlags.NonPublic | BindingFlags.Instance)
             .Where(method => names.Contains(method.Name)).ToArray();
         MethodInfo count = AccessTools.Method(typeof(MultiplayerFinalSelectionContracts), nameof(CountSinglePlayerEntry));

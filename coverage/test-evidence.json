@@ -1,4 +1,12 @@
 {
+  "MULTIPLAYER-COVERED-WINDOW-SELECTION": {
+    "status": "Passed",
+    "level": "OfflineManagedCoveredWindowPolicyAndIncrementalReplay",
+    "procedure": "From fc7225d8 / 0.43.3 compare disabled/enabled covered-window selection through the same production coordinator at fixed Beam8, DOP1 and 3000ms: payback 52 nodes, missing-representative and defense 180 nodes. Exercise detached production ordering, enabled previews with incremental full replay, existing multiplayer strategy contracts and official cccc270 solo sentinel.",
+    "expected": "Use the deepest enemy checkpoint covered by all retained complete current-turn representatives, preserve eligibility and known-risk ordering, use common-cycle action cost only after an upgrade, and fall back without changing search budgets or solo behavior.",
+    "observed": "2026-09-20: payback A/C both 52 expanded/83 transitions with identical candidate facts; comparison 4 to 5, current Strike to Inflame, external damage at 3/7/14 cycles 21/49/98 to 18/54/117, zero HP loss. Missing-representative A/C 180/301 retain comparison 1 and identical whole route. Defense A/C 180/364 compare 6 to 7, same current Inflame and known loss 3/excess 0; identical external 14-cycle loss 37 is not a safety guarantee. 43 detached cases, 24 permutations and 27 triples pass. Enabled-preview incremental search compares every transition with full replay, reaches covered final cycle 5; shallow previews correctly fall back. Nine existing strategy cases with native next-turn full state, Fork, 840 legacy permutations and 216 triples pass. Official solo 80 fields/full route equal, four multiplayer entries never called. No live-network/visible-game/all-encounter guarantee.",
+    "evidence": "docs/TEST_MATRIX.md; docs/strategy/pro-window-selection-20260920/implementation.md; docs/strategy/pro-window-selection-20260920/implementation-results.json; .local/mp-window-implementation-20260920/contracts-final/; .local/mp-window-implementation-20260920/payback-final/; .local/mp-window-implementation-20260920/sentinel-final/; .local/mp-window-implementation-20260920/defense-final/; .local/mp-window-implementation-20260920/incremental-preview-final/; .local/mp-window-implementation-20260920/strategy-final/; .local/mp-window-implementation-20260920/solo-comparison-final.json"
+  },
   "MULTIPLAYER-RELIC-OWNERSHIP-PAELS-EYE": {
     "status": "Passed",
     "level": "NativeHeadlessMultiplayerSemanticBoundariesAndLocalization",

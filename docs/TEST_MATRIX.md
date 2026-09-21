@@ -1,5 +1,21 @@
 # CombatSolver 测试清单
 
+## 0.43.4（fork）：完整回合覆盖选路（2026-09-20）
+
+固定起点 `fc7225d8 / 0.43.3`，采用受限 C 的最终行为 DLL；版本号随后同步为 0.43.4，纯发布元数据不重跑行为。证据根 `.local/mp-window-implementation-20260920/`。以下均为普通 .NET 进程托管合同，不启动 Steam/Godot，也不等同真实网络。
+
+| 检查 | 本轮直接证据 |
+|---|---|
+| 实际同池收益 | `window-covered-payback`，Beam8 / 内部52节点 / 3000ms / DOP1。A/C 均52展开、83转移，候选事实完全一致；周期4→5，当前攻击→铺垫。统一3/7/14周期伤害21/49/98→18/54/117，双方扣血0、两人存活。`payback-final/window-selection.json` |
+| 缺代表负例 | `window-covered-sentinel`，180节点，A/C 均180展开/301转移、19个候选；四个本回合代表中无药攻击只有首周期，C返回`coverage_not_deeper`，周期1和原完整动作一致。`sentinel-final/window-selection.json` |
+| 带来伤长线对照 | `window-covered-defense`，本机无缓冲、50 HP、15敏捷、一张防御，首周期来伤3。A/C 均180展开/364转移；周期6→7、当前铺垫不变、所选完整后缀均扣3/超额0/两人存活。统一防御后攻击协议第3/7/14周期扣血3/3/37，不能称十四周期始终安全。`defense-final/window-selection.json` |
+| 纯排序边界 | `window-covered-contracts`，43项、24排列、27三元关系：完整牌序/同名实例/目标/选择/药水槽/额外回合、根隔离、`4B`前覆盖、缺代表/待用药/未完成/外部阻断、坏后缀/好兄弟/祖先克隆、风险回退、终局、共同周期成本、取消和预算上限通过。纯指定事实，无模拟器。`contracts-final/covered-window-contracts.json` |
+| 新路线与预览 | `window-covered-incremental`，52节点真实长线请求启用逐转移完整重放；最终周期5、83转移与铺垫结果成立。启用预览的独立合同记录不同发布池的应用/回退原因，不要求浅预览强行升级；`incremental/`、`incremental-preview-final/`。正确性耗时不作性能比较 |
+| 防守与原生边界 | `--multiplayer-strategy-contracts`，Beam2 / 100节点 / 1000ms / DOP1（能力隔离子例Beam12）。九项扣血/避死/治疗/已付额度、救援、未来风险、原生下一回合全文/增量与Fork、840资格排列、216原比较三元关系、同池预览/最终一致通过，步骤836ms。`strategy-final/` |
+| 官方单人隔离 | 固定`solo-power-compat.json`，Coordinator / Beam12 / 每成员350节点 / 12000ms / DOP1；当前`solo/`对已完成的官方`cccc270`基线：80项非时序/根/目录/动作及完整route JSON相同，1820展开/4583转移/2 HP。四个多人选路入口零进入。`solo-comparison-final.json` |
+
+普通A/C扫描本轮样例约1.98–2.29ms，含局部基线排序/JIT/观察；未设可见性能结论。完整数据和每阶段来源见[实施记录](strategy/pro-window-selection-20260920/implementation.md)，结构化条目 `MULTIPLAYER-COVERED-WINDOW-SELECTION`。Bash结构门禁与文档检查凭证单列；PowerShell、可见Steam、真实联机、三/四人、所有遭遇质量、DOP广泛对照、干净安装和完整发布门禁未执行。
+
 ## 研究：多人未击杀长线选路（2026-09-20）
 
 固定生产源码 `851c1521 / 0.43.3`，只新增离线宿主观察入口，未更改生产 DLL。现场 `.local/mp-window-selection-20260920/`；双玩家、本机索引 1、单敌 500 HP、单次首回合攻击或显式 Ethereal 铺垫、64 层缓冲、Beam8/DOP1/3000ms。全部搜索设置固定预算；深度筛选重选和统一后续回放均发生在原搜索之外，不计作免费生产能力。

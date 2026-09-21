@@ -14,6 +14,7 @@ using MegaCrit.Sts2.Core.Models.Cards;
 using MegaCrit.Sts2.Core.Models.Potions;
 using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.Runs;
+using MegaCrit.Sts2.Core.ValueProps;
 
 namespace OfflineSearchHarness;
 
@@ -26,8 +27,11 @@ internal static class MultiplayerWindowSelectionContracts
     private static readonly SortedDictionary<int, int> Expanded = [];
     private static int _generatedDepth;
     private static int _maximumPool;
+    private static int _coveredPublications;
+    private static readonly List<string> PublicationReasons = [];
 
-    private sealed record Publication(CombatBeamSolver Solver, SearchNode[] Pool, SearchNode Best, int Depth);
+    private sealed record Publication(CombatBeamSolver Solver, SearchNode[] Pool, SearchNode Best, int Depth,
+        object? Window);
     private sealed record Point(int Cycle, int EnemyHp, int HpLost, int TeamSurvivors);
     private sealed record Evaluation(Point[] Points, int Replays, int ReplayedActions, string[] CurrentTurn);
 
@@ -49,12 +53,17 @@ internal static class MultiplayerWindowSelectionContracts
         _maximumPool = Math.Max(_maximumPool, _lastPool.Length);
     }
 
-    private static void CaptureSelection(object __result)
+    private static void CaptureSelection(object __0, object __result)
     {
         if (!_recording) return;
         object candidate = Property(__result, "Candidate");
         _lastPublication = new(_lastSolver!, _lastPool,
-            (SearchNode)Property(candidate, "Node"), (int)Property(__result, "AdvisoryComparisonCycles"));
+            (SearchNode)Property(candidate, "Node"), (int)Property(__result, "AdvisoryComparisonCycles"),
+            AccessTools.Property(__0.GetType(), "Window").GetValue(__0));
+        if (_lastPublication.Window is { } window && (string)Property(window, "Reason") == "covered")
+            _coveredPublications++;
+        if (_lastPublication.Window is { } decision)
+            PublicationReasons.Add((string)Property(decision, "Reason"));
     }
 
     private static object Property(object instance, string name)
@@ -101,14 +110,16 @@ internal static class MultiplayerWindowSelectionContracts
             || options.MaxDegreeOfParallelism != 1 || options.BudgetMilliseconds > 5000)
             throw new ArgumentException("Window selection requires two players, local index 1, one enemy, DOP 1 and at most 5000 ms.");
         void Native(Task task) => loop.RunUntilCompleted(task, TimeSpan.FromSeconds(20), "Window selection setup");
+        bool defense = options.Scenario.MultiplayerReviewStage == "window-covered-defense";
         foreach (Player player in state.Players)
         {
             foreach (var potion in player.PotionSlots.ToArray()) potion?.Discard();
             Native(CardPileCmd.RemoveFromCombat(player.PlayerCombatState!.AllCards.ToArray(), skipVisuals: true));
             player.Creature.SetMaxHpInternal(500);
             player.Creature.SetCurrentHpInternal(500);
-            Native(PowerCmd.Apply<BufferPower>(new ThrowingPlayerChoiceContext(), player.Creature, 64,
-                player.Creature, null));
+            if (!defense || player != local)
+                Native(PowerCmd.Apply<BufferPower>(new ThrowingPlayerChoiceContext(), player.Creature, 64,
+                    player.Creature, null));
         }
         Native(PlayerCmd.LoseEnergy(local.PlayerCombatState!.Energy - 1, local));
         Native(CardPileCmd.AddGeneratedCardToCombat(state.CreateCard(ModelDb.Card<StrikeIronclad>(), local),
@@ -116,7 +127,17 @@ internal static class MultiplayerWindowSelectionContracts
         var setup = state.CreateCard(ModelDb.Card<Inflame>(), local);
         setup.AddKeyword(CardKeyword.Ethereal);
         Native(CardPileCmd.AddGeneratedCardToCombat(setup, PileType.Hand, local));
-        bool delayedPayback = options.Scenario.MultiplayerReviewStage == "window-selection-payback";
+        if (defense)
+        {
+            local.Creature.SetCurrentHpInternal(50);
+            Native(PowerCmd.Apply<DexterityPower>(new ThrowingPlayerChoiceContext(), local.Creature, 15, local.Creature, null));
+            Native(CardPileCmd.AddGeneratedCardToCombat(state.CreateCard(ModelDb.Card<DefendIronclad>(), local), PileType.Hand, local));
+        }
+        bool covered = options.Scenario.MultiplayerReviewStage is "window-covered-payback" or "window-covered-sentinel"
+            or "window-covered-incremental" or "window-covered-defense";
+        bool verify = options.Scenario.MultiplayerReviewStage == "window-covered-incremental";
+        bool delayedPayback = options.Scenario.MultiplayerReviewStage is "window-selection-payback" or "window-covered-payback"
+            or "window-covered-incremental";
         if (delayedPayback)
             Native(PowerCmd.Apply<StrengthPower>(new ThrowingPlayerChoiceContext(), local.Creature, 1,
                 local.Creature, null));
@@ -131,6 +152,16 @@ internal static class MultiplayerWindowSelectionContracts
             FixedBudget = true, BudgetOverrideMilliseconds = options.BudgetMilliseconds,
             Profile = ModRuntime.ResolveProfile(options), MaxDegreeOfParallelism = 1,
         };
+        if (defense)
+        {
+            var probeRoot = CombatRootSnapshot.Capture(state, multiplayerAdvisor: true);
+            var probe = new CombatBeamSolver(probeRoot, SolverDisplayNames.Capture(state), BattleDamageTracker.Observe(state),
+                template, searchProfile: template.Profile).ReplayMultiplayerForTesting([new(PlanActionKind.EndTurn, probeRoot.StartTurnNumber)]);
+            int incoming = probe.CumulativePlayerHpLost;
+            probe.ReleaseSimulator();
+            if (incoming < 3) throw new InvalidOperationException("Defensive window fixture requires actual incoming damage.");
+            Native(CreatureCmd.GainBlock(local.Creature, incoming - 3, ValueProp.Unpowered, null, fast: true));
+        }
         MethodInfo observe = AccessTools.Method(typeof(CombatBeamSolver), "ObserveSearchPath");
         MethodInfo prepare = AccessTools.Method(typeof(CombatBeamSolver), "PrepareMultiplayerFinalCandidates");
         MethodInfo select = AccessTools.Method(typeof(CombatBeamSolver), "SelectMultiplayerFinal");
@@ -143,7 +174,8 @@ internal static class MultiplayerWindowSelectionContracts
         List<object> evidence = [];
         try
         {
-            foreach (bool withPotion in delayedPayback ? new[] { false } : new[] { false, true })
+            foreach (bool withPotion in delayedPayback || defense ? new[] { false }
+                : covered ? new[] { true } : new[] { false, true })
             {
                 if (withPotion)
                     Native(PotionCmd.TryToProcure(ModelDb.Potion<FirePotion>().ToMutable(), local));
@@ -152,20 +184,29 @@ internal static class MultiplayerWindowSelectionContracts
                 var damage = BattleDamageTracker.Observe(state);
                 var live = ContinuationStamp.CaptureLive(state, multiplayerAdvisor: true);
                 Dictionary<string, Evaluation> evaluations = [];
+                string? baselinePool = null, baselineActions = null;
+                int baselineTransitions = 0;
                 foreach (int nodes in delayedPayback ? new[] { 52 }
-                    : withPotion ? new[] { 36, 180 } : new[] { 4, 12, 36, 96, 180 })
+                    : covered ? new[] { 180 } : withPotion ? new[] { 36, 180 } : new[] { 4, 12, 36, 96, 180 })
+                foreach (bool useCoverage in verify ? new[] { true } : covered ? new[] { false, true } : new[] { false })
                 {
                     _lastPool = [];
                     _lastPublication = null;
-                    _maximumPool = _generatedDepth = 0;
+                    _maximumPool = _generatedDepth = _coveredPublications = 0;
+                    PublicationReasons.Clear();
                     Expanded.Clear();
-                    var policy = template with { Profile = template.Profile with { MaxExpandedNodes = nodes } };
+                    var policy = template with
+                    {
+                        Profile = template.Profile with { MaxExpandedNodes = nodes },
+                        Multiplayer = template.Multiplayer! with { UseCoveredWindowSelection = useCoverage },
+                        VerifyIncrementalSearch = verify,
+                    };
                     _recording = true;
                     SolverResult result;
                     try
                     {
                         var task = Task.Run(() => CombatSearchCoordinator.Solve(root, names, damage,
-                            policy, CancellationToken.None, null));
+                            policy, CancellationToken.None, verify ? _ => { } : null));
                         loop.RunUntilCompleted(task, TimeSpan.FromSeconds(20), "Window selection search");
                         result = task.GetAwaiter().GetResult();
                     }
@@ -177,6 +218,36 @@ internal static class MultiplayerWindowSelectionContracts
                         throw new InvalidOperationException("Window selection budget or observation mismatch.");
                     if (final.Pool.Any(node => node.Snapshot.HasSimulator))
                         throw new InvalidOperationException("Final candidate observation retained an unreleased simulator.");
+                    if (verify && (_coveredPublications < 1 || PublicationReasons.Count < 2))
+                        throw new InvalidOperationException("Incremental contract did not exercise preview and covered final publication.");
+                    if (covered)
+                    {
+                        string poolFacts = JsonSerializer.Serialize(final.Pool.Select(node => Facts(node, root.StartTurnNumber)));
+                        string actions = JsonSerializer.Serialize(final.Best.Actions);
+                        if (!useCoverage)
+                        {
+                            baselinePool = poolFacts;
+                            baselineActions = actions;
+                            baselineTransitions = result.TransitionCount;
+                        }
+                        else if (!verify && (poolFacts != baselinePool || result.TransitionCount != baselineTransitions))
+                            throw new InvalidOperationException("Coverage changed the observed fixed-budget search pool.");
+                        string expectedReason = !useCoverage ? "disabled" : delayedPayback ? "covered" : "coverage_not_deeper";
+                        int expectedDepth = delayedPayback ? useCoverage ? 5 : 4 : 1;
+                        if (!defense && (result.AdvisoryComparisonCycles != expectedDepth || final.Window == null
+                            || (string)Property(final.Window, "Reason") != expectedReason
+                            || useCoverage && !delayedPayback && actions != baselineActions))
+                            throw new InvalidOperationException("Covered production selection violated the expected payback or fallback.");
+                        if (delayedPayback && FirstTurn(final.Best, root.StartTurnNumber).Single().CardId
+                            != (useCoverage ? "INFLAME" : "STRIKE_IRONCLAD"))
+                            throw new InvalidOperationException("Covered payback did not change the complete current turn as expected.");
+                        if (defense && (result.AdvisoryComparisonCycles != (useCoverage ? 7 : 6)
+                            || final.Best.Snapshot.CumulativePlayerHpLost != 3
+                            || final.Best.AdvisoryHpLoss.ExcessHpLost(3) != 0
+                            || final.Best.Snapshot.DeathSaveUseCount != 0 || final.Best.Snapshot.TeamSurvivors != 2
+                            || FirstTurn(final.Best, root.StartTurnNumber).Single().CardId != "INFLAME"))
+                            throw new InvalidOperationException("Covered defense changed the expected observed risk or current turn.");
+                    }
 
                     Evaluation Evaluate(SearchNode node)
                     {
@@ -185,14 +256,29 @@ internal static class MultiplayerWindowSelectionContracts
                         if (!evaluations.TryGetValue(key, out Evaluation? evaluation))
                         {
                             evaluation = EvaluateCurrentTurn(root, names, damage, template, local,
-                                state.Enemies[0].CombatId, current);
+                                state.Enemies[0].CombatId, current, defense);
                             evaluations.Add(key, evaluation);
                         }
                         return evaluation;
                     }
+                    if (covered && delayedPayback)
+                    {
+                        Point[] points = Evaluate(final.Best).Points;
+                        int[] expected = useCoverage ? [482, 446, 383] : [479, 451, 402];
+                        if (!new[] { 3, 7, 14 }.Select(cycle => points.Single(point => point.Cycle == cycle).EnemyHp)
+                                .SequenceEqual(expected) || points.Any(point => point.HpLost != 0 || point.TeamSurvivors != 2))
+                            throw new InvalidOperationException("Payback evaluation changed damage, loss, or surviving players.");
+                    }
+                    if (defense)
+                    {
+                        Point[] points = Evaluate(final.Best).Points;
+                        if (!new[] { 3, 7, 14 }.Select(cycle => points.Single(point => point.Cycle == cycle).HpLost)
+                                .SequenceEqual([3, 3, 37]) || points.Any(point => point.TeamSurvivors != 2))
+                            throw new InvalidOperationException("Defensive external evaluation changed its known longer-term losses.");
+                    }
                     List<object> groups = [];
                     int groupedCandidateScans = 0;
-                    foreach (int depth in final.Pool.Select(node => node.Snapshot.AdvisoryEnemyCycles)
+                    foreach (int depth in (covered ? Enumerable.Empty<int>() : final.Pool.Select(node => node.Snapshot.AdvisoryEnemyCycles))
                         .Where(cycle => cycle > 0).Distinct().Order())
                     {
                         SearchNode[] pool = final.Pool.Where(node => node.Snapshot.AdvisoryEnemyCycles >= depth
@@ -212,11 +298,13 @@ internal static class MultiplayerWindowSelectionContracts
                     }
                     evidence.Add(new
                     {
-                        withPotion, nodes, strength = delayedPayback ? 1 : 0,
+                        withPotion, nodes, strength = delayedPayback ? 1 : 0, useCoverage, verify, defense,
                         horizon = 14, beam = policy.Profile.BeamWidth,
                         result.ExpandedNodes, result.TransitionCount, result.Elapsed,
                         expandedCycles = Expanded.ToDictionary(), generatedDepth = _generatedDepth,
-                        maximumObservedPool = _maximumPool, result.AdvisoryComparisonCycles,
+                        maximumObservedPool = _maximumPool, result.AdvisoryComparisonCycles, final.Window,
+                        coveredPublications = _coveredPublications,
+                        publicationReasons = PublicationReasons.ToArray(),
                         result.BoundaryReason, selected = Facts(final.Best, root.StartTurnNumber),
                         evaluation = Evaluate(final.Best),
                         pool = final.Pool.Distinct(ReferenceEqualityComparer.Instance)
@@ -231,12 +319,15 @@ internal static class MultiplayerWindowSelectionContracts
                         {
                             experimentBaselineCommit = "851c1521f5258ec43dc71c24eeb8d5200fdf612d",
                             loadedSolverAssemblyVersion = typeof(CombatBeamSolver).Assembly.GetName().Version?.ToString(),
-                            method = "Production search final pools; offline depth-filtered selection uses the production comparator. No policy replacement.",
-                            limitations = "Two players, one enemy, one energy, Ethereal Inflame, 64 Buffer. No native differential or real multiplayer. Observation retains two bounded node pools but never prevents simulator release; timing is not a benchmark.",
-                            evaluationProtocol = "Execute the selected first player turn; then play at most one legal Strike per turn, pass otherwise; teammate passes. Reuse only identical pure action prefixes on the same root. All evaluation is outside search and reports replay cost.",
+                            method = covered ? "Production A/C selection with one fixed search budget per request; external evaluation remains separate."
+                                : "Production search with coverage disabled; offline depth-filtered selection uses the legacy comparator.",
+                            limitations = defense ? "Two players, one enemy, local 50 HP without Buffer, 15 Dexterity, one Defend, 3 opening incoming HP; peer has 64 Buffer. No real multiplayer."
+                                : "Two players, one enemy, one energy, Ethereal Inflame, 64 Buffer. No native differential or real multiplayer. Observation retains two bounded node pools but never prevents simulator release; timing is not a benchmark.",
+                            evaluationProtocol = defense ? "Execute the selected first player turn; subsequently play one legal Defend, then one legal Strike, then pass; teammate passes. Evaluation is outside search."
+                                : "Execute the selected first player turn; then play at most one legal Strike per turn, pass otherwise; teammate passes. Reuse only identical pure action prefixes on the same root. All evaluation is outside search and reports replay cost.",
                             evidence,
                         }, UnattendedTestFiles.JsonOptions));
-                    Console.WriteLine($"[window-selection] potion={withPotion} nodes={nodes} "
+                    Console.WriteLine($"[window-selection] potion={withPotion} nodes={nodes} covered={useCoverage} "
                         + $"common={result.AdvisoryComparisonCycles} selected={result.Snapshot.AdvisoryEnemyCycles} "
                         + $"generated={_generatedDepth} pool={final.Pool.Length} groups={groups.Count}");
                 }
@@ -252,18 +343,18 @@ internal static class MultiplayerWindowSelectionContracts
             GameBootstrap.Harmony.Unpatch(prepare, preparePatch);
             GameBootstrap.Harmony.Unpatch(select, selectPatch);
         }
-        return $"window_selection_runs={evidence.Count} production_unchanged=true live_root_unchanged=true";
+        return $"window_selection_runs={evidence.Count} covered_comparison={covered} live_root_unchanged=true";
     }
 
     private static Evaluation EvaluateCurrentTurn(CombatRootSnapshot root, SolverDisplayNames names,
         BattleDamageSnapshot damage, SearchPolicySnapshot policy, Player local, uint? enemyId,
-        PlanAction[] current)
+        PlanAction[] current, bool defense = false)
     {
         var solver = new CombatBeamSolver(root, names, damage, policy, searchProfile: policy.Profile);
         List<PlanAction> actions = [.. current];
         bool endTurn = true;
         int replays = 0, replayedActions = 0;
-        for (int step = 0; step < 36; step++)
+        for (int step = 0; step < (defense ? 60 : 36); step++)
         {
             SimulationSnapshot snapshot = solver.ReplayMultiplayerForTesting(actions);
             replays++;
@@ -284,6 +375,17 @@ internal static class MultiplayerWindowSelectionContracts
                 }
                 var simulator = (CombatPredictionSimulator)snapshot.Simulator;
                 var combat = (SimulatedCombatState)simulator.State.CombatState;
+                if (defense)
+                {
+                    var defend = simulator.State.GetPlayerCombatState(local).Hand.Cards
+                        .SingleOrDefault(card => card.Preview is DefendIronclad);
+                    if (defend != null && combat.CanPlayCard(simulator, defend))
+                    {
+                        actions.Add(new(PlanActionKind.PlayCard, snapshot.Turn,
+                            CardId: "DEFEND_IRONCLAD", TargetCombatId: local.Creature.CombatId));
+                        continue;
+                    }
+                }
                 var strike = simulator.State.GetPlayerCombatState(local).Hand.Cards
                     .SingleOrDefault(card => card.Preview is StrikeIronclad);
                 if (strike != null && combat.CanPlayCard(simulator, strike))

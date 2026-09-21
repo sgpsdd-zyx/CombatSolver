@@ -70,6 +70,12 @@ internal sealed partial class CombatBeamSolver
 
     private int CompareMultiplayerAtCycle(SearchNode left, SearchNode right, int depth)
     {
+        int comparison = CompareMultiplayerQualityAtCycle(left, right, depth);
+        return comparison != 0 ? comparison : left.ActionCount.CompareTo(right.ActionCount);
+    }
+
+    private int CompareMultiplayerQualityAtCycle(SearchNode left, SearchNode right, int depth)
+    {
         bool forcedA = _potionStrategy.EvaluateForcedUses(left.Actions, root.HasRenewablePotionShapedRock).AllForcedUsesSatisfied;
         bool forcedB = _potionStrategy.EvaluateForcedUses(right.Actions, root.HasRenewablePotionShapedRock).AllForcedUsesSatisfied;
         int comparison = forcedB.CompareTo(forcedA);
@@ -91,10 +97,7 @@ internal sealed partial class CombatBeamSolver
         comparison = b.Won.CompareTo(a.Won);
         if (comparison != 0) return comparison;
         if (!a.Comparable)
-        {
-            comparison = right.Score.CompareTo(left.Score);
-            return comparison != 0 ? comparison : left.ActionCount.CompareTo(right.ActionCount);
-        }
+            return right.Score.CompareTo(left.Score);
         comparison = Math.Min(b.TeamSurvivors, right.Snapshot.TeamSurvivors)
             .CompareTo(Math.Min(a.TeamSurvivors, left.Snapshot.TeamSurvivors));
         if (comparison != 0) return comparison;
@@ -111,7 +114,7 @@ internal sealed partial class CombatBeamSolver
             comparison = Nullable.Compare(left.Snapshot.CombatEndedTurn, right.Snapshot.CombatEndedTurn);
             if (comparison != 0) return comparison;
         }
-        // Unspent block, setup estimates and work beyond the common depth are not rewards.
-        return left.ActionCount.CompareTo(right.ActionCount);
+        // Exploration estimates never replace an observed enemy-cycle result.
+        return 0;
     }
 }

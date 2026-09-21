@@ -1,6 +1,6 @@
 # CombatSolver 文档导航
 
-当前源码和本地准备版 [0.43.3](releases/0.43.3-RELEASE_NOTES.md) 基于官方 0.43.0，修复多人遗物归属提示与佩尔之眼状态，保留十四周期和普通时间/节点双倍额度，单人保持官方行为。GitHub 已发布版本仍为 0.43.1。见 [多人指南与兼容记录](multiplayer-advisor.md#官方-0430-兼容同步)；发布凭证见[开发笔记](DEVELOPMENT_NOTES.md)。官方标签保持原指向。
+当前源码和本地准备版 [0.43.4](releases/0.43.4-RELEASE_NOTES.md) 基于官方 0.43.0，采用完整当前回合方案覆盖后的长线比较，保留十四周期、普通双倍额度、遗物归属与佩尔之眼修复；单人保持官方行为。GitHub 已发布版本仍为 0.43.1。现役机制见[多人指南](multiplayer-advisor.md)，发布状态见[开发笔记](DEVELOPMENT_NOTES.md)，官方标签不移动。
 
 通用随机/指定战斗测试入口：[场景生成与批量重跑](GENERATED_COMBAT_SCENARIOS.md)。
 
@@ -12,11 +12,11 @@
 | 要查什么 | 入口 |
 |---|---|
 | 0.41.2 发布、独立尖塔军师修复及本地材料的归档状态 | [2026-09-18 归档记录](DEVELOPMENT_NOTES.md#归档状态2026-09-18) |
-| 多人手动军师、3 HP 周期目标、共同周期选路、救援与官方 0.41.0 兼容 | [多人军师](multiplayer-advisor.md) |
+| 多人手动军师、3 HP 周期目标、共同周期选路、救援与官方 0.43.0 兼容 | [多人军师](multiplayer-advisor.md) |
 | 独立「尖塔军师」拿牌推荐模组误读房主卡组的修复与重跑 | [本机玩家修复工具](../tools/SpireAdvisorMultiplayerFix/README.md) |
 | 多人研究原文归档、已采用改进与暂缓方案 | [策略索引](strategy/README.md#多人研究归档)、[首批实施](multiplayer-advisor.md#首批策略优化已实施) |
-| 十四周期规划、计算额度与队友偏移 | [2026-09-20 对照与采用](strategy/multiplayer-fourteen-cycles-20260920.md)；[旧七周期研究](strategy/pro-horizon-20260919/README.md)保留原始结果，动作成本调整仍仅为实验 |
-| 未击杀长线选路、浅比较与首回合方案的公平续行 | [6 Pro 研究与本地候选池观察](strategy/pro-window-selection-20260920/README.md)；固定 0.43.3，仅研究 |
+| 十四周期规划、计算额度与队友偏移 | [2026-09-20 对照与采用](strategy/multiplayer-fourteen-cycles-20260920.md)；[旧七周期研究](strategy/pro-horizon-20260919/README.md)保留当时原始结果与动作成本实验 |
+| 未击杀长线选路、浅比较与首回合方案的公平续行 | [6 Pro 研究与本地候选池观察](strategy/pro-window-selection-20260920/README.md)；[0.43.4 实施与知识收尾](strategy/pro-window-selection-20260920/implementation.md) |
 | 0.41.2 的第二轮 6 Pro 复审与首批修正 | [第二轮归档](strategy/pro-review-0412-20260918/README.md)、[本地复核](strategy/pro-review-0412-20260918/local-review.md)、[实施与收尾](strategy/pro-review-0412-20260918/implementation.md)；F01/F02/F03 纳入 0.41.3 定版 |
 | 0.41.1 的 ChatGPT 6 Pro 审查结论、策略设计原文与本地复核 | [复审归档](strategy/pro-review-20260918/README.md)、[本地复核与采用边界](strategy/pro-review-20260918/local-review.md)；旧版输入见[历史索引](strategy/README.md#多人研究归档) |
 | 状态键为什么要含整场历史计数、条件式与无条件追加的对照 | [状态键历史计数报告](strategy/state-key-history-counters-20260919.md) |

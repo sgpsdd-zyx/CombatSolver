@@ -188,6 +188,7 @@ internal sealed partial class CombatBeamSolver
         SolverRouteAdoptionSeed? routeAdoptionSeed = null;
         SolverRouteAdoptionSeed? requestedRouteAdoptionSeed = null;
         IReadOnlyList<SearchNode>? interruptedActive = null;
+        List<SearchNode>? advisoryLastCohort = null;
         int routePreviewVersion = 0;
         // 路线预览要重排一次完整 RankFinal；与进度 UI 用同一个刷新间隔，避免每 100ms
         // 就重算一次比进度本身还重的排序。
@@ -924,7 +925,8 @@ internal sealed partial class CombatBeamSolver
         void PublishRoutePreview(
             IReadOnlyList<SearchNode> retained,
             IReadOnlyList<SearchNode>? additional = null,
-            bool force = false)
+            bool force = false,
+            IReadOnlyList<SearchNode>? advisoryScope = null)
         {
             if (progressCallback == null)
                 return;
@@ -944,7 +946,8 @@ internal sealed partial class CombatBeamSolver
                 .Select(node => (node, node.RetentionRank))
                 .ToArray();
             MultiplayerFinalBatch? advisoryBatch = IsMultiplayerAdvice
-                ? PrepareMultiplayerFinalCandidates(viable) : null;
+                ? PrepareMultiplayerPublicationCandidates(viable,
+                    [.. advisoryScope ?? [], .. advisoryLastCohort ?? []], stopwatch.ElapsedMilliseconds) : null;
             List<SearchNode> candidates;
             try
             {
@@ -1115,7 +1118,6 @@ internal sealed partial class CombatBeamSolver
 
         SeedMultiplayerRoutes(frontier);
         List<SearchNode> completed = [];
-        List<SearchNode>? advisoryLastCohort = null;
         SearchNode fallback = frontier.MaxBy(static node => node.Score)!;
         SearchNode? potionFreeBoundaryFallback = null;
         double potionFreeBoundaryFallbackScore = double.NegativeInfinity;
@@ -1972,7 +1974,7 @@ internal sealed partial class CombatBeamSolver
                     && (policy.MemoryPressureSignal.HasUnexpectedNoGcLoss()
                         || policy.MemoryPressureSignal.IsLimitReached()))
                     ReclaimAtCommittedBoundary("after_prune", playDepth, active.Count, ended.Count);
-                PublishRoutePreview(completed, active);
+                PublishRoutePreview(completed, active, advisoryScope: ended);
                 if (_detailedDiagnostics && searchedTurnLayers == 0)
                 {
                     policy.Diagnostics.Info(
@@ -2170,7 +2172,7 @@ internal sealed partial class CombatBeamSolver
             && (_run.Expanded >= _profile.MaxExpandedNodes || timeBudgetReached))
             finalPool.AddRange(advisoryLastCohort);
         MultiplayerFinalBatch? advisoryBatch = IsMultiplayerAdvice
-            ? PrepareMultiplayerFinalCandidates(finalPool) : null;
+            ? PrepareMultiplayerPublicationCandidates(finalPool, advisoryLastCohort, stopwatch.ElapsedMilliseconds) : null;
         List<SearchNode> finalCandidates = advisoryBatch?.Candidates ?? Retention.RankFinal(finalPool);
         ReleaseDroppedSnapshots(finalPool, finalCandidates);
         ValidateHistoricalSimulatorsReleased(finalCandidates);

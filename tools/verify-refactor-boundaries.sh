@@ -582,6 +582,7 @@ expected_beam_files=(
     CombatBeamSolver.Models.cs
     CombatBeamSolver.Multiplayer.cs
     CombatBeamSolver.MultiplayerEvaluation.cs
+    CombatBeamSolver.MultiplayerWindow.cs
     CombatBeamSolver.MultiplayerRound.cs
     CombatBeamSolver.NoveltySearch.cs
     CombatBeamSolver.Transpositions.cs
@@ -1305,9 +1306,14 @@ src/Search/MultiplayerSearchPolicy.cs|internal readonly record struct Multiplaye
 src/Search/CombatBeamSolver.Multiplayer.cs|private List<SearchNode> RankMultiplayer(
 src/Search/CombatBeamSolver.Multiplayer.cs|private MultiplayerFinalBatch PrepareMultiplayerFinalCandidates(
 src/Search/CombatBeamSolver.Multiplayer.cs|batch.Ordering.EnemyCycles
-src/Search/CombatBeamSolver.Phases.cs|? PrepareMultiplayerFinalCandidates(viable) : null;
-src/Search/CombatBeamSolver.Phases.cs|? PrepareMultiplayerFinalCandidates(finalPool) : null;
+src/Search/CombatBeamSolver.Phases.cs|? PrepareMultiplayerPublicationCandidates(viable,
+src/Search/CombatBeamSolver.Phases.cs|? PrepareMultiplayerPublicationCandidates(finalPool, advisoryLastCohort, stopwatch.ElapsedMilliseconds) : null;
 src/Search/CombatBeamSolver.Phases.cs|? PrepareMultiplayerFinalCandidates(completedCandidates).Candidates
+src/Search/MultiplayerSearchPolicy.cs|public bool UseCoveredWindowSelection { get; init; } = true;
+src/Search/CombatBeamSolver.MultiplayerWindow.cs|int commonDepth = Math.Min(policy.Multiplayer.Horizon, representatives.Min(id => depths[id]));
+src/Search/CombatBeamSolver.MultiplayerWindow.cs|CompareMultiplayerKnownRisk(best, incumbent) > 0
+src/Search/CombatBeamSolver.MultiplayerWindow.cs|if (pending > 0) return KeepBaseline("pending_eligibility");
+src/Search/CombatBeamSolver.MultiplayerWindow.cs|if (work.RemainingMilliseconds < replayReserve) return KeepBaseline("replay_budget");
 src/Search/CombatBeamSolver.cs|policy.Multiplayer != null ? CreateMultiplayerOrdering : null
 src/Search/CombatBeamSolver.MultiplayerEvaluation.cs|private MultiplayerPlanOrdering CreateMultiplayerOrdering(
 src/Search/CombatBeamSolver.MultiplayerEvaluation.cs|if (!terminal && depth > 0 && checkpoint?.Cycle == depth)

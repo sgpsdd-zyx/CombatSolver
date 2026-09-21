@@ -14,7 +14,14 @@ internal sealed partial class CombatBeamSolver
         => CompareMultiplayerAtCycle(left, right, int.MaxValue);
 
     private sealed record MultiplayerFinalBatch(
-        List<SearchNode> Candidates, MultiplayerPlanOrdering Ordering);
+        List<SearchNode> Candidates, MultiplayerPlanOrdering Ordering,
+        MultiplayerWindowDecision? Window = null);
+
+    private bool IsEligibleMultiplayerFinal(SearchNode node)
+        => (!_enforcePotionDirectives || _potionStrategy.EvaluateForcedUses(
+                node.Actions, root.HasRenewablePotionShapedRock, _run.PotionStrategicCosts).AllForcedUsesSatisfied)
+            && ExplicitPotionUseCount(node) >= _minimumPotionUses
+            && (_potionPolicy != SolverPotionPolicy.RequireAtLeastOne || ExplicitPotionUseCount(node) > 0);
 
     private MultiplayerFinalBatch PrepareMultiplayerFinalCandidates(IEnumerable<SearchNode> nodes)
     {
@@ -22,10 +29,7 @@ internal sealed partial class CombatBeamSolver
         // Expandable prefixes still use the unfiltered intermediate retention policy.
         List<SearchNode> eligible = nodes
             .Distinct((IEqualityComparer<SearchNode>)ReferenceEqualityComparer.Instance)
-            .Where(node => !_enforcePotionDirectives || _potionStrategy.EvaluateForcedUses(
-                node.Actions, root.HasRenewablePotionShapedRock, _run.PotionStrategicCosts).AllForcedUsesSatisfied)
-            .Where(node => ExplicitPotionUseCount(node) >= _minimumPotionUses
-                && (_potionPolicy != SolverPotionPolicy.RequireAtLeastOne || ExplicitPotionUseCount(node) > 0))
+            .Where(IsEligibleMultiplayerFinal)
             .ToList();
         MultiplayerPlanOrdering ordering = CreateMultiplayerOrdering(eligible);
         eligible.Sort(ordering.Compare);
@@ -38,6 +42,12 @@ internal sealed partial class CombatBeamSolver
     {
         if (batch.Candidates.Count == 0)
             throw new PotionPolicyUnsatisfiedException("No advisory route satisfies the selected potion directives.");
+        if (batch.Window is { } window)
+            policy.Diagnostics.Debug($"[CombatSolver/Test] MULTIPLAYER_WINDOW reason={window.Reason} "
+                + $"baseline={window.BaselineCycles} comparison={window.ComparisonCycles} "
+                + $"required={window.RequiredRepresentatives} covered={window.CoveredRepresentatives} "
+                + $"pending={window.PendingEligibility} ancestors={window.SuppressedAncestors} "
+                + $"metadata_work={window.MetadataWork} elapsed_ms={window.ElapsedMilliseconds:0.###}");
         SearchNode best = batch.Candidates[0];
         return new FinalPlanSelection(new FinalPlanCandidate(best, best.Snapshot,
             SearchFeatures.Capture(best), best.FutureSoldHp,
