@@ -489,6 +489,8 @@ internal static class CorePowerSupport
         combat.RestoreTemporaryFocus();
         foreach (Creature player in players)
         {
+            if (player.Player is { } owner && !combat.IsPlayerActiveForHooks(owner))
+                continue;
             int constrict = combat.GetAmount<ConstrictPower>(player);
             if (constrict > 0 && simulator.State.GetCreature(player).IsAlive)
                 simulator.Damage(player, constrict, ValueProp.Unpowered, player);
@@ -523,6 +525,8 @@ internal static class CorePowerSupport
     {
         foreach (Creature player in players)
         {
+            if (player.Player is { } owner && !combat.IsPlayerActiveForHooks(owner))
+                continue;
             int regen = combat.GetAmount<RegenPower>(player);
             if (regen > 0)
                 combat.SetAmount<RegenPower>(player, regen - 1);
@@ -573,6 +577,8 @@ internal static class CorePowerSupport
         SimulatedCombatState combat,
         Creature owner)
     {
+        if (owner.Player is { } player && !combat.IsPlayerActiveForHooks(player))
+            return true;
         int blockNextTurn = combat.GetAmount<BlockNextTurnPower>(owner);
         if (blockNextTurn > 0)
         {
@@ -650,6 +656,8 @@ internal static class CorePowerSupport
                 for (int playerIndex = 0; playerIndex < playerCreatures.Count; playerIndex++)
                 {
                     Creature player = playerCreatures[playerIndex];
+                    if (player.Player is { } owner && !combat.IsPlayerActiveForHooks(owner))
+                        continue;
                     ConstrictPower? constrict = combat.GetPower<ConstrictPower>(player);
                     if (constrict?.Applier == dead)
                         combat.SetAmount<ConstrictPower>(player, 0);
@@ -663,7 +671,7 @@ internal static class CorePowerSupport
                 // SetPowerAmount 会让 EffectivePowers 失效，所以命中项仍必须先物化；
                 // 但绝大多数结算根本没有 MagicBomb，改成只在命中时才建表，顺序与原来一致。
                 List<MagicBombPower>? magicBombs = null;
-                IReadOnlyList<PowerModel> effectivePowers = combat.EffectivePowers();
+                IReadOnlyList<PowerModel> effectivePowers = combat.PowersForHooks();
                 for (int powerIndex = 0; powerIndex < effectivePowers.Count; powerIndex++)
                 {
                     if (effectivePowers[powerIndex] is MagicBombPower bomb
@@ -716,6 +724,8 @@ internal static class CorePowerSupport
     {
         foreach (Creature creature in combat.Creatures)
         {
+            if (creature.Player is { } player && !combat.IsPlayerActiveForHooks(player))
+                continue;
             Tick<WeakPower>(combat, creature);
             Tick<VulnerablePower>(combat, creature);
             Tick<FrailPower>(combat, creature);
@@ -763,6 +773,8 @@ internal static class CorePowerSupport
         HashSet<Creature> participantSet = participants.ToHashSet();
         foreach (Creature creature in combat.Creatures)
         {
+            if (creature.Player is { } player && !combat.IsPlayerActiveForHooks(player))
+                continue;
             if (creature.Side != side && combat.GetAmount<FlameBarrierPower>(creature) > 0)
                 combat.SetAmount<FlameBarrierPower>(creature, 0);
             if (!participantSet.Contains(creature))

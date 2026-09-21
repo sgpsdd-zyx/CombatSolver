@@ -8,6 +8,8 @@
 
 官方后来发布的 [0.43.1](upstream/0.43.1-RELEASE_NOTES.md) 和 [0.43.2](upstream/0.43.2-RELEASE_NOTES.md) 在独立目录保留原文，与下列 fork 同号版本不同，不能据此替换 fork 标签或更新说明。
 
+本地准备版 **[0.43.6](0.43.6-RELEASE_NOTES.md)** 修复死亡队友重算及效果生命周期；验证见[测试矩阵](../TEST_MATRIX.md#0436fork死亡队友重算2026-09-21)。尚未创建标签或发布渠道。
+
 | 版本系列 | 更新日志 |
 |---|---|
 | 0.43 | [0.43.5（fork）](0.43.5-RELEASE_NOTES.md) · [0.43.4（fork，历史准备版）](0.43.4-RELEASE_NOTES.md) · [0.43.3（fork，历史准备版）](0.43.3-RELEASE_NOTES.md) · [0.43.2（fork，历史准备版）](0.43.2-RELEASE_NOTES.md) · [0.43.1（fork）](0.43.1-RELEASE_NOTES.md) · [0.43.0（上游）](0.43.0-RELEASE_NOTES.md) |

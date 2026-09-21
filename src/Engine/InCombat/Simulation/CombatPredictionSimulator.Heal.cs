@@ -7,7 +7,7 @@ namespace CombatSolver.Engine.InCombat.Simulation;
 internal sealed partial class CombatPredictionSimulator
 {
     // Mirrors CreatureCmd.Heal's state mutation and HP-change hook without mutating real Creature state.
-    // VFX/SFX, map-point history, waits, and player hook activation on revive are intentionally omitted.
+    // VFX/SFX, map-point history and waits are intentionally omitted.
     public void Heal(Creature creature, decimal amount)
     {
         if (IsEnding && !creature.IsPlayer)
@@ -18,6 +18,9 @@ internal sealed partial class CombatPredictionSimulator
         var creatureState = State.GetCreature(creature);
         int hpBeforeHeal = creatureState.CurrentHp;
         creatureState.Heal(amount);
+        if (hpBeforeHeal <= 0 && creatureState.IsAlive && creature.Player is { } revived
+            && State.CombatState is SimulatedCombatState multiplayer && multiplayer.AdvisorPlayer != null)
+            multiplayer.SetPlayerActiveForHooks(revived, active: true);
         int restoredHp = creatureState.CurrentHp - hpBeforeHeal;
         ActionRelicTriggers?.RecordHealth("heal", creature.CombatId, ResolveDamageSource(null),
             amount, restoredHp, hpBeforeHeal, creatureState.CurrentHp);

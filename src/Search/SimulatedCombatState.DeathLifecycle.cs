@@ -186,7 +186,8 @@ internal sealed partial class SimulatedCombatState
         bool hasIllusionHook = EffectivePowers().Any(power =>
             power is IllusionPower
             && power.Amount > 0
-            && ReferenceEquals(power.Owner, creature));
+            && (AdvisorPlayer == null ? ReferenceEquals(power.Owner, creature)
+                : IsMultiplayerHookOwnerActive(power) && ContainsCreature(power.Owner)));
         foreach (PowerModel power in EffectivePowers()
                      .Where(power => power.Owner == creature && power.Amount != 0)
                      .ToArray())
@@ -194,7 +195,7 @@ internal sealed partial class SimulatedCombatState
             bool keep = !power.ShouldPowerBeRemovedAfterOwnerDeath();
             if (hasIllusionHook)
             {
-                keep = power.Type != PowerType.Debuff || power is ITemporaryPower;
+                keep = (AdvisorPlayer != null && keep) || power.Type != PowerType.Debuff || power is ITemporaryPower;
             }
             if (!keep)
                 SetPowerAmount(power, 0);

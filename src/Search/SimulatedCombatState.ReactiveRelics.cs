@@ -18,6 +18,12 @@ internal sealed partial class SimulatedCombatState
         out bool extraTurn,
         out bool hasActiveEmotionChip)
     {
+        if (!IsPlayerActiveForHooks(player))
+        {
+            extraTurn = false;
+            hasActiveEmotionChip = false;
+            return true;
+        }
         extraTurn = GetAmount<AmbergrisPower>(player.Creature) > 0;
         hasActiveEmotionChip = false;
         foreach (RelicModel relic in RelicsOf(player))
@@ -225,6 +231,7 @@ internal sealed partial class SimulatedCombatState
         int etherealExhaustCount)
     {
         foreach (RelicModel relic in Players
+                     .Where(IsPlayerActiveForHooks)
                      .SelectMany(RelicsOf)
                      .Where(relic => !relic.IsMelted && participants.Contains(relic.Owner.Creature)))
         {

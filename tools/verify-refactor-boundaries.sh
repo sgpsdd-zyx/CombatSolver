@@ -1298,6 +1298,14 @@ src/Search/CombatBeamSolver.Multiplayer.cs|!CanReplayMultiplayerAction(node, act
 src/Search/CombatBeamSolver.Models.cs|public int ReplayedAdviceActions;
 src/Search/CombatBeamSolver.cs|_hasRegisteredPowerCards = policy.Multiplayer == null
 src/Search/SimulatedCombatState.Multiplayer.cs|throw new ExternalPlayerChoiceException
+src/Search/SimulatedCombatState.Multiplayer.cs|private ForkableSet<Player>? _inactiveMultiplayerPlayers;
+src/Search/SimulatedCombatState.Multiplayer.cs|internal IReadOnlyList<PowerModel> PowersForHooks()
+src/Search/SimulatedCombatState.cs|CaptureMultiplayerRootListeners(rootHookListeners, inner.Creatures)
+src/Search/SimulatedCombatState.Fork.cs|_inactiveMultiplayerPlayers = _inactiveMultiplayerPlayers?.Fork(),
+src/Search/CombatBeamSolver.StateEvaluation.cs|key.Add(simulatedCombat.IsPlayerActiveForHooks(peer));
+src/Runtime/ContinuationStamp.Multiplayer.cs|.Append(':').Append(combat.IsPlayerActiveForHooks(player));
+src/Engine/InCombat/Simulation/CombatPredictionSimulator.Damage.cs|multiplayer.SetPlayerActiveForHooks(player, active: false);
+src/Engine/InCombat/Simulation/CombatPredictionSimulator.Heal.cs|multiplayer.SetPlayerActiveForHooks(revived, active: true);
 src/Search/MultiplayerSearchPolicy.cs|StopAtAcceptableBattleHpLoss = false
 src/Search/MultiplayerSearchPolicy.cs|int Horizon = 14,
 src/Search/MultiplayerSearchPolicy.cs|if (policy.FixedBudget) return profile;

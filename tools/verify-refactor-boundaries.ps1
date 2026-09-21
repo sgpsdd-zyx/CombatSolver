@@ -1617,6 +1617,14 @@ $multiplayerAdviceRules = @(
     @{ Path = 'src/Search/CombatBeamSolver.Models.cs'; Text = 'public int ReplayedAdviceActions;' }
     @{ Path = 'src/Search/CombatBeamSolver.cs'; Text = '_hasRegisteredPowerCards = policy.Multiplayer == null' }
     @{ Path = 'src/Search/SimulatedCombatState.Multiplayer.cs'; Text = 'throw new ExternalPlayerChoiceException' }
+    @{ Path = 'src/Search/SimulatedCombatState.Multiplayer.cs'; Text = 'private ForkableSet<Player>? _inactiveMultiplayerPlayers;' }
+    @{ Path = 'src/Search/SimulatedCombatState.Multiplayer.cs'; Text = 'internal IReadOnlyList<PowerModel> PowersForHooks()' }
+    @{ Path = 'src/Search/SimulatedCombatState.cs'; Text = 'CaptureMultiplayerRootListeners(rootHookListeners, inner.Creatures)' }
+    @{ Path = 'src/Search/SimulatedCombatState.Fork.cs'; Text = '_inactiveMultiplayerPlayers = _inactiveMultiplayerPlayers?.Fork(),' }
+    @{ Path = 'src/Search/CombatBeamSolver.StateEvaluation.cs'; Text = 'key.Add(simulatedCombat.IsPlayerActiveForHooks(peer));' }
+    @{ Path = 'src/Runtime/ContinuationStamp.Multiplayer.cs'; Text = '.Append('':'').Append(combat.IsPlayerActiveForHooks(player));' }
+    @{ Path = 'src/Engine/InCombat/Simulation/CombatPredictionSimulator.Damage.cs'; Text = 'multiplayer.SetPlayerActiveForHooks(player, active: false);' }
+    @{ Path = 'src/Engine/InCombat/Simulation/CombatPredictionSimulator.Heal.cs'; Text = 'multiplayer.SetPlayerActiveForHooks(revived, active: true);' }
     @{ Path = 'src/Search/MultiplayerSearchPolicy.cs'; Text = 'StopAtAcceptableBattleHpLoss = false' }
     @{ Path = 'src/Search/MultiplayerSearchPolicy.cs'; Text = 'int Horizon = 14,' }
     @{ Path = 'src/Search/MultiplayerSearchPolicy.cs'; Text = 'if (policy.FixedBudget) return profile;' }

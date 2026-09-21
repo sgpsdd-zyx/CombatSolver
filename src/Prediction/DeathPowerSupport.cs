@@ -30,7 +30,7 @@ internal static class DeathPowerSupport
         SimulatedCombatState combat,
         Creature dead)
     {
-        foreach (PowerModel power in combat.EffectivePowers().ToArray())
+        foreach (PowerModel power in combat.PowersForHooks().ToArray())
         {
             if (power.Amount <= 0)
                 continue;

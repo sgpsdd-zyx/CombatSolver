@@ -1,5 +1,22 @@
 # CombatSolver 测试清单
 
+## 0.43.6（fork）：死亡队友重算（2026-09-21）
+
+起点 `94d6737f / 0.43.5`。普通 .NET 离线宿主加载游戏 0.111.0 托管程序集，调用原生死亡、治疗、回合流程及生产重算入口；Godot 渲染、完整录像负载与网络传输绕过。所有现场位于 `.local/mp-dead-teammate-20260921/`，没有启动 Steam／Godot 或建立 headless 安装目录。行为验证使用 0.43.5 程序集版本，随后仅同步 0.43.6 版本元数据，不因此重复行为测试。
+
+| 检查 | 本轮直接证据 |
+|---|---|
+| 根捕获失败基线 | `baseline-retained-power/`：原版 Illusion 死亡保留规则留下队友 Strength；手动重算报 `SEARCH_SETUP_FAILURE stage=combat_root_snapshot`，Power 项 expected_count=2 / actual_count=1。此时 Hook 资格修正已在工作树，Power 根捕获仍为发布版逻辑；不声称该次使用未经修改的整份发布 DLL |
+| 相邻偏差 | `baseline-relic/`：旧行为给死亡队友额外回合，预测 TurnNumber=3、原生=2，PaelsEye 被错误消耗；`fix-hooks/` 记录双亡灵契约师中死亡队友奥斯蒂 MaxHp 预测=0、原生=1。`fix-lifecycle/` 再定位停用玩家 Plating 预测从7减为6、原生保持7 |
+| 最终死亡与重算 | `final-lifecycle-concrete/dead-teammate.json` Passed：两位 NECROBINDER、本机索引1；主机／客户端各一次存活根按钮启动，再原生杀死队友并第三次按重算，实际搜索100展开、选中3回合。下一玩家回合重新捕获并短搜完成，没有代替玩家操作 |
+| L2 严格状态 | 同一最终场景对瓶中仙女救命、真正死亡、治疗复活、再次死亡与下一玩家回合逐字段比较完整 ContinuationStamp。含残留力量／临时力量／临时敏捷／集中、回合成长／临时能力、遗物、药水、奥斯蒂与双方牌堆；死亡时的能力保留与停用分开验证。原生下一回合包括双方准备及敌方行动；不是只比较 HP |
+| 隔离与状态键 | 同场景验证只改变玩家 Hook 资格会改变生产 Snapshot.StateKey，子 Fork 继承、父分支不变；原生死亡、救命、复活、回合推进后旧根全文不变。复活恢复捕获的遗物／能力／药水监听；未把 HP=0 直接视作停用，救命效果能完成 |
+| 单人哨兵 | `solo/` 对已完成的 `.local/upstream-merge-20260920/solo-official/` 官方 `3f4002bd` 基线；同一 `solo-power-compat.json`、Coordinator／Beam12／每成员350节点／12000ms／DOP1。`solo-comparison.json` 80项非时序字段及完整17动作路线相等，1820／4581／2HP；四个多人入口零进入。耗时与分配量不作等价或性能结论 |
+
+复跑入口：`--multiplayer-review-contracts dead-teammate --character NECROBINDER --encounter FUZZY_WURM_CRAWLER_WEAK --beam 4 --nodes 100 --budget-ms 1000 --dop 1`，外层120秒上限，原生动作每项20秒；没有增量标志或整场自动部署。初期普通无残留能力的死亡重算已经通过，不能用它覆盖后来找到的残留能力问题。离线 ready quorum、未撤销的 Client 传输替身导致的等待，以及抽象 `TemporaryStrengthPower` 不在 ModelDb 中属于夹具错误，均保留日志，修正输入／替身而非放宽产品异常处理。
+
+Bash 结构门禁 `REFACTOR_BOUNDARIES_OK search_files=212` 通过；两端门禁同步新增资格所有权、Fork、状态键及死亡／复活入口约束。630 个本地文档链接、版本同步和结构化证据检查通过，凭证为 `boundaries.log` 与 `doc-validation.json`。未执行真实主机／客户端网络、可见 UI、三／四人、全角色／全遭遇、全部第三方 Mod、PowerShell、干净安装或完整发布门禁；未收到玩家原日志，不宣称穷尽其所有报错原因。
+
 ## 0.43.5（fork）：发布与知识收尾（2026-09-20）
 
 本阶段只改中英玩家日志、发布规则和当前版本索引，复用下方行为证据以及 `d4371738` 的最终 Release 构建／最小 ZIP。没有把旧检查记为重新通过。发布前 3 份变更 Markdown 的 15 个本地链接通过，`release-gate` 官方快速校验通过；发布后变更文档的链接、锚点、版本与忽略边界检查见 `.local/release-0.43.5/doc-validation-closeout.json`。原子推送与 GitHub 创建命令分别直接证明分支／标签同步和 Release／附件发布，详见[发布归档](releases/0.43.5-PUBLISH.md)。本阶段不启动游戏，不重复构建、打包或行为场景；第三方原生适配、真实联机与可见性能的未验证状态保留。

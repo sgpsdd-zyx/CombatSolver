@@ -1,4 +1,12 @@
 {
+  "MULTIPLAYER-DEAD-TEAMMATE-RECALCULATION": {
+    "status": "Passed",
+    "level": "L2OfflineManagedNativeLifecycleAndManualEntry",
+    "procedure": "Run OfflineSearchHarness --multiplayer-review-contracts dead-teammate --character NECROBINDER --encounter FUZZY_WURM_CRAWLER_WEAK --beam 4 --nodes 100 --budget-ms 1000 --dop 1. Use native Illusion death retention with a dead peer, manual recalculation, death prevention, revival, a subsequent death and the next player turn. Compare full-party ContinuationStamp, production state keys and frozen forks. Run the fixed solo-power-compat Coordinator sentinel against the existing upstream 3f4002bd baseline.",
+    "expected": "Capture retained powers independently of active hooks. Preserve peer inventories and branch-owned activation across death and revival without suppressing Fairy death prevention. Dead peers must not trigger PaelsEye or tick retained powers; multiple Osty HP states stay owner-scoped. Keep solo behavior.",
+    "observed": "2026-09-21: unchanged root-capture logic fails with missing retained Strength, expected power count 2 versus 1. Adjacent failures show a dead peer receiving an extra turn and zero Osty maximum HP. Final native lifecycle, death-prevention, revival, next-turn full state, manual recalculation (100 expanded, selected 3 turns), second-turn search, activation fingerprint and root/Fork isolation pass. Solo 80 non-timing fields and all 17 route actions match upstream, 1820 expanded / 4581 transitions / 2 HP; four multiplayer selection entry points unused. Godot rendering, network transport and replay payload capture are bypassed. No player log was supplied, no live-network or all-encounter claim.",
+    "evidence": "docs/TEST_MATRIX.md; tools/OfflineSearchHarness/MultiplayerDeadTeammateContracts.cs; .local/mp-dead-teammate-20260921/baseline-retained-power/; .local/mp-dead-teammate-20260921/baseline-relic/; .local/mp-dead-teammate-20260921/fix-hooks/; .local/mp-dead-teammate-20260921/final-lifecycle-concrete/; .local/mp-dead-teammate-20260921/solo-comparison.json"
+  },
   "MULTIPLAYER-UPSTREAM-0432-COMPAT": {
     "status": "Passed",
     "level": "UpstreamIntegrationManagedContractsAndNativeHeadlessBoundaries",

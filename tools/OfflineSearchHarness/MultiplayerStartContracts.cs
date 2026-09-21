@@ -26,7 +26,8 @@ internal static class MultiplayerStartContracts
     private static NetGameType _netType = NetGameType.Host;
     private static Exception? _checkpointFailure;
 
-    internal static string Run(CombatState state, HarnessOptions options, MainLoopContext loop)
+    internal static string Run(CombatState state, HarnessOptions options, MainLoopContext loop,
+        Action? beforeRecalculate = null)
     {
         _host = (NGame)RuntimeHelpers.GetUninitializedObject(typeof(NGame));
         _userDataDirectory = options.OutputDirectory;
@@ -70,6 +71,17 @@ internal static class MultiplayerStartContracts
                 RequireAdvice();
             }
 
+            if (beforeRecalculate != null)
+            {
+                beforeRecalculate();
+                Click(click);
+                WaitForSearch(loop);
+                RequireAdvice();
+                File.WriteAllLines(Path.Combine(options.OutputDirectory, "manual-recalculation-events.txt"), RuntimeEvents);
+                return $"manual_recalculation=passed searches={_searchingShown}; "
+                    + "Godot rendering, replay payload capture, and network transport are bypassed";
+            }
+
             VerifyPendingAction(click, loop);
             VerifyStartupFailures(click, loop);
             Click(click);
@@ -83,6 +95,9 @@ internal static class MultiplayerStartContracts
         finally
         {
             LocalContext.NetId = originalLocalId;
+            GameBootstrap.Harmony.Unpatch(
+                AccessTools.PropertyGetter(RunManager.Instance.NetService.GetType(), "Type"),
+                AccessTools.Method(typeof(MultiplayerStartContracts), nameof(NetTypePrefix)));
         }
     }
 

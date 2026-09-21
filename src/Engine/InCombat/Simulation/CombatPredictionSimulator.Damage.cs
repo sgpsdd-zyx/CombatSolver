@@ -481,7 +481,8 @@ internal sealed partial class CombatPredictionSimulator
                 return false;
         }
 
-        // Player hook deactivation only affects a surviving multiplayer teammate's later hooks; multiplayer is out of scope.
+        if (State.CombatState is SimulatedCombatState multiplayer && multiplayer.AdvisorPlayer != null)
+            multiplayer.SetPlayerActiveForHooks(player, active: false);
 
         // Mirrors CombatManager.HandlePlayerDeath, which is only called when not all players are dead.
         if (!State.Players.All(p => State.GetCreature(p.Creature).IsDead))

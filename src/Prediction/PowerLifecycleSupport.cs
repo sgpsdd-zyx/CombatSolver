@@ -36,7 +36,7 @@ internal static class PowerLifecycleSupport
     {
         if (target == null)
             return;
-        foreach (SurroundedPower power in combat.EffectivePowers().OfType<SurroundedPower>())
+        foreach (SurroundedPower power in combat.PowersForHooks().OfType<SurroundedPower>())
         {
             if (power.Amount <= 0 || !ReferenceEquals(power.Owner.Player, player))
                 continue;
@@ -70,7 +70,7 @@ internal static class PowerLifecycleSupport
             return;
 
         Creature owner = card.Preview.Owner.Creature;
-        foreach (PaleBlueDotPower power in combat.EffectivePowers().OfType<PaleBlueDotPower>().ToArray())
+        foreach (PaleBlueDotPower power in combat.PowersForHooks().OfType<PaleBlueDotPower>().ToArray())
         {
             if (power.Amount <= 0
                 || !ReferenceEquals(power.Owner, owner)
@@ -96,7 +96,7 @@ internal static class PowerLifecycleSupport
         if (amount <= 0)
             return;
         Creature owner = card.Preview.Owner.Creature;
-        foreach (OrbitPower power in combat.EffectivePowers().OfType<OrbitPower>().ToArray())
+        foreach (OrbitPower power in combat.PowersForHooks().OfType<OrbitPower>().ToArray())
         {
             if (power.Amount <= 0 || !ReferenceEquals(power.Owner, owner))
                 continue;
@@ -117,7 +117,7 @@ internal static class PowerLifecycleSupport
         Creature owner = card.Preview.Owner.Creature;
         if (!combat.TriggerRelicsAfterStarsSpent(simulator, card.Preview.Owner, amount))
             return;
-        foreach (ChildOfTheStarsPower power in combat.EffectivePowers().OfType<ChildOfTheStarsPower>())
+        foreach (ChildOfTheStarsPower power in combat.PowersForHooks().OfType<ChildOfTheStarsPower>())
         {
             if (power.Amount > 0 && ReferenceEquals(power.Owner, owner))
             {
@@ -139,7 +139,7 @@ internal static class PowerLifecycleSupport
                 return;
             foreach (SimulatedPowerAmountChange change in changes)
             {
-                foreach (PowerModel listener in combat.EffectivePowers().ToArray())
+                foreach (PowerModel listener in combat.PowersForHooks().ToArray())
                 {
                     if (listener.Amount <= 0)
                         continue;

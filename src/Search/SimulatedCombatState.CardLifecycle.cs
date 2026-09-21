@@ -96,7 +96,7 @@ internal sealed partial class SimulatedCombatState
             osty = existingOsty!;
         }
         SimCreatureState state = simulator.State.GetCreature(osty);
-        int currentMax = _simulatedOstyMaxHp?.GetValueOrDefault(osty) ?? state.MaxHp;
+        int currentMax = GetOstyMaxHp(simulator, player);
         if (!created && state.IsAlive)
         {
             currentMax += amount;
@@ -117,7 +117,7 @@ internal sealed partial class SimulatedCombatState
         Creature osty = GetOsty(player)
             ?? throw new InvalidOperationException("治疗奥斯蒂时，玩家没有可供模拟的奥斯蒂实例。");
         SimCreatureState state = simulator.State.GetCreature(osty);
-        int maxHp = _simulatedOstyMaxHp?.GetValueOrDefault(osty) ?? state.MaxHp;
+        int maxHp = GetOstyMaxHp(simulator, player);
         state.CurrentHp = Math.Min(maxHp, state.CurrentHp + Math.Max(0, amount));
     }
 
@@ -126,8 +126,8 @@ internal sealed partial class SimulatedCombatState
         Creature? osty = GetOsty(player);
         if (osty == null)
             return 0;
-        return _simulatedOstyMaxHp?.GetValueOrDefault(osty)
-            ?? simulator.State.GetCreature(osty).MaxHp;
+        return _simulatedOstyMaxHp?.TryGetValue(osty, out int maxHp) == true
+            ? maxHp : simulator.State.GetCreature(osty).MaxHp;
     }
 
     public bool IsOstyHittable(CombatPredictionSimulator simulator, Player player)

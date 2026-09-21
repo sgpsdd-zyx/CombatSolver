@@ -305,6 +305,10 @@ internal sealed partial class SimulatedCombatState
         }
         _rootRelics = rootRelics;
         _rootRelicSources = rootRelicSources;
+        if (_players.Count > 1)
+            foreach (Player player in _players)
+                if (!player.IsActiveForHooks)
+                    (_inactiveMultiplayerPlayers ??= []).Add(player);
         _rootPotionSlotCounts = inner.Players.ToDictionary(player => player, player => player.PotionSlots.Count);
         _rootPlayerTurnNumbers = inner.Players.ToDictionary(
             player => player,
@@ -370,7 +374,7 @@ internal sealed partial class SimulatedCombatState
                 throw new InvalidOperationException("Combat hook listener snapshot does not end with mod subscribers.");
             }
         }
-        _rootHookListeners = liveCombatHookListeners
+        AbstractModel[] rootHookListeners = liveCombatHookListeners
             .Take(standardCombatListenerCount)
             .Select(listener => rootModelClones.GetValueOrDefault(listener, listener))
             .Where(listener => listener is not null)
@@ -379,12 +383,16 @@ internal sealed partial class SimulatedCombatState
                 and not EnchantmentModel
                 and not OrbModel)
             .ToArray();
+        _rootHookListeners = _players.Count > 1
+            ? CaptureMultiplayerRootListeners(rootHookListeners, inner.Creatures)
+            : rootHookListeners;
         List<AbstractModel> rootRunHookListeners = [];
-        foreach (Player player in concreteRunState.Players.Where(player => player.IsActiveForHooks))
+        foreach (Player player in concreteRunState.Players.Where(player => _players.Count > 1 || player.IsActiveForHooks))
         {
             foreach (CardModel card in player.Deck.Cards)
             {
-                if (!MegaCrit.Sts2.Core.Runs.RunState.Contains(card))
+                if (_players.Count > 1 ? card.HasBeenRemovedFromState
+                    : !MegaCrit.Sts2.Core.Runs.RunState.Contains(card))
                     continue;
                 if (!rootModelClones.TryGetValue(card, out AbstractModel? capturedCard))
                 {
@@ -396,7 +404,7 @@ internal sealed partial class SimulatedCombatState
                 }
                 rootRunHookListeners.Add(capturedCard);
                 if (card.Enchantment != null
-                    && MegaCrit.Sts2.Core.Runs.RunState.Contains(card.Enchantment))
+                    && (_players.Count > 1 || MegaCrit.Sts2.Core.Runs.RunState.Contains(card.Enchantment)))
                 {
                     rootRunHookListeners.Add(rootModelClones.TryGetValue(card.Enchantment, out AbstractModel? captured)
                         ? captured
@@ -1103,7 +1111,7 @@ internal sealed partial class SimulatedCombatState
 
     public void RestoreTemporaryDexterity()
     {
-        foreach (IGrouping<Creature, TemporaryDexterityPower> group in EffectivePowers()
+        foreach (IGrouping<Creature, TemporaryDexterityPower> group in PowersForHooks()
                      .OfType<TemporaryDexterityPower>()
                      .Where(static power => power.Amount > 0)
                      .GroupBy(static power => power.Owner)
@@ -1120,7 +1128,7 @@ internal sealed partial class SimulatedCombatState
     public void RestoreTemporaryStrength(IEnumerable<Creature> participants)
     {
         HashSet<Creature> participantSet = participants.ToHashSet();
-        foreach (TemporaryStrengthPower power in EffectivePowers()
+        foreach (TemporaryStrengthPower power in PowersForHooks()
                      .OfType<TemporaryStrengthPower>()
                      .Where(power => participantSet.Contains(power.Owner) && power.Amount > 0)
                      .ToArray())
@@ -1137,6 +1145,8 @@ internal sealed partial class SimulatedCombatState
     {
         foreach (Creature creature in Creatures)
         {
+            if (creature.Player is { } player && !IsPlayerActiveForHooks(player))
+                continue;
             int amount = GetAmount<HotfixPower>(creature)
                 + GetAmount<SynchronizePower>(creature)
                 + GetAmount<FocusedStrikePower>(creature);
@@ -1175,7 +1185,7 @@ internal sealed partial class SimulatedCombatState
 
     public void IncrementSandpitTargeting(Creature target)
     {
-        SandpitPower? source = EffectivePowers()
+        SandpitPower? source = PowersForHooks()
             .OfType<SandpitPower>()
             .FirstOrDefault(power => power.Amount > 0
                 && ReferenceEquals(power.Target, target)
@@ -1283,6 +1293,8 @@ internal sealed partial class SimulatedCombatState
         Creature owner,
         bool decrementPlating)
     {
+        if (owner.Player is { } player && !IsPlayerActiveForHooks(player))
+            return;
         TickDuration<BlurPower>(owner);
         if (GetAmount<DrawCardsNextTurnPower>(owner) > 0)
             SetAmount<DrawCardsNextTurnPower>(owner, 0);
@@ -1665,7 +1677,8 @@ internal sealed partial class SimulatedCombatState
         // 同一序列，把整表拷贝降成一个两字段对象。消费方（HookListenerEnumerable、无人测试
         // 的下标断言）全部按 Count/索引访问，看到的元素与顺序完全一致。
         _effectiveRunHookListeners = new ConcatenatedListenerView(
-            _rootRunHookListeners,
+            AdvisorPlayer == null ? _rootRunHookListeners
+                : _rootRunHookListeners.Where(IsMultiplayerHookOwnerActive).ToArray(),
             combatListeners);
         return _effectiveRunHookListeners;
     }
@@ -1675,6 +1688,12 @@ internal sealed partial class SimulatedCombatState
         if (CanReuseHookListenerCache && _activeHookListeners != null)
             return _activeHookListeners;
         IReadOnlyList<AbstractModel> complete = GetEffectiveHookListeners();
+        if (AdvisorPlayer != null)
+        {
+            _activeHookListeners = complete.Where(listener => IsMultiplayerHookOwnerActive(listener)
+                && (listener is not PowerModel power || ContainsCreature(power.Owner))).ToArray();
+            return _activeHookListeners;
+        }
         ConcatenatedListenerView? segmented = complete as ConcatenatedListenerView;
         if (segmented is not null && _activeHookListenerPrefix is { } activePrefix)
         {
@@ -2848,7 +2867,7 @@ internal sealed partial class SimulatedCombatState
             return false;
         }
 
-        foreach (AbstractModel listener in GetEffectiveHookListeners())
+        foreach (AbstractModel listener in AdvisorPlayer == null ? GetEffectiveHookListeners() : GetActiveHookListeners())
         {
             if (listener is ReattachPower or IllusionPower or AdaptablePower or DieForYouPower)
                 continue;

@@ -1594,6 +1594,7 @@ internal sealed partial class CombatBeamSolver
                 key.Add(peerState.Energy);
                 key.Add(peerState.Stars);
                 key.Add((int)peerState.Phase);
+                key.Add(simulatedCombat.IsPlayerActiveForHooks(peer));
                 key.Add(simulatedCombat.GetPlayerTurnNumber(peer));
                 key.Add(simulatedCombat.GetPlayerGold(peer));
                 AppendPile(ref key, peerState.Hand, 'H');

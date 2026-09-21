@@ -22,6 +22,8 @@ internal static class MultiplayerReviewContracts
 
     public static string Run(CombatState state, HarnessOptions options, MainLoopContext loop)
     {
+        if (options.Scenario.MultiplayerReviewStage == "dead-teammate")
+            return MultiplayerDeadTeammateContracts.Run(state, options, loop);
         if (options.Scenario.MultiplayerReviewStage == "upstream-compatibility")
             return MultiplayerUpstreamContracts.Run(state, options, loop);
         if (options.Scenario.MultiplayerReviewStage == "window-covered-contracts")

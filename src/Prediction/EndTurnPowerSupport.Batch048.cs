@@ -15,7 +15,7 @@ internal static partial class EndTurnPowerSupport
         CombatSide side,
         IReadOnlySet<Creature> participants)
     {
-        foreach (PowerModel power in combat.EffectivePowers().ToArray())
+        foreach (PowerModel power in combat.PowersForHooks().ToArray())
         {
             if (power.Amount <= 0)
                 continue;

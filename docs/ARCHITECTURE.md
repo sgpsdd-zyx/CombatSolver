@@ -335,6 +335,8 @@ Smart 层间使用 `SmartLayerMemoryForecast` 的同窗分配和转移高水位�
 
 `EffectivePowers` 保留已知敌人尚待完成死亡结算的能力；普通 `ICombatState` / `ICombatPredictionHookListenerSource` 回调使用活动监听视图，排除所有者已离场的 Power。两种视图共用既有根与分支能力实例，活动视图随阵容和能力缓存失效，不清空死亡补偿所需的数据。
 
+多人根还必须保留死亡玩家的残留 Power、遗物、药水及根牌组；原生活动监听枚举会漏掉这些仍属战斗状态的对象。`SimulatedCombatState.Multiplayer` 独占 `_inactiveMultiplayerPlayers`：根在主线程捕获 `Player.IsActiveForHooks`，键只使用稳定 Player 身份，Fork 复制 COW 集合。引擎沿原生时序在死亡清理后停用、治疗从死亡恢复时启用；HP 归零与 Hook 停用不可合并，否则会阻断救命效果。资格变化使监听缓存失效，进入多人生产状态键及 ContinuationStamp；普通镜像用活动视图，领域 Hook 补偿用 `PowersForHooks` 或逐玩家资格，状态快照、死亡保留和每回合 Power 初值仍消费完整状态。单人继续沿用原视图和生命周期，不能把多人过滤接入单人语义。
+
 ## 4. 内嵌模拟引擎
 
 冻结的 `_rootRunHookListeners` 只包含捕获时根牌组的 CardModel/Enchantment。跑局拼接视图前缀与它引用相同时，Fork 直接复用该前缀：此前的 `State.Fork` 只登记 wrapper、creature、orb 和 power，`StateStore.Fork` 仍在监听恢复之后，不会命中这些根模型。其他前缀与战斗后缀继续通过原 context 重映射；不得把此规则扩展到分支 Power 或改变上述复制顺序而不复核。

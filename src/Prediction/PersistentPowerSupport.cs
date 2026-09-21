@@ -126,7 +126,7 @@ internal static class PersistentPowerSupport
         var context = new AfterEnergyResetMirrorContext { Simulator = simulator, Player = player };
 
         // Channel order affects the queue and the effects evoked when it is full.
-        foreach (PowerModel power in combat.EffectivePowers())
+        foreach (PowerModel power in combat.PowersForHooks())
         {
             // 层数为零的能力在原版里每一个重写都是空转：加零点星、抽零张、扣零点能量。
             // 这道门保持原来的判据，顺带让没登记的第三方能力不会为了一次空转记风险。
@@ -159,6 +159,8 @@ internal static class PersistentPowerSupport
 
     public static void TriggerRitual(SimulatedCombatState combat, Creature owner)
     {
+        if (owner.Player is { } player && !combat.IsPlayerActiveForHooks(player))
+            return;
         int amount = combat.GetAmount<RitualPower>(owner);
         if (amount <= 0 || combat.ConsumeRitualApplicationDelay(owner))
             return;
@@ -170,6 +172,8 @@ internal static class PersistentPowerSupport
         SimulatedCombatState combat,
         Creature owner)
     {
+        if (owner.Player is { } player && !combat.IsPlayerActiveForHooks(player))
+            return true;
         int biasedCognition = combat.GetAmount<BiasedCognitionPower>(owner);
         if (biasedCognition > 0)
             combat.Apply<FocusPower>(owner, -biasedCognition, owner);
@@ -245,7 +249,7 @@ internal static class PersistentPowerSupport
         CombatPredictionSimulator simulator,
         SimulatedCombatState combat)
     {
-        foreach (RampartPower rampart in combat.EffectivePowers().OfType<RampartPower>().ToArray())
+        foreach (RampartPower rampart in combat.PowersForHooks().OfType<RampartPower>().ToArray())
         {
             if (rampart.Amount <= 0)
                 continue;

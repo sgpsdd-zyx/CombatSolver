@@ -22,7 +22,7 @@ internal static partial class EndTurnPowerSupport
         HashSet<Creature> participantSet = participants.ToHashSet();
         // EffectivePowers 的数组发布后不会被就地改写（失效只把缓存字段置空），所以先取一次
         // 快照按下标推进即可，与 ToArray 的防御性拷贝看到的元素与顺序完全一致。
-        IReadOnlyList<PowerModel> effectivePowers = combat.EffectivePowers();
+        IReadOnlyList<PowerModel> effectivePowers = combat.PowersForHooks();
         for (int powerIndex = 0; powerIndex < effectivePowers.Count; powerIndex++)
         {
             PowerModel power = effectivePowers[powerIndex];
@@ -154,7 +154,7 @@ internal static partial class EndTurnPowerSupport
         IEnumerable<Creature> participants)
     {
         HashSet<Creature> participantSet = participants.ToHashSet();
-        foreach (AsleepPower asleep in combat.EffectivePowers().OfType<AsleepPower>().ToArray())
+        foreach (AsleepPower asleep in combat.PowersForHooks().OfType<AsleepPower>().ToArray())
         {
             if (asleep.Amount <= 1 && participantSet.Contains(asleep.Owner))
                 combat.SetAmount<PlatingPower>(asleep.Owner, 0);

@@ -26,6 +26,7 @@ internal sealed partial class SimulatedCombatState
         List<RelicModel> relics = [];
         for (int playerIndex = 0; playerIndex < Players.Count; playerIndex++)
         {
+            if (!IsPlayerActiveForHooks(Players[playerIndex])) continue;
             IReadOnlyList<RelicModel> owned = RelicsOf(Players[playerIndex]);
             for (int relicIndex = 0; relicIndex < owned.Count; relicIndex++)
             {
@@ -312,7 +313,7 @@ internal sealed partial class SimulatedCombatState
             // Pael's Eye also observes turns its owner sits out; the native hook clears eligibility.
             foreach (Player player in Players)
             {
-                if (side != player.Creature.Side) continue;
+                if (side != player.Creature.Side || !IsPlayerActiveForHooks(player)) continue;
                 foreach (RelicModel relic in RelicsOf(player))
                 {
                     if (relic is not PaelsEye || relic.IsMelted) continue;
@@ -497,6 +498,7 @@ internal sealed partial class SimulatedCombatState
         IReadOnlyList<Creature> participants)
     {
         foreach (PaelsTears relic in Players
+                     .Where(IsPlayerActiveForHooks)
                      .SelectMany(RelicsOf)
                      .OfType<PaelsTears>()
                      .Where(relic => !relic.IsMelted && participants.Contains(relic.Owner.Creature)))
@@ -512,6 +514,7 @@ internal sealed partial class SimulatedCombatState
         int etherealExhaustCount)
     {
         foreach (ArtOfWar relic in Players
+                     .Where(IsPlayerActiveForHooks)
                      .SelectMany(RelicsOf)
                      .OfType<ArtOfWar>()
                      .Where(relic => !relic.IsMelted && participants.Contains(relic.Owner.Creature)))

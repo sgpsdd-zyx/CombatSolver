@@ -172,7 +172,7 @@ internal sealed partial class SimulatedCombatState
     {
         HashSet<CardModel> liveCardsAtSnapshot = _liveCardsAtSnapshot
             ?? throw new InvalidOperationException("Power affliction root cards were not captured.");
-        IReadOnlyList<PowerModel> powers = EffectivePowers();
+        IReadOnlyList<PowerModel> powers = PowersForHooks();
         int vitalSparkAmount = 0;
         for (int index = 0; index < powers.Count; index++)
         {

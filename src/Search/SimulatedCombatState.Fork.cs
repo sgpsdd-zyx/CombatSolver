@@ -53,6 +53,7 @@ internal sealed partial class SimulatedCombatState
             _enemiesIntendingAttack = _enemiesIntendingAttack?.Fork(),
             _hasPredictedEnemyIntents = _hasPredictedEnemyIntents,
             _playerTurnNumbers = _playerTurnNumbers?.Fork(),
+            _inactiveMultiplayerPlayers = _inactiveMultiplayerPlayers?.Fork(),
             _knowledgeDemonCurseCounters = _knowledgeDemonCurseCounters?.Fork(),
             _monsterAiStates = _monsterAiStates?.Fork(),
             _monsterIntStates = _monsterIntStates?.Fork(),

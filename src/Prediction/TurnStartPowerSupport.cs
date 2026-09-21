@@ -40,7 +40,7 @@ internal static partial class TurnStartPowerSupport
         // 看到的元素与顺序完全一致，只是不再复制数组、不再建迭代器。
         if (combat.CurrentSide == CombatSide.Player && combat.RoundNumber <= 1)
         {
-            IReadOnlyList<PowerModel> platingPowers = combat.EffectivePowers();
+            IReadOnlyList<PowerModel> platingPowers = combat.PowersForHooks();
             for (int powerIndex = 0; powerIndex < platingPowers.Count; powerIndex++)
             {
                 if (platingPowers[powerIndex] is not PlatingPower plating)
@@ -54,7 +54,7 @@ internal static partial class TurnStartPowerSupport
             }
         }
 
-        IReadOnlyList<PowerModel> aggressionPowers = combat.EffectivePowers();
+        IReadOnlyList<PowerModel> aggressionPowers = combat.PowersForHooks();
         for (int powerIndex = 0; powerIndex < aggressionPowers.Count; powerIndex++)
         {
             if (aggressionPowers[powerIndex] is not AggressionPower aggression)
@@ -85,7 +85,7 @@ internal static partial class TurnStartPowerSupport
             }
         }
 
-        IReadOnlyList<PowerModel> effectivePowers = combat.EffectivePowers();
+        IReadOnlyList<PowerModel> effectivePowers = combat.PowersForHooks();
         for (int powerIndex = 0; powerIndex < effectivePowers.Count; powerIndex++)
         {
             PowerModel power = effectivePowers[powerIndex];
@@ -122,7 +122,7 @@ internal static partial class TurnStartPowerSupport
         SimulatedCombatState combat,
         Player player,
         TurnStartChoiceCursor choices)
-        => ContinueBeforeHandDraw(simulator, combat, player, choices, combat.EffectivePowers().ToArray(), 0);
+        => ContinueBeforeHandDraw(simulator, combat, player, choices, combat.PowersForHooks().ToArray(), 0);
 
     private static bool ContinueBeforeHandDraw(CombatPredictionSimulator simulator, SimulatedCombatState combat,
         Player player, TurnStartChoiceCursor choices, IReadOnlyList<PowerModel> powers, int nextIndex,
@@ -261,7 +261,7 @@ internal static partial class TurnStartPowerSupport
         SimulatedCombatState combat,
         Player player,
         TurnStartChoiceCursor choices)
-        => ContinueAfterPlayerTurnStart(simulator, combat, player, choices, combat.EffectivePowers().ToArray(), 0);
+        => ContinueAfterPlayerTurnStart(simulator, combat, player, choices, combat.PowersForHooks().ToArray(), 0);
 
     private static bool ContinueAfterPlayerTurnStart(CombatPredictionSimulator simulator, SimulatedCombatState combat,
         Player player, TurnStartChoiceCursor choices, IReadOnlyList<PowerModel> powers, int nextIndex)
@@ -405,7 +405,7 @@ internal static partial class TurnStartPowerSupport
         CombatSide side,
         IReadOnlyList<Creature> participants)
     {
-        foreach (CountdownPower countdown in combat.EffectivePowers().OfType<CountdownPower>().ToArray())
+        foreach (CountdownPower countdown in combat.PowersForHooks().OfType<CountdownPower>().ToArray())
         {
             if (countdown.Amount <= 0 || !participants.Contains(countdown.Owner))
                 continue;
@@ -421,7 +421,7 @@ internal static partial class TurnStartPowerSupport
 
         if (side != CombatSide.Enemy)
             return !simulator.HasPendingChoice;
-        foreach (SandpitPower sandpit in combat.EffectivePowers().OfType<SandpitPower>().ToArray())
+        foreach (SandpitPower sandpit in combat.PowersForHooks().OfType<SandpitPower>().ToArray())
         {
             if (sandpit.Amount <= 0)
                 continue;
