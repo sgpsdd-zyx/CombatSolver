@@ -4,15 +4,15 @@
 
 按版本倒序列出已有玩家更新日志，包括历史草案。是否正式发布以对应 Git 标签和发布记录为准；未发布改动见 [开发笔记](../DEVELOPMENT_NOTES.md)。发布 ZIP 存放在仓库根目录的 `releases/`，此处只保存文档。
 
-当前 fork 已发布 **[0.43.5](0.43.5-RELEASE_NOTES.md)**，定版提交 `d4371738`，基于官方 **0.43.2**；见 [GitHub Release](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.43.5) 和[发布归档](0.43.5-PUBLISH.md)。本次一并发布此前仅本地准备的 0.43.2／0.43.3／0.43.4 功能，完整中英日志以已发布的 fork 0.43.1 为起点；这些中间版本未补建标签。独立尖塔军师的 0.1.3 修复包由[工具目录](../../tools/SpireAdvisorMultiplayerFix/README.md#已交付产物)单独维护，不属于此版本序列。
+当前 fork 已发布 **[0.43.6](0.43.6-RELEASE_NOTES.md)**，定版提交 `ed6620a3`，基于官方 **0.43.2**；修复死亡队友重算及效果生命周期，见 [GitHub Release](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.43.6) 和[发布记录](0.43.6-PUBLISH.md)。此前 [0.43.5](0.43.5-PUBLISH.md) 已一并发布仅本地准备的 0.43.2／0.43.3／0.43.4 功能，这些中间版本未补建标签。独立尖塔军师的 0.1.3 修复包由[工具目录](../../tools/SpireAdvisorMultiplayerFix/README.md#已交付产物)单独维护，不属于此版本序列。
 
 官方后来发布的 [0.43.1](upstream/0.43.1-RELEASE_NOTES.md) 和 [0.43.2](upstream/0.43.2-RELEASE_NOTES.md) 在独立目录保留原文，与下列 fork 同号版本不同，不能据此替换 fork 标签或更新说明。
 
-本地准备版 **[0.43.6](0.43.6-RELEASE_NOTES.md)** 修复死亡队友重算及效果生命周期；验证见[测试矩阵](../TEST_MATRIX.md#0436fork死亡队友重算2026-09-21)。尚未创建标签或发布渠道。
+0.43.6 的死亡／复活原生对照和单人哨兵验证见[测试矩阵](../TEST_MATRIX.md#0436fork死亡队友重算2026-09-21)；真实联机尚未验收。
 
 | 版本系列 | 更新日志 |
 |---|---|
-| 0.43 | [0.43.5（fork）](0.43.5-RELEASE_NOTES.md) · [0.43.4（fork，历史准备版）](0.43.4-RELEASE_NOTES.md) · [0.43.3（fork，历史准备版）](0.43.3-RELEASE_NOTES.md) · [0.43.2（fork，历史准备版）](0.43.2-RELEASE_NOTES.md) · [0.43.1（fork）](0.43.1-RELEASE_NOTES.md) · [0.43.0（上游）](0.43.0-RELEASE_NOTES.md) |
+| 0.43 | [0.43.6（fork）](0.43.6-RELEASE_NOTES.md) · [0.43.5（fork）](0.43.5-RELEASE_NOTES.md) · [0.43.4（fork，历史准备版）](0.43.4-RELEASE_NOTES.md) · [0.43.3（fork，历史准备版）](0.43.3-RELEASE_NOTES.md) · [0.43.2（fork，历史准备版）](0.43.2-RELEASE_NOTES.md) · [0.43.1（fork）](0.43.1-RELEASE_NOTES.md) · [0.43.0（上游）](0.43.0-RELEASE_NOTES.md) |
 | 0.42 | [0.42.0](0.42.0-RELEASE_NOTES.md) |
 | 0.41 | [0.41.3（fork）](0.41.3-RELEASE_NOTES.md) · [0.41.2（fork）](0.41.2-RELEASE_NOTES.md) · [0.41.1（fork）](0.41.1-RELEASE_NOTES.md) · [0.41.0](0.41.0-RELEASE_NOTES.md) |
 | 0.40 | [0.40.5（fork，准备包）](0.40.5-RELEASE_NOTES.md) · [0.40.4（fork）](0.40.4-RELEASE_NOTES.md) · [0.40.3（fork）](0.40.3-RELEASE_NOTES.md) · [0.40.2](0.40.2-RELEASE_NOTES.md) · [0.40.1](0.40.1-RELEASE_NOTES.md) · [0.40.0](0.40.0-RELEASE_NOTES.md) |
