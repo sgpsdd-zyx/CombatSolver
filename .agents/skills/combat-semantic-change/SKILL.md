@@ -74,6 +74,8 @@ CombatRootSnapshot.Capture（主线程根）
 
 ## 3. 状态所有权清单
 
+- 单人历史六项累计值由 `CombatPredictionHistory.Record` 维护，普通、手动选牌与执行续接 Fork 均继承已有总数，复制尾段不重复入账。多人沿用按各效果持有者范围扫描历史，不能调用只接受单人 owner 的累计入口。更改历史事件或续接路径时使用 `VerifyHistoryCounters=true` 核对单人独立扫描，并以 `upstream-compatibility` 覆盖多人两位玩家、生产键及原生全队状态；Started/Finished 与原始/Resolved 的计数时点不能混用。
+
 新增分支状态必须回答：
 
 1. 根值从哪里、在哪个主线程时点捕获；

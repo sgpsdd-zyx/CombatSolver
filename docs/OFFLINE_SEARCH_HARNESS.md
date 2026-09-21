@@ -23,6 +23,8 @@
 
 `--multiplayer-review-contracts facts` 使用双玩家、本机索引 1、双打击与敌方 10 HP 的固定小局，验证真实终局与旧检查点混合、实际搜索继续展开、原生本机/队友药水历史和资格。内部固定 Beam 4 / 120 节点 / 1 秒 / DOP 1 / 三周期，输出 `review-facts.json`；单独复核提前停止可用 `--multiplayer-review-contracts stopping`，输出 `review-stopping.json`，只观察搜索实际展开到的回合。该入口不能与 `--request` 或其他多人合同合用。`SearchedTurns` 是最终选中路线的长度，不是所有搜索层的覆盖量。终局被截断、两条真胜利的结束回合和本机死亡优先控制另由现有 `final-selection.json` 覆盖。普通离线指标、原生托管合同、真实联机验收的边界不变。
 
+`--multiplayer-review-contracts upstream-compatibility --encounter FUZZY_WURM_CRAWLER_WEAK --beam 4 --nodes 100 --budget-ms 1000 --dop 1` 检查官方 0.43.2 的多人接入：双玩家／本机索引 1，空局外成长目标、疯狂科学改进正常施加但不产生信用，两位玩家历史／金斧计算、生产状态键、Fork 与冻结根；最后逐字段比较原生出牌和预测的全队状态。13 项结果写入 `upstream-compatibility.json`。原生动作时间戳局部替换 Godot 时钟，牌效果不替换；历史事件部分是人工构造，不等同全部卡牌或真实联机验证。见[本轮合并](strategy/upstream-0432-merge-20260920.md)。
+
 窗口专项复用该入口的三个阶段：`horizon` 对六个固定根运行 3/5/7/9 上限，输出 `horizon-comparison.json`；`horizon-native` 只核对本机铺垫与队友攻击两个原生手动动作的完整状态；`horizon-ordering` 分别记录现役完整动作数比较和仅在宿主中计算的共同周期成本提案，不改变生产比较器。固定输入为 `--encounter FUZZY_WURM_CRAWLER_WEAK --beam 8 --nodes 350 --budget-ms 3000 --dop 1`，要求单 worker、时间不超过 5000ms。`horizon` 把相同当前回合动作交给统一九周期评价器，队友攻击仅是测试侧的固定扰动；输出区分搜索工作与评价回放。Ethereal 铺垫牌是明确的实验改造，不是原版默认效果。窗口数字与首动作结果见[研究归档](strategy/pro-horizon-20260919/README.md)，不能把这些条件世界线当作真人策略或胜率验收。
 
 `horizon-fourteen` 复用窗口根，比较 7/14 周期并加入第十四周期才回本的输入；当前回合动作统一交给十四周期外部评价器。`horizon-budget` 用十张原版卡牌、抽牌与生成牌的固定长战斗，对照 H7/原额度、H14/原额度、H14/双倍额度，记录实际展开分布、选中周期、共同周期和动作；第三级显式倍增测试上限，不触发生产默认倍增。可用 Beam24/1200 节点/3000ms 或 Beam96/7000 节点/5000ms，单搜索最多等待 20 秒。十四周期语义与有效请求额度由 `--multiplayer-contracts --encounter FOGMOG_NORMAL --beam 12 --nodes 700 --budget-ms 12000 --dop 2` 验证，包含十三次原生完整状态对账、旧七周期控制、额外回合、边界及 UI 投影。结果和限制见[十四周期记录](strategy/multiplayer-fourteen-cycles-20260920.md)。
@@ -178,3 +180,12 @@ plan 每项的字段：`label`（必填，简单目录名）、`request`（必�
 **建根流程本身与游戏内的一致性**（宿主刚做出来时测的，基于研究分支 `4287e03`）：30 根生成场景，
 宿主与游戏内无人测试逐字段对照，`solverMetrics` 的可比字段、选中路线、装备与开局产物全部相同，
 2 根探索量不同（RitsuLib 未初始化，见上）。
+
+
+## 生产预算与转置表观测
+
+`--production-budget` 使用现有生产预算流程，包括剩余预算允许的无胜利升级。默认仍是固定预算，用于确定性逐位对照。批量计划的 `productionBudget: true` 允许正常时间边界作为有效观测，仍保留 `timeBoundary` 字段；固定预算计划撞到时间边界仍作废。
+
+批量计划现在支持 `transpositionEntryLimit`，映射已有 CLI 的同名上限。省略字段使用生产默认一百万条；实验放大上限不修改生产值。
+
+每次求解的 `TRANSPOSITION_CAP` 行记录首次触顶展开数、跨缓存重建保留的峰值条目、结束时标签数和分布。`LimitBypasses` 按未入表的准入/展开事件计数，包含重复键；标签分布为单通道结束值。Coordinator 多个通道分别输出，不合并成虚假的同时驻留峰值。

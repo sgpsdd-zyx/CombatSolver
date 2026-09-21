@@ -279,6 +279,13 @@ $onPlayFacade = Join-Path $repositoryRoot "src/Engine/InCombat/Mirrors/Cards/OnP
 if (Select-String -LiteralPath $onPlayFacade -SimpleMatch "Harmony.GetPatchInfo" -Quiet) {
     $violations.Add("${onPlayFacade}: worker must not query Harmony")
 }
+$onPlayAdapter = Join-Path $repositoryRoot 'src/Prediction/AdaptedCardOnPlayMirrors.cs'
+if (Select-String -LiteralPath $onPlayAdapter -SimpleMatch 'PredictionModPatchAudit.AuditCardOnPlay(' -Quiet) {
+    $violations.Add("${onPlayAdapter}: generated cards must use frozen root patch evidence")
+}
+if (-not (Select-String -LiteralPath $onPlayAdapter -SimpleMatch 'patchedOnPlayTargets.Contains(target)' -Quiet)) {
+    $violations.Add("${onPlayAdapter}: missing frozen generated-card patch decision")
+}
 
 $sessionPath = Join-Path $repositoryRoot "src\Runtime\SolverControllerSessions.cs"
 foreach ($sessionType in @("SolverCombatSession", "SolverSearchSession", "SolverDeploymentSession")) {
@@ -1644,6 +1651,27 @@ foreach ($rule in $multiplayerAdviceRules) {
     $path = Join-Path $repositoryRoot $rule.Path
     if (-not (Select-String -LiteralPath $path -SimpleMatch -Pattern $rule.Text -Quiet)) {
         $violations.Add("${path}: missing multiplayer advice boundary '$($rule.Text)'")
+    }
+}
+
+if (-not (Select-String -LiteralPath (Join-Path $repositoryRoot 'src/Search/CombatHistoryCounterKey.cs') -SimpleMatch 'simulator.History.GetCounters(owner)' -Quiet)) {
+    $violations.Add('Solo history key must consume incremental totals')
+}
+foreach ($historyFile in @('CombatPredictionHistory.cs', 'CombatPredictionHistory.CardContinuation.cs', 'CombatPredictionHistory.ExecutionContinuation.cs')) {
+    if (-not (Select-String -LiteralPath (Join-Path $repositoryRoot "src/Engine/InCombat/Simulation/$historyFile") -SimpleMatch '_counterOwner, _counters' -Quiet)) {
+        $violations.Add("History fork must inherit counters: $historyFile")
+    }
+}
+foreach ($rule in @(
+    @{ File = 'src/Search/CombatHistoryCounterKey.cs'; Text = 'simulator.State.CombatState.Players.Count > 1' },
+    @{ File = 'src/Search/CombatHistoryCounterKey.cs'; Text = 'CombatHistoryCounters.Scan(simulator.History, owner)' },
+    @{ File = 'src/Runtime/SolverController.cs'; Text = 'GrowthOpportunityTargets = state.Players.Count > 1' },
+    @{ File = 'src/Search/SimulatedCombatState.cs'; Text = '_madScienceUpgradeCapacity = _players.Count > 1 ? 0 : MadScienceGrowth.CaptureRemainingCapacity(inner);' },
+    @{ File = 'src/Search/CombatBeamSolver.Models.cs'; Text = 'TranspositionCapDiagnostics TranspositionDiagnostics' },
+    @{ File = 'src/Search/SearchPolicySnapshot.cs'; Text = 'DefaultTranspositionEntryLimit = 1_000_000' }
+)) {
+    if (-not (Select-String -LiteralPath (Join-Path $repositoryRoot $rule.File) -SimpleMatch $rule.Text -Quiet)) {
+        $violations.Add("Missing upstream integration boundary: $($rule.File)")
     }
 }
 

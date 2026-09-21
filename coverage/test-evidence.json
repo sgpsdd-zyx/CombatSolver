@@ -1,4 +1,20 @@
 {
+  "MULTIPLAYER-UPSTREAM-0432-COMPAT": {
+    "status": "Passed",
+    "level": "UpstreamIntegrationManagedContractsAndNativeHeadlessBoundaries",
+    "procedure": "Merge upstream 3f4002bd / 0.43.2 into fork 7b52ac8c / 0.43.4. Preserve solo policy and scoped multiplayer behavior. Reproduce growth-capture and history-owner failures; check multiplayer owner scopes and native full-party state; compare one fixed solo root with a separately built upstream DLL; run targeted history, cache, transposition, OnPlay and headless UI/potion/growth checks.",
+    "expected": "Keep upstream solo behavior, multiplayer H14 and 3 HP target, covered-window selection and Paels Eye ownership. Skip solo growth targets in multiplayer and retain per-effect history owner scopes. Do not infer live-network or all-encounter correctness.",
+    "observed": "2026-09-20: multiplayer compatibility 13 checks pass; native Mad Science full-party ContinuationStamp equal. Solo 80 fields and full route match upstream (1820 expanded, 4581 transitions, 2 HP), four multiplayer entry points unused. Nine strategy and ten facts contracts pass. Covered-window incremental 52/83 reaches cycle 5; missing-representative A/C 180/301 retain cycle 1 and identical route; defense A/C 180/364 retain 3 HP loss and upgrade comparison 6 to 7, external cycle-14 loss remains 37. Verified-history build passes 21 checks; ancillary failures 18; transposition 1024013; OnPlay 40 plus empty registry 2. Native eng/zhs/zht 449-entry UI, mixed-potion and Mad Science growth fixtures pass. ADAPTED-ONPLAY-INTEGRATION-CARD returns no protocol result in this environment and remains unverified. All native instances removed. Bash boundaries pass with 212 search files; no PowerShell, visible Steam, live multiplayer or full release gate.",
+    "evidence": "docs/strategy/upstream-0432-merge-20260920.md; docs/TEST_MATRIX.md; .local/upstream-merge-20260920/inputs.json; .local/upstream-merge-20260920/mp-compatibility-clock/; .local/upstream-merge-20260920/solo-comparison.json; .local/upstream-merge-20260920/mp-window-incremental/; .local/upstream-merge-20260920/mp-window-sentinel-traced/; .local/upstream-merge-20260920/mp-window-defense/; .local/upstream-merge-20260920/history-verified/; .local/upstream-merge-20260920/native/; .local/upstream-merge-20260920/native-adapted-protocol/; .local/upstream-merge-20260920/boundaries.log"
+  },
+  "UPSTREAM-0432-ADAPTED-NATIVE": {
+    "status": "Pending",
+    "level": "NativeHeadlessIntegration",
+    "procedure": "Run upstream ADAPTED-ONPLAY-INTEGRATION-CARD with the merged DLL and isolated macOS game.",
+    "expected": "Native replacement once, frozen patch composition, full state and turn-1-to-2 replay.",
+    "observed": "2026-09-20: no protocol result for batch request 4 or two isolated attempts; no completed checks claimed. Explicit schemaVersion did not change the outcome. Fixtures were not given a longer timeout; managed 40+2 checks are separate evidence. All instances removed.",
+    "evidence": "docs/strategy/upstream-0432-merge-20260920.md; .local/upstream-merge-20260920/native.log; .local/upstream-merge-20260920/native-adapted.log; .local/upstream-merge-20260920/native-adapted-protocol.log; .local/upstream-merge-20260920/native-adapted-protocol/sample.txt"
+  },
   "MULTIPLAYER-COVERED-WINDOW-SELECTION": {
     "status": "Passed",
     "level": "OfflineManagedCoveredWindowPolicyAndIncrementalReplay",

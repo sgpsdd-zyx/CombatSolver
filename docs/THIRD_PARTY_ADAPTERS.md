@@ -1,4 +1,4 @@
-# 第三方 Mod 适配手册
+﻿# 第三方 Mod 适配手册
 
 写给想让战斗路线求解器看懂自家 Mod 的作者。
 
@@ -293,6 +293,8 @@ PowerHiddenStateMirrors.Register<TYourPower>(
 
 ### 2.7 局外成长来源的独立额度
 
+本 fork 的成长额度与目标属于单人政策。多人军师不捕获这些局外目标，也不借此增加扣血额度；登记的战斗效果仍须按真实持有者结算。内置疯狂科学的能力／改进变体在单人新增独立信用，多人只保留实际改进 Power；不能用队友牌组或升级容量填入本机的策略输入。
+
 下一版本的成长早停按逐来源的可证明实际可打次数判断。第三方登记新增可选 `opportunityTarget`；旧登记不需要修改，但命中旧登记时继续完整搜索，不推断完成次数。战损目标早停默认开启；成长来源仅在本场实际可用卡牌命中 `hasTarget` 且考虑局外收益时形成目标，只保存非零额度不算实际目标。
 原版禁忌魔典已包含独立删牌收益额度，按每次成功增加战后删牌奖励计数。至亮之焰的单场最大生命消耗上限属于独立成本约束，不使用成长收益向量表示负收益，也不受 IgnoreLongTermRewards 影响；它不改变第三方成长来源登记接口。
 
@@ -328,14 +330,14 @@ combat.RecordGrowthReward(_diligence);
 一律判成亏。侧栏让玩家给每个来源单独填一份「每次收益允许的额外战损」，搜索据此在打分里给这条
 线路记一笔 HP 信用额度。
 
-原版九个来源写死在 `GrowthSource` 枚举里，`GrowthValues` 是与之对应的九个 int 字段。局外成长类
+原版十个来源写死在 `GrowthSource` 枚举里，`GrowthValues` 是与之对应的十个 int 字段（疯狂科学仅能力／改进变体）。局外成长类
 卡牌很多 mod 都有，它们全部落不进那个枚举：既拿不到自己的额度栏，收益也记不进
 `SimulatedCombatState.GrowthRewards`。**表现不是「少了个选项」，而是搜索必然避开这张牌**——
 付出的血看得见，换回来的东西在打分里根本不存在。
 
 登记之后你会得到四样东西；提供可证明的目标计算器时还会启用第五项：
 
-- 成长策略侧栏多一行，有自己的图标、标题和额度输入框，排在原版九行之后、按登记顺序；
+- 成长策略侧栏多一行，有自己的图标、标题和额度输入框，排在原版十行之后、按登记顺序；
 - 额度按你给的 id 存进设置文件，也进问题包的有效策略和路线缓存；
 - `GrowthValues.HasTarget` 认得你的牌，于是「打到可接受战损就提早收手」那条捷径会被关掉——
   否则搜索会在还没摸到你这张牌之前就收手；
@@ -446,7 +448,9 @@ CardRemovalValueMirrors.Register<YourDefend>(-10d);
 `AdaptedCardOnPlayMirrors.Register<TCard>` 登记精确目标、完整补丁组合与唯一完整预测实现。
 首次根／续用捕获后冻结；根选择通过标准 registry 分派，命中后不再执行原版 OnPlay/spec。
 组合核对包含实际顺序、owner、优先级和 before／after；不放行未知来源或明确不兼容 Mod。
-配置进入 continuation，旧根及路线沿既有边界核对失效；worker 不扫描补丁表。
+配置进入 continuation，旧根及路线沿既有边界核对失效。建根时冻结所有已补丁 OnPlay 方法，
+并审完全部已登记的卡牌类型。战斗中首次出现的未登记类型只按冻结方法集合判定：
+无补丁就交回普通镜像，有补丁则明确拒绝；worker 不读取实时 Harmony 表。
 支持面、条件 descriptor、async／动态卡牌限制及测试见[OnPlay 补丁适配](third-party-onplay-patches.md)。
 
 ### 2.12 还没有登记入口的地方
@@ -592,7 +596,7 @@ CardRemovalValueMirrors.Register<YourDefend>(-10d);
 | `ContinuationStamp.AppendCard` 的 `private=` 段与 `CombatBeamSolver.CaptureCardStateFingerprintForTesting` 的 `switch (preview)` | **卡牌**的隐藏字段按原版类型写死（利爪、基因算法、巨锤、狂暴、镰刀、疯狂科学），第三方卡牌的私有计数进不了指纹。Power 那一侧已有 `PowerHiddenStateMirrors`，见 §2.6 | 待做 |
 | `SimulatedCombatState.AddTurnStartStates` 的 `switch (power)` | 原版 Power 隐藏计数按类型写死。第三方走 §2.6 的登记表进同一份指纹，本行只是记下原版那个 `switch` 本身仍然封闭 | 第三方已有入口 |
 | `RelicPredictionStateSupport` 的原版类型分支 | 内置遗物状态仍按原实现处理；第三方遗物与 Modifier 的独立状态通过 §2.9 登记，不修改原版分支 | 第三方已有入口 |
-| `GrowthSource` 枚举与 `SolverGrowthStrategyPanel.SourceCard` 的 `switch` | 原版九类成长来源按类型写死。第三方走 §2.7 的 `GrowthSourceMirrors` 拿独立额度、侧栏行和指纹，本行只是记下原版那个枚举本身仍然封闭 | 第三方已有入口 |
+| `GrowthSource` 枚举与 `SolverGrowthStrategyPanel.SourceCard` 的 `switch` | 原版十类成长来源按类型写死。第三方走 §2.7 的 `GrowthSourceMirrors` 拿独立额度、侧栏行和指纹，本行只是记下原版那个枚举本身仍然封闭 | 第三方已有入口 |
 
 **这些开关新增或改动时，必须在同一个提交里更新这张表和本文档对应章节。** 见
 [AGENTS.md](../AGENTS.md) 第 9 节。

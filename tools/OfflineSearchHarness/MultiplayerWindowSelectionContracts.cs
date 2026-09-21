@@ -237,7 +237,17 @@ internal static class MultiplayerWindowSelectionContracts
                         if (!defense && (result.AdvisoryComparisonCycles != expectedDepth || final.Window == null
                             || (string)Property(final.Window, "Reason") != expectedReason
                             || useCoverage && !delayedPayback && actions != baselineActions))
-                            throw new InvalidOperationException("Covered production selection violated the expected payback or fallback.");
+                        {
+                            File.WriteAllText(Path.Combine(options.OutputDirectory, "window-expectation-failure.json"),
+                                JsonSerializer.Serialize(new { useCoverage, expectedDepth, expectedReason,
+                                    actualDepth = result.AdvisoryComparisonCycles, final.Window,
+                                    actionsEqual = actions == baselineActions,
+                                    pool = final.Pool.Select(node => Facts(node, root.StartTurnNumber)) },
+                                    new JsonSerializerOptions { WriteIndented = true }));
+                            throw new InvalidOperationException("Covered production selection violated the expected payback or fallback. "
+                                + $"coverage={useCoverage} depth={result.AdvisoryComparisonCycles}/{expectedDepth} "
+                                + $"reason={(final.Window == null ? "missing" : Property(final.Window, "Reason"))}/{expectedReason}");
+                        }
                         if (delayedPayback && FirstTurn(final.Best, root.StartTurnNumber).Single().CardId
                             != (useCoverage ? "INFLAME" : "STRIKE_IRONCLAD"))
                             throw new InvalidOperationException("Covered payback did not change the complete current turn as expected.");

@@ -1,5 +1,24 @@
 # CombatSolver 测试清单
 
+## 0.43.5（fork）：官方 0.43.2 合并（2026-09-20）
+
+固定起点 `7b52ac8c / fork 0.43.4`，合入官方 `3f4002bd / 0.43.2` 后加显式多人兼容。现场 `.local/upstream-merge-20260920/`；行为测试时程序集版本为 0.43.4，元数据随后同步 0.43.5，不因此重跑。
+
+| 检查 | 本轮直接结果 |
+|---|---|
+| 新多人兼容 | `upstream-compatibility`：13 项，通过两位 owner 的历史扫描／金斧、真实生产状态键、Fork／根隔离、空多人局外成长目标和改进的原生全队全文状态对账。`mp-compatibility-clock/upstream-compatibility.json` |
+| 官方单人 | 独立导出编译官方版本，`solo-power-compat.json`／Coordinator／Beam12／350 节点每成员／12000ms／DOP1；80 项及完整 route JSON 同一，1820／4581／2 HP，四个多人入口零进入。`solo-comparison.json` |
+| 既有多人 | `mp-strategy/` 九项防守／额度／原生下一回合／增量／Fork、能力隔离及 840 排列／216 三元关系通过；`mp-facts/` 10 项终局与本机用药通过 |
+| 长线选路 | `mp-window-incremental/` 52／83，逐转移重放和预览通过、比较 4→5；`mp-window-sentinel-traced/` A/C 180／301 同池同路线、仍比较 1；`mp-window-defense/` A/C 180／364 同池、比较 6→7，3 HP／超额零与首动作不变，外评十四周期仍扣 37 HP |
+| 历史与故障 | 带 `VerifyHistoryCounters=true` 的 DEFECT／M1 21 项通过，普通构建不含逐事件扫描；同一次单人真实结果上的缓存故障注入 18 项通过，取消／程序错误继续传播 |
+| 独立结构语义 | `TranspositionFrontierChecks` 1,024,013 项；`AdaptedOnPlayChecks` 40 项、空登记分支 2 项通过 |
+| 原生无头 UI | `UI-LOCALIZATION`／`macos-b6faaf6ad08349f880873587f605addb` Passed：eng/zhs/zht 449 文案、真实药水／成长／遗物面板及 Collapse、遗物归属／JSON／语言刷新 |
+| 原生无头用药 | `SEARCH-HP-TARGET-STOP`／`macos-67e1bb55d1ed4e019ad805e0176e0979` Passed：强制药基准、额外 Smart 边际收益、保留药和救援、战损／成长早停 |
+| 原生无头成长 | `GROWTH-POLICY-FREE-FIRST`／`macos-098e27737e56478f8a4e0b7759754544` Passed：改进容量 3、变体边界、独立额度、Fork 与真实结算 |
+| 结构门禁 | Bash `REFACTOR_BOUNDARIES_OK search_files=212`；两端脚本保留上游新约束并新增多人历史／成长接入约束，PowerShell 未执行 |
+
+失败与限制：自动合并先后复现多人 `Players.Single()` 和单人 history owner 异常，最终 13 项覆盖修正。新夹具初期有未完成历史配对和离线 Godot 时钟错误；已修正夹具，不误记为产品失败。缺代表哨兵首轮在并发负载下以 323ms 超出 250ms 层预算，候选池改变；保留失败，补充诊断后原预算通过，不提高预算。`ADAPTED-ONPLAY-INTEGRATION-CARD` 同进程及独立尝试均未返回协议结果，原生适配仍未验证；不拿 40+2 项代替。全部三处 headless 实例由启动器删除，日志保留资源清理告警。来源、细节与复跑参数见[合并归档](strategy/upstream-0432-merge-20260920.md)。未执行真实联机、可见 Steam、全角色／全遭遇、干净安装、完整发布门禁或渠道发布。
+
 ## 0.43.4（fork）：完整回合覆盖选路（2026-09-20）
 
 固定起点 `fc7225d8 / 0.43.3`，采用受限 C 的最终行为 DLL；版本号随后同步为 0.43.4，纯发布元数据不重跑行为。证据根 `.local/mp-window-implementation-20260920/`。以下均为普通 .NET 进程托管合同，不启动 Steam/Godot，也不等同真实网络。
@@ -86,6 +105,29 @@
 
 以下导入的 0.43.0、0.42.0 与其“未发布”段落均保留上游原始运行历史，不属于本轮执行结果。
 
+以下两个章节为官方 0.43.1／0.43.2 的历史记录，保留其原始证据；不属于 fork 同号发布，也不代表本轮合并重新验证。当前合并证据见本文件顶部 0.43.5。
+
+## 0.43.2（官方历史）：混合用药、生成牌、路线缓存与增量历史计数
+
+- 强制／智能混合用药：`SEARCH-HP-TARGET-STOP` / `312cb8cd77fb470eaac9bbc48cd19506` Passed，强制能量药与智能力量药的真实搜索在零战损胜利时仅用一瓶，DOP1/DOP2 完整结果和非时序指标逐字段一致；改为只持防御牌与 15 HP 敌人时，仅强制药无法获胜，智能火焰药作为第二瓶救命且不被误拦。纯合同核对强制基线只允许指定槽位、额外一瓶仅比强制基线多省 1 HP 时不满足 9 HP 门槛、强制药本身不计入额外药机会成本及梯度瓶数。隔离实例已清理。中间正向场景曾 Failed：初始接线把只允许强制药的临时策略传给后续 Smart 审计，使 `maximum=0`；改由审计读取原始逐瓶策略后通过。结构门禁 `REFACTOR_BOUNDARIES_OK search_files=205`，Windows Release 0 警告／错误。短根验证了混合策略、早停和救命路径；未取得玩家原战斗同根对照，也未实测非零但不足门槛的实际两药胜利比较。启动器曾报告一次 `Import-Clixml` 解析警告，随后游戏请求 Passed、目标断言完成；未把警告当成产品行为结论。
+- #105 原提交合入后的集成修正：`AdaptedOnPlayChecks` 40 项和空登记 2 项通过，涵盖已登记生成牌根前预审、未登记生成牌由根冻结的补丁集合拒绝、根捕获后安装／卸载补丁不改变旧根及新根恢复普通镜像。`ADAPTED-ONPLAY-INTEGRATION-CARD` / `5ae3ade71d1e4e9c9eb0d9aaff6ce209` Passed，真实游戏的替换只执行一次、完整快照／增量回放／Fork／第 1 至 2 回合对账及晚装补丁拒绝通过；最终构建的 `ADAPTED-ONPLAY-INTEGRATION-REUSE` / `1b16e4e994f74934ba79ecf044a324f9` Passed，精确续用到第 2 回合、计划外重算 0。两场隔离实例均已清理。Windows Release 0 警告／错误，`REFACTOR_BOUNDARIES_OK search_files=205`。首次把请求 JSON 误传给 `-GeneratedScenarioPath`，启动阶段报未知 `scenarioId`，属于命令输入错误，不计为产品断言；改为显式测试选项后上述场景通过。未跑可见 Steam、任意第三方 Mod 或执行中并发热换补丁；生成牌的根冻结边界由独立合同覆盖，而非真实游戏生成牌场景。
+- #117/#118/#119 均以原 PR 提交 merge 到已发布的 0.43.1 基线上，仅手工并列解决版本文档与双平台结构门禁冲突。合并组合 Windows Release 构建 0 警告/错误，`REFACTOR_BOUNDARIES_OK search_files=205`。#117 的辅助失败边界收窄后，Windows 离线单根 `OFFLINE_HARNESS_ANCILLARY_CHECKS=1` / `ancillary-integration` Passed：原 17 项磁盘/取消合同与新增程序错误传播断言合计 18 项；固定 150 节点、DOP 1、实际展开 119、转移 405。作者的 60 根逐字段对照、#118 的逐事件验证构建、#119 的百万项前沿检查及三根 VeryHigh 观察均是各 PR 的原有证据，本次未重跑，不等同于 0.43.1 三 PR 合并组合的整场等价性或可见实机验收。
+- 离线宿主 `OFFLINE_HARNESS_ANCILLARY_CHECKS=1`（DEFECT、`FUZZY_WURM_CRAWLER_WEAK`、High、DOP 1）在一次真实求解结果上注入磁盘故障，17 项通过：正常写读往返、临时文件清理、坏 JSON 与空路线按未命中处理并改名 `.bad`、隔离后同一键可重新写入、独占文件锁按未命中处理且不隔离、解锁后可读、缓存目录被文件占位、Unix 只读目录、目标路径被目录占用、结果序列化字节不变、取消异常传播、普通失败只记一次日志。作者在 macOS 本机运行；PR 阶段未验证 Windows 文件锁，本轮短根已覆盖 Windows 独占锁分支。
+- 录像采集与打包的隔离、打包调用顺序调整只经过编译和结构门禁，未在游戏内验证；符合录像条件的进阶 10 第三幕 Boss 无伤路线本机没有复现条件。
+- `OFFLINE_HARNESS_HISTORY_CHECKS=1`，DEFECT、`--milestone M1`：21 项通过。检查原始/完成事件、嵌套自动出牌、两种暂停续接、普通 Fork、父/根隔离和键位一致性。
+- `-p:VerifyHistoryCounters=true` 逐事件及 Fork/构键读取核对独立全扫描。语料、构键计时与验证范围见 [专题](strategy/incremental-history-counters.md)。
+- EQ 10 / FULL 40 / GA 10 对照 `8be1410`：60 根有效，5,670 个确定性字段及补充预算/剪枝字段一致。普通构建另测两个根的选中通道构键阶段，数据见专题。变基到 0.43.0（`cccc270`）后重跑 EQ 10 根，`compare_results.py` 992 字段 `IDENTICAL`。
+- 前沿与观测检查 1,024,010 项通过，新增标签数、首次触顶、峰值跨重建保留和分布检查；原支配决策逐项对照独立 List 基准。
+- EQ 10、FULL 40、GA 10 对照 `8be1410`：60 根有效，5,670 个确定性字段、额外预算／剪枝字段及完整结果快照一致。变基到 0.43.0（`cccc270`）后重跑 EQ 10 根，`compare_results.py` 992 字段 `IDENTICAL`。
+- VeryHigh 生产预算观察：三个重型根均未触顶，最大占用 832,793 / 1,000,000（83.28%）。没有触顶根，未运行放大上限臂；本轮不提供默认触顶后的质量结论。数据见 [专题](performance/transposition-cap-evidence-20260920.md)。未实机验证。
+
+## 0.43.1（官方历史）：英文界面启动与疯狂科学成长策略
+
+- `GROWTH-POLICY-FREE-FIRST` / `fb11ce8e1d95410b80d58555a26f6b07` Passed（22.80 秒）。在 Defect 独立原生战斗中注入疯狂科学能力／改进变体，冻结可升级正式牌组三张的目标，预测出牌产生一层改进及一次独立成长额度，随后真实出牌并逐字段对照；另核对非改进／非能力变体不计成长、两张牌与一张可升级目标时目标封顶、零容量不产生目标、额度设置往返、侧栏独立行、Fork 隔离及重复记录封顶。修复前 `630075e609644c418a9c5eece3b23330` 在变体识别断言按预期 Failed；中间 `45bee93749284fff8eba0dc8839755c7` 为夹具错误地重复转可变卡，`4c962a31b75f4a53a278e4b2c4373474` 与 `d3a9d2720aba442e8e3ae03eff03538d` 是反射回放参数及未重编 DLL 的夹具失败，均非产品断言失败。所有隔离实例已删除。未覆盖事件实际生成选项页及正式战后随机升级的可见动画。
+- `UI-LOCALIZATION` / `db0cc94e1f604a21843514d4c5bd1610` Passed（25.76 秒），eng/zhs/zht 子面板构造和动态标题未因新增成长行失败；结构门禁 `REFACTOR_BOUNDARIES_OK search_files=204`。均仅为无头／静态证据，可见排版尚未验收。
+- `SEARCH-HP-TARGET-STOP` / `e60944f238684bc1a41135317e7d10d6` Passed（23.55 秒）：零损/阈值、成长达标、可重复致命来源及相关回收与动态重放回归，隔离实例已删除。
+- `GROWTH-ANCIENT-POLICY` / `16e87117632749b783df9b46909f8581` Passed（26.93 秒）：原有成长牌手动历史、跨回合/Fork、至亮之焰硬上限及禁忌魔典额度合同继续成立，隔离实例已删除。
+- `UI-LOCALIZATION` 增加 eng/zhs/zht 药水、成长、遗物子面板的实际构造与“收起”按钮文案合同。0.43.0 源码增加断言后，在英文药水面板构造处按玩家异常栈 Failed（runId `391a52cdd52942d9a45e8b514f9034b9`，`KeyNotFoundException: 收起`）；补齐英文词典后 Passed（runId `333583c32c81407bbcd7b3171e872198`），三种语言的三个子面板均完成检查。两次都使用 120 秒上限、独立无头实例及 `-CleanupInstanceOnExit`，实例已删除。该合同覆盖建窗对象与本地化，不等于可见 Steam 排版验收。
 ## 0.43.0：路线连续性与操作体验（2026-09-19）
 
 - 两回合原生场景 `TOASTY-QOL-MANUAL-SAME` Passed（runId `c82b3f8125cc4b8998047ccabaf3ca7a`）：第 2 回合烘焙手套手牌页按计划手动删牌，精确续用，新增搜索 0、计划外重算 0。`TOASTY-QOL-MANUAL-DIFFERENT` Passed（runId `f42cc57ca55e4c8e8a91a64a42f951a8`）：选另一张牌严格失配并重新计算。固定夹具位于 `coverage/unattended/toasty-qol-*.json`，可用 `pwsh -NoProfile -File tools/run-qol-contracts.ps1 -Case manual-same`（或 `manual-different`）重跑。最初误将生成场景输出路径用作输入的启动失败不计入上述通过结果，隔离实例已清理。

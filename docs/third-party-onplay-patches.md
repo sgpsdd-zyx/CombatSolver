@@ -1,4 +1,4 @@
-# 已适配 OnPlay 补丁组合
+﻿# 已适配 OnPlay 补丁组合
 
 `AdaptedCardOnPlayMirrors.Register<TCard>` 为精确卡牌类型登记一组已审阅的 Harmony 补丁和唯一的完整预测实现。它是内部开发接口，外部程序集需要 publicizer，不是按 Mod ID 的放行名单。
 
@@ -23,7 +23,7 @@ AdaptedCardOnPlayMirrors.Register<MyCard>(
 
 ## 根、Fork 与旧路线
 
-`PredictionModHookSubscriberCapture` 拥有根内选择表，`SimulatedCombatState` 的 Fork 只共享不可变选择和配置标记。worker 每次 OnPlay 只查表，不扫描 Harmony，也不调用原生补丁。启用登记后，首次根审计未见过的卡牌类型即使后来生成也明确失败；下一次捕获可重新审计。
+`PredictionModHookSubscriberCapture` 拥有根内选择表，`SimulatedCombatState` 的 Fork 只共享根捕获的类型选择、已补丁 OnPlay 方法集合和配置标记。根阶段除了可达牌，还审计已登记但尚未出现的类型：合格的生成牌可直接走登记镜像，不匹配的组合保存拒绝原因，在实际打出时报告。未登记的生成牌首次出现时只解析其静态 OnPlay 方法身份；根冻结的集合不含该方法就走普通镜像，集合包含该方法则明确拒绝。worker 不读取 Harmony 补丁表或调用原生补丁。
 
 live continuation 在主线程读取当前所有 CardModel.OnPlay 补丁的配置标记，包括登记 schema、目标与预测实现的方法身份。predicted continuation 和状态指纹使用冻结标记。安装、卸载、顺序变化及后来出现的卡牌补丁会改变 live 标记，沿现有 LiveCombatStamp／ContinuationStamp 的结果采用、缓存和部署前核对淘汰旧路线。没有登记时不增加配置字段或全局扫描。
 
@@ -37,4 +37,6 @@ live continuation 在主线程读取当前所有 CardModel.OnPlay 补丁的配�
 
 游戏级夹具另外覆盖原生 OnPlay 完整替换、完整模拟器 Fork／增量回放、T1→T2 状态对账、控制器缓存执行资格和最早跨回合续用，输入在 `coverage/unattended/adapted-*-integration.json`，运行证据见测试矩阵。注册与测试补丁只在专用 scenario 中启用，必须使用隔离的新游戏进程；不在正常存档或玩家正在进行的战斗里运行。
 
-主线程配置核对成本随补丁数量和登记数量增长；每次 live stamp 会重新读取，不缓存可能过期的 Harmony 表。worker 增加一次类型查询，命中后沿现有精确 registry 分派。未做性能 A/B 或真实游戏性能结论。
+fork 0.43.5 合并官方 0.43.2 时，独立 OnPlay 检查的 40 项及空登记 2 项通过；macOS 原生 `ADAPTED-ONPLAY-INTEGRATION-CARD` 未返回协议结果，不能引用历史游戏级证据声称本轮通过。范围和现场见[合并记录](strategy/upstream-0432-merge-20260920.md)。
+
+主线程配置核对成本随补丁数量和登记数量增长；每次 live stamp 会重新读取，不缓存可能过期的 Harmony 表。未在根选择表内的类型由 worker 解析静态方法身份并对照冻结集合，已登记类型沿现有精确 registry 分派。未做性能 A/B 或真实游戏性能结论。

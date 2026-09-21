@@ -855,6 +855,11 @@ internal sealed partial class CombatBeamSolver
             && _run.Transpositions.Count + _run.ExpandedTranspositions.Count
                 >= policy.TranspositionEntryLimit;
 
+    private void ObserveTranspositionEntries()
+        => _run.TranspositionDiagnostics.ObserveEntries(
+            _run.Transpositions.Count + _run.ExpandedTranspositions.Count,
+            policy.TranspositionEntryLimit, _run.Expanded);
+
     private bool TryAcceptTransposition(SearchNode candidate)
     {
         // Scheduling obligations are deliberately bounded elsewhere. A normal route at the
@@ -890,6 +895,7 @@ internal sealed partial class CombatBeamSolver
                 return true;
             }
             _run.Transpositions.Add(candidate.StateKey, new TranspositionFrontier(next));
+            ObserveTranspositionEntries();
             ObserveSearchPath(candidate, SearchPathObservationStage.AdmissionTransposition, "accepted_new_state");
             return true;
         }
@@ -951,6 +957,7 @@ internal sealed partial class CombatBeamSolver
                 return true;
             }
             _run.ExpandedTranspositions.Add(node.StateKey, new TranspositionFrontier(next));
+            ObserveTranspositionEntries();
             ObserveSearchPath(node, SearchPathObservationStage.ExpansionTransposition, "accepted_new_state");
             return true;
         }

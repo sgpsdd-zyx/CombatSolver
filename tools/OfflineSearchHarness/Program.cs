@@ -113,6 +113,8 @@ internal static class Program
             }
 
             reached = "M1";
+            if (Environment.GetEnvironmentVariable("OFFLINE_HARNESS_HISTORY_CHECKS") == "1")
+                HistoryCounterChecks.Run(combat!, options.OutputDirectory);
             payload["budget"] = DescribeBudget(options);
             payload["root"] = OfflineCombat.DescribeRoot(combat!);
             string diagnostics = ModRuntime.DescribeStart(combat!);
@@ -202,6 +204,8 @@ internal static class Program
                     JsonSerializer.Serialize(outcome.RouteActions, UnattendedTestFiles.JsonOptions));
 
                 reached = "M2";
+                if (Environment.GetEnvironmentVariable("OFFLINE_HARNESS_ANCILLARY_CHECKS") == "1")
+                    AncillaryFailureChecks.Run(outcome.Result, options.OutputDirectory);
                 WriteProgress(options, "M2", "ok", "搜索完成并产出指标");
                 }
             }
@@ -292,7 +296,7 @@ internal static class Program
             options.PotionPolicy,
             options.SearchMode,
             options.UsePortfolio,
-            fixedSearchBudget = true,
+            fixedSearchBudget = !options.ProductionBudget,
             enableNoGcRegion = options.EnableNoGcRegion,
             noGcRegionBudgetGigabytes = options.EnableNoGcRegion
                 ? options.NoGcRegionBudgetGigabytes
@@ -373,6 +377,7 @@ internal sealed record HarnessOptions
           --disable-transposition-prune <0..3>  实验：关掉转置支配剪枝（1=候选准入/2=展开准入）
           --memory-no-progress-limit <int>  实验：连续多少次无进展回收后提前收手（0=关闭）
           --transposition-entry-limit <int>  实验：转置支配表合并条目上限（0=不设上限；缺省=生产默认 1000000）
+          --production-budget    使用生产预算流程，允许预算内的无胜利升级；不用于固定节点逐位对照
           --enable-no-gc-region   开 Runtime 的搜索内 No-GC 生命周期（默认关闭）
           --no-gc-region-budget-gigabytes <double>  No-GC 区域预算，单位十进制 GB（默认 1）
           --signal-ballast-mb <int>  进 No-GC scope 后先持有 N MiB 活对象，制造回收腾不出余量的压力
@@ -420,6 +425,7 @@ internal sealed record HarnessOptions
     public int MemoryNoProgressRecoveryLimit { get; init; }
     /// <summary>实验：转置支配表合并条目上限；0 = 不设上限，缺省 = 生产默认。</summary>
     public int? TranspositionEntryLimit { get; init; }
+    public bool ProductionBudget { get; init; }
     /// <summary>实验：走 Runtime 的搜索内 No-GC 生命周期，供无头宿主复现内存回收与截断。</summary>
     public bool EnableNoGcRegion { get; init; }
     /// <summary>No-GC 区域预算；只在 <see cref="EnableNoGcRegion" /> 开启时生效。</summary>
@@ -442,7 +448,7 @@ internal sealed record HarnessOptions
         int ascension = 0, actIndex = 0, dop = 1, budget = 600_000, unorderedPileMask = 0, stateKeySalt = 0;
         int transpositionPruneOff = 0, memoryNoProgressLimit = 0;
         int? transpositionEntryLimit = null;
-        bool measurePhases = false, enableNoGcRegion = false;
+        bool measurePhases = false, enableNoGcRegion = false, productionBudget = false;
         double noGcRegionBudgetGigabytes = 1d;
         int signalBallastMegabytes = 0;
         int? beam = null, nodes = null, cardBranches = null, pileBranches = null, handBranches = null;
@@ -496,6 +502,7 @@ internal sealed record HarnessOptions
                 case "--unordered-pile-mask": unorderedPileMask = int.Parse(Value()); break;
                 case "--state-key-salt": stateKeySalt = int.Parse(Value()); break;
                 case "--measure-phases": measurePhases = true; break;
+                case "--production-budget": productionBudget = true; break;
                 case "--disable-transposition-prune": transpositionPruneOff = int.Parse(Value()); break;
                 case "--memory-no-progress-limit": memoryNoProgressLimit = int.Parse(Value()); break;
                 case "--transposition-entry-limit": transpositionEntryLimit = int.Parse(Value()); break;
@@ -527,9 +534,9 @@ internal sealed record HarnessOptions
         if (multiplayerLongTermContracts && (multiplayerContracts || multiplayerStartContracts
             || multiplayerStrategyContracts || requestPath != null))
             throw new ArgumentException("--multiplayer-long-term-contracts requires its own two-player fixture.");
-        if (multiplayerReviewStage != null && (multiplayerReviewStage is not ("facts" or "stopping" or "horizon" or "horizon-fourteen" or "horizon-budget" or "horizon-native" or "horizon-ordering" or "window-selection" or "window-selection-payback" or "window-covered-payback" or "window-covered-sentinel" or "window-covered-contracts" or "window-covered-incremental" or "window-covered-defense") || multiplayerContracts
+        if (multiplayerReviewStage != null && (multiplayerReviewStage is not ("upstream-compatibility" or "facts" or "stopping" or "horizon" or "horizon-fourteen" or "horizon-budget" or "horizon-native" or "horizon-ordering" or "window-selection" or "window-selection-payback" or "window-covered-payback" or "window-covered-sentinel" or "window-covered-contracts" or "window-covered-incremental" or "window-covered-defense") || multiplayerContracts
             || multiplayerStartContracts || multiplayerStrategyContracts || multiplayerLongTermContracts || requestPath != null))
-            throw new ArgumentException("--multiplayer-review-contracts requires a facts, stopping, horizon, horizon-fourteen, horizon-budget, horizon-native, horizon-ordering, window-selection, window-selection-payback, window-covered-payback, window-covered-sentinel window-covered-contracts window-covered-incremental or window-covered-defense fixture of its own.");
+            throw new ArgumentException("--multiplayer-review-contracts requires an upstream-compatibility, facts, stopping, horizon, horizon-fourteen, horizon-budget, horizon-native, horizon-ordering, window-selection, window-selection-payback, window-covered-payback, window-covered-sentinel window-covered-contracts window-covered-incremental or window-covered-defense fixture of its own.");
         if ((observePortfolio || portfolioModelPath != null) && (!usePortfolio || searchMode != "Coordinator"))
             throw new ArgumentException("选择器实验需要 --search-mode Coordinator --use-portfolio。");
         if (noPlainBaseline && (!usePortfolio || searchMode != "Coordinator"))
@@ -579,6 +586,7 @@ internal sealed record HarnessOptions
             MeasureSearchPhases = measurePhases,
             TranspositionPruningDisabledMask = transpositionPruneOff,
             TranspositionEntryLimit = transpositionEntryLimit,
+            ProductionBudget = productionBudget,
             MemoryNoProgressRecoveryLimit = memoryNoProgressLimit,
             EnableNoGcRegion = enableNoGcRegion,
             NoGcRegionBudgetGigabytes = noGcRegionBudgetGigabytes,

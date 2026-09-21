@@ -399,6 +399,8 @@ require_fixed "$repository_root/src/Runtime/ContinuationStamp.cs" 'AdaptedCardOn
 require_fixed "$repository_root/src/Runtime/ContinuationStamp.cs" 'adaptedOnPlay.Stamp' 'missing frozen predicted OnPlay configuration'
 require_fixed "$repository_root/src/Engine/InCombat/Mirrors/Cards/OnPlay/CardOnPlayMirrors.cs" 'return replacement;' 'missing exclusive adapted OnPlay dispatch'
 forbid_fixed "$repository_root/src/Engine/InCombat/Mirrors/Cards/OnPlay/CardOnPlayMirrors.cs" 'Harmony.GetPatchInfo' 'worker must not query Harmony'
+forbid_fixed "$repository_root/src/Prediction/AdaptedCardOnPlayMirrors.cs" 'PredictionModPatchAudit.AuditCardOnPlay(' 'generated cards must use frozen root patch evidence'
+require_fixed "$repository_root/src/Prediction/AdaptedCardOnPlayMirrors.cs" 'patchedOnPlayTargets.Contains(target)' 'missing frozen generated-card patch decision'
 for session_type in SolverCombatSession SolverSearchSession SolverDeploymentSession; do
     require_fixed "$session_path" "class $session_type" 'missing controller session type'
 done
@@ -1326,6 +1328,17 @@ src/Search/MultiplayerCycleCheckpoint.cs|internal sealed record MultiplayerCycle
 src/Search/CombatBeamSolver.Transpositions.cs|left.AdvisoryLastEnemyCycle == right.AdvisoryLastEnemyCycle
 src/UI/SolverActionBar.cs|&& !state.AdviceOnly
 MULTIPLAYER_ADVICE_RULES
+
+require_fixed "$repository_root/src/Search/CombatHistoryCounterKey.cs" 'simulator.History.GetCounters(owner)' 'solo history key must consume incremental totals'
+require_fixed "$repository_root/src/Search/CombatHistoryCounterKey.cs" 'simulator.State.CombatState.Players.Count > 1' 'history key must distinguish multiplayer ownership'
+require_fixed "$repository_root/src/Search/CombatHistoryCounterKey.cs" 'CombatHistoryCounters.Scan(simulator.History, owner)' 'multiplayer history key must preserve per-effect owner scopes'
+require_fixed "$repository_root/src/Runtime/SolverController.cs" 'GrowthOpportunityTargets = state.Players.Count > 1' 'multiplayer must bypass solo growth target capture'
+require_fixed "$repository_root/src/Search/SimulatedCombatState.cs" '_madScienceUpgradeCapacity = _players.Count > 1 ? 0 : MadScienceGrowth.CaptureRemainingCapacity(inner);' 'multiplayer must bypass solo upgrade capacity'
+for history_file in CombatPredictionHistory.cs CombatPredictionHistory.CardContinuation.cs CombatPredictionHistory.ExecutionContinuation.cs; do
+    require_fixed "$repository_root/src/Engine/InCombat/Simulation/$history_file" '_counterOwner, _counters' 'history forks must inherit counters'
+done
+require_fixed "$repository_root/src/Search/CombatBeamSolver.Models.cs" 'TranspositionCapDiagnostics TranspositionDiagnostics' 'cap observations must be owned by the search run'
+require_fixed "$repository_root/src/Search/SearchPolicySnapshot.cs" 'DefaultTranspositionEntryLimit = 1_000_000' 'production transposition entry limit changed'
 
 if ((${#violations[@]} > 0)); then
     printf '%s\n' "${violations[@]}" >&2
