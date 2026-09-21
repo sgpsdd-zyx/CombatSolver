@@ -25,6 +25,8 @@
 
 `horizon-fourteen` 复用窗口根，比较 7/14 周期并加入第十四周期才回本的输入；当前回合动作统一交给十四周期外部评价器。`horizon-budget` 用十张原版卡牌、抽牌与生成牌的固定长战斗，对照 H7/原额度、H14/原额度、H14/双倍额度，记录实际展开分布、选中周期、共同周期和动作；第三级显式倍增测试上限，不触发生产默认倍增。可用 Beam24/1200 节点/3000ms 或 Beam96/7000 节点/5000ms，单搜索最多等待 20 秒。十四周期语义与有效请求额度由 `--multiplayer-contracts --encounter FOGMOG_NORMAL --beam 12 --nodes 700 --budget-ms 12000 --dop 2` 验证，包含十三次原生完整状态对账、旧七周期控制、额外回合、边界及 UI 投影。结果和限制见[十四周期记录](strategy/multiplayer-fourteen-cycles-20260920.md)。
 
+未击杀长线选路诊断：`--multiplayer-review-contracts window-selection --encounter FUZZY_WURM_CRAWLER_WEAK --beam 8 --nodes 180 --budget-ms 3000 --dop 1` 运行 7 个内部固定预算点，记录真实最终输入池后，仅在离线阶段按深度筛选并调用原比较器；不更改生产搜索。`window-selection-payback` 使用 1 点力量和内部 52 节点的晚回本输入，外部 `--nodes` 仍需至少 100 以满足设置入口。两者输出 `window-selection.json`，把实际展开、观察生成、选中、共同周期、首回合动作与统一 3/7/14 周期外部评价分开。外部后续仅每回合至多一次攻击，不使用保留药水；药水时机差异不能当作资源匹配收益。输入和本轮结果见[选路研究](strategy/pro-window-selection-20260920/local-review.md)。
+
 ## 构建
 
 ```

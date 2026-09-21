@@ -22,6 +22,8 @@ internal static class MultiplayerReviewContracts
 
     public static string Run(CombatState state, HarnessOptions options, MainLoopContext loop)
     {
+        if (options.Scenario.MultiplayerReviewStage is "window-selection" or "window-selection-payback")
+            return MultiplayerWindowSelectionContracts.Run(state, options, loop);
         if (options.Scenario.MultiplayerReviewStage is "horizon" or "horizon-fourteen" or "horizon-budget" or "horizon-native" or "horizon-ordering")
             return MultiplayerHorizonContracts.Run(state, options, loop);
         GameBootstrap.Harmony.Patch(AccessTools.Method(typeof(Godot.Time), nameof(Godot.Time.GetTicksMsec)),

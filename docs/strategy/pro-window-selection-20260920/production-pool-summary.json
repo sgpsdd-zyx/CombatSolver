@@ -1,0 +1,1021 @@
+{
+  "sourceCommit": "851c1521f5258ec43dc71c24eeb8d5200fdf612d",
+  "evidenceOwner": "Local C# harness; not ChatGPT Pro experiments.",
+  "method": "Production search final pools; offline depth-filtered selection uses the production comparator. No policy replacement.",
+  "limitations": "Two players, one enemy, one energy, Ethereal Inflame, 64 Buffer. No native differential or real multiplayer. Observation retains two bounded node pools but never prevents simulator release; timing is not a benchmark.",
+  "evaluationProtocol": "Execute the selected first player turn; then play at most one legal Strike per turn, pass otherwise; teammate passes. Reuse only identical pure action prefixes on the same root. All evaluation is outside search and reports replay cost.",
+  "costCaution": "Replay counts describe each distinct prefix; identical prefixes on one root are cached across budget points, so do not sum per-row evaluation costs as new work. Candidate scans and external rollouts are outside search.",
+  "potionCaution": "A planned later potion is not eliminated. The fixed external continuation never consumes retained potions, so HP differences are not resource-matched regressions.",
+  "runs": [
+    {
+      "withPotion": false,
+      "nodes": 4,
+      "horizon": 14,
+      "beam": 8,
+      "expandedNodes": 4,
+      "transitionCount": 6,
+      "expandedCycles": {
+        "0": 3,
+        "1": 1
+      },
+      "generatedDepth": 1,
+      "maximumObservedPool": 4,
+      "advisoryComparisonCycles": 1,
+      "groupedCandidateScans": 4,
+      "distinctExternalEvaluations": 1,
+      "sourceResult": "production-pools/window-selection.json",
+      "strength": 0,
+      "baseline": {
+        "selectedCycles": 1,
+        "firstTurn": [
+          "1:PlayCard:STRIKE_IRONCLAD:0:2:"
+        ],
+        "potionsBySelectedEnd": 0,
+        "evaluation": [
+          {
+            "cycle": 3,
+            "enemyHp": 482,
+            "hpLost": 0,
+            "teamSurvivors": 2
+          },
+          {
+            "cycle": 7,
+            "enemyHp": 458,
+            "hpLost": 0,
+            "teamSurvivors": 2
+          },
+          {
+            "cycle": 14,
+            "enemyHp": 416,
+            "hpLost": 0,
+            "teamSurvivors": 2
+          }
+        ],
+        "externalReplayCalls": 28,
+        "externalReplayedActions": 406
+      },
+      "groups": [
+        {
+          "minimumDepth": 1,
+          "actualComparisonDepth": 1,
+          "inputCount": 4,
+          "retainedCount": 4,
+          "firstTurnFamilies": 3,
+          "selected": {
+            "selectedCycles": 1,
+            "firstTurn": [
+              "1:PlayCard:STRIKE_IRONCLAD:0:2:"
+            ],
+            "potionsBySelectedEnd": 0,
+            "evaluation": [
+              {
+                "cycle": 3,
+                "enemyHp": 482,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 7,
+                "enemyHp": 458,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 14,
+                "enemyHp": 416,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              }
+            ],
+            "externalReplayCalls": 28,
+            "externalReplayedActions": 406
+          }
+        }
+      ]
+    },
+    {
+      "withPotion": false,
+      "nodes": 12,
+      "horizon": 14,
+      "beam": 8,
+      "expandedNodes": 12,
+      "transitionCount": 19,
+      "expandedCycles": {
+        "0": 3,
+        "1": 6,
+        "2": 3
+      },
+      "generatedDepth": 3,
+      "maximumObservedPool": 8,
+      "advisoryComparisonCycles": 2,
+      "groupedCandidateScans": 16,
+      "distinctExternalEvaluations": 1,
+      "sourceResult": "production-pools/window-selection.json",
+      "strength": 0,
+      "baseline": {
+        "selectedCycles": 2,
+        "firstTurn": [
+          "1:PlayCard:STRIKE_IRONCLAD:0:2:"
+        ],
+        "potionsBySelectedEnd": 0,
+        "evaluation": [
+          {
+            "cycle": 3,
+            "enemyHp": 482,
+            "hpLost": 0,
+            "teamSurvivors": 2
+          },
+          {
+            "cycle": 7,
+            "enemyHp": 458,
+            "hpLost": 0,
+            "teamSurvivors": 2
+          },
+          {
+            "cycle": 14,
+            "enemyHp": 416,
+            "hpLost": 0,
+            "teamSurvivors": 2
+          }
+        ],
+        "externalReplayCalls": 28,
+        "externalReplayedActions": 406
+      },
+      "groups": [
+        {
+          "minimumDepth": 2,
+          "actualComparisonDepth": 2,
+          "inputCount": 8,
+          "retainedCount": 8,
+          "firstTurnFamilies": 3,
+          "selected": {
+            "selectedCycles": 2,
+            "firstTurn": [
+              "1:PlayCard:STRIKE_IRONCLAD:0:2:"
+            ],
+            "potionsBySelectedEnd": 0,
+            "evaluation": [
+              {
+                "cycle": 3,
+                "enemyHp": 482,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 7,
+                "enemyHp": 458,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 14,
+                "enemyHp": 416,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              }
+            ],
+            "externalReplayCalls": 28,
+            "externalReplayedActions": 406
+          }
+        },
+        {
+          "minimumDepth": 3,
+          "actualComparisonDepth": 3,
+          "inputCount": 2,
+          "retainedCount": 2,
+          "firstTurnFamilies": 2,
+          "selected": {
+            "selectedCycles": 3,
+            "firstTurn": [
+              "1:PlayCard:STRIKE_IRONCLAD:0:2:"
+            ],
+            "potionsBySelectedEnd": 0,
+            "evaluation": [
+              {
+                "cycle": 3,
+                "enemyHp": 482,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 7,
+                "enemyHp": 458,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 14,
+                "enemyHp": 416,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              }
+            ],
+            "externalReplayCalls": 28,
+            "externalReplayedActions": 406
+          }
+        }
+      ]
+    },
+    {
+      "withPotion": false,
+      "nodes": 36,
+      "horizon": 14,
+      "beam": 8,
+      "expandedNodes": 36,
+      "transitionCount": 57,
+      "expandedCycles": {
+        "0": 3,
+        "1": 6,
+        "2": 12,
+        "3": 15
+      },
+      "generatedDepth": 4,
+      "maximumObservedPool": 20,
+      "advisoryComparisonCycles": 3,
+      "groupedCandidateScans": 40,
+      "distinctExternalEvaluations": 2,
+      "sourceResult": "production-pools/window-selection.json",
+      "strength": 0,
+      "baseline": {
+        "selectedCycles": 3,
+        "firstTurn": [
+          "1:PlayCard:STRIKE_IRONCLAD:0:2:"
+        ],
+        "potionsBySelectedEnd": 0,
+        "evaluation": [
+          {
+            "cycle": 3,
+            "enemyHp": 482,
+            "hpLost": 0,
+            "teamSurvivors": 2
+          },
+          {
+            "cycle": 7,
+            "enemyHp": 458,
+            "hpLost": 0,
+            "teamSurvivors": 2
+          },
+          {
+            "cycle": 14,
+            "enemyHp": 416,
+            "hpLost": 0,
+            "teamSurvivors": 2
+          }
+        ],
+        "externalReplayCalls": 28,
+        "externalReplayedActions": 406
+      },
+      "groups": [
+        {
+          "minimumDepth": 3,
+          "actualComparisonDepth": 3,
+          "inputCount": 20,
+          "retainedCount": 20,
+          "firstTurnFamilies": 3,
+          "selected": {
+            "selectedCycles": 3,
+            "firstTurn": [
+              "1:PlayCard:STRIKE_IRONCLAD:0:2:"
+            ],
+            "potionsBySelectedEnd": 0,
+            "evaluation": [
+              {
+                "cycle": 3,
+                "enemyHp": 482,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 7,
+                "enemyHp": 458,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 14,
+                "enemyHp": 416,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              }
+            ],
+            "externalReplayCalls": 28,
+            "externalReplayedActions": 406
+          }
+        },
+        {
+          "minimumDepth": 4,
+          "actualComparisonDepth": 4,
+          "inputCount": 10,
+          "retainedCount": 10,
+          "firstTurnFamilies": 3,
+          "selected": {
+            "selectedCycles": 4,
+            "firstTurn": [
+              "1:PlayCard:INFLAME:0::"
+            ],
+            "potionsBySelectedEnd": 0,
+            "evaluation": [
+              {
+                "cycle": 3,
+                "enemyHp": 484,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 7,
+                "enemyHp": 452,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 14,
+                "enemyHp": 396,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              }
+            ],
+            "externalReplayCalls": 28,
+            "externalReplayedActions": 406
+          }
+        }
+      ]
+    },
+    {
+      "withPotion": false,
+      "nodes": 96,
+      "horizon": 14,
+      "beam": 8,
+      "expandedNodes": 96,
+      "transitionCount": 147,
+      "expandedCycles": {
+        "0": 3,
+        "1": 6,
+        "2": 12,
+        "3": 20,
+        "4": 20,
+        "5": 20,
+        "6": 15
+      },
+      "generatedDepth": 7,
+      "maximumObservedPool": 19,
+      "advisoryComparisonCycles": 6,
+      "groupedCandidateScans": 38,
+      "distinctExternalEvaluations": 2,
+      "sourceResult": "production-pools/window-selection.json",
+      "strength": 0,
+      "baseline": {
+        "selectedCycles": 6,
+        "firstTurn": [
+          "1:PlayCard:INFLAME:0::"
+        ],
+        "potionsBySelectedEnd": 0,
+        "evaluation": [
+          {
+            "cycle": 3,
+            "enemyHp": 484,
+            "hpLost": 0,
+            "teamSurvivors": 2
+          },
+          {
+            "cycle": 7,
+            "enemyHp": 452,
+            "hpLost": 0,
+            "teamSurvivors": 2
+          },
+          {
+            "cycle": 14,
+            "enemyHp": 396,
+            "hpLost": 0,
+            "teamSurvivors": 2
+          }
+        ],
+        "externalReplayCalls": 28,
+        "externalReplayedActions": 406
+      },
+      "groups": [
+        {
+          "minimumDepth": 6,
+          "actualComparisonDepth": 6,
+          "inputCount": 19,
+          "retainedCount": 19,
+          "firstTurnFamilies": 3,
+          "selected": {
+            "selectedCycles": 6,
+            "firstTurn": [
+              "1:PlayCard:INFLAME:0::"
+            ],
+            "potionsBySelectedEnd": 0,
+            "evaluation": [
+              {
+                "cycle": 3,
+                "enemyHp": 484,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 7,
+                "enemyHp": 452,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 14,
+                "enemyHp": 396,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              }
+            ],
+            "externalReplayCalls": 28,
+            "externalReplayedActions": 406
+          }
+        },
+        {
+          "minimumDepth": 7,
+          "actualComparisonDepth": 7,
+          "inputCount": 9,
+          "retainedCount": 9,
+          "firstTurnFamilies": 3,
+          "selected": {
+            "selectedCycles": 7,
+            "firstTurn": [
+              "1:PlayCard:INFLAME:0::"
+            ],
+            "potionsBySelectedEnd": 0,
+            "evaluation": [
+              {
+                "cycle": 3,
+                "enemyHp": 484,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 7,
+                "enemyHp": 452,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 14,
+                "enemyHp": 396,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              }
+            ],
+            "externalReplayCalls": 28,
+            "externalReplayedActions": 406
+          }
+        }
+      ]
+    },
+    {
+      "withPotion": false,
+      "nodes": 180,
+      "horizon": 14,
+      "beam": 8,
+      "expandedNodes": 180,
+      "transitionCount": 271,
+      "expandedCycles": {
+        "0": 3,
+        "1": 6,
+        "2": 12,
+        "3": 20,
+        "4": 20,
+        "5": 20,
+        "6": 20,
+        "7": 20,
+        "8": 20,
+        "9": 20,
+        "10": 19
+      },
+      "generatedDepth": 11,
+      "maximumObservedPool": 20,
+      "advisoryComparisonCycles": 10,
+      "groupedCandidateScans": 40,
+      "distinctExternalEvaluations": 2,
+      "sourceResult": "production-pools/window-selection.json",
+      "strength": 0,
+      "baseline": {
+        "selectedCycles": 10,
+        "firstTurn": [
+          "1:PlayCard:INFLAME:0::"
+        ],
+        "potionsBySelectedEnd": 0,
+        "evaluation": [
+          {
+            "cycle": 3,
+            "enemyHp": 484,
+            "hpLost": 0,
+            "teamSurvivors": 2
+          },
+          {
+            "cycle": 7,
+            "enemyHp": 452,
+            "hpLost": 0,
+            "teamSurvivors": 2
+          },
+          {
+            "cycle": 14,
+            "enemyHp": 396,
+            "hpLost": 0,
+            "teamSurvivors": 2
+          }
+        ],
+        "externalReplayCalls": 28,
+        "externalReplayedActions": 406
+      },
+      "groups": [
+        {
+          "minimumDepth": 10,
+          "actualComparisonDepth": 10,
+          "inputCount": 20,
+          "retainedCount": 20,
+          "firstTurnFamilies": 2,
+          "selected": {
+            "selectedCycles": 10,
+            "firstTurn": [
+              "1:PlayCard:INFLAME:0::"
+            ],
+            "potionsBySelectedEnd": 0,
+            "evaluation": [
+              {
+                "cycle": 3,
+                "enemyHp": 484,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 7,
+                "enemyHp": 452,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 14,
+                "enemyHp": 396,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              }
+            ],
+            "externalReplayCalls": 28,
+            "externalReplayedActions": 406
+          }
+        },
+        {
+          "minimumDepth": 11,
+          "actualComparisonDepth": 11,
+          "inputCount": 10,
+          "retainedCount": 10,
+          "firstTurnFamilies": 2,
+          "selected": {
+            "selectedCycles": 11,
+            "firstTurn": [
+              "1:PlayCard:INFLAME:0::"
+            ],
+            "potionsBySelectedEnd": 0,
+            "evaluation": [
+              {
+                "cycle": 3,
+                "enemyHp": 484,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 7,
+                "enemyHp": 452,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 14,
+                "enemyHp": 396,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              }
+            ],
+            "externalReplayCalls": 28,
+            "externalReplayedActions": 406
+          }
+        }
+      ]
+    },
+    {
+      "withPotion": true,
+      "nodes": 36,
+      "horizon": 14,
+      "beam": 8,
+      "expandedNodes": 36,
+      "transitionCount": 69,
+      "expandedCycles": {
+        "0": 6,
+        "1": 17,
+        "2": 13
+      },
+      "generatedDepth": 3,
+      "maximumObservedPool": 19,
+      "advisoryComparisonCycles": 2,
+      "groupedCandidateScans": 38,
+      "distinctExternalEvaluations": 1,
+      "sourceResult": "production-pools/window-selection.json",
+      "strength": 0,
+      "baseline": {
+        "selectedCycles": 2,
+        "firstTurn": [
+          "1:UsePotion::0:2:FIRE_POTION",
+          "1:PlayCard:STRIKE_IRONCLAD:0:2:"
+        ],
+        "potionsBySelectedEnd": 1,
+        "evaluation": [
+          {
+            "cycle": 3,
+            "enemyHp": 462,
+            "hpLost": 0,
+            "teamSurvivors": 2
+          },
+          {
+            "cycle": 7,
+            "enemyHp": 438,
+            "hpLost": 0,
+            "teamSurvivors": 2
+          },
+          {
+            "cycle": 14,
+            "enemyHp": 396,
+            "hpLost": 0,
+            "teamSurvivors": 2
+          }
+        ],
+        "externalReplayCalls": 28,
+        "externalReplayedActions": 434
+      },
+      "groups": [
+        {
+          "minimumDepth": 2,
+          "actualComparisonDepth": 2,
+          "inputCount": 19,
+          "retainedCount": 19,
+          "firstTurnFamilies": 6,
+          "selected": {
+            "selectedCycles": 2,
+            "firstTurn": [
+              "1:UsePotion::0:2:FIRE_POTION",
+              "1:PlayCard:STRIKE_IRONCLAD:0:2:"
+            ],
+            "potionsBySelectedEnd": 1,
+            "evaluation": [
+              {
+                "cycle": 3,
+                "enemyHp": 462,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 7,
+                "enemyHp": 438,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 14,
+                "enemyHp": 396,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              }
+            ],
+            "externalReplayCalls": 28,
+            "externalReplayedActions": 434
+          }
+        },
+        {
+          "minimumDepth": 3,
+          "actualComparisonDepth": 3,
+          "inputCount": 9,
+          "retainedCount": 9,
+          "firstTurnFamilies": 5,
+          "selected": {
+            "selectedCycles": 3,
+            "firstTurn": [
+              "1:UsePotion::0:2:FIRE_POTION",
+              "1:PlayCard:STRIKE_IRONCLAD:0:2:"
+            ],
+            "potionsBySelectedEnd": 1,
+            "evaluation": [
+              {
+                "cycle": 3,
+                "enemyHp": 462,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 7,
+                "enemyHp": 438,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 14,
+                "enemyHp": 396,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              }
+            ],
+            "externalReplayCalls": 28,
+            "externalReplayedActions": 434
+          }
+        }
+      ]
+    },
+    {
+      "withPotion": true,
+      "nodes": 180,
+      "horizon": 14,
+      "beam": 8,
+      "expandedNodes": 180,
+      "transitionCount": 301,
+      "expandedCycles": {
+        "0": 6,
+        "1": 17,
+        "2": 22,
+        "3": 21,
+        "4": 21,
+        "5": 21,
+        "6": 21,
+        "7": 21,
+        "8": 21,
+        "9": 9
+      },
+      "generatedDepth": 10,
+      "maximumObservedPool": 19,
+      "advisoryComparisonCycles": 1,
+      "groupedCandidateScans": 57,
+      "distinctExternalEvaluations": 3,
+      "sourceResult": "production-pools/window-selection.json",
+      "strength": 0,
+      "baseline": {
+        "selectedCycles": 9,
+        "firstTurn": [
+          "1:UsePotion::0:2:FIRE_POTION",
+          "1:PlayCard:INFLAME:0::"
+        ],
+        "potionsBySelectedEnd": 1,
+        "evaluation": [
+          {
+            "cycle": 3,
+            "enemyHp": 464,
+            "hpLost": 0,
+            "teamSurvivors": 2
+          },
+          {
+            "cycle": 7,
+            "enemyHp": 432,
+            "hpLost": 0,
+            "teamSurvivors": 2
+          },
+          {
+            "cycle": 14,
+            "enemyHp": 376,
+            "hpLost": 0,
+            "teamSurvivors": 2
+          }
+        ],
+        "externalReplayCalls": 28,
+        "externalReplayedActions": 434
+      },
+      "groups": [
+        {
+          "minimumDepth": 1,
+          "actualComparisonDepth": 1,
+          "inputCount": 19,
+          "retainedCount": 19,
+          "firstTurnFamilies": 4,
+          "selected": {
+            "selectedCycles": 9,
+            "firstTurn": [
+              "1:UsePotion::0:2:FIRE_POTION",
+              "1:PlayCard:INFLAME:0::"
+            ],
+            "potionsBySelectedEnd": 1,
+            "evaluation": [
+              {
+                "cycle": 3,
+                "enemyHp": 464,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 7,
+                "enemyHp": 432,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 14,
+                "enemyHp": 376,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              }
+            ],
+            "externalReplayCalls": 28,
+            "externalReplayedActions": 434
+          }
+        },
+        {
+          "minimumDepth": 9,
+          "actualComparisonDepth": 9,
+          "inputCount": 18,
+          "retainedCount": 18,
+          "firstTurnFamilies": 3,
+          "selected": {
+            "selectedCycles": 9,
+            "firstTurn": [
+              "1:PlayCard:INFLAME:0::"
+            ],
+            "potionsBySelectedEnd": 1,
+            "evaluation": [
+              {
+                "cycle": 3,
+                "enemyHp": 484,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 7,
+                "enemyHp": 452,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 14,
+                "enemyHp": 396,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              }
+            ],
+            "externalReplayCalls": 28,
+            "externalReplayedActions": 406
+          }
+        },
+        {
+          "minimumDepth": 10,
+          "actualComparisonDepth": 10,
+          "inputCount": 8,
+          "retainedCount": 8,
+          "firstTurnFamilies": 2,
+          "selected": {
+            "selectedCycles": 10,
+            "firstTurn": [
+              "1:PlayCard:INFLAME:0::"
+            ],
+            "potionsBySelectedEnd": 1,
+            "evaluation": [
+              {
+                "cycle": 3,
+                "enemyHp": 484,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 7,
+                "enemyHp": 452,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 14,
+                "enemyHp": 396,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              }
+            ],
+            "externalReplayCalls": 28,
+            "externalReplayedActions": 406
+          }
+        }
+      ]
+    },
+    {
+      "withPotion": false,
+      "nodes": 52,
+      "horizon": 14,
+      "beam": 8,
+      "expandedNodes": 52,
+      "transitionCount": 83,
+      "expandedCycles": {
+        "0": 3,
+        "1": 6,
+        "2": 12,
+        "3": 20,
+        "4": 11
+      },
+      "generatedDepth": 5,
+      "maximumObservedPool": 19,
+      "advisoryComparisonCycles": 4,
+      "groupedCandidateScans": 38,
+      "distinctExternalEvaluations": 2,
+      "sourceResult": "payback-pool-r2/window-selection.json",
+      "strength": 1,
+      "baseline": {
+        "selectedCycles": 4,
+        "firstTurn": [
+          "1:PlayCard:STRIKE_IRONCLAD:0:2:"
+        ],
+        "potionsBySelectedEnd": 0,
+        "evaluation": [
+          {
+            "cycle": 3,
+            "enemyHp": 479,
+            "hpLost": 0,
+            "teamSurvivors": 2
+          },
+          {
+            "cycle": 7,
+            "enemyHp": 451,
+            "hpLost": 0,
+            "teamSurvivors": 2
+          },
+          {
+            "cycle": 14,
+            "enemyHp": 402,
+            "hpLost": 0,
+            "teamSurvivors": 2
+          }
+        ],
+        "externalReplayCalls": 28,
+        "externalReplayedActions": 406
+      },
+      "groups": [
+        {
+          "minimumDepth": 4,
+          "actualComparisonDepth": 4,
+          "inputCount": 19,
+          "retainedCount": 19,
+          "firstTurnFamilies": 3,
+          "selected": {
+            "selectedCycles": 4,
+            "firstTurn": [
+              "1:PlayCard:STRIKE_IRONCLAD:0:2:"
+            ],
+            "potionsBySelectedEnd": 0,
+            "evaluation": [
+              {
+                "cycle": 3,
+                "enemyHp": 479,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 7,
+                "enemyHp": 451,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 14,
+                "enemyHp": 402,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              }
+            ],
+            "externalReplayCalls": 28,
+            "externalReplayedActions": 406
+          }
+        },
+        {
+          "minimumDepth": 5,
+          "actualComparisonDepth": 5,
+          "inputCount": 9,
+          "retainedCount": 9,
+          "firstTurnFamilies": 3,
+          "selected": {
+            "selectedCycles": 5,
+            "firstTurn": [
+              "1:PlayCard:INFLAME:0::"
+            ],
+            "potionsBySelectedEnd": 0,
+            "evaluation": [
+              {
+                "cycle": 3,
+                "enemyHp": 482,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 7,
+                "enemyHp": 446,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              },
+              {
+                "cycle": 14,
+                "enemyHp": 383,
+                "hpLost": 0,
+                "teamSurvivors": 2
+              }
+            ],
+            "externalReplayCalls": 28,
+            "externalReplayedActions": 406
+          }
+        }
+      ]
+    }
+  ]
+}

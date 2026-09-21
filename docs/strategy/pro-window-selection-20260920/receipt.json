@@ -1,0 +1,34 @@
+{
+  "researchDate": "2026-09-20",
+  "conversationUrl": "https://chatgpt.com/c/6aacf71e-165c-83ec-896a-a77f789ad559",
+  "conversationTitle": "源码复审与策略优化",
+  "observedModel": "6 Pro",
+  "observedWorkedFor": "40m 12s",
+  "sourceCommit": "851c1521f5258ec43dc71c24eeb8d5200fdf612d",
+  "version": "0.43.3",
+  "attachments": [
+    "CombatSolver-851c1521-source.zip",
+    "CombatSolver-window-selection-review-request.md"
+  ],
+  "fullOriginalEvidence": ".local/mp-window-selection-20260920/CombatSolver_Multiplayer_WindowSelection_20260920_Evidence.zip",
+  "originalExtraction": ".local/mp-window-selection-20260920/pro-delivery/",
+  "originalEntryCount": 19,
+  "abstractSearchRuns": 269,
+  "distinctAbstractRoots": 24,
+  "abstractMicroChecks": 18,
+  "localProductionSearchObservations": 8,
+  "localProductionCodeChanged": false,
+  "localProposedPolicyImplemented": false,
+  "externalExperimentsRerunLocally": false,
+  "researchSupplement": "Attempted during research; service error; original research continued after reload and supplemental message was not persisted. Final report does not claim our local results.",
+  "verificationBoundary": "Original final reports and experiment source inspected. Compact external results extracted; local actual candidate pools checked separately. No new native game differential, multiplayer session, visible performance, package or release.",
+  "receivedDateLocal": "2026-09-20",
+  "timezone": "America/Los_Angeles",
+  "localStaticChecks": {
+    "localLinksResolved": 15,
+    "jsonAndPythonSyntax": "passed",
+    "newCSharpAscii": "passed",
+    "gitDiffWhitespace": "passed",
+    "harnessFinalReleaseBuild": "passed, 0 warnings / 0 errors"
+  }
+}

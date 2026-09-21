@@ -1,0 +1,68 @@
+[
+  {
+    "id": "P1",
+    "authors": "Richard E. Korf",
+    "year": 1985,
+    "title": "Depth-first iterative-deepening: An optimal admissible tree search",
+    "url": "https://www.sciencedirect.com/science/article/pii/0004370285900840",
+    "read": "publisher abstract and author publication listing only",
+    "proof_read": false
+  },
+  {
+    "id": "P2",
+    "authors": "Eric A. Hansen, Rong Zhou",
+    "year": 2007,
+    "title": "Anytime Heuristic Search",
+    "url": "https://arxiv.org/pdf/1110.2737",
+    "read": "Algorithm 1, incumbent and bounds, printed pp271-272; PDF indices4-5",
+    "screenshots": [
+      4
+    ]
+  },
+  {
+    "id": "P3",
+    "authors": "Dimitri P. Bertsekas, John N. Tsitsiklis, Cynara Wu",
+    "year": 1997,
+    "title": "Rollout Algorithms for Combinatorial Optimization",
+    "url": "https://web.mit.edu/dimitrib/www/rollout.pdf",
+    "read": "sequential consistency, Proposition1, two-step variants, printed pp249-253; PDF indices4-8",
+    "screenshots": [
+      5
+    ]
+  },
+  {
+    "id": "P4",
+    "authors": "Dimitri P. Bertsekas",
+    "year": 2020,
+    "title": "Constrained Multiagent Rollout and Multidimensional Assignment with Auction Algorithm",
+    "url": "https://arxiv.org/pdf/2002.07407",
+    "read": "v2; fortified rollout pp9-10",
+    "screenshots": [
+      3,
+      9
+    ]
+  },
+  {
+    "id": "P5",
+    "authors": "Leslie Pack Kaelbling, Michael L. Littman, Anthony R. Cassandra",
+    "year": 1998,
+    "title": "Planning and acting in partially observable stochastic domains",
+    "url": "https://people.csail.mit.edu/lpk/papers/aij98-pomdp.pdf",
+    "read": "model and belief state, printed pp101-106",
+    "screenshots": [
+      2,
+      7
+    ]
+  },
+  {
+    "id": "P6",
+    "authors": "James B. Rawlings, David Q. Mayne, Moritz M. Diehl",
+    "year": 2017,
+    "title": "Model Predictive Control: Theory, Computation, and Design",
+    "url": "https://sites.engineering.ucsb.edu/~jbraw/mpc/MPC-book-2nd-edition-1st-printing.pdf",
+    "read": "second edition first printing section2.10, printed p164; PDF index211",
+    "screenshots": [
+      211
+    ]
+  }
+]

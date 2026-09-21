@@ -1,0 +1,25 @@
+{
+  "baseline": "851c1521f5258ec43dc71c24eeb8d5200fdf612d",
+  "version": "0.43.3",
+  "validation_type": "one static delivery integrity pass, NOT rerunning experiments",
+  "checks": {
+    "parse_python_ast": true,
+    "parse_json": true,
+    "all_269_work_ledgers_balance": true,
+    "all_runs_within_same_per_case_budget": true,
+    "all_horizons_14": true,
+    "external_points_3_7_14_present": true,
+    "markdown_fences_balanced": true,
+    "micro_assertions_recorded_passed": 18,
+    "unique_fixture_roots": 24
+  },
+  "executed_evidence": "corrected core once, distinct supplement once; actual stdout included",
+  "not_executed": [
+    "production C# build/contracts",
+    "native actual/sim differential",
+    "real multiplayer",
+    "full solo regression"
+  ],
+  "no_repository_write": "All authored research files reside outside the extracted current-source directory.",
+  "scope_warning": "This static pass validates files/ledgers, not correctness of the game model or universal strategy quality."
+}

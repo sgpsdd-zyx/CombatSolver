@@ -527,9 +527,9 @@ internal sealed record HarnessOptions
         if (multiplayerLongTermContracts && (multiplayerContracts || multiplayerStartContracts
             || multiplayerStrategyContracts || requestPath != null))
             throw new ArgumentException("--multiplayer-long-term-contracts requires its own two-player fixture.");
-        if (multiplayerReviewStage != null && (multiplayerReviewStage is not ("facts" or "stopping" or "horizon" or "horizon-fourteen" or "horizon-budget" or "horizon-native" or "horizon-ordering") || multiplayerContracts
+        if (multiplayerReviewStage != null && (multiplayerReviewStage is not ("facts" or "stopping" or "horizon" or "horizon-fourteen" or "horizon-budget" or "horizon-native" or "horizon-ordering" or "window-selection" or "window-selection-payback") || multiplayerContracts
             || multiplayerStartContracts || multiplayerStrategyContracts || multiplayerLongTermContracts || requestPath != null))
-            throw new ArgumentException("--multiplayer-review-contracts requires a facts, stopping, horizon, horizon-fourteen, horizon-budget, horizon-native or horizon-ordering fixture of its own.");
+            throw new ArgumentException("--multiplayer-review-contracts requires a facts, stopping, horizon, horizon-fourteen, horizon-budget, horizon-native, horizon-ordering, window-selection or window-selection-payback fixture of its own.");
         if ((observePortfolio || portfolioModelPath != null) && (!usePortfolio || searchMode != "Coordinator"))
             throw new ArgumentException("选择器实验需要 --search-mode Coordinator --use-portfolio。");
         if (noPlainBaseline && (!usePortfolio || searchMode != "Coordinator"))

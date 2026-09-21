@@ -1,0 +1,236 @@
+{
+  "sourceCommit": "851c1521f5258ec43dc71c24eeb8d5200fdf612d",
+  "method": "Post-hoc min over max observed checkpoint by complete first-turn tokens, on already recorded real candidate pools. No search or rollout rerun, no production comparator replacement.",
+  "limitations": "These fixed fixtures have no choices, duplicate card instances, force-potion directives or extra turns. Only final visible pool families are represented; no registry of earlier discarded or pending prefixes. This computes one necessary scope/depth condition, not the full proposed C gate or its common-depth action-cost comparator.",
+  "rows": [
+    {
+      "input": "production-pools/window-selection.json",
+      "nodes": 4,
+      "withPotion": false,
+      "currentCommonCycle": 1,
+      "poolOnlyCommonCoverageCycle": 1,
+      "wouldPassDeeperCycleGate": false,
+      "representatives": [
+        {
+          "currentTurn": [
+            "1:PlayCard:STRIKE_IRONCLAD:0:2:"
+          ],
+          "maxObservedDepth": 1
+        },
+        {
+          "currentTurn": [
+            "1:PlayCard:INFLAME:0::"
+          ],
+          "maxObservedDepth": 1
+        },
+        {
+          "currentTurn": [],
+          "maxObservedDepth": 1
+        }
+      ]
+    },
+    {
+      "input": "production-pools/window-selection.json",
+      "nodes": 12,
+      "withPotion": false,
+      "currentCommonCycle": 2,
+      "poolOnlyCommonCoverageCycle": 2,
+      "wouldPassDeeperCycleGate": false,
+      "representatives": [
+        {
+          "currentTurn": [
+            "1:PlayCard:STRIKE_IRONCLAD:0:2:"
+          ],
+          "maxObservedDepth": 3
+        },
+        {
+          "currentTurn": [
+            "1:PlayCard:INFLAME:0::"
+          ],
+          "maxObservedDepth": 3
+        },
+        {
+          "currentTurn": [],
+          "maxObservedDepth": 2
+        }
+      ]
+    },
+    {
+      "input": "production-pools/window-selection.json",
+      "nodes": 36,
+      "withPotion": false,
+      "currentCommonCycle": 3,
+      "poolOnlyCommonCoverageCycle": 4,
+      "wouldPassDeeperCycleGate": true,
+      "representatives": [
+        {
+          "currentTurn": [
+            "1:PlayCard:INFLAME:0::"
+          ],
+          "maxObservedDepth": 4
+        },
+        {
+          "currentTurn": [
+            "1:PlayCard:STRIKE_IRONCLAD:0:2:"
+          ],
+          "maxObservedDepth": 4
+        },
+        {
+          "currentTurn": [],
+          "maxObservedDepth": 4
+        }
+      ]
+    },
+    {
+      "input": "production-pools/window-selection.json",
+      "nodes": 96,
+      "withPotion": false,
+      "currentCommonCycle": 6,
+      "poolOnlyCommonCoverageCycle": 7,
+      "wouldPassDeeperCycleGate": true,
+      "representatives": [
+        {
+          "currentTurn": [
+            "1:PlayCard:INFLAME:0::"
+          ],
+          "maxObservedDepth": 7
+        },
+        {
+          "currentTurn": [
+            "1:PlayCard:STRIKE_IRONCLAD:0:2:"
+          ],
+          "maxObservedDepth": 7
+        },
+        {
+          "currentTurn": [],
+          "maxObservedDepth": 7
+        }
+      ]
+    },
+    {
+      "input": "production-pools/window-selection.json",
+      "nodes": 180,
+      "withPotion": false,
+      "currentCommonCycle": 10,
+      "poolOnlyCommonCoverageCycle": 11,
+      "wouldPassDeeperCycleGate": true,
+      "representatives": [
+        {
+          "currentTurn": [
+            "1:PlayCard:INFLAME:0::"
+          ],
+          "maxObservedDepth": 11
+        },
+        {
+          "currentTurn": [],
+          "maxObservedDepth": 11
+        }
+      ]
+    },
+    {
+      "input": "production-pools/window-selection.json",
+      "nodes": 36,
+      "withPotion": true,
+      "currentCommonCycle": 2,
+      "poolOnlyCommonCoverageCycle": 2,
+      "wouldPassDeeperCycleGate": false,
+      "representatives": [
+        {
+          "currentTurn": [
+            "1:UsePotion::0:2:FIRE_POTION",
+            "1:PlayCard:STRIKE_IRONCLAD:0:2:"
+          ],
+          "maxObservedDepth": 3
+        },
+        {
+          "currentTurn": [
+            "1:PlayCard:STRIKE_IRONCLAD:0:2:"
+          ],
+          "maxObservedDepth": 3
+        },
+        {
+          "currentTurn": [
+            "1:PlayCard:INFLAME:0::"
+          ],
+          "maxObservedDepth": 3
+        },
+        {
+          "currentTurn": [
+            "1:UsePotion::0:2:FIRE_POTION",
+            "1:PlayCard:INFLAME:0::"
+          ],
+          "maxObservedDepth": 3
+        },
+        {
+          "currentTurn": [],
+          "maxObservedDepth": 3
+        },
+        {
+          "currentTurn": [
+            "1:UsePotion::0:2:FIRE_POTION"
+          ],
+          "maxObservedDepth": 2
+        }
+      ]
+    },
+    {
+      "input": "production-pools/window-selection.json",
+      "nodes": 180,
+      "withPotion": true,
+      "currentCommonCycle": 1,
+      "poolOnlyCommonCoverageCycle": 1,
+      "wouldPassDeeperCycleGate": false,
+      "representatives": [
+        {
+          "currentTurn": [
+            "1:PlayCard:INFLAME:0::"
+          ],
+          "maxObservedDepth": 10
+        },
+        {
+          "currentTurn": [
+            "1:UsePotion::0:2:FIRE_POTION",
+            "1:PlayCard:INFLAME:0::"
+          ],
+          "maxObservedDepth": 10
+        },
+        {
+          "currentTurn": [
+            "1:PlayCard:STRIKE_IRONCLAD:0:2:"
+          ],
+          "maxObservedDepth": 1
+        },
+        {
+          "currentTurn": [],
+          "maxObservedDepth": 9
+        }
+      ]
+    },
+    {
+      "input": "payback-pool-r2/window-selection.json",
+      "nodes": 52,
+      "withPotion": false,
+      "currentCommonCycle": 4,
+      "poolOnlyCommonCoverageCycle": 5,
+      "wouldPassDeeperCycleGate": true,
+      "representatives": [
+        {
+          "currentTurn": [
+            "1:PlayCard:INFLAME:0::"
+          ],
+          "maxObservedDepth": 5
+        },
+        {
+          "currentTurn": [
+            "1:PlayCard:STRIKE_IRONCLAD:0:2:"
+          ],
+          "maxObservedDepth": 5
+        },
+        {
+          "currentTurn": [],
+          "maxObservedDepth": 5
+        }
+      ]
+    }
+  ]
+}

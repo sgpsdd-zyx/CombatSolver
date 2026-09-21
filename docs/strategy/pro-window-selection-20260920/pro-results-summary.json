@@ -1,0 +1,4774 @@
+{
+  "evidenceOwner": "ChatGPT 6 Pro original results; not locally rerun.",
+  "originalResults": ".local/mp-window-selection-20260920/pro-delivery/CombatSolver_Multiplayer_WindowSelection_20260920_Results.json",
+  "counts": {
+    "fixtures": 22,
+    "main_runs": 132,
+    "budget_runs": 96,
+    "weight_runs": 3,
+    "micro_checks": 18,
+    "supplement_runs": 38
+  },
+  "records": [
+    {
+      "fixture": "W03_delayed_3",
+      "strategy": "A",
+      "budget": 1600,
+      "spent": 185,
+      "selectedPlan": "attack",
+      "selectedCycles": 1,
+      "commonCycle": 1,
+      "expandedParentCycle": 13,
+      "generatedCycle": 14,
+      "firstTurn": [
+        {
+          "kind": "hit",
+          "amount": 18,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": null,
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 570,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 30,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 546,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 54,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 504,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 96,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W03_delayed_3",
+      "strategy": "B",
+      "budget": 1600,
+      "spent": 238,
+      "selectedPlan": "attack",
+      "selectedCycles": 14,
+      "commonCycle": 1,
+      "expandedParentCycle": 13,
+      "generatedCycle": 14,
+      "firstTurn": [
+        {
+          "kind": "hit",
+          "amount": 18,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": null,
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 570,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 30,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 546,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 54,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 504,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 96,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W03_delayed_3",
+      "strategy": "C_count",
+      "budget": 1600,
+      "spent": 296,
+      "selectedPlan": "setup",
+      "selectedCycles": 14,
+      "commonCycle": 14,
+      "expandedParentCycle": 13,
+      "generatedCycle": 14,
+      "firstTurn": [
+        {
+          "kind": "install",
+          "amount": 0,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": null,
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 504,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 96,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 480,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 120,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 438,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 162,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W03_delayed_3",
+      "strategy": "C_cover",
+      "budget": 1600,
+      "spent": 296,
+      "selectedPlan": "setup",
+      "selectedCycles": 14,
+      "commonCycle": 14,
+      "expandedParentCycle": 13,
+      "generatedCycle": 14,
+      "firstTurn": [
+        {
+          "kind": "install",
+          "amount": 0,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": null,
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 504,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 96,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 480,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 120,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 438,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 162,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W03_delayed_3",
+      "strategy": "D",
+      "budget": 1600,
+      "spent": 411,
+      "selectedPlan": "setup",
+      "selectedCycles": 14,
+      "commonCycle": 14,
+      "expandedParentCycle": 13,
+      "generatedCycle": 14,
+      "firstTurn": [
+        {
+          "kind": "install",
+          "amount": 0,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": null,
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 504,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 96,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 480,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 120,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 438,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 162,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W03_delayed_3",
+      "strategy": "E",
+      "budget": 1600,
+      "spent": 386,
+      "selectedPlan": "setup",
+      "selectedCycles": 14,
+      "commonCycle": 14,
+      "expandedParentCycle": 13,
+      "generatedCycle": 14,
+      "firstTurn": [
+        {
+          "kind": "install",
+          "amount": 0,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": [
+        1,
+        1,
+        1
+      ],
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 504,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 96,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 480,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 120,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 438,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 162,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W07_delayed_7",
+      "strategy": "A",
+      "budget": 1600,
+      "spent": 185,
+      "selectedPlan": "attack",
+      "selectedCycles": 1,
+      "commonCycle": 1,
+      "expandedParentCycle": 13,
+      "generatedCycle": 14,
+      "firstTurn": [
+        {
+          "kind": "hit",
+          "amount": 18,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": null,
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 570,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 30,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 546,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 54,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 504,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 96,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W07_delayed_7",
+      "strategy": "B",
+      "budget": 1600,
+      "spent": 238,
+      "selectedPlan": "attack",
+      "selectedCycles": 14,
+      "commonCycle": 1,
+      "expandedParentCycle": 13,
+      "generatedCycle": 14,
+      "firstTurn": [
+        {
+          "kind": "hit",
+          "amount": 18,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": null,
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 570,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 30,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 546,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 54,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 504,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 96,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W07_delayed_7",
+      "strategy": "C_count",
+      "budget": 1600,
+      "spent": 296,
+      "selectedPlan": "setup",
+      "selectedCycles": 14,
+      "commonCycle": 14,
+      "expandedParentCycle": 13,
+      "generatedCycle": 14,
+      "firstTurn": [
+        {
+          "kind": "install",
+          "amount": 0,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": null,
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 588,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 12,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 480,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 120,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 438,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 162,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W07_delayed_7",
+      "strategy": "C_cover",
+      "budget": 1600,
+      "spent": 296,
+      "selectedPlan": "setup",
+      "selectedCycles": 14,
+      "commonCycle": 14,
+      "expandedParentCycle": 13,
+      "generatedCycle": 14,
+      "firstTurn": [
+        {
+          "kind": "install",
+          "amount": 0,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": null,
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 588,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 12,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 480,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 120,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 438,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 162,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W07_delayed_7",
+      "strategy": "D",
+      "budget": 1600,
+      "spent": 411,
+      "selectedPlan": "setup",
+      "selectedCycles": 14,
+      "commonCycle": 14,
+      "expandedParentCycle": 13,
+      "generatedCycle": 14,
+      "firstTurn": [
+        {
+          "kind": "install",
+          "amount": 0,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": null,
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 588,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 12,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 480,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 120,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 438,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 162,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W07_delayed_7",
+      "strategy": "E",
+      "budget": 1600,
+      "spent": 386,
+      "selectedPlan": "setup",
+      "selectedCycles": 14,
+      "commonCycle": 14,
+      "expandedParentCycle": 13,
+      "generatedCycle": 14,
+      "firstTurn": [
+        {
+          "kind": "install",
+          "amount": 0,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": [
+        1,
+        1,
+        1
+      ],
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 588,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 12,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 480,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 120,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 438,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 162,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W14_delayed_14",
+      "strategy": "A",
+      "budget": 1600,
+      "spent": 185,
+      "selectedPlan": "attack",
+      "selectedCycles": 1,
+      "commonCycle": 1,
+      "expandedParentCycle": 13,
+      "generatedCycle": 14,
+      "firstTurn": [
+        {
+          "kind": "hit",
+          "amount": 18,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": null,
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 570,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 30,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 546,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 54,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 504,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 96,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W14_delayed_14",
+      "strategy": "B",
+      "budget": 1600,
+      "spent": 238,
+      "selectedPlan": "attack",
+      "selectedCycles": 14,
+      "commonCycle": 1,
+      "expandedParentCycle": 13,
+      "generatedCycle": 14,
+      "firstTurn": [
+        {
+          "kind": "hit",
+          "amount": 18,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": null,
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 570,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 30,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 546,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 54,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 504,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 96,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W14_delayed_14",
+      "strategy": "C_count",
+      "budget": 1600,
+      "spent": 296,
+      "selectedPlan": "setup",
+      "selectedCycles": 14,
+      "commonCycle": 14,
+      "expandedParentCycle": 13,
+      "generatedCycle": 14,
+      "firstTurn": [
+        {
+          "kind": "install",
+          "amount": 0,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": null,
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 588,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 12,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 564,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 36,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 438,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 162,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W14_delayed_14",
+      "strategy": "C_cover",
+      "budget": 1600,
+      "spent": 296,
+      "selectedPlan": "setup",
+      "selectedCycles": 14,
+      "commonCycle": 14,
+      "expandedParentCycle": 13,
+      "generatedCycle": 14,
+      "firstTurn": [
+        {
+          "kind": "install",
+          "amount": 0,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": null,
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 588,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 12,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 564,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 36,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 438,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 162,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W14_delayed_14",
+      "strategy": "D",
+      "budget": 1600,
+      "spent": 411,
+      "selectedPlan": "setup",
+      "selectedCycles": 14,
+      "commonCycle": 14,
+      "expandedParentCycle": 13,
+      "generatedCycle": 14,
+      "firstTurn": [
+        {
+          "kind": "install",
+          "amount": 0,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": null,
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 588,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 12,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 564,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 36,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 438,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 162,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W14_delayed_14",
+      "strategy": "E",
+      "budget": 1600,
+      "spent": 386,
+      "selectedPlan": "setup",
+      "selectedCycles": 14,
+      "commonCycle": 14,
+      "expandedParentCycle": 13,
+      "generatedCycle": 14,
+      "firstTurn": [
+        {
+          "kind": "install",
+          "amount": 0,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": [
+        1,
+        1,
+        1
+      ],
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 588,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 12,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 564,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 36,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 438,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 162,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W22_known_risk",
+      "strategy": "A",
+      "budget": 1600,
+      "spent": 319,
+      "selectedPlan": "setup",
+      "selectedCycles": 14,
+      "commonCycle": 14,
+      "expandedParentCycle": 13,
+      "generatedCycle": 14,
+      "firstTurn": [
+        {
+          "kind": "install",
+          "amount": 0,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": null,
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 504,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 96,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 480,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 120,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 438,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 162,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W22_known_risk",
+      "strategy": "B",
+      "budget": 1600,
+      "spent": 319,
+      "selectedPlan": "setup",
+      "selectedCycles": 14,
+      "commonCycle": 14,
+      "expandedParentCycle": 13,
+      "generatedCycle": 14,
+      "firstTurn": [
+        {
+          "kind": "install",
+          "amount": 0,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": null,
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 504,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 96,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 480,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 120,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 438,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 162,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W22_known_risk",
+      "strategy": "C_count",
+      "budget": 1600,
+      "spent": 409,
+      "selectedPlan": "setup",
+      "selectedCycles": 14,
+      "commonCycle": 14,
+      "expandedParentCycle": 13,
+      "generatedCycle": 14,
+      "firstTurn": [
+        {
+          "kind": "install",
+          "amount": 0,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": null,
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 504,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 96,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 480,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 120,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 438,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 162,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W22_known_risk",
+      "strategy": "C_cover",
+      "budget": 1600,
+      "spent": 409,
+      "selectedPlan": "setup",
+      "selectedCycles": 14,
+      "commonCycle": 14,
+      "expandedParentCycle": 13,
+      "generatedCycle": 14,
+      "firstTurn": [
+        {
+          "kind": "install",
+          "amount": 0,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": null,
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 504,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 96,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 480,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 120,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 438,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 162,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W22_known_risk",
+      "strategy": "D",
+      "budget": 1600,
+      "spent": 497,
+      "selectedPlan": "setup",
+      "selectedCycles": 14,
+      "commonCycle": 14,
+      "expandedParentCycle": 13,
+      "generatedCycle": 14,
+      "firstTurn": [
+        {
+          "kind": "install",
+          "amount": 0,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": null,
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 504,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 96,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 480,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 120,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 438,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 162,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W22_known_risk",
+      "strategy": "E",
+      "budget": 1600,
+      "spent": 544,
+      "selectedPlan": "setup",
+      "selectedCycles": 14,
+      "commonCycle": 14,
+      "expandedParentCycle": 13,
+      "generatedCycle": 14,
+      "firstTurn": [
+        {
+          "kind": "install",
+          "amount": 0,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": [
+        1,
+        1,
+        1
+      ],
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 504,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 96,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 480,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 120,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 438,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 162,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W23_shallow_unknown",
+      "strategy": "A",
+      "budget": 1600,
+      "spent": 100,
+      "selectedPlan": "attack",
+      "selectedCycles": 1,
+      "commonCycle": 1,
+      "expandedParentCycle": 13,
+      "generatedCycle": 14,
+      "firstTurn": [
+        {
+          "kind": "hit",
+          "amount": 18,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": null,
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 570,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 30,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 546,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 54,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 504,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 96,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W23_shallow_unknown",
+      "strategy": "B",
+      "budget": 1600,
+      "spent": 100,
+      "selectedPlan": "attack",
+      "selectedCycles": 1,
+      "commonCycle": 1,
+      "expandedParentCycle": 13,
+      "generatedCycle": 14,
+      "firstTurn": [
+        {
+          "kind": "hit",
+          "amount": 18,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": null,
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 570,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 30,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 546,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 54,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 504,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 96,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W23_shallow_unknown",
+      "strategy": "C_count",
+      "budget": 1600,
+      "spent": 160,
+      "selectedPlan": "attack",
+      "selectedCycles": 1,
+      "commonCycle": 1,
+      "expandedParentCycle": 13,
+      "generatedCycle": 14,
+      "firstTurn": [
+        {
+          "kind": "hit",
+          "amount": 18,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": null,
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 570,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 30,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 546,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 54,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 504,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 96,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W23_shallow_unknown",
+      "strategy": "C_cover",
+      "budget": 1600,
+      "spent": 160,
+      "selectedPlan": "attack",
+      "selectedCycles": 1,
+      "commonCycle": 1,
+      "expandedParentCycle": 13,
+      "generatedCycle": 14,
+      "firstTurn": [
+        {
+          "kind": "hit",
+          "amount": 18,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": null,
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 570,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 30,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 546,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 54,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 504,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 96,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W23_shallow_unknown",
+      "strategy": "D",
+      "budget": 1600,
+      "spent": 187,
+      "selectedPlan": "attack",
+      "selectedCycles": 1,
+      "commonCycle": 1,
+      "expandedParentCycle": 13,
+      "generatedCycle": 14,
+      "firstTurn": [
+        {
+          "kind": "hit",
+          "amount": 18,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": null,
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 570,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 30,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 546,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 54,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 504,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 96,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W23_shallow_unknown",
+      "strategy": "E",
+      "budget": 1600,
+      "spent": 250,
+      "selectedPlan": "attack",
+      "selectedCycles": 1,
+      "commonCycle": 1,
+      "expandedParentCycle": 13,
+      "generatedCycle": 14,
+      "firstTurn": [
+        {
+          "kind": "hit",
+          "amount": 18,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": [
+        1,
+        1,
+        1
+      ],
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 570,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 30,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 546,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 54,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 504,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 96,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W26_late_discovery",
+      "strategy": "A",
+      "budget": 570,
+      "spent": 335,
+      "selectedPlan": "late_combo",
+      "selectedCycles": 12,
+      "commonCycle": 12,
+      "expandedParentCycle": 13,
+      "generatedCycle": 14,
+      "firstTurn": [
+        {
+          "kind": "hit",
+          "amount": 90,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": null,
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 498,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 102,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 474,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 126,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 432,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 168,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W26_late_discovery",
+      "strategy": "B",
+      "budget": 570,
+      "spent": 335,
+      "selectedPlan": "late_combo",
+      "selectedCycles": 12,
+      "commonCycle": 12,
+      "expandedParentCycle": 13,
+      "generatedCycle": 14,
+      "firstTurn": [
+        {
+          "kind": "hit",
+          "amount": 90,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": null,
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 498,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 102,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 474,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 126,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 432,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 168,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W26_late_discovery",
+      "strategy": "C_count",
+      "budget": 570,
+      "spent": 379,
+      "selectedPlan": "attack",
+      "selectedCycles": 13,
+      "commonCycle": 12,
+      "expandedParentCycle": 12,
+      "generatedCycle": 13,
+      "firstTurn": [
+        {
+          "kind": "hit",
+          "amount": 18,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": null,
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 570,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 30,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 546,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 54,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 504,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 96,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W26_late_discovery",
+      "strategy": "C_cover",
+      "budget": 570,
+      "spent": 371,
+      "selectedPlan": "late_combo",
+      "selectedCycles": 10,
+      "commonCycle": 10,
+      "expandedParentCycle": 12,
+      "generatedCycle": 13,
+      "firstTurn": [
+        {
+          "kind": "hit",
+          "amount": 90,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": null,
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 498,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 102,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 474,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 126,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 432,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 168,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W26_late_discovery",
+      "strategy": "D",
+      "budget": 570,
+      "spent": 367,
+      "selectedPlan": "late_combo",
+      "selectedCycles": 8,
+      "commonCycle": 8,
+      "expandedParentCycle": 10,
+      "generatedCycle": 11,
+      "firstTurn": [
+        {
+          "kind": "hit",
+          "amount": 90,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": null,
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 498,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 102,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 474,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 126,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 432,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 168,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W26_late_discovery",
+      "strategy": "E",
+      "budget": 570,
+      "spent": 365,
+      "selectedPlan": "late_combo",
+      "selectedCycles": 7,
+      "commonCycle": 7,
+      "expandedParentCycle": 8,
+      "generatedCycle": 9,
+      "firstTurn": [
+        {
+          "kind": "hit",
+          "amount": 90,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": [
+        1,
+        1,
+        1
+      ],
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 498,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 102,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 474,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 126,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 432,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 168,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W28_external_choice",
+      "strategy": "A",
+      "budget": 1600,
+      "spent": 152,
+      "selectedPlan": "setup",
+      "selectedCycles": 14,
+      "commonCycle": 14,
+      "expandedParentCycle": 13,
+      "generatedCycle": 14,
+      "firstTurn": [
+        {
+          "kind": "install",
+          "amount": 0,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": null,
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 504,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 96,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 480,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 120,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 438,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 162,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W28_external_choice",
+      "strategy": "B",
+      "budget": 1600,
+      "spent": 152,
+      "selectedPlan": "setup",
+      "selectedCycles": 14,
+      "commonCycle": 14,
+      "expandedParentCycle": 13,
+      "generatedCycle": 14,
+      "firstTurn": [
+        {
+          "kind": "install",
+          "amount": 0,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": null,
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 504,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 96,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 480,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 120,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 438,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 162,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W28_external_choice",
+      "strategy": "C_count",
+      "budget": 1600,
+      "spent": 160,
+      "selectedPlan": "attack",
+      "selectedCycles": 1,
+      "commonCycle": 1,
+      "expandedParentCycle": 13,
+      "generatedCycle": 14,
+      "firstTurn": [
+        {
+          "kind": "hit",
+          "amount": 18,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": null,
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 570,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 30,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 546,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 54,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 504,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 96,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W28_external_choice",
+      "strategy": "C_cover",
+      "budget": 1600,
+      "spent": 160,
+      "selectedPlan": "attack",
+      "selectedCycles": 1,
+      "commonCycle": 1,
+      "expandedParentCycle": 13,
+      "generatedCycle": 14,
+      "firstTurn": [
+        {
+          "kind": "hit",
+          "amount": 18,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": null,
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 570,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 30,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 546,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 54,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 504,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 96,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W28_external_choice",
+      "strategy": "D",
+      "budget": 1600,
+      "spent": 187,
+      "selectedPlan": "attack",
+      "selectedCycles": 1,
+      "commonCycle": 1,
+      "expandedParentCycle": 13,
+      "generatedCycle": 14,
+      "firstTurn": [
+        {
+          "kind": "hit",
+          "amount": 18,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": null,
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 570,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 30,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 546,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 54,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 504,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 96,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W28_external_choice",
+      "strategy": "E",
+      "budget": 1600,
+      "spent": 250,
+      "selectedPlan": "attack",
+      "selectedCycles": 1,
+      "commonCycle": 1,
+      "expandedParentCycle": 13,
+      "generatedCycle": 14,
+      "firstTurn": [
+        {
+          "kind": "hit",
+          "amount": 18,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": [
+        1,
+        1,
+        1
+      ],
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 570,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 30,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 546,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 54,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 504,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 96,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W35_weight_crossing",
+      "strategy": "A",
+      "budget": 1600,
+      "spent": 231,
+      "selectedPlan": "setup",
+      "selectedCycles": 14,
+      "commonCycle": 14,
+      "expandedParentCycle": 13,
+      "generatedCycle": 14,
+      "firstTurn": [
+        {
+          "kind": "install",
+          "amount": 0,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": null,
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 588,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 12,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 564,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 36,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 392,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 208,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W35_weight_crossing",
+      "strategy": "B",
+      "budget": 1600,
+      "spent": 231,
+      "selectedPlan": "setup",
+      "selectedCycles": 14,
+      "commonCycle": 14,
+      "expandedParentCycle": 13,
+      "generatedCycle": 14,
+      "firstTurn": [
+        {
+          "kind": "install",
+          "amount": 0,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": null,
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 588,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 12,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 564,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 36,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 392,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 208,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W35_weight_crossing",
+      "strategy": "C_count",
+      "budget": 1600,
+      "spent": 291,
+      "selectedPlan": "setup",
+      "selectedCycles": 14,
+      "commonCycle": 14,
+      "expandedParentCycle": 13,
+      "generatedCycle": 14,
+      "firstTurn": [
+        {
+          "kind": "install",
+          "amount": 0,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": null,
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 588,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 12,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 564,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 36,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 392,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 208,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W35_weight_crossing",
+      "strategy": "C_cover",
+      "budget": 1600,
+      "spent": 291,
+      "selectedPlan": "setup",
+      "selectedCycles": 14,
+      "commonCycle": 14,
+      "expandedParentCycle": 13,
+      "generatedCycle": 14,
+      "firstTurn": [
+        {
+          "kind": "install",
+          "amount": 0,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": null,
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 588,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 12,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 564,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 36,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 392,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 208,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W35_weight_crossing",
+      "strategy": "D",
+      "budget": 1600,
+      "spent": 407,
+      "selectedPlan": "setup",
+      "selectedCycles": 14,
+      "commonCycle": 14,
+      "expandedParentCycle": 13,
+      "generatedCycle": 14,
+      "firstTurn": [
+        {
+          "kind": "install",
+          "amount": 0,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": null,
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 588,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 12,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 564,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 36,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 392,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 208,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W35_weight_crossing",
+      "strategy": "E",
+      "budget": 1600,
+      "spent": 382,
+      "selectedPlan": "early_power",
+      "selectedCycles": 14,
+      "commonCycle": 14,
+      "expandedParentCycle": 13,
+      "generatedCycle": 14,
+      "firstTurn": [
+        {
+          "kind": "power",
+          "amount": 5,
+          "target": 0
+        },
+        {
+          "kind": "hit",
+          "amount": 13,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": [
+        1,
+        1,
+        1
+      ],
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 560,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 40,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 516,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 84,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 439,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 161,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W35_weight_crossing",
+      "strategy": "E",
+      "budget": 1600,
+      "spent": 382,
+      "selectedPlan": "early_power",
+      "selectedCycles": 14,
+      "commonCycle": 14,
+      "expandedParentCycle": 13,
+      "generatedCycle": 14,
+      "firstTurn": [
+        {
+          "kind": "power",
+          "amount": 5,
+          "target": 0
+        },
+        {
+          "kind": "hit",
+          "amount": 13,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": [
+        4,
+        2,
+        1
+      ],
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 560,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 40,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 516,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 84,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 439,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 161,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W35_weight_crossing",
+      "strategy": "E",
+      "budget": 1600,
+      "spent": 381,
+      "selectedPlan": "setup",
+      "selectedCycles": 14,
+      "commonCycle": 14,
+      "expandedParentCycle": 13,
+      "generatedCycle": 14,
+      "firstTurn": [
+        {
+          "kind": "install",
+          "amount": 0,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": [
+        1,
+        1,
+        4
+      ],
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 588,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 12,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 564,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 36,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 392,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 208,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W35_weight_crossing",
+      "strategy": "E",
+      "budget": 1600,
+      "spent": 381,
+      "selectedPlan": "setup",
+      "selectedCycles": 14,
+      "commonCycle": 14,
+      "expandedParentCycle": 13,
+      "generatedCycle": 14,
+      "firstTurn": [
+        {
+          "kind": "install",
+          "amount": 0,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": [
+        1,
+        1,
+        8
+      ],
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 588,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 12,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 564,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 36,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 392,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 208,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W39_target_opportunity",
+      "strategy": "A",
+      "budget": 1600,
+      "spent": 185,
+      "selectedPlan": "attack_survivor",
+      "selectedCycles": 1,
+      "commonCycle": 1,
+      "expandedParentCycle": 13,
+      "generatedCycle": 14,
+      "firstTurn": [
+        {
+          "kind": "hit",
+          "amount": 18,
+          "target": 1
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": null,
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 470,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 30,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 446,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 54,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 404,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 96,
+            "peer_damage": 0
+          }
+        },
+        "kill_target": {
+          "3": {
+            "enemy_hp": 320,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 30,
+            "peer_damage": 150
+          },
+          "7": {
+            "enemy_hp": 296,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 54,
+            "peer_damage": 150
+          },
+          "14": {
+            "enemy_hp": 254,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 96,
+            "peer_damage": 150
+          }
+        },
+        "end_combat": {
+          "3": {
+            "enemy_hp": 0,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": true,
+            "potions": 0,
+            "own_damage": 18,
+            "peer_damage": 482
+          },
+          "7": {
+            "enemy_hp": 0,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": true,
+            "potions": 0,
+            "own_damage": 18,
+            "peer_damage": 482
+          },
+          "14": {
+            "enemy_hp": 0,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": true,
+            "potions": 0,
+            "own_damage": 18,
+            "peer_damage": 482
+          }
+        },
+        "phase": {
+          "3": {
+            "enemy_hp": 529,
+            "loss": 8,
+            "excess": 2,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 30,
+            "peer_damage": 1
+          },
+          "7": {
+            "enemy_hp": 505,
+            "loss": 24,
+            "excess": 6,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 54,
+            "peer_damage": 1
+          },
+          "14": {
+            "enemy_hp": 463,
+            "loss": 52,
+            "excess": 13,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 96,
+            "peer_damage": 1
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W39_target_opportunity",
+      "strategy": "B",
+      "budget": 1600,
+      "spent": 238,
+      "selectedPlan": "attack_survivor",
+      "selectedCycles": 14,
+      "commonCycle": 1,
+      "expandedParentCycle": 13,
+      "generatedCycle": 14,
+      "firstTurn": [
+        {
+          "kind": "hit",
+          "amount": 18,
+          "target": 1
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": null,
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 470,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 30,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 446,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 54,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 404,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 96,
+            "peer_damage": 0
+          }
+        },
+        "kill_target": {
+          "3": {
+            "enemy_hp": 320,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 30,
+            "peer_damage": 150
+          },
+          "7": {
+            "enemy_hp": 296,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 54,
+            "peer_damage": 150
+          },
+          "14": {
+            "enemy_hp": 254,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 96,
+            "peer_damage": 150
+          }
+        },
+        "end_combat": {
+          "3": {
+            "enemy_hp": 0,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": true,
+            "potions": 0,
+            "own_damage": 18,
+            "peer_damage": 482
+          },
+          "7": {
+            "enemy_hp": 0,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": true,
+            "potions": 0,
+            "own_damage": 18,
+            "peer_damage": 482
+          },
+          "14": {
+            "enemy_hp": 0,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": true,
+            "potions": 0,
+            "own_damage": 18,
+            "peer_damage": 482
+          }
+        },
+        "phase": {
+          "3": {
+            "enemy_hp": 529,
+            "loss": 8,
+            "excess": 2,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 30,
+            "peer_damage": 1
+          },
+          "7": {
+            "enemy_hp": 505,
+            "loss": 24,
+            "excess": 6,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 54,
+            "peer_damage": 1
+          },
+          "14": {
+            "enemy_hp": 463,
+            "loss": 52,
+            "excess": 13,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 96,
+            "peer_damage": 1
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W39_target_opportunity",
+      "strategy": "C_count",
+      "budget": 1600,
+      "spent": 296,
+      "selectedPlan": "mark_target0",
+      "selectedCycles": 14,
+      "commonCycle": 14,
+      "expandedParentCycle": 13,
+      "generatedCycle": 14,
+      "firstTurn": [
+        {
+          "kind": "install",
+          "amount": 0,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": null,
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 488,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 12,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 364,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 136,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 326,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 174,
+            "peer_damage": 0
+          }
+        },
+        "kill_target": {
+          "3": {
+            "enemy_hp": 338,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 12,
+            "peer_damage": 150
+          },
+          "7": {
+            "enemy_hp": 314,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 36,
+            "peer_damage": 150
+          },
+          "14": {
+            "enemy_hp": 272,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 78,
+            "peer_damage": 150
+          }
+        },
+        "end_combat": {
+          "3": {
+            "enemy_hp": 0,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": true,
+            "potions": 0,
+            "own_damage": 0,
+            "peer_damage": 500
+          },
+          "7": {
+            "enemy_hp": 0,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": true,
+            "potions": 0,
+            "own_damage": 0,
+            "peer_damage": 500
+          },
+          "14": {
+            "enemy_hp": 0,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": true,
+            "potions": 0,
+            "own_damage": 0,
+            "peer_damage": 500
+          }
+        },
+        "phase": {
+          "3": {
+            "enemy_hp": 547,
+            "loss": 8,
+            "excess": 2,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 12,
+            "peer_damage": 1
+          },
+          "7": {
+            "enemy_hp": 423,
+            "loss": 24,
+            "excess": 6,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 136,
+            "peer_damage": 1
+          },
+          "14": {
+            "enemy_hp": 381,
+            "loss": 52,
+            "excess": 13,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 178,
+            "peer_damage": 1
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W39_target_opportunity",
+      "strategy": "C_cover",
+      "budget": 1600,
+      "spent": 296,
+      "selectedPlan": "mark_target0",
+      "selectedCycles": 14,
+      "commonCycle": 14,
+      "expandedParentCycle": 13,
+      "generatedCycle": 14,
+      "firstTurn": [
+        {
+          "kind": "install",
+          "amount": 0,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": null,
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 488,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 12,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 364,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 136,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 326,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 174,
+            "peer_damage": 0
+          }
+        },
+        "kill_target": {
+          "3": {
+            "enemy_hp": 338,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 12,
+            "peer_damage": 150
+          },
+          "7": {
+            "enemy_hp": 314,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 36,
+            "peer_damage": 150
+          },
+          "14": {
+            "enemy_hp": 272,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 78,
+            "peer_damage": 150
+          }
+        },
+        "end_combat": {
+          "3": {
+            "enemy_hp": 0,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": true,
+            "potions": 0,
+            "own_damage": 0,
+            "peer_damage": 500
+          },
+          "7": {
+            "enemy_hp": 0,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": true,
+            "potions": 0,
+            "own_damage": 0,
+            "peer_damage": 500
+          },
+          "14": {
+            "enemy_hp": 0,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": true,
+            "potions": 0,
+            "own_damage": 0,
+            "peer_damage": 500
+          }
+        },
+        "phase": {
+          "3": {
+            "enemy_hp": 547,
+            "loss": 8,
+            "excess": 2,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 12,
+            "peer_damage": 1
+          },
+          "7": {
+            "enemy_hp": 423,
+            "loss": 24,
+            "excess": 6,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 136,
+            "peer_damage": 1
+          },
+          "14": {
+            "enemy_hp": 381,
+            "loss": 52,
+            "excess": 13,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 178,
+            "peer_damage": 1
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W39_target_opportunity",
+      "strategy": "D",
+      "budget": 1600,
+      "spent": 411,
+      "selectedPlan": "mark_target0",
+      "selectedCycles": 14,
+      "commonCycle": 14,
+      "expandedParentCycle": 13,
+      "generatedCycle": 14,
+      "firstTurn": [
+        {
+          "kind": "install",
+          "amount": 0,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": null,
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 488,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 12,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 364,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 136,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 326,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 174,
+            "peer_damage": 0
+          }
+        },
+        "kill_target": {
+          "3": {
+            "enemy_hp": 338,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 12,
+            "peer_damage": 150
+          },
+          "7": {
+            "enemy_hp": 314,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 36,
+            "peer_damage": 150
+          },
+          "14": {
+            "enemy_hp": 272,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 78,
+            "peer_damage": 150
+          }
+        },
+        "end_combat": {
+          "3": {
+            "enemy_hp": 0,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": true,
+            "potions": 0,
+            "own_damage": 0,
+            "peer_damage": 500
+          },
+          "7": {
+            "enemy_hp": 0,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": true,
+            "potions": 0,
+            "own_damage": 0,
+            "peer_damage": 500
+          },
+          "14": {
+            "enemy_hp": 0,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": true,
+            "potions": 0,
+            "own_damage": 0,
+            "peer_damage": 500
+          }
+        },
+        "phase": {
+          "3": {
+            "enemy_hp": 547,
+            "loss": 8,
+            "excess": 2,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 12,
+            "peer_damage": 1
+          },
+          "7": {
+            "enemy_hp": 423,
+            "loss": 24,
+            "excess": 6,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 136,
+            "peer_damage": 1
+          },
+          "14": {
+            "enemy_hp": 381,
+            "loss": 52,
+            "excess": 13,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 178,
+            "peer_damage": 1
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W39_target_opportunity",
+      "strategy": "E",
+      "budget": 1600,
+      "spent": 386,
+      "selectedPlan": "mark_target0",
+      "selectedCycles": 14,
+      "commonCycle": 14,
+      "expandedParentCycle": 13,
+      "generatedCycle": 14,
+      "firstTurn": [
+        {
+          "kind": "install",
+          "amount": 0,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": [
+        1,
+        1,
+        1
+      ],
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 488,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 12,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 364,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 136,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 326,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 174,
+            "peer_damage": 0
+          }
+        },
+        "kill_target": {
+          "3": {
+            "enemy_hp": 338,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 12,
+            "peer_damage": 150
+          },
+          "7": {
+            "enemy_hp": 314,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 36,
+            "peer_damage": 150
+          },
+          "14": {
+            "enemy_hp": 272,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 78,
+            "peer_damage": 150
+          }
+        },
+        "end_combat": {
+          "3": {
+            "enemy_hp": 0,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": true,
+            "potions": 0,
+            "own_damage": 0,
+            "peer_damage": 500
+          },
+          "7": {
+            "enemy_hp": 0,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": true,
+            "potions": 0,
+            "own_damage": 0,
+            "peer_damage": 500
+          },
+          "14": {
+            "enemy_hp": 0,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": true,
+            "potions": 0,
+            "own_damage": 0,
+            "peer_damage": 500
+          }
+        },
+        "phase": {
+          "3": {
+            "enemy_hp": 547,
+            "loss": 8,
+            "excess": 2,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 12,
+            "peer_damage": 1
+          },
+          "7": {
+            "enemy_hp": 423,
+            "loss": 24,
+            "excess": 6,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 136,
+            "peer_damage": 1
+          },
+          "14": {
+            "enemy_hp": 381,
+            "loss": 52,
+            "excess": 13,
+            "dead": false,
+            "won": false,
+            "potions": 1,
+            "own_damage": 178,
+            "peer_damage": 1
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W40_cheap_rollout",
+      "strategy": "A",
+      "budget": 1000,
+      "spent": 710,
+      "selectedPlan": "attack",
+      "selectedCycles": 4,
+      "commonCycle": 4,
+      "expandedParentCycle": 3,
+      "generatedCycle": 4,
+      "firstTurn": [
+        {
+          "kind": "hit",
+          "amount": 18,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": null,
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 570,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 30,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 546,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 54,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 504,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 96,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W40_cheap_rollout",
+      "strategy": "B",
+      "budget": 1000,
+      "spent": 710,
+      "selectedPlan": "attack",
+      "selectedCycles": 4,
+      "commonCycle": 4,
+      "expandedParentCycle": 3,
+      "generatedCycle": 4,
+      "firstTurn": [
+        {
+          "kind": "hit",
+          "amount": 18,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": null,
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 570,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 30,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 546,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 54,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 504,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 96,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W40_cheap_rollout",
+      "strategy": "C_count",
+      "budget": 1000,
+      "spent": 730,
+      "selectedPlan": "attack",
+      "selectedCycles": 4,
+      "commonCycle": 4,
+      "expandedParentCycle": 3,
+      "generatedCycle": 4,
+      "firstTurn": [
+        {
+          "kind": "hit",
+          "amount": 18,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": null,
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 570,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 30,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 546,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 54,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 504,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 96,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W40_cheap_rollout",
+      "strategy": "C_cover",
+      "budget": 1000,
+      "spent": 730,
+      "selectedPlan": "attack",
+      "selectedCycles": 4,
+      "commonCycle": 4,
+      "expandedParentCycle": 3,
+      "generatedCycle": 4,
+      "firstTurn": [
+        {
+          "kind": "hit",
+          "amount": 18,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": null,
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 570,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 30,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 546,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 54,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 504,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 96,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W40_cheap_rollout",
+      "strategy": "D",
+      "budget": 1000,
+      "spent": 720,
+      "selectedPlan": "attack",
+      "selectedCycles": 3,
+      "commonCycle": 3,
+      "expandedParentCycle": 2,
+      "generatedCycle": 3,
+      "firstTurn": [
+        {
+          "kind": "hit",
+          "amount": 18,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": null,
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 570,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 30,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 546,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 54,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 504,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 96,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W40_cheap_rollout",
+      "strategy": "E",
+      "budget": 1000,
+      "spent": 760,
+      "selectedPlan": "attack",
+      "selectedCycles": 4,
+      "commonCycle": 4,
+      "expandedParentCycle": 3,
+      "generatedCycle": 4,
+      "firstTurn": [
+        {
+          "kind": "hit",
+          "amount": 18,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": [
+        1,
+        1,
+        1
+      ],
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 570,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 30,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 546,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 54,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 504,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 96,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W40_cheap_rollout",
+      "strategy": "D_fast_hold",
+      "budget": 1000,
+      "spent": 775,
+      "selectedPlan": "resource",
+      "selectedCycles": 14,
+      "commonCycle": 14,
+      "expandedParentCycle": 13,
+      "generatedCycle": 14,
+      "firstTurn": [
+        {
+          "kind": "install",
+          "amount": 0,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": null,
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 588,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 12,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 444,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 156,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 402,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 198,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W40_cheap_rollout",
+      "strategy": "D_fast_greedy",
+      "budget": 1000,
+      "spent": 774,
+      "selectedPlan": "attack",
+      "selectedCycles": 14,
+      "commonCycle": 14,
+      "expandedParentCycle": 13,
+      "generatedCycle": 14,
+      "firstTurn": [
+        {
+          "kind": "hit",
+          "amount": 18,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": null,
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 570,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 30,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 546,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 54,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 504,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 96,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W38_scan_opportunity",
+      "strategy": "A",
+      "budget": 382,
+      "spent": 138,
+      "selectedPlan": "late_combo",
+      "selectedCycles": 1,
+      "commonCycle": 1,
+      "expandedParentCycle": 2,
+      "generatedCycle": 3,
+      "firstTurn": [
+        {
+          "kind": "hit",
+          "amount": 90,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": null,
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 498,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 102,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 474,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 126,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 432,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 168,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W38_scan_opportunity",
+      "strategy": "B",
+      "budget": 382,
+      "spent": 138,
+      "selectedPlan": "late_combo",
+      "selectedCycles": 1,
+      "commonCycle": 1,
+      "expandedParentCycle": 2,
+      "generatedCycle": 3,
+      "firstTurn": [
+        {
+          "kind": "hit",
+          "amount": 90,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": null,
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 498,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 102,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 474,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 126,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 432,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 168,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W38_scan_opportunity",
+      "strategy": "C_count",
+      "budget": 382,
+      "spent": 66,
+      "selectedPlan": "attack",
+      "selectedCycles": 3,
+      "commonCycle": 3,
+      "expandedParentCycle": 2,
+      "generatedCycle": 3,
+      "firstTurn": [
+        {
+          "kind": "hit",
+          "amount": 18,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": null,
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 570,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 30,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 546,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 54,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 504,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 96,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W38_scan_opportunity",
+      "strategy": "C_cover",
+      "budget": 382,
+      "spent": 66,
+      "selectedPlan": "attack",
+      "selectedCycles": 3,
+      "commonCycle": 3,
+      "expandedParentCycle": 2,
+      "generatedCycle": 3,
+      "firstTurn": [
+        {
+          "kind": "hit",
+          "amount": 18,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": null,
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 570,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 30,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 546,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 54,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 504,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 96,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W38_scan_opportunity",
+      "strategy": "D",
+      "budget": 382,
+      "spent": 103,
+      "selectedPlan": "attack",
+      "selectedCycles": 3,
+      "commonCycle": 3,
+      "expandedParentCycle": 3,
+      "generatedCycle": 4,
+      "firstTurn": [
+        {
+          "kind": "hit",
+          "amount": 18,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": null,
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 570,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 30,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 546,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 54,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 504,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 96,
+            "peer_damage": 0
+          }
+        }
+      }
+    },
+    {
+      "fixture": "W38_scan_opportunity",
+      "strategy": "E",
+      "budget": 382,
+      "spent": 84,
+      "selectedPlan": "attack",
+      "selectedCycles": 3,
+      "commonCycle": 3,
+      "expandedParentCycle": 2,
+      "generatedCycle": 3,
+      "firstTurn": [
+        {
+          "kind": "hit",
+          "amount": 18,
+          "target": 0
+        },
+        {
+          "kind": "end",
+          "amount": 0,
+          "target": 0
+        }
+      ],
+      "selectionWeights": [
+        1,
+        1,
+        1
+      ],
+      "evaluations": {
+        "idle": {
+          "3": {
+            "enemy_hp": 570,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 30,
+            "peer_damage": 0
+          },
+          "7": {
+            "enemy_hp": 546,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 54,
+            "peer_damage": 0
+          },
+          "14": {
+            "enemy_hp": 504,
+            "loss": 0,
+            "excess": 0,
+            "dead": false,
+            "won": false,
+            "potions": 0,
+            "own_damage": 96,
+            "peer_damage": 0
+          }
+        }
+      }
+    }
+  ]
+}
