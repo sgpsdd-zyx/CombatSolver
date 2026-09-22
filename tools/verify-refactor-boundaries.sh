@@ -161,6 +161,7 @@ shopt -u nullglob
 cycle_policy_paths=(
     "$search_root/CombatBeamSolver.CyclePlanning.cs"
     "$search_root/CombatBeamSolver.CycleRegionRetention.cs"
+    "$search_root/CombatBeamSolver.CycleReplay.cs"
     "$search_root/CombatBeamSolver.OrderedMutationRetention.cs"
 )
 legacy_loop_guard_paths=(
@@ -550,7 +551,7 @@ for targeting_rule in \
 done
 
 block_potion_insertion_path="$search_root/CombatBeamSolver.BlockPotionInsertion.cs"
-for required_rule in 'HpLostByTurn' 'SolverWeights.PotionMinimumHpSaved' 'ReplayInsertedRoute(' 'ProjectedDeathSaveUseCount' 'expanded_nodes_added=0'; do
+for required_rule in 'HpLostByTurn' 'SolverWeights.PotionMinimumHpSaved' 'ReplayAdjustedRoute(' 'ProjectedDeathSaveUseCount' 'expanded_nodes_added=0'; do
     require_fixed "$block_potion_insertion_path" "$required_rule" 'deterministic block-potion route rule is missing'
 done
 require_fixed "$search_root/CombatSearchCoordinator.cs" 'passResult.DeterministicBlockPotionInserted' 'deterministic block-potion result must settle before supplemental potion audits'
@@ -571,10 +572,12 @@ expected_beam_files=(
     CombatBeamSolver.BeamRetentionPolicy.Ranking.cs
     CombatBeamSolver.BeamRetentionPolicy.Routing.cs
     CombatBeamSolver.BeamRetentionPolicy.Testing.cs
+    CombatBeamSolver.AfterimageFrontloading.cs
     CombatBeamSolver.BlockPotionInsertion.cs
     CombatBeamSolver.CrossTurnPlanning.cs
     CombatBeamSolver.CyclePlanning.cs
     CombatBeamSolver.CycleRegionRetention.cs
+    CombatBeamSolver.CycleReplay.cs
     CombatBeamSolver.Expansion.cs
     CombatBeamSolver.Expansion.Candidates.cs
     CombatBeamSolver.Expansion.Choices.cs
@@ -1297,6 +1300,9 @@ src/Runtime/SolverController.cs|Multiplayer advice cannot deploy native actions.
 src/Search/CombatBeamSolver.Multiplayer.cs|!CanReplayMultiplayerAction(node, action)
 src/Search/CombatBeamSolver.Models.cs|public int ReplayedAdviceActions;
 src/Search/CombatBeamSolver.cs|_hasRegisteredPowerCards = policy.Multiplayer == null
+src/Search/CombatBeamSolver.Phases.cs|AfterimageFrontloading? afterimageFrontloading = IsMultiplayerAdvice ? null
+src/Search/CombatBeamSolver.CycleReplay.cs|if (IsMultiplayerAdvice || !policy.CanStopAtHpTarget
+src/Search/CombatBeamSolver.StateEvaluation.cs|DefensiveBlockValue = IsMultiplayerAdvice
 src/Search/SimulatedCombatState.Multiplayer.cs|throw new ExternalPlayerChoiceException
 src/Search/SimulatedCombatState.Multiplayer.cs|private ForkableSet<Player>? _inactiveMultiplayerPlayers;
 src/Search/SimulatedCombatState.Multiplayer.cs|internal IReadOnlyList<PowerModel> PowersForHooks()
@@ -1342,11 +1348,28 @@ require_fixed "$repository_root/src/Search/CombatHistoryCounterKey.cs" 'simulato
 require_fixed "$repository_root/src/Search/CombatHistoryCounterKey.cs" 'CombatHistoryCounters.Scan(simulator.History, owner)' 'multiplayer history key must preserve per-effect owner scopes'
 require_fixed "$repository_root/src/Runtime/SolverController.cs" 'GrowthOpportunityTargets = state.Players.Count > 1' 'multiplayer must bypass solo growth target capture'
 require_fixed "$repository_root/src/Search/SimulatedCombatState.cs" '_madScienceUpgradeCapacity = _players.Count > 1 ? 0 : MadScienceGrowth.CaptureRemainingCapacity(inner);' 'multiplayer must bypass solo upgrade capacity'
+require_fixed "$repository_root/src/Search/CombatBeamSolver.cs" 'policy.RequestWorkTotals ?? new()' 'loop budget/history ownership changed'
+require_fixed "$repository_root/src/Search/CombatBeamSolver.CycleReplay.cs" '_replayWork.TryConsumeCycleReplayAction()' 'loop budget/history ownership changed'
+require_fixed "$repository_root/src/Runtime/CombatRootSnapshot.cs" 'playerState.AllCards.Cast<AbstractModel>()' 'loop budget/history ownership changed'
+require_fixed "$repository_root/src/Search/CombatBeamSolver.StateEvaluation.cs" '_historyDependencies' 'loop budget/history ownership changed'
+require_fixed "$repository_root/src/Search/CombatHistoryCounterKey.cs" 'simulator.History.GetCounters(owner)' 'history key must consume incremental totals'
 for history_file in CombatPredictionHistory.cs CombatPredictionHistory.CardContinuation.cs CombatPredictionHistory.ExecutionContinuation.cs; do
     require_fixed "$repository_root/src/Engine/InCombat/Simulation/$history_file" '_counterOwner, _counters' 'history forks must inherit counters'
 done
 require_fixed "$repository_root/src/Search/CombatBeamSolver.Models.cs" 'TranspositionCapDiagnostics TranspositionDiagnostics' 'cap observations must be owned by the search run'
 require_fixed "$repository_root/src/Search/SearchPolicySnapshot.cs" 'DefaultTranspositionEntryLimit = 1_000_000' 'production transposition entry limit changed'
+
+# Contextual estimates may influence intermediate ordering only; loading stays outside workers.
+require_fixed "$search_root/ContextualRankingModel.cs" 'stackalloc double[FeatureCount]' 'contextual ranking must keep its feature buffer local'
+require_fixed "$search_root/ContextualRankingModel.cs" 'ModuleVersionId' 'contextual model must validate assembly identity'
+for token in 'File.' 'SolverSettings.Current' 'SolverController' 'ComparePrimaryQuality'; do
+    forbid_fixed "$search_root/ContextualRankingModel.cs" "$token" 'contextual estimate crossed its pure ranking boundary:'
+done
+for file in CombatBeamSolver.FinalPlanOrdering.cs CombatBeamSolver.Transpositions.cs; do
+    for token in ContextualRanking ContinuousThreatRanking StopPortfolioAtHpTarget BeamWeightPerturbation OffensiveRefinementPortfolio BoundedOffensiveRefinementPortfolio ReallocatedRefinementPortfolio; do
+        forbid_fixed "$search_root/$file" "$token" 'intermediate estimate must not become final policy or exact dominance:'
+    done
+done
 
 if ((${#violations[@]} > 0)); then
     printf '%s\n' "${violations[@]}" >&2

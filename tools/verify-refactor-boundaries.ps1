@@ -74,6 +74,7 @@ $beamPaths = @($beamFiles.FullName)
 $cyclePolicyPaths = @(
     (Join-Path $searchRoot "CombatBeamSolver.CyclePlanning.cs"),
     (Join-Path $searchRoot "CombatBeamSolver.CycleRegionRetention.cs"),
+    (Join-Path $searchRoot "CombatBeamSolver.CycleReplay.cs"),
     (Join-Path $searchRoot "CombatBeamSolver.OrderedMutationRetention.cs")
 )
 $legacyLoopGuardPaths = @(
@@ -97,7 +98,7 @@ $blockPotionInsertionPath = Join-Path $searchRoot "CombatBeamSolver.BlockPotionI
 foreach ($requiredBlockPotionRule in @(
     'HpLostByTurn',
     'SolverWeights.PotionMinimumHpSaved',
-    'ReplayInsertedRoute(',
+    'ReplayAdjustedRoute(',
     'ProjectedDeathSaveUseCount',
     'expanded_nodes_added=0')) {
     if (-not (Select-String -LiteralPath $blockPotionInsertionPath -SimpleMatch $requiredBlockPotionRule -Quiet)) {
@@ -600,10 +601,12 @@ $expectedBeamFiles = @(
     "CombatBeamSolver.BeamRetentionPolicy.Ranking.cs",
     "CombatBeamSolver.BeamRetentionPolicy.Routing.cs",
     "CombatBeamSolver.BeamRetentionPolicy.Testing.cs",
+    "CombatBeamSolver.AfterimageFrontloading.cs",
     "CombatBeamSolver.BlockPotionInsertion.cs",
     "CombatBeamSolver.CrossTurnPlanning.cs",
     "CombatBeamSolver.CyclePlanning.cs",
     "CombatBeamSolver.CycleRegionRetention.cs",
+    "CombatBeamSolver.CycleReplay.cs",
     "CombatBeamSolver.Expansion.cs",
     "CombatBeamSolver.Expansion.Candidates.cs",
     "CombatBeamSolver.Expansion.Choices.cs",
@@ -1616,6 +1619,9 @@ $multiplayerAdviceRules = @(
     @{ Path = 'src/Search/CombatBeamSolver.Multiplayer.cs'; Text = '!CanReplayMultiplayerAction(node, action)' }
     @{ Path = 'src/Search/CombatBeamSolver.Models.cs'; Text = 'public int ReplayedAdviceActions;' }
     @{ Path = 'src/Search/CombatBeamSolver.cs'; Text = '_hasRegisteredPowerCards = policy.Multiplayer == null' }
+    @{ Path = 'src/Search/CombatBeamSolver.Phases.cs'; Text = 'AfterimageFrontloading? afterimageFrontloading = IsMultiplayerAdvice ? null' }
+    @{ Path = 'src/Search/CombatBeamSolver.CycleReplay.cs'; Text = 'if (IsMultiplayerAdvice || !policy.CanStopAtHpTarget' }
+    @{ Path = 'src/Search/CombatBeamSolver.StateEvaluation.cs'; Text = 'DefensiveBlockValue = IsMultiplayerAdvice' }
     @{ Path = 'src/Search/SimulatedCombatState.Multiplayer.cs'; Text = 'throw new ExternalPlayerChoiceException' }
     @{ Path = 'src/Search/SimulatedCombatState.Multiplayer.cs'; Text = 'private ForkableSet<Player>? _inactiveMultiplayerPlayers;' }
     @{ Path = 'src/Search/SimulatedCombatState.Multiplayer.cs'; Text = 'internal IReadOnlyList<PowerModel> PowersForHooks()' }
@@ -1662,6 +1668,18 @@ foreach ($rule in $multiplayerAdviceRules) {
     }
 }
 
+if (-not (Select-String -LiteralPath (Join-Path $repositoryRoot 'src/Search/CombatBeamSolver.cs') -SimpleMatch 'policy.RequestWorkTotals ?? new()' -Quiet)) {
+    $violations.Add('Loop budget/history ownership changed: src/Search/CombatBeamSolver.cs')
+}
+if (-not (Select-String -LiteralPath (Join-Path $repositoryRoot 'src/Search/CombatBeamSolver.CycleReplay.cs') -SimpleMatch '_replayWork.TryConsumeCycleReplayAction()' -Quiet)) {
+    $violations.Add('Loop budget/history ownership changed: src/Search/CombatBeamSolver.CycleReplay.cs')
+}
+if (-not (Select-String -LiteralPath (Join-Path $repositoryRoot 'src/Runtime/CombatRootSnapshot.cs') -SimpleMatch 'playerState.AllCards.Cast<AbstractModel>()' -Quiet)) {
+    $violations.Add('Loop budget/history ownership changed: src/Runtime/CombatRootSnapshot.cs')
+}
+if (-not (Select-String -LiteralPath (Join-Path $repositoryRoot 'src/Search/CombatBeamSolver.StateEvaluation.cs') -SimpleMatch '_historyDependencies' -Quiet)) {
+    $violations.Add('Loop budget/history ownership changed: src/Search/CombatBeamSolver.StateEvaluation.cs')
+}
 if (-not (Select-String -LiteralPath (Join-Path $repositoryRoot 'src/Search/CombatHistoryCounterKey.cs') -SimpleMatch 'simulator.History.GetCounters(owner)' -Quiet)) {
     $violations.Add('Solo history key must consume incremental totals')
 }
@@ -1680,6 +1698,26 @@ foreach ($rule in @(
 )) {
     if (-not (Select-String -LiteralPath (Join-Path $repositoryRoot $rule.File) -SimpleMatch $rule.Text -Quiet)) {
         $violations.Add("Missing upstream integration boundary: $($rule.File)")
+    }
+}
+
+# Contextual estimates remain pure intermediate ordering; never a bound or final policy.
+$contextualPath = Join-Path $searchRoot 'ContextualRankingModel.cs'
+foreach ($text in @('stackalloc double[FeatureCount]', 'ModuleVersionId')) {
+    if (-not (Select-String -LiteralPath $contextualPath -SimpleMatch $text -Quiet)) {
+        $violations.Add("Missing contextual ranking boundary: $text")
+    }
+}
+foreach ($text in @('File.', 'SolverSettings.Current', 'SolverController', 'ComparePrimaryQuality')) {
+    if (Select-String -LiteralPath $contextualPath -SimpleMatch $text -Quiet) {
+        $violations.Add("Contextual estimate crossed its pure ranking boundary: $text")
+    }
+}
+foreach ($file in @('CombatBeamSolver.FinalPlanOrdering.cs', 'CombatBeamSolver.Transpositions.cs')) {
+    foreach ($text in @('ContextualRanking', 'ContinuousThreatRanking', 'StopPortfolioAtHpTarget', 'BeamWeightPerturbation', 'OffensiveRefinementPortfolio', 'BoundedOffensiveRefinementPortfolio', 'ReallocatedRefinementPortfolio')) {
+        if (Select-String -LiteralPath (Join-Path $searchRoot $file) -SimpleMatch $text -Quiet) {
+            $violations.Add("Intermediate estimate must not become final policy or exact dominance: $file")
+        }
     }
 }
 

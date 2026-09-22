@@ -32,8 +32,10 @@ internal sealed record SolverOverlayActionSnapshot(
     int ReplayCount,
     SolverActionTextIdentity? TextIdentity = null)
 {
+    public StateFingerprint CycleIdentity { get; init; }
+
     public bool HasSamePresentation(SolverOverlayActionSnapshot other)
-        => Title == other.Title && TargetName == other.TargetName
+        => CycleIdentity == other.CycleIdentity && Title == other.Title && TargetName == other.TargetName
             && ChoiceText == other.ChoiceText && Tooltip == other.Tooltip
             && VisualKind == other.VisualKind && ReplayCount == other.ReplayCount
             && RelicLabels.SequenceEqual(other.RelicLabels)
@@ -328,6 +330,13 @@ internal sealed record SolverOverlaySnapshot(
         if (!outlook.Enabled || result.CombatEndedTurn == null
             || !result.Snapshot.AllEnemiesDead || result.Snapshot.PlayerDead)
             return null;
+        return RewardOutcome(outlook);
+    }
+
+    internal static string? RewardOutcome(PotionRewardOutlook outlook)
+    {
+        if (!outlook.Enabled)
+            return null;
         return outlook.Forecast switch
         {
             PotionRewardForecast.Drop => SolverText.Format($"预计掉落：{SolverUiModelNames.Potion(outlook.ForecastPotionId!, outlook.ForecastPotionId!)}"),
@@ -435,7 +444,16 @@ internal sealed record SolverOverlaySnapshot(
                         new SolverCardTextIdentity(card.CardId, card.UpgradeLevel, card.Title)).ToArray()).ToArray(),
                 action.RelicEffects?.Select(effect => new SolverRelicTextIdentity(effect.RelicId, effect.RelicTitle, effect.Summary,
                     effect.OwnerPlayerNumber, effect.OwnerIsLocal)).ToArray() ?? [])
-                { CardEnchantmentId = action.CardEnchantmentId });
+                { CardEnchantmentId = action.CardEnchantmentId })
+        {
+            // Physical hand occurrence is deployment metadata, not visible action
+            // identity. Stable combat IDs remain mandatory grouping boundaries.
+            CycleIdentity = CombatBeamSolver.BuildCycleActionKey(action with
+            {
+                CardOccurrence = 0,
+                TargetIndex = action.TargetCombatId.HasValue ? -1 : action.TargetIndex,
+            }),
+        };
         return SolverActionTextIdentity.Refresh(snapshot);
     }
 

@@ -1228,6 +1228,7 @@ internal static partial class SolverController
                 $"potion_reward={rootSnapshot.PotionRewardOutlook.Forecast}" +
                 $"/{rootSnapshot.PotionRewardOutlook.ForecastPotionId ?? "-"}" +
                 $"/credit={rootSnapshot.PotionRewardOutlook.ReplacementHpCredit}");
+            search.PotionRewardOutlook = rootSnapshot.PotionRewardOutlook;
             _combat.State = state;
             if (!IsMultiplayerSession)
             {
@@ -1247,7 +1248,8 @@ internal static partial class SolverController
                 host,
                 turn,
                 deployWhenReady,
-                _combat.ReviewedWorldlinesTotal);
+                _combat.ReviewedWorldlinesTotal,
+                rootSnapshot.PotionRewardOutlook);
             Entry.Logger.Info(
                 $"[CombatSolver/Test] SEARCH_REQUEST generation={generation} reason={reason} " +
                 $"cause={CauseToken(replanCause)} previous_boundary={previousBoundary?.ToString() ?? "-"} " +
@@ -1469,7 +1471,8 @@ internal static partial class SolverController
                 host,
                 player.PlayerCombatState!.TurnNumber,
                 deployWhenReady: true,
-                _combat.ReviewedWorldlinesTotal);
+                _combat.ReviewedWorldlinesTotal,
+                search.PotionRewardOutlook);
             Entry.Logger.Info($"[CombatSolver/Test] DEPLOY_WAIT generation={search.Generation}");
             return;
         }

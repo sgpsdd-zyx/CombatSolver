@@ -53,7 +53,8 @@ internal sealed partial class CombatBeamSolver(
     // Single-player power projections do not interpret party histories or spend advisory work.
     private readonly bool _hasRegisteredPowerCards = policy.Multiplayer == null
         && root.PlayerCardIds.Any(PowerCardValuationModels.Registry.ContainsCardId);
-    private readonly bool _keysCombatHistoryCounters = CombatHistoryCounterKey.AppliesTo(root.PlayerCardIds);
+    private readonly SearchRequestWorkTotals _replayWork = policy.RequestWorkTotals ?? new();
+    private readonly CombatHistoryDependencies _historyDependencies = root.HistoryDependencies;
     private readonly bool _isActEndingBoss = root.IsActEndingBoss;
     private readonly BossHpRelief _bossHpRelief = root.BossHpRelief;
     private readonly BossHpRelief _strategicBossHpRelief = ActEndingBossPolicy.ResolveStrategicHpRelief(

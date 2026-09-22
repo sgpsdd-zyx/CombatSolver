@@ -1,6 +1,6 @@
-# 多人军师（基于官方 0.43.2）
+# 多人军师（基于官方 0.44.0）
 
-当前源码与 GitHub 已发布版本为 [0.43.6](releases/0.43.6-RELEASE_NOTES.md)，修复死亡队友重算及效果生命周期。分支合入官方 `3f4002bd / 0.43.2`，包含完整当前回合覆盖后的长线比较、多人遗物归属与佩尔之眼修复。上限十四个敌方周期，普通手动请求时间/节点上限仍为原值两倍；单人保持该官方版本路径。官方标签不含 fork 多人功能。原始研究与历史版本见[策略索引](strategy/README.md#多人研究归档)，上游兼容见[合并记录](strategy/upstream-0432-merge-20260920.md)，长线策略见[实施归档](strategy/pro-window-selection-20260920/implementation.md)，渠道凭证见[发布记录](releases/0.43.6-PUBLISH.md)。真实联机尚未验收。
+当前源码已合入官方 `42e09028 / 0.44.0`，单人保留该官方版本行为。下文多人政策暂与已发布 [0.43.6](releases/0.43.6-RELEASE_NOTES.md) 一致：十四个敌方周期、普通双倍额度、完整回合覆盖及 3 HP 目标；本次用户已授权在合并归档后替换为不预测队友的本机贡献目标，尚未实施。合并直接证据见[记录](strategy/upstream-0440-merge-20260922.md)，原长线政策见[实施归档](strategy/pro-window-selection-20260920/implementation.md)。GitHub 已发布版仍基于官方 0.43.2，见[发布记录](releases/0.43.6-PUBLISH.md)；真实联机尚未验收。
 
 ## 使用方式
 

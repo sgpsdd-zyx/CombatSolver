@@ -1,5 +1,161 @@
 # CombatSolver 测试清单
 
+## 官方 0.44.0 合并（2026-09-22，本 fork）
+
+- 合并版与独立官方版 Release/离线宿主均构建通过；同根单人 92 项非时序字段及完整路线一致，1750 展开 / 4363 转移 / 2 HP，四个多人入口零进入。
+- 多人兼容 13 项、死亡队友/复活/手动重算合同通过；循环显示纯合同 125473 项通过。
+- 原生 UI 本地化与历史依赖合同通过，快速通道对账启用，实例已由启动器删除。Bash 职责门禁通过，PowerShell 仅同步规则。
+- 军火库回合开始夹具先因 1 HP 敌人未覆盖前缀，调整后的九牌夹具在 120 秒内未返回；本轮未验证。GC 异常诊断夹具未进入实际 No-GC 区域，后续检查未验证。
+- 精确输入、证据位置及第一轮知识归档见[合并记录](strategy/upstream-0440-merge-20260922.md)。无可见 Steam 或真人联机；不重复借用下列上游测试。
+
+以下“上游历史”段落导入官方 0.44.0，保留其原始证据与限制，不计为本 fork 本轮验证；当前合并记录另列。
+
+## 上游历史：0.44.0 发布验证范围（2026-09-22）
+
+- 本次定版仅变更版本与文档，复用下列集成、UI 本地化、左起编号及完整部署的成功证据；由最终提交执行一次 Release 构建并生成最小包，统一脚本记录三个渠道的发布结果。
+- 未追加可见 Steam 验收或性能测试，不将已有无头结果扩展为可见效果或通用性能保证。
+
+## 上游历史：生成敌人编号与循环分组（2026-09-22）
+
+- 左起编号修正：`UI-LOCALIZATION` / `3f56d808fea54349a12b4d92cc560427` 在原生 `PHROG_PARASITE_ELITE` 场景 Passed（26.40 秒）。eng/zhs/zht 下倒序创建四只扭动虫，编号逐项对齐原版 Marker2D 横坐标顺序；Fork 与移除已死敌人后标签保持。此项替代此前内部战斗 ID 后缀的显示约定，既有根敌人标签保持。
+- `SPAWNED-LEFT-ORDER-DEPLOY` / `ac863c2c1bc1463b99986ce8c535bdc7` Passed（23.45 秒）：原生寄生虫场景，五张打击/五能量/100力量，先杀寄生虫再杀四只扭动虫；严格增量、Instant/0 完整执行，5动作零损T1获胜、0计划外重算。该最小场景经过目标生成与最终击杀注释的生产路径，不代表截图原局面的完整复现。
+- 最终 Windows Release 0 警告、0 错误，PowerShell 结构门禁 `search_files=208`；两个实例均由启动器删除，未进行可见 Steam 验收。
+- `UI-LOCALIZATION` / `d63691bed27a4f8faf9a84ba41a3ac9f` Passed（26.22 秒）：每种 eng/zhs/zht 语言下，从冻结根的模拟器创建四只扭动虫，核对标签各异、含战斗 ID、Creature 与击杀记录名称入口一致。新增显示身份合同核对物理手牌序号/阵容索引归一化、不同 CombatId 即使同名也分开、Search 原键仍区分物理手牌序号；既有高亮、宽窄布局与复用合同通过。
+- 循环展示纯合同 125473 项通过，含两次重复直接展开、三次折叠、完整序列还原与动作索引唯一映射。Windows Release 0 警告、0 错误，PowerShell 结构门禁 `search_files=208`。
+- 首次新增测试 `0aebe0e839d74f599900a260452212d7` 在测试准备中把主线程根捕获放进隔离域，被 Power 惰性物化保护拒绝；仅修正测试的捕获顺序后通过。两次实例均已清理。未获得截图原局面的完整路线日志，未进行该原局面逐动作复现或可见 Steam 验收。
+
+## 上游历史：紧凑循环动作组（2026-09-22）
+
+- 虚线在上次位置基础上再下移 2 像素：仅调整绘制坐标，Windows Release 构建 0 警告、0 错误；未重跑行为测试，可见观感未验收。
+- 虚线按实机截图下移 1 像素：仅修改绘制坐标，Windows Release 构建 0 警告、0 错误；未重跑行为测试，调整后的可见观感未验收。
+- 蓝色虚线追加：Windows Release 0 警告、0 错误；`UI-LOCALIZATION` / `1299d057871f4c2aac47486b1297c7f1` Passed（26.36 秒），既有中英简繁、紧凑高度、宽窄往返、高亮与复用合同通过。源码仅在现有空间绘制下划线，未改变布局尺寸；未进行可见观感验收。实例 `loop-dashed-underline` 已由启动器删除。
+- `UI-LOCALIZATION` / `1ccc7277cdba46279dc5c1e295f496b0` Passed（26.39 秒）：eng/zhs/zht 中 41 个动作折叠为一个双动作循环组与独立末击；次数位于动作右侧，宽布局贴合内容、组高仅增加外框留白、末击同排，窄布局内部换行且动作/次数均被外框包围，宽→窄→宽恢复通过。循环中间/末次/后缀高亮及行复用通过，既有完整本地化合同通过。
+- Windows Release 构建 0 警告、0 错误，PowerShell 结构门禁 `search_files=208`。无头实例 `compact-loop-ui` 已由启动器删除；仅 UI 布局与显示变化，未重跑搜索语义或性能基准，未进行可见 Steam 观感验收。
+
+## 上游历史：PR #123 / #124 / #125 合并验证（2026-09-22）
+
+- 行为基线为计算失败修复 `94254728` 加三个原 PR，合并提交 `0f7d6935`；两处计算失败生产修复文件与 `94254728` 完全一致。Windows Release 构建 0 警告、0 错误（`CopyModOnBuild=false`）；PowerShell 结构门禁 `search_files=208`、108 项组合合同、122505 项循环显示索引断言、12 项循环预算分类与 2 项比较上下文测试通过。
+- 同一个无头进程启用 `COMBATSOLVER_VERIFY_FAST_LANES=1`，以下定向合同通过；这是合并组合的运行证据，作者的离线性能与大语料结果仍按各自原基线引用。
+
+| 场景 | runId | 核对边界 |
+| --- | --- | --- |
+| ARSENAL-HAND-DRAW-SHUFFLE-CHOICE-REPLAY | `b70cc6575b474bbb8280fd3e0800466f` | 回合开始 Power 通知、选牌检查点、DOP1/DOP2、取消和异常 |
+| ADJUSTED-ROUTE-INVALID-SUFFIX | `7a29239c6c5341e2a83b6eb1919f5cfc` | 失效手牌后缀、终局后缀舍弃与合法路线保留 |
+| SEARCH-HP-TARGET-STOP | `39a66450ae2b4e3a94ec2d52ec788cc6` | 组合早停、治疗保护、成长、强制与智能用药、DOP2 |
+| LOOP-HISTORY-DEPENDENCIES | `c8977ec522cd4660b143f4c085bd262e` | 三类牌堆历史键、未来生成读者、Fork 与并发共享额度 |
+| LOOP-REPLAY-REQUEST-BUDGET | `515228c6cb8e4e94915bcc3676f101ec` | 两个真实 solver 分别消费 96/0 次回放、请求总额4096、前缀续搜、严格增量与 live 不变 |
+
+- 反伤完整部署首次运行 `72d0e86119044d9bb515872f356f41b7` 在 NoGC 配置断言失败：搜索得到了零损 T1 胜利，生命周期统计有一次区域建立与结束，但断言时区域已结束，尚未完成部署验收。保留失败记录，未将其计为通过；本批无头实例 `pr123-125-integration` 已由启动器删除。
+- 同一反伤夹具显式关闭 NoGC 后，`LOOP-DEFENSE-REPLAYED-THORNS-RESERVE` / `f35a94cf82c2456e8b161a8e2cf41bff` Passed：快速通道对账模式、严格增量、Instant/0 完整部署，3 动作、零损 T1 胜利、零计划外重算。独立实例 `pr123-125-deploy` 已由启动器删除。该结果证明本场战斗语义与部署，未解决或验收前述 NoGC 保留断言。
+- 本轮未验证可见 Steam、性能收益或任意第三方补丁回退；未发包或更新本地游戏 Mod。
+
+## 上游历史：下一版本（开发中）：计算失败
+
+- 未结清 Power：原玩家包 `716a294f…` 的 `search_request_AutoTurnStart` 检查点，修复前 `SearchOnly` 在第 5 回合的预抽牌前缀以 `STRENGTH_POWER:1` Failed（runId `3219ddc70d9e420e99b61a8762825b11`）；来源追踪确认为“军火库”在摸牌前生成牌时加力量。修复后同一包同一检查点 Passed（runId `ec5a5bc9f00749eeb1afdb7117fd759f`），搜索包括 2050 次回合前缀捕获与 1001 次复用。独立 `ARSENAL-HAND-DRAW-SHUFFLE-CHOICE-REPLAY` Passed（runId `38d1275a230f4b2e800a9838a0eb03fb`），覆盖生成牌、力量变更、预抽牌检查点、选牌兄弟分支及 DOP1/DOP2 等价；无头，不代表玩家战斗的可见部署。
+- 插入路线：`ADJUSTED-ROUTE-INVALID-SUFFIX` Passed（runId `038c4e9ef71943f28559f3d91c6ea1e1`），同一真实模拟根分别验证计划手牌状态失效、致胜后仍有 EndTurn 的后缀被舍弃，合法致胜动作保留。终局原玩家包 `5b184b7d…` 在本机原生还原阶段因第三方模型的 `SavedProperty net ID 51` 与当前可用的 47 项不匹配而 Failed（非搜索断言）；未宣称原包搜索通过。20/9 两组的其他原包、可见 Steam 和长期路线质量未逐份复测。
+- 结构门禁 `REFACTOR_BOUNDARIES_OK search_files=206`；当前行为源码 Release 构建 0 警告、0 错误。各无人实例均已停止；本地游戏 Mods 目录的部署不等于可见 Steam 验收。
+
+## 上游历史：下一版本：热路径快速通道
+
+- 等价性（High 90/50000、Coordinator、Smart、DOP 1）：EQ 10 + FULL 40 + GA 10 对未改动 0.43.2，`compare_results.py` 5,590 字段 `IDENTICAL`。变基到 `8826a333` 后加 5 个能力哨兵根共 65 根重跑：64 根 6,016 字段一致；`POWER-REGENT-ELITE` 在 600 秒批次预算下两臂各自撞上用药梯度的到期停止（机器降频，展开数 110000 对 106716），把预算放到 1,800,000 ms 单进程各跑两次后四次都停在节点上限，展开、转移、选牌分支、路线、分数逐字段一致。
+- 校验模式 `COMBATSOLVER_VERIFY_FAST_LANES=1` 10 根零失败；负对照：故意改错 `AfterCardPlayed` 早期一趟的位图，校验 208 ms 内抛出并点名 `Kusarigama`，同一错位图不开校验时把 `EQ-IRONCLAD-ELITE-00` 从 `expanded=12190 / hpLost=52` 改成 `12785 / 74`。
+- 计时（A B B A，每臂 4 次，机器空闲，单进程）：5 根跨根中位 −3.27%（−0.63% ~ −4.11%），REGENT、NECROBINDER、DEFECT 三根两臂完全分离；60 根分配总量 −0.41%，65 根批次 −0.56%（55/64 根下降）。批次并行时的墙钟受降频影响（同根同 DLL 满载 40 分钟后漂 20% 以上），不作计时依据。
+- 只在离线宿主验证，未在游戏内验证；未测 DOP > 1；带第三方 mod 时位图关闭的回退只做了代码审查。
+
+## 上游历史：下一版本：默认组合再分配
+
+- 默认组合再分配最终验收：新种子REALLOCATED-HOLDOUT35根/70进程，34对Comparable、1基线超时；2早结束/31同/1多损2 HP，无胜负翻转。Low/High两代表4对全部Comparable，Low防御多1回合，High消耗高压少7 HP。最终4根16次独立进程ABBA全部Comparable，同配置重复路线/质量/剪枝/工作完全一致；新接线与冻结双开关、关闭接线与冻结基线的代表根等价。108项组合合同、2组比较上下文、两端208结构边界、Release/宿主0警告错误通过。
+- 原生 `CONTEXTUAL-REALLOCATED-DEPLOY` / `f51aa294fe2749d3b1f6b30e00e0fc8a` Passed，42.78秒：默认候选10 HP/0药/T9路线完整执行至胜利，0意外重算，Instant/0，实例清理；17742展开/75006转移。独立test没有战损改善，Regent+2 HP及ABBA托管采样均值+13.31%等代价如实保留；不外推Windows或可见性能。详见[完整再分配证据](strategy/contextual-portfolio-reallocation-20260922-evidence.json)。
+
+普通基线消融/有界进攻组合：开发32根均Comparable，战损/用药不变、结束回合1好/1差；组合保留训练代表消耗高压17→10 HP的离线收益，开发转移−4.73%、分配−4.11%，明确保留内存与发布延迟尾项。这是独立test前的开发阶段记录；最终独立测试、默认接受、原生和ABBA结果见本页顶部。宿主新元数据编译0/0、2组比较上下文检查通过；见[证据与协议](strategy/contextual-portfolio-reallocation-20260922-evidence.json)。
+
+已撤回条件窄成员替换原型：训练5根1好/4同；开发验证32根1好/31同，均未见时间截断，无胜负翻转，总转移−0.92%、分配+0.63%。原型115项组合合同、Release/宿主及两端208门禁通过；源码/合同已归档，不能把活动检查程序说成包含这些新合同。未运行新独立test、原生或ABBA；见[证据](strategy/contextual-structural-refinement-20260922-evidence.json)。
+
+后置结构探索实验（默认关闭）：5个训练代表1好/4同；validation32根实际预算观察1好/31同，无胜负翻转，其中8根新颖性时间截断，未截断24根1好/23同。原Beam成员工作/质量32根全部保持，唯一改善少1 HP；新增11项预算合同、12项停止原因分类检查、2项CLI拒绝通过，两端结构门禁208。没有新独立test、原生部署或ABBA验收；成本与尾项见[结构化证据](strategy/contextual-adaptive-novelty-20260922-evidence.json)。
+
+## 上游历史：上下文排序与组合成本（2026-09-22，排序模型仍关闭）
+
+- 单进展值同分截线实验：V1训练Evaluate20根5好/11同/4差、各1次胜负翻转；完整8代表2好/6同，但validation出现候选独有超时。仅基础分V3的validation32根2好/30同；冻结后test34可比根0好/32同/2差、无胜负翻转，另1基线超时并省略候选。实际战损+9、战略战损+15 HP，包含少回血与少用药的反例；默认关闭，不声明原生/ABBA通过。纯值生产方法合同覆盖单组排序、必保位置及旧旁路；最终默认/显式入口控制与构建/门禁见[结构化证据](strategy/contextual-tactical-ties-20260922-evidence.json)。
+
+- 有界追加进攻成员：五个完整训练请求1好/4同，32个validation可比请求0好/32同/0差（3对双方120秒超时排除），原成员的预算/准入/结果/展开/转移逐条保持。追加成员21次运行、11次达标跳过，validation无赢家；总转移+3.36%，默认关闭。合同106项、非法CLI组合5项、构建0/0、两端门禁208通过；不声明该排序原生或ABBA通过，test划分未使用。
+
+- 窄进攻精炼替换宽成员：五个完整请求训练代表1好/4同，消耗高压17→10 HP；新种子validation35根32可比/3双方120秒超时，0实质改善/28同/4差，三根各+1 HP、一根0损多3回合，总转移−6.69%，拒绝默认启用。32根原普通主搜/窄成员工作与结果保持；两根关闭实验的完整路线/质量/工作保持。生产组合合同100项、四个非法组合、构建0/0、两端门禁208通过。独立2426节点探针仍找到10 HP见证，但有界追加尚未接入，不声明该候选原生或ABBA通过。
+
+- 三项Beam敏感度140次训练测量全Comparable：敌方血量1.5倍在20根为8项实质改善/12同，但完整Coordinator五根仅少一回合且出现消耗高压胜转败，拒绝默认启用；没有为该候选声明原生/ABBA通过。20根默认结果与工作量保持；2根1倍扰动完整路线及工作量保持；9个非法/冲突参数拒绝，Release/宿主0/0，两端门禁208。见上下文实验记录及结构化敏感度证据。
+
+- 组合目标早停初版35根：33可比/2双方120秒进程超时；31项实质相同、2个防御根多1/3回合，无胜负翻转/战损/回血差异，11根工作减少。7个定向治疗边界暴露少回血及延后卖血回血机会；加入主线程冻结的Heal变量/已有再生与实际回血保护后，11触发根质量/工作保持，7个边界与原基线完整政策和展开/转移相同。其余22个未触发重根未重新运行，不混称最终整批复测。
+- 最终 `SEARCH-HP-TARGET-STOP` / `042d6ed60cdf47de9681a9c16e14ffeb` Passed，25.72秒：达标跳过、关闭开关保留审计、待抽治疗牌未实际回血时保留审计、DOP2、阈值3、成长/固定重放与混合用药合同通过，实例清理。此前未保护版runId `36c798602c1847709a2b3aebea302c1d` 只作为初版记录。最终Release/宿主0/0，两端结构门禁208通过；正式ABBA及默认配置完整部署见实验记录。
+
+- 最终4根16次独立进程ABBA全部Comparable；两种收益根耗时−76.72%/−75.00%，防御根0损但T11→T13；未触发根耗时约0%/+0.39%，采样托管峰值+12.04%/+19.56%、工作集+1.43%/+3.27%，明确保留这些内存尾项。重复质量和展开/转移一致。
+- 默认配置原生完整执行 `CONTEXTUAL-TARGET-STOP-DEPLOY` / `6dfaaebbb5784a0c896fe88c8136c288` Passed，29.85秒，预测0损路线执行至T6、0意外重算、结束HP下限65，Instant/0，实例清理。没有Windows或可见Steam性能验收。
+
+- 自生成 105 根；训练 35 根的 105 次排序观察中 101 Comparable、4 TimeLimited，全部进程成功；时间截断不进固定工作量质量/性能结论。20 个定向根采集 60 次，得到 94 个有实质政策差异的候选配对，13 个根贡献标签；未知被剪分支不标负样本。
+- `RankingChecks`：514 组真实/边界特征的 Python/C# 对齐，连同模型版本、范围、截断与终局旁路共 14921 个断言通过。
+- 未注入模型的候选 DLL，在 `exhaust_resources-train-high`、`target_order-train-low` 两根与冻结基线的根、完整路线和所有非时序 pruneCounters 相同。
+- 第一个模型的 20 根复搜：原政策含尾分为 7 好/4 差/9 同；去旧 Score 尾键为 6 好/4 差/10 同。消耗牌高压根由胜转败，拒绝；未进入 validation/test 或原生部署验收。不得把这些数字表述为已完成优化或普遍不退化。
+- 两端结构门禁通过（208 Search 文件），Python 工具编译检查通过；追加三根六次外层保路诊断无时间边界。
+- 连续威胁排序：全部中途节点版本20根4好/1差，拒绝；仅新回合起点版本20根3好/0差/17同，验证集35根3好/3差/29同；最终test35根2好/3差/30同，含两次胜转败。105根中104可比，1根墙钟截断排除；完整Coordinator另测，不声称训练外零退化。两版源码均编译0/0，终局/转置政策保持，默认关闭。
+- 新增无人预算参数：Release与宿主构建0/0，Bash/PowerShell参数语法与非法范围拒绝通过；原生 `CONTEXTUAL-BUDGET-OVERRIDES` / `0ded12cc74694c3d90ea8bdb8a0f8992` Passed，Beam24/20000实际注入，0 HP/T1完整执行，0意外重算，实例删除。宿主M1元数据核对真实请求种子通过。此项未启用实验排序。
+- 完整Coordinator test35根：33Comparable、2TimeLimited排除，主要质量2好/1差/30同，无胜负翻转；默认Medium/组合开启3个代表主要质量全同。候选仍关闭，未作最终ABBA；全部工作量与反例见下述记录。
+- 当前排序证据是离线测量与纯值合同，没有可见 Steam 或原生新排序行为验收；复现命令和后续结果见[实验记录](strategy/contextual-ordering-20260922.md)。
+
+## 上游历史：循环外层胶囊（2026-09-21）
+
+- `UI-LOCALIZATION` / `ffaa5652dcfe42e89eea9e7cbd10e789` Passed：eng/zhs/zht 的 41 动作显示为「外框含 2 动作 ×20」加独立末击；在真实 Godot 容器中宽→窄→宽，断言框内换行、标题及动作完整包围、宽度不超父流；周期首/中/末次执行高亮、后缀高亮、重复填充复用通过。
+- `ROUTE-ROW-REUSE` / `254c96d24a6d45eb9031971398696611` Passed：完整显示身份、失败填充重试、语言往返及订阅清理。既有非循环 16 动作行的两组 64 次不变填充分别 0.2099 / 0.1784 ms、各 48 B；这只证明既有复用路径，不作为循环新建布局或可见帧率的数据。
+- Release 0 警告/0 错误；两项均用 120 秒上限和 `--cleanup-instance-on-exit`，实例已删除。没有改动搜索/模拟/执行数组；每个循环仅多 2 个容器节点。尚未验收可见 Steam 排版。
+
+```bash
+./tools/run-unattended-test.sh --scenario-id UI-LOCALIZATION --timeout-seconds 120 --cleanup-instance-on-exit
+./tools/run-unattended-test.sh --scenario-id ROUTE-ROW-REUSE --evidence-directory "$PWD/.local/loop-group-row" --timeout-seconds 120 --cleanup-instance-on-exit
+```
+
+- PR #123 / 上游 8826a333 整合：Release 0/0、两端门禁 207；UI-LOCALIZATION `70dae8a331234fcbb6e3a51a40a089f1` 与必要格挡原生部署 `19f8f8ad583b4b029a5c559f759243fa` Passed，实例清理；cap / 多 solver 两组与 656a9608 完整路线、质量 Equivalent。
+
+- [循环请求额度与历史依赖收尾](performance/loop-final-20260921.md)：28 组（26 根）/23 完整同路线/5 改善；4 个最终原生场景 Passed（历史依赖、两 solver 共享额度、两种投影范围外伤害必要格挡）；严格增量与完整部署分别记录，实例全部清理。Python 10 项与两端结构门禁通过；ABBA 将时间切层组标为 Inconclusive，另列无时间切层的固定节点实验。
+
+## 上游历史：循环预算审计跟进（2026-09-21）
+
+- [F1/F2/F3 修正及证据](performance/loop-boundaries-20260921.md)：8 项 Python 分类合同；正常预算 cap＋finisher 的 A/B Equivalent；主动 2000 ms 时间切层两侧各 time=3/node=0，原始未击杀观察保留，工具正确返回 Inconclusive／2。无时间边界的差异仍退出 1，不放宽为自动通过。
+- 新 `generic-loop-replay-estimate-margin.json` 离线单 solver：6835 HP，6 展开／4107 转移、4095 额外回放、零损 T1；估算 4101 并不证明超过 4096 无法完成。非原生验证，不加入原 19 根 A/B 等价集。
+- Release 0 警告／0 错误；遥测拆分不改变搜索判断或战斗语义，未重跑之前通过的四项原生部署。请求级累计额度仍未验证，不将 Evaluate 的 4096 检查外推到 Coordinator。
+
+```bash
+python3 -m unittest discover -s tools/OfflineSearchHarness -p test_loop_boundaries.py -v
+```
+
+## 上游历史：追加循环边界与审计（2026-09-21）
+
+- [19 根边界集及审计复核](performance/loop-boundaries-20260921.md)：同根串行 A/B；质量指标均相同，18 根完整路线相同，1 根同质量异路线。包含隐藏相位、Buffer、格挡、4096 耗尽、替代出牌、付费抽牌、低血卖血、三目标、选牌、星能和 BansheesCry。离线显式检查见 `coverage/unattended/loop-boundaries-20260921/suite.json`。
+- 耗尽反例 ABBA：展开/转移 4675/9375 → 4675/13471，路线及 4 HP/T2 相同；求解 +11.3%、累计分配 +14.9%、采样活对象峰值 -18.6%。不是无退化验收。
+- 下列前三项严格增量及完整原生部署 Passed、0 计划外重算；最后一项在首次结果断言后停止。runId 与实例清理记录见报告。不是历史 EQ10/FULL40；P4 投影低估反例尚未验证。
+
+```bash
+./tools/run-unattended-test.sh --scenario-id LOOP-BOUNDARY-LETTER-BRANCH-FINESSE --character-id IRONCLAD --encounter-id FUZZY_WURM_CRAWLER_WEAK --seed LOOPLETTEROPENERPHASE0111 --enemy-current-hp 61 --initial-player-hp 80 --initial-player-max-hp 80 --initial-player-energy 0 --clear-player-piles --clear-all-powers --cards-json '[{"cardId": "IMPATIENCE", "pile": "Hand"}, {"cardId": "FINESSE", "pile": "Hand"}, {"cardId": "IMPATIENCE", "pile": "Discard"}]' --relics-json '[{"relicId": "LETTER_OPENER"}]' --force-short-search-only --short-search-budget-override-milliseconds 10000 --search-max-degree-of-parallelism-for-test 1 --measure-search-phases --timeout-seconds 120 --performance-preset-for-test Low --initial-enemy-max-hps-json '[61]' --initial-enemy-current-hps-json '[61]' --expected-initial-projected-battle-hp-lost 0 --expected-initial-combat-ended-turn 1 --expected-initial-final-enemy-hp-at-most 0 --verify-incremental-search --expected-unexpected-replans-at-most 0 --cleanup-instance-on-exit
+./tools/run-unattended-test.sh --scenario-id LOOP-BOUNDARY-MULTI-TARGET --character-id IRONCLAD --encounter-id CORPSE_SLUGS_NORMAL --seed LOOPLETTEROPENERPHASE0111 --enemy-current-hp 9 --initial-player-hp 80 --initial-player-max-hp 80 --initial-player-energy 0 --clear-player-piles --clear-all-powers --cards-json '[{"cardId": "FLASH_OF_STEEL", "pile": "Hand"}, {"cardId": "FINESSE", "pile": "Discard"}]' --relics-json '[]' --force-short-search-only --short-search-budget-override-milliseconds 10000 --search-max-degree-of-parallelism-for-test 1 --measure-search-phases --timeout-seconds 120 --performance-preset-for-test Low --expected-initial-projected-battle-hp-lost 0 --expected-initial-combat-ended-turn 1 --expected-initial-final-enemy-hp-at-most 0 --verify-incremental-search --expected-unexpected-replans-at-most 0 --cleanup-instance-on-exit
+./tools/run-unattended-test.sh --scenario-id LOOP-BOUNDARY-BLOCK-BODY-SLAM --character-id IRONCLAD --encounter-id FUZZY_WURM_CRAWLER_WEAK --seed LOOPLETTEROPENERPHASE0111 --enemy-current-hp 37 --initial-player-hp 80 --initial-player-max-hp 80 --initial-player-energy 0 --clear-player-piles --clear-all-powers --cards-json '[{"cardId": "FINESSE", "pile": "Hand"}, {"cardId": "FINESSE", "pile": "Discard"}, {"cardId": "BODY_SLAM", "pile": "Discard", "upgradeLevels": 1}]' --relics-json '[]' --force-short-search-only --short-search-budget-override-milliseconds 10000 --search-max-degree-of-parallelism-for-test 1 --measure-search-phases --timeout-seconds 120 --performance-preset-for-test Low --expected-initial-projected-battle-hp-lost 0 --expected-initial-combat-ended-turn 2 --expected-initial-final-enemy-hp-at-most 0 --verify-incremental-search --expected-unexpected-replans-at-most 0 --cleanup-instance-on-exit
+./tools/run-unattended-test.sh --scenario-id LOOP-BOUNDARY-BLOOD-LOW-HP --character-id SILENT --encounter-id FUZZY_WURM_CRAWLER_WEAK --seed LOOPBLOODPOMMELQUALITY0111 --enemy-current-hp 40 --initial-enemy-move-ids-json '["INHALE"]' --initial-player-hp 4 --initial-player-max-hp 57 --initial-player-energy 0 --clear-run-deck --clear-player-piles --clear-all-powers --cards-json '[{"cardId": "BLOODLETTING", "pile": "Hand", "treatAsDeckCard": true}, {"cardId": "POMMEL_STRIKE", "pile": "Hand", "count": 2, "upgradeLevels": 1, "treatAsDeckCard": true}]' --force-short-search-only --short-search-budget-override-milliseconds 10000 --search-max-degree-of-parallelism-for-test 1 --measure-search-phases --stop-after-initial-solver-result-assertion --timeout-seconds 120 --performance-preset-for-test Low --expected-initial-projected-battle-hp-lost 3 --expected-initial-combat-ended-turn 2 --expected-initial-final-enemy-hp-at-most 0 --cleanup-instance-on-exit
+```
+
+## 上游历史：下一版本（开发中）：循环验证（2026-09-21）
+
+- [循环报告及逐次数据](performance/loop-optimization-20260921.md)：2000 HP、1200 动作 A/B 路线逐字段相同，零损 T1；最终 DOP1/DOP2 6 展开/1206 转移一致，最大父节点并发 2。分支根关闭早停时 101/256 一致，动作并发 2；仅调度计数、lane 局部缓存条目数不同。
+- `LOOP-DEFENSIVE-VALUE` / `50cfafd5acc642508e18840ab459f69a` Passed：100→200 格挡饱和、Barricade 原生保留、固定保留上限、BansheesCry 历史读者门控。Release 0 警告/0 错误，Bash/PowerShell 两端结构门禁均通过（search_files=206）。
+- `LoopDisplayChecks`：122505 断言通过。`UI-LOCALIZATION` / `275d2dcafd214c62b675f5832a11993d` Passed；`ROUTE-ROW-REUSE` / `5ec0d3f0b90c450b8c43a87b0cdaee25` Passed。41 动作折叠、额外重放与末击后缀、循环高亮、失败重试、完整显示身份复用、中英简繁及订阅释放通过；未做可见排版验收。
+- `LOOP-REPLAY-DEPLOY` / `d4867a3cb9154340a85fe848d1139a56` Passed：40 HP、24 动作、零战损 T1、严格增量/全前缀核对、原生部署、0 非预期重算。严格回放的时间不用于性能表。
+- 新 `generic-loop-bloodletting-no-postcombat-heal-quality.json` 排除燃烧之血战后回血干扰，A/B 675/1820、3 HP/T2，完整路线相同；原生 `41f101db99fa4f8fb9a55bd6494cc456` 同断言 Passed。旧铁甲战士夹具仍会给 6 HP/T1（战后补满），不能将旧 3 HP 断言误报为通过。
+- 50 万 HP 成长循环按 Low 60000 节点、RequireAtLeastOne 对照：两侧 10555/22248、零损 T1、完整路线相同。6000 节点的早期内环两侧都失败，只说明该预算不足。
+
+
+## 上游历史：0.43.3：余像路线与战后掉药预测
+
+- 药水奖励机会成本：更新纯合同，概率 100%/40% 但结果未知的满栏情形额度均为 0；确定掉药按预测药水档位抵扣一次，确定不掉、药栏未满和禁用获得药水时额度为 0。UI 本地化合同新增搜索刚开始即显示预测掉药/不掉药，关闭预测时清空；英/简/繁分别核对。本地 Release 构建 0 警告、0 错误，自动部署的 DLL 与构建 DLL SHA256 一致。没有运行无人游戏合同或可见实机。结构门禁本次失败：`CombatBeamSolver.BlockPotionInsertion.cs` 缺少脚本硬编码的 `ReplayInsertedRoute(`，但当前 HEAD 的该文件原本就命名为 `ReplayAdjustedRoute(`，本次未改动该文件；不把门禁当作通过。
+- 依据玩家本机 `combat-a6529611f1c3484bafe6d8a7d4f07f1d.jsonl` 的第 2 回合计划，原路线先撕咬／暴政、后打两张余像，原计划的逐动作格挡与原生 Hook 口径对得上；前置路径尚无同根实机执行证据。用户明确要求停止测试，已终止隔离场景并清理实例；本次只执行 Release 编译（0 警告、0 错误），没有将编译当作路线改善验证。
+- `CombatSolver.GcPolicyChecks`：Linux / Windows 各 54 项通过（26 + 8 + 9 + 2 + 1 + 8）。新增 `diagnostic-failure` 用工具侧日志替身验证八条故障路径、异常身份、排队手动任务和后续搜索准入；上游检查点失败与中间版本漏结清手动任务均有 12 秒超时基线。
+- Release 构建及 Bash / PowerShell 结构门禁通过。当前上游 `3f4002bd` 的组合候选 ABBA：三场 12 份有效搜索，6 对非时序指标和完整记录路线一致；因耗时/峰值代价撤掉根缓存。另保留一份系统压力导致 No-GC 未建立的失败基线，不计入性能均值。
+- Skittish 单独筛选两场 8 份搜索、4 对对账一致，2 项原生差分通过；收益/代价仍不足，一并撤掉。最终纯修复版花园冒烟 Passed（`bed2628af2e94abd843a0c45103bbc05`），与上游非时序指标/路线对账无差异，最大 GC 暂停仍为 1645.559 ms。验证与清理证据见 [本轮报告](performance/gc-completion-allocation-20260921.md) 和 [结构化数据](performance/gc-completion-allocation-20260921.json)。均为无头或 CLR 证据，未验证可见 Steam 帧时间或整场自动部署。
+- #122 合入 0.43.3 时处理两项审查意见：多次失败合并时展平既有 `AggregateException`，未取得回收后堆快照时三个指标用 `-1` 明确表示未知，不再伪装为真实 0。合并组合在 Windows 上运行 `diagnostic-failure` 8 项通过，结构门禁 `REFACTOR_BOUNDARIES_OK search_files=206`，Release 构建 0 警告、0 错误并自动部署本地 Mod；没有重跑作者已完成的 20 份性能对照、Linux 合同或可见 Steam。
+
 ## 多人目标重设计研究（2026-09-22）
 
 固定 `95fd98572884c1f2da97ffd5120167815fca6403 / fork 0.43.6`，只研究，不改变现役行为。现场 `.local/mp-coop-strategy-20260922/`，资料与复跑范围见[研究入口](strategy/multiplayer-cooperative-planning-20260922/README.md)。

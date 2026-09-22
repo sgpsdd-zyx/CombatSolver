@@ -171,6 +171,7 @@ internal sealed class SolverSearchSession(
 
     public int Generation { get; } = generation;
     public int StartTurnNumber { get; init; }
+    public PotionRewardOutlook PotionRewardOutlook { get; set; }
     public ReplanCause ReplanCause { get; init; }
     public CombatState State { get; } = state;
     public LiveCombatStamp Stamp { get; } = stamp;

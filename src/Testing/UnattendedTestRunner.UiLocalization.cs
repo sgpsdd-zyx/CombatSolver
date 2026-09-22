@@ -17,6 +17,86 @@ namespace CombatSolver;
 
 internal sealed partial class UnattendedTestRunner
 {
+    private async Task AssertLoopDisplayAsync(bool english)
+    {
+        PlanAction targeted = new(PlanActionKind.PlayCard, 1, CardId: "STRIKE_IRONCLAD",
+            TargetIndex: 0, TargetCombatId: 10, TargetName: "Enemy");
+        SolverOverlayActionSnapshot targetDisplay = SolverOverlaySnapshot.CaptureAction(targeted, []);
+        SolverOverlayActionSnapshot otherCopy = SolverOverlaySnapshot.CaptureAction(
+            targeted with { CardOccurrence = 1, TargetIndex = 2 }, []);
+        SolverOverlayActionSnapshot otherTarget = SolverOverlaySnapshot.CaptureAction(
+            targeted with { TargetCombatId = 11 }, []);
+        if (!targetDisplay.HasSamePresentation(otherCopy)
+            || targetDisplay.HasSamePresentation(otherTarget)
+            || CombatBeamSolver.BuildCycleActionKey(targeted)
+                == CombatBeamSolver.BuildCycleActionKey(targeted with { CardOccurrence = 1 }))
+            throw new InvalidOperationException("Loop display must ignore physical copy indexes and retain target identity without changing search keys.");
+        SolverOverlayActionSnapshot a = SolverOverlaySnapshot.CaptureAction(
+            new PlanAction(PlanActionKind.PlayCard, 1, CardId: "IMPATIENCE"), []);
+        SolverOverlayActionSnapshot b = SolverOverlaySnapshot.CaptureAction(
+            new PlanAction(PlanActionKind.PlayCard, 1, CardId: "FINESSE", ReplayCount: 2), []);
+        SolverOverlayTurnSnapshot turn = new(1, [],
+            Enumerable.Range(0, 40).Select(i => i % 2 == 0 ? a : b)
+                .Append(a with { Kills = ["Enemy"] }).ToArray(), null, 5, 0, 0, 0, true);
+        SolverRouteRow row = new(0);
+        _host.AddChild(row);
+        try
+        {
+            row.Populate(turn);
+            if (row.DeploymentActionCount != 41 || row.ActionFlow.GetChildCount() != 2)
+                throw new InvalidOperationException("Loop folding lost executable indexes or kill suffix.");
+            var group = (Control)row.ActionFlow.GetChild(0);
+            var content = group.GetChild<HBoxContainer>(0);
+            var actions = content.GetChild<HFlowContainer>(0);
+            Label count = content.GetChild<Label>(1);
+            if (actions.GetChildCount() != 2 || count.Text != "×20"
+                || !group.TooltipText.Contains(english ? "Repeat" : "重复"))
+                throw new InvalidOperationException("Loop badge localization failed.");
+            foreach (int index in new[] { 0, 1, 2, 37, 38, 39 })
+            {
+                row.SetDeploymentProgress(index, index);
+                if (((CanvasItem)actions.GetChild(index % 2)).Modulate
+                    != SolverUiTokens.Palette.ActiveActionModulate)
+                    throw new InvalidOperationException("Repeated action highlight lost its modulo mapping.");
+            }
+            row.SetDeploymentProgress(40, 40);
+            if (((CanvasItem)actions.GetChild(0)).Modulate != SolverUiTokens.Palette.CompletedActionModulate
+                || ((CanvasItem)actions.GetChild(1)).Modulate != SolverUiTokens.Palette.CompletedActionModulate
+                || ((CanvasItem)row.ActionFlow.GetChild(1)).Modulate != SolverUiTokens.Palette.ActiveActionModulate)
+                throw new InvalidOperationException("Loop completion or suffix highlight failed.");
+            row.SetDeploymentProgress(41, null);
+            ulong id = row.ActionFlow.GetChild(0).GetInstanceId();
+            row.Populate(turn with { Actions = turn.Actions.ToArray() });
+            if (id != row.ActionFlow.GetChild(0).GetInstanceId()
+                || actions.GetChildren().Cast<CanvasItem>().Any(pill => pill.Modulate != Colors.White))
+                throw new InvalidOperationException("Folded row reuse failed.");
+            // Exercise wide -> narrow -> wide on live Godot containers: the enclosing
+            // frame must resize with the flow, without separating the count or clipping actions.
+            foreach (bool narrow in new[] { false, true, false })
+            {
+                row.Size = new Vector2(narrow ? row.GetCombinedMinimumSize().X : 1400, 0);
+                for (int frame = 0; frame < 6; frame++)
+                    await _host.ToSignal(_host.GetTree(), SceneTree.SignalName.ProcessFrame);
+                Control first = actions.GetChild<Control>(0);
+                Control second = actions.GetChild<Control>(1);
+                bool wrapped = second.Position.Y > first.Position.Y;
+                if (wrapped != narrow
+                    || !group.GetGlobalRect().Encloses(first.GetGlobalRect())
+                    || !group.GetGlobalRect().Encloses(second.GetGlobalRect())
+                    || !group.GetGlobalRect().Encloses(count.GetGlobalRect())
+                    || group.Size.X > row.ActionFlow.Size.X + 1)
+                    throw new InvalidOperationException($"Loop group layout failed: narrow={narrow}, wrapped={wrapped}, group={group.Size}, flow={row.ActionFlow.Size}.");
+                if (!narrow && (group.Size.X >= row.ActionFlow.Size.X - 1
+                    || group.Size.Y > Mathf.Max(first.Size.Y, second.Size.Y) + 5
+                    || count.GlobalPosition.X < second.GetGlobalRect().End.X
+                    || row.ActionFlow.GetChild<Control>(1).Position.Y > group.Position.Y + 1))
+                    throw new InvalidOperationException($"Loop group should fit content on one line with its suffix: group={group.Size}, flow={row.ActionFlow.Size}.");
+            }
+            _completedChecks.Add($"LoopDisplay:{(english ? "eng" : "zh")}:41Actions:2OuterControls:CompactInlineCount:EnclosedPeriod:WideNarrowWide:ReplayCount:KillSuffix:Deployment:Reuse");
+        }
+        finally { row.Free(); }
+    }
+
     private async Task AssertUiLocalizationAsync(CombatState combat)
     {
         using Stream stream = typeof(SolverText).Assembly.GetManifestResourceStream("CombatSolver.UI.English.json")!;
@@ -41,6 +121,42 @@ internal sealed partial class UnattendedTestRunner
                 await _host.ToSignal(_host.GetTree(), SceneTree.SignalName.ProcessFrame);
                 bool english = target == "eng";
                 var displayNames = SolverDisplayNames.Capture(combat);
+                CombatRootSnapshot nameRoot = CombatRootSnapshot.Capture(combat);
+                using (SimulationNotificationIsolation.Enter())
+                {
+                    CombatPredictionSimulator simulator = nameRoot.ForkSimulator();
+                    var simulated = (SimulatedCombatState)simulator.State.CombatState;
+                    bool positionedSpawn = combat.Encounter?.Slots.Contains("wriggler1") == true;
+                    var spawned = Enumerable.Range(1, 4).Reverse().Select(number =>
+                        MonsterSpawnSupport.Spawn<MegaCrit.Sts2.Core.Models.Monsters.Wriggler>(
+                            simulator, simulated, combat.Enemies[0], slot: positionedSpawn ? $"wriggler{number}" : null)).ToArray();
+                    string[] names = spawned.Select(creature => displayNames.Creature(creature, simulated.KnownEnemies)).ToArray();
+                    var child = simulator.Fork();
+                    var childCombat = (SimulatedCombatState)child.State.CombatState;
+                    if (names.Distinct(StringComparer.Ordinal).Count() != 4
+                        || spawned.Where((creature, index) =>
+                            names[index] != displayNames.Creature(
+                                childCombat.KnownEnemies.Single(enemy => enemy.CombatId == creature.CombatId), childCombat.KnownEnemies)
+                            || !names[index].Contains(english ? "from left" : "左起")).Any())
+                        throw new InvalidOperationException("Spawned targets must retain left-to-right labels across Fork.");
+                    if (positionedSpawn)
+                    {
+                        var scene = (Control)typeof(MegaCrit.Sts2.Core.Nodes.Rooms.NCombatRoom)
+                            .GetProperty("EncounterSlots", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)!
+                            .GetValue(MegaCrit.Sts2.Core.Nodes.Rooms.NCombatRoom.Instance)!;
+                        var ordered = spawned.OrderBy(creature => scene.GetNode<Marker2D>(creature.SlotName!).GlobalPosition.X).ToArray();
+                        for (int index = 0; index < ordered.Length; index++)
+                        {
+                            string expected = english ? $"#{index + 1} from left" : $"左起{index + 1}";
+                            if (!displayNames.Creature(ordered[index], simulated.KnownEnemies).Contains(expected))
+                                throw new InvalidOperationException("Spawn label order differs from native slot coordinates.");
+                        }
+                        simulated.RemoveCreature(ordered[0]);
+                        if (spawned.Where((creature, index) => names[index] != displayNames.Creature(creature, simulated.KnownEnemies)).Any())
+                            throw new InvalidOperationException("Removing a defeated enemy renumbered the remaining targets.");
+                    }
+                    _completedChecks.Add($"SpawnedEntityIdentity:{target}:FourWrigglers:LeftToRight:NativeSlots={positionedSpawn}:ForkStable:DeathStable");
+                }
                 if (combat.Enemies.Select(displayNames.Creature).Distinct().Count() != combat.Enemies.Count)
                     throw new InvalidOperationException("Enemy display names are ambiguous.");
                 var plainShiv = SolverOverlaySnapshot.CaptureAction(new PlanAction(PlanActionKind.PlayCard, 1, CardId: "SHIV"), []);
@@ -68,6 +184,7 @@ internal sealed partial class UnattendedTestRunner
                 _completedChecks.Add($"StrategyOutcome:{target}:AlignedAndUnmet:GrowthCounts:PartialRoute:EmptyHidden");
                 await AssertActionAnnotationLocalizationAsync(combat, english);
                 AssertLiveTurnStartChoicePreview(english);
+                await AssertLoopDisplayAsync(english);
                 foreach ((string source, string translated) in catalog)
                 {
                     if (SolverText.Get(source) != (english ? translated : source))
@@ -121,6 +238,28 @@ internal sealed partial class UnattendedTestRunner
                 if (SolverOverlay.RouteHeadingForTesting != (english ? "Current candidate (unverified)" : "求解器当前考虑（尚未验证）")
                     || SolverOverlay.AdoptRouteButtonTextForTesting != (english ? "Use candidate" : "采用当前路线"))
                     throw new InvalidOperationException($"Dynamic overlay localization failed: {target}");
+                SolverOverlay.ShowSearching(_host, 3, false, 0,
+                    new PotionRewardOutlook(0.4f, true, false)
+                    {
+                        Enabled = true,
+                        Forecast = PotionRewardForecast.Drop,
+                        ForecastPotionId = "SWIFT_POTION",
+                    });
+                if (SolverOverlay.RewardOutcomeTextForTesting?.StartsWith(
+                        english ? "Expected drop: " : "预计掉落：", StringComparison.Ordinal) != true)
+                    throw new InvalidOperationException($"Searching reward forecast missing: {target}");
+                SolverOverlay.ShowSearching(_host, 3, false, 0,
+                    new PotionRewardOutlook(0.4f, true, false)
+                    {
+                        Enabled = true,
+                        Forecast = PotionRewardForecast.NoDrop,
+                    });
+                if (SolverOverlay.RewardOutcomeTextForTesting != (english
+                        ? "No potion drop expected" : "预计不掉落药水"))
+                    throw new InvalidOperationException($"Searching no-drop forecast missing: {target}");
+                SolverOverlay.ShowSearching(_host, 3, false, 0);
+                if (SolverOverlay.RewardOutcomeTextForTesting != null)
+                    throw new InvalidOperationException($"Disabled reward forecast remained visible: {target}");
                 if (!SolverOverlay.ExerciseGuidanceHintsForTesting())
                     throw new InvalidOperationException($"Guidance banner localization or dismissal failed: {target}");
                 string failure = SolverController.FormatSearchFailureForTesting(new InvalidOperationException(untouched), true);

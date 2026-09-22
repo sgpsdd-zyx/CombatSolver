@@ -138,6 +138,13 @@ internal static class SolverActionPill
         return pill;
     }
 
+    public static Control CreateCycle(SolverActionRun run, out HFlowContainer actions)
+    {
+        SolverLoopGroup group = new(run);
+        actions = group.Actions;
+        return group;
+    }
+
     private static (Color Border, Color Background) ActionColors(SolverOverlayActionVisualKind kind)
         => kind switch
         {

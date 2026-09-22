@@ -30,6 +30,8 @@ Power 的原版克隆会重置 `_internalData`。跨根保留的数据必须从�
 
 ## 1. 求解器默认怎么对待未知内容
 
+格挡清空被阻止后的上限结算目前只显式识别原版 `SturdyClamp`；其他已准入的 preventer 在 `PersistentRelicSupport.BlockAfterPreventingClear` 中按全额保留计算。搜索的保留格挡估值与实际影子清空共用此规则，二者一致不等于已支持第三方的额外上限。新增“保留至多 N 点”等语义时，必须同时适配清空后的结算和估值，并验证原生状态与分支状态；仅登记 `ShouldClearBlock=false` 不足以实现该上限。这是既有适配边界，不表示未知第三方会自动通过兼容门禁。
+
 计算型动态变量必须有分支规则。第三方卡牌进入 `CalculatedVar` 求值且没有 `CalculatedVarSpecRegistry` 支持时，按卡牌所属 Mod 报不兼容，日志包含卡牌 ID；界面和报告账本不引导玩家上传。不能回退调用会读取 live 状态的原生计算器。20260911 的 `LIFEMASTERMOD-TENTACLES` 属于该情况，本次没有为该 Mod 提供适配。
 
 Power 来源也是语义的一部分：精确镜像可通过 `ICombatPredictionEffectSink.ApplyPowerFromSource` 显式提供 `CardModel? cardSource`，原版传 null 时必须保持 null，避免能力附带效果被误判成外层卡牌直接效果。普通 `ApplyPower` 仍沿用当前卡牌作用域；两者不能按调用栈有无卡牌随意替代。
@@ -569,12 +571,15 @@ CardRemovalValueMirrors.Register<YourDefend>(-10d);
 
 ## 6. 已知的封闭开关
 
+组合达标早停额外读取冻结的 `CombatRootSnapshot.HasVisibleHealingSource`：牌、玩家 Power 和可搜索药水的 `Heal` / `HealPercent` / `RegenPower` 变量，以及已有 `RegenPower`，会保守保留追加搜索；已选路线实际回血也保留追加搜索。变量在主线程完成物化后读取，治疗随从同样可能触发保守回退。这不是完整治疗来源登记或可达收益上界；没有这些元数据的自定义治疗、后续生成的治疗来源，仍可能因玩家战损目标已经达标而少做追加审计。关闭战损达标早停可保留原追加搜索；不改变模拟执行和既有第三方适配合同。
+
 下面这些位置目前是按原版类型写死的开关，第三方登记不进去。要用只能 Harmony 打补丁，或者等
 对应扩展点合并。列在这里是为了让你知道撞上了什么，而不是以为自己写错了。
 
 | 位置 | 症状 | 状态 |
 |---|---|---|
 | `CardOnPlaySupport.Multiplayer` / `MonsterMoveEffects.Multiplayer` | 原版多人卡牌补偿与怪物多目标结算；仅军师分支生效，没有增加第三方登记入口。队友选择和未支持效果形成边界，已有单人登记不等于多人通过验证 | 原版封闭派发 |
+| `CombatHistoryCounterKey.ForCard` / `OpenGenerationSources` | 原版历史读者按所读计数入键，随机生成、变牌及间接生成药水来源保守全量入键；新增原版入口必须同步该表。根包含消耗堆。第三方模型、已捕获 Mod 订阅者、BaseLib 修饰器或存在 AdaptedOnPlay 快照时自动回退六项全量，不能据此支持六项之外的新历史语义；新计数仍须显式扩展历史、Fork 和指纹合同。 | 封闭语义依赖表 |
 | `CombatPredictionSimulator.SupportsManualCardChoiceContinuation` / `PredictionStateStore.SupportsManualCardChoiceContinuation` | 自身选牌续执行覆盖清单中的41张原版单人卡，要求无附魔/污染、手动单次执行；已生成的请求、候选、历史与活动格挡计数有显式复制合同，不能据此接纳第三方选牌委托；拒绝不透明外部状态以及所有 `IPredictionForkBoundary` 状态（包括模型状态适配器包装）。不符合时保留原完整回放，已有第三方战斗支持范围不因此扩大；无注册入口 | 封闭性能特化 |
 | `CombatPredictionSimulator.ExecutionContinuation` / `ExecutionDispatchScope` | 回合来源、抽牌、Hook及嵌套子出牌使用内部纯数据帧。未知派发未确认协议、未知历史、不可复制事务或不透明StateStore时拒绝捕获，继续既有完整回放；不会跳过游戏效果，也不把既有第三方登记等同于可复制回调。原Fork稳定断言保持；没有外部续跑注册入口 | 封闭性能特化 |
 | `PotionChoiceContinuation.Supports` | 9种原版手动选牌药水的稳定前缀特化；第三方类型与通过PotionChoiceMirrors登记覆盖原版选择者继续完整重放，无额外注册入口。普通Fork/StateStore断言保持，不能用此入口接纳不透明回调或事务 | 封闭性能特化 |

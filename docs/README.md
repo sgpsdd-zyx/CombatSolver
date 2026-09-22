@@ -1,7 +1,8 @@
 # CombatSolver 文档导航
 
-当前源码与 GitHub 已发布版本为 fork [0.43.6](releases/0.43.6-RELEASE_NOTES.md)，修复死亡队友重算、停用／复活效果与奥斯蒂状态，验证见[测试矩阵](TEST_MATRIX.md#0436fork死亡队友重算2026-09-21)，交付见[发布记录](releases/0.43.6-PUBLISH.md)。基于官方 0.43.2，保留多人完整回合覆盖选路、十四周期、普通双倍额度和遗物归属。现役机制见[多人指南](multiplayer-advisor.md)，[上游合并记录](strategy/upstream-0432-merge-20260920.md)与[0.43.5 发布归档](releases/0.43.5-PUBLISH.md)保留历史证据；官方标签不移动。
+当前源码已合入官方 `42e09028 / 0.44.0`，多人仍保留上一版政策；本次还将实施已授权的本机贡献目标，然后统一定版发布。合并范围、直接证据与第一轮知识归档见[0.44.0 合并记录](strategy/upstream-0440-merge-20260922.md)。GitHub 最新已发布 fork 仍是 [0.43.6](releases/0.43.6-PUBLISH.md)，它基于官方 0.43.2。现役机制见[多人指南](multiplayer-advisor.md)；官方标签不移动。
 
+- [GC 完成链修复与优化筛选](performance/gc-completion-allocation-20260921.md)：替代 #116/#120 的窄修复、失败复现与重新实测取舍。
 - [增量历史计数](strategy/incremental-history-counters.md)：生命周期、测试构建与构键计时。
 - [转置表触顶证据](performance/transposition-cap-evidence-20260920.md)：默认条目上限、标签分布与逐根观测。
 
@@ -16,7 +17,7 @@
 |---|---|
 | 0.43.6 发布来源与 GitHub 交付 | [发布记录](releases/0.43.6-PUBLISH.md) |
 | 0.41.2 发布、独立尖塔军师修复及本地材料的归档状态 | [2026-09-18 归档记录](DEVELOPMENT_NOTES.md#归档状态2026-09-18) |
-| 多人手动军师、3 HP 周期目标、共同周期选路、救援与官方 0.43.2 兼容 | [多人军师](multiplayer-advisor.md) |
+| 多人手动军师、3 HP 周期目标、共同周期选路、救援与官方 0.44.0 兼容 | [多人军师](multiplayer-advisor.md) |
 | 独立「尖塔军师」拿牌推荐模组误读房主卡组的修复与重跑 | [本机玩家修复工具](../tools/SpireAdvisorMultiplayerFix/README.md) |
 | 多人研究原文归档、已采用改进与暂缓方案 | [策略索引](strategy/README.md#多人研究归档)、[首批实施](multiplayer-advisor.md#首批策略优化已实施) |
 | 取消 3 HP 优先、本机贡献配额（不预测队友，未实施） | [2026-09-22 研究与证据](strategy/multiplayer-cooperative-planning-20260922/README.md) |
@@ -24,6 +25,10 @@
 | 未击杀长线选路、浅比较与首回合方案的公平续行 | [6 Pro 研究与本地候选池观察](strategy/pro-window-selection-20260920/README.md)；[0.43.4 实施与知识收尾](strategy/pro-window-selection-20260920/implementation.md) |
 | 0.41.2 的第二轮 6 Pro 复审与首批修正 | [第二轮归档](strategy/pro-review-0412-20260918/README.md)、[本地复核](strategy/pro-review-0412-20260918/local-review.md)、[实施与收尾](strategy/pro-review-0412-20260918/implementation.md)；F01/F02/F03 纳入 0.41.3 定版 |
 | 0.41.1 的 ChatGPT 6 Pro 审查结论、策略设计原文与本地复核 | [复审归档](strategy/pro-review-20260918/README.md)、[本地复核与采用边界](strategy/pro-review-20260918/local-review.md)；旧版输入见[历史索引](strategy/README.md#多人研究归档) |
+| 官方计算失败修复、循环优化与搜索组合调整的历史说明 | [0.44.0 上游原文](releases/upstream/0.44.0-RELEASE_NOTES.md) |
+| 小循环的质量（过量格挡/不取斩杀）、动作数上限与展示折叠落点 | [循环质量性能展示调研](research/loop-quality-performance-display-20260921.md) |
+| 循环请求共享额度、安全前缀续搜及历史依赖收尾 | [循环优化收尾](performance/loop-final-20260921.md) |
+| 19 个循环边界场景、4096 回放耗尽反例及外部审计复核 | [循环边界扩展](performance/loop-boundaries-20260921.md) |
 | 状态键为什么要含整场历史计数、条件式与无条件追加的对照 | [状态键历史计数报告](strategy/state-key-history-counters-20260919.md) |
 | 战后掉药预测（奖励 RNG 镜像）与满栏用药门槛 | [战后掉药预测报告](strategy/potion-reward-outlook-20260918.md) |
 | 0.41.0代码体量、死代码诊断与保持行为的轻度清理 | [代码整洁度审查](refactoring/code-hygiene-review-2026-09-18.md) |
@@ -51,6 +56,10 @@
 | PR #114 内存截断、续用戳与排他阶段测量 | [搜索内存恢复](performance/search-memory-recovery-20260919.md) |
 | PR #114 离线宿主保真与 16 并行基线 | [16 并行阶段归因](performance/dop16-veryhigh-fidelity-20260919.md) |
 | 默认关闭的学习型组合选择器和训练反例 | [学习型门控](strategy/learned-portfolio-gate-20260917.md) |
+| 自生成场景、上下文排序实验与组合达标早停 | [实验与取舍](strategy/contextual-ordering-20260922.md)、[早停证据](strategy/contextual-target-stop-20260922-evidence.json)、[权重敏感度证据](strategy/contextual-weight-sensitivity-20260922-evidence.json)、[窄进攻成员证据](strategy/contextual-offensive-refinement-20260922-evidence.json)、[有界追加证据](strategy/contextual-bounded-refinement-20260922-evidence.json) |
+- [后置结构探索证据](strategy/contextual-adaptive-novelty-20260922-evidence.json)：完整原搜索后追加有限探索的32根质量、成本、时间截断与默认关闭决定。
+- [条件窄成员替换证据](strategy/contextual-structural-refinement-20260922-evidence.json)：已撤回原型的质量、成本及复现补丁。
+- [组合再分配证据](strategy/contextual-portfolio-reallocation-20260922-evidence.json)：默认组合再分配、独立35根、跨预设、ABBA与原生完整部署，以及质量/内存取舍。
 | 943份计划外重算报告、16类已修机制及证据缺口 | [2026-09-13批次结果](issues/report-replans-20260913.md) |
 | 环绕轨道、自动化的持续返能估值与实战对照 | [返能能力估值](issues/recurring-energy-valuation-20260913.md) |
 | 后续六方向的当前诊断、逐项实现与对照 | [六方向开发记录](performance/six-directions-20260913.md) |

@@ -252,6 +252,8 @@ internal sealed class UnattendedTestRequest
     public SolverDeploymentFastMode? HeadlessFastModeForTest { get; init; }
     public SolverDeploymentFastMode? DeploymentFastModeForTest { get; init; }
     public SolverPerformancePreset? PerformancePresetForTest { get; init; }
+    public int? SearchBeamWidthForTest { get; init; }
+    public int? SearchMaxExpandedNodesForTest { get; init; }
     public int? ShortMaxCardBranchesPerNodeForTest { get; init; }
     public int? DeepMaxCardBranchesPerNodeForTest { get; init; }
     public SolverPotionPolicy? PotionPolicyForTest { get; init; }
@@ -564,6 +566,18 @@ internal sealed class UnattendedSolverMetrics
     public int ChoiceReplayAttempts { get; init; }
     public int ChoiceReplayBudgetExhaustions { get; init; }
     public int ChoiceBranchesDroppedByBudget { get; init; }
+    public int CycleReplayAttempts { get; init; }
+    public int CycleReplayActions { get; init; }
+    public int TotalCycleReplayActions { get; init; }
+    public int CycleReplayVictories { get; init; }
+    public int CycleReplayContinuations { get; init; }
+    public int CycleStoppedUnproductive { get; init; }
+    public int CycleStoppedRepetitionBudget { get; init; }
+    public int CycleStoppedFamilyBudget { get; init; }
+    public int CycleStoppedExitBudget { get; init; }
+    public int TurnLayerBudgetStops { get; init; }
+    public int TurnLayerTimeBudgetStops { get; init; }
+    public int TurnLayerNodeBudgetStops { get; init; }
     public int CycleRegionsDetected { get; init; }
     public int CycleRegionCandidatesConsidered { get; init; }
     public int CycleRegionCandidatesAdmitted { get; init; }

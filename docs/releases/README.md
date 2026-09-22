@@ -6,12 +6,13 @@
 
 当前 fork 已发布 **[0.43.6](0.43.6-RELEASE_NOTES.md)**，定版提交 `ed6620a3`，基于官方 **0.43.2**；修复死亡队友重算及效果生命周期，见 [GitHub Release](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.43.6) 和[发布记录](0.43.6-PUBLISH.md)。此前 [0.43.5](0.43.5-PUBLISH.md) 已一并发布仅本地准备的 0.43.2／0.43.3／0.43.4 功能，这些中间版本未补建标签。独立尖塔军师的 0.1.3 修复包由[工具目录](../../tools/SpireAdvisorMultiplayerFix/README.md#已交付产物)单独维护，不属于此版本序列。
 
-官方后来发布的 [0.43.1](upstream/0.43.1-RELEASE_NOTES.md) 和 [0.43.2](upstream/0.43.2-RELEASE_NOTES.md) 在独立目录保留原文，与下列 fork 同号版本不同，不能据此替换 fork 标签或更新说明。
+官方后来发布的 [0.43.1](upstream/0.43.1-RELEASE_NOTES.md) 、[0.43.2](upstream/0.43.2-RELEASE_NOTES.md)、[0.43.3](upstream/0.43.3-RELEASE_NOTES.md) 和 [0.44.0](upstream/0.44.0-RELEASE_NOTES.md) 在独立目录保留原文，与下列 fork 同号版本不同，不能据此替换 fork 标签或更新说明。
 
 0.43.6 的死亡／复活原生对照和单人哨兵验证见[测试矩阵](../TEST_MATRIX.md#0436fork死亡队友重算2026-09-21)；真实联机尚未验收。
 
 | 版本系列 | 更新日志 |
 |---|---|
+| 0.44（上游） | [0.44.0 官方原文](upstream/0.44.0-RELEASE_NOTES.md) |
 | 0.43 | [0.43.6（fork）](0.43.6-RELEASE_NOTES.md) · [0.43.5（fork）](0.43.5-RELEASE_NOTES.md) · [0.43.4（fork，历史准备版）](0.43.4-RELEASE_NOTES.md) · [0.43.3（fork，历史准备版）](0.43.3-RELEASE_NOTES.md) · [0.43.2（fork，历史准备版）](0.43.2-RELEASE_NOTES.md) · [0.43.1（fork）](0.43.1-RELEASE_NOTES.md) · [0.43.0（上游）](0.43.0-RELEASE_NOTES.md) |
 | 0.42 | [0.42.0](0.42.0-RELEASE_NOTES.md) |
 | 0.41 | [0.41.3（fork）](0.41.3-RELEASE_NOTES.md) · [0.41.2（fork）](0.41.2-RELEASE_NOTES.md) · [0.41.1（fork）](0.41.1-RELEASE_NOTES.md) · [0.41.0](0.41.0-RELEASE_NOTES.md) |
