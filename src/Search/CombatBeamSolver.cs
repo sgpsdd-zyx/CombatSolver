@@ -40,6 +40,10 @@ internal sealed partial class CombatBeamSolver(
     PrimarySearchIncumbent? primaryIncumbent = null)
 {
     private bool IsMultiplayerAdvice => policy.Multiplayer != null;
+    private readonly MultiplayerContributionObjective? _contributionObjective = policy.Multiplayer == null ? null
+        : policy.Multiplayer.Objective ?? MultiplayerContributionObjective.Start(
+            root.MultiplayerObservation ?? throw new InvalidOperationException("Multiplayer root observation missing."),
+            policy.Multiplayer.Horizon);
     private readonly SolverSearchProfile _profile = searchProfile ?? SolverSearchProfile.Default;
     private readonly SearchRunContext _run = new(
         policy.MeasurePhasePerformance,

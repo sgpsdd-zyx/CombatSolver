@@ -251,10 +251,10 @@ internal static class MultiplayerEvaluationContracts
             object ordering = AccessTools.Method(typeof(CombatBeamSolver), "CreateMultiplayerOrdering")
                 .Invoke(solver, [new[] { safe, risky }])!;
             var compare = (Comparison<SearchNode>)AccessTools.Property(ordering.GetType(), "Compare").GetValue(ordering)!;
-            bool detected = health == 2 ? risky.Snapshot.PlayerDead : risky.AdvisoryHpLoss.ExcessHpLost(3) == 3;
+            bool detected = health == 2 ? risky.Snapshot.PlayerDead : risky.Snapshot.CumulativePlayerHpLost == 3;
             if (!detected || compare(safe, risky with { Score = 1e50 }) >= 0)
                 throw new InvalidOperationException("Known later death or excess HP loss was hidden by an earlier checkpoint.");
-            evidence.Add(new { health, risky.Snapshot.PlayerDead, excess = risky.AdvisoryHpLoss.ExcessHpLost(3), sameFirstAction = true });
+            evidence.Add(new { health, risky.Snapshot.PlayerDead, excess = risky.Snapshot.CumulativePlayerHpLost, sameFirstAction = true });
             foreach (SearchNode node in nodes) node.Snapshot.ReleaseSimulator();
         }
         local.Creature.SetCurrentHpInternal(hp);

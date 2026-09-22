@@ -11,11 +11,12 @@ internal sealed partial class CombatBeamSolver
             : throw new InvalidOperationException("Multiplayer contract requires an advisory policy.");
 
     private int CompareMultiplayerPlans(SearchNode left, SearchNode right)
-        => CompareMultiplayerAtCycle(left, right, int.MaxValue);
+        => CompareMultiplayerAtCycle(left, right, _contributionObjective!.RemainingCycles);
 
     private sealed record MultiplayerFinalBatch(
-        List<SearchNode> Candidates, MultiplayerPlanOrdering Ordering,
-        MultiplayerWindowDecision? Window = null);
+        List<SearchNode> Candidates, MultiplayerPlanOrdering Ordering);
+
+    private List<SearchNode> _contributionWitnesses = [];
 
     private bool IsEligibleMultiplayerFinal(SearchNode node)
         => (!_enforcePotionDirectives || _potionStrategy.EvaluateForcedUses(
@@ -32,28 +33,91 @@ internal sealed partial class CombatBeamSolver
             .Where(IsEligibleMultiplayerFinal)
             .ToList();
         MultiplayerPlanOrdering ordering = CreateMultiplayerOrdering(eligible);
-        eligible.Sort(ordering.Compare);
         int limit = _profile.BeamWidth * 4;
-        if (eligible.Count > limit) eligible.RemoveRange(limit, eligible.Count - limit);
+        eligible = RetainContributionFrontier(eligible, ordering, limit);
         return new(eligible, ordering);
+    }
+
+    private List<SearchNode> RetainContributionFrontier(List<SearchNode> nodes,
+        MultiplayerPlanOrdering ordering, int limit)
+    {
+        nodes.Sort(ordering.Compare);
+        List<SearchNode> frontier = [];
+        foreach (SearchNode candidate in nodes)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            MultiplayerPlanValue value = MultiplayerFactsAt(candidate, ordering.EnemyCycles);
+            if (frontier.Any(other => (!other.HasPredictionRisk || candidate.HasPredictionRisk)
+                && FirstCycleRisk(other) <= FirstCycleRisk(candidate)
+                && MultiplayerTailValue(other, MultiplayerFactsAt(other, ordering.EnemyCycles))
+                    >= MultiplayerTailValue(candidate, value)
+                && MultiplayerQuotaSelection.Dominates(
+                MultiplayerFactsAt(other, ordering.EnemyCycles), value, root.InitialPlayerHp, root.InitialPlayerMaxHp)))
+                continue;
+            frontier.RemoveAll(other => (!candidate.HasPredictionRisk || other.HasPredictionRisk)
+                && FirstCycleRisk(candidate) <= FirstCycleRisk(other)
+                && MultiplayerTailValue(candidate, value)
+                    >= MultiplayerTailValue(other, MultiplayerFactsAt(other, ordering.EnemyCycles))
+                && MultiplayerQuotaSelection.Dominates(value,
+                MultiplayerFactsAt(other, ordering.EnemyCycles), root.InitialPlayerHp, root.InitialPlayerMaxHp));
+            frontier.Add(candidate);
+            if (frontier.Count > limit)
+            {
+                var cheapest = frontier.OrderBy(node => MultiplayerFactsAt(node, ordering.EnemyCycles)
+                    .HealthCost(root.InitialPlayerHp, root.InitialPlayerMaxHp)).First();
+                var damage = frontier.MaxBy(node => MultiplayerFactsAt(node, ordering.EnemyCycles).Progress)!;
+                var witness = frontier.FirstOrDefault(node =>
+                    MultiplayerFactsAt(node, ordering.EnemyCycles).Progress >= _contributionObjective!.TargetDamage);
+                var retained = frontier.Take(Math.Max(1, limit - 3)).ToHashSet(ReferenceEqualityComparer.Instance);
+                retained.Add(cheapest); retained.Add(damage);
+                if (witness != null) retained.Add(witness);
+                frontier = frontier.Where(retained.Contains).Take(limit).ToList();
+            }
+        }
+        frontier.Sort(ordering.Compare);
+        return frontier;
+    }
+
+    private void PreserveContributionWitnesses(IEnumerable<SearchNode> nodes)
+    {
+        var candidates = nodes.Where(node => node.Snapshot.AdvisoryLastEnemyCycle != null
+            || node.Snapshot.AllEnemiesDead).Concat(_contributionWitnesses)
+            .Distinct((IEqualityComparer<SearchNode>)ReferenceEqualityComparer.Instance).Where(IsEligibleMultiplayerFinal).ToList();
+        _contributionWitnesses = RetainContributionFrontier(candidates,
+            CreateMultiplayerOrdering(candidates), _profile.BeamWidth * 4)
+            .Select(node => node.Snapshot.HasSimulator
+                ? node with { Snapshot = node.Snapshot.DetachForMultiplayerWitness() } : node).ToList();
     }
 
     private FinalPlanSelection SelectMultiplayerFinal(MultiplayerFinalBatch batch)
     {
         if (batch.Candidates.Count == 0)
             throw new PotionPolicyUnsatisfiedException("No advisory route satisfies the selected potion directives.");
-        if (batch.Window is { } window)
-            policy.Diagnostics.Debug($"[CombatSolver/Test] MULTIPLAYER_WINDOW reason={window.Reason} "
-                + $"baseline={window.BaselineCycles} comparison={window.ComparisonCycles} "
-                + $"required={window.RequiredRepresentatives} covered={window.CoveredRepresentatives} "
-                + $"pending={window.PendingEligibility} ancestors={window.SuppressedAncestors} "
-                + $"metadata_work={window.MetadataWork} elapsed_ms={window.ElapsedMilliseconds:0.###}");
         SearchNode best = batch.Candidates[0];
+        _selectedContribution = MultiplayerFactsAt(best, batch.Ordering.EnemyCycles);
+        _selectedContributionWitness = _selectedContribution.Comparable && !_selectedContribution.Dead
+            && (_selectedContribution.Won || batch.Ordering.EnemyCycles == _contributionObjective!.RemainingCycles
+                && _selectedContribution.Progress >= _contributionObjective.TargetDamage);
+        _selectedQuotaFrontierCount = batch.Candidates.Count;
+        _selectedSearchCycles = Volatile.Read(ref _maximumObservedEnemyCycles);
+        if (batch.Ordering.EnemyCycles > 0 && !_selectedContribution.Won)
+        {
+            // The fixed deadline is the actionable output; later no-active-help risk is conditional.
+            while (best.Parent is { } parent && parent.Snapshot.AdvisoryEnemyCycles >= batch.Ordering.EnemyCycles
+                && IsEligibleMultiplayerFinal(parent))
+                best = parent;
+        }
         return new FinalPlanSelection(new FinalPlanCandidate(best, best.Snapshot,
             SearchFeatures.Capture(best), best.FutureSoldHp,
             battleDamage.SoldHpCommitted + best.FutureSoldHp, best.PotionCount, best.Score), 0, 0, 0,
-            batch.Ordering.EnemyCycles);
+            Math.Min(batch.Ordering.EnemyCycles, _selectedContribution.Won
+                ? batch.Ordering.EnemyCycles : best.Snapshot.AdvisoryLastEnemyCycle?.Cycle ?? 0));
     }
+
+    private MultiplayerPlanValue _selectedContribution;
+    private bool _selectedContributionWitness;
+    private int _selectedQuotaFrontierCount;
+    private int _selectedSearchCycles;
 
     private sealed partial class BeamRetentionPolicy
     {
@@ -73,7 +137,7 @@ internal sealed partial class CombatBeamSolver
                 return final;
             }
             var ranked = nodes.GroupBy(node => (node.StateKey,
-                    node.AdvisoryHpLoss.CompletedExcessHpLost, node.AdvisoryHpLoss.CurrentCycleHpLost,
+                    node.Snapshot.AdvisoryLocalDamage, node.Snapshot.AdvisoryTotalDamage,
                     node.Snapshot.AdvisoryLastEnemyCycle))
                 .Select(group => group.OrderByDescending(node => node.Score)
                     .ThenBy(node => node.Snapshot.CumulativePlayerHpLost).ThenBy(node => node.ActionCount).First())
@@ -88,7 +152,7 @@ internal sealed partial class CombatBeamSolver
             IEnumerable<SearchNode> living = ranked.Where(node => !node.Snapshot.PlayerDead);
             List<SearchNode>[] lanes =
             [
-                living.OrderBy(node => node.AdvisoryHpLoss.ExcessHpLost(node.Snapshot.AdvisoryHpLossAllowance))
+                living.OrderBy(node => node.Snapshot.CumulativePlayerHpLost)
                     .ThenByDescending(node => node.Snapshot.PlayerHp).ThenByDescending(node => node.Snapshot.PlayerBlock)
                     .ThenByDescending(node => node.Score).ToList(),
                 living.OrderBy(node => node.Snapshot.EnemyHp).ThenByDescending(node => node.Score).ToList(),

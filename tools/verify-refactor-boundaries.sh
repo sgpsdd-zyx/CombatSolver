@@ -1318,21 +1318,21 @@ src/Search/MultiplayerSearchPolicy.cs|if (policy.FixedBudget) return profile;
 src/Search/CombatSearchCoordinator.cs|policy.Multiplayer.ResolveSearchProfile(policy)
 src/Search/CombatBeamSolver.Phases.cs|policy.Multiplayer?.RemainingCycleLayers(
 src/Search/CombatBeamSolver.Phases.cs|result.AdvisoryTimeBudgetMilliseconds = IsMultiplayerAdvice ? _profile.SoftTimeBudgetMilliseconds : 0;
-src/Search/MultiplayerSearchPolicy.cs|internal readonly record struct MultiplayerHpLossBudget(
+src/Runtime/MultiplayerContributionSession.cs|internal sealed class MultiplayerContributionSession
 src/Search/CombatBeamSolver.Multiplayer.cs|private List<SearchNode> RankMultiplayer(
 src/Search/CombatBeamSolver.Multiplayer.cs|private MultiplayerFinalBatch PrepareMultiplayerFinalCandidates(
 src/Search/CombatBeamSolver.Multiplayer.cs|batch.Ordering.EnemyCycles
 src/Search/CombatBeamSolver.Phases.cs|? PrepareMultiplayerPublicationCandidates(viable,
 src/Search/CombatBeamSolver.Phases.cs|? PrepareMultiplayerPublicationCandidates(finalPool, advisoryLastCohort, stopwatch.ElapsedMilliseconds) : null;
 src/Search/CombatBeamSolver.Phases.cs|? PrepareMultiplayerFinalCandidates(completedCandidates).Candidates
-src/Search/MultiplayerSearchPolicy.cs|public bool UseCoveredWindowSelection { get; init; } = true;
-src/Search/CombatBeamSolver.MultiplayerWindow.cs|int commonDepth = Math.Min(policy.Multiplayer.Horizon, representatives.Min(id => depths[id]));
-src/Search/CombatBeamSolver.MultiplayerWindow.cs|CompareMultiplayerKnownRisk(best, incumbent) > 0
-src/Search/CombatBeamSolver.MultiplayerWindow.cs|if (pending > 0) return KeepBaseline("pending_eligibility");
-src/Search/CombatBeamSolver.MultiplayerWindow.cs|if (work.RemainingMilliseconds < replayReserve) return KeepBaseline("replay_budget");
+src/Search/MultiplayerContributionObjective.cs|internal const int StageCycles = 3;
+src/Search/CombatBeamSolver.Multiplayer.cs|private List<SearchNode> RetainContributionFrontier(
+src/Search/CombatBeamSolver.Multiplayer.cs|!other.HasPredictionRisk || candidate.HasPredictionRisk
+src/Search/CombatBeamSolver.Multiplayer.cs|.Where(IsEligibleMultiplayerFinal)
+src/Search/CombatBeamSolver.Multiplayer.cs|cancellationToken.ThrowIfCancellationRequested();
 src/Search/CombatBeamSolver.cs|policy.Multiplayer != null ? CreateMultiplayerOrdering : null
 src/Search/CombatBeamSolver.MultiplayerEvaluation.cs|private MultiplayerPlanOrdering CreateMultiplayerOrdering(
-src/Search/CombatBeamSolver.MultiplayerEvaluation.cs|if (!terminal && depth > 0 && checkpoint?.Cycle == depth)
+src/Search/CombatBeamSolver.MultiplayerEvaluation.cs|if (depth > 0 && checkpoint?.Cycle == depth && !earlyTerminal)
 src/Search/CombatBeamSolver.Phases.cs|if (!IsMultiplayerAdvice && !_hasGrowthTargets && completed.Any(node =>
 src/Runtime/BattleDamageTracker.cs|? MultiplayerPotionIdsUsedSoFar(combat)
 src/Runtime/BattleDamageTracker.cs|ReferenceEquals(entry.Actor, local.Creature)

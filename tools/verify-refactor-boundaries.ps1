@@ -1637,21 +1637,21 @@ $multiplayerAdviceRules = @(
     @{ Path = 'src/Search/CombatSearchCoordinator.cs'; Text = 'policy.Multiplayer.ResolveSearchProfile(policy)' }
     @{ Path = 'src/Search/CombatBeamSolver.Phases.cs'; Text = 'policy.Multiplayer?.RemainingCycleLayers(' }
     @{ Path = 'src/Search/CombatBeamSolver.Phases.cs'; Text = 'result.AdvisoryTimeBudgetMilliseconds = IsMultiplayerAdvice ? _profile.SoftTimeBudgetMilliseconds : 0;' }
-    @{ Path = 'src/Search/MultiplayerSearchPolicy.cs'; Text = 'internal readonly record struct MultiplayerHpLossBudget(' }
+    @{ Path = 'src/Runtime/MultiplayerContributionSession.cs'; Text = 'internal sealed class MultiplayerContributionSession' }
     @{ Path = 'src/Search/CombatBeamSolver.Multiplayer.cs'; Text = 'private List<SearchNode> RankMultiplayer(' }
     @{ Path = 'src/Search/CombatBeamSolver.Multiplayer.cs'; Text = 'private MultiplayerFinalBatch PrepareMultiplayerFinalCandidates(' }
     @{ Path = 'src/Search/CombatBeamSolver.Multiplayer.cs'; Text = 'batch.Ordering.EnemyCycles' }
     @{ Path = 'src/Search/CombatBeamSolver.Phases.cs'; Text = '? PrepareMultiplayerPublicationCandidates(viable,' }
     @{ Path = 'src/Search/CombatBeamSolver.Phases.cs'; Text = '? PrepareMultiplayerPublicationCandidates(finalPool, advisoryLastCohort, stopwatch.ElapsedMilliseconds) : null;' }
     @{ Path = 'src/Search/CombatBeamSolver.Phases.cs'; Text = '? PrepareMultiplayerFinalCandidates(completedCandidates).Candidates' }
-    @{ Path = 'src/Search/MultiplayerSearchPolicy.cs'; Text = 'public bool UseCoveredWindowSelection { get; init; } = true;' }
-    @{ Path = 'src/Search/CombatBeamSolver.MultiplayerWindow.cs'; Text = 'int commonDepth = Math.Min(policy.Multiplayer.Horizon, representatives.Min(id => depths[id]));' }
-    @{ Path = 'src/Search/CombatBeamSolver.MultiplayerWindow.cs'; Text = 'CompareMultiplayerKnownRisk(best, incumbent) > 0' }
-    @{ Path = 'src/Search/CombatBeamSolver.MultiplayerWindow.cs'; Text = 'if (pending > 0) return KeepBaseline("pending_eligibility");' }
-    @{ Path = 'src/Search/CombatBeamSolver.MultiplayerWindow.cs'; Text = 'if (work.RemainingMilliseconds < replayReserve) return KeepBaseline("replay_budget");' }
+    @{ Path = 'src/Search/MultiplayerContributionObjective.cs'; Text = 'internal const int StageCycles = 3;' }
+    @{ Path = 'src/Search/CombatBeamSolver.Multiplayer.cs'; Text = 'private List<SearchNode> RetainContributionFrontier(' }
+    @{ Path = 'src/Search/CombatBeamSolver.Multiplayer.cs'; Text = '!other.HasPredictionRisk || candidate.HasPredictionRisk' }
+    @{ Path = 'src/Search/CombatBeamSolver.Multiplayer.cs'; Text = '.Where(IsEligibleMultiplayerFinal)' }
+    @{ Path = 'src/Search/CombatBeamSolver.Multiplayer.cs'; Text = 'cancellationToken.ThrowIfCancellationRequested();' }
     @{ Path = 'src/Search/CombatBeamSolver.cs'; Text = 'policy.Multiplayer != null ? CreateMultiplayerOrdering : null' }
     @{ Path = 'src/Search/CombatBeamSolver.MultiplayerEvaluation.cs'; Text = 'private MultiplayerPlanOrdering CreateMultiplayerOrdering(' }
-    @{ Path = 'src/Search/CombatBeamSolver.MultiplayerEvaluation.cs'; Text = 'if (!terminal && depth > 0 && checkpoint?.Cycle == depth)' }
+    @{ Path = 'src/Search/CombatBeamSolver.MultiplayerEvaluation.cs'; Text = 'if (depth > 0 && checkpoint?.Cycle == depth && !earlyTerminal)' }
     @{ Path = 'src/Search/CombatBeamSolver.Phases.cs'; Text = 'if (!IsMultiplayerAdvice && !_hasGrowthTargets && completed.Any(node =>' }
     @{ Path = 'src/Runtime/BattleDamageTracker.cs'; Text = '? MultiplayerPotionIdsUsedSoFar(combat)' }
     @{ Path = 'src/Runtime/BattleDamageTracker.cs'; Text = 'ReferenceEquals(entry.Actor, local.Creature)' }

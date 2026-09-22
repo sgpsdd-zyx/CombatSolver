@@ -513,10 +513,14 @@ internal sealed partial class CombatBeamSolver
             boundary);
         if (IsMultiplayerAdvice)
         {
-            // Nodes charge only per-cycle losses above the allowance. These terms guide
-            // unfinished actions; safety is checked using actual simulated enemy cycles.
+            int progress = ContributionProgress(enemyHp, combat.AdvisorLocalDamage, combat.AdvisorTotalDamage);
+            double loss = Math.Max(0, root.InitialPlayerHp - player.CurrentHp)
+                + Math.Max(0, root.InitialPlayerMaxHp - player.MaxHp) + potionStrategicCost;
+            // Continuous quota shortfall preserves near-target low-cost choices. Safety is
+            // decided at completed enemy cycles, never from this exploration estimate.
             score = (dead ? -1e12 : 0) + (won ? 1e11 : 0)
-                - enemyHp * 100d
+                - (loss + _contributionObjective!.DeficitCost(progress, root.InitialPlayerHp)) * 100d
+                - enemyHp
                 + persistentBuffValue * 20d + reachableHandValue + playerState.Energy * 2d
                 - potionUseCount * 0.1d - actionCount * 0.001d;
         }
@@ -599,10 +603,13 @@ internal sealed partial class CombatBeamSolver
             TeamSurvivors = IsMultiplayerAdvice
                 ? combat.Players.Count(peer => simulator.State.GetCreature(peer.Creature).IsAlive) : 0,
             AdvisoryEnemyCycles = IsMultiplayerAdvice ? combat.AdvisorEnemyCycles : 0,
-            AdvisoryHpLossAllowance = policy.Multiplayer?.AcceptableHpLossPerTurn ?? -1,
             AdvisoryRootHpLost = IsMultiplayerAdvice ? root.InitialPlayerRoundHpLost : 0,
             AdvisoryLastEnemyCycleHpLost = IsMultiplayerAdvice ? combat.AdvisorLastEnemyCycleHpLost : 0,
             AdvisoryLastEnemyCycle = IsMultiplayerAdvice ? combat.AdvisorLastEnemyCycle : null,
+            AdvisoryContribution = IsMultiplayerAdvice
+                ? ContributionProgress(enemyHp, combat.AdvisorLocalDamage, combat.AdvisorTotalDamage) : 0,
+            AdvisoryLocalDamage = IsMultiplayerAdvice ? combat.AdvisorLocalDamage : 0,
+            AdvisoryTotalDamage = IsMultiplayerAdvice ? combat.AdvisorTotalDamage : 0,
             DefensiveBlockValue = IsMultiplayerAdvice
                 ? Math.Min(Math.Max(0, player.Block), Math.Max(0, player.MaxHp))
                 : MeasureDefensiveBlockReserve(combat, player, threat),

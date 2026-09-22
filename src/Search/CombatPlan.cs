@@ -1089,9 +1089,6 @@ internal sealed record SearchNode(
 {
     private IReadOnlyList<PlanAction>? _actions;
 
-    public MultiplayerHpLossBudget AdvisoryHpLoss { get; } = MultiplayerHpLossBudget.Capture(Parent, Snapshot);
-    public double Score { get; init; } = MultiplayerHpLossBudget.ApplyScore(Score, Parent, Snapshot);
-
     // Cycle evidence is discovered only after the simulator snapshot has produced this node.
     // Keep the positional member (and therefore record equality/deconstruction/with semantics),
     // but allow the unpublished node to receive that evidence without cloning the whole node.
@@ -1248,10 +1245,12 @@ internal sealed class SimulationSnapshot(
     private CombatPredictionSimulator? _simulator = simulator;
     public int TeamSurvivors { get; init; }
     public int AdvisoryEnemyCycles { get; init; }
-    public int AdvisoryHpLossAllowance { get; init; } = -1;
     public int AdvisoryRootHpLost { get; init; }
     public int AdvisoryLastEnemyCycleHpLost { get; init; }
     public MultiplayerCycleCheckpoint? AdvisoryLastEnemyCycle { get; init; }
+    public int AdvisoryContribution { get; init; }
+    public long AdvisoryLocalDamage { get; init; }
+    public long AdvisoryTotalDamage { get; init; }
     private string? _releasedBy;
     private int _releasedAtLine;
 
@@ -1362,6 +1361,13 @@ internal sealed class SimulationSnapshot(
 
     public bool HasSimulator => _simulator != null;
 
+    internal SimulationSnapshot DetachForMultiplayerWitness()
+    {
+        var detached = (SimulationSnapshot)MemberwiseClone();
+        detached.ReleaseSimulator();
+        return detached;
+    }
+
     public void ReleaseSimulator(
         [CallerMemberName] string caller = "",
         [CallerLineNumber] int line = 0)
@@ -1432,9 +1438,12 @@ internal sealed class SolverResult
     public int AdvisoryHorizon { get; internal set; }
     public int AdvisoryTimeBudgetMilliseconds { get; internal set; }
     public int AdvisoryNodeBudget { get; internal set; }
-    public int AdvisoryHpLossAllowance { get; internal set; }
-    public int AdvisoryMaximumCycleHpLost { get; internal set; }
     public int AdvisoryComparisonCycles { get; internal set; }
+    public MultiplayerContributionObjective? AdvisoryObjective { get; internal set; }
+    public int AdvisoryPlannedContribution { get; internal set; }
+    public bool AdvisoryObjectiveWitness { get; internal set; }
+    public int AdvisoryQuotaFrontierCount { get; internal set; }
+    public int AdvisorySearchedEnemyCycles { get; internal set; }
     public int ReplayedAdviceActions { get; internal set; }
     public bool WasRestoredFromCache { get; internal set; }
     public SolverResultScope ResultScope { get; internal set; } = SolverResultScope.SearchCompletion;

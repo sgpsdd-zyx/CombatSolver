@@ -29,7 +29,8 @@ python3 tools/OfflineSearchHarness/compare_results.py \
 | `MultiplayerLongTermContracts.cs` | 多人长线收益的有界路径丢失诊断；不改变排序或状态键 |
 | `MultiplayerUpstreamContracts.cs` | 官方 0.43.2 多人兼容：成长隔离、持有者历史、生产键／Fork、改进原生全队状态对账 |
 | `HistoryCounterChecks.cs` / `AncillaryFailureChecks.cs` | 单人增量历史的独立扫描对照、真实路线结果上的可选缓存故障注入 |
-| `MultiplayerWindowSelectionContracts.cs` / `MultiplayerCoveredWindowContracts.cs` | 真实固定预算 A/C、统一外部续行与完整回合覆盖的纯政策合同；阶段与限制见完整说明 |
+| `MultiplayerQuotaContracts.cs` / `MultiplayerQuotaBenchmarks.cs` | 当前贡献阶段、原生/Fork/增量/预算合同及压力、防御、投资短搜 |
+| `MultiplayerWindowSelectionContracts.cs` / `MultiplayerCoveredWindowContracts.cs` | A/C 历史复现资料，当前命令已拒绝，需使用 v0.43.6 源码 |
 | `AssemblyBootstrap.cs` | 运行期解析 `sts2` / `RitsuLib` / `CombatSolver` |
 | `GameBootstrap.cs` | 游戏静态状态初始化与**全部** Godot 绕过（类头有表） |
 | `ModRuntime.cs` | 模组侧初始化、离线会话、搜索正确性补丁、一次求解 |

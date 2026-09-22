@@ -154,6 +154,7 @@ internal sealed class SolverCombatSession
     public bool ManualControlObserved { get; set; }
     public bool ShowcaseMode { get; set; }
     public List<IReadOnlyList<PlanAction>> AdvisoryRoutes { get; } = [];
+    public MultiplayerContributionSession AdvisoryContribution { get; } = new();
     public bool AdvisoryStale { get; set; }
     public long AdvisoryCheckedAt { get; set; }
     public CombatBugReportIssueLedger BugReportIssues { get; } = new();

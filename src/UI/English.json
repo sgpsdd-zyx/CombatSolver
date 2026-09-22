@@ -22,7 +22,6 @@
   "循环 ×{0}": "Loop ×{0}",
   "框内 {0} 个动作按顺序重复 {1} 次，共 {2} 个动作": "Repeat the {0} actions inside this group in order {1} times ({2} actions total)",
   "另有 {0} 回合未展开显示": "{0} more turns not shown",
-
   "遗物": "Relics",
   "未持有": "Not owned",
   "已持有": "Owned",
@@ -451,5 +450,11 @@
   "已保存路线（已过期）": "Saved route (outdated)",
   "解除冻结；自动计算开启时，可从当前状态重新计算。": "Unfreeze the route; when auto-calculate is enabled, recalculate from the current state.",
   "保留本场路线，暂停自动重算和全自动；失配路线仅供参考。": "Keep this combat's route and pause automatic recalculation and full auto; mismatched routes are for reference only.",
-  "当前平台不支持 NoGC；设置保留，搜索使用常规 GC。": "NoGC is unavailable on this platform. Your setting is retained; searches use normal GC."
+  "当前平台不支持 NoGC；设置保留，搜索使用常规 GC。": "NoGC is unavailable on this platform. Your setting is retained; searches use normal GC.",
+  "本机阶段目标：{0} 点有效伤害，剩余 {1} 个敌方周期；已付 {2}，方案预计 {3}。": "Local stage target: {0} effective damage within {1} enemy cycles; observed {2}, planned {3}.",
+  "已找到阶段达标方案，敌人仍按真实血量反击。": "A stage-target witness was found. Surviving enemies still retaliate with their real HP.",
+  "阶段目标尚未证实；当前返回已找到的伤害与战损折中方案。": "The stage target is unproven. Showing the best found damage and health-cost tradeoff.",
+  "队友未来操作未知；队友行动后请手动重新计算。": "Future teammate actions are unknown. Recalculate manually after they act.",
+  "搜索曾到达第 {0} 个敌方周期；后续风险仅作条件参考。": "Search reached enemy cycle {0}; later risks are conditional estimates.",
+  "上一阶段已结算：目标 {0}，实际进展 {1}。": "Previous stage closed: target {0}, observed progress {1}."
 }

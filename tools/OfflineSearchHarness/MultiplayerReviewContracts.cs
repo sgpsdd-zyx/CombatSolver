@@ -22,6 +22,16 @@ internal static class MultiplayerReviewContracts
 
     public static string Run(CombatState state, HarnessOptions options, MainLoopContext loop)
     {
+        if (options.Scenario.MultiplayerReviewStage == "quota-contracts")
+            return MultiplayerQuotaContracts.Run(state, options, loop);
+        if (options.Scenario.MultiplayerReviewStage == "quota-selection")
+        {
+            MultiplayerFinalSelectionContracts.Run(state, SolverController.CaptureSearchPolicy(
+                SolverSettings.Capture(), state, false, null), options);
+            return "quota_final_eligibility_and_permutations=passed";
+        }
+        if (options.Scenario.MultiplayerReviewStage is "quota-pressure" or "quota-defense" or "quota-investment")
+            return MultiplayerQuotaBenchmarks.Run(state, options, loop);
         if (options.Scenario.MultiplayerReviewStage == "dead-teammate")
             return MultiplayerDeadTeammateContracts.Run(state, options, loop);
         if (options.Scenario.MultiplayerReviewStage == "upstream-compatibility")
@@ -146,7 +156,7 @@ internal static class MultiplayerReviewContracts
             terminalCheckpointEnemyHp = win.Snapshot.AdvisoryLastEnemyCycle.EnemyHp,
             unfinishedEnemyHp = unfinished.Snapshot.EnemyHp,
         });
-        object terminalFacts = AccessTools.Method(typeof(CombatBeamSolver), "MultiplayerFactsAt").Invoke(solver, [win, 1])!;
+        object terminalFacts = AccessTools.Method(typeof(CombatBeamSolver), "MultiplayerFactsAt").Invoke(solver, [win, 3])!;
         int Fact(string property) => (int)AccessTools.Property(terminalFacts.GetType(), property).GetValue(terminalFacts)!;
         Check("terminal_projection_uses_entire_snapshot",
             Fact("EnemyHp") == win.Snapshot.EnemyHp && Fact("Hp") == win.Snapshot.PlayerHp

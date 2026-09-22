@@ -22,7 +22,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <EnableDynamicLoading>true</EnableDynamicLoading>
     <RootNamespace>CombatSolver</RootNamespace>
-    <Version>0.43.6</Version>
+    <Version>0.44.1</Version>
     <DefineConstants Condition="'$(VerifyHistoryCounters)' == 'true'">$(DefineConstants);VERIFY_HISTORY_COUNTERS</DefineConstants>
     <SteamRoot Condition="'$(SteamRoot)' == '' and '$(OS)' == 'Windows_NT' and Exists('D:/Steam')">D:/Steam</SteamRoot>
     <SteamRoot Condition="'$(SteamRoot)' == '' and '$(OS)' == 'Windows_NT'">$(MSBuildProgramFiles32)/Steam</SteamRoot>
@@ -45,6 +45,7 @@
 
   <ItemGroup>
     <Compile Remove="tools/**/*.cs" />
+    <Compile Remove="docs/**/*.cs" />
     <Compile Remove="outputs/**/*.cs" />
     <EmbeddedResource Include="src/UI/English.json" LogicalName="CombatSolver.UI.English.json" />
     <PackageReference Include="Krafs.Publicizer" Version="2.3.0" PrivateAssets="all" />

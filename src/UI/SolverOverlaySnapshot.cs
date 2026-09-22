@@ -256,11 +256,21 @@ internal sealed record SolverOverlaySnapshot(
         if (result.IsMultiplayerAdvice)
         {
             summaryText += "\n" + SolverText.Format($"敌方回合：已推演 {result.Snapshot.AdvisoryEnemyCycles} / 上限 {result.AdvisoryHorizon}");
+            summaryText += "\n" + SolverText.Format($"搜索曾到达第 {result.AdvisorySearchedEnemyCycles} 个敌方周期；后续风险仅作条件参考。");
             if (!result.CombatEndedTurn.HasValue)
                 summaryText += "\n" + (result.AdvisoryComparisonCycles > 0
                     ? SolverText.Format($"选路比较范围：第 {result.AdvisoryComparisonCycles} 个敌方周期")
                     : SolverText.Get("尚未完成首个敌方周期，当前建议缺少完整受击评估。"));
-            summaryText += "\n" + SolverText.Format($"输出优先：单回合扣血目标不超过 {result.AdvisoryHpLossAllowance} 点；当前预测最高 {result.AdvisoryMaximumCycleHpLost} 点。");
+            if (result.AdvisoryObjective is { } objective)
+            {
+                summaryText += "\n" + SolverText.Format($"本机阶段目标：{objective.TargetDamage} 点有效伤害，剩余 {objective.RemainingCycles} 个敌方周期；已付 {objective.PaidDamage}，方案预计 {result.AdvisoryPlannedContribution}。");
+                summaryText += "\n" + SolverText.Get(result.AdvisoryObjectiveWitness
+                    ? "已找到阶段达标方案，敌人仍按真实血量反击。"
+                    : "阶段目标尚未证实；当前返回已找到的伤害与战损折中方案。");
+                summaryText += "\n" + SolverText.Get("队友未来操作未知；队友行动后请手动重新计算。");
+                if (objective.PreviousTarget is { } previousTarget && objective.PreviousProgress is { } previousProgress)
+                    summaryText += "\n" + SolverText.Format($"上一阶段已结算：目标 {previousTarget}，实际进展 {previousProgress}。");
+            }
         }
         string reviewSummaryText = result.WasRestoredFromCache
             ? SolverText.Get("已恢复本场战斗记录的路线")

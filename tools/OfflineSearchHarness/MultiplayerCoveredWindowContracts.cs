@@ -42,7 +42,6 @@ internal static class MultiplayerCoveredWindowContracts
         Set(initial, nameof(SimulationSnapshot.ProjectedPlayerHp), 80);
         Set(initial, nameof(SimulationSnapshot.CumulativePlayerHpLost), 0);
         Set(initial, nameof(SimulationSnapshot.AdvisoryRootHpLost), 0);
-        Set(initial, nameof(SimulationSnapshot.AdvisoryHpLossAllowance), 3);
         Set(initial, nameof(SimulationSnapshot.EnemyHp), 100);
         Set(initial, nameof(SimulationSnapshot.TeamSurvivors), 2);
         SearchNode rootNode = new(null, 0, 0, 0, turn, SearchRouteTraits.None, 0, 0, initial.StateKey,

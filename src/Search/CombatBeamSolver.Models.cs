@@ -270,8 +270,8 @@ internal sealed partial class CombatBeamSolver
                         node.Snapshot.CumulativePlayerHpLost,
                         node.ActionCount,
                         node.Score,
-                        node.AdvisoryHpLoss.CompletedExcessHpLost,
-                        node.AdvisoryHpLoss.CurrentCycleHpLost,
+                        node.Snapshot.AdvisoryLocalDamage,
+                        node.Snapshot.AdvisoryTotalDamage,
                         node.Snapshot.AdvisoryLastEnemyCycle));
             }
             ExpandedTranspositions = [];

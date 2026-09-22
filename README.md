@@ -4,17 +4,17 @@ Combat Solver 是《杀戮尖塔 2》的战斗路线求解器，本 fork 支持�
 
 单人模式下，玩家可以只查看建议，也可以让求解器执行当前回合，或连续接管整场战斗。多人模式只提供手动请求的建议。搜索不会修改游戏 RNG，也不会在后台操作真实战斗状态。
 
-当前已发布 **0.43.6**，基于官方 **0.43.2**。本次修复死亡队友重算报错、死亡与复活后的效果判断，以及多人奥斯蒂最大生命计算；保留多人完整回合覆盖后的长线选路、十四周期、普通计算双倍额度和每周期 3 HP 扣血目标。见 [GitHub Release 与下载](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.43.6)、[更新日志](docs/releases/0.43.6-RELEASE_NOTES.md) 与 [多人军师](docs/multiplayer-advisor.md)。
+本次 **0.44.1** 基于官方 **0.44.0**，重新设计多人选路：以本机阶段贡献为目标，综合考虑战损、药水和后续收益，取消每周期 3 HP 目标。见 [中英更新日志](docs/releases/0.44.1-RELEASE_NOTES.md)、[发布状态](docs/releases/0.44.1-PUBLISH.md)与[多人军师](docs/multiplayer-advisor.md)。
 
 [多人军师](docs/multiplayer-advisor.md) 推荐本人的出牌和用药路线，最多推演十四个敌方回合。队友行动后自行决定何时重算；推演假设队友后续不主动出牌或用药，但仍结算其被动效果。多人功能目前供试用，尚未完成真实联机验收。
 
-**English UI:** Set the game language to English and restart the game. In single-player, use **Play turn** or **Auto: On**. Released version **0.43.6**, based on upstream **0.43.2**, fixes recalculation with dead teammates, effect activation after death and revival, and multiplayer Osty maximum HP. Multiplayer retains manual advice for up to fourteen enemy cycles, the 3 HP loss target, doubled ordinary time and node limits, and complete-current-turn coverage for longer-term selection. Teammates' future active actions are not modeled; live multiplayer compatibility is not yet verified. See the [release notes](docs/releases/0.43.6-RELEASE_NOTES.md) and [GitHub download](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.43.6). Configure potions, growth and search budgets in the overlay. **Settings > Reports > Upload report** submits a bug report. Logs, raw errors and some detailed diagnostics retain their original text.
+**English UI:** Set the game language to English and restart the game. In single-player, use **Play turn** or **Auto: On**. Version **0.44.1** is based on upstream **0.44.0**. Multiplayer replaces the per-cycle 3 HP target with a local contribution objective, balancing health, potions and observed longer-term returns. It retains manual advice for up to fourteen enemy cycles and doubled ordinary time and node limits. Teammates' future active actions are not modeled; live multiplayer is not yet verified. See the [release notes](docs/releases/0.44.1-RELEASE_NOTES.md) and [publication status](docs/releases/0.44.1-PUBLISH.md). Configure potions, growth and search budgets in the overlay. **Settings > Reports > Upload report** submits a bug report. Logs, raw errors and some detailed diagnostics retain their original text.
 
 界面跟随游戏语言：简体/繁体中文使用现有中文文案，其他语言使用英文。简化版不提供独立语言开关；卡牌胶囊、选牌和相关悬停说明支持运行中切换语言，其他既有窗口可通过重启统一刷新。
 
 ## 主要功能
 
-- **多人手动军师（试用）**：点击重新计算，基于当时全队状态建议本人的出牌和用药；在单回合最多 3 HP 的扣血目标内优先输出，显示目标、预测最高扣血、实际推演深度和边界，最多十四个敌方回合。多人只提供建议，以下执行和自动复用功能用于单人。
+- **多人手动军师（试用）**：点击重新计算，基于当时全队状态建议本人的出牌和用药；按敌人血量和存活人数设置本人阶段目标，兼顾战损与后续输出。显示目标、实绩、计划贡献与是否证实，最多推演十四个敌方回合。多人只提供建议，以下执行和自动复用功能用于单人。
 - **跨回合搜索**：继续预测抽牌、洗牌、敌人行动、持续状态和后续资源，而不是只计算眼前一回合。
 - **路线与战损展示**：按回合展示出牌、目标、选牌、药水、结束回合和关键遗物触发，并显示当前路线的预计整场战损。
 - **三种使用方式**：仅查看路线、执行本回合、连续全自动。搜索期间可以立即停止，并暂停本场后续自动搜索。

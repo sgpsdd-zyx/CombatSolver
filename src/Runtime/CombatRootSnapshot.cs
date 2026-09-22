@@ -37,6 +37,7 @@ internal sealed class CombatRootSnapshot
     public int InitialPlayerHp { get; }
     public int InitialPlayerMaxHp { get; }
     public int InitialPlayerRoundHpLost { get; }
+    public MultiplayerRootObservation? MultiplayerObservation { get; }
     public int InitialBrightestFlameMaxHpSpent
         => ((SimulatedCombatState)_rootSimulator.State.CombatState).BrightestFlameMaxHpSpent;
     public int PotionSlotCount { get; }
@@ -103,7 +104,8 @@ internal sealed class CombatRootSnapshot
         bool hasRenewablePotionShapedRock,
         PostCombatRelicHealProfile postCombatRelicHeal,
         int initialPlayerRoundHpLost,
-        PotionRewardOutlook potionRewardOutlook)
+        PotionRewardOutlook potionRewardOutlook,
+        MultiplayerRootObservation? multiplayerObservation)
     {
         PlayerIdentity = playerIdentity;
         Enemies = enemies;
@@ -144,6 +146,7 @@ internal sealed class CombatRootSnapshot
         HasRenewablePotionShapedRock = hasRenewablePotionShapedRock;
         PostCombatRelicHeal = postCombatRelicHeal;
         PotionRewardOutlook = potionRewardOutlook;
+        MultiplayerObservation = multiplayerObservation;
     }
 
     public static CombatRootSnapshot Capture(CombatState state, bool predictPotionReward = false)
@@ -303,7 +306,8 @@ internal sealed class CombatRootSnapshot
             hasRenewablePotionShapedRock,
             postCombatRelicHeal,
             initialPlayerRoundHpLost,
-            potionRewardOutlook);
+            potionRewardOutlook,
+            advisor ? MultiplayerContributionCapture.Capture(state, simulator, player) : null);
     }
 
     private static bool HasHealingVariables(DynamicVarSet variables)

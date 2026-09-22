@@ -345,7 +345,7 @@ internal static class MultiplayerHorizonContracts
                     expandedCycles = ExpandedCycles.ToDictionary(), result.ExpandedNodes, result.TransitionCount,
                     result.Elapsed, result.AdvisoryComparisonCycles, selectedCycles = result.Snapshot.AdvisoryEnemyCycles,
                     result.BoundaryReason, result.Snapshot.EnemyHp, result.Snapshot.CumulativePlayerHpLost,
-                    result.AdvisoryMaximumCycleHpLost, result.BestNode.Actions,
+                    result.AdvisoryPlannedContribution, result.AdvisoryObjectiveWitness, result.BestNode.Actions,
                 });
                 File.WriteAllText(Path.Combine(options.OutputDirectory, "horizon-budget.json"),
                     JsonSerializer.Serialize(new { fixture = "native_ten_card_draw_and_anger", evidence }, UnattendedTestFiles.JsonOptions));

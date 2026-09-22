@@ -148,7 +148,7 @@ internal static class Program
                 }
                 else if (options.Scenario.MultiplayerStrategyContracts)
                 {
-                    Step(steps, "Multiplayer damage allowance", () => MultiplayerStrategyContracts.Run(combat!, options, loop));
+                    Step(steps, "Multiplayer contribution quota", () => MultiplayerQuotaContracts.Run(combat!, options, loop));
                     reached = "M2";
                 }
                 else if (options.Scenario.MultiplayerStartContracts)
@@ -643,9 +643,11 @@ internal sealed record HarnessOptions
         if (multiplayerLongTermContracts && (multiplayerContracts || multiplayerStartContracts
             || multiplayerStrategyContracts || requestPath != null))
             throw new ArgumentException("--multiplayer-long-term-contracts requires its own two-player fixture.");
-        if (multiplayerReviewStage != null && (multiplayerReviewStage is not ("dead-teammate" or "upstream-compatibility" or "facts" or "stopping" or "horizon" or "horizon-fourteen" or "horizon-budget" or "horizon-native" or "horizon-ordering" or "window-selection" or "window-selection-payback" or "window-covered-payback" or "window-covered-sentinel" or "window-covered-contracts" or "window-covered-incremental" or "window-covered-defense") || multiplayerContracts
+        if (multiplayerReviewStage is "horizon-ordering" || multiplayerReviewStage?.StartsWith("window-", StringComparison.Ordinal) == true)
+            throw new ArgumentException("This historical ordering contract requires the v0.43.6 source; use quota-selection or quota-contracts for the current policy.");
+        if (multiplayerReviewStage != null && (multiplayerReviewStage is not ("quota-selection" or "quota-contracts" or "quota-pressure" or "quota-defense" or "quota-investment" or "dead-teammate" or "upstream-compatibility" or "facts" or "stopping" or "horizon" or "horizon-fourteen" or "horizon-budget" or "horizon-native" or "horizon-ordering" or "window-selection" or "window-selection-payback" or "window-covered-payback" or "window-covered-sentinel" or "window-covered-contracts" or "window-covered-incremental" or "window-covered-defense") || multiplayerContracts
             || multiplayerStartContracts || multiplayerStrategyContracts || multiplayerLongTermContracts || requestPath != null))
-            throw new ArgumentException("--multiplayer-review-contracts requires a dead-teammate, upstream-compatibility, facts, stopping, horizon, horizon-fourteen, horizon-budget, horizon-native, horizon-ordering, window-selection, window-selection-payback, window-covered-payback, window-covered-sentinel window-covered-contracts window-covered-incremental or window-covered-defense fixture of its own.");
+            throw new ArgumentException("--multiplayer-review-contracts requires quota-contracts, quota-selection, quota-pressure, quota-defense, quota-investment, dead-teammate, upstream-compatibility, facts, stopping, horizon, horizon-fourteen, horizon-budget, horizon-native, horizon-ordering, window-selection, window-selection-payback, window-covered-payback, window-covered-sentinel window-covered-contracts window-covered-incremental or window-covered-defense fixture of its own.");
         if ((observePortfolio || portfolioModelPath != null) && (!usePortfolio || searchMode != "Coordinator"))
             throw new ArgumentException("选择器实验需要 --search-mode Coordinator --use-portfolio。");
         if (noPlainBaseline && (!usePortfolio || searchMode != "Coordinator"))

@@ -883,8 +883,8 @@ internal sealed partial class CombatBeamSolver
             candidate.Snapshot.CumulativePlayerHpLost,
             candidate.ActionCount,
             candidate.Score,
-            candidate.AdvisoryHpLoss.CompletedExcessHpLost,
-            candidate.AdvisoryHpLoss.CurrentCycleHpLost,
+            candidate.Snapshot.AdvisoryLocalDamage,
+            candidate.Snapshot.AdvisoryTotalDamage,
             candidate.Snapshot.AdvisoryLastEnemyCycle);
         if (!_run.Transpositions.TryGetValue(candidate.StateKey, out TranspositionFrontier? frontier))
         {
@@ -945,8 +945,8 @@ internal sealed partial class CombatBeamSolver
             node.Snapshot.CumulativePlayerHpLost,
             node.ActionCount,
             node.Score,
-            node.AdvisoryHpLoss.CompletedExcessHpLost,
-            node.AdvisoryHpLoss.CurrentCycleHpLost,
+            node.Snapshot.AdvisoryLocalDamage,
+            node.Snapshot.AdvisoryTotalDamage,
             node.Snapshot.AdvisoryLastEnemyCycle);
         if (!_run.ExpandedTranspositions.TryGetValue(node.StateKey, out TranspositionFrontier? frontier))
         {

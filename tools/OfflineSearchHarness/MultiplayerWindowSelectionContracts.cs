@@ -83,7 +83,7 @@ internal static class MultiplayerWindowSelectionContracts
         node.Snapshot.EnemyHp,
         node.Snapshot.CumulativePlayerHpLost,
         node.Snapshot.DeathSaveUseCount,
-        excess = node.AdvisoryHpLoss.ExcessHpLost(3),
+        excess = node.Snapshot.CumulativePlayerHpLost,
         node.Snapshot.TeamSurvivors,
         node.Snapshot.PlayerDead,
         node.Snapshot.AllEnemiesDead,
@@ -198,7 +198,6 @@ internal static class MultiplayerWindowSelectionContracts
                     var policy = template with
                     {
                         Profile = template.Profile with { MaxExpandedNodes = nodes },
-                        Multiplayer = template.Multiplayer! with { UseCoveredWindowSelection = useCoverage },
                         VerifyIncrementalSearch = verify,
                     };
                     _recording = true;
@@ -253,7 +252,7 @@ internal static class MultiplayerWindowSelectionContracts
                             throw new InvalidOperationException("Covered payback did not change the complete current turn as expected.");
                         if (defense && (result.AdvisoryComparisonCycles != (useCoverage ? 7 : 6)
                             || final.Best.Snapshot.CumulativePlayerHpLost != 3
-                            || final.Best.AdvisoryHpLoss.ExcessHpLost(3) != 0
+                            || final.Best.Snapshot.CumulativePlayerHpLost != 0
                             || final.Best.Snapshot.DeathSaveUseCount != 0 || final.Best.Snapshot.TeamSurvivors != 2
                             || FirstTurn(final.Best, root.StartTurnNumber).Single().CardId != "INFLAME"))
                             throw new InvalidOperationException("Covered defense changed the expected observed risk or current turn.");

@@ -1197,8 +1197,6 @@ internal static partial class SolverController
                 includeTurnSetup: false,
                 theftPolicy: theftPolicy,
                 interaction: search.Interaction);
-            if (IsMultiplayerSession)
-                searchPolicy = new MultiplayerSearchPolicy(PreviousRoutes: _combat.AdvisoryRoutes.ToArray()).Apply(searchPolicy);
             search.MaxDegreeOfParallelism = searchPolicy.MaxDegreeOfParallelism;
             search.MemoryPressureSignal = searchPolicy.MemoryPressureSignal;
             setupStage = "combat_root_snapshot";
@@ -1217,6 +1215,12 @@ internal static partial class SolverController
                     "combat_root_snapshot",
                     settings.EnableNoGcRegion);
             }
+            if (IsMultiplayerSession)
+                searchPolicy = new MultiplayerSearchPolicy(PreviousRoutes: _combat.AdvisoryRoutes.ToArray())
+                {
+                    Objective = _combat.AdvisoryContribution.Observe(rootSnapshot.MultiplayerObservation
+                        ?? throw new InvalidOperationException("Multiplayer root has no contribution observation.")),
+                }.Apply(searchPolicy);
             Entry.Logger.Info(
                 $"[CombatSolver/Test] COMBAT_ROOT_CAPTURE generation={generation} " +
                 $"elapsed_ms={rootSnapshot.CaptureElapsedMilliseconds:F3} " +

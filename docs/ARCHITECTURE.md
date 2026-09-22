@@ -18,17 +18,13 @@
 
 `SolverController` 在网络多人中只接受 Manual 请求，排空旧 worker 后主线程捕获整个战场。`SolverController.Multiplayer` 持有过期标记和有界纯动作路线，不做自动续用或部署；`ContinuationStamp.Multiplayer` 对账全队状态。`MultiplayerSearchPolicy` 注入最多十四次敌方周期与独立建议排序，`CombatBeamSolver.Multiplayer` 重放旧前缀，重放计数属于 `SearchRunContext`；`MultiplayerRound` 编排全队回合，不接管实机。已推演的敌方周期从分支按值复制至 `SimulationSnapshot`、`SolverSnapshot` 和 UI，与窗口上限分开显示。`MultiplayerSearchPolicy.ResolveSearchProfile` 在多人协调器入口解析一次有效额度：普通请求时间/节点乘二，固定或显式覆盖保持原值，不改持久化设置。`RemainingCycleLayers` 供 `Phases` 按前沿实际完成的敌方周期分摊原请求剩余额度，额外玩家回合不当作周期；单人保持官方 4/8 层。有效额度经 `SolverResult` 纯值传到 UI 详情，窗口、预算均只归多人政策所有。`SimulatedCombatState.Multiplayer` 的身份、窗口和额外回合参与者随 Fork 复制，其他队员数值继续属于既有影子状态。队友选择通过显式边界退出，本人选择继续搜索。UI 仍只渲染 snapshot，单人调用原有路径。详见 [行为与验证](multiplayer-advisor.md)。
 
-多人默认以每个敌方周期 3 HP 扣血为输出目标范围。`CombatRootSnapshot` 在主线程冻结本机本轮已经发生的未格挡伤害；敌方周期结束、下一玩家回合准备之前，`Expansion.Replay` 将累计扣血检查点写入 `SimulatedCombatState.AdvisorLastEnemyCycleHpLost`，随 Fork 按值复制。该字段只记录原始观察，不决定政策；`SearchNode` 持有不可变的 `MultiplayerHpLossBudget`，区分已结束周期的超额扣血与当前周期的已用额度。治疗、重算和额外玩家回合不清除已用额度，下一回合准备的自损计入新周期。政策账本通过转置标签和去重标签保留，不进入战斗状态键或 `ContinuationStamp`。
+`MultiplayerContributionCapture` 在主线程从真实伤害历史、有效敌人生命与存活参与者捕获 `MultiplayerRootObservation`。`SolverCombatSession.AdvisoryContribution` 独占跨手动请求的阶段账本；`MultiplayerContributionSession` 按绝对敌方轮次维护三周期截止，人数变化/到期明确重建并保留上一任务结果。Search 只接收不可变 `MultiplayerContributionObjective`，不回读 live 历史，也不预测队友操作。
 
-`CombatBeamSolver.Multiplayer` 中的 `BeamRetentionPolicy` 分片先覆盖多人进攻、防御、铺垫代表，再补剩余席位，全部共用既有 Beam 与请求预算。`MultiplayerEvaluation` 在敌方结算后、下一玩家准备前捕获 `MultiplayerCycleCheckpoint`：它是最多十四条、只含数值的不可变短链，归分支持有并由 Fork 共享历史；不含模型或模拟器。原始周期观察和扣血账本通过去重/转置标签区分，单人保持默认值；不加入战斗状态键或原生对账戳。
+`SimulatedCombatState.RecordDamageReceived` 在已有事件入口按 dealer / PetOwner 累加本机与总实际扣血；原版 `UnblockedDamage` 已排除过杀。计数按值 Fork；`MultiplayerCycleCheckpoint` 在敌方周期结束、下一玩家准备前保存 HP、最大 HP、伤害计数、药水代价和阵容观察，最多十四条不可变链。伤害计数与检查点进入多人去重/转置标签和严格增量校验，不进入战斗状态键或 ContinuationStamp，单人缺省为零。
 
-多人 `CombatBeamSolver.Multiplayer.PrepareMultiplayerFinalCandidates` 保留 A：逐槽强制用药、最少显式用药和至少一瓶资格先过滤，再冻结 `MultiplayerPlanOrdering` 并截至 `4B`；中途终止池压缩继续走此入口。既有预览/最终发布经 `MultiplayerWindow.PrepareMultiplayerPublicationCandidates` 从截断前候选与仍保留的回合/上一层冻结完整本回合代表，满足全部覆盖、预算与已知风险门禁时升级共同周期，否则返回 A。局部动作路径索引不跨发布存活，不改变战斗键、转置或分支模拟；具体机制由[多人指南](multiplayer-advisor.md#未击杀时如何选择长线方案)维护。`MultiplayerFinalBatch` 只持有候选、冻结排序上下文及纯值决策说明，预览/最终经 `SelectMultiplayerFinal` 透传周期，不从截断子集重算。可继续展开的前缀保路不受最终资格限制，空合格池仍显式失败。`Phases` 独占模拟器释放，`FinalPlanOrdering` 保留官方单人政策。
+`CombatBeamSolver.MultiplayerEvaluation` 拥有阶段事实、近期风险与条件尾值；`MultiplayerPlanValue` / `MultiplayerQuotaSelection` 拥有纯值成本和支配关系。真实终局在比较周期内优先于旧检查点。`Multiplayer` 先过滤用药资格，再冻结截止内已观察的最深周期并保留最多 `4B` 伤害/代价前沿；缺少周期证据仍是未知。`Phases` 在既有回合层保存无模拟器的见证，最终与现有候选合并；预览与最终共用入口。快照释放继续归 `Phases`，长期见证不拥有模拟器。阶段之后的风险/收益只作条件尾值，返回动作截至实际比较边界，不能伪造胜利或略去敌方结算。旧 3 HP 账本与 A/C 覆盖升级不再运行。
 
-`MultiplayerEvaluation.MultiplayerFactsAt` 只对未结束路线读取历史检查点，真实胜利/死亡投影完整结束状态；原风险顺序继续有效。`Phases` 的本机无损满血胜利捷径只允许单人进入。主线程 `BattleDamageTracker.Observe` 在多人时沿原 `Begin` 追踪窗口按 `PotionUsedEntry.Actor` 统计本机用药，将结果写入既有不可变 `BattleDamageSnapshot`；后台不读实时历史，也不增加重复的根字段。缺少本机身份或药水历史退到追踪基线之前显式失败，单人计数路径不改。
-
-多人 A 与中间比较器末级同分使用完整动作数。C 仅在完整代表覆盖使共同周期严格提高后，沿真实父链读取该周期边界的动作数；真实终局仍用完整动作数。`MultiplayerHorizonContracts.ExperimentalActionCountAt` 保留 0.41.3 当时未采用的独立实验，当前受限 C 的接入与成本门禁见[实施记录](strategy/pro-window-selection-20260920/implementation.md)，不能把旧实验结论当成当前默认。
-
-具体续行后来已出现的风险仍能否定其较早的安全观察。救命计数仍为全队口径，资源归属和两步挑战尚待独立处理；0.41.1 的原始问题与采用边界见[外部复审本地核对](strategy/pro-review-20260918/local-review.md)。深度、未兑现铺垫和名义格挡不是最终收益。预算停止时 `Phases` 保留上一层的有界节点组，释放模拟器后仅对选中路线走原有物化重放，不新增第二套探针或预算。`StateEvaluation` 保留中间探索特征，UI 从只读结果分别投影实际推演深度、共同周期、额度与最高扣血；零共同周期明确提示受击评估未完成。
+中间 Beam 继续覆盖防御、进攻和铺垫；单人 `FinalPlanOrdering`、能力承诺及预算不变。多人根前用药资格由 Runtime 原追踪窗口按 Actor 冻结。UI 从 `SolverResult` 投影阶段目标、已付/预计进展、是否存在选中达标见证、返回深度、曾到达深度和未知受击提示；不读取搜索树。详细默认参数与验证由[多人指南](multiplayer-advisor.md)及[实施记录](strategy/multiplayer-cooperative-planning-20260922/implementation.md)维护。
 
 当前单人基线为官方 `42e09028 / 0.44.0`。`PowerCardValuation` / `PowerCommitment` 和能力固定前缀组合用于单人。多人协调器继续在这些组合及强制／Smart 药水梯度之前返回；`CombatBeamSolver._hasRegisteredPowerCards` 另以 `policy.Multiplayer == null` 隔离共享候选展开中的能力承诺入口。Runtime 多人不捕获单人成长目标，`SimulatedCombatState` 多人根的疯狂科学升级信用容量为零，实际 Power 仍按持有者结算。单人继续官方登记、成长、保路和预算路径；[兼容证据](strategy/upstream-0440-merge-20260922.md)。
 
@@ -542,7 +538,7 @@ NativeReplayDriver 保存开战/结束观察器抛出的原始异常，由 Advan
 - `tools/headless-runtime.ps1` / `tools/headless-runtime.sh`：拥有实例目录、私有游戏/Mod 内容快照与每用户主机租约。实例默认位于当前仓库 `.local/headless-instances/<实例>`；用户目录只保存跨任务互斥所需的小型主机租约，不保存游戏快照。默认 exclusive，显式 parallel 最多两个游戏；CPU/内存预约随游戏进程存活，暖进程也占名额。实例清理要求租约已释放、私有游戏已退出、所有权标记完全匹配且目录不含重解析点/符号链接。它们不改变 Search DOP、NoGC、战斗语义或请求协议。详见 [实例与并行说明](HEADLESS_TESTING.md)。
 
 - `tools/run-visible-steam-benchmark.ps1` / `tools/run-visible-steam-benchmark.sh`：Windows / Linux 的平台原生入口，负责正常可见 Steam 会话的搜索、GC 与帧口径。
-- `tools/CoverageCatalog/Program.cs`：当前程序集和 registry descriptor 的覆盖目录生成/验证。
+- `tools/CoverageCatalog/Program.cs`：当前程序集和 registry descriptor 的覆盖目录生成/验证。构建导入RitsuLib多程序集引用；带限制的聚合证据状态保留原含义，不授予Runtime覆盖。
 - `tools/verify-refactor-boundaries.ps1` / `tools/verify-refactor-boundaries.sh`：Windows / Linux 的等价门禁，阻止 Search 全局依赖、旧 controller 字段、worker live 回读、Beam 职责回流、unattended 编排回流、UI mutable 类型回流和 registry 私有反射；规则变化时必须同步维护两端。
 
 纯职责移动至少运行 Release 编译与当前平台的结构门禁。改变语义、搜索或显示行为时，再按影响面选择严格差分、完整 headless、CoverageCatalog 或可见 Steam。

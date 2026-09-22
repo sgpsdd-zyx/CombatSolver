@@ -1,0 +1,1000 @@
+{
+  "date": "2026-09-22",
+  "forkVersion": "0.44.1",
+  "upstreamBase": "42e0902874f5f3c329ef13dccf30eb694375ca17",
+  "upstreamMergeCommit": "abb3979ce827b59e631f552ab90f1187587f5636",
+  "scope": "Independent multiplayer contribution policy; no teammate active-action prediction. Release source commit is recorded in docs/releases/0.44.1-PUBLISH.md.",
+  "quotaContracts": {
+    "status": "Passed",
+    "source": ".local/multiplayer-quota-20260922/accepted-contracts/quota-contracts.json",
+    "checks": [
+      "stage_share_and_absolute_deadline",
+      "same_round_recalculation_does_not_renew",
+      "healing_and_continued_progress_share_stage_origin",
+      "roster_change_preserves_deadline_and_previous_result",
+      "elapsed_stage_renews_explicitly",
+      "recalculation_does_not_add_nonadditive_capped_progress",
+      "no_last_damage_point_health_cliff",
+      "local_index_one",
+      "native_overkill_counts_only_actual_hp",
+      "local_damage_credited",
+      "damage_ledger_fork_and_root_isolation",
+      "child_foreign_and_unknown_damage_stays_in_child",
+      "native_local_play_accepted",
+      "local_play_full_party_native_equal",
+      "native_recalculation_keeps_paid_damage",
+      "native_peer_play_accepted",
+      "native_peer_damage_does_not_pay_or_postpone_local_quota",
+      "enemy_healing_reopens_progress",
+      "native_changes_do_not_mutate_frozen_prediction",
+      "quota_does_not_skip_real_retaliation_incremental_equal",
+      "fixed_node_budget_respected",
+      "risk_cannot_dominate_reliable_witness",
+      "real_victory_overrides_stale_cycle",
+      "victory_after_deadline_does_not_backdate_stage",
+      "fixed_batch_ordering_125_triples",
+      "unassessed_budget_fallback_remains_unknown",
+      "quota_and_unknown_ui_eng",
+      "quota_and_unknown_ui_zhs",
+      "quota_and_unknown_ui_zht",
+      "native_retaliation_play_STRIKE_IRONCLAD",
+      "native_retaliation_play_DEFEND_IRONCLAD",
+      "retaliation_full_party_native_cycle_equal"
+    ]
+  },
+  "selection": {
+    "status": "Passed",
+    "source": ".local/multiplayer-quota-20260922/verified-selection/final-selection.json",
+    "evidence": [
+      {
+        "name": "F01_require_potion_before_truncation",
+        "passed": true,
+        "input": [
+          "dry0",
+          "dry1",
+          "dry2",
+          "dry3",
+          "used"
+        ],
+        "selected": "used",
+        "depth": 1,
+        "retained": 1,
+        "orderingCalls": 1,
+        "Error": null
+      },
+      {
+        "name": "F02_minimum_two_before_truncation",
+        "passed": true,
+        "input": [
+          "dry0",
+          "dry1",
+          "dry2",
+          "dry3",
+          "used",
+          "twice"
+        ],
+        "selected": "twice",
+        "depth": 1,
+        "retained": 1,
+        "orderingCalls": 1,
+        "Error": null
+      },
+      {
+        "name": "empty_eligible_pool",
+        "passed": true,
+        "input": [
+          "dry0",
+          "dry1",
+          "dry2",
+          "dry3"
+        ],
+        "selected": null,
+        "depth": 0,
+        "retained": 0,
+        "orderingCalls": 1,
+        "Error": "PotionPolicyUnsatisfiedException"
+      },
+      {
+        "name": "automatic_potion_is_not_explicit",
+        "passed": true,
+        "input": [
+          "automatic"
+        ],
+        "selected": null,
+        "depth": 0,
+        "retained": 0,
+        "orderingCalls": 1,
+        "Error": "PotionPolicyUnsatisfiedException"
+      },
+      {
+        "name": "eligibility_precedes_common_cycle",
+        "passed": true,
+        "input": [
+          "dry0",
+          "dry1",
+          "dry2",
+          "dry3",
+          "deep_use"
+        ],
+        "selected": "deep_use",
+        "depth": 2,
+        "retained": 1,
+        "orderingCalls": 1,
+        "Error": null
+      },
+      {
+        "name": "forced_slot_directive",
+        "passed": true,
+        "input": [
+          "dry0",
+          "dry1",
+          "dry2",
+          "dry3",
+          "used",
+          "forced_slot1"
+        ],
+        "selected": "forced_slot1",
+        "depth": 1,
+        "retained": 1,
+        "orderingCalls": 1,
+        "Error": null
+      },
+      {
+        "name": "expandable_prefix_kept",
+        "finalQualityFirst": "both",
+        "passed": true
+      },
+      {
+        "name": "terminal_survives_common_cycle_cut",
+        "passed": true,
+        "input": [
+          "dry0",
+          "dry1",
+          "dry2",
+          "dry3",
+          "early_win"
+        ],
+        "selected": "early_win",
+        "depth": 3,
+        "retained": 1,
+        "orderingCalls": 1,
+        "Error": null
+      },
+      {
+        "name": "terminal_end_facts_before_old_checkpoint",
+        "passed": true,
+        "input": [
+          "early_win",
+          "late_win",
+          "dry0"
+        ],
+        "selected": "early_win",
+        "depth": 3,
+        "retained": 3,
+        "orderingCalls": 1,
+        "Error": null
+      },
+      {
+        "name": "all_terminal_end_turn_control",
+        "passed": true,
+        "input": [
+          "late_win",
+          "early_win"
+        ],
+        "selected": "early_win",
+        "depth": 3,
+        "retained": 2,
+        "orderingCalls": 1,
+        "Error": null
+      },
+      {
+        "name": "local_death_still_precedes_victory",
+        "passed": true,
+        "input": [
+          "dead_win",
+          "early_win",
+          "dry0"
+        ],
+        "selected": "early_win",
+        "depth": 3,
+        "retained": 3,
+        "orderingCalls": 1,
+        "Error": null
+      },
+      {
+        "name": "F03_five_candidate_frozen_depth",
+        "passed": true,
+        "input": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "S"
+        ],
+        "selected": "D",
+        "depth": 2,
+        "retained": 2,
+        "orderingCalls": 1,
+        "Error": null
+      },
+      {
+        "name": "F04_six_candidate_frozen_depth",
+        "passed": true,
+        "input": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "S",
+          "X"
+        ],
+        "selected": "X",
+        "depth": 2,
+        "retained": 2,
+        "orderingCalls": 1,
+        "Error": null
+      },
+      {
+        "name": "new_batch_can_advance_depth",
+        "passed": true,
+        "input": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "X"
+        ],
+        "selected": "X",
+        "depth": 2,
+        "retained": 1,
+        "orderingCalls": 1,
+        "Error": null
+      },
+      {
+        "name": "reference_duplicates_do_not_fill_limit",
+        "passed": true,
+        "input": [
+          "A",
+          "A",
+          "B",
+          "C",
+          "D",
+          "S"
+        ],
+        "selected": "D",
+        "depth": 2,
+        "retained": 2,
+        "orderingCalls": 1,
+        "Error": null
+      },
+      {
+        "name": "permutations_5",
+        "permutations": 120,
+        "wrong": 0
+      },
+      {
+        "name": "permutations_6",
+        "permutations": 720,
+        "wrong": 0
+      },
+      {
+        "name": "fixed_cycle_comparator",
+        "triples": 216
+      }
+    ],
+    "failures": []
+  },
+  "terminalAndPotionContracts": {
+    "status": "Passed",
+    "source": ".local/multiplayer-quota-20260922/accepted-facts/review-facts.json",
+    "evidence": [
+      {
+        "name": "terminal_facts_precede_checkpoint",
+        "passed": true,
+        "facts": {
+          "winner": "win",
+          "terminalEnemyHp": 0,
+          "terminalCheckpointEnemyHp": 10,
+          "unfinishedEnemyHp": 4
+        }
+      },
+      {
+        "name": "terminal_projection_uses_entire_snapshot",
+        "passed": true,
+        "facts": {
+          "projectedEnemyHp": 0,
+          "actualEnemyHp": 0
+        }
+      },
+      {
+        "name": "all_terminal_control",
+        "passed": true,
+        "facts": {
+          "CombatEndedTurn": 2
+        }
+      },
+      {
+        "name": "multiplayer_continues_after_local_perfect_win",
+        "passed": true,
+        "facts": {
+          "lastExpandedTurn": 3,
+          "ExpandedNodes": 9,
+          "AllEnemiesDead": true,
+          "Elapsed": "00:00:00.0944394"
+        }
+      },
+      {
+        "name": "single_player_reward_forecast_excluded",
+        "passed": true,
+        "facts": {
+          "ForecastPotionId": null,
+          "ReplacementHpCredit": 0
+        }
+      },
+      {
+        "name": "peer_potion_does_not_satisfy_local_requirement",
+        "passed": true,
+        "facts": {
+          "PotionsUsedSoFar": 0,
+          "afterPeer": 0,
+          "effective": "RequireAtLeastOne",
+          "explicitUses": 1,
+          "ExpandedNodes": 28
+        }
+      },
+      {
+        "name": "local_force_still_applies",
+        "passed": true,
+        "facts": {
+          "ExpandedNodes": 28,
+          "explicitUses": 1
+        }
+      },
+      {
+        "name": "protected_potion_is_not_generated",
+        "passed": true,
+        "facts": {
+          "slot": 0,
+          "Entry": "BLOCK_POTION"
+        }
+      },
+      {
+        "name": "local_prior_use_satisfies_requirement",
+        "passed": true,
+        "facts": {
+          "PotionsUsedSoFar": 1,
+          "PotionIdsUsedSoFar": [
+            "BLOCK_POTION"
+          ],
+          "effective": "Smart"
+        }
+      },
+      {
+        "name": "tracking_window_and_frozen_request",
+        "passed": true,
+        "facts": {
+          "PotionsUsedSoFar": 0,
+          "frozenPeerRequest": 0
+        }
+      }
+    ]
+  },
+  "singleplayer": {
+    "status": "EquivalentForFixedSentinel",
+    "source": ".local/multiplayer-quota-20260922/solo-comparison.json",
+    "baseline": ".local/upstream-0440-merge-20260922/solo-official/harness-result.json",
+    "nonTimingChecks": 71,
+    "differences": 0,
+    "expanded": 1750,
+    "transitions": 4363,
+    "hpLost": 2,
+    "multiplayerEntrypointCalls": 0
+  },
+  "shortSearch": {
+    "nodeLimit": 1400,
+    "beam": 12,
+    "dop": 1,
+    "effectiveTimeBudgetMs": 3000,
+    "priorBaselineTimeBudgetMs": 600000,
+    "timingClaim": false,
+    "results": [
+      {
+        "source": ".local/multiplayer-quota-20260922/verified-pressure/quota-pressure.json",
+        "scenario": "quota-pressure",
+        "initialPlayerHp": 80,
+        "expandedNodes": 326,
+        "transitionCount": 639,
+        "advisoryComparisonCycles": 3,
+        "advisoryEnemyCycles": 3,
+        "advisoryPlannedContribution": 18,
+        "advisoryObjectiveWitness": false,
+        "advisoryQuotaFrontierCount": 47,
+        "advisorySearchedEnemyCycles": 8,
+        "playerHp": 68,
+        "playerDead": false,
+        "allEnemiesDead": false,
+        "enemyHp": 142,
+        "cumulativePlayerHpLost": 12,
+        "boundary": "None",
+        "firstTurn": [
+          "STRIKE_IRONCLAD",
+          "EndTurn"
+        ],
+        "objective": {
+          "stage": 1,
+          "startedRound": 1,
+          "deadlineRound": 3,
+          "targetDamage": 80,
+          "paidDamage": 0,
+          "remainingCycles": 3,
+          "participantCount": 2,
+          "renewalReason": "initial",
+          "previousTarget": null,
+          "previousProgress": null,
+          "stageEnemyHp": 160,
+          "observedLocalDamage": 0,
+          "observedTotalDamage": 0
+        }
+      },
+      {
+        "source": ".local/multiplayer-quota-20260922/verified-defense/quota-defense.json",
+        "scenario": "quota-defense",
+        "initialPlayerHp": 6,
+        "expandedNodes": 48,
+        "transitionCount": 86,
+        "advisoryComparisonCycles": 2,
+        "advisoryEnemyCycles": 2,
+        "advisoryPlannedContribution": 6,
+        "advisoryObjectiveWitness": false,
+        "advisoryQuotaFrontierCount": 20,
+        "advisorySearchedEnemyCycles": 2,
+        "playerHp": 6,
+        "playerDead": false,
+        "allEnemiesDead": false,
+        "enemyHp": 24,
+        "cumulativePlayerHpLost": 0,
+        "boundary": "None",
+        "firstTurn": [
+          "DEFEND_IRONCLAD",
+          "EndTurn"
+        ],
+        "objective": {
+          "stage": 1,
+          "startedRound": 1,
+          "deadlineRound": 3,
+          "targetDamage": 15,
+          "paidDamage": 0,
+          "remainingCycles": 3,
+          "participantCount": 2,
+          "renewalReason": "initial",
+          "previousTarget": null,
+          "previousProgress": null,
+          "stageEnemyHp": 30,
+          "observedLocalDamage": 0,
+          "observedTotalDamage": 0
+        }
+      },
+      {
+        "source": ".local/multiplayer-quota-20260922/verified-investment/quota-investment.json",
+        "scenario": "quota-investment",
+        "initialPlayerHp": 80,
+        "expandedNodes": 395,
+        "transitionCount": 1096,
+        "advisoryComparisonCycles": 3,
+        "advisoryEnemyCycles": 3,
+        "advisoryPlannedContribution": 57,
+        "advisoryObjectiveWitness": false,
+        "advisoryQuotaFrontierCount": 46,
+        "advisorySearchedEnemyCycles": 8,
+        "playerHp": 63,
+        "playerDead": false,
+        "allEnemiesDead": false,
+        "enemyHp": 103,
+        "cumulativePlayerHpLost": 17,
+        "boundary": "None",
+        "firstTurn": [
+          "INFLAME",
+          "STRIKE_IRONCLAD",
+          "EndTurn"
+        ],
+        "objective": {
+          "stage": 1,
+          "startedRound": 1,
+          "deadlineRound": 3,
+          "targetDamage": 80,
+          "paidDamage": 0,
+          "remainingCycles": 3,
+          "participantCount": 2,
+          "renewalReason": "initial",
+          "previousTarget": null,
+          "previousProgress": null,
+          "stageEnemyHp": 160,
+          "observedLocalDamage": 0,
+          "observedTotalDamage": 0
+        }
+      }
+    ]
+  },
+  "holdout": {
+    "seed": "QUOTA-HOLDOUT-20260922",
+    "encounter": "FOGMOG",
+    "hasPriorBaseline": false,
+    "results": [
+      {
+        "source": ".local/multiplayer-quota-20260922/holdout-defense/quota-defense.json",
+        "scenario": "quota-defense",
+        "initialPlayerHp": 6,
+        "expandedNodes": 52,
+        "transitionCount": 102,
+        "advisoryComparisonCycles": 2,
+        "advisoryEnemyCycles": 2,
+        "advisoryPlannedContribution": -1,
+        "advisoryObjectiveWitness": false,
+        "advisoryQuotaFrontierCount": 31,
+        "advisorySearchedEnemyCycles": 2,
+        "playerHp": 3,
+        "playerDead": false,
+        "allEnemiesDead": false,
+        "enemyHp": 31,
+        "cumulativePlayerHpLost": 3,
+        "boundary": "None",
+        "firstTurn": [
+          "STRIKE_IRONCLAD",
+          "EndTurn"
+        ],
+        "objective": {
+          "stage": 1,
+          "startedRound": 1,
+          "deadlineRound": 3,
+          "targetDamage": 15,
+          "paidDamage": 0,
+          "remainingCycles": 3,
+          "participantCount": 2,
+          "renewalReason": "initial",
+          "previousTarget": null,
+          "previousProgress": null,
+          "stageEnemyHp": 30,
+          "observedLocalDamage": 0,
+          "observedTotalDamage": 0
+        }
+      },
+      {
+        "source": ".local/multiplayer-quota-20260922/holdout-pressure/quota-pressure.json",
+        "scenario": "quota-pressure",
+        "initialPlayerHp": 80,
+        "expandedNodes": 297,
+        "transitionCount": 686,
+        "advisoryComparisonCycles": 3,
+        "advisoryEnemyCycles": 3,
+        "advisoryPlannedContribution": 5,
+        "advisoryObjectiveWitness": false,
+        "advisoryQuotaFrontierCount": 47,
+        "advisorySearchedEnemyCycles": 7,
+        "playerHp": 71,
+        "playerDead": false,
+        "allEnemiesDead": false,
+        "enemyHp": 155,
+        "cumulativePlayerHpLost": 9,
+        "boundary": "None",
+        "firstTurn": [
+          "STRIKE_IRONCLAD",
+          "EndTurn"
+        ],
+        "objective": {
+          "stage": 1,
+          "startedRound": 1,
+          "deadlineRound": 3,
+          "targetDamage": 80,
+          "paidDamage": 0,
+          "remainingCycles": 3,
+          "participantCount": 2,
+          "renewalReason": "initial",
+          "previousTarget": null,
+          "previousProgress": null,
+          "stageEnemyHp": 160,
+          "observedLocalDamage": 0,
+          "observedTotalDamage": 0
+        }
+      }
+    ]
+  },
+  "longTail": {
+    "source": ".local/multiplayer-quota-20260922/accepted-long-tail/horizon-comparison.json",
+    "evaluationProtocol": "Selected current-turn cards, then one legal Strike per turn through cycle 14; teammates pass. Evaluation work is separate from search.",
+    "humanPolicyValidated": false,
+    "peerPerturbationActuallyUsed": true,
+    "results": [
+      {
+        "name": "late_setup",
+        "rootEnemyHp": 500,
+        "horizon": 7,
+        "nodeLimit": 350,
+        "expandedNodes": 101,
+        "transitionCount": 152,
+        "advisoryComparisonCycles": 3,
+        "selectedCycles": 3,
+        "boundaryReason": "None",
+        "currentTurn": [
+          "STRIKE_IRONCLAD"
+        ],
+        "evaluation": {
+          "cycles": 14,
+          "enemyHp": 416,
+          "hpLost": 0,
+          "teamSurvivors": 2,
+          "won": false,
+          "endedTurn": null,
+          "replayCalls": 28,
+          "peerReplayActions": 0
+        }
+      },
+      {
+        "name": "late_setup",
+        "rootEnemyHp": 500,
+        "horizon": 14,
+        "nodeLimit": 350,
+        "expandedNodes": 241,
+        "transitionCount": 362,
+        "advisoryComparisonCycles": 3,
+        "selectedCycles": 3,
+        "boundaryReason": "None",
+        "currentTurn": [
+          "INFLAME"
+        ],
+        "evaluation": {
+          "cycles": 14,
+          "enemyHp": 396,
+          "hpLost": 0,
+          "teamSurvivors": 2,
+          "won": false,
+          "endedTurn": null,
+          "replayCalls": 28,
+          "peerReplayActions": 0
+        }
+      },
+      {
+        "name": "early_finish",
+        "rootEnemyHp": 12,
+        "horizon": 7,
+        "nodeLimit": 350,
+        "expandedNodes": 57,
+        "transitionCount": 101,
+        "advisoryComparisonCycles": 3,
+        "selectedCycles": 1,
+        "boundaryReason": "None",
+        "currentTurn": [
+          "STRIKE_IRONCLAD"
+        ],
+        "evaluation": {
+          "cycles": 1,
+          "enemyHp": 0,
+          "hpLost": 0,
+          "teamSurvivors": 2,
+          "won": true,
+          "endedTurn": 2,
+          "replayCalls": 3,
+          "peerReplayActions": 0
+        }
+      },
+      {
+        "name": "early_finish",
+        "rootEnemyHp": 12,
+        "horizon": 14,
+        "nodeLimit": 350,
+        "expandedNodes": 135,
+        "transitionCount": 243,
+        "advisoryComparisonCycles": 3,
+        "selectedCycles": 1,
+        "boundaryReason": "None",
+        "currentTurn": [
+          "STRIKE_IRONCLAD"
+        ],
+        "evaluation": {
+          "cycles": 1,
+          "enemyHp": 0,
+          "hpLost": 0,
+          "teamSurvivors": 2,
+          "won": true,
+          "endedTurn": 2,
+          "replayCalls": 3,
+          "peerReplayActions": 0
+        }
+      },
+      {
+        "name": "budget_four",
+        "rootEnemyHp": 500,
+        "horizon": 7,
+        "nodeLimit": 4,
+        "expandedNodes": 4,
+        "transitionCount": 6,
+        "advisoryComparisonCycles": 1,
+        "selectedCycles": 1,
+        "boundaryReason": "NodeLimit",
+        "currentTurn": [
+          "STRIKE_IRONCLAD"
+        ],
+        "evaluation": {
+          "cycles": 14,
+          "enemyHp": 416,
+          "hpLost": 0,
+          "teamSurvivors": 2,
+          "won": false,
+          "endedTurn": null,
+          "replayCalls": 28,
+          "peerReplayActions": 0
+        }
+      },
+      {
+        "name": "budget_four",
+        "rootEnemyHp": 500,
+        "horizon": 14,
+        "nodeLimit": 4,
+        "expandedNodes": 4,
+        "transitionCount": 6,
+        "advisoryComparisonCycles": 1,
+        "selectedCycles": 1,
+        "boundaryReason": "NodeLimit",
+        "currentTurn": [
+          "STRIKE_IRONCLAD"
+        ],
+        "evaluation": {
+          "cycles": 14,
+          "enemyHp": 416,
+          "hpLost": 0,
+          "teamSurvivors": 2,
+          "won": false,
+          "endedTurn": null,
+          "replayCalls": 28,
+          "peerReplayActions": 0
+        }
+      },
+      {
+        "name": "peer_finisher",
+        "rootEnemyHp": 38,
+        "horizon": 7,
+        "nodeLimit": 350,
+        "expandedNodes": 93,
+        "transitionCount": 143,
+        "advisoryComparisonCycles": 3,
+        "selectedCycles": 3,
+        "boundaryReason": "None",
+        "currentTurn": [
+          "STRIKE_IRONCLAD"
+        ],
+        "evaluation": {
+          "cycles": 6,
+          "enemyHp": 0,
+          "hpLost": 0,
+          "teamSurvivors": 2,
+          "won": true,
+          "endedTurn": 7,
+          "replayCalls": 13,
+          "peerReplayActions": 0
+        },
+        "peerEvaluation": {
+          "cycles": 0,
+          "enemyHp": 0,
+          "hpLost": 0,
+          "teamSurvivors": 2,
+          "won": true,
+          "endedTurn": 1,
+          "replayCalls": 2,
+          "peerReplayActions": 1
+        }
+      },
+      {
+        "name": "peer_finisher",
+        "rootEnemyHp": 38,
+        "horizon": 14,
+        "nodeLimit": 350,
+        "expandedNodes": 184,
+        "transitionCount": 297,
+        "advisoryComparisonCycles": 3,
+        "selectedCycles": 3,
+        "boundaryReason": "None",
+        "currentTurn": [
+          "STRIKE_IRONCLAD"
+        ],
+        "evaluation": {
+          "cycles": 6,
+          "enemyHp": 0,
+          "hpLost": 0,
+          "teamSurvivors": 2,
+          "won": true,
+          "endedTurn": 7,
+          "replayCalls": 13,
+          "peerReplayActions": 0
+        },
+        "peerEvaluation": {
+          "cycles": 0,
+          "enemyHp": 0,
+          "hpLost": 0,
+          "teamSurvivors": 2,
+          "won": true,
+          "endedTurn": 1,
+          "replayCalls": 2,
+          "peerReplayActions": 1
+        }
+      },
+      {
+        "name": "payback_seven",
+        "rootEnemyHp": 500,
+        "horizon": 7,
+        "nodeLimit": 350,
+        "expandedNodes": 101,
+        "transitionCount": 152,
+        "advisoryComparisonCycles": 3,
+        "selectedCycles": 3,
+        "boundaryReason": "None",
+        "currentTurn": [
+          "STRIKE_IRONCLAD"
+        ],
+        "evaluation": {
+          "cycles": 14,
+          "enemyHp": 360,
+          "hpLost": 0,
+          "teamSurvivors": 2,
+          "won": false,
+          "endedTurn": null,
+          "replayCalls": 28,
+          "peerReplayActions": 0
+        }
+      },
+      {
+        "name": "payback_seven",
+        "rootEnemyHp": 500,
+        "horizon": 14,
+        "nodeLimit": 350,
+        "expandedNodes": 241,
+        "transitionCount": 362,
+        "advisoryComparisonCycles": 3,
+        "selectedCycles": 3,
+        "boundaryReason": "None",
+        "currentTurn": [
+          "STRIKE_IRONCLAD"
+        ],
+        "evaluation": {
+          "cycles": 14,
+          "enemyHp": 360,
+          "hpLost": 0,
+          "teamSurvivors": 2,
+          "won": false,
+          "endedTurn": null,
+          "replayCalls": 28,
+          "peerReplayActions": 0
+        }
+      },
+      {
+        "name": "payback_nine",
+        "rootEnemyHp": 500,
+        "horizon": 7,
+        "nodeLimit": 350,
+        "expandedNodes": 101,
+        "transitionCount": 152,
+        "advisoryComparisonCycles": 3,
+        "selectedCycles": 3,
+        "boundaryReason": "None",
+        "currentTurn": [
+          "STRIKE_IRONCLAD"
+        ],
+        "evaluation": {
+          "cycles": 14,
+          "enemyHp": 304,
+          "hpLost": 0,
+          "teamSurvivors": 2,
+          "won": false,
+          "endedTurn": null,
+          "replayCalls": 28,
+          "peerReplayActions": 0
+        }
+      },
+      {
+        "name": "payback_nine",
+        "rootEnemyHp": 500,
+        "horizon": 14,
+        "nodeLimit": 350,
+        "expandedNodes": 241,
+        "transitionCount": 362,
+        "advisoryComparisonCycles": 3,
+        "selectedCycles": 3,
+        "boundaryReason": "None",
+        "currentTurn": [
+          "STRIKE_IRONCLAD"
+        ],
+        "evaluation": {
+          "cycles": 14,
+          "enemyHp": 304,
+          "hpLost": 0,
+          "teamSurvivors": 2,
+          "won": false,
+          "endedTurn": null,
+          "replayCalls": 28,
+          "peerReplayActions": 0
+        }
+      },
+      {
+        "name": "payback_fourteen",
+        "rootEnemyHp": 500,
+        "horizon": 7,
+        "nodeLimit": 350,
+        "expandedNodes": 101,
+        "transitionCount": 152,
+        "advisoryComparisonCycles": 3,
+        "selectedCycles": 3,
+        "boundaryReason": "None",
+        "currentTurn": [
+          "STRIKE_IRONCLAD"
+        ],
+        "evaluation": {
+          "cycles": 14,
+          "enemyHp": 164,
+          "hpLost": 0,
+          "teamSurvivors": 2,
+          "won": false,
+          "endedTurn": null,
+          "replayCalls": 28,
+          "peerReplayActions": 0
+        }
+      },
+      {
+        "name": "payback_fourteen",
+        "rootEnemyHp": 500,
+        "horizon": 14,
+        "nodeLimit": 350,
+        "expandedNodes": 239,
+        "transitionCount": 359,
+        "advisoryComparisonCycles": 3,
+        "selectedCycles": 3,
+        "boundaryReason": "None",
+        "currentTurn": [
+          "STRIKE_IRONCLAD"
+        ],
+        "evaluation": {
+          "cycles": 14,
+          "enemyHp": 164,
+          "hpLost": 0,
+          "teamSurvivors": 2,
+          "won": false,
+          "endedTurn": null,
+          "replayCalls": 28,
+          "peerReplayActions": 0
+        }
+      }
+    ]
+  },
+  "nativeUi": {
+    "status": "Passed",
+    "scenario": "UI-LOCALIZATION",
+    "runId": "macos-867c13c432e445b0a73e34343c142c52",
+    "templates": 458,
+    "languages": [
+      "eng",
+      "zhs",
+      "zht"
+    ],
+    "source": ".local/multiplayer-quota-20260922/native-ui/01-result.json",
+    "headlessInstanceRemovedByLauncher": true
+  },
+  "static": {
+    "boundaries": "REFACTOR_BOUNDARIES_OK search_files=218",
+    "powershell": "not-run",
+    "coverageFlags": [
+      "--verify-state-fields",
+      "--verify-branch-state-reads"
+    ],
+    "coverageExit": 0,
+    "coverageSource": ".local/multiplayer-quota-20260922/coverage-verify-compatible.log",
+    "unclassifiedStateFields": 0,
+    "exactLiveFallbackReads": 0
+  },
+  "limitations": [
+    "No live network or visible Steam validation.",
+    "No all-character or win-rate claim.",
+    "No global optimality or fourteen-cycle safety guarantee.",
+    "Three later-payback examples still select Strike.",
+    "Stage and tail coefficients are not independently calibrated.",
+    "No four-arm A/Q/F/F0 ablation.",
+    "Upstream Arsenal fixture timed out and NoGC precondition failed; neither is counted as passed.",
+    "Apotheosis/wax third-party compatibility remains deferred."
+  ]
+}

@@ -179,6 +179,13 @@ internal sealed partial class SimulatedCombatState
 
     public void RecordDamageReceived(Creature receiver, Creature? dealer, DamageResult result)
     {
+        if (AdvisorPlayer is { } advisor && receiver.Side == MegaCrit.Sts2.Core.Combat.CombatSide.Enemy)
+        {
+            int damage = MultiplayerDamageAttribution.HpDamage(result);
+            AdvisorTotalDamage = checked(AdvisorTotalDamage + damage);
+            if (MultiplayerDamageAttribution.IsLocal(dealer, advisor))
+                AdvisorLocalDamage = checked(AdvisorLocalDamage + damage);
+        }
         if (result.UnblockedDamage > 0)
         {
             (_unblockedDamageThisTurn ??= []).Add(receiver);

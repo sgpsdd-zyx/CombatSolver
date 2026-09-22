@@ -2,7 +2,7 @@
 
 > **当前多人分支（2026-09-22）：** `codex/multiplayer-advisor` 基于官方 `42e09028 / 0.44.0`。单人保持该官方版本的原路径、参数和行为；fork 自有评分、保路、剪枝、预算和缓存只归多人政策/对象所有，公共文件仅允许显式多人接入。官方单人能力承诺不得进入多人候选；涉及公共战斗语义的依赖单列，不混入策略优化。现役行为见[多人军师](docs/multiplayer-advisor.md)。
 >
-> 多人保持手动请求与操作、最多十四个敌方周期、每周期 3 HP 本机扣血目标；治疗、重算和额外玩家回合不刷新额度。普通请求时间/节点上限乘二，固定预算不变。多人不捕获单人成长目标，历史键保持各效果原持有者范围的扫描。完整回合覆盖 C／A 回退、仅 C 的共同周期动作成本、原资格和风险次序继续有效，索引不追加模拟或跨根缓存；[长线实现](docs/strategy/pro-window-selection-20260920/implementation.md)。fork `0.43.6` 已发布到 GitHub，[发布记录](docs/releases/0.43.6-PUBLISH.md)区分渠道完成与未验收项；官方标签不移动，官方同号日志独立归档。新多人策略已获本次用户授权，先完成[上游合并归档](docs/strategy/upstream-0440-merge-20260922.md)，再替换 3 HP 目标；不预测队友主动行为。独立[尖塔军师修复工具](tools/SpireAdvisorMultiplayerFix/README.md)另有产物。禁止启动可见 Steam；无头结果不外推可见性能或联机胜率。
+> 多人保持手动请求与操作、最多十四个敌方周期；当前已删除每周期 3 HP 与旧 C/A 回退，改用三周期本机贡献目标、伤害/代价前沿和条件长线续行。治疗、重算及额外玩家回合不延后阶段截止，人数变化明确重建记账；不预测队友主动行为。普通时间/节点上限乘二，固定预算不变。多人不捕获单人成长目标，历史键保持原持有者范围扫描。上游合并和第一次归档已完成，贡献策略的当前实现、验证及未覆盖项见[实施记录](docs/strategy/multiplayer-cooperative-planning-20260922/implementation.md)；发布状态见[版本索引](docs/releases/README.md)。官方标签不移动，同号日志独立归档。独立[尖塔军师修复工具](tools/SpireAdvisorMultiplayerFix/README.md)另有产物。禁止启动可见 Steam；无头结果不外推可见性能或联机胜率。
 >
 > 历史批次、发布授权与证据归 [开发笔记](docs/DEVELOPMENT_NOTES.md)、[版本日志](docs/releases/README.md) 和专题文档，不作为新的操作授权。外部研究固定输入与采用情况见 [策略索引](docs/strategy/README.md)。
 

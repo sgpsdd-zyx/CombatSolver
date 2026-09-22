@@ -1,6 +1,6 @@
 # CombatSolver 文档导航
 
-当前源码已合入官方 `42e09028 / 0.44.0`，多人仍保留上一版政策；本次还将实施已授权的本机贡献目标，然后统一定版发布。合并范围、直接证据与第一轮知识归档见[0.44.0 合并记录](strategy/upstream-0440-merge-20260922.md)。GitHub 最新已发布 fork 仍是 [0.43.6](releases/0.43.6-PUBLISH.md)，它基于官方 0.43.2。现役机制见[多人指南](multiplayer-advisor.md)；官方标签不移动。
+当前 fork **0.44.1** 基于官方 `42e09028 / 0.44.0`，单人保持官方策略，多人采用[本机贡献目标](strategy/multiplayer-cooperative-planning-20260922/implementation.md)，取消每周期 3 HP 目标，不预测队友主动行为。见[发布状态](releases/0.44.1-PUBLISH.md)、[玩家更新日志](releases/0.44.1-RELEASE_NOTES.md)与[多人指南](multiplayer-advisor.md)。上游合并与第一轮归档见[合并记录](strategy/upstream-0440-merge-20260922.md)，官方标签不移动。
 
 - [GC 完成链修复与优化筛选](performance/gc-completion-allocation-20260921.md)：替代 #116/#120 的窄修复、失败复现与重新实测取舍。
 - [增量历史计数](strategy/incremental-history-counters.md)：生命周期、测试构建与构键计时。
@@ -15,12 +15,12 @@
 
 | 要查什么 | 入口 |
 |---|---|
-| 0.43.6 发布来源与 GitHub 交付 | [发布记录](releases/0.43.6-PUBLISH.md) |
+| 0.44.1 发布来源与 GitHub 交付 | [发布记录](releases/0.44.1-PUBLISH.md) |
 | 0.41.2 发布、独立尖塔军师修复及本地材料的归档状态 | [2026-09-18 归档记录](DEVELOPMENT_NOTES.md#归档状态2026-09-18) |
-| 多人手动军师、3 HP 周期目标、共同周期选路、救援与官方 0.44.0 兼容 | [多人军师](multiplayer-advisor.md) |
+| 多人手动军师、本机贡献目标、阶段与长线选路、救援与官方 0.44.0 兼容 | [多人军师](multiplayer-advisor.md) |
 | 独立「尖塔军师」拿牌推荐模组误读房主卡组的修复与重跑 | [本机玩家修复工具](../tools/SpireAdvisorMultiplayerFix/README.md) |
 | 多人研究原文归档、已采用改进与暂缓方案 | [策略索引](strategy/README.md#多人研究归档)、[首批实施](multiplayer-advisor.md#首批策略优化已实施) |
-| 取消 3 HP 优先、本机贡献配额（不预测队友，未实施） | [2026-09-22 研究与证据](strategy/multiplayer-cooperative-planning-20260922/README.md) |
+| 本机贡献策略的研究采用、实现、证据与限制 | [2026-09-22 实施与归档](strategy/multiplayer-cooperative-planning-20260922/implementation.md) |
 | 十四周期规划、计算额度与队友偏移 | [2026-09-20 对照与采用](strategy/multiplayer-fourteen-cycles-20260920.md)；[旧七周期研究](strategy/pro-horizon-20260919/README.md)保留当时原始结果与动作成本实验 |
 | 未击杀长线选路、浅比较与首回合方案的公平续行 | [6 Pro 研究与本地候选池观察](strategy/pro-window-selection-20260920/README.md)；[0.43.4 实施与知识收尾](strategy/pro-window-selection-20260920/implementation.md) |
 | 0.41.2 的第二轮 6 Pro 复审与首批修正 | [第二轮归档](strategy/pro-review-0412-20260918/README.md)、[本地复核](strategy/pro-review-0412-20260918/local-review.md)、[实施与收尾](strategy/pro-review-0412-20260918/implementation.md)；F01/F02/F03 纳入 0.41.3 定版 |

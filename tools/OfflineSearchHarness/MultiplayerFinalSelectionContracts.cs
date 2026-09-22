@@ -101,10 +101,10 @@ internal static class MultiplayerFinalSelectionContracts
                     $"<{property}>k__BackingField").SetValue(snapshot, value);
                 MultiplayerCycleCheckpoint? checkpoint = null;
                 for (int index = 0; index < enemyHp.Length; index++)
-                    checkpoint = new(index + 1, 80, 0, 0, enemyHp[index], 2, potions, checkpoint);
+                    checkpoint = new(index + 1, 80, 0, 0, enemyHp[index], 2, potions, checkpoint)
+                    { MaxHp = 80, AliveEnemies = 1, LocalDamage = 100 - enemyHp[index], TotalDamage = 100 - enemyHp[index] };
                 Set(nameof(SimulationSnapshot.AdvisoryLastEnemyCycle), checkpoint!);
                 Set(nameof(SimulationSnapshot.AdvisoryEnemyCycles), enemyHp.Length);
-                Set(nameof(SimulationSnapshot.AdvisoryHpLossAllowance), 3);
                 Set(nameof(SimulationSnapshot.AdvisoryRootHpLost), 0);
                 Set(nameof(SimulationSnapshot.CumulativePlayerHpLost), 0);
                 Set(nameof(SimulationSnapshot.PlayerHp), 80);
@@ -119,9 +119,12 @@ internal static class MultiplayerFinalSelectionContracts
                         PotionSlot: slot, PotionId: "BLOCK_POTION")),
                     new(PlanActionKind.EndTurn, root.StartTurnNumber)];
                 foreach (PlanAction action in actions)
+                {
+                    var actionSnapshot = action.Kind == PlanActionKind.EndTurn ? snapshot : template.DetachForMultiplayerWitness();
                     node = new(action, (node?.ActionCount ?? 0) + 1, potions, 0, snapshot.Turn,
                         SearchRouteTraits.None, 0, 0, snapshot.StateKey, false, snapshot.BoundaryReason,
-                        false, node, snapshot, CombatProgressState.Capture(snapshot));
+                        false, node, actionSnapshot, CombatProgressState.Capture(actionSnapshot));
+                }
                 labels.Add(node!, name);
                 return node!;
             }
@@ -194,20 +197,20 @@ internal static class MultiplayerFinalSelectionContracts
                 return node;
             }
             SearchNode earlyWin = Victory("early_win", 99, 2), lateWin = Victory("late_win", 10, 3);
-            Check("terminal_survives_common_cycle_cut", solver, [.. dry, earlyWin], earlyWin, 1);
-            Check("terminal_end_facts_before_old_checkpoint", solver, [earlyWin, lateWin, dry[0]], earlyWin, 1);
+            Check("terminal_survives_common_cycle_cut", solver, [.. dry, earlyWin], earlyWin, 3);
+            Check("terminal_end_facts_before_old_checkpoint", solver, [earlyWin, lateWin, dry[0]], earlyWin, 3);
             Check("all_terminal_end_turn_control", solver, [lateWin, earlyWin], earlyWin, 3);
             SearchNode deadWin = Victory("dead_win", 1, 1);
             AccessTools.Field(typeof(SimulationSnapshot), "<PlayerDead>k__BackingField").SetValue(deadWin.Snapshot, true);
-            Check("local_death_still_precedes_victory", solver, [deadWin, earlyWin, dry[0]], earlyWin, 1);
+            Check("local_death_still_precedes_victory", solver, [deadWin, earlyWin, dry[0]], earlyWin, 3);
 
             SearchNode a = Node("A", [40, 35]), b = Node("B", [41, 25]), c = Node("C", [42, 15]);
             SearchNode d = Node("D", [43, 5]), shallow = Node("S", [99]), x = Node("X", [44, 1]);
             SearchNode[] five = [a, b, c, d, shallow], six = [a, b, c, d, shallow, x];
-            Check("F03_five_candidate_frozen_depth", solver, five, a, 1);
-            Check("F04_six_candidate_frozen_depth", solver, six, a, 1);
+            Check("F03_five_candidate_frozen_depth", solver, five, d, 2);
+            Check("F04_six_candidate_frozen_depth", solver, six, x, 2);
             Check("new_batch_can_advance_depth", solver, [a, b, c, d, x], x, 2);
-            Check("reference_duplicates_do_not_fill_limit", solver, [a, a, b, c, d, shallow], a, 1);
+            Check("reference_duplicates_do_not_fill_limit", solver, [a, a, b, c, d, shallow], d, 2);
             foreach (SearchNode[] pool in new[] { five, six })
             {
                 int permutations = 0, wrong = 0;
@@ -215,7 +218,7 @@ internal static class MultiplayerFinalSelectionContracts
                 {
                     var result = Select(solver, permutation);
                     permutations++;
-                    if (!ReferenceEquals(result.Best, a) || result.Depth != 1 || _orderingCalls != 1) wrong++;
+                    if (!ReferenceEquals(result.Best, pool.Length == 5 ? d : x) || result.Depth != 2 || _orderingCalls != 1) wrong++;
                 }
                 evidence.Add(new { name = $"permutations_{pool.Length}", permutations, wrong });
                 if (wrong != 0) failures.Add($"permutations_{pool.Length}");

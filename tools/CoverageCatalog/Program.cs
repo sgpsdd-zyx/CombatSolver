@@ -2384,6 +2384,9 @@ internal enum VerificationStatus
     StaticPassed,
     Passed,
     Failed,
+    // Aggregate evidence labels retain their limits; they do not grant Runtime coverage.
+    PassedWithDocumentedBoundaries,
+    PassedWithDocumentedPerformanceRegression,
 }
 
 internal sealed record CoverageTestEvidence(

@@ -879,9 +879,12 @@ internal sealed partial class CombatBeamSolver
             result.AdvisoryHorizon = policy.Multiplayer?.Horizon ?? 0;
             result.AdvisoryTimeBudgetMilliseconds = IsMultiplayerAdvice ? _profile.SoftTimeBudgetMilliseconds : 0;
             result.AdvisoryNodeBudget = IsMultiplayerAdvice ? _profile.MaxExpandedNodes : 0;
-            result.AdvisoryHpLossAllowance = policy.Multiplayer?.AcceptableHpLossPerTurn ?? 0;
-            result.AdvisoryMaximumCycleHpLost = best.AdvisoryHpLoss.MaximumCycleHpLost;
             result.AdvisoryComparisonCycles = ordering.AdvisoryComparisonCycles;
+            result.AdvisoryObjective = _contributionObjective;
+            result.AdvisoryPlannedContribution = _selectedContribution.Progress;
+            result.AdvisoryObjectiveWitness = _selectedContributionWitness;
+            result.AdvisoryQuotaFrontierCount = _selectedQuotaFrontierCount;
+            result.AdvisorySearchedEnemyCycles = _selectedSearchCycles;
             result.ReplayedAdviceActions = _run.ReplayedAdviceActions;
             finalSnapshot.ReleaseSimulator();
             return result;
@@ -1127,8 +1130,8 @@ internal sealed partial class CombatBeamSolver
                     root.Snapshot.CumulativePlayerHpLost,
                     0,
                     root.Score,
-                    root.AdvisoryHpLoss.CompletedExcessHpLost,
-                    root.AdvisoryHpLoss.CurrentCycleHpLost,
+                    root.Snapshot.AdvisoryLocalDamage,
+                    root.Snapshot.AdvisoryTotalDamage,
                     root.Snapshot.AdvisoryLastEnemyCycle));
             else
                 _run.Transpositions.Add(
@@ -1140,8 +1143,8 @@ internal sealed partial class CombatBeamSolver
                         root.Snapshot.CumulativePlayerHpLost,
                         0,
                         root.Score,
-                        root.AdvisoryHpLoss.CompletedExcessHpLost,
-                        root.AdvisoryHpLoss.CurrentCycleHpLost,
+                        root.Snapshot.AdvisoryLocalDamage,
+                        root.Snapshot.AdvisoryTotalDamage,
                         root.Snapshot.AdvisoryLastEnemyCycle)));
         }
         if (frontier.Count == 0)
@@ -2051,6 +2054,7 @@ internal sealed partial class CombatBeamSolver
             List<SearchNode> unannotatedEnded = ended;
             ended = AnnotateTurnOutcomes(unannotatedEnded);
             ReleaseDroppedSnapshots(unannotatedEnded, ended);
+            if (IsMultiplayerAdvice) PreserveContributionWitnesses(ended);
 
             List<SearchNode> completedCandidates =
                 [.. completed, .. ended.Where(node => node.IsTerminal)];

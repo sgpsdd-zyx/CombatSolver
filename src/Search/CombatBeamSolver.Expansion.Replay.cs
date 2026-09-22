@@ -900,6 +900,10 @@ internal sealed partial class CombatBeamSolver
             && incremental.PlayerDead == replayed.PlayerDead
             && incremental.AllEnemiesDead == replayed.AllEnemiesDead
             && incremental.TerminalStamp == replayed.TerminalStamp
+            && (!IsMultiplayerAdvice || incremental.AdvisoryLocalDamage == replayed.AdvisoryLocalDamage
+                && incremental.AdvisoryTotalDamage == replayed.AdvisoryTotalDamage
+                && incremental.AdvisoryContribution == replayed.AdvisoryContribution
+                && incremental.AdvisoryLastEnemyCycle == replayed.AdvisoryLastEnemyCycle)
             && incrementalStamp == replayedStamp
             && incremental.ProcessedEnemyDeaths.SetEquals(replayed.ProcessedEnemyDeaths)
             && incremental.PredictionGaps.SequenceEqual(replayed.PredictionGaps);

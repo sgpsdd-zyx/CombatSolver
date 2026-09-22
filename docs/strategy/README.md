@@ -4,7 +4,7 @@
 
 当前搜索职责见 [架构地图](../ARCHITECTURE.md)，实际测试与未验证范围见 [测试矩阵](../TEST_MATRIX.md)。
 
-- [多人策略重设计：本机贡献配额与权衡前沿](multiplayer-cooperative-planning-20260922/README.md)：固定 0.43.6，取消 3 HP 优先；按用户后续要求不预测队友行为。两轮 6 Pro 原文、首轮 909 次抽象对照及本地反例保留；当前设计尚未实施或发布。
+- [多人策略重设计：本机贡献配额与权衡前沿](multiplayer-cooperative-planning-20260922/README.md)：固定 0.43.6，取消 3 HP 优先；按用户后续要求不预测队友行为。两轮 6 Pro 原文、首轮 909 次抽象对照及本地反例保留；生产实施、弹性目标/条件尾值取舍与直接证据见[实施记录](multiplayer-cooperative-planning-20260922/implementation.md)。
 - [官方 0.44.0 合并与第一轮知识归档](upstream-0440-merge-20260922.md)：保留上游单人更新、显式隔离多人政策，列明本轮验证与未验证项；新的多人贡献目标随后实施。
 - [官方 0.43.2 合并与多人兼容](upstream-0432-merge-20260920.md)：两处上游单人假设的失败基线、多人历史／成长隔离、官方单人对照及未完成的原生适配检查；已纳入 fork 0.43.5，见[发布归档](../releases/0.43.5-PUBLISH.md)。
 - [单人历史累计维护](incremental-history-counters.md)：官方 0.43.2 实现与历史测量；多人保留各效果原持有者范围的完整扫描。
