@@ -67,5 +67,18 @@
     "git_diff_whitespace": "Reviewed once: only two original Markdown hard breaks in the unmodified Pro addendum, lines 3 and 4; preserved as source evidence.",
     "scope": "L0 only; no production code or external experiment execution",
     "evidenceFile": ".local/mp-coop-strategy-20260922/doc-validation.json"
+  },
+  "postResearchUserDecision": {
+    "source": "User follow-up after the two research responses",
+    "teammatePrediction": false,
+    "planningScope": "Local-player actions, stage contribution quotas, shared damage/cost frontier and local continuation only.",
+    "unknownBehavior": "Future teammate active choices remain unknown; no random policy, virtual DPS, or cooperative counterfactuals.",
+    "retainedFacts": "Observed team state and modeled passive effects retain their actual owners. Local benefits of support actions remain evaluated.",
+    "replanning": "Manual new-root capture after actual changes; no automatic search.",
+    "knownLimit": "No complete valuation of benefits requiring future teammate actions; no solo-clear requirement or arbitrary-teammate guarantee.",
+    "productionCodeChanged": false,
+    "newBehaviorTests": 0,
+    "newProRequest": false,
+    "documentationEvidence": ".local/mp-coop-strategy-20260922/no-peer-prediction-doc-validation.json"
   }
 }
