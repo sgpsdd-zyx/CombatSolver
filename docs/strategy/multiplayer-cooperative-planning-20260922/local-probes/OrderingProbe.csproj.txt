@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net9.0</TargetFramework>
+    <LangVersion>13.0</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>OfflineSearchHarness</AssemblyName>
+    <RepoRoot>$(MSBuildProjectDirectory)/../../..</RepoRoot>
+  </PropertyGroup>
+  <Import Project="$(RepoRoot)/local.props" />
+  <PropertyGroup>
+    <CombatSolverDll>$(RepoRoot)/.godot/mono/temp/bin/Release/CombatSolver.dll</CombatSolverDll>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="sts2" HintPath="$(Sts2DataDir)/sts2.dll" Private="false" />
+    <Reference Include="GodotSharp" HintPath="$(Sts2DataDir)/GodotSharp.dll" Private="false" />
+    <Reference Include="0Harmony" HintPath="$(Sts2DataDir)/0Harmony.dll" Private="false" />
+    <Reference Include="CombatSolver" HintPath="$(CombatSolverDll)" Private="false" />
+    <RuntimeHostConfigurationOption Include="Sts2DataDir" Value="$(Sts2DataDir)" />
+    <RuntimeHostConfigurationOption Include="RitsuLibDir" Value="$(RitsuLibDir)" />
+    <RuntimeHostConfigurationOption Include="RitsuLibCompatDir" Value="$(RitsuWorkshopRoot)/compat/$(RitsuLibReferenceTarget)" />
+    <RuntimeHostConfigurationOption Include="RitsuLibSharedDir" Value="$(RitsuWorkshopRoot)/shared" />
+    <RuntimeHostConfigurationOption Include="CombatSolverDll" Value="$(CombatSolverDll)" />
+  </ItemGroup>
+</Project>

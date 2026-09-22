@@ -1,0 +1,235 @@
+{
+  "scope": "Two exact one-turn abstract card enumerations and two finite mathematical examples. Not a C# search, native simulation, teammate distribution, or performance comparison.",
+  "case_count": 4,
+  "results": [
+    {
+      "case": "quota_is_not_victory",
+      "root": {
+        "hp": 6,
+        "enemy_hp": 20,
+        "energy": 2,
+        "block": 0,
+        "vulnerable": 0,
+        "own_damage": 0,
+        "team_damage": 0,
+        "hp_lost": 0,
+        "actions": []
+      },
+      "quota": 10,
+      "real_hp_end_phase": {
+        "hp": 3,
+        "enemy_hp": 10,
+        "energy": 0,
+        "block": 5,
+        "vulnerable": 0,
+        "own_damage": 10,
+        "team_damage": 10,
+        "hp_lost": 3,
+        "actions": [
+          "guard",
+          "strike"
+        ]
+      },
+      "scaled_enemy_hp": {
+        "hp": 6,
+        "enemy_hp": 0,
+        "energy": 1,
+        "block": 0,
+        "vulnerable": 0,
+        "own_damage": 10,
+        "team_damage": 10,
+        "hp_lost": 0,
+        "actions": [
+          "strike"
+        ]
+      },
+      "stopping_on_quota_prefix": {
+        "hp": 6,
+        "enemy_hp": 10,
+        "energy": 1,
+        "block": 0,
+        "vulnerable": 0,
+        "own_damage": 10,
+        "team_damage": 10,
+        "hp_lost": 0,
+        "actions": [
+          "strike"
+        ]
+      },
+      "same_prefix_after_real_enemy": {
+        "hp": 0,
+        "enemy_hp": 10,
+        "energy": 1,
+        "block": 0,
+        "vulnerable": 0,
+        "own_damage": 10,
+        "team_damage": 10,
+        "hp_lost": 6,
+        "actions": [
+          "strike"
+        ]
+      },
+      "claim": "A virtual quota needs the real enemy response; scaling HP changes the optimal bundle."
+    },
+    {
+      "case": "direct_quota_rejects_team_support",
+      "peer_attacks": [
+        10,
+        10
+      ],
+      "direct_quota_choice": {
+        "hp": 30,
+        "enemy_hp": 72,
+        "energy": 0,
+        "block": 0,
+        "vulnerable": 0,
+        "own_damage": 8,
+        "team_damage": 28,
+        "hp_lost": 0,
+        "actions": [
+          "own_attack"
+        ]
+      },
+      "team_choice": {
+        "hp": 30,
+        "enemy_hp": 70,
+        "energy": 0,
+        "block": 0,
+        "vulnerable": 1,
+        "own_damage": 0,
+        "team_damage": 30,
+        "hp_lost": 0,
+        "actions": [
+          "team_vulnerable"
+        ]
+      },
+      "already_ended_peer_choice": {
+        "hp": 30,
+        "enemy_hp": 92,
+        "energy": 0,
+        "block": 0,
+        "vulnerable": 0,
+        "own_damage": 8,
+        "team_damage": 8,
+        "hp_lost": 0,
+        "actions": [
+          "own_attack"
+        ]
+      },
+      "claim": "Direct damage quotas can reject a better team result; support value depends on teammate opportunity."
+    },
+    {
+      "case": "one_frontier_multiple_quotas",
+      "all_points_damage_loss": [
+        [
+          0,
+          0
+        ],
+        [
+          20,
+          0
+        ],
+        [
+          35,
+          2
+        ],
+        [
+          50,
+          6
+        ],
+        [
+          60,
+          15
+        ],
+        [
+          45,
+          8
+        ]
+      ],
+      "frontier_damage_loss": [
+        [
+          20,
+          0
+        ],
+        [
+          35,
+          2
+        ],
+        [
+          50,
+          6
+        ],
+        [
+          60,
+          15
+        ]
+      ],
+      "selections": {
+        "20": [
+          20,
+          0
+        ],
+        "35": [
+          35,
+          2
+        ],
+        "40": [
+          50,
+          6
+        ],
+        "50": [
+          50,
+          6
+        ],
+        "55": [
+          60,
+          15
+        ]
+      },
+      "claim": "For the same frozen outcome set, one Pareto frontier answers many quota queries; no additional simulator calls are needed."
+    },
+    {
+      "case": "unknown_cannot_lower_binary_upper_bound",
+      "probes": [
+        {
+          "quota": 50,
+          "status": "Unknown",
+          "witness": null
+        },
+        {
+          "quota": 25,
+          "status": "Feasible",
+          "witness": 60
+        },
+        {
+          "quota": 37,
+          "status": "Feasible",
+          "witness": 60
+        },
+        {
+          "quota": 43,
+          "status": "Feasible",
+          "witness": 60
+        },
+        {
+          "quota": 46,
+          "status": "Feasible",
+          "witness": 60
+        },
+        {
+          "quota": 48,
+          "status": "Feasible",
+          "witness": 60
+        },
+        {
+          "quota": 49,
+          "status": "Feasible",
+          "witness": 60
+        }
+      ],
+      "incorrect_binary_result": 49,
+      "known_feasible_damage": 90,
+      "claim": "Exact feasibility is monotone; an incomplete search result is not a valid infeasibility certificate."
+    }
+  ]
+}

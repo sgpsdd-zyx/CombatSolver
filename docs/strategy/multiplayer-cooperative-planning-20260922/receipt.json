@@ -1,0 +1,71 @@
+{
+  "researchDate": "2026-09-22",
+  "sourceCommit": "95fd98572884c1f2da97ffd5120167815fca6403",
+  "sourceVersion": "0.43.6",
+  "officialSoloBaseline": "3f4002bd / 0.43.2",
+  "conversationUrl": "https://chatgpt.com/c/6aacf71e-165c-83ec-896a-a77f789ad559",
+  "conversationTitle": "源码复审与策略优化",
+  "observedModel": "6 Pro",
+  "browserEnvironment": "HubStudio environment 8; native accessibility",
+  "initialAttachments": [
+    "CombatSolver-95fd9857-source.zip",
+    "research-request.md"
+  ],
+  "initialSubmissionUiLocalTime": "2026-09-22 00:38 America/Los_Angeles",
+  "initialObservedWorkedFor": "58m 1s",
+  "initialResultReceived": true,
+  "originalEvidenceZip": ".local/mp-coop-strategy-20260922/CombatSolver_CooperativePlanning_20260922_Evidence.zip",
+  "originalExtraction": ".local/mp-coop-strategy-20260922/pro-evidence/",
+  "originalEntries": 107,
+  "originalUncompressedBytes": 38979156,
+  "originalAbstractEvidence": {
+    "mainRuns": 780,
+    "mainRoots": 60,
+    "algorithms": 13,
+    "budgetRuns": 126,
+    "additionalBeamRuns": 3,
+    "checks": 27,
+    "finalUntunedRoots": 8
+  },
+  "quotaFollowup": {
+    "earlierAttempt": "Briefly visible during original research, then absent; not claimed as incorporated.",
+    "durableSubmission": "After first final response; user prompt and new Pro response visible.",
+    "requestFile": "quota-review-request.md",
+    "finalResultReceived": true,
+    "intermediateResponseObserved": "I have now settled on a bounded elastic-quota Pareto frontier, removing the 3-HP anchor entirely and retaining unmet-quota alternatives to avoid costly hard-threshold edge cases.",
+    "finalObservedWorkedFor": "18m 50s",
+    "finalReport": "pro/CombatSolver_CooperativePlanning_20260922_Quota_Addendum.md",
+    "originalDownload": ".local/mp-coop-strategy-20260922/CombatSolver_CooperativePlanning_20260922_Quota_Addendum.md",
+    "newExperiments": 0,
+    "finalRecommendation": "Qepsilon stage quotas and shared bounded witnesses first; remove all 3-HP terms; F0 fallback and active teammate planning remain unimplemented."
+  },
+  "localEvidence": {
+    "productionComparatorSyntheticChecks": 10,
+    "quotaOneTurnAndMathematicalCases": 4,
+    "rollingDeadlineCounterexample": 1,
+    "externalBudgetRowsInspected": 909,
+    "externalExperimentsRerunLocally": false,
+    "productionSearchRuns": 0,
+    "nativeDifferentialRuns": 0
+  },
+  "localReviewCorrections": [
+    "R02 enemy HP distributions differ despite equal total HP and listed aggregate outcomes; no full-state equivalence.",
+    "Pro S1 uses a shorthand method name; actual comparison is CompareMultiplayerQualityAtCycle and node ApplyScore belongs to MultiplayerHpLossBudget.",
+    "F_cheap is not a quota algorithm; no first-round result proves the proposed quota planner.",
+    "Final addendum still chooses only satisfied witnesses when any exist; preserving a frontier alone does not resolve threshold cost cliffs despite the intermediate elastic label.",
+    "The addendum U1-U5 reports this local agent's probes/source observations, not experiments executed by 6 Pro or by the human user."
+  ],
+  "localProductionCodeChanged": false,
+  "localProposedPolicyImplemented": false,
+  "releaseCreated": false,
+  "verificationBoundary": "Research and bounded probes only. No live game, new native differential, visible Steam, network co-op, human win-rate or release validation.",
+  "localStaticChecks": {
+    "markdown_files": 21,
+    "local_link_paths": 534,
+    "json_files": 7,
+    "python_syntax_files": 3,
+    "git_diff_whitespace": "Reviewed once: only two original Markdown hard breaks in the unmodified Pro addendum, lines 3 and 4; preserved as source evidence.",
+    "scope": "L0 only; no production code or external experiment execution",
+    "evidenceFile": ".local/mp-coop-strategy-20260922/doc-validation.json"
+  }
+}

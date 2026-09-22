@@ -1,0 +1,10 @@
+{
+  "before_new_test_execution": true,
+  "main": "D_no_tail",
+  "fallback": "F_no_tail",
+  "parameter_change": "none to A..F_cheap; add F_no_tail and fresh test roots only",
+  "why": "extra optimistic terminal capacity failed validation; use actual fair short rollouts plus state utility, not old 3HP ordering",
+  "v2_sha256": "f12260ea4520cf62c86a17294fd3f671b540be7b53bf147f5266e7b270eb511d",
+  "v3_sha256": "9eaad585ab1d265253365953529f7ceb06fa7873584775a606359b9609ed89aa",
+  "finaltest_seed": 9222026436
+}

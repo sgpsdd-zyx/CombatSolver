@@ -1,0 +1,320 @@
+{
+  "SourceCommit": "95fd98572884c1f2da97ffd5120167815fca6403",
+  "Version": "0.43.6",
+  "ProductionAssemblyRebuilt": false,
+  "Evidence": "Current production comparison methods invoked on synthetic frozen candidate facts.",
+  "Limitations": "No root capture, reachable card sequence, simulator execution, Beam candidate generation, native differential test, game session, or win-rate evidence. C window selection also calls the quality comparator, but its representative selection is not exercised here.",
+  "CaseCount": 10,
+  "Results": [
+    {
+      "Case": "one_excess_hp_before_victory",
+      "Method": "CompareMultiplayerQualityAtCycle",
+      "CommonCycle": 1,
+      "ComparisonSign": 1,
+      "Preferred": "right",
+      "Left": {
+        "Won": true,
+        "Dead": false,
+        "EnemyHp": 0,
+        "HpLost": 4,
+        "ExcessHpLost": 1,
+        "TeamSurvivors": 2,
+        "DeathSaves": 0,
+        "Score": 0,
+        "Actions": 1
+      },
+      "Right": {
+        "Won": false,
+        "Dead": false,
+        "EnemyHp": 100,
+        "HpLost": 3,
+        "ExcessHpLost": 0,
+        "TeamSurvivors": 2,
+        "DeathSaves": 0,
+        "Score": 0,
+        "Actions": 1
+      },
+      "Observation": "An alive victory with one excess HP loses to an unfinished route within allowance.",
+      "Passed": true
+    },
+    {
+      "Case": "one_excess_hp_before_team_survival",
+      "Method": "CompareMultiplayerQualityAtCycle",
+      "CommonCycle": 1,
+      "ComparisonSign": 1,
+      "Preferred": "right",
+      "Left": {
+        "Won": false,
+        "Dead": false,
+        "EnemyHp": 20,
+        "HpLost": 4,
+        "ExcessHpLost": 1,
+        "TeamSurvivors": 2,
+        "DeathSaves": 0,
+        "Score": 0,
+        "Actions": 1
+      },
+      "Right": {
+        "Won": false,
+        "Dead": false,
+        "EnemyHp": 20,
+        "HpLost": 3,
+        "ExcessHpLost": 0,
+        "TeamSurvivors": 1,
+        "DeathSaves": 0,
+        "Score": 0,
+        "Actions": 1
+      },
+      "Observation": "One local excess HP precedes keeping a teammate alive, with both routes unfinished.",
+      "Passed": true
+    },
+    {
+      "Case": "one_excess_hp_before_90_damage",
+      "Method": "CompareMultiplayerQualityAtCycle",
+      "CommonCycle": 1,
+      "ComparisonSign": 1,
+      "Preferred": "right",
+      "Left": {
+        "Won": false,
+        "Dead": false,
+        "EnemyHp": 10,
+        "HpLost": 4,
+        "ExcessHpLost": 1,
+        "TeamSurvivors": 2,
+        "DeathSaves": 0,
+        "Score": 0,
+        "Actions": 1
+      },
+      "Right": {
+        "Won": false,
+        "Dead": false,
+        "EnemyHp": 100,
+        "HpLost": 3,
+        "ExcessHpLost": 0,
+        "TeamSurvivors": 2,
+        "DeathSaves": 0,
+        "Score": 0,
+        "Actions": 1
+      },
+      "Observation": "Ninety extra enemy HP removed does not compensate one excess HP.",
+      "Passed": true
+    },
+    {
+      "Case": "support_or_terminal_estimate_not_used_when_comparable",
+      "Method": "CompareMultiplayerQualityAtCycle",
+      "CommonCycle": 1,
+      "ComparisonSign": 0,
+      "Preferred": "tie",
+      "Left": {
+        "Won": false,
+        "Dead": false,
+        "EnemyHp": 50,
+        "HpLost": 0,
+        "ExcessHpLost": 0,
+        "TeamSurvivors": 2,
+        "DeathSaves": 0,
+        "Score": 100000,
+        "Actions": 1
+      },
+      "Right": {
+        "Won": false,
+        "Dead": false,
+        "EnemyHp": 50,
+        "HpLost": 0,
+        "ExcessHpLost": 0,
+        "TeamSurvivors": 2,
+        "DeathSaves": 0,
+        "Score": 0,
+        "Actions": 1
+      },
+      "Observation": "Equal completed-cycle facts tie despite different exploration estimates; no team support field exists here.",
+      "Passed": true
+    },
+    {
+      "Case": "high_exploration_estimate_loses_to_one_less_action",
+      "Method": "CompareMultiplayerAtCycle",
+      "CommonCycle": 1,
+      "ComparisonSign": 1,
+      "Preferred": "right",
+      "Left": {
+        "Won": false,
+        "Dead": false,
+        "EnemyHp": 50,
+        "HpLost": 0,
+        "ExcessHpLost": 0,
+        "TeamSurvivors": 2,
+        "DeathSaves": 0,
+        "Score": 100000,
+        "Actions": 2
+      },
+      "Right": {
+        "Won": false,
+        "Dead": false,
+        "EnemyHp": 50,
+        "HpLost": 0,
+        "ExcessHpLost": 0,
+        "TeamSurvivors": 2,
+        "DeathSaves": 0,
+        "Score": 0,
+        "Actions": 1
+      },
+      "Observation": "The ordinary full comparator breaks equal quality toward fewer actions.",
+      "Passed": true
+    },
+    {
+      "Case": "safe_victory_control",
+      "Method": "CompareMultiplayerQualityAtCycle",
+      "CommonCycle": 1,
+      "ComparisonSign": -1,
+      "Preferred": "left",
+      "Left": {
+        "Won": true,
+        "Dead": false,
+        "EnemyHp": 0,
+        "HpLost": 3,
+        "ExcessHpLost": 0,
+        "TeamSurvivors": 2,
+        "DeathSaves": 0,
+        "Score": 0,
+        "Actions": 1
+      },
+      "Right": {
+        "Won": false,
+        "Dead": false,
+        "EnemyHp": 100,
+        "HpLost": 0,
+        "ExcessHpLost": 0,
+        "TeamSurvivors": 2,
+        "DeathSaves": 0,
+        "Score": 0,
+        "Actions": 1
+      },
+      "Observation": "Within equal excess and death-save counts, victory takes priority.",
+      "Passed": true
+    },
+    {
+      "Case": "within_allowance_damage_control",
+      "Method": "CompareMultiplayerQualityAtCycle",
+      "CommonCycle": 1,
+      "ComparisonSign": -1,
+      "Preferred": "left",
+      "Left": {
+        "Won": false,
+        "Dead": false,
+        "EnemyHp": 10,
+        "HpLost": 3,
+        "ExcessHpLost": 0,
+        "TeamSurvivors": 2,
+        "DeathSaves": 0,
+        "Score": 0,
+        "Actions": 1
+      },
+      "Right": {
+        "Won": false,
+        "Dead": false,
+        "EnemyHp": 100,
+        "HpLost": 0,
+        "ExcessHpLost": 0,
+        "TeamSurvivors": 2,
+        "DeathSaves": 0,
+        "Score": 0,
+        "Actions": 1
+      },
+      "Observation": "Within the allowance, more damage precedes conserving those three HP.",
+      "Passed": true
+    },
+    {
+      "Case": "local_death_control",
+      "Method": "CompareMultiplayerQualityAtCycle",
+      "CommonCycle": 1,
+      "ComparisonSign": 1,
+      "Preferred": "right",
+      "Left": {
+        "Won": true,
+        "Dead": true,
+        "EnemyHp": 0,
+        "HpLost": 40,
+        "ExcessHpLost": 37,
+        "TeamSurvivors": 2,
+        "DeathSaves": 0,
+        "Score": 0,
+        "Actions": 1
+      },
+      "Right": {
+        "Won": false,
+        "Dead": false,
+        "EnemyHp": 100,
+        "HpLost": 3,
+        "ExcessHpLost": 0,
+        "TeamSurvivors": 2,
+        "DeathSaves": 0,
+        "Score": 0,
+        "Actions": 1
+      },
+      "Observation": "Local death is not repaired by the victory flag.",
+      "Passed": true
+    },
+    {
+      "Case": "death_save_before_victory",
+      "Method": "CompareMultiplayerQualityAtCycle",
+      "CommonCycle": 1,
+      "ComparisonSign": 1,
+      "Preferred": "right",
+      "Left": {
+        "Won": true,
+        "Dead": false,
+        "EnemyHp": 0,
+        "HpLost": 0,
+        "ExcessHpLost": 0,
+        "TeamSurvivors": 2,
+        "DeathSaves": 1,
+        "Score": 0,
+        "Actions": 1
+      },
+      "Right": {
+        "Won": false,
+        "Dead": false,
+        "EnemyHp": 100,
+        "HpLost": 0,
+        "ExcessHpLost": 0,
+        "TeamSurvivors": 2,
+        "DeathSaves": 0,
+        "Score": 0,
+        "Actions": 1
+      },
+      "Observation": "An observed death-save use precedes victory even when local HP loss is equal.",
+      "Passed": true
+    },
+    {
+      "Case": "known_suffix_excess_vs_unknown_suffix",
+      "Method": "CompareMultiplayerQualityAtCycle",
+      "CommonCycle": 1,
+      "ComparisonSign": 1,
+      "Preferred": "right",
+      "Left": {
+        "Won": false,
+        "Dead": false,
+        "EnemyHp": 10,
+        "HpLost": 4,
+        "ExcessHpLost": 1,
+        "TeamSurvivors": 2,
+        "DeathSaves": 0,
+        "Score": 0,
+        "Actions": 1
+      },
+      "Right": {
+        "Won": false,
+        "Dead": false,
+        "EnemyHp": 50,
+        "HpLost": 0,
+        "ExcessHpLost": 0,
+        "TeamSurvivors": 2,
+        "DeathSaves": 0,
+        "Score": 0,
+        "Actions": 1
+      },
+      "Observation": "Equal first-cycle facts still penalize the deeper route's observed later excess; future teammate actions are absent from that model.",
+      "Passed": true
+    }
+  ]
+}

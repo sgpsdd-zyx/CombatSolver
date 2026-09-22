@@ -1,0 +1,9 @@
+{
+  "main": "D_actor_tail",
+  "fallback": "F_cheap",
+  "script_sha256": "1786f120a79fd72b2ec88176e581971a6627d50f281cfb5f2ff8d3e35b26686c",
+  "decision_before_running_new_algorithm": true,
+  "lockbox_seed": 202609220436,
+  "reason": "Q11 refutes unconditional zero tail; aggregate peer capacity contradicts owned target constraints, correct it without outcome-dependent ally selection",
+  "no_further_parameter_tuning_after_lockbox": true
+}

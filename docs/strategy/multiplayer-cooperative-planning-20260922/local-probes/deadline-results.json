@@ -1,0 +1,61 @@
+{
+  "scope": "Exact finite scheduling example, not card or native game simulation. Attack causes 10 effective damage and 3 local HP loss; defend causes neither. Target is 20 within three rounds. No empirical win-rate claim.",
+  "rolling_deadline": [
+    {
+      "step": 1,
+      "projected": [
+        "defend",
+        "attack",
+        "attack"
+      ],
+      "executed": "defend"
+    },
+    {
+      "step": 2,
+      "projected": [
+        "defend",
+        "attack",
+        "attack"
+      ],
+      "executed": "defend"
+    },
+    {
+      "step": 3,
+      "projected": [
+        "defend",
+        "attack",
+        "attack"
+      ],
+      "executed": "defend"
+    }
+  ],
+  "rolling_damage": 0,
+  "fixed_deadline": [
+    {
+      "step": 1,
+      "projected": [
+        "defend",
+        "attack",
+        "attack"
+      ],
+      "executed": "defend"
+    },
+    {
+      "step": 2,
+      "projected": [
+        "attack",
+        "attack"
+      ],
+      "executed": "attack"
+    },
+    {
+      "step": 3,
+      "projected": [
+        "attack"
+      ],
+      "executed": "attack"
+    }
+  ],
+  "fixed_damage": 20,
+  "claim": "Each rolling plan meets its own projected quota, but repeated execution can postpone all progress. This is a counterexample, not a claim that every MPC policy procrastinates."
+}

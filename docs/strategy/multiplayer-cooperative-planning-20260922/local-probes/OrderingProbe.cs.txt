@@ -1,0 +1,147 @@
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Runtime.Loader;
+using System.Text.Json;
+using CombatSolver;
+
+internal static class Program
+{
+    public static void Main()
+    {
+        string dll = Path.GetFullPath((string)AppContext.GetData("CombatSolverDll")!);
+        string[] directories = [Path.GetDirectoryName(dll)!,
+            .. new[] { "Sts2DataDir", "RitsuLibDir", "RitsuLibCompatDir", "RitsuLibSharedDir" }
+                .Select(key => AppContext.GetData(key) as string).OfType<string>()
+                .Where(path => !string.IsNullOrWhiteSpace(path)).Select(Path.GetFullPath)];
+        AssemblyLoadContext.Default.Resolving += (context, name) =>
+        {
+            string? path = directories.Select(dir => Path.Combine(dir, name.Name + ".dll"))
+                .FirstOrDefault(File.Exists);
+            return path == null ? null : context.LoadFromAssemblyPath(path);
+        };
+        typeof(Program).Assembly.GetType("OrderingProbe")!.GetMethod("Run")!.Invoke(null, null);
+    }
+}
+
+internal static class OrderingProbe
+{
+    private const BindingFlags Private = BindingFlags.Instance | BindingFlags.NonPublic;
+    private static readonly List<object> Results = [];
+
+    public static void Run()
+    {
+        CombatBeamSolver solver = Bare<CombatBeamSolver>();
+        SearchPolicySnapshot policy = Bare<SearchPolicySnapshot>();
+        Set(policy, nameof(SearchPolicySnapshot.Multiplayer), new MultiplayerSearchPolicy());
+        Field(solver, "<root>P", Bare<CombatRootSnapshot>());
+        Field(solver, "<policy>P", policy);
+        Field(solver, "_potionStrategy", new PotionStrategySnapshot(SolverPotionPolicy.Smart, []));
+
+        Compare(solver, "one_excess_hp_before_victory",
+            Node(enemy: 0, loss: 4, won: true), Node(enemy: 100, loss: 3), 1,
+            "An alive victory with one excess HP loses to an unfinished route within allowance.");
+        Compare(solver, "one_excess_hp_before_team_survival",
+            Node(enemy: 20, loss: 4, survivors: 2), Node(enemy: 20, loss: 3, survivors: 1), 1,
+            "One local excess HP precedes keeping a teammate alive, with both routes unfinished.");
+        Compare(solver, "one_excess_hp_before_90_damage",
+            Node(enemy: 10, loss: 4), Node(enemy: 100, loss: 3), 1,
+            "Ninety extra enemy HP removed does not compensate one excess HP.");
+        Compare(solver, "support_or_terminal_estimate_not_used_when_comparable",
+            Node(enemy: 50, score: 100000), Node(enemy: 50, score: 0), 0,
+            "Equal completed-cycle facts tie despite different exploration estimates; no team support field exists here.");
+        Compare(solver, "high_exploration_estimate_loses_to_one_less_action",
+            Node(enemy: 50, score: 100000, actions: 2), Node(enemy: 50, score: 0, actions: 1), 1,
+            "The ordinary full comparator breaks equal quality toward fewer actions.", qualityOnly: false);
+        Compare(solver, "safe_victory_control",
+            Node(enemy: 0, loss: 3, won: true), Node(enemy: 100, loss: 0), -1,
+            "Within equal excess and death-save counts, victory takes priority.");
+        Compare(solver, "within_allowance_damage_control",
+            Node(enemy: 10, loss: 3), Node(enemy: 100, loss: 0), -1,
+            "Within the allowance, more damage precedes conserving those three HP.");
+        Compare(solver, "local_death_control",
+            Node(enemy: 0, loss: 40, won: true, dead: true), Node(enemy: 100, loss: 3), 1,
+            "Local death is not repaired by the victory flag.");
+        Compare(solver, "death_save_before_victory",
+            Node(enemy: 0, won: true, saves: 1), Node(enemy: 100), 1,
+            "An observed death-save use precedes victory even when local HP loss is equal.");
+
+        MultiplayerCycleCheckpoint first = Checkpoint(1, enemy: 50, loss: 0, saves: 0, survivors: 2);
+        SearchNode shallow = Node(enemy: 50, checkpoint: first);
+        SearchNode tail = Node(enemy: 10, loss: 4,
+            checkpoint: Checkpoint(2, 10, 4, 0, 2, first));
+        Compare(solver, "known_suffix_excess_vs_unknown_suffix", tail, shallow, 1,
+            "Equal first-cycle facts still penalize the deeper route's observed later excess; future teammate actions are absent from that model.");
+
+        Console.WriteLine(JsonSerializer.Serialize(new
+        {
+            SourceCommit = "95fd98572884c1f2da97ffd5120167815fca6403",
+            Version = "0.43.6",
+            ProductionAssemblyRebuilt = false,
+            Evidence = "Current production comparison methods invoked on synthetic frozen candidate facts.",
+            Limitations = "No root capture, reachable card sequence, simulator execution, Beam candidate generation, native differential test, game session, or win-rate evidence. C window selection also calls the quality comparator, but its representative selection is not exercised here.",
+            CaseCount = Results.Count,
+            Results,
+        }, new JsonSerializerOptions { WriteIndented = true }));
+    }
+
+    private static void Compare(CombatBeamSolver solver, string name, SearchNode left, SearchNode right,
+        int expectedSign, string observation, bool qualityOnly = true)
+    {
+        string method = qualityOnly ? "CompareMultiplayerQualityAtCycle" : "CompareMultiplayerAtCycle";
+        int comparison = (int)typeof(CombatBeamSolver).GetMethod(method, Private)!.Invoke(solver, [left, right, 1])!;
+        if (Math.Sign(comparison) != expectedSign)
+            throw new InvalidOperationException($"{name}: expected {expectedSign}, got {comparison}.");
+        Results.Add(new
+        {
+            Case = name, Method = method, CommonCycle = 1, ComparisonSign = Math.Sign(comparison),
+            Preferred = comparison < 0 ? "left" : comparison > 0 ? "right" : "tie",
+            Left = Describe(left), Right = Describe(right), Observation = observation, Passed = true,
+        });
+    }
+
+    private static object Describe(SearchNode node) => new
+    {
+        Won = node.Snapshot.AllEnemiesDead, Dead = node.Snapshot.PlayerDead,
+        EnemyHp = node.Snapshot.EnemyHp, HpLost = node.Snapshot.CumulativePlayerHpLost,
+        ExcessHpLost = node.AdvisoryHpLoss.ExcessHpLost(3), TeamSurvivors = node.Snapshot.TeamSurvivors,
+        DeathSaves = node.Snapshot.DeathSaveUseCount, Score = node.Score, Actions = node.ActionCount,
+    };
+
+    private static MultiplayerCycleCheckpoint Checkpoint(int cycle, int enemy, int loss, int saves,
+        int survivors, MultiplayerCycleCheckpoint? previous = null)
+        => new(cycle, 40 - loss, loss, saves, enemy, survivors, 0, previous);
+
+    private static SearchNode Node(int enemy, int loss = 0, int survivors = 2, int saves = 0,
+        bool won = false, bool dead = false, double score = 0, int actions = 1,
+        MultiplayerCycleCheckpoint? checkpoint = null)
+    {
+        SimulationSnapshot snapshot = Bare<SimulationSnapshot>();
+        checkpoint ??= Checkpoint(1, enemy, loss, saves, survivors);
+        Set(snapshot, nameof(SimulationSnapshot.AdvisoryLastEnemyCycle), checkpoint);
+        Set(snapshot, nameof(SimulationSnapshot.AdvisoryEnemyCycles), checkpoint.Cycle);
+        Set(snapshot, nameof(SimulationSnapshot.AdvisoryHpLossAllowance), 3);
+        Set(snapshot, nameof(SimulationSnapshot.AdvisoryLastEnemyCycleHpLost), checkpoint.HpLost);
+        Set(snapshot, nameof(SimulationSnapshot.AllEnemiesDead), won);
+        Set(snapshot, nameof(SimulationSnapshot.PlayerDead), dead);
+        Set(snapshot, nameof(SimulationSnapshot.PlayerHp), 40 - loss);
+        Set(snapshot, nameof(SimulationSnapshot.PlayerMaxHp), 80);
+        Set(snapshot, nameof(SimulationSnapshot.CumulativePlayerHpLost), loss);
+        Set(snapshot, nameof(SimulationSnapshot.EnemyHp), enemy);
+        Set(snapshot, nameof(SimulationSnapshot.TeamSurvivors), survivors);
+        Set(snapshot, nameof(SimulationSnapshot.DeathSaveUseCount), saves);
+        SearchNode? node = null;
+        for (int i = 1; i <= actions; i++)
+            node = new SearchNode(new PlanAction(PlanActionKind.EndTurn, checkpoint.Cycle + 1),
+                i, 0, 0, checkpoint.Cycle + 1, default, 0, score, default, false,
+                SearchBoundaryReason.None, won || dead, node, snapshot, default);
+        Set(node!, nameof(SearchNode.AdvisoryHpLoss), new MultiplayerHpLossBudget(Math.Max(0, loss - 3), 0, loss));
+        Set(node!, nameof(SearchNode.Score), score);
+        return node!;
+    }
+
+    private static T Bare<T>() where T : class => (T)RuntimeHelpers.GetUninitializedObject(typeof(T));
+    private static void Set(object obj, string name, object? value) => Field(obj, $"<{name}>k__BackingField", value);
+    private static void Field(object obj, string name, object? value)
+        => (obj.GetType().GetField(name, Private) ?? throw new MissingFieldException(obj.GetType().FullName, name))
+            .SetValue(obj, value);
+}
