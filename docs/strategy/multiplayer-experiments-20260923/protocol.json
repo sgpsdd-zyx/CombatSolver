@@ -1,5 +1,5 @@
 {
-  "protocolId": "multiplayer-manual-loop-20260923-draft1",
+  "protocolId": "multiplayer-manual-loop-20260923-draft2",
   "date": "2026-09-23",
   "status": "DesignOnly",
   "readyToExecute": false,
@@ -7,12 +7,14 @@
   "baselineBehaviorCommit": "fd976376c79cf87561d13397f2c5ddc330cc80ae",
   "baselineVersion": "0.44.2",
   "prerequisites": [
-    "Implement a test-owned native action and manual-request loop; no production teammate planner or auto-deployment.",
+    "Implement a test-owned single-action native driver reusing existing card mapping, queue capture and choice helpers; do not bypass the full single-player deployment workflow.",
     "Verify a two-player native full-party loop, branch isolation, stable recapture, session accounting and request ownership.",
-    "Register and restore complete party roots with source clusters, player identity, historical state and game RNG state.",
+    "Admit the registered whole-deck candidate recipes, capture complete party roots, and prove restoration of identity, historical state and game RNG state.",
     "Implement a test-only shared-credit ablation binding through manual requests and prove it is the sole treatment difference.",
     "Freeze partner policies, schedules, request cadence and actor-specific choice adapters before measuring.",
-    "Record explicit outcomes for every planned arm, including unavailable advice, errors and censoring."
+    "Record explicit outcomes for every planned arm, including unavailable advice, errors and censoring.",
+    "Pass same-policy A/A, calibrated positive controls and minimal request-coverage contracts before the multi-trajectory pilot.",
+    "Freeze full policy snapshots and permit only the declared policy-field differences in each comparison."
   ],
   "productionConstraints": {
     "singlePlayerUnchanged": true,
@@ -25,10 +27,20 @@
     "newReleaseRequested": false
   },
   "comparison": {
-    "kind": "SameBuildSingleFactorAblation",
+    "kind": "SameBuildPolicyFieldAblation",
     "arms": [
-      { "id": "shared_off", "creditSharedDamage": false },
-      { "id": "shared_on", "creditSharedDamage": true }
+      {
+        "id": "shared_off",
+        "policyPatch": {
+          "Multiplayer.CreditSharedDamage": false
+        }
+      },
+      {
+        "id": "shared_on",
+        "policyPatch": {
+          "Multiplayer.CreditSharedDamage": true
+        }
+      }
     ],
     "historicalDllComparison": "Optional separately labeled calibration, not the primary causal pair.",
     "factorsHeldFixed": [
@@ -45,42 +57,59 @@
       "partner decisions responding to that state",
       "legal actions and targets",
       "game RNG consumption caused by actual actions"
-    ]
+    ],
+    "allowedPolicyDifferences": [
+      "Multiplayer.CreditSharedDamage"
+    ],
+    "policySnapshotsCaptured": false,
+    "estimand": "Effect of the existing shared-credit feature, including its gated frontier cost condition, under the registered roots and actor policies; not just the arithmetic credit formula.",
+    "exposureStrata": "Register mechanism opportunities before building trajectories; report realized unattributed damage separately without conditioning the main outcome table on treatment-dependent exposure.",
+    "zeroExposureControl": "Expected agreement requires zero unattributed damage on all relevant search paths and normal unsaturated arithmetic. A topic label or unchanged first action does not establish those premises."
   },
   "pilot": {
     "purpose": "Validate execution and measurement, not estimate human multiplayer benefit.",
-    "rootManifest": null,
-    "plannedSourceRoots": 4,
     "plannedPartySize": 2,
-    "partnerPolicyIds": ["immediate_attack", "survival_first"],
-    "scheduleIds": ["peer_batch_first", "alternate_one_action"],
-    "requestCadenceIds": ["turn_start", "after_peer_batch"],
-    "interactionCells": [
-      { "scheduleId": "peer_batch_first", "requestCadenceId": "turn_start" },
-      { "scheduleId": "alternate_one_action", "requestCadenceId": "turn_start" },
-      { "scheduleId": "alternate_one_action", "requestCadenceId": "after_peer_batch" }
+    "partnerPolicyIds": [
+      "immediate_attack",
+      "survival_first"
     ],
-    "omittedEquivalentCell": "peer_batch_first / after_peer_batch coalesces with the first local request; do not duplicate turn_start.",
+    "scheduleIds": [
+      "peer_batch_first",
+      "local_first",
+      "alternate_one_action"
+    ],
+    "requestCadenceIds": [
+      "turn_start",
+      "after_peer_batch"
+    ],
+    "interactionCells": [
+      {
+        "scheduleId": "peer_batch_first",
+        "requestCadenceId": "turn_start"
+      },
+      {
+        "scheduleId": "local_first",
+        "requestCadenceId": "turn_start"
+      },
+      {
+        "scheduleId": "alternate_one_action",
+        "requestCadenceId": "turn_start"
+      },
+      {
+        "scheduleId": "alternate_one_action",
+        "requestCadenceId": "after_peer_batch"
+      }
+    ],
     "externalSeedReplicatesPerCell": 1,
     "armsPerPair": 2,
-    "plannedPairs": 24,
-    "plannedTrajectories": 48,
-    "maximumIndependentRootClusters": 4,
+    "plannedPairs": 32,
+    "plannedTrajectories": 64,
     "requiredCoverageThemes": [
-      "poison versus immediate teammate kill",
-      "defense and teammate self-protection",
-      "investment and later payoff",
+      "local-only poison source",
+      "mixed poison sources",
+      "defense and investment control",
       "multiple enemies and target changes"
     ],
-    "searchProfile": {
-      "fixedBudget": true,
-      "beamWidth": 12,
-      "maxExpandedNodes": 350,
-      "softTimeBudgetMilliseconds": 3000,
-      "maxDegreeOfParallelism": 1,
-      "enemyCycleLimit": 14,
-      "otherPolicySettings": "Freeze and record the full current multiplayer policy snapshot; no solo growth targets."
-    },
     "trajectoryLimits": {
       "requestTimeoutSeconds": 120,
       "enemyCycles": 12,
@@ -92,7 +121,21 @@
     },
     "qualityWorldAdvancesDuringSearch": false,
     "stressBatchSeparatedFromQuality": true,
-    "currentStatus": "NotImplementedNotRun"
+    "currentStatus": "NotImplementedNotRun",
+    "candidateRootManifest": "docs/strategy/multiplayer-experiments-20260923/root-candidates.json",
+    "capturedRootManifest": null,
+    "plannedCandidateConfigurations": 4,
+    "verifiedIndependentHumanSources": 0,
+    "sourceCluster": "controlled-ironclad-silent-template-v1",
+    "omittedEquivalentCells": "For either complete-batch order, coalesce after_peer_batch with the next first local request. Extra turns or ready withdrawal invalidate this simplification and need a separately registered sequence.",
+    "searchProfileId": "smoke_350",
+    "countsExclude": [
+      "A/A controls",
+      "positive controls",
+      "coverage calibration requests",
+      "interruption diagnostics",
+      "correctness stress contracts"
+    ]
   },
   "partnerPolicies": {
     "proposedFamilies": [
@@ -117,7 +160,9 @@
     "usesTestedSolverAsPartner": false,
     "randomPlayAndIdle": "Stress and negative controls only; not an empirical human population.",
     "humanCalibrated": false,
-    "parametersFrozen": false
+    "parametersFrozen": false,
+    "pilotCardPool": "Use only peer decks and exact allowed IDs in root-candidates.json, pending native choice-chain admission. Freeze complete decks before combat; never skip an unsupported draw.",
+    "fullChoiceCoverage": false
   },
   "execution": {
     "environment": "Native game actions; managed harness transport/rendering bypasses must be declared, representative loop verified in native headless.",
@@ -131,12 +176,26 @@
     "reset": "Complete run/session reset per trajectory. Reuse a process only after reset correctness is established.",
     "nativeInstanceLocation": ".local/headless-instances/<instance>",
     "nativeInstanceCleanup": "Use existing platform cleanup flag on the last request; retain logs outside the instance.",
-    "platformProtocolChanges": "Maintain Bash and PowerShell entry points together if parameters or capabilities change."
+    "platformProtocolChanges": "Maintain Bash and PowerShell entry points together if parameters or capabilities change.",
+    "reusedActionPrimitives": [
+      "SolverController.FindCardForDeployment",
+      "SolverController.EnqueueAndCaptureActionAsync",
+      "NativeChoiceRuntime"
+    ],
+    "cardMapping": "Preserve existing state-key/occurrence matching and existing ID/occurrence fallback for legacy actions. Log the actual native instance; do not invent a separate fuzzy matcher or claim permanent identity.",
+    "deploymentBoundary": "Full DeployCurrentTurn also owns automatic drift/exhaustion requests and ending the turn; a test-only guard bypass alone does not implement the required interleaved manual-request loop.",
+    "actorOwnership": "Prove each queued native action belongs to the scheduled actor. Existing peer OnPlayWrapper fixtures do not prove peer queue identity. Any LocalContext override must be stable, isolated and restored with no search or action in flight.",
+    "readyObservations": "Record per-player ready before/after, withdrawal, phase and actor turn in test events; do not infer future inactivity or require a new production root/UI field."
   },
   "randomness": {
     "gameRng": "Equal initial states; natural action-dependent consumption after branching, never forced alignment.",
     "externalRng": "Separate test-only actor and scheduler streams; never consume game RNG.",
-    "externalDrawCoordinates": ["pairId", "stableActorId", "actorTurn", "actorDecisionOrdinal"],
+    "externalDrawCoordinates": [
+      "pairId",
+      "stableActorId",
+      "actorTurn",
+      "actorDecisionOrdinal"
+    ],
     "replayActionTape": "Only validates its original path; not a responsive counterfactual partner.",
     "sameSeedImpliesIndependentSample": false
   },
@@ -164,18 +223,23 @@
       "per-player potion identity and count",
       "manual request count and invalid advice count",
       "search work and time-limit incidence",
-      "enemy cycles until actual terminal"
+      "enemy cycles until actual terminal",
+      "stage coverage and realized unattributed damage by preregistered mechanism stratum",
+      "per-player ready and withdrawal events",
+      "isolated requery disagreement and explicit diagnostic unavailability"
     ],
     "pairedHealthSubset": "Both arms complete and win; report subset size and exclusions alongside all-pair outcomes.",
     "negativeCases": "List candidate-only defeats, deaths and unavailable outcomes, plus worst health regressions by source root.",
     "unknownOutcomes": "Retain in denominator and report explicit bounds; do not relabel censoring as defeat or zero loss.",
-    "independentUnit": "Original run or source deck/root cluster, with generator-template sensitivity when sources share a template.",
+    "independentUnit": "Original source run/deck cluster in later quality studies. The four pilot recipes are one controlled template group, with zero verified independent human sources.",
     "withinRootWeighting": "Aggregate frozen conditions within root, then weight independent roots equally; publish strata and mixture sensitivity.",
     "formalUncertainty": "Paired cluster-level interval estimates only after a predeclared adequate sample design; pilot is descriptive.",
     "holdout": "Separate source runs, deck provenance and partner families; once used for tuning, reclassify as development data.",
     "formalSampleSize": null,
     "minimumUsefulEffect": null,
-    "formalStoppingRule": null
+    "formalStoppingRule": null,
+    "pilotInference": "Descriptive apparatus coverage only; do not estimate human between-root variance or human confidence intervals from the four controlled recipes.",
+    "counting": "64 trajectories and 32 pairs cover only B. Auxiliary control/calibration/diagnostic counts are unfrozen and must not be represented as executed or included in a fabricated all-batch total."
   },
   "sources": [
     {
@@ -190,5 +254,110 @@
       "readScope": "Primary abstract page",
       "application": "Report uncertainty and distributions; source-cluster design is a project-specific inference."
     }
-  ]
+  ],
+  "reviewResponse": "docs/strategy/multiplayer-experiments-20260923/review-response.md",
+  "controls": {
+    "samePolicyAA": {
+      "purpose": "Check complete reset, action actor identity and RNG isolation.",
+      "allowedPolicyDifferences": [],
+      "requiredEqualFields": [
+        "initial full party state",
+        "native action and choice sequence",
+        "manual request roots and reasons",
+        "non-timing search outcomes",
+        "game RNG states and counters",
+        "terminal or stopping outcome"
+      ],
+      "timeLimitRule": "If timing changes effective work, classify as an inconclusive determinism control, never an A/A pass.",
+      "plannedPairs": null,
+      "status": "NotRun"
+    },
+    "positive": {
+      "candidateSources": [
+        {
+          "source": "docs/strategy/multiplayer-shared-damage-20260923/implementation-evidence.json",
+          "case": "dev-poison/final-poison, one input root",
+          "allowedPolicyDifferences": [
+            "Multiplayer.CreditSharedDamage"
+          ],
+          "historicalDifference": "First local action changes from STRIKE_IRONCLAD to DEADLY_POISON."
+        },
+        {
+          "source": "docs/strategy/multiplayer-shared-damage-20260923/implementation.md",
+          "case": "Archived late_setup H7/H14 pair",
+          "allowedPolicyDifferences": [
+            "Multiplayer.Horizon"
+          ],
+          "historicalDifference": "The archived synthetic continuation deals 84 versus 104 damage with zero local HP loss."
+        }
+      ],
+      "nativeCalibration": "Historical synthetic inputs locate sensitive cases, but do not establish that complete-deck native loops reproduce them. Calibrate and freeze an explicit native witness before claiming a positive-control pass.",
+      "doesNotReplacePrimaryComparison": true,
+      "plannedPairs": null,
+      "status": "NotRun"
+    }
+  },
+  "budgetCalibration": {
+    "profiles": {
+      "smoke_350": {
+        "fixedBudget": true,
+        "beamWidth": 12,
+        "maxExpandedNodes": 350,
+        "softTimeBudgetMilliseconds": 3000,
+        "maxDegreeOfParallelism": 1,
+        "enemyCycleLimit": 14,
+        "otherPolicySettings": "Freeze and record the full current multiplayer policy snapshot; no solo growth targets.",
+        "maxCardBranchesPerNode": 32,
+        "maxPileChoiceBranchesPerAction": 18,
+        "maxHandChoiceBranchesPerAction": 24
+      },
+      "medium_nodes_time_capped": {
+        "fixedBudget": true,
+        "beamWidth": 60,
+        "maxExpandedNodes": 240000,
+        "maxCardBranchesPerNode": 32,
+        "maxPileChoiceBranchesPerAction": 18,
+        "maxHandChoiceBranchesPerAction": 24,
+        "softTimeBudgetMilliseconds": 10000,
+        "maxDegreeOfParallelism": 1,
+        "enemyCycleLimit": 14,
+        "basis": "Current Medium branch/beam limits and doubled multiplayer node allowance; independent 10-second cap and DOP1. Not the complete ordinary production time allowance."
+      }
+    },
+    "perRequestFields": [
+      "remainingStageEnemyCycles",
+      "frozenComparisonEnemyCycles",
+      "maximumObservedEnemyCycles",
+      "selectedComparable",
+      "bothIncomparableScoreFallbackCount",
+      "nodeLimitReached",
+      "timeLimitReached",
+      "expandedNodes",
+      "observedUnattributedDamage",
+      "selectedPredictedUnattributedDamage"
+    ],
+    "coverageDefinition": "For every available request report whether the frozen comparison reaches its remaining stage deadline and whether the selected facts are comparable. Keep true native terminal, predicted terminal, local death and unavailable advice distinct; do not use maximum explored depth alone as success.",
+    "witnessGate": "Both arms on preregistered nonterminal witness requests must reach comparable stage facts or an actual early native terminal. Missing this gate is insufficient coverage, not automatic fallback to Score.",
+    "populationStageCoverageThreshold": null,
+    "diagnosticScope": "Choose representative initial or earliest manual-requery roots using A coverage results; freeze the diagnostic list before comparative measurement. Do not cross this profile with all 64 pilot trajectories by default.",
+    "plannedDiagnosticRequests": null,
+    "status": "NotRun"
+  },
+  "interruptionDiagnostics": {
+    "status": "NotRun",
+    "kind": "UnexecutedRequerySensitivity",
+    "sourceCadence": "turn_start",
+    "sampling": "Preregister stable peer-interruption points before observing treatment results.",
+    "compare": "Old next action versus new first action, including actual card mapping, target, potion and choice details.",
+    "separateDenominators": [
+      "old advice legal",
+      "old advice invalid",
+      "new advice unavailable",
+      "diagnostic search failed"
+    ],
+    "isolation": "Run outside the episode from a frozen root and policy/session-ledger snapshot. Do not mutate original caches, previous route prefixes, ledger, request count or schedule.",
+    "cost": "Record diagnostic search work separately from actual manual queries and trajectory limits.",
+    "interpretation": "Action disagreement is sensitivity to a new root, not the value of replanning. Only paired executed continuations can estimate downstream benefit.",
+    "plannedRequests": null
+  }
 }

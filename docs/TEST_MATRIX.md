@@ -2,7 +2,7 @@
 
 ## 多人闭环实验协议（2026-09-23，设计记录）
 
-[设计与协议](strategy/multiplayer-experiments-20260923/README.md)只完成L0文档/JSON一致性检查，`readyToExecute=false`，没有新行为通过结果。拟先验证双人原生行动、两次真实手动请求、下一回合与持续阶段账本，再试跑4原根×2队友×3个有效调度/重算组合×2臂。48为计划轨迹数，不是已执行测试或独立样本；原根清单、执行器及三/四人恢复仍待补齐。
+[设计与协议](strategy/multiplayer-experiments-20260923/README.md)经[审查复核](strategy/multiplayer-experiments-20260923/review-response.md)完成L0文档/JSON一致性检查，`readyToExecute=false`，没有新行为通过结果。拟先验证双人原生行动、两次真实手动请求、下一回合、持续阶段账本和A/A复位，再校准正对照与搜索阶段覆盖。加入本机先手后，B为4候选配置×2队友×4个有效调度/重算组合×2臂，即64条计划轨迹、32对，替代初稿48条/24对；辅助控制与诊断另计、数量尚未冻结。[完整牌组候选](strategy/multiplayer-experiments-20260923/root-candidates.json)已登记但尚未原生捕获，0份已验证独立真人来源。执行器、全队恢复、选择/Actor合同及三/四人恢复仍待验证。新留存的7个原生参考类型仅属静态补证，不增加Passed项。
 
 ## 0.44.2（fork，本地准备）：多人无来源伤害选路（2026-09-23）
 

@@ -40,6 +40,8 @@ deficitCost      = max(1, rootLocalHp) * clamp((target - scoredProgress) / max(1
 
 这是一条评分规则，不是实际伤害分配。所有玩家/怪物的生命、毒层数、伤害事件、下一行动与九条 RNG 仍按原生模拟结算。已知队友 dealer 的伤害永远不会进入 `U`。清场仍按真实敌人生命判断，个人达标仍只读 `personalProgress`。
 
+均分也有代价：即便本机是唯一毒源，无来源扣血在缺口进展中仍只有直接本机扣血的 `1/n` 信用，可能低估持续伤害主力对消灭敌人的贡献。这不是整条路线评分固定减半，真实清场、剩余敌血、战损和尾值仍参与比较。现役 `H0/n` 目标是均摊工作量的政策选择，包含“平衡队员负担”的假设；它不等于已测得队友未来会打出该份额，也没有把预测的队友伤害写进战斗状态。后续实验须分别覆盖本机唯一毒源与混合毒源。
+
 中间评分、固定阶段比较和条件尾值使用同一折算口径。前沿支配额外核对实际多人目标代价，避免旧的“个人贡献更高”坐标删除更有价值的共享伤害路线。用药资格、近期死亡次序、队友死亡代价、三周期截止、4B 前沿、十四周期上限、普通双倍/固定原值预算都保留。
 
 | 层 | 改动与所有权 |
@@ -100,3 +102,5 @@ deficitCost      = max(1, rootLocalHp) * clamp((target - scoredProgress) / max(1
 现役入口、参数和外评脚本说明见[离线宿主](../../OFFLINE_SEARCH_HARNESS.md)。`RACE_FIXTURE` 指定一个根，`RACE_VARIANT=0/1` 关闭/开启共享信用；两个新种子根另外设置 `RACE_ENEMY_HP=180,RACE_LOCAL_HP=67` 或 `55,32`。每个实验根独立进程，禁止把不同根的牌堆、历史或敌人残留串起来。原生请求位于 `coverage/unattended/multiplayer-shared-damage.json`，原有 Bash/PowerShell 启动器均可读取，必须使用实例清理开关。
 
 被拒绝原型的[说明与快照](prototype/README.md)保留用于审视当时实现；生产不加载它们。后续若继续研究，先补齐 Intercept 公共语义，再另取独立根评估辅助价值；历史团队速率需要明确预测授权与独立质量验证，不能仅改名字规避约束。
+
+2026-09-23 [二次审查回应](../multiplayer-experiments-20260923/review-response.md)补齐定向原生源码留存与评分假设说明。旧轮“补读源码”未保存可复核正文的缺口成立；本次重新提取 `PoisonPower`、`PowerCmd`、`PowerModel`、`RunRngSet`、`Intercept`、`CoveredPower` 和 `InterceptPower`，来源与关键方法见回应。仅增加静态证据，不冒充新的原生差分通过。ready 状态可以作为测试事件观察，现役未将它纳入预测或不可撤销承诺。

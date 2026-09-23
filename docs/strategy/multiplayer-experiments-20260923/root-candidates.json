@@ -1,0 +1,151 @@
+{
+  "manifestId": "multiplayer-controlled-party-candidates-20260923-v1",
+  "status": "CandidateRecipesNotCaptured",
+  "readyToExecute": false,
+  "capturedRootManifest": null,
+  "verifiedIndependentHumanSources": 0,
+  "sourceCluster": "controlled-ironclad-silent-template-v1",
+  "provenance": "Explicit synthetic whole-deck recipes for apparatus validation, not sampled human runs or already restored native roots.",
+  "common": {
+    "partySize": 2,
+    "localNetId": 1,
+    "peerNetId": 2,
+    "ascension": 0,
+    "actIndexForTest": 0,
+    "currentHpPerPlayer": 60,
+    "maxHp": "Native character maximum, captured before execution.",
+    "relics": "Native character starting relics only; resolve exact IDs and state into the captured manifest.",
+    "potionsPerPlayer": [],
+    "upgradesPerCard": 0,
+    "enchantmentsPerCard": [],
+    "enemyHp": "Native encounter HP and one native multiplayer scaling pass; no manual enemy HP override.",
+    "deckSemantics": "Replace each precombat deck with the entire listed composition, expanded in listed order; native shuffle and draw then run normally. Never refill piles or resources between cycles.",
+    "initialResourcesAndPowers": "Native combat-start state only; no injected energy, stars, block or powers.",
+    "construction": "Build both character configurations inside one new native RunState and combat session, not by merging existing single-player runs.",
+    "choiceScope": "No extra card-choice effects in the listed card pool; enemy target selection is still required. All relic, encounter and generated-card choice chains must be checked before admission."
+  },
+  "peerAllowedCardIds": [
+    "STRIKE_IRONCLAD",
+    "DEFEND_IRONCLAD",
+    "BASH",
+    "INFLAME",
+    "STRIKE_SILENT",
+    "DEFEND_SILENT",
+    "DEADLY_POISON",
+    "POISONED_STAB"
+  ],
+  "admissionRequirements": [
+    "Resolve every character, encounter, card and starting-relic ID against the declared game and mod environment.",
+    "Verify the native encounter is legal for the registered act and its active enemy count meets the recipe requirement.",
+    "Verify all starting, generated and triggered choices are absent or have a registered actor-owned adapter; reject the whole root instead of dropping a card.",
+    "Keep failed root admission in the planned-root and arm-availability report; do not silently replace or omit a candidate after seeing failures or comparative outcomes.",
+    "Capture exact ordered piles, card state, full party identity/resources/relics/potions, enemy state, native history, contribution ledger and all nine captured combat RNG streams.",
+    "Capture ready/phase/player-turn observations separately from the production search root and prove native action actor ownership.",
+    "Restore each captured root and compare complete party state before paired trajectories; a recipe or successful parse is not restoration evidence.",
+    "Freeze partner policy parameters, complete policy snapshots, search profiles and permitted treatment fields before measurement."
+  ],
+  "candidates": [
+    {
+      "id": "local_only_poison",
+      "seed": "MANUAL-LOOP-LOCAL-POISON-20260923",
+      "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+      "minimumActiveEnemies": 1,
+      "plannedMechanismStratum": "UnattributedDamageOpportunity",
+      "purpose": "Local player is the only planned poison source; observe early peer kills and equal-share under-credit without assuming poison is actually played.",
+      "local": {
+        "characterId": "SILENT",
+        "deck": [
+          { "cardId": "STRIKE_SILENT", "count": 5 },
+          { "cardId": "DEFEND_SILENT", "count": 5 },
+          { "cardId": "DEADLY_POISON", "count": 2 },
+          { "cardId": "POISONED_STAB", "count": 2 }
+        ]
+      },
+      "peer": {
+        "characterId": "IRONCLAD",
+        "deck": [
+          { "cardId": "STRIKE_IRONCLAD", "count": 5 },
+          { "cardId": "DEFEND_IRONCLAD", "count": 4 },
+          { "cardId": "BASH", "count": 1 }
+        ]
+      }
+    },
+    {
+      "id": "mixed_poison",
+      "seed": "MANUAL-LOOP-MIXED-POISON-20260923",
+      "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+      "minimumActiveEnemies": 1,
+      "plannedMechanismStratum": "UnattributedDamageOpportunity",
+      "purpose": "Both players can add to the same poison counter; no applier-based ownership is inferred from this recipe.",
+      "local": {
+        "characterId": "SILENT",
+        "deck": [
+          { "cardId": "STRIKE_SILENT", "count": 5 },
+          { "cardId": "DEFEND_SILENT", "count": 5 },
+          { "cardId": "DEADLY_POISON", "count": 2 },
+          { "cardId": "POISONED_STAB", "count": 2 }
+        ]
+      },
+      "peer": {
+        "characterId": "SILENT",
+        "deck": [
+          { "cardId": "STRIKE_SILENT", "count": 5 },
+          { "cardId": "DEFEND_SILENT", "count": 5 },
+          { "cardId": "DEADLY_POISON", "count": 2 },
+          { "cardId": "POISONED_STAB", "count": 2 }
+        ]
+      }
+    },
+    {
+      "id": "defense_investment_control",
+      "seed": "MANUAL-LOOP-DEFENSE-SETUP-20260923",
+      "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+      "minimumActiveEnemies": 1,
+      "plannedMechanismStratum": "NoPlannedUnattributedDamageSource",
+      "purpose": "Check defense, setup and expected agreement without poison. Confirm zero unattributed exposure throughout relevant search paths and equal effective budgets before treating a cross-policy difference as an equivalence failure.",
+      "local": {
+        "characterId": "IRONCLAD",
+        "deck": [
+          { "cardId": "STRIKE_IRONCLAD", "count": 5 },
+          { "cardId": "DEFEND_IRONCLAD", "count": 4 },
+          { "cardId": "BASH", "count": 1 },
+          { "cardId": "INFLAME", "count": 2 }
+        ]
+      },
+      "peer": {
+        "characterId": "IRONCLAD",
+        "deck": [
+          { "cardId": "STRIKE_IRONCLAD", "count": 5 },
+          { "cardId": "DEFEND_IRONCLAD", "count": 4 },
+          { "cardId": "BASH", "count": 1 }
+        ]
+      }
+    },
+    {
+      "id": "multi_target_poison",
+      "seed": "MANUAL-LOOP-MULTI-TARGET-20260923",
+      "encounterId": "BOWLBUGS_NORMAL",
+      "minimumActiveEnemies": 2,
+      "plannedMechanismStratum": "UnattributedDamageOpportunity",
+      "purpose": "Observe poison investment, early kills and legal target changes with multiple native enemies; the required roster remains unverified until admission.",
+      "local": {
+        "characterId": "SILENT",
+        "deck": [
+          { "cardId": "STRIKE_SILENT", "count": 5 },
+          { "cardId": "DEFEND_SILENT", "count": 5 },
+          { "cardId": "DEADLY_POISON", "count": 2 },
+          { "cardId": "POISONED_STAB", "count": 2 }
+        ]
+      },
+      "peer": {
+        "characterId": "IRONCLAD",
+        "deck": [
+          { "cardId": "STRIKE_IRONCLAD", "count": 5 },
+          { "cardId": "DEFEND_IRONCLAD", "count": 4 },
+          { "cardId": "BASH", "count": 1 },
+          { "cardId": "INFLAME", "count": 1 }
+        ]
+      }
+    }
+  ]
+}
