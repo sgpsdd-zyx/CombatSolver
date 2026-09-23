@@ -420,7 +420,7 @@ internal sealed record HarnessOptions
           --multiplayer-start-contracts Exercise the manual UI entry and native action waits without networking
           --multiplayer-strategy-contracts Check offense within the per-turn HP allowance and survival guards
           --multiplayer-long-term-contracts Record bounded multiplayer path-loss diagnostics without changing ranking
-          --multiplayer-review-contracts <stage> Multiplayer review; horizon-* / window-selection* / window-covered-* stages are documented in docs/OFFLINE_SEARCH_HARNESS.md
+          --multiplayer-review-contracts <stage> Multiplayer contracts and race-dev/race-holdout experiments; see docs/OFFLINE_SEARCH_HARNESS.md
         环境变量 OFFLINE_HARNESS_COMBATSOLVER_DLL 可以换掉运行时加载的 CombatSolver.dll。
         """;
 
@@ -645,9 +645,9 @@ internal sealed record HarnessOptions
             throw new ArgumentException("--multiplayer-long-term-contracts requires its own two-player fixture.");
         if (multiplayerReviewStage is "horizon-ordering" || multiplayerReviewStage?.StartsWith("window-", StringComparison.Ordinal) == true)
             throw new ArgumentException("This historical ordering contract requires the v0.43.6 source; use quota-selection or quota-contracts for the current policy.");
-        if (multiplayerReviewStage != null && (multiplayerReviewStage is not ("quota-selection" or "quota-contracts" or "quota-pressure" or "quota-defense" or "quota-investment" or "dead-teammate" or "upstream-compatibility" or "facts" or "stopping" or "horizon" or "horizon-fourteen" or "horizon-budget" or "horizon-native" or "horizon-ordering" or "window-selection" or "window-selection-payback" or "window-covered-payback" or "window-covered-sentinel" or "window-covered-contracts" or "window-covered-incremental" or "window-covered-defense") || multiplayerContracts
+        if (multiplayerReviewStage != null && (multiplayerReviewStage is not ("shared-ranking" or "race-dev" or "race-holdout" or "quota-selection" or "quota-contracts" or "quota-pressure" or "quota-defense" or "quota-investment" or "dead-teammate" or "upstream-compatibility" or "facts" or "stopping" or "horizon" or "horizon-fourteen" or "horizon-budget" or "horizon-native" or "horizon-ordering" or "window-selection" or "window-selection-payback" or "window-covered-payback" or "window-covered-sentinel" or "window-covered-contracts" or "window-covered-incremental" or "window-covered-defense") || multiplayerContracts
             || multiplayerStartContracts || multiplayerStrategyContracts || multiplayerLongTermContracts || requestPath != null))
-            throw new ArgumentException("--multiplayer-review-contracts requires quota-contracts, quota-selection, quota-pressure, quota-defense, quota-investment, dead-teammate, upstream-compatibility, facts, stopping, horizon, horizon-fourteen, horizon-budget, horizon-native, horizon-ordering, window-selection, window-selection-payback, window-covered-payback, window-covered-sentinel window-covered-contracts window-covered-incremental or window-covered-defense fixture of its own.");
+            throw new ArgumentException("--multiplayer-review-contracts requires its own supported stage (including shared-ranking, race-dev and race-holdout); see docs/OFFLINE_SEARCH_HARNESS.md.");
         if ((observePortfolio || portfolioModelPath != null) && (!usePortfolio || searchMode != "Coordinator"))
             throw new ArgumentException("选择器实验需要 --search-mode Coordinator --use-portfolio。");
         if (noPlainBaseline && (!usePortfolio || searchMode != "Coordinator"))

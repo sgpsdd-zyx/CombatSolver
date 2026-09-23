@@ -20,7 +20,11 @@
 
 `MultiplayerContributionCapture` 在主线程从真实伤害历史、有效敌人生命与存活参与者捕获 `MultiplayerRootObservation`。`SolverCombatSession.AdvisoryContribution` 独占跨手动请求的阶段账本；`MultiplayerContributionSession` 按绝对敌方轮次维护三周期截止，人数变化/到期明确重建并保留上一任务结果。Search 只接收不可变 `MultiplayerContributionObjective`，不回读 live 历史，也不预测队友操作。
 
-`SimulatedCombatState.RecordDamageReceived` 在已有事件入口按 dealer / PetOwner 累加本机与总实际扣血；原版 `UnblockedDamage` 已排除过杀。计数按值 Fork；`MultiplayerCycleCheckpoint` 在敌方周期结束、下一玩家准备前保存 HP、最大 HP、伤害计数、药水代价和阵容观察，最多十四条不可变链。伤害计数与检查点进入多人去重/转置标签和严格增量校验，不进入战斗状态键或 ContinuationStamp，单人缺省为零。
+`SimulatedCombatState.RecordDamageReceived` 在已有事件入口按 dealer / PetOwner 累加本机与总实际扣血，并单列 null dealer 的 `AdvisorUnattributedDamage`；原版 `UnblockedDamage` 已排除过杀。计数按值 Fork；`MultiplayerCycleCheckpoint` 在敌方周期结束、下一玩家准备前保存 HP、最大 HP、三类伤害计数、药水代价和阵容观察，最多十四条不可变链。伤害计数与检查点进入多人去重/转置标签和严格增量校验，不进入战斗状态键或 ContinuationStamp，单人缺省为零。Runtime 从原生历史捕获相同分类，跨请求只传已观察的阶段增量。
+
+`MultiplayerContributionObjective.SharedProgress` 将阶段内无来源实际伤害按参与人数折算，仅供多人中间分、阶段缺口与条件尾值使用；个人 `Progress` 和达标见证保留严格归属。治疗冲回一次、人数变化重建、三周期截止不变；无来源计数不冒充队友输出速率。`MultiplayerSearchPolicy.CreditSharedDamage` 默认开启，关闭仅供离线对照。前沿支配检查实际目标代价，不能仅凭个人贡献轴删除共享路线。结果经 `AdvisorySharedDamageCredit` 只读投影给 UI，中英解释与个人贡献分开。实验与原生证据见[伤害归属实施](strategy/multiplayer-shared-damage-20260923/implementation.md)。
+
+`SearchRunContext.ResetRebuildableCaches` 若从前沿重建转置标签，保留三类伤害计数与周期检查点，不能将无来源计数退回默认零；并行 lane 传空前沿时仍只清空缓存。`shared-ranking` 独立覆盖非空重建输入。
 
 `CombatBeamSolver.MultiplayerEvaluation` 拥有阶段事实、近期风险与条件尾值；`MultiplayerPlanValue` / `MultiplayerQuotaSelection` 拥有纯值成本和支配关系。真实终局在比较周期内优先于旧检查点。`Multiplayer` 先过滤用药资格，再冻结截止内已观察的最深周期并保留最多 `4B` 伤害/代价前沿；缺少周期证据仍是未知。`Phases` 在既有回合层保存无模拟器的见证，最终与现有候选合并；预览与最终共用入口。快照释放继续归 `Phases`，长期见证不拥有模拟器。阶段之后的风险/收益只作条件尾值，返回动作截至实际比较边界，不能伪造胜利或略去敌方结算。旧 3 HP 账本与 A/C 覆盖升级不再运行。
 

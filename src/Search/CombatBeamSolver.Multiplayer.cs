@@ -49,6 +49,9 @@ internal sealed partial class CombatBeamSolver
             MultiplayerPlanValue value = MultiplayerFactsAt(candidate, ordering.EnemyCycles);
             if (frontier.Any(other => (!other.HasPredictionRisk || candidate.HasPredictionRisk)
                 && FirstCycleRisk(other) <= FirstCycleRisk(candidate)
+                && (!policy.Multiplayer!.CreditSharedDamage
+                    || MultiplayerObjectiveCost(other, MultiplayerFactsAt(other, ordering.EnemyCycles))
+                        <= MultiplayerObjectiveCost(candidate, value))
                 && MultiplayerTailValue(other, MultiplayerFactsAt(other, ordering.EnemyCycles))
                     >= MultiplayerTailValue(candidate, value)
                 && MultiplayerQuotaSelection.Dominates(
@@ -56,6 +59,9 @@ internal sealed partial class CombatBeamSolver
                 continue;
             frontier.RemoveAll(other => (!candidate.HasPredictionRisk || other.HasPredictionRisk)
                 && FirstCycleRisk(candidate) <= FirstCycleRisk(other)
+                && (!policy.Multiplayer!.CreditSharedDamage
+                    || MultiplayerObjectiveCost(candidate, value)
+                        <= MultiplayerObjectiveCost(other, MultiplayerFactsAt(other, ordering.EnemyCycles)))
                 && MultiplayerTailValue(candidate, value)
                     >= MultiplayerTailValue(other, MultiplayerFactsAt(other, ordering.EnemyCycles))
                 && MultiplayerQuotaSelection.Dominates(value,
@@ -138,6 +144,7 @@ internal sealed partial class CombatBeamSolver
             }
             var ranked = nodes.GroupBy(node => (node.StateKey,
                     node.Snapshot.AdvisoryLocalDamage, node.Snapshot.AdvisoryTotalDamage,
+                    node.Snapshot.AdvisoryUnattributedDamage,
                     node.Snapshot.AdvisoryLastEnemyCycle))
                 .Select(group => group.OrderByDescending(node => node.Score)
                     .ThenBy(node => node.Snapshot.CumulativePlayerHpLost).ThenBy(node => node.ActionCount).First())

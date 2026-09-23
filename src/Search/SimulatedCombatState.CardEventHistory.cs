@@ -185,6 +185,8 @@ internal sealed partial class SimulatedCombatState
             AdvisorTotalDamage = checked(AdvisorTotalDamage + damage);
             if (MultiplayerDamageAttribution.IsLocal(dealer, advisor))
                 AdvisorLocalDamage = checked(AdvisorLocalDamage + damage);
+            if (dealer == null)
+                AdvisorUnattributedDamage = checked(AdvisorUnattributedDamage + damage);
         }
         if (result.UnblockedDamage > 0)
         {

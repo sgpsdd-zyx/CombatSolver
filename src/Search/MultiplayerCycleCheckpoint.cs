@@ -7,6 +7,7 @@ internal sealed record MultiplayerCycleCheckpoint(int Cycle, int Hp, int HpLost,
 {
     public long LocalDamage { get; init; }
     public long TotalDamage { get; init; }
+    public long UnattributedDamage { get; init; }
     public int AliveEnemies { get; init; }
     public int PotionCost { get; init; }
     public int MaxHp { get; init; }

@@ -272,7 +272,7 @@ internal sealed partial class CombatBeamSolver
                         node.Score,
                         node.Snapshot.AdvisoryLocalDamage,
                         node.Snapshot.AdvisoryTotalDamage,
-                        node.Snapshot.AdvisoryLastEnemyCycle));
+                        node.Snapshot.AdvisoryLastEnemyCycle, node.Snapshot.AdvisoryUnattributedDamage));
             }
             ExpandedTranspositions = [];
             StandPatCache = [];

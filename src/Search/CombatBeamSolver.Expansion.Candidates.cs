@@ -885,7 +885,7 @@ internal sealed partial class CombatBeamSolver
             candidate.Score,
             candidate.Snapshot.AdvisoryLocalDamage,
             candidate.Snapshot.AdvisoryTotalDamage,
-            candidate.Snapshot.AdvisoryLastEnemyCycle);
+            candidate.Snapshot.AdvisoryLastEnemyCycle, candidate.Snapshot.AdvisoryUnattributedDamage);
         if (!_run.Transpositions.TryGetValue(candidate.StateKey, out TranspositionFrontier? frontier))
         {
             if (AtTranspositionEntryLimit())
@@ -947,7 +947,7 @@ internal sealed partial class CombatBeamSolver
             node.Score,
             node.Snapshot.AdvisoryLocalDamage,
             node.Snapshot.AdvisoryTotalDamage,
-            node.Snapshot.AdvisoryLastEnemyCycle);
+            node.Snapshot.AdvisoryLastEnemyCycle, node.Snapshot.AdvisoryUnattributedDamage);
         if (!_run.ExpandedTranspositions.TryGetValue(node.StateKey, out TranspositionFrontier? frontier))
         {
             if (AtTranspositionEntryLimit())

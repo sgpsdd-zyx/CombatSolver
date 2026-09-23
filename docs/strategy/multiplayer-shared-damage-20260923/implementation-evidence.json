@@ -1,0 +1,5583 @@
+{
+  "date": "2026-09-23",
+  "status": "ImplementedLocalPreparation",
+  "baseCommit": "cad3ba35",
+  "baselineBehaviorCommit": "86026b05",
+  "upstreamBaseline": "42e09028 / 0.44.0",
+  "scope": "Only unattributed actual enemy HP damage divided by living participants is enabled in multiplayer scoring; personal quota witnesses retain exact dealer ownership.",
+  "featureBits": {
+    "0": "Original contribution scoring",
+    "1": "Shared damage",
+    "2": "Distance-discounted peer death costs (rejected)",
+    "4": "Threat-weighted enemy HP pressure (rejected)",
+    "7": "All three prototype features (rejected except shared damage)"
+  },
+  "protocol": {
+    "search": "Coordinator, Beam 12, 350 nodes, 3000 ms, DOP 1. Fixed budgets are not doubled.",
+    "externalEvaluation": "Replay selected current-turn actions; then fixed local guard/power/ID order for up to 5 enemy cycles. Peer idle/one Defend/one Strike scripts run only in the evaluator and obey legality.",
+    "sameSeedNotIndependentPopulation": true,
+    "humanPolicyValidated": false,
+    "prototypesAreNotFinalBinary": true
+  },
+  "experiments": [
+    {
+      "stage": "exploratory",
+      "run": "dev-poison",
+      "source": ".local/multiplayer-race-20260923/dev-poison/race-experiments.json",
+      "scenario": {
+        "CharacterId": "SILENT",
+        "EncounterId": "FUZZY_WURM_CRAWLER_WEAK",
+        "Seed": "RACE-DEV-20260923",
+        "Ascension": 0,
+        "ActIndexForTest": 0,
+        "MultiplayerContracts": false,
+        "MultiplayerStartContracts": false,
+        "MultiplayerStrategyContracts": false,
+        "MultiplayerLongTermContracts": false,
+        "MultiplayerReviewStage": "race-dev"
+      },
+      "budget": {
+        "BeamWidth": 12,
+        "MaxExpandedNodes": 350,
+        "BudgetMilliseconds": 3000,
+        "MaxDegreeOfParallelism": 1
+      },
+      "rows": [
+        {
+          "fixture": "poison",
+          "features": 0,
+          "expandedNodes": 350,
+          "transitionCount": 872,
+          "elapsed": "00:00:00.3313895",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 7,
+          "advisoryPlannedContribution": 18,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 70,
+          "enemyHp": 88,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "STRIKE_IRONCLAD",
+              "targetCombatId": 2
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 5,
+              "localHp": 64,
+              "localLoss": 16,
+              "peerHp": 54,
+              "enemyHp": 46,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 18
+            },
+            "guard": {
+              "cycles": 5,
+              "localHp": 64,
+              "localLoss": 16,
+              "peerHp": 68,
+              "enemyHp": 46,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 18
+            },
+            "attack": {
+              "cycles": 5,
+              "localHp": 64,
+              "localLoss": 16,
+              "peerHp": 54,
+              "enemyHp": 16,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 18
+            }
+          }
+        },
+        {
+          "fixture": "poison",
+          "features": 1,
+          "expandedNodes": 350,
+          "transitionCount": 867,
+          "elapsed": "00:00:00.1344434",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 8,
+          "advisoryPlannedContribution": 12,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 70,
+          "enemyHp": 81,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "DEADLY_POISON",
+              "targetCombatId": 2
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 5,
+              "localHp": 64,
+              "localLoss": 16,
+              "peerHp": 54,
+              "enemyHp": 31,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 18
+            },
+            "guard": {
+              "cycles": 5,
+              "localHp": 64,
+              "localLoss": 16,
+              "peerHp": 68,
+              "enemyHp": 31,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 18
+            },
+            "attack": {
+              "cycles": 5,
+              "localHp": 64,
+              "localLoss": 16,
+              "peerHp": 54,
+              "enemyHp": 1,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 18
+            }
+          }
+        },
+        {
+          "fixture": "poison",
+          "features": 2,
+          "expandedNodes": 350,
+          "transitionCount": 872,
+          "elapsed": "00:00:00.1452309",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 7,
+          "advisoryPlannedContribution": 18,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 70,
+          "enemyHp": 88,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "STRIKE_IRONCLAD",
+              "targetCombatId": 2
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 5,
+              "localHp": 64,
+              "localLoss": 16,
+              "peerHp": 54,
+              "enemyHp": 46,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 18
+            },
+            "guard": {
+              "cycles": 5,
+              "localHp": 64,
+              "localLoss": 16,
+              "peerHp": 68,
+              "enemyHp": 46,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 18
+            },
+            "attack": {
+              "cycles": 5,
+              "localHp": 64,
+              "localLoss": 16,
+              "peerHp": 54,
+              "enemyHp": 16,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 18
+            }
+          }
+        },
+        {
+          "fixture": "poison",
+          "features": 4,
+          "expandedNodes": 350,
+          "transitionCount": 872,
+          "elapsed": "00:00:00.1471281",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 7,
+          "advisoryPlannedContribution": 18,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 70,
+          "enemyHp": 88,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "STRIKE_IRONCLAD",
+              "targetCombatId": 2
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 5,
+              "localHp": 64,
+              "localLoss": 16,
+              "peerHp": 54,
+              "enemyHp": 46,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 18
+            },
+            "guard": {
+              "cycles": 5,
+              "localHp": 64,
+              "localLoss": 16,
+              "peerHp": 68,
+              "enemyHp": 46,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 18
+            },
+            "attack": {
+              "cycles": 5,
+              "localHp": 64,
+              "localLoss": 16,
+              "peerHp": 54,
+              "enemyHp": 16,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 18
+            }
+          }
+        },
+        {
+          "fixture": "poison",
+          "features": 7,
+          "expandedNodes": 350,
+          "transitionCount": 861,
+          "elapsed": "00:00:00.1449337",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 7,
+          "advisoryPlannedContribution": 12,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 70,
+          "enemyHp": 81,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "DEADLY_POISON",
+              "targetCombatId": 2
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 5,
+              "localHp": 64,
+              "localLoss": 16,
+              "peerHp": 54,
+              "enemyHp": 31,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 18
+            },
+            "guard": {
+              "cycles": 5,
+              "localHp": 64,
+              "localLoss": 16,
+              "peerHp": 68,
+              "enemyHp": 31,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 18
+            },
+            "attack": {
+              "cycles": 5,
+              "localHp": 64,
+              "localLoss": 16,
+              "peerHp": 54,
+              "enemyHp": 1,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 18
+            }
+          }
+        }
+      ]
+    },
+    {
+      "stage": "exploratory",
+      "run": "dev-fumes",
+      "source": ".local/multiplayer-race-20260923/dev-fumes/race-experiments.json",
+      "scenario": {
+        "CharacterId": "SILENT",
+        "EncounterId": "FUZZY_WURM_CRAWLER_WEAK",
+        "Seed": "RACE-DEV-20260923",
+        "Ascension": 0,
+        "ActIndexForTest": 0,
+        "MultiplayerContracts": false,
+        "MultiplayerStartContracts": false,
+        "MultiplayerStrategyContracts": false,
+        "MultiplayerLongTermContracts": false,
+        "MultiplayerReviewStage": "race-dev"
+      },
+      "budget": {
+        "BeamWidth": 12,
+        "MaxExpandedNodes": 350,
+        "BudgetMilliseconds": 3000,
+        "MaxDegreeOfParallelism": 1
+      },
+      "rows": [
+        {
+          "fixture": "fumes",
+          "features": 0,
+          "expandedNodes": 350,
+          "transitionCount": 779,
+          "elapsed": "00:00:00.3182595",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 9,
+          "advisoryPlannedContribution": 18,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 70,
+          "enemyHp": 140,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "STRIKE_IRONCLAD",
+              "targetCombatId": 2
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 5,
+              "localHp": 64,
+              "localLoss": 16,
+              "peerHp": 54,
+              "enemyHp": 121,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            },
+            "guard": {
+              "cycles": 5,
+              "localHp": 64,
+              "localLoss": 16,
+              "peerHp": 68,
+              "enemyHp": 121,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            },
+            "attack": {
+              "cycles": 5,
+              "localHp": 64,
+              "localLoss": 16,
+              "peerHp": 54,
+              "enemyHp": 91,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            }
+          }
+        },
+        {
+          "fixture": "fumes",
+          "features": 1,
+          "expandedNodes": 350,
+          "transitionCount": 779,
+          "elapsed": "00:00:00.1257650",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 9,
+          "advisoryPlannedContribution": 18,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 70,
+          "enemyHp": 140,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "STRIKE_IRONCLAD",
+              "targetCombatId": 2
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 5,
+              "localHp": 64,
+              "localLoss": 16,
+              "peerHp": 54,
+              "enemyHp": 121,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            },
+            "guard": {
+              "cycles": 5,
+              "localHp": 64,
+              "localLoss": 16,
+              "peerHp": 68,
+              "enemyHp": 121,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            },
+            "attack": {
+              "cycles": 5,
+              "localHp": 64,
+              "localLoss": 16,
+              "peerHp": 54,
+              "enemyHp": 91,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            }
+          }
+        },
+        {
+          "fixture": "fumes",
+          "features": 2,
+          "expandedNodes": 350,
+          "transitionCount": 779,
+          "elapsed": "00:00:00.1361364",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 9,
+          "advisoryPlannedContribution": 18,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 70,
+          "enemyHp": 140,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "STRIKE_IRONCLAD",
+              "targetCombatId": 2
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 5,
+              "localHp": 64,
+              "localLoss": 16,
+              "peerHp": 54,
+              "enemyHp": 121,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            },
+            "guard": {
+              "cycles": 5,
+              "localHp": 64,
+              "localLoss": 16,
+              "peerHp": 68,
+              "enemyHp": 121,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            },
+            "attack": {
+              "cycles": 5,
+              "localHp": 64,
+              "localLoss": 16,
+              "peerHp": 54,
+              "enemyHp": 91,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            }
+          }
+        },
+        {
+          "fixture": "fumes",
+          "features": 4,
+          "expandedNodes": 350,
+          "transitionCount": 781,
+          "elapsed": "00:00:00.1365318",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 9,
+          "advisoryPlannedContribution": 18,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 70,
+          "enemyHp": 140,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "STRIKE_IRONCLAD",
+              "targetCombatId": 2
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 5,
+              "localHp": 64,
+              "localLoss": 16,
+              "peerHp": 54,
+              "enemyHp": 121,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            },
+            "guard": {
+              "cycles": 5,
+              "localHp": 64,
+              "localLoss": 16,
+              "peerHp": 68,
+              "enemyHp": 121,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            },
+            "attack": {
+              "cycles": 5,
+              "localHp": 64,
+              "localLoss": 16,
+              "peerHp": 54,
+              "enemyHp": 91,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            }
+          }
+        },
+        {
+          "fixture": "fumes",
+          "features": 7,
+          "expandedNodes": 350,
+          "transitionCount": 779,
+          "elapsed": "00:00:00.1350528",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 9,
+          "advisoryPlannedContribution": 18,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 70,
+          "enemyHp": 140,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "STRIKE_IRONCLAD",
+              "targetCombatId": 2
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 5,
+              "localHp": 64,
+              "localLoss": 16,
+              "peerHp": 54,
+              "enemyHp": 121,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            },
+            "guard": {
+              "cycles": 5,
+              "localHp": 64,
+              "localLoss": 16,
+              "peerHp": 68,
+              "enemyHp": 121,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            },
+            "attack": {
+              "cycles": 5,
+              "localHp": 64,
+              "localLoss": 16,
+              "peerHp": 54,
+              "enemyHp": 91,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            }
+          }
+        }
+      ]
+    },
+    {
+      "stage": "exploratory",
+      "run": "dev-mixed",
+      "source": ".local/multiplayer-race-20260923/dev-mixed/race-experiments.json",
+      "scenario": {
+        "CharacterId": "SILENT",
+        "EncounterId": "FUZZY_WURM_CRAWLER_WEAK",
+        "Seed": "RACE-DEV-20260923",
+        "Ascension": 0,
+        "ActIndexForTest": 0,
+        "MultiplayerContracts": false,
+        "MultiplayerStartContracts": false,
+        "MultiplayerStrategyContracts": false,
+        "MultiplayerLongTermContracts": false,
+        "MultiplayerReviewStage": "race-dev"
+      },
+      "budget": {
+        "BeamWidth": 12,
+        "MaxExpandedNodes": 350,
+        "BudgetMilliseconds": 3000,
+        "MaxDegreeOfParallelism": 1
+      },
+      "rows": [
+        {
+          "fixture": "mixed_poison",
+          "features": 0,
+          "expandedNodes": 205,
+          "transitionCount": 505,
+          "elapsed": "00:00:00.2725850",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 5,
+          "advisoryPlannedContribution": 18,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 64,
+          "enemyHp": 33,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "POISONED_STAB",
+              "targetCombatId": 2
+            },
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "DEFEND_IRONCLAD"
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 3,
+              "localHp": 64,
+              "localLoss": 6,
+              "peerHp": 55,
+              "enemyHp": 0,
+              "won": true,
+              "boundary": "None",
+              "actions": 15
+            },
+            "guard": {
+              "cycles": 3,
+              "localHp": 64,
+              "localLoss": 6,
+              "peerHp": 64,
+              "enemyHp": 0,
+              "won": true,
+              "boundary": "None",
+              "actions": 15
+            },
+            "attack": {
+              "cycles": 3,
+              "localHp": 64,
+              "localLoss": 6,
+              "peerHp": 55,
+              "enemyHp": 0,
+              "won": true,
+              "boundary": "None",
+              "actions": 15
+            }
+          }
+        },
+        {
+          "fixture": "mixed_poison",
+          "features": 1,
+          "expandedNodes": 238,
+          "transitionCount": 575,
+          "elapsed": "00:00:00.0932075",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 6,
+          "advisoryPlannedContribution": 18,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 64,
+          "enemyHp": 33,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "POISONED_STAB",
+              "targetCombatId": 2
+            },
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "DEFEND_IRONCLAD"
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 3,
+              "localHp": 64,
+              "localLoss": 6,
+              "peerHp": 55,
+              "enemyHp": 0,
+              "won": true,
+              "boundary": "None",
+              "actions": 15
+            },
+            "guard": {
+              "cycles": 3,
+              "localHp": 64,
+              "localLoss": 6,
+              "peerHp": 64,
+              "enemyHp": 0,
+              "won": true,
+              "boundary": "None",
+              "actions": 15
+            },
+            "attack": {
+              "cycles": 3,
+              "localHp": 64,
+              "localLoss": 6,
+              "peerHp": 55,
+              "enemyHp": 0,
+              "won": true,
+              "boundary": "None",
+              "actions": 15
+            }
+          }
+        },
+        {
+          "fixture": "mixed_poison",
+          "features": 2,
+          "expandedNodes": 205,
+          "transitionCount": 505,
+          "elapsed": "00:00:00.0776818",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 5,
+          "advisoryPlannedContribution": 18,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 64,
+          "enemyHp": 33,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "POISONED_STAB",
+              "targetCombatId": 2
+            },
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "DEFEND_IRONCLAD"
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 3,
+              "localHp": 64,
+              "localLoss": 6,
+              "peerHp": 55,
+              "enemyHp": 0,
+              "won": true,
+              "boundary": "None",
+              "actions": 15
+            },
+            "guard": {
+              "cycles": 3,
+              "localHp": 64,
+              "localLoss": 6,
+              "peerHp": 64,
+              "enemyHp": 0,
+              "won": true,
+              "boundary": "None",
+              "actions": 15
+            },
+            "attack": {
+              "cycles": 3,
+              "localHp": 64,
+              "localLoss": 6,
+              "peerHp": 55,
+              "enemyHp": 0,
+              "won": true,
+              "boundary": "None",
+              "actions": 15
+            }
+          }
+        },
+        {
+          "fixture": "mixed_poison",
+          "features": 4,
+          "expandedNodes": 205,
+          "transitionCount": 505,
+          "elapsed": "00:00:00.0774058",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 5,
+          "advisoryPlannedContribution": 18,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 64,
+          "enemyHp": 33,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "POISONED_STAB",
+              "targetCombatId": 2
+            },
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "DEFEND_IRONCLAD"
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 3,
+              "localHp": 64,
+              "localLoss": 6,
+              "peerHp": 55,
+              "enemyHp": 0,
+              "won": true,
+              "boundary": "None",
+              "actions": 15
+            },
+            "guard": {
+              "cycles": 3,
+              "localHp": 64,
+              "localLoss": 6,
+              "peerHp": 64,
+              "enemyHp": 0,
+              "won": true,
+              "boundary": "None",
+              "actions": 15
+            },
+            "attack": {
+              "cycles": 3,
+              "localHp": 64,
+              "localLoss": 6,
+              "peerHp": 55,
+              "enemyHp": 0,
+              "won": true,
+              "boundary": "None",
+              "actions": 15
+            }
+          }
+        },
+        {
+          "fixture": "mixed_poison",
+          "features": 7,
+          "expandedNodes": 237,
+          "transitionCount": 567,
+          "elapsed": "00:00:00.0971103",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 6,
+          "advisoryPlannedContribution": 18,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 64,
+          "enemyHp": 33,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "POISONED_STAB",
+              "targetCombatId": 2
+            },
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "DEFEND_IRONCLAD"
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 3,
+              "localHp": 64,
+              "localLoss": 6,
+              "peerHp": 55,
+              "enemyHp": 0,
+              "won": true,
+              "boundary": "None",
+              "actions": 15
+            },
+            "guard": {
+              "cycles": 3,
+              "localHp": 64,
+              "localLoss": 6,
+              "peerHp": 64,
+              "enemyHp": 0,
+              "won": true,
+              "boundary": "None",
+              "actions": 15
+            },
+            "attack": {
+              "cycles": 3,
+              "localHp": 64,
+              "localLoss": 6,
+              "peerHp": 55,
+              "enemyHp": 0,
+              "won": true,
+              "boundary": "None",
+              "actions": 15
+            }
+          }
+        }
+      ]
+    },
+    {
+      "stage": "exploratory",
+      "run": "dev-peer",
+      "source": ".local/multiplayer-race-20260923/dev-peer/race-experiments.json",
+      "scenario": {
+        "CharacterId": "IRONCLAD",
+        "EncounterId": "FUZZY_WURM_CRAWLER_WEAK",
+        "Seed": "RACE-DEV-20260923",
+        "Ascension": 0,
+        "ActIndexForTest": 0,
+        "MultiplayerContracts": false,
+        "MultiplayerStartContracts": false,
+        "MultiplayerStrategyContracts": false,
+        "MultiplayerLongTermContracts": false,
+        "MultiplayerReviewStage": "race-dev"
+      },
+      "budget": {
+        "BeamWidth": 12,
+        "MaxExpandedNodes": 350,
+        "BudgetMilliseconds": 3000,
+        "MaxDegreeOfParallelism": 1
+      },
+      "rows": [
+        {
+          "fixture": "peer_guard",
+          "features": 0,
+          "expandedNodes": 350,
+          "transitionCount": 895,
+          "elapsed": "00:00:00.3138935",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 9,
+          "advisoryPlannedContribution": 18,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 79,
+          "enemyHp": 142,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "STRIKE_IRONCLAD",
+              "targetCombatId": 2
+            },
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "DEFEND_IRONCLAD"
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 5,
+              "localHp": 62,
+              "localLoss": 18,
+              "peerHp": 0,
+              "enemyHp": 130,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            },
+            "guard": {
+              "cycles": 5,
+              "localHp": 62,
+              "localLoss": 18,
+              "peerHp": 0,
+              "enemyHp": 130,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            },
+            "attack": {
+              "cycles": 5,
+              "localHp": 62,
+              "localLoss": 18,
+              "peerHp": 0,
+              "enemyHp": 112,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            }
+          }
+        },
+        {
+          "fixture": "peer_guard",
+          "features": 1,
+          "expandedNodes": 350,
+          "transitionCount": 895,
+          "elapsed": "00:00:00.1431889",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 9,
+          "advisoryPlannedContribution": 18,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 79,
+          "enemyHp": 142,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "STRIKE_IRONCLAD",
+              "targetCombatId": 2
+            },
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "DEFEND_IRONCLAD"
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 5,
+              "localHp": 62,
+              "localLoss": 18,
+              "peerHp": 0,
+              "enemyHp": 130,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            },
+            "guard": {
+              "cycles": 5,
+              "localHp": 62,
+              "localLoss": 18,
+              "peerHp": 0,
+              "enemyHp": 130,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            },
+            "attack": {
+              "cycles": 5,
+              "localHp": 62,
+              "localLoss": 18,
+              "peerHp": 0,
+              "enemyHp": 112,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            }
+          }
+        },
+        {
+          "fixture": "peer_guard",
+          "features": 2,
+          "expandedNodes": 350,
+          "transitionCount": 895,
+          "elapsed": "00:00:00.1389232",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 9,
+          "advisoryPlannedContribution": 18,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 79,
+          "enemyHp": 142,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "STRIKE_IRONCLAD",
+              "targetCombatId": 2
+            },
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "DEFEND_IRONCLAD"
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 5,
+              "localHp": 62,
+              "localLoss": 18,
+              "peerHp": 0,
+              "enemyHp": 130,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            },
+            "guard": {
+              "cycles": 5,
+              "localHp": 62,
+              "localLoss": 18,
+              "peerHp": 0,
+              "enemyHp": 130,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            },
+            "attack": {
+              "cycles": 5,
+              "localHp": 62,
+              "localLoss": 18,
+              "peerHp": 0,
+              "enemyHp": 112,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            }
+          }
+        },
+        {
+          "fixture": "peer_guard",
+          "features": 4,
+          "expandedNodes": 350,
+          "transitionCount": 895,
+          "elapsed": "00:00:00.1397544",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 9,
+          "advisoryPlannedContribution": 18,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 79,
+          "enemyHp": 142,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "STRIKE_IRONCLAD",
+              "targetCombatId": 2
+            },
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "DEFEND_IRONCLAD"
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 5,
+              "localHp": 62,
+              "localLoss": 18,
+              "peerHp": 0,
+              "enemyHp": 130,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            },
+            "guard": {
+              "cycles": 5,
+              "localHp": 62,
+              "localLoss": 18,
+              "peerHp": 0,
+              "enemyHp": 130,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            },
+            "attack": {
+              "cycles": 5,
+              "localHp": 62,
+              "localLoss": 18,
+              "peerHp": 0,
+              "enemyHp": 112,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            }
+          }
+        },
+        {
+          "fixture": "peer_guard",
+          "features": 7,
+          "expandedNodes": 350,
+          "transitionCount": 895,
+          "elapsed": "00:00:00.1438113",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 9,
+          "advisoryPlannedContribution": 18,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 79,
+          "enemyHp": 142,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "STRIKE_IRONCLAD",
+              "targetCombatId": 2
+            },
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "DEFEND_IRONCLAD"
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 5,
+              "localHp": 62,
+              "localLoss": 18,
+              "peerHp": 0,
+              "enemyHp": 130,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            },
+            "guard": {
+              "cycles": 5,
+              "localHp": 62,
+              "localLoss": 18,
+              "peerHp": 0,
+              "enemyHp": 130,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            },
+            "attack": {
+              "cycles": 5,
+              "localHp": 62,
+              "localLoss": 18,
+              "peerHp": 0,
+              "enemyHp": 112,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            }
+          }
+        }
+      ]
+    },
+    {
+      "stage": "exploratory",
+      "run": "dev-rescue",
+      "source": ".local/multiplayer-race-20260923/dev-rescue/race-experiments.json",
+      "scenario": {
+        "CharacterId": "IRONCLAD",
+        "EncounterId": "FUZZY_WURM_CRAWLER_WEAK",
+        "Seed": "RACE-DEV-20260923",
+        "Ascension": 0,
+        "ActIndexForTest": 0,
+        "MultiplayerContracts": false,
+        "MultiplayerStartContracts": false,
+        "MultiplayerStrategyContracts": false,
+        "MultiplayerLongTermContracts": false,
+        "MultiplayerReviewStage": "race-dev"
+      },
+      "budget": {
+        "BeamWidth": 12,
+        "MaxExpandedNodes": 350,
+        "BudgetMilliseconds": 3000,
+        "MaxDegreeOfParallelism": 1
+      },
+      "rows": [
+        {
+          "fixture": "immediate_rescue",
+          "features": 0,
+          "expandedNodes": 322,
+          "transitionCount": 634,
+          "elapsed": "00:00:00.3221934",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 8,
+          "advisoryPlannedContribution": 18,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 40,
+          "enemyHp": 102,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "STRIKE_IRONCLAD",
+              "targetCombatId": 2
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 5,
+              "localHp": 34,
+              "localLoss": 16,
+              "peerHp": 0,
+              "enemyHp": 90,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 14
+            },
+            "guard": {
+              "cycles": 5,
+              "localHp": 34,
+              "localLoss": 16,
+              "peerHp": 0,
+              "enemyHp": 90,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 14
+            },
+            "attack": {
+              "cycles": 5,
+              "localHp": 34,
+              "localLoss": 16,
+              "peerHp": 0,
+              "enemyHp": 84,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 14
+            }
+          }
+        },
+        {
+          "fixture": "immediate_rescue",
+          "features": 1,
+          "expandedNodes": 322,
+          "transitionCount": 634,
+          "elapsed": "00:00:00.1293287",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 8,
+          "advisoryPlannedContribution": 18,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 40,
+          "enemyHp": 102,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "STRIKE_IRONCLAD",
+              "targetCombatId": 2
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 5,
+              "localHp": 34,
+              "localLoss": 16,
+              "peerHp": 0,
+              "enemyHp": 90,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 14
+            },
+            "guard": {
+              "cycles": 5,
+              "localHp": 34,
+              "localLoss": 16,
+              "peerHp": 0,
+              "enemyHp": 90,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 14
+            },
+            "attack": {
+              "cycles": 5,
+              "localHp": 34,
+              "localLoss": 16,
+              "peerHp": 0,
+              "enemyHp": 84,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 14
+            }
+          }
+        },
+        {
+          "fixture": "immediate_rescue",
+          "features": 2,
+          "expandedNodes": 322,
+          "transitionCount": 634,
+          "elapsed": "00:00:00.1309871",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 8,
+          "advisoryPlannedContribution": 18,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 40,
+          "enemyHp": 102,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "STRIKE_IRONCLAD",
+              "targetCombatId": 2
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 5,
+              "localHp": 34,
+              "localLoss": 16,
+              "peerHp": 0,
+              "enemyHp": 90,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 14
+            },
+            "guard": {
+              "cycles": 5,
+              "localHp": 34,
+              "localLoss": 16,
+              "peerHp": 0,
+              "enemyHp": 90,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 14
+            },
+            "attack": {
+              "cycles": 5,
+              "localHp": 34,
+              "localLoss": 16,
+              "peerHp": 0,
+              "enemyHp": 84,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 14
+            }
+          }
+        },
+        {
+          "fixture": "immediate_rescue",
+          "features": 4,
+          "expandedNodes": 324,
+          "transitionCount": 637,
+          "elapsed": "00:00:00.1424988",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 8,
+          "advisoryPlannedContribution": 18,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 40,
+          "enemyHp": 102,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "STRIKE_IRONCLAD",
+              "targetCombatId": 2
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 5,
+              "localHp": 34,
+              "localLoss": 16,
+              "peerHp": 0,
+              "enemyHp": 90,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 14
+            },
+            "guard": {
+              "cycles": 5,
+              "localHp": 34,
+              "localLoss": 16,
+              "peerHp": 0,
+              "enemyHp": 90,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 14
+            },
+            "attack": {
+              "cycles": 5,
+              "localHp": 34,
+              "localLoss": 16,
+              "peerHp": 0,
+              "enemyHp": 84,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 14
+            }
+          }
+        },
+        {
+          "fixture": "immediate_rescue",
+          "features": 7,
+          "expandedNodes": 324,
+          "transitionCount": 637,
+          "elapsed": "00:00:00.1470070",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 8,
+          "advisoryPlannedContribution": 18,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 40,
+          "enemyHp": 102,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "STRIKE_IRONCLAD",
+              "targetCombatId": 2
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 5,
+              "localHp": 34,
+              "localLoss": 16,
+              "peerHp": 0,
+              "enemyHp": 90,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 14
+            },
+            "guard": {
+              "cycles": 5,
+              "localHp": 34,
+              "localLoss": 16,
+              "peerHp": 0,
+              "enemyHp": 90,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 14
+            },
+            "attack": {
+              "cycles": 5,
+              "localHp": 34,
+              "localLoss": 16,
+              "peerHp": 0,
+              "enemyHp": 84,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 14
+            }
+          }
+        }
+      ]
+    },
+    {
+      "stage": "exploratory",
+      "run": "dev-lift-fixed",
+      "source": ".local/multiplayer-race-20260923/dev-lift-fixed/race-experiments.json",
+      "scenario": {
+        "CharacterId": "IRONCLAD",
+        "EncounterId": "FUZZY_WURM_CRAWLER_WEAK",
+        "Seed": "RACE-DEV-20260923",
+        "Ascension": 0,
+        "ActIndexForTest": 0,
+        "MultiplayerContracts": false,
+        "MultiplayerStartContracts": false,
+        "MultiplayerStrategyContracts": false,
+        "MultiplayerLongTermContracts": false,
+        "MultiplayerReviewStage": "race-dev"
+      },
+      "budget": {
+        "BeamWidth": 12,
+        "MaxExpandedNodes": 350,
+        "BudgetMilliseconds": 3000,
+        "MaxDegreeOfParallelism": 1
+      },
+      "rows": [
+        {
+          "fixture": "lift_rescue",
+          "features": 0,
+          "expandedNodes": 350,
+          "transitionCount": 726,
+          "elapsed": "00:00:00.2395418",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 8,
+          "advisoryPlannedContribution": 18,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 40,
+          "enemyHp": 102,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "STRIKE_IRONCLAD",
+              "targetCombatId": 2
+            },
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "LIFT",
+              "targetCombatId": 0
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 5,
+              "localHp": 34,
+              "localLoss": 16,
+              "peerHp": 0,
+              "enemyHp": 90,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            },
+            "guard": {
+              "cycles": 5,
+              "localHp": 34,
+              "localLoss": 16,
+              "peerHp": 0,
+              "enemyHp": 90,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            },
+            "attack": {
+              "cycles": 5,
+              "localHp": 34,
+              "localLoss": 16,
+              "peerHp": 0,
+              "enemyHp": 72,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            }
+          }
+        },
+        {
+          "fixture": "lift_rescue",
+          "features": 1,
+          "expandedNodes": 350,
+          "transitionCount": 726,
+          "elapsed": "00:00:00.1200345",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 8,
+          "advisoryPlannedContribution": 18,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 40,
+          "enemyHp": 102,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "STRIKE_IRONCLAD",
+              "targetCombatId": 2
+            },
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "LIFT",
+              "targetCombatId": 0
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 5,
+              "localHp": 34,
+              "localLoss": 16,
+              "peerHp": 0,
+              "enemyHp": 90,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            },
+            "guard": {
+              "cycles": 5,
+              "localHp": 34,
+              "localLoss": 16,
+              "peerHp": 0,
+              "enemyHp": 90,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            },
+            "attack": {
+              "cycles": 5,
+              "localHp": 34,
+              "localLoss": 16,
+              "peerHp": 0,
+              "enemyHp": 72,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            }
+          }
+        },
+        {
+          "fixture": "lift_rescue",
+          "features": 2,
+          "expandedNodes": 350,
+          "transitionCount": 726,
+          "elapsed": "00:00:00.1275458",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 8,
+          "advisoryPlannedContribution": 18,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 40,
+          "enemyHp": 102,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "STRIKE_IRONCLAD",
+              "targetCombatId": 2
+            },
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "LIFT",
+              "targetCombatId": 0
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 5,
+              "localHp": 34,
+              "localLoss": 16,
+              "peerHp": 0,
+              "enemyHp": 90,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            },
+            "guard": {
+              "cycles": 5,
+              "localHp": 34,
+              "localLoss": 16,
+              "peerHp": 0,
+              "enemyHp": 90,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            },
+            "attack": {
+              "cycles": 5,
+              "localHp": 34,
+              "localLoss": 16,
+              "peerHp": 0,
+              "enemyHp": 72,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            }
+          }
+        },
+        {
+          "fixture": "lift_rescue",
+          "features": 4,
+          "expandedNodes": 350,
+          "transitionCount": 727,
+          "elapsed": "00:00:00.1398683",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 8,
+          "advisoryPlannedContribution": 18,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 40,
+          "enemyHp": 102,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "STRIKE_IRONCLAD",
+              "targetCombatId": 2
+            },
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "LIFT",
+              "targetCombatId": 0
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 5,
+              "localHp": 34,
+              "localLoss": 16,
+              "peerHp": 0,
+              "enemyHp": 90,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            },
+            "guard": {
+              "cycles": 5,
+              "localHp": 34,
+              "localLoss": 16,
+              "peerHp": 0,
+              "enemyHp": 90,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            },
+            "attack": {
+              "cycles": 5,
+              "localHp": 34,
+              "localLoss": 16,
+              "peerHp": 0,
+              "enemyHp": 72,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            }
+          }
+        },
+        {
+          "fixture": "lift_rescue",
+          "features": 7,
+          "expandedNodes": 350,
+          "transitionCount": 727,
+          "elapsed": "00:00:00.1380722",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 8,
+          "advisoryPlannedContribution": 18,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 40,
+          "enemyHp": 102,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "STRIKE_IRONCLAD",
+              "targetCombatId": 2
+            },
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "LIFT",
+              "targetCombatId": 0
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 5,
+              "localHp": 34,
+              "localLoss": 16,
+              "peerHp": 0,
+              "enemyHp": 90,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            },
+            "guard": {
+              "cycles": 5,
+              "localHp": 34,
+              "localLoss": 16,
+              "peerHp": 0,
+              "enemyHp": 90,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            },
+            "attack": {
+              "cycles": 5,
+              "localHp": 34,
+              "localLoss": 16,
+              "peerHp": 0,
+              "enemyHp": 72,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            }
+          }
+        }
+      ],
+      "reference": [
+        {
+          "id": "STRIKE_IRONCLAD",
+          "playerHp": 46,
+          "teamSurvivors": 1,
+          "peerHp": 0,
+          "boundary": "None",
+          "predictionGaps": []
+        },
+        {
+          "id": "LIFT",
+          "playerHp": 46,
+          "teamSurvivors": 2,
+          "peerHp": 2,
+          "boundary": "None",
+          "predictionGaps": []
+        },
+        {
+          "id": "DEFEND_IRONCLAD",
+          "playerHp": 50,
+          "teamSurvivors": 1,
+          "peerHp": 0,
+          "boundary": "None",
+          "predictionGaps": []
+        }
+      ]
+    },
+    {
+      "stage": "exploratory",
+      "run": "dev-burst",
+      "source": ".local/multiplayer-race-20260923/dev-burst/race-experiments.json",
+      "scenario": {
+        "CharacterId": "IRONCLAD",
+        "EncounterId": "FUZZY_WURM_CRAWLER_WEAK",
+        "Seed": "RACE-DEV-20260923",
+        "Ascension": 0,
+        "ActIndexForTest": 0,
+        "MultiplayerContracts": false,
+        "MultiplayerStartContracts": false,
+        "MultiplayerStrategyContracts": false,
+        "MultiplayerLongTermContracts": false,
+        "MultiplayerReviewStage": "race-dev"
+      },
+      "budget": {
+        "BeamWidth": 12,
+        "MaxExpandedNodes": 350,
+        "BudgetMilliseconds": 3000,
+        "MaxDegreeOfParallelism": 1
+      },
+      "rows": [
+        {
+          "fixture": "burst",
+          "features": 0,
+          "expandedNodes": 350,
+          "transitionCount": 865,
+          "elapsed": "00:00:00.3947459",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 9,
+          "advisoryPlannedContribution": 96,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 65,
+          "enemyHp": 124,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "BLUDGEON",
+              "targetCombatId": 2
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 5,
+              "localHp": 64,
+              "localLoss": 16,
+              "peerHp": 54,
+              "enemyHp": 156,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            },
+            "guard": {
+              "cycles": 5,
+              "localHp": 64,
+              "localLoss": 16,
+              "peerHp": 68,
+              "enemyHp": 156,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            },
+            "attack": {
+              "cycles": 5,
+              "localHp": 64,
+              "localLoss": 16,
+              "peerHp": 54,
+              "enemyHp": 126,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            }
+          }
+        },
+        {
+          "fixture": "burst",
+          "features": 1,
+          "expandedNodes": 350,
+          "transitionCount": 865,
+          "elapsed": "00:00:00.1749686",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 9,
+          "advisoryPlannedContribution": 96,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 65,
+          "enemyHp": 124,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "BLUDGEON",
+              "targetCombatId": 2
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 5,
+              "localHp": 64,
+              "localLoss": 16,
+              "peerHp": 54,
+              "enemyHp": 156,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            },
+            "guard": {
+              "cycles": 5,
+              "localHp": 64,
+              "localLoss": 16,
+              "peerHp": 68,
+              "enemyHp": 156,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            },
+            "attack": {
+              "cycles": 5,
+              "localHp": 64,
+              "localLoss": 16,
+              "peerHp": 54,
+              "enemyHp": 126,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            }
+          }
+        },
+        {
+          "fixture": "burst",
+          "features": 2,
+          "expandedNodes": 350,
+          "transitionCount": 865,
+          "elapsed": "00:00:00.1602202",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 9,
+          "advisoryPlannedContribution": 96,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 65,
+          "enemyHp": 124,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "BLUDGEON",
+              "targetCombatId": 2
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 5,
+              "localHp": 64,
+              "localLoss": 16,
+              "peerHp": 54,
+              "enemyHp": 156,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            },
+            "guard": {
+              "cycles": 5,
+              "localHp": 64,
+              "localLoss": 16,
+              "peerHp": 68,
+              "enemyHp": 156,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            },
+            "attack": {
+              "cycles": 5,
+              "localHp": 64,
+              "localLoss": 16,
+              "peerHp": 54,
+              "enemyHp": 126,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            }
+          }
+        },
+        {
+          "fixture": "burst",
+          "features": 4,
+          "expandedNodes": 350,
+          "transitionCount": 872,
+          "elapsed": "00:00:00.1565029",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 9,
+          "advisoryPlannedContribution": 96,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 65,
+          "enemyHp": 124,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "BLUDGEON",
+              "targetCombatId": 2
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 5,
+              "localHp": 64,
+              "localLoss": 16,
+              "peerHp": 54,
+              "enemyHp": 156,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            },
+            "guard": {
+              "cycles": 5,
+              "localHp": 64,
+              "localLoss": 16,
+              "peerHp": 68,
+              "enemyHp": 156,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            },
+            "attack": {
+              "cycles": 5,
+              "localHp": 64,
+              "localLoss": 16,
+              "peerHp": 54,
+              "enemyHp": 126,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            }
+          }
+        },
+        {
+          "fixture": "burst",
+          "features": 7,
+          "expandedNodes": 350,
+          "transitionCount": 872,
+          "elapsed": "00:00:00.1549147",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 9,
+          "advisoryPlannedContribution": 96,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 65,
+          "enemyHp": 124,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "BLUDGEON",
+              "targetCombatId": 2
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 5,
+              "localHp": 64,
+              "localLoss": 16,
+              "peerHp": 54,
+              "enemyHp": 156,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            },
+            "guard": {
+              "cycles": 5,
+              "localHp": 64,
+              "localLoss": 16,
+              "peerHp": 68,
+              "enemyHp": 156,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            },
+            "attack": {
+              "cycles": 5,
+              "localHp": 64,
+              "localLoss": 16,
+              "peerHp": 54,
+              "enemyHp": 126,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            }
+          }
+        }
+      ]
+    },
+    {
+      "stage": "exploratory",
+      "run": "dev-threat",
+      "source": ".local/multiplayer-race-20260923/dev-threat/race-experiments.json",
+      "scenario": {
+        "CharacterId": "SILENT",
+        "EncounterId": "FUZZY_WURM_CRAWLER_WEAK",
+        "Seed": "RACE-DEV-20260923",
+        "Ascension": 0,
+        "ActIndexForTest": 0,
+        "MultiplayerContracts": false,
+        "MultiplayerStartContracts": false,
+        "MultiplayerStrategyContracts": false,
+        "MultiplayerLongTermContracts": false,
+        "MultiplayerReviewStage": "race-dev"
+      },
+      "budget": {
+        "BeamWidth": 12,
+        "MaxExpandedNodes": 350,
+        "BudgetMilliseconds": 3000,
+        "MaxDegreeOfParallelism": 1
+      },
+      "rows": [
+        {
+          "fixture": "threat",
+          "features": 0,
+          "expandedNodes": 350,
+          "transitionCount": 993,
+          "elapsed": "00:00:00.3965098",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 7,
+          "advisoryPlannedContribution": 30,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 66,
+          "enemyHp": 75,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "POISONED_STAB",
+              "targetCombatId": 2
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 5,
+              "localHp": 60,
+              "localLoss": 20,
+              "peerHp": 50,
+              "enemyHp": 45,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 18
+            },
+            "guard": {
+              "cycles": 5,
+              "localHp": 60,
+              "localLoss": 20,
+              "peerHp": 65,
+              "enemyHp": 45,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 18
+            },
+            "attack": {
+              "cycles": 5,
+              "localHp": 60,
+              "localLoss": 20,
+              "peerHp": 50,
+              "enemyHp": 21,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 18
+            }
+          }
+        },
+        {
+          "fixture": "threat",
+          "features": 1,
+          "expandedNodes": 350,
+          "transitionCount": 973,
+          "elapsed": "00:00:00.2074464",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 7,
+          "advisoryPlannedContribution": 30,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 66,
+          "enemyHp": 75,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "POISONED_STAB",
+              "targetCombatId": 2
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 5,
+              "localHp": 60,
+              "localLoss": 20,
+              "peerHp": 50,
+              "enemyHp": 45,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 18
+            },
+            "guard": {
+              "cycles": 5,
+              "localHp": 60,
+              "localLoss": 20,
+              "peerHp": 65,
+              "enemyHp": 45,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 18
+            },
+            "attack": {
+              "cycles": 5,
+              "localHp": 60,
+              "localLoss": 20,
+              "peerHp": 50,
+              "enemyHp": 21,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 18
+            }
+          }
+        },
+        {
+          "fixture": "threat",
+          "features": 2,
+          "expandedNodes": 350,
+          "transitionCount": 993,
+          "elapsed": "00:00:00.1821164",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 7,
+          "advisoryPlannedContribution": 30,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 66,
+          "enemyHp": 75,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "POISONED_STAB",
+              "targetCombatId": 2
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 5,
+              "localHp": 60,
+              "localLoss": 20,
+              "peerHp": 50,
+              "enemyHp": 45,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 18
+            },
+            "guard": {
+              "cycles": 5,
+              "localHp": 60,
+              "localLoss": 20,
+              "peerHp": 65,
+              "enemyHp": 45,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 18
+            },
+            "attack": {
+              "cycles": 5,
+              "localHp": 60,
+              "localLoss": 20,
+              "peerHp": 50,
+              "enemyHp": 21,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 18
+            }
+          }
+        },
+        {
+          "fixture": "threat",
+          "features": 4,
+          "expandedNodes": 350,
+          "transitionCount": 962,
+          "elapsed": "00:00:00.1708296",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 7,
+          "advisoryPlannedContribution": 30,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 66,
+          "enemyHp": 76,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "POISONED_STAB",
+              "targetCombatId": 2
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 5,
+              "localHp": 60,
+              "localLoss": 20,
+              "peerHp": 50,
+              "enemyHp": 45,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 18
+            },
+            "guard": {
+              "cycles": 5,
+              "localHp": 60,
+              "localLoss": 20,
+              "peerHp": 65,
+              "enemyHp": 45,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 18
+            },
+            "attack": {
+              "cycles": 5,
+              "localHp": 60,
+              "localLoss": 20,
+              "peerHp": 50,
+              "enemyHp": 21,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 18
+            }
+          }
+        },
+        {
+          "fixture": "threat",
+          "features": 7,
+          "expandedNodes": 350,
+          "transitionCount": 970,
+          "elapsed": "00:00:00.1712070",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 7,
+          "advisoryPlannedContribution": 30,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 66,
+          "enemyHp": 76,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "POISONED_STAB",
+              "targetCombatId": 2
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 5,
+              "localHp": 60,
+              "localLoss": 20,
+              "peerHp": 50,
+              "enemyHp": 45,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 18
+            },
+            "guard": {
+              "cycles": 5,
+              "localHp": 60,
+              "localLoss": 20,
+              "peerHp": 65,
+              "enemyHp": 45,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 18
+            },
+            "attack": {
+              "cycles": 5,
+              "localHp": 60,
+              "localLoss": 20,
+              "peerHp": 50,
+              "enemyHp": 21,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 18
+            }
+          }
+        }
+      ]
+    },
+    {
+      "stage": "holdout",
+      "run": "holdout-poison",
+      "source": ".local/multiplayer-race-20260923/holdout-poison/race-experiments.json",
+      "scenario": {
+        "CharacterId": "SILENT",
+        "EncounterId": "FUZZY_WURM_CRAWLER_WEAK",
+        "Seed": "RACE-HOLDOUT-20260923",
+        "Ascension": 0,
+        "ActIndexForTest": 0,
+        "MultiplayerContracts": false,
+        "MultiplayerStartContracts": false,
+        "MultiplayerStrategyContracts": false,
+        "MultiplayerLongTermContracts": false,
+        "MultiplayerReviewStage": "race-holdout"
+      },
+      "budget": {
+        "BeamWidth": 12,
+        "MaxExpandedNodes": 350,
+        "BudgetMilliseconds": 3000,
+        "MaxDegreeOfParallelism": 1
+      },
+      "rows": [
+        {
+          "fixture": "poison_holdout",
+          "features": 0,
+          "expandedNodes": 350,
+          "transitionCount": 849,
+          "elapsed": "00:00:00.3583366",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 8,
+          "advisoryPlannedContribution": 18,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 45,
+          "enemyHp": 62,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "POISONED_STAB",
+              "targetCombatId": 2
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 4,
+              "localHp": 39,
+              "localLoss": 16,
+              "peerHp": 29,
+              "enemyHp": 0,
+              "won": true,
+              "boundary": "None",
+              "actions": 18
+            },
+            "guard": {
+              "cycles": 4,
+              "localHp": 39,
+              "localLoss": 16,
+              "peerHp": 43,
+              "enemyHp": 0,
+              "won": true,
+              "boundary": "None",
+              "actions": 18
+            },
+            "attack": {
+              "cycles": 4,
+              "localHp": 39,
+              "localLoss": 16,
+              "peerHp": 29,
+              "enemyHp": 0,
+              "won": true,
+              "boundary": "None",
+              "actions": 18
+            }
+          }
+        },
+        {
+          "fixture": "poison_holdout",
+          "features": 1,
+          "expandedNodes": 350,
+          "transitionCount": 870,
+          "elapsed": "00:00:00.1492402",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 8,
+          "advisoryPlannedContribution": 18,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 45,
+          "enemyHp": 62,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "POISONED_STAB",
+              "targetCombatId": 2
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 4,
+              "localHp": 39,
+              "localLoss": 16,
+              "peerHp": 29,
+              "enemyHp": 0,
+              "won": true,
+              "boundary": "None",
+              "actions": 18
+            },
+            "guard": {
+              "cycles": 4,
+              "localHp": 39,
+              "localLoss": 16,
+              "peerHp": 43,
+              "enemyHp": 0,
+              "won": true,
+              "boundary": "None",
+              "actions": 18
+            },
+            "attack": {
+              "cycles": 4,
+              "localHp": 39,
+              "localLoss": 16,
+              "peerHp": 29,
+              "enemyHp": 0,
+              "won": true,
+              "boundary": "None",
+              "actions": 18
+            }
+          }
+        },
+        {
+          "fixture": "poison_holdout",
+          "features": 2,
+          "expandedNodes": 350,
+          "transitionCount": 849,
+          "elapsed": "00:00:00.1568543",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 8,
+          "advisoryPlannedContribution": 18,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 45,
+          "enemyHp": 62,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "POISONED_STAB",
+              "targetCombatId": 2
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 4,
+              "localHp": 39,
+              "localLoss": 16,
+              "peerHp": 29,
+              "enemyHp": 0,
+              "won": true,
+              "boundary": "None",
+              "actions": 18
+            },
+            "guard": {
+              "cycles": 4,
+              "localHp": 39,
+              "localLoss": 16,
+              "peerHp": 43,
+              "enemyHp": 0,
+              "won": true,
+              "boundary": "None",
+              "actions": 18
+            },
+            "attack": {
+              "cycles": 4,
+              "localHp": 39,
+              "localLoss": 16,
+              "peerHp": 29,
+              "enemyHp": 0,
+              "won": true,
+              "boundary": "None",
+              "actions": 18
+            }
+          }
+        },
+        {
+          "fixture": "poison_holdout",
+          "features": 4,
+          "expandedNodes": 350,
+          "transitionCount": 855,
+          "elapsed": "00:00:00.1463065",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 8,
+          "advisoryPlannedContribution": 18,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 45,
+          "enemyHp": 62,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "POISONED_STAB",
+              "targetCombatId": 2
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 4,
+              "localHp": 39,
+              "localLoss": 16,
+              "peerHp": 29,
+              "enemyHp": 0,
+              "won": true,
+              "boundary": "None",
+              "actions": 18
+            },
+            "guard": {
+              "cycles": 4,
+              "localHp": 39,
+              "localLoss": 16,
+              "peerHp": 43,
+              "enemyHp": 0,
+              "won": true,
+              "boundary": "None",
+              "actions": 18
+            },
+            "attack": {
+              "cycles": 4,
+              "localHp": 39,
+              "localLoss": 16,
+              "peerHp": 29,
+              "enemyHp": 0,
+              "won": true,
+              "boundary": "None",
+              "actions": 18
+            }
+          }
+        },
+        {
+          "fixture": "poison_holdout",
+          "features": 7,
+          "expandedNodes": 350,
+          "transitionCount": 865,
+          "elapsed": "00:00:00.1743432",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 8,
+          "advisoryPlannedContribution": 18,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 45,
+          "enemyHp": 62,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "POISONED_STAB",
+              "targetCombatId": 2
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 4,
+              "localHp": 39,
+              "localLoss": 16,
+              "peerHp": 29,
+              "enemyHp": 0,
+              "won": true,
+              "boundary": "None",
+              "actions": 18
+            },
+            "guard": {
+              "cycles": 4,
+              "localHp": 39,
+              "localLoss": 16,
+              "peerHp": 43,
+              "enemyHp": 0,
+              "won": true,
+              "boundary": "None",
+              "actions": 18
+            },
+            "attack": {
+              "cycles": 4,
+              "localHp": 39,
+              "localLoss": 16,
+              "peerHp": 29,
+              "enemyHp": 0,
+              "won": true,
+              "boundary": "None",
+              "actions": 18
+            }
+          }
+        }
+      ]
+    },
+    {
+      "stage": "holdout",
+      "run": "holdout-fumes",
+      "source": ".local/multiplayer-race-20260923/holdout-fumes/race-experiments.json",
+      "scenario": {
+        "CharacterId": "SILENT",
+        "EncounterId": "FUZZY_WURM_CRAWLER_WEAK",
+        "Seed": "RACE-HOLDOUT-20260923",
+        "Ascension": 0,
+        "ActIndexForTest": 0,
+        "MultiplayerContracts": false,
+        "MultiplayerStartContracts": false,
+        "MultiplayerStrategyContracts": false,
+        "MultiplayerLongTermContracts": false,
+        "MultiplayerReviewStage": "race-holdout"
+      },
+      "budget": {
+        "BeamWidth": 12,
+        "MaxExpandedNodes": 350,
+        "BudgetMilliseconds": 3000,
+        "MaxDegreeOfParallelism": 1
+      },
+      "rows": [
+        {
+          "fixture": "fumes_holdout",
+          "features": 0,
+          "expandedNodes": 350,
+          "transitionCount": 779,
+          "elapsed": "00:00:00.3293465",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 8,
+          "advisoryPlannedContribution": 18,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 55,
+          "enemyHp": 140,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "STRIKE_IRONCLAD",
+              "targetCombatId": 2
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 5,
+              "localHp": 49,
+              "localLoss": 16,
+              "peerHp": 39,
+              "enemyHp": 121,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            },
+            "guard": {
+              "cycles": 5,
+              "localHp": 49,
+              "localLoss": 16,
+              "peerHp": 53,
+              "enemyHp": 121,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            },
+            "attack": {
+              "cycles": 5,
+              "localHp": 49,
+              "localLoss": 16,
+              "peerHp": 39,
+              "enemyHp": 91,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            }
+          }
+        },
+        {
+          "fixture": "fumes_holdout",
+          "features": 1,
+          "expandedNodes": 350,
+          "transitionCount": 778,
+          "elapsed": "00:00:00.1365972",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 9,
+          "advisoryPlannedContribution": 18,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 55,
+          "enemyHp": 140,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "STRIKE_IRONCLAD",
+              "targetCombatId": 2
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 5,
+              "localHp": 49,
+              "localLoss": 16,
+              "peerHp": 39,
+              "enemyHp": 121,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            },
+            "guard": {
+              "cycles": 5,
+              "localHp": 49,
+              "localLoss": 16,
+              "peerHp": 53,
+              "enemyHp": 121,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            },
+            "attack": {
+              "cycles": 5,
+              "localHp": 49,
+              "localLoss": 16,
+              "peerHp": 39,
+              "enemyHp": 91,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            }
+          }
+        },
+        {
+          "fixture": "fumes_holdout",
+          "features": 2,
+          "expandedNodes": 350,
+          "transitionCount": 779,
+          "elapsed": "00:00:00.1491107",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 8,
+          "advisoryPlannedContribution": 18,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 55,
+          "enemyHp": 140,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "STRIKE_IRONCLAD",
+              "targetCombatId": 2
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 5,
+              "localHp": 49,
+              "localLoss": 16,
+              "peerHp": 39,
+              "enemyHp": 121,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            },
+            "guard": {
+              "cycles": 5,
+              "localHp": 49,
+              "localLoss": 16,
+              "peerHp": 53,
+              "enemyHp": 121,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            },
+            "attack": {
+              "cycles": 5,
+              "localHp": 49,
+              "localLoss": 16,
+              "peerHp": 39,
+              "enemyHp": 91,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            }
+          }
+        },
+        {
+          "fixture": "fumes_holdout",
+          "features": 4,
+          "expandedNodes": 350,
+          "transitionCount": 779,
+          "elapsed": "00:00:00.1647199",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 8,
+          "advisoryPlannedContribution": 18,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 55,
+          "enemyHp": 140,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "STRIKE_IRONCLAD",
+              "targetCombatId": 2
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 5,
+              "localHp": 49,
+              "localLoss": 16,
+              "peerHp": 39,
+              "enemyHp": 121,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            },
+            "guard": {
+              "cycles": 5,
+              "localHp": 49,
+              "localLoss": 16,
+              "peerHp": 53,
+              "enemyHp": 121,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            },
+            "attack": {
+              "cycles": 5,
+              "localHp": 49,
+              "localLoss": 16,
+              "peerHp": 39,
+              "enemyHp": 91,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            }
+          }
+        },
+        {
+          "fixture": "fumes_holdout",
+          "features": 7,
+          "expandedNodes": 350,
+          "transitionCount": 778,
+          "elapsed": "00:00:00.1471504",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 9,
+          "advisoryPlannedContribution": 18,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 55,
+          "enemyHp": 140,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "STRIKE_IRONCLAD",
+              "targetCombatId": 2
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 5,
+              "localHp": 49,
+              "localLoss": 16,
+              "peerHp": 39,
+              "enemyHp": 121,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            },
+            "guard": {
+              "cycles": 5,
+              "localHp": 49,
+              "localLoss": 16,
+              "peerHp": 53,
+              "enemyHp": 121,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            },
+            "attack": {
+              "cycles": 5,
+              "localHp": 49,
+              "localLoss": 16,
+              "peerHp": 39,
+              "enemyHp": 91,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            }
+          }
+        }
+      ]
+    },
+    {
+      "stage": "holdout",
+      "run": "holdout-guard",
+      "source": ".local/multiplayer-race-20260923/holdout-guard/race-experiments.json",
+      "scenario": {
+        "CharacterId": "IRONCLAD",
+        "EncounterId": "FOGMOG_NORMAL",
+        "Seed": "RACE-HOLDOUT-20260923",
+        "Ascension": 0,
+        "ActIndexForTest": 0,
+        "MultiplayerContracts": false,
+        "MultiplayerStartContracts": false,
+        "MultiplayerStrategyContracts": false,
+        "MultiplayerLongTermContracts": false,
+        "MultiplayerReviewStage": "race-holdout"
+      },
+      "budget": {
+        "BeamWidth": 12,
+        "MaxExpandedNodes": 350,
+        "BudgetMilliseconds": 3000,
+        "MaxDegreeOfParallelism": 1
+      },
+      "rows": [
+        {
+          "fixture": "peer_guard_holdout",
+          "features": 0,
+          "expandedNodes": 350,
+          "transitionCount": 826,
+          "elapsed": "00:00:00.3477138",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 10,
+          "advisoryPlannedContribution": 5,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 66,
+          "enemyHp": 145,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "STRIKE_IRONCLAD",
+              "targetCombatId": 2
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 5,
+              "localHp": 68,
+              "localLoss": 2,
+              "peerHp": 0,
+              "enemyHp": 157,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 14
+            },
+            "guard": {
+              "cycles": 5,
+              "localHp": 68,
+              "localLoss": 2,
+              "peerHp": 9,
+              "enemyHp": 157,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 14
+            },
+            "attack": {
+              "cycles": 5,
+              "localHp": 68,
+              "localLoss": 2,
+              "peerHp": 0,
+              "enemyHp": 145,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 14
+            }
+          }
+        },
+        {
+          "fixture": "peer_guard_holdout",
+          "features": 1,
+          "expandedNodes": 350,
+          "transitionCount": 826,
+          "elapsed": "00:00:00.2634949",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 10,
+          "advisoryPlannedContribution": 5,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 66,
+          "enemyHp": 145,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "STRIKE_IRONCLAD",
+              "targetCombatId": 2
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 5,
+              "localHp": 68,
+              "localLoss": 2,
+              "peerHp": 0,
+              "enemyHp": 157,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 14
+            },
+            "guard": {
+              "cycles": 5,
+              "localHp": 68,
+              "localLoss": 2,
+              "peerHp": 9,
+              "enemyHp": 157,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 14
+            },
+            "attack": {
+              "cycles": 5,
+              "localHp": 68,
+              "localLoss": 2,
+              "peerHp": 0,
+              "enemyHp": 145,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 14
+            }
+          }
+        },
+        {
+          "fixture": "peer_guard_holdout",
+          "features": 2,
+          "expandedNodes": 350,
+          "transitionCount": 826,
+          "elapsed": "00:00:00.2709622",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 10,
+          "advisoryPlannedContribution": 5,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 66,
+          "enemyHp": 145,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "STRIKE_IRONCLAD",
+              "targetCombatId": 2
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 5,
+              "localHp": 68,
+              "localLoss": 2,
+              "peerHp": 0,
+              "enemyHp": 157,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 14
+            },
+            "guard": {
+              "cycles": 5,
+              "localHp": 68,
+              "localLoss": 2,
+              "peerHp": 9,
+              "enemyHp": 157,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 14
+            },
+            "attack": {
+              "cycles": 5,
+              "localHp": 68,
+              "localLoss": 2,
+              "peerHp": 0,
+              "enemyHp": 145,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 14
+            }
+          }
+        },
+        {
+          "fixture": "peer_guard_holdout",
+          "features": 4,
+          "expandedNodes": 350,
+          "transitionCount": 827,
+          "elapsed": "00:00:00.2516954",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 10,
+          "advisoryPlannedContribution": 5,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 66,
+          "enemyHp": 145,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "STRIKE_IRONCLAD",
+              "targetCombatId": 2
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 5,
+              "localHp": 68,
+              "localLoss": 2,
+              "peerHp": 0,
+              "enemyHp": 157,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 14
+            },
+            "guard": {
+              "cycles": 5,
+              "localHp": 68,
+              "localLoss": 2,
+              "peerHp": 9,
+              "enemyHp": 157,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 14
+            },
+            "attack": {
+              "cycles": 5,
+              "localHp": 68,
+              "localLoss": 2,
+              "peerHp": 0,
+              "enemyHp": 145,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 14
+            }
+          }
+        },
+        {
+          "fixture": "peer_guard_holdout",
+          "features": 7,
+          "expandedNodes": 350,
+          "transitionCount": 827,
+          "elapsed": "00:00:00.2629556",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 10,
+          "advisoryPlannedContribution": 5,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 66,
+          "enemyHp": 145,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "STRIKE_IRONCLAD",
+              "targetCombatId": 2
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 5,
+              "localHp": 68,
+              "localLoss": 2,
+              "peerHp": 0,
+              "enemyHp": 157,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 14
+            },
+            "guard": {
+              "cycles": 5,
+              "localHp": 68,
+              "localLoss": 2,
+              "peerHp": 9,
+              "enemyHp": 157,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 14
+            },
+            "attack": {
+              "cycles": 5,
+              "localHp": 68,
+              "localLoss": 2,
+              "peerHp": 0,
+              "enemyHp": 145,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 14
+            }
+          }
+        }
+      ],
+      "reference": [
+        {
+          "id": "STRIKE_IRONCLAD",
+          "playerHp": 70,
+          "teamSurvivors": 2,
+          "peerHp": 11,
+          "boundary": "None",
+          "predictionGaps": []
+        },
+        {
+          "id": "RALLY",
+          "playerHp": 70,
+          "teamSurvivors": 2,
+          "peerHp": 11,
+          "boundary": "None",
+          "predictionGaps": [
+            {
+              "sourceId": "RALLY",
+              "method": "OnPlay",
+              "reason": "MethodMirrorIncomplete",
+              "compensated": true,
+              "key": "RALLY.OnPlay"
+            }
+          ]
+        },
+        {
+          "id": "DEFEND_IRONCLAD",
+          "playerHp": 70,
+          "teamSurvivors": 2,
+          "peerHp": 11,
+          "boundary": "None",
+          "predictionGaps": []
+        }
+      ]
+    },
+    {
+      "stage": "holdout",
+      "run": "holdout-threat",
+      "source": ".local/multiplayer-race-20260923/holdout-threat/race-experiments.json",
+      "scenario": {
+        "CharacterId": "SILENT",
+        "EncounterId": "FOGMOG_NORMAL",
+        "Seed": "RACE-HOLDOUT-20260923",
+        "Ascension": 0,
+        "ActIndexForTest": 0,
+        "MultiplayerContracts": false,
+        "MultiplayerStartContracts": false,
+        "MultiplayerStrategyContracts": false,
+        "MultiplayerLongTermContracts": false,
+        "MultiplayerReviewStage": "race-holdout"
+      },
+      "budget": {
+        "BeamWidth": 12,
+        "MaxExpandedNodes": 350,
+        "BudgetMilliseconds": 3000,
+        "MaxDegreeOfParallelism": 1
+      },
+      "rows": [
+        {
+          "fixture": "threat_holdout",
+          "features": 0,
+          "expandedNodes": 350,
+          "transitionCount": 1182,
+          "elapsed": "00:00:00.5068913",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 8,
+          "advisoryPlannedContribution": 17,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 57,
+          "enemyHp": 144,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "POISONED_STAB",
+              "targetCombatId": 2
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 5,
+              "localHp": 4,
+              "localLoss": 71,
+              "peerHp": 0,
+              "enemyHp": 104,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 17
+            },
+            "guard": {
+              "cycles": 5,
+              "localHp": 4,
+              "localLoss": 71,
+              "peerHp": 13,
+              "enemyHp": 104,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 17
+            },
+            "attack": {
+              "cycles": 5,
+              "localHp": 4,
+              "localLoss": 71,
+              "peerHp": 0,
+              "enemyHp": 74,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 17
+            }
+          }
+        },
+        {
+          "fixture": "threat_holdout",
+          "features": 1,
+          "expandedNodes": 350,
+          "transitionCount": 1179,
+          "elapsed": "00:00:00.3369727",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 8,
+          "advisoryPlannedContribution": 17,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 57,
+          "enemyHp": 144,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "POISONED_STAB",
+              "targetCombatId": 2
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 5,
+              "localHp": 4,
+              "localLoss": 71,
+              "peerHp": 0,
+              "enemyHp": 104,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 17
+            },
+            "guard": {
+              "cycles": 5,
+              "localHp": 4,
+              "localLoss": 71,
+              "peerHp": 13,
+              "enemyHp": 104,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 17
+            },
+            "attack": {
+              "cycles": 5,
+              "localHp": 4,
+              "localLoss": 71,
+              "peerHp": 0,
+              "enemyHp": 74,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 17
+            }
+          }
+        },
+        {
+          "fixture": "threat_holdout",
+          "features": 2,
+          "expandedNodes": 350,
+          "transitionCount": 1182,
+          "elapsed": "00:00:00.3413610",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 8,
+          "advisoryPlannedContribution": 17,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 57,
+          "enemyHp": 144,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "POISONED_STAB",
+              "targetCombatId": 2
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 5,
+              "localHp": 4,
+              "localLoss": 71,
+              "peerHp": 0,
+              "enemyHp": 104,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 17
+            },
+            "guard": {
+              "cycles": 5,
+              "localHp": 4,
+              "localLoss": 71,
+              "peerHp": 13,
+              "enemyHp": 104,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 17
+            },
+            "attack": {
+              "cycles": 5,
+              "localHp": 4,
+              "localLoss": 71,
+              "peerHp": 0,
+              "enemyHp": 74,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 17
+            }
+          }
+        },
+        {
+          "fixture": "threat_holdout",
+          "features": 4,
+          "expandedNodes": 350,
+          "transitionCount": 1165,
+          "elapsed": "00:00:00.3331555",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 8,
+          "advisoryPlannedContribution": 17,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 57,
+          "enemyHp": 144,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "POISONED_STAB",
+              "targetCombatId": 2
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 5,
+              "localHp": 4,
+              "localLoss": 71,
+              "peerHp": 0,
+              "enemyHp": 104,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 17
+            },
+            "guard": {
+              "cycles": 5,
+              "localHp": 4,
+              "localLoss": 71,
+              "peerHp": 13,
+              "enemyHp": 104,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 17
+            },
+            "attack": {
+              "cycles": 5,
+              "localHp": 4,
+              "localLoss": 71,
+              "peerHp": 0,
+              "enemyHp": 74,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 17
+            }
+          }
+        },
+        {
+          "fixture": "threat_holdout",
+          "features": 7,
+          "expandedNodes": 350,
+          "transitionCount": 1158,
+          "elapsed": "00:00:00.3165336",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 8,
+          "advisoryPlannedContribution": 17,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 57,
+          "enemyHp": 144,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "POISONED_STAB",
+              "targetCombatId": 2
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 5,
+              "localHp": 4,
+              "localLoss": 71,
+              "peerHp": 0,
+              "enemyHp": 104,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 17
+            },
+            "guard": {
+              "cycles": 5,
+              "localHp": 4,
+              "localLoss": 71,
+              "peerHp": 13,
+              "enemyHp": 104,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 17
+            },
+            "attack": {
+              "cycles": 5,
+              "localHp": 4,
+              "localLoss": 71,
+              "peerHp": 0,
+              "enemyHp": 74,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 17
+            }
+          }
+        }
+      ]
+    },
+    {
+      "stage": "accepted",
+      "run": "final-poison",
+      "source": ".local/multiplayer-race-20260923/final-poison/race-experiments.json",
+      "scenario": {
+        "CharacterId": "SILENT",
+        "EncounterId": "FUZZY_WURM_CRAWLER_WEAK",
+        "Seed": "RACE-DEV-20260923",
+        "Ascension": 0,
+        "ActIndexForTest": 0,
+        "MultiplayerContracts": false,
+        "MultiplayerStartContracts": false,
+        "MultiplayerStrategyContracts": false,
+        "MultiplayerLongTermContracts": false,
+        "MultiplayerReviewStage": "race-dev"
+      },
+      "budget": {
+        "BeamWidth": 12,
+        "MaxExpandedNodes": 350,
+        "BudgetMilliseconds": 3000,
+        "MaxDegreeOfParallelism": 1
+      },
+      "rows": [
+        {
+          "fixture": "poison",
+          "features": 0,
+          "expandedNodes": 350,
+          "transitionCount": 872,
+          "elapsed": "00:00:00.4122379",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 7,
+          "advisoryPlannedContribution": 18,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 70,
+          "enemyHp": 88,
+          "rootEnemyHp": 120,
+          "initialPlayerHp": 80,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "STRIKE_IRONCLAD",
+              "targetCombatId": 2
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 5,
+              "localHp": 64,
+              "localLoss": 16,
+              "peerHp": 54,
+              "enemyHp": 46,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 18
+            },
+            "guard": {
+              "cycles": 5,
+              "localHp": 64,
+              "localLoss": 16,
+              "peerHp": 68,
+              "enemyHp": 46,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 18
+            },
+            "attack": {
+              "cycles": 5,
+              "localHp": 64,
+              "localLoss": 16,
+              "peerHp": 54,
+              "enemyHp": 16,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 18
+            }
+          }
+        },
+        {
+          "fixture": "poison",
+          "features": 1,
+          "expandedNodes": 350,
+          "transitionCount": 867,
+          "elapsed": "00:00:00.1951208",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 8,
+          "advisoryPlannedContribution": 12,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 70,
+          "enemyHp": 81,
+          "rootEnemyHp": 120,
+          "initialPlayerHp": 80,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "DEADLY_POISON",
+              "targetCombatId": 2
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 5,
+              "localHp": 64,
+              "localLoss": 16,
+              "peerHp": 54,
+              "enemyHp": 31,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 18
+            },
+            "guard": {
+              "cycles": 5,
+              "localHp": 64,
+              "localLoss": 16,
+              "peerHp": 68,
+              "enemyHp": 31,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 18
+            },
+            "attack": {
+              "cycles": 5,
+              "localHp": 64,
+              "localLoss": 16,
+              "peerHp": 54,
+              "enemyHp": 1,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 18
+            }
+          }
+        }
+      ]
+    },
+    {
+      "stage": "accepted",
+      "run": "new-poison-high",
+      "source": ".local/multiplayer-race-20260923/new-poison-high/race-experiments.json",
+      "scenario": {
+        "CharacterId": "SILENT",
+        "EncounterId": "FUZZY_WURM_CRAWLER_WEAK",
+        "Seed": "RACE-NEW-HIGH-20260923",
+        "Ascension": 0,
+        "ActIndexForTest": 0,
+        "MultiplayerContracts": false,
+        "MultiplayerStartContracts": false,
+        "MultiplayerStrategyContracts": false,
+        "MultiplayerLongTermContracts": false,
+        "MultiplayerReviewStage": "race-dev"
+      },
+      "budget": {
+        "BeamWidth": 12,
+        "MaxExpandedNodes": 350,
+        "BudgetMilliseconds": 3000,
+        "MaxDegreeOfParallelism": 1
+      },
+      "rows": [
+        {
+          "fixture": "poison",
+          "features": 0,
+          "expandedNodes": 350,
+          "transitionCount": 863,
+          "elapsed": "00:00:00.4293876",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 8,
+          "advisoryPlannedContribution": 18,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 57,
+          "enemyHp": 148,
+          "rootEnemyHp": 180,
+          "initialPlayerHp": 67,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "STRIKE_IRONCLAD",
+              "targetCombatId": 2
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 5,
+              "localHp": 51,
+              "localLoss": 16,
+              "peerHp": 54,
+              "enemyHp": 106,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 18
+            },
+            "guard": {
+              "cycles": 5,
+              "localHp": 51,
+              "localLoss": 16,
+              "peerHp": 68,
+              "enemyHp": 106,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 18
+            },
+            "attack": {
+              "cycles": 5,
+              "localHp": 51,
+              "localLoss": 16,
+              "peerHp": 54,
+              "enemyHp": 76,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 18
+            }
+          }
+        },
+        {
+          "fixture": "poison",
+          "features": 1,
+          "expandedNodes": 350,
+          "transitionCount": 863,
+          "elapsed": "00:00:00.1833125",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 8,
+          "advisoryPlannedContribution": 12,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 57,
+          "enemyHp": 141,
+          "rootEnemyHp": 180,
+          "initialPlayerHp": 67,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "DEADLY_POISON",
+              "targetCombatId": 2
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 5,
+              "localHp": 51,
+              "localLoss": 16,
+              "peerHp": 54,
+              "enemyHp": 91,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 18
+            },
+            "guard": {
+              "cycles": 5,
+              "localHp": 51,
+              "localLoss": 16,
+              "peerHp": 68,
+              "enemyHp": 91,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 18
+            },
+            "attack": {
+              "cycles": 5,
+              "localHp": 51,
+              "localLoss": 16,
+              "peerHp": 54,
+              "enemyHp": 61,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 18
+            }
+          }
+        }
+      ]
+    },
+    {
+      "stage": "accepted",
+      "run": "new-poison-low",
+      "source": ".local/multiplayer-race-20260923/new-poison-low/race-experiments.json",
+      "scenario": {
+        "CharacterId": "SILENT",
+        "EncounterId": "FUZZY_WURM_CRAWLER_WEAK",
+        "Seed": "RACE-NEW-LOW-20260923",
+        "Ascension": 0,
+        "ActIndexForTest": 0,
+        "MultiplayerContracts": false,
+        "MultiplayerStartContracts": false,
+        "MultiplayerStrategyContracts": false,
+        "MultiplayerLongTermContracts": false,
+        "MultiplayerReviewStage": "race-dev"
+      },
+      "budget": {
+        "BeamWidth": 12,
+        "MaxExpandedNodes": 350,
+        "BudgetMilliseconds": 3000,
+        "MaxDegreeOfParallelism": 1
+      },
+      "rows": [
+        {
+          "fixture": "poison",
+          "features": 0,
+          "expandedNodes": 322,
+          "transitionCount": 800,
+          "elapsed": "00:00:00.3587317",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 6,
+          "advisoryPlannedContribution": 18,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 22,
+          "enemyHp": 23,
+          "rootEnemyHp": 55,
+          "initialPlayerHp": 32,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "STRIKE_IRONCLAD",
+              "targetCombatId": 2
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 4,
+              "localHp": 16,
+              "localLoss": 16,
+              "peerHp": 54,
+              "enemyHp": 0,
+              "won": true,
+              "boundary": "None",
+              "actions": 17
+            },
+            "guard": {
+              "cycles": 4,
+              "localHp": 16,
+              "localLoss": 16,
+              "peerHp": 68,
+              "enemyHp": 0,
+              "won": true,
+              "boundary": "None",
+              "actions": 17
+            },
+            "attack": {
+              "cycles": 3,
+              "localHp": 22,
+              "localLoss": 10,
+              "peerHp": 65,
+              "enemyHp": 0,
+              "won": true,
+              "boundary": "None",
+              "actions": 13
+            }
+          }
+        },
+        {
+          "fixture": "poison",
+          "features": 1,
+          "expandedNodes": 320,
+          "transitionCount": 787,
+          "elapsed": "00:00:00.1438976",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 6,
+          "advisoryPlannedContribution": 12,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 26,
+          "enemyHp": 29,
+          "rootEnemyHp": 55,
+          "initialPlayerHp": 32,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "DEFEND_IRONCLAD"
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 4,
+              "localHp": 20,
+              "localLoss": 12,
+              "peerHp": 54,
+              "enemyHp": 0,
+              "won": true,
+              "boundary": "None",
+              "actions": 18
+            },
+            "guard": {
+              "cycles": 4,
+              "localHp": 20,
+              "localLoss": 12,
+              "peerHp": 68,
+              "enemyHp": 0,
+              "won": true,
+              "boundary": "None",
+              "actions": 18
+            },
+            "attack": {
+              "cycles": 3,
+              "localHp": 26,
+              "localLoss": 6,
+              "peerHp": 65,
+              "enemyHp": 0,
+              "won": true,
+              "boundary": "None",
+              "actions": 14
+            }
+          }
+        }
+      ]
+    },
+    {
+      "stage": "accepted",
+      "run": "final-defense",
+      "source": ".local/multiplayer-race-20260923/final-defense/race-experiments.json",
+      "scenario": {
+        "CharacterId": "IRONCLAD",
+        "EncounterId": "FUZZY_WURM_CRAWLER_WEAK",
+        "Seed": "RACE-DEV-20260923",
+        "Ascension": 0,
+        "ActIndexForTest": 0,
+        "MultiplayerContracts": false,
+        "MultiplayerStartContracts": false,
+        "MultiplayerStrategyContracts": false,
+        "MultiplayerLongTermContracts": false,
+        "MultiplayerReviewStage": "race-dev"
+      },
+      "budget": {
+        "BeamWidth": 12,
+        "MaxExpandedNodes": 350,
+        "BudgetMilliseconds": 3000,
+        "MaxDegreeOfParallelism": 1
+      },
+      "rows": [
+        {
+          "fixture": "defense",
+          "features": 0,
+          "expandedNodes": 48,
+          "transitionCount": 86,
+          "elapsed": "00:00:00.2070720",
+          "advisoryComparisonCycles": 2,
+          "advisorySearchedEnemyCycles": 2,
+          "advisoryPlannedContribution": 6,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 6,
+          "enemyHp": 24,
+          "rootEnemyHp": 30,
+          "initialPlayerHp": 6,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "DEFEND_IRONCLAD"
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 2,
+              "localHp": 0,
+              "localLoss": 6,
+              "peerHp": 80,
+              "enemyHp": 18,
+              "won": false,
+              "boundary": "None",
+              "actions": 8
+            },
+            "guard": {
+              "cycles": 2,
+              "localHp": 0,
+              "localLoss": 6,
+              "peerHp": 80,
+              "enemyHp": 18,
+              "won": false,
+              "boundary": "None",
+              "actions": 8
+            },
+            "attack": {
+              "cycles": 2,
+              "localHp": 6,
+              "localLoss": 0,
+              "peerHp": 80,
+              "enemyHp": 0,
+              "won": true,
+              "boundary": "None",
+              "actions": 8
+            }
+          }
+        },
+        {
+          "fixture": "defense",
+          "features": 1,
+          "expandedNodes": 48,
+          "transitionCount": 86,
+          "elapsed": "00:00:00.0155566",
+          "advisoryComparisonCycles": 2,
+          "advisorySearchedEnemyCycles": 2,
+          "advisoryPlannedContribution": 6,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 6,
+          "enemyHp": 24,
+          "rootEnemyHp": 30,
+          "initialPlayerHp": 6,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "DEFEND_IRONCLAD"
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 2,
+              "localHp": 0,
+              "localLoss": 6,
+              "peerHp": 80,
+              "enemyHp": 18,
+              "won": false,
+              "boundary": "None",
+              "actions": 8
+            },
+            "guard": {
+              "cycles": 2,
+              "localHp": 0,
+              "localLoss": 6,
+              "peerHp": 80,
+              "enemyHp": 18,
+              "won": false,
+              "boundary": "None",
+              "actions": 8
+            },
+            "attack": {
+              "cycles": 2,
+              "localHp": 6,
+              "localLoss": 0,
+              "peerHp": 80,
+              "enemyHp": 0,
+              "won": true,
+              "boundary": "None",
+              "actions": 8
+            }
+          }
+        }
+      ]
+    },
+    {
+      "stage": "accepted",
+      "run": "final-investment",
+      "source": ".local/multiplayer-race-20260923/final-investment/race-experiments.json",
+      "scenario": {
+        "CharacterId": "IRONCLAD",
+        "EncounterId": "FUZZY_WURM_CRAWLER_WEAK",
+        "Seed": "RACE-DEV-20260923",
+        "Ascension": 0,
+        "ActIndexForTest": 0,
+        "MultiplayerContracts": false,
+        "MultiplayerStartContracts": false,
+        "MultiplayerStrategyContracts": false,
+        "MultiplayerLongTermContracts": false,
+        "MultiplayerReviewStage": "race-dev"
+      },
+      "budget": {
+        "BeamWidth": 12,
+        "MaxExpandedNodes": 350,
+        "BudgetMilliseconds": 3000,
+        "MaxDegreeOfParallelism": 1
+      },
+      "rows": [
+        {
+          "fixture": "investment",
+          "features": 0,
+          "expandedNodes": 350,
+          "transitionCount": 979,
+          "elapsed": "00:00:00.4007072",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 8,
+          "advisoryPlannedContribution": 57,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 63,
+          "enemyHp": 103,
+          "rootEnemyHp": 160,
+          "initialPlayerHp": 80,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "INFLAME"
+            },
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "STRIKE_IRONCLAD",
+              "targetCombatId": 2
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 5,
+              "localHp": 58,
+              "localLoss": 22,
+              "peerHp": 80,
+              "enemyHp": 97,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            },
+            "guard": {
+              "cycles": 5,
+              "localHp": 58,
+              "localLoss": 22,
+              "peerHp": 80,
+              "enemyHp": 97,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            },
+            "attack": {
+              "cycles": 5,
+              "localHp": 58,
+              "localLoss": 22,
+              "peerHp": 80,
+              "enemyHp": 55,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            }
+          }
+        },
+        {
+          "fixture": "investment",
+          "features": 1,
+          "expandedNodes": 350,
+          "transitionCount": 979,
+          "elapsed": "00:00:00.1924335",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 8,
+          "advisoryPlannedContribution": 57,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 63,
+          "enemyHp": 103,
+          "rootEnemyHp": 160,
+          "initialPlayerHp": 80,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "INFLAME"
+            },
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "STRIKE_IRONCLAD",
+              "targetCombatId": 2
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 5,
+              "localHp": 58,
+              "localLoss": 22,
+              "peerHp": 80,
+              "enemyHp": 97,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            },
+            "guard": {
+              "cycles": 5,
+              "localHp": 58,
+              "localLoss": 22,
+              "peerHp": 80,
+              "enemyHp": 97,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            },
+            "attack": {
+              "cycles": 5,
+              "localHp": 58,
+              "localLoss": 22,
+              "peerHp": 80,
+              "enemyHp": 55,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 15
+            }
+          }
+        }
+      ]
+    },
+    {
+      "stage": "frozen_baseline",
+      "run": "frozen-poison",
+      "source": ".local/multiplayer-race-20260923/frozen-poison/race-experiments.json",
+      "scenario": {
+        "CharacterId": "SILENT",
+        "EncounterId": "FUZZY_WURM_CRAWLER_WEAK",
+        "Seed": "RACE-DEV-20260923",
+        "Ascension": 0,
+        "ActIndexForTest": 0,
+        "MultiplayerContracts": false,
+        "MultiplayerStartContracts": false,
+        "MultiplayerStrategyContracts": false,
+        "MultiplayerLongTermContracts": false,
+        "MultiplayerReviewStage": "race-dev"
+      },
+      "budget": {
+        "BeamWidth": 12,
+        "MaxExpandedNodes": 350,
+        "BudgetMilliseconds": 3000,
+        "MaxDegreeOfParallelism": 1
+      },
+      "rows": [
+        {
+          "fixture": "poison",
+          "features": 0,
+          "expandedNodes": 350,
+          "transitionCount": 872,
+          "elapsed": "00:00:00.3991491",
+          "advisoryComparisonCycles": 3,
+          "advisorySearchedEnemyCycles": 7,
+          "advisoryPlannedContribution": 18,
+          "advisoryObjectiveWitness": false,
+          "playerHp": 70,
+          "enemyHp": 88,
+          "firstTurn": [
+            {
+              "kind": "PlayCard",
+              "turn": 1,
+              "cardId": "STRIKE_IRONCLAD",
+              "targetCombatId": 2
+            }
+          ],
+          "outcomes": {
+            "idle": {
+              "cycles": 5,
+              "localHp": 64,
+              "localLoss": 16,
+              "peerHp": 54,
+              "enemyHp": 46,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 18
+            },
+            "guard": {
+              "cycles": 5,
+              "localHp": 64,
+              "localLoss": 16,
+              "peerHp": 68,
+              "enemyHp": 46,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 18
+            },
+            "attack": {
+              "cycles": 5,
+              "localHp": 64,
+              "localLoss": 16,
+              "peerHp": 54,
+              "enemyHp": 16,
+              "won": false,
+              "boundary": "AdvisoryHorizon",
+              "actions": 18
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "horizon": {
+    "fixture": "native_models_ethereal_inflame_one_strike",
+    "localPlayerIndex": 1,
+    "evaluationProtocol": "Selected current-turn cards, then one legal Strike per turn through cycle 14; teammates pass. Evaluation work is separate from search.",
+    "peerProtocol": "Only peer_finisher: the teammate legally plays one Bludgeon before the first enemy cycle, then passes. This is a fixed perturbation, not a human probability model.",
+    "humanPolicyValidated": false,
+    "evidence": [
+      {
+        "name": "late_setup",
+        "rootEnemyHp": 500,
+        "strength": 0,
+        "isUpgraded": false,
+        "horizon": 7,
+        "nodeLimit": 350,
+        "expandedNodes": 129,
+        "transitionCount": 194,
+        "elapsed": "00:00:00.2277817",
+        "expandedCycles": {
+          "0": 3,
+          "1": 6,
+          "2": 12,
+          "3": 24,
+          "4": 28,
+          "5": 28,
+          "6": 28
+        },
+        "advisoryComparisonCycles": 3,
+        "selectedCycles": 3,
+        "boundaryReason": "None",
+        "endEnemyHp": 482,
+        "cumulativePlayerHpLost": 0,
+        "currentTurn": [
+          {
+            "kind": "PlayCard",
+            "turn": 1,
+            "cardId": "STRIKE_IRONCLAD",
+            "targetCombatId": 2
+          }
+        ],
+        "evaluation": {
+          "cycles": 14,
+          "enemyHp": 416,
+          "hpLost": 0,
+          "teamSurvivors": 2,
+          "won": false,
+          "endedTurn": null,
+          "replayCalls": 28,
+          "peerReplayActions": 0
+        },
+        "peerEvaluation": null
+      },
+      {
+        "name": "late_setup",
+        "rootEnemyHp": 500,
+        "strength": 0,
+        "isUpgraded": false,
+        "horizon": 14,
+        "nodeLimit": 350,
+        "expandedNodes": 322,
+        "transitionCount": 484,
+        "elapsed": "00:00:00.1203754",
+        "expandedCycles": {
+          "0": 3,
+          "1": 6,
+          "2": 12,
+          "3": 24,
+          "4": 28,
+          "5": 28,
+          "6": 28,
+          "7": 28,
+          "8": 27,
+          "9": 26,
+          "10": 28,
+          "11": 28,
+          "12": 28,
+          "13": 28
+        },
+        "advisoryComparisonCycles": 3,
+        "selectedCycles": 3,
+        "boundaryReason": "None",
+        "endEnemyHp": 484,
+        "cumulativePlayerHpLost": 0,
+        "currentTurn": [
+          {
+            "kind": "PlayCard",
+            "turn": 1,
+            "cardId": "INFLAME"
+          }
+        ],
+        "evaluation": {
+          "cycles": 14,
+          "enemyHp": 396,
+          "hpLost": 0,
+          "teamSurvivors": 2,
+          "won": false,
+          "endedTurn": null,
+          "replayCalls": 28,
+          "peerReplayActions": 0
+        },
+        "peerEvaluation": null
+      },
+      {
+        "name": "early_finish",
+        "rootEnemyHp": 12,
+        "strength": 0,
+        "isUpgraded": false,
+        "horizon": 7,
+        "nodeLimit": 350,
+        "expandedNodes": 63,
+        "transitionCount": 113,
+        "elapsed": "00:00:00.0355689",
+        "expandedCycles": {
+          "0": 3,
+          "1": 5,
+          "2": 7,
+          "3": 9,
+          "4": 11,
+          "5": 13,
+          "6": 15
+        },
+        "advisoryComparisonCycles": 3,
+        "selectedCycles": 1,
+        "boundaryReason": "None",
+        "endEnemyHp": 0,
+        "cumulativePlayerHpLost": 0,
+        "currentTurn": [
+          {
+            "kind": "PlayCard",
+            "turn": 1,
+            "cardId": "STRIKE_IRONCLAD",
+            "targetCombatId": 2
+          }
+        ],
+        "evaluation": {
+          "cycles": 1,
+          "enemyHp": 0,
+          "hpLost": 0,
+          "teamSurvivors": 2,
+          "won": true,
+          "endedTurn": 2,
+          "replayCalls": 3,
+          "peerReplayActions": 0
+        },
+        "peerEvaluation": null
+      },
+      {
+        "name": "early_finish",
+        "rootEnemyHp": 12,
+        "strength": 0,
+        "isUpgraded": false,
+        "horizon": 14,
+        "nodeLimit": 350,
+        "expandedNodes": 169,
+        "transitionCount": 311,
+        "elapsed": "00:00:00.1104352",
+        "expandedCycles": {
+          "0": 3,
+          "1": 5,
+          "2": 7,
+          "3": 9,
+          "4": 11,
+          "5": 13,
+          "6": 15,
+          "7": 15,
+          "8": 15,
+          "9": 15,
+          "10": 15,
+          "11": 15,
+          "12": 16,
+          "13": 15
+        },
+        "advisoryComparisonCycles": 3,
+        "selectedCycles": 1,
+        "boundaryReason": "None",
+        "endEnemyHp": 0,
+        "cumulativePlayerHpLost": 0,
+        "currentTurn": [
+          {
+            "kind": "PlayCard",
+            "turn": 1,
+            "cardId": "STRIKE_IRONCLAD",
+            "targetCombatId": 2
+          }
+        ],
+        "evaluation": {
+          "cycles": 1,
+          "enemyHp": 0,
+          "hpLost": 0,
+          "teamSurvivors": 2,
+          "won": true,
+          "endedTurn": 2,
+          "replayCalls": 3,
+          "peerReplayActions": 0
+        },
+        "peerEvaluation": null
+      },
+      {
+        "name": "budget_four",
+        "rootEnemyHp": 500,
+        "strength": 0,
+        "isUpgraded": false,
+        "horizon": 7,
+        "nodeLimit": 4,
+        "expandedNodes": 4,
+        "transitionCount": 6,
+        "elapsed": "00:00:00.0021339",
+        "expandedCycles": {
+          "0": 3,
+          "1": 1
+        },
+        "advisoryComparisonCycles": 1,
+        "selectedCycles": 1,
+        "boundaryReason": "NodeLimit",
+        "endEnemyHp": 494,
+        "cumulativePlayerHpLost": 0,
+        "currentTurn": [
+          {
+            "kind": "PlayCard",
+            "turn": 1,
+            "cardId": "STRIKE_IRONCLAD",
+            "targetCombatId": 2
+          }
+        ],
+        "evaluation": {
+          "cycles": 14,
+          "enemyHp": 416,
+          "hpLost": 0,
+          "teamSurvivors": 2,
+          "won": false,
+          "endedTurn": null,
+          "replayCalls": 28,
+          "peerReplayActions": 0
+        },
+        "peerEvaluation": null
+      },
+      {
+        "name": "budget_four",
+        "rootEnemyHp": 500,
+        "strength": 0,
+        "isUpgraded": false,
+        "horizon": 14,
+        "nodeLimit": 4,
+        "expandedNodes": 4,
+        "transitionCount": 6,
+        "elapsed": "00:00:00.0018647",
+        "expandedCycles": {
+          "0": 3,
+          "1": 1
+        },
+        "advisoryComparisonCycles": 1,
+        "selectedCycles": 1,
+        "boundaryReason": "NodeLimit",
+        "endEnemyHp": 494,
+        "cumulativePlayerHpLost": 0,
+        "currentTurn": [
+          {
+            "kind": "PlayCard",
+            "turn": 1,
+            "cardId": "STRIKE_IRONCLAD",
+            "targetCombatId": 2
+          }
+        ],
+        "evaluation": {
+          "cycles": 14,
+          "enemyHp": 416,
+          "hpLost": 0,
+          "teamSurvivors": 2,
+          "won": false,
+          "endedTurn": null,
+          "replayCalls": 28,
+          "peerReplayActions": 0
+        },
+        "peerEvaluation": null
+      },
+      {
+        "name": "peer_finisher",
+        "rootEnemyHp": 38,
+        "strength": 0,
+        "isUpgraded": false,
+        "horizon": 7,
+        "nodeLimit": 350,
+        "expandedNodes": 122,
+        "transitionCount": 187,
+        "elapsed": "00:00:00.0354240",
+        "expandedCycles": {
+          "0": 3,
+          "1": 6,
+          "2": 12,
+          "3": 24,
+          "4": 28,
+          "5": 27,
+          "6": 22
+        },
+        "advisoryComparisonCycles": 3,
+        "selectedCycles": 3,
+        "boundaryReason": "None",
+        "endEnemyHp": 20,
+        "cumulativePlayerHpLost": 0,
+        "currentTurn": [
+          {
+            "kind": "PlayCard",
+            "turn": 1,
+            "cardId": "STRIKE_IRONCLAD",
+            "targetCombatId": 2
+          }
+        ],
+        "evaluation": {
+          "cycles": 6,
+          "enemyHp": 0,
+          "hpLost": 0,
+          "teamSurvivors": 2,
+          "won": true,
+          "endedTurn": 7,
+          "replayCalls": 13,
+          "peerReplayActions": 0
+        },
+        "peerEvaluation": {
+          "cycles": 0,
+          "enemyHp": 0,
+          "hpLost": 0,
+          "teamSurvivors": 2,
+          "won": true,
+          "endedTurn": 1,
+          "replayCalls": 2,
+          "peerReplayActions": 1
+        }
+      },
+      {
+        "name": "peer_finisher",
+        "rootEnemyHp": 38,
+        "strength": 0,
+        "isUpgraded": false,
+        "horizon": 14,
+        "nodeLimit": 350,
+        "expandedNodes": 248,
+        "transitionCount": 404,
+        "elapsed": "00:00:00.0916543",
+        "expandedCycles": {
+          "0": 3,
+          "1": 6,
+          "2": 12,
+          "3": 24,
+          "4": 28,
+          "5": 27,
+          "6": 22,
+          "7": 18,
+          "8": 18,
+          "9": 18,
+          "10": 18,
+          "11": 18,
+          "12": 18,
+          "13": 18
+        },
+        "advisoryComparisonCycles": 3,
+        "selectedCycles": 3,
+        "boundaryReason": "None",
+        "endEnemyHp": 20,
+        "cumulativePlayerHpLost": 0,
+        "currentTurn": [
+          {
+            "kind": "PlayCard",
+            "turn": 1,
+            "cardId": "STRIKE_IRONCLAD",
+            "targetCombatId": 2
+          }
+        ],
+        "evaluation": {
+          "cycles": 6,
+          "enemyHp": 0,
+          "hpLost": 0,
+          "teamSurvivors": 2,
+          "won": true,
+          "endedTurn": 7,
+          "replayCalls": 13,
+          "peerReplayActions": 0
+        },
+        "peerEvaluation": {
+          "cycles": 0,
+          "enemyHp": 0,
+          "hpLost": 0,
+          "teamSurvivors": 2,
+          "won": true,
+          "endedTurn": 1,
+          "replayCalls": 2,
+          "peerReplayActions": 1
+        }
+      },
+      {
+        "name": "payback_seven",
+        "rootEnemyHp": 500,
+        "strength": 1,
+        "isUpgraded": true,
+        "horizon": 7,
+        "nodeLimit": 350,
+        "expandedNodes": 129,
+        "transitionCount": 194,
+        "elapsed": "00:00:00.0366622",
+        "expandedCycles": {
+          "0": 3,
+          "1": 6,
+          "2": 12,
+          "3": 24,
+          "4": 28,
+          "5": 28,
+          "6": 28
+        },
+        "advisoryComparisonCycles": 3,
+        "selectedCycles": 3,
+        "boundaryReason": "None",
+        "endEnemyHp": 470,
+        "cumulativePlayerHpLost": 0,
+        "currentTurn": [
+          {
+            "kind": "PlayCard",
+            "turn": 1,
+            "cardId": "STRIKE_IRONCLAD",
+            "targetCombatId": 2
+          }
+        ],
+        "evaluation": {
+          "cycles": 14,
+          "enemyHp": 360,
+          "hpLost": 0,
+          "teamSurvivors": 2,
+          "won": false,
+          "endedTurn": null,
+          "replayCalls": 28,
+          "peerReplayActions": 0
+        },
+        "peerEvaluation": null
+      },
+      {
+        "name": "payback_seven",
+        "rootEnemyHp": 500,
+        "strength": 1,
+        "isUpgraded": true,
+        "horizon": 14,
+        "nodeLimit": 350,
+        "expandedNodes": 325,
+        "transitionCount": 488,
+        "elapsed": "00:00:00.1223922",
+        "expandedCycles": {
+          "0": 3,
+          "1": 6,
+          "2": 12,
+          "3": 24,
+          "4": 28,
+          "5": 28,
+          "6": 28,
+          "7": 28,
+          "8": 28,
+          "9": 28,
+          "10": 28,
+          "11": 28,
+          "12": 28,
+          "13": 28
+        },
+        "advisoryComparisonCycles": 3,
+        "selectedCycles": 3,
+        "boundaryReason": "None",
+        "endEnemyHp": 470,
+        "cumulativePlayerHpLost": 0,
+        "currentTurn": [
+          {
+            "kind": "PlayCard",
+            "turn": 1,
+            "cardId": "STRIKE_IRONCLAD",
+            "targetCombatId": 2
+          }
+        ],
+        "evaluation": {
+          "cycles": 14,
+          "enemyHp": 360,
+          "hpLost": 0,
+          "teamSurvivors": 2,
+          "won": false,
+          "endedTurn": null,
+          "replayCalls": 28,
+          "peerReplayActions": 0
+        },
+        "peerEvaluation": null
+      },
+      {
+        "name": "payback_nine",
+        "rootEnemyHp": 500,
+        "strength": 5,
+        "isUpgraded": true,
+        "horizon": 7,
+        "nodeLimit": 350,
+        "expandedNodes": 129,
+        "transitionCount": 194,
+        "elapsed": "00:00:00.0384114",
+        "expandedCycles": {
+          "0": 3,
+          "1": 6,
+          "2": 12,
+          "3": 24,
+          "4": 28,
+          "5": 28,
+          "6": 28
+        },
+        "advisoryComparisonCycles": 3,
+        "selectedCycles": 3,
+        "boundaryReason": "None",
+        "endEnemyHp": 458,
+        "cumulativePlayerHpLost": 0,
+        "currentTurn": [
+          {
+            "kind": "PlayCard",
+            "turn": 1,
+            "cardId": "STRIKE_IRONCLAD",
+            "targetCombatId": 2
+          }
+        ],
+        "evaluation": {
+          "cycles": 14,
+          "enemyHp": 304,
+          "hpLost": 0,
+          "teamSurvivors": 2,
+          "won": false,
+          "endedTurn": null,
+          "replayCalls": 28,
+          "peerReplayActions": 0
+        },
+        "peerEvaluation": null
+      },
+      {
+        "name": "payback_nine",
+        "rootEnemyHp": 500,
+        "strength": 5,
+        "isUpgraded": true,
+        "horizon": 14,
+        "nodeLimit": 350,
+        "expandedNodes": 325,
+        "transitionCount": 488,
+        "elapsed": "00:00:00.1179285",
+        "expandedCycles": {
+          "0": 3,
+          "1": 6,
+          "2": 12,
+          "3": 24,
+          "4": 28,
+          "5": 28,
+          "6": 28,
+          "7": 28,
+          "8": 28,
+          "9": 28,
+          "10": 28,
+          "11": 28,
+          "12": 28,
+          "13": 28
+        },
+        "advisoryComparisonCycles": 3,
+        "selectedCycles": 3,
+        "boundaryReason": "None",
+        "endEnemyHp": 458,
+        "cumulativePlayerHpLost": 0,
+        "currentTurn": [
+          {
+            "kind": "PlayCard",
+            "turn": 1,
+            "cardId": "STRIKE_IRONCLAD",
+            "targetCombatId": 2
+          }
+        ],
+        "evaluation": {
+          "cycles": 14,
+          "enemyHp": 304,
+          "hpLost": 0,
+          "teamSurvivors": 2,
+          "won": false,
+          "endedTurn": null,
+          "replayCalls": 28,
+          "peerReplayActions": 0
+        },
+        "peerEvaluation": null
+      },
+      {
+        "name": "payback_fourteen",
+        "rootEnemyHp": 500,
+        "strength": 15,
+        "isUpgraded": true,
+        "horizon": 7,
+        "nodeLimit": 350,
+        "expandedNodes": 129,
+        "transitionCount": 194,
+        "elapsed": "00:00:00.0393536",
+        "expandedCycles": {
+          "0": 3,
+          "1": 6,
+          "2": 12,
+          "3": 24,
+          "4": 28,
+          "5": 28,
+          "6": 28
+        },
+        "advisoryComparisonCycles": 3,
+        "selectedCycles": 3,
+        "boundaryReason": "None",
+        "endEnemyHp": 428,
+        "cumulativePlayerHpLost": 0,
+        "currentTurn": [
+          {
+            "kind": "PlayCard",
+            "turn": 1,
+            "cardId": "STRIKE_IRONCLAD",
+            "targetCombatId": 2
+          }
+        ],
+        "evaluation": {
+          "cycles": 14,
+          "enemyHp": 164,
+          "hpLost": 0,
+          "teamSurvivors": 2,
+          "won": false,
+          "endedTurn": null,
+          "replayCalls": 28,
+          "peerReplayActions": 0
+        },
+        "peerEvaluation": null
+      },
+      {
+        "name": "payback_fourteen",
+        "rootEnemyHp": 500,
+        "strength": 15,
+        "isUpgraded": true,
+        "horizon": 14,
+        "nodeLimit": 350,
+        "expandedNodes": 323,
+        "transitionCount": 485,
+        "elapsed": "00:00:00.1174827",
+        "expandedCycles": {
+          "0": 3,
+          "1": 6,
+          "2": 12,
+          "3": 24,
+          "4": 28,
+          "5": 28,
+          "6": 28,
+          "7": 28,
+          "8": 28,
+          "9": 28,
+          "10": 28,
+          "11": 28,
+          "12": 28,
+          "13": 26
+        },
+        "advisoryComparisonCycles": 3,
+        "selectedCycles": 3,
+        "boundaryReason": "None",
+        "endEnemyHp": 428,
+        "cumulativePlayerHpLost": 0,
+        "currentTurn": [
+          {
+            "kind": "PlayCard",
+            "turn": 1,
+            "cardId": "STRIKE_IRONCLAD",
+            "targetCombatId": 2
+          }
+        ],
+        "evaluation": {
+          "cycles": 14,
+          "enemyHp": 164,
+          "hpLost": 0,
+          "teamSurvivors": 2,
+          "won": false,
+          "endedTurn": null,
+          "replayCalls": 28,
+          "peerReplayActions": 0
+        },
+        "peerEvaluation": null
+      }
+    ]
+  },
+  "checks": {
+    "nativeSharedDamage": {
+      "checks": [
+        "predicted_poison_settles",
+        "mixed_poison_full_native_state",
+        "poison_stays_unattributed",
+        "sibling_shared_ledger_isolated",
+        "root_stays_frozen",
+        "native_observation_shared_not_personal",
+        "poison_recalculation_does_not_extend_deadline",
+        "healing_undoes_shared_progress_once",
+        "unchanged_recalculation_is_idempotent",
+        "known_peer_damage_never_becomes_shared",
+        "child_poison_settles",
+        "child_accumulates_without_mutating_parent",
+        "three_players_share_without_rounding_each_tick",
+        "fractional_shared_progress_preserved",
+        "roster_change_rebases_shared_history_without_extension",
+        "ready_observed",
+        "ready_can_be_undone",
+        "shared_scoring_incremental_replay_and_fixed_budget",
+        "poison_full_party_native_cycle_and_draw_equal",
+        "native_cycle_shared_damage_ledger_equal"
+      ],
+      "passed": true,
+      "nativeFullStateCompared": true,
+      "networkValidated": false
+    },
+    "ranking": {
+      "checks": [
+        "counterexample_old_personal_axes_dominate_shared_route",
+        "shared_route_survives_frontier_and_wins",
+        "disabled_policy_preserves_personal_ranking",
+        "shared_route_survives_frontier_and_wins",
+        "disabled_policy_preserves_personal_ranking",
+        "same_combat_state_keeps_distinct_damage_attribution",
+        "transposition_keeps_new_attribution",
+        "transposition_still_removes_exact_duplicate",
+        "cache_rebuild_preserves_attribution",
+        "shared_explanation_eng",
+        "zero_shared_hidden_eng",
+        "shared_explanation_zhs",
+        "zero_shared_hidden_zhs",
+        "shared_explanation_zht",
+        "zero_shared_hidden_zht",
+        "shared_explanation_does_not_change_personal_witness"
+      ],
+      "passed": true,
+      "syntheticRankingFacts": true,
+      "nativeDamageValidation": "coverage/unattended/multiplayer-shared-damage.json"
+    },
+    "quota": {
+      "checks": [
+        "stage_share_and_absolute_deadline",
+        "same_round_recalculation_does_not_renew",
+        "healing_and_continued_progress_share_stage_origin",
+        "roster_change_preserves_deadline_and_previous_result",
+        "elapsed_stage_renews_explicitly",
+        "recalculation_does_not_add_nonadditive_capped_progress",
+        "no_last_damage_point_health_cliff",
+        "local_index_one",
+        "native_overkill_counts_only_actual_hp",
+        "local_damage_credited",
+        "damage_ledger_fork_and_root_isolation",
+        "child_foreign_and_unknown_damage_stays_in_child",
+        "native_local_play_accepted",
+        "local_play_full_party_native_equal",
+        "native_recalculation_keeps_paid_damage",
+        "native_peer_play_accepted",
+        "native_peer_damage_does_not_pay_or_postpone_local_quota",
+        "enemy_healing_reopens_progress",
+        "native_changes_do_not_mutate_frozen_prediction",
+        "quota_does_not_skip_real_retaliation_incremental_equal",
+        "fixed_node_budget_respected",
+        "risk_cannot_dominate_reliable_witness",
+        "real_victory_overrides_stale_cycle",
+        "victory_after_deadline_does_not_backdate_stage",
+        "fixed_batch_ordering_125_triples",
+        "unassessed_budget_fallback_remains_unknown",
+        "quota_and_unknown_ui_eng",
+        "quota_and_unknown_ui_zhs",
+        "quota_and_unknown_ui_zht",
+        "native_retaliation_play_STRIKE_IRONCLAD",
+        "native_retaliation_play_DEFEND_IRONCLAD",
+        "retaliation_full_party_native_cycle_equal"
+      ],
+      "expandedNodes": 5,
+      "transitionCount": 9,
+      "advisoryObjective": {
+        "stage": 1,
+        "startedRound": 1,
+        "deadlineRound": 1,
+        "targetDamage": 6,
+        "paidDamage": 0,
+        "remainingCycles": 1,
+        "participantCount": 2,
+        "renewalReason": "initial",
+        "previousTarget": null,
+        "previousProgress": null,
+        "stageEnemyHp": 12,
+        "observedLocalDamage": 0,
+        "observedTotalDamage": 0,
+        "observedUnattributedDamage": 0
+      },
+      "advisoryPlannedContribution": 6,
+      "advisoryObjectiveWitness": true,
+      "actions": [
+        {
+          "kind": "PlayCard",
+          "turn": 1,
+          "cardId": "STRIKE_IRONCLAD",
+          "cardOccurrence": 0,
+          "targetIndex": 0,
+          "targetCombatId": 2,
+          "cardTitle": "STRIKE_IRONCLAD.title",
+          "targetName": "FUZZY_WURM_CRAWLER.name",
+          "choice": null,
+          "nestedChoices": null,
+          "nestedChoicesBeforePrimary": 0,
+          "potionSlot": -1,
+          "potionId": "",
+          "potionTitle": "",
+          "turnStartChoices": null,
+          "relicEffects": [],
+          "replayCount": 0,
+          "cardStateKey": "STRIKE_IRONCLAD+0|energy=False:1|stars=False:-1|replay=0|exhaust=False|sly=False|retain=False|deck=False|keywords=|vars=Damage=6|-|:0|baselib=-",
+          "cardStateOccurrence": 0,
+          "endsPlayerTurn": false,
+          "cardUpgradeLevel": 0,
+          "cardEnchantmentId": "",
+          "isExecutable": true,
+          "actionTitle": "STRIKE_IRONCLAD.title"
+        },
+        {
+          "kind": "PlayCard",
+          "turn": 1,
+          "cardId": "DEFEND_IRONCLAD",
+          "cardOccurrence": 0,
+          "targetIndex": -1,
+          "targetCombatId": null,
+          "cardTitle": "DEFEND_IRONCLAD.title",
+          "targetName": "",
+          "choice": null,
+          "nestedChoices": null,
+          "nestedChoicesBeforePrimary": 0,
+          "potionSlot": -1,
+          "potionId": "",
+          "potionTitle": "",
+          "turnStartChoices": null,
+          "relicEffects": [],
+          "replayCount": 0,
+          "cardStateKey": "DEFEND_IRONCLAD+0|energy=False:1|stars=False:-1|replay=0|exhaust=False|sly=False|retain=False|deck=False|keywords=|vars=Block=5|-|:0|baselib=-",
+          "cardStateOccurrence": 0,
+          "endsPlayerTurn": false,
+          "cardUpgradeLevel": 0,
+          "cardEnchantmentId": "",
+          "isExecutable": true,
+          "actionTitle": "DEFEND_IRONCLAD.title"
+        },
+        {
+          "kind": "EndTurn",
+          "turn": 1,
+          "cardId": "",
+          "cardOccurrence": 0,
+          "targetIndex": -1,
+          "targetCombatId": null,
+          "cardTitle": "",
+          "targetName": "",
+          "choice": null,
+          "nestedChoices": null,
+          "nestedChoicesBeforePrimary": 0,
+          "potionSlot": -1,
+          "potionId": "",
+          "potionTitle": "",
+          "turnStartChoices": null,
+          "relicEffects": [],
+          "replayCount": 0,
+          "cardStateKey": "",
+          "cardStateOccurrence": 0,
+          "endsPlayerTurn": false,
+          "cardUpgradeLevel": 0,
+          "cardEnchantmentId": "",
+          "isExecutable": false,
+          "actionTitle": ""
+        }
+      ]
+    },
+    "selection": {
+      "evidence": [
+        {
+          "name": "F01_require_potion_before_truncation",
+          "passed": true,
+          "input": [
+            "dry0",
+            "dry1",
+            "dry2",
+            "dry3",
+            "used"
+          ],
+          "selected": "used",
+          "depth": 1,
+          "retained": 1,
+          "orderingCalls": 1,
+          "Error": null
+        },
+        {
+          "name": "F02_minimum_two_before_truncation",
+          "passed": true,
+          "input": [
+            "dry0",
+            "dry1",
+            "dry2",
+            "dry3",
+            "used",
+            "twice"
+          ],
+          "selected": "twice",
+          "depth": 1,
+          "retained": 1,
+          "orderingCalls": 1,
+          "Error": null
+        },
+        {
+          "name": "empty_eligible_pool",
+          "passed": true,
+          "input": [
+            "dry0",
+            "dry1",
+            "dry2",
+            "dry3"
+          ],
+          "selected": null,
+          "depth": 0,
+          "retained": 0,
+          "orderingCalls": 1,
+          "Error": "PotionPolicyUnsatisfiedException"
+        },
+        {
+          "name": "automatic_potion_is_not_explicit",
+          "passed": true,
+          "input": [
+            "automatic"
+          ],
+          "selected": null,
+          "depth": 0,
+          "retained": 0,
+          "orderingCalls": 1,
+          "Error": "PotionPolicyUnsatisfiedException"
+        },
+        {
+          "name": "eligibility_precedes_common_cycle",
+          "passed": true,
+          "input": [
+            "dry0",
+            "dry1",
+            "dry2",
+            "dry3",
+            "deep_use"
+          ],
+          "selected": "deep_use",
+          "depth": 2,
+          "retained": 1,
+          "orderingCalls": 1,
+          "Error": null
+        },
+        {
+          "name": "forced_slot_directive",
+          "passed": true,
+          "input": [
+            "dry0",
+            "dry1",
+            "dry2",
+            "dry3",
+            "used",
+            "forced_slot1"
+          ],
+          "selected": "forced_slot1",
+          "depth": 1,
+          "retained": 1,
+          "orderingCalls": 1,
+          "Error": null
+        },
+        {
+          "name": "expandable_prefix_kept",
+          "finalQualityFirst": "both",
+          "passed": true
+        },
+        {
+          "name": "terminal_survives_common_cycle_cut",
+          "passed": true,
+          "input": [
+            "dry0",
+            "dry1",
+            "dry2",
+            "dry3",
+            "early_win"
+          ],
+          "selected": "early_win",
+          "depth": 3,
+          "retained": 1,
+          "orderingCalls": 1,
+          "Error": null
+        },
+        {
+          "name": "terminal_end_facts_before_old_checkpoint",
+          "passed": true,
+          "input": [
+            "early_win",
+            "late_win",
+            "dry0"
+          ],
+          "selected": "early_win",
+          "depth": 3,
+          "retained": 3,
+          "orderingCalls": 1,
+          "Error": null
+        },
+        {
+          "name": "all_terminal_end_turn_control",
+          "passed": true,
+          "input": [
+            "late_win",
+            "early_win"
+          ],
+          "selected": "early_win",
+          "depth": 3,
+          "retained": 2,
+          "orderingCalls": 1,
+          "Error": null
+        },
+        {
+          "name": "local_death_still_precedes_victory",
+          "passed": true,
+          "input": [
+            "dead_win",
+            "early_win",
+            "dry0"
+          ],
+          "selected": "early_win",
+          "depth": 3,
+          "retained": 3,
+          "orderingCalls": 1,
+          "Error": null
+        },
+        {
+          "name": "F03_five_candidate_frozen_depth",
+          "passed": true,
+          "input": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "S"
+          ],
+          "selected": "D",
+          "depth": 2,
+          "retained": 2,
+          "orderingCalls": 1,
+          "Error": null
+        },
+        {
+          "name": "F04_six_candidate_frozen_depth",
+          "passed": true,
+          "input": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "S",
+            "X"
+          ],
+          "selected": "X",
+          "depth": 2,
+          "retained": 2,
+          "orderingCalls": 1,
+          "Error": null
+        },
+        {
+          "name": "new_batch_can_advance_depth",
+          "passed": true,
+          "input": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "X"
+          ],
+          "selected": "X",
+          "depth": 2,
+          "retained": 1,
+          "orderingCalls": 1,
+          "Error": null
+        },
+        {
+          "name": "reference_duplicates_do_not_fill_limit",
+          "passed": true,
+          "input": [
+            "A",
+            "A",
+            "B",
+            "C",
+            "D",
+            "S"
+          ],
+          "selected": "D",
+          "depth": 2,
+          "retained": 2,
+          "orderingCalls": 1,
+          "Error": null
+        },
+        {
+          "name": "permutations_5",
+          "permutations": 120,
+          "wrong": 0
+        },
+        {
+          "name": "permutations_6",
+          "permutations": 720,
+          "wrong": 0
+        },
+        {
+          "name": "fixed_cycle_comparator",
+          "triples": 216
+        }
+      ],
+      "failures": []
+    }
+  },
+  "nativeUi": {
+    "runId": "macos-d8d52578137447339b5b3156b0bf18e6",
+    "status": "Passed",
+    "completedChecks": [
+      "CardLocaleRoundTrip:EnglishSnapshot:ChineseEnglishChinese:Upgrade:Choice:RelicOwner:SerializedPlan:LivePill:SubscriptionCleanup:NoReplan",
+      "SpawnedEntityIdentity:eng:FourWrigglers:LeftToRight:NativeSlots=True:ForkStable:DeathStable",
+      "EntityIdentity:eng:DistinctEnemies=1:PlainAndInkyShiv",
+      "StrategyOutcome:eng:AlignedAndUnmet:GrowthCounts:PartialRoute:EmptyHidden",
+      "RelicOwnership:eng:Self:PeerNumber:SameRelic:Json:Tooltip:Identity",
+      "ActionAnnotations:eng:CapturedDamageSources:21RelicFormats:NestedChoices:Tooltip",
+      "LiveTurnStartChoicePreview:eng:Power:Relic",
+      "LoopDisplay:eng:41Actions:2OuterControls:CompactInlineCount:EnclosedPeriod:WideNarrowWide:ReplayCount:KillSuffix:Deployment:Reuse",
+      "StrategyPanels:eng:Potion:Growth:Relic:Collapse",
+      "UiLocalization:eng:Catalog459:Settings:UploadTransitions:DynamicStatus:FailureInstructions",
+      "SpawnedEntityIdentity:zhs:FourWrigglers:LeftToRight:NativeSlots=True:ForkStable:DeathStable",
+      "EntityIdentity:zhs:DistinctEnemies=1:PlainAndInkyShiv",
+      "StrategyOutcome:zhs:AlignedAndUnmet:GrowthCounts:PartialRoute:EmptyHidden",
+      "RelicOwnership:zhs:Self:PeerNumber:SameRelic:Json:Tooltip:Identity",
+      "ActionAnnotations:zhs:CapturedDamageSources:21RelicFormats:NestedChoices:Tooltip",
+      "LiveTurnStartChoicePreview:zhs/zht:Power:Relic",
+      "LoopDisplay:zh:41Actions:2OuterControls:CompactInlineCount:EnclosedPeriod:WideNarrowWide:ReplayCount:KillSuffix:Deployment:Reuse",
+      "StrategyPanels:zhs:Potion:Growth:Relic:Collapse",
+      "UiLocalization:zhs:Catalog459:Settings:UploadTransitions:DynamicStatus:FailureInstructions",
+      "SpawnedEntityIdentity:zht:FourWrigglers:LeftToRight:NativeSlots=True:ForkStable:DeathStable",
+      "EntityIdentity:zht:DistinctEnemies=1:PlainAndInkyShiv",
+      "StrategyOutcome:zht:AlignedAndUnmet:GrowthCounts:PartialRoute:EmptyHidden",
+      "RelicOwnership:zht:Self:PeerNumber:SameRelic:Json:Tooltip:Identity",
+      "ActionAnnotations:zht:CapturedDamageSources:21RelicFormats:NestedChoices:Tooltip",
+      "LiveTurnStartChoicePreview:zhs/zht:Power:Relic",
+      "LoopDisplay:zh:41Actions:2OuterControls:CompactInlineCount:EnclosedPeriod:WideNarrowWide:ReplayCount:KillSuffix:Deployment:Reuse",
+      "StrategyPanels:zht:Potion:Growth:Relic:Collapse",
+      "UiLocalization:zht:Catalog459:Settings:UploadTransitions:DynamicStatus:FailureInstructions"
+    ]
+  },
+  "nativeInstancesRemoved": [
+    ".local/headless-instances/macos.g2gP9L",
+    ".local/headless-instances/macos.sI4DeV"
+  ],
+  "solo": {
+    "compared": 92,
+    "mismatches": [],
+    "rootAndFullActionsAndContinuationsEqual": true,
+    "baseline": ".local/multiplayer-quota-20260922/solo",
+    "candidate": ".local/multiplayer-race-20260923/final-solo"
+  },
+  "coverage": {
+    "status": "Passed",
+    "flags": [
+      "--verify-state-fields",
+      "--verify-branch-state-reads"
+    ],
+    "unclassifiedStateFields": 0,
+    "exactOriginalFallbacksReadingLiveBranchState": 0,
+    "source": ".local/multiplayer-race-20260923/coverage-check.log"
+  },
+  "limitations": [
+    "No live network or visible Steam performance evidence.",
+    "Intercept reference returns UnsupportedEffect; excluded from positive rescue conclusions.",
+    "Noxious Fumes and later setup fixtures still expose unresolved strategy gaps.",
+    "Low-HP guard-first sentinel preserves the opening, not full-fight survival under a fixed continuation script.",
+    "Original report race rate and ready inference were not implemented."
+  ],
+  "fixtureFailures": [
+    "Lift fixture initially omitted an AnyPlayer target; corrected before dev-lift-fixed.",
+    "shared-ranking first launch used a CLI node limit below the settings minimum and never entered combat; rerun with CLI 100/internal 40 passed."
+  ],
+  "boundaries": {
+    "status": "Passed",
+    "searchFiles": 218,
+    "source": ".local/multiplayer-race-20260923/boundaries-cache.log",
+    "powershell": "Rules updated, not executed"
+  },
+  "finalCacheRepair": {
+    "scope": "Pass the unattributed counter when ResetRebuildableCaches seeds transposition labels.",
+    "validation": "shared-ranking-cache passes all 16 checks, including explicit reset with a nonzero counter. Release and updated boundaries pass; unrelated successful behavior evidence reused."
+  },
+  "forkVersion": "0.44.2"
+}

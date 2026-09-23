@@ -7,6 +7,7 @@ internal sealed record MultiplayerSearchPolicy(
     internal const int LongHorizonBudgetMultiplier = 2;
 
     public MultiplayerContributionObjective? Objective { get; init; }
+    public bool CreditSharedDamage { get; init; } = true;
 
     public SolverSearchProfile ResolveSearchProfile(SearchPolicySnapshot policy)
     {

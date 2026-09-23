@@ -1,5 +1,15 @@
 # CombatSolver 测试清单
 
+## 0.44.2（fork，本地准备）：多人无来源伤害选路（2026-09-23）
+
+- L2 原生 `MULTIPLAYER-SHARED-DAMAGE` / `macos-b3820fafd274467f93601a352371e20b`：20项 Passed。混合本机/队友毒仍为 null dealer，毒触发及完整敌方周期后全队 ContinuationStamp 相同；根/兄弟/子 Fork、已观察阶段账本、治疗冲回、重复重算、三人分数、人数变化、ready/撤销及严格增量通过。固定短搜、120秒请求；夹具为 `coverage/unattended/multiplayer-shared-damage.json`。
+- `shared-ranking` 16项：旧个人伤害轴会支配的共享路线仍被保留且获选；正反排列相同，转置/去重及缓存重建保留无来源计数，精确重复仍剪掉；eng/zhs/zht正数提示与零值隐藏不影响个人见证。仅排名事实使用合成快照，语义由上一项单独验证。
+- 当前默认 `quota-contracts` 32项、`quota-selection` 用药资格/4B/840排列/216三元比较通过。单人 `solo-power-compat` 对已核对官方0.44.0的冻结基线，92项非时序字段、根戳、完整动作及续行相同，1750展开/4363转移/2HP，多人入口零次。
+- 固定Beam12/350节点/3000ms/DOP1：12个原型开发/留出根×5变体、最终5组成对检查及旧DLL一次，共71次搜索；三种固定队友脚本只在外评侧。两个毒根多15伤害且同战损，新低血根相同结束周期少损4HP；两项被撤回原型没有观察到选路收益。另七根×H7/H14保留晚回本84→104伤害/0损失，也保留更晚回本未选中。不是随机真人胜率样本。
+- 原生 `UI-LOCALIZATION` / `macos-d8d52578137447339b5b3156b0bf18e6` Passed，459模板、eng/zhs/zht。两个原生实例 `macos.g2gP9L` / `macos.sI4DeV` 均由启动器删除。生产/宿主 Release 零警告错误；Bash职责门禁通过，PowerShell同步未运行；CoverageCatalog仅定向state-fields/branch-state-reads，0未分类字段、0精确回退live读取。
+- Intercept参考返回 `UnsupportedEffect`，不计辅助通过；Lift首周期救援为有效负哨兵，固定后续并不保证队友生存。低血防御只证明首动保持，外评固定续行仍可能死亡；Noxious Fumes及晚投资缺口保留。首次Lift夹具目标遗漏、排名CLI预算低于最小值的运行均排除。
+- 未做真实联机、可见Steam、完整角色/遭遇回归、干净安装或完整发布门禁。证据根 `.local/multiplayer-race-20260923/`；可复现输入、原型与结果见[实施记录](strategy/multiplayer-shared-damage-20260923/implementation.md)和[结构化摘要](strategy/multiplayer-shared-damage-20260923/implementation-evidence.json)。
+
 ## 0.44.1（fork）：本机贡献策略（2026-09-22）
 
 发布阶段从 `86026b05` 一次Release构建零警告错误、最小ZIP创建及GitHub正式Release命令成功；未重跑下列行为，凭证见[发布记录](releases/0.44.1-PUBLISH.md)。

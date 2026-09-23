@@ -1659,6 +1659,16 @@ $multiplayerAdviceRules = @(
     @{ Path = 'src/Search/SimulatedCombatState.cs'; Text = 'AdvisorLastEnemyCycle = source.AdvisorLastEnemyCycle;' }
     @{ Path = 'src/Search/MultiplayerCycleCheckpoint.cs'; Text = 'internal sealed record MultiplayerCycleCheckpoint(' }
     @{ Path = 'src/Search/CombatBeamSolver.Transpositions.cs'; Text = 'left.AdvisoryLastEnemyCycle == right.AdvisoryLastEnemyCycle' }
+    @{ Path = 'src/Runtime/MultiplayerContributionCapture.cs'; Text = 'if (entry.Dealer == null) unattributed = checked(unattributed + damage);' }
+    @{ Path = 'src/Search/MultiplayerContributionObjective.cs'; Text = 'internal double SharedProgress(' }
+    @{ Path = 'src/Search/MultiplayerSearchPolicy.cs'; Text = 'public bool CreditSharedDamage { get; init; } = true;' }
+    @{ Path = 'src/Search/SimulatedCombatState.cs'; Text = 'AdvisorUnattributedDamage = source.AdvisorUnattributedDamage;' }
+    @{ Path = 'src/Search/CombatBeamSolver.Expansion.Replay.cs'; Text = 'incremental.AdvisoryUnattributedDamage == replayed.AdvisoryUnattributedDamage' }
+    @{ Path = 'src/Search/CombatBeamSolver.Transpositions.cs'; Text = 'left.AdvisoryUnattributedDamage == right.AdvisoryUnattributedDamage' }
+    @{ Path = 'src/Search/CombatBeamSolver.Models.cs'; Text = 'node.Snapshot.AdvisoryLastEnemyCycle, node.Snapshot.AdvisoryUnattributedDamage' }
+    @{ Path = 'src/Search/CombatBeamSolver.Multiplayer.cs'; Text = 'node.Snapshot.AdvisoryUnattributedDamage,' }
+    @{ Path = 'src/Search/CombatBeamSolver.MultiplayerEvaluation.cs'; Text = 'facts.LocalDamage, facts.TotalDamage, facts.UnattributedDamage' }
+    @{ Path = 'src/UI/SolverOverlaySnapshot.cs'; Text = 'if (result.AdvisorySharedDamageCredit > 0)' }
     @{ Path = 'src/UI/SolverActionBar.cs'; Text = '&& !state.AdviceOnly' }
 )
 foreach ($rule in $multiplayerAdviceRules) {

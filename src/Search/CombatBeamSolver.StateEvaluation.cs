@@ -513,7 +513,8 @@ internal sealed partial class CombatBeamSolver
             boundary);
         if (IsMultiplayerAdvice)
         {
-            int progress = ContributionProgress(enemyHp, combat.AdvisorLocalDamage, combat.AdvisorTotalDamage);
+            double progress = MultiplayerScoredProgress(enemyHp, combat.AdvisorLocalDamage, combat.AdvisorTotalDamage,
+                combat.AdvisorUnattributedDamage);
             double loss = Math.Max(0, root.InitialPlayerHp - player.CurrentHp)
                 + Math.Max(0, root.InitialPlayerMaxHp - player.MaxHp) + potionStrategicCost;
             // Continuous quota shortfall preserves near-target low-cost choices. Safety is
@@ -610,6 +611,7 @@ internal sealed partial class CombatBeamSolver
                 ? ContributionProgress(enemyHp, combat.AdvisorLocalDamage, combat.AdvisorTotalDamage) : 0,
             AdvisoryLocalDamage = IsMultiplayerAdvice ? combat.AdvisorLocalDamage : 0,
             AdvisoryTotalDamage = IsMultiplayerAdvice ? combat.AdvisorTotalDamage : 0,
+            AdvisoryUnattributedDamage = IsMultiplayerAdvice ? combat.AdvisorUnattributedDamage : 0,
             DefensiveBlockValue = IsMultiplayerAdvice
                 ? Math.Min(Math.Max(0, player.Block), Math.Max(0, player.MaxHp))
                 : MeasureDefensiveBlockReserve(combat, player, threat),

@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "scenarioId": "MULTIPLAYER-SHARED-DAMAGE",
+  "characterId": "SILENT",
+  "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+  "seed": "MPSHAREDDAMAGE20260923",
+  "timeoutSeconds": 120,
+  "headlessFastModeForTest": "Instant",
+  "fixedSearchBudget": true,
+  "searchBudgetOverrideMilliseconds": 1000,
+  "searchMaxDegreeOfParallelism": 1
+}

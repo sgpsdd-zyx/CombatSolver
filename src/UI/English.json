@@ -1,4 +1,5 @@
 {
+  "无明确来源的伤害按人数折算 {0:F1} 点参与选路，不计入本机贡献。": "Unattributed damage contributes {0:F1} points to route evaluation after division among players; it is not credited as your damage.",
   "玩家 {0}：{1}": "Player {0}: {1}",
   "自己：{0}": "You: {0}",
   "队友 {0}：{1}": "Teammate {0}: {1}",

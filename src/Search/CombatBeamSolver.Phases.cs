@@ -882,6 +882,9 @@ internal sealed partial class CombatBeamSolver
             result.AdvisoryComparisonCycles = ordering.AdvisoryComparisonCycles;
             result.AdvisoryObjective = _contributionObjective;
             result.AdvisoryPlannedContribution = _selectedContribution.Progress;
+            result.AdvisorySharedDamageCredit = IsMultiplayerAdvice && policy.Multiplayer!.CreditSharedDamage
+                ? (_contributionObjective!.ObservedUnattributedDamage + (double)_selectedContribution.UnattributedDamage)
+                    / _contributionObjective.ParticipantCount : 0;
             result.AdvisoryObjectiveWitness = _selectedContributionWitness;
             result.AdvisoryQuotaFrontierCount = _selectedQuotaFrontierCount;
             result.AdvisorySearchedEnemyCycles = _selectedSearchCycles;
@@ -1132,7 +1135,7 @@ internal sealed partial class CombatBeamSolver
                     root.Score,
                     root.Snapshot.AdvisoryLocalDamage,
                     root.Snapshot.AdvisoryTotalDamage,
-                    root.Snapshot.AdvisoryLastEnemyCycle));
+                    root.Snapshot.AdvisoryLastEnemyCycle, root.Snapshot.AdvisoryUnattributedDamage));
             else
                 _run.Transpositions.Add(
                     root.StateKey,
@@ -1145,7 +1148,7 @@ internal sealed partial class CombatBeamSolver
                         root.Score,
                         root.Snapshot.AdvisoryLocalDamage,
                         root.Snapshot.AdvisoryTotalDamage,
-                        root.Snapshot.AdvisoryLastEnemyCycle)));
+                        root.Snapshot.AdvisoryLastEnemyCycle, root.Snapshot.AdvisoryUnattributedDamage)));
         }
         if (frontier.Count == 0)
             throw new InvalidOperationException("固定搜索前缀与全部回合准备选牌分支都不相容。");

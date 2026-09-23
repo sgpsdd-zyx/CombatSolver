@@ -264,6 +264,8 @@ internal sealed record SolverOverlaySnapshot(
             if (result.AdvisoryObjective is { } objective)
             {
                 summaryText += "\n" + SolverText.Format($"本机阶段目标：{objective.TargetDamage} 点有效伤害，剩余 {objective.RemainingCycles} 个敌方周期；已付 {objective.PaidDamage}，方案预计 {result.AdvisoryPlannedContribution}。");
+                if (result.AdvisorySharedDamageCredit > 0)
+                    summaryText += "\n" + SolverText.Format($"无明确来源的伤害按人数折算 {result.AdvisorySharedDamageCredit:F1} 点参与选路，不计入本机贡献。");
                 summaryText += "\n" + SolverText.Get(result.AdvisoryObjectiveWitness
                     ? "已找到阶段达标方案，敌人仍按真实血量反击。"
                     : "阶段目标尚未证实；当前返回已找到的伤害与战损折中方案。");

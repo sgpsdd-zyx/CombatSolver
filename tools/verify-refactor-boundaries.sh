@@ -1340,6 +1340,16 @@ src/Search/CombatBeamSolver.Expansion.Replay.cs|CaptureMultiplayerCycle(simulato
 src/Search/SimulatedCombatState.cs|AdvisorLastEnemyCycle = source.AdvisorLastEnemyCycle;
 src/Search/MultiplayerCycleCheckpoint.cs|internal sealed record MultiplayerCycleCheckpoint(
 src/Search/CombatBeamSolver.Transpositions.cs|left.AdvisoryLastEnemyCycle == right.AdvisoryLastEnemyCycle
+src/Runtime/MultiplayerContributionCapture.cs|if (entry.Dealer == null) unattributed = checked(unattributed + damage);
+src/Search/MultiplayerContributionObjective.cs|internal double SharedProgress(
+src/Search/MultiplayerSearchPolicy.cs|public bool CreditSharedDamage { get; init; } = true;
+src/Search/SimulatedCombatState.cs|AdvisorUnattributedDamage = source.AdvisorUnattributedDamage;
+src/Search/CombatBeamSolver.Expansion.Replay.cs|incremental.AdvisoryUnattributedDamage == replayed.AdvisoryUnattributedDamage
+src/Search/CombatBeamSolver.Transpositions.cs|left.AdvisoryUnattributedDamage == right.AdvisoryUnattributedDamage
+src/Search/CombatBeamSolver.Models.cs|node.Snapshot.AdvisoryLastEnemyCycle, node.Snapshot.AdvisoryUnattributedDamage
+src/Search/CombatBeamSolver.Multiplayer.cs|node.Snapshot.AdvisoryUnattributedDamage,
+src/Search/CombatBeamSolver.MultiplayerEvaluation.cs|facts.LocalDamage, facts.TotalDamage, facts.UnattributedDamage
+src/UI/SolverOverlaySnapshot.cs|if (result.AdvisorySharedDamageCredit > 0)
 src/UI/SolverActionBar.cs|&& !state.AdviceOnly
 MULTIPLAYER_ADVICE_RULES
 

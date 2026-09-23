@@ -22,6 +22,10 @@ internal static class MultiplayerReviewContracts
 
     public static string Run(CombatState state, HarnessOptions options, MainLoopContext loop)
     {
+        if (options.Scenario.MultiplayerReviewStage == "shared-ranking")
+            return MultiplayerSharedRankingContracts.Run(state, options, loop);
+        if (options.Scenario.MultiplayerReviewStage is "race-dev" or "race-holdout")
+            return MultiplayerRaceExperiments.Run(state, options, loop);
         if (options.Scenario.MultiplayerReviewStage == "quota-contracts")
             return MultiplayerQuotaContracts.Run(state, options, loop);
         if (options.Scenario.MultiplayerReviewStage == "quota-selection")

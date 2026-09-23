@@ -4,6 +4,10 @@ internal readonly record struct MultiplayerPlanValue(bool Comparable, bool Won, 
     int Hp, int MaxHp, int HpLost, int DeathSaves, int EnemyHp, int AliveEnemies,
     int TeamSurvivors, int Potions, int PotionCost, int Progress, int Cycle)
 {
+    public long LocalDamage { get; init; }
+    public long TotalDamage { get; init; }
+    public long UnattributedDamage { get; init; }
+
     public int HealthCost(int rootHp, int rootMaxHp)
         => Math.Max(0, rootHp - Hp) + Math.Max(0, rootMaxHp - MaxHp);
 }

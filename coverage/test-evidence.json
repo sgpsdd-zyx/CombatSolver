@@ -1,4 +1,12 @@
 {
+  "MULTIPLAYER-SHARED-DAMAGE": {
+    "status": "Passed",
+    "level": "TargetedNativeFullPartyForkIncrementalAndOfflineScoring",
+    "procedure": "Run coverage/unattended/multiplayer-shared-damage.json in native macOS headless with a 120-second timeout and instance cleanup. Compare mixed poison settlement and a complete enemy/player cycle with full-party ContinuationStamp; exercise ledger/Fork/recalculation. Separately run shared-ranking, quota-contracts, quota-selection, fixed race-dev/race-holdout and H7/H14 experiments, solo sentinel, native UI and targeted coverage checks.",
+    "expected": "Actual null-dealer enemy damage is divided by participants only for multiplayer evaluation, never credited as local or known teammate damage. Preserve personal witnesses, healing/roster deadlines, branch isolation, exact replay, potion rules, manual input, 14-cycle limit and official solo behavior.",
+    "observed": "2026-09-23: native run macos-b3820fafd274467f93601a352371e20b passes 20 checks including mixed poison, root/sibling/child isolation, shared fractions, healing, idempotent recalculation, ready undo and native complete cycle. shared-ranking passes 16 checks for objective-aware frontier, attribution-separated dedup/TT/cache rebuild and eng/zhs/zht display; quota 32, potion 840 permutations/216 triples pass. Twelve exploratory/holdout roots x five variants, five final pairs and one frozen-DLL baseline total 71 searches; H7/H14 adds 14. Poison cases gain 15 damage at equal loss, one new low-HP root saves 4 HP at equal finish cycle under all three fixed peer scripts. Solo 92 fields and full root/actions/continuations match. UI catalog 459 passes, both native instances removed. Intercept remains UnsupportedEffect; no live-network/visible-performance or universal quality claim. Version 0.44.2 is prepared locally; no tag, push or external release.",
+    "evidence": "docs/strategy/multiplayer-shared-damage-20260923/implementation.md; docs/strategy/multiplayer-shared-damage-20260923/implementation-evidence.json; coverage/unattended/multiplayer-shared-damage.json; .local/multiplayer-race-20260923/"
+  },
   "MULTIPLAYER-CONTRIBUTION-20260922": {
     "status": "Passed",
     "level": "TargetedManagedNativeActionsIncrementalAndHeadlessUi",

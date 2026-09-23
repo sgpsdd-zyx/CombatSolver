@@ -1,5 +1,7 @@
 # CombatSolver 文档导航
 
+本地准备版 [0.44.2](releases/0.44.2-RELEASE_NOTES.md) 改善无来源伤害的多人选路价值，尚未对外发布；[实验与采用](strategy/multiplayer-shared-damage-20260923/implementation.md)记录本轮证据和未解决项。
+
 当前 fork 已发布 **0.44.1** 基于官方 `42e09028 / 0.44.0`，单人保持官方策略，多人采用[本机贡献目标](strategy/multiplayer-cooperative-planning-20260922/implementation.md)，取消每周期 3 HP 目标，不预测队友主动行为。见[发布状态](releases/0.44.1-PUBLISH.md)、[玩家更新日志](releases/0.44.1-RELEASE_NOTES.md)与[多人指南](multiplayer-advisor.md)。上游合并与第一轮归档见[合并记录](strategy/upstream-0440-merge-20260922.md)，官方标签不移动。
 
 - [GC 完成链修复与优化筛选](performance/gc-completion-allocation-20260921.md)：替代 #116/#120 的窄修复、失败复现与重新实测取舍。

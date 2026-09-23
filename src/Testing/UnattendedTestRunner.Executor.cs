@@ -39,6 +39,11 @@ internal sealed partial class UnattendedTestRunner
             bool expectedCardPlayed = request.ExpectedPlayedCardId == null;
             bool expectedPotionUsed = request.ExpectedUsedPotionId == null;
             bool expectedPlayerPowerObserved = request.ExpectedObservedPlayerPowerId == null;
+            if (request.ScenarioId == "MULTIPLAYER-SHARED-DAMAGE")
+            {
+                await runner.AssertMultiplayerSharedDamageAsync(combatState);
+                return Observation(combatEnded: false);
+            }
             if (request.ScenarioId == "MULTIPLAYER-RELIC-OWNERSHIP")
             {
                 await runner.AssertMultiplayerRelicOwnershipAsync(combatState);

@@ -902,6 +902,7 @@ internal sealed partial class CombatBeamSolver
             && incremental.TerminalStamp == replayed.TerminalStamp
             && (!IsMultiplayerAdvice || incremental.AdvisoryLocalDamage == replayed.AdvisoryLocalDamage
                 && incremental.AdvisoryTotalDamage == replayed.AdvisoryTotalDamage
+                && incremental.AdvisoryUnattributedDamage == replayed.AdvisoryUnattributedDamage
                 && incremental.AdvisoryContribution == replayed.AdvisoryContribution
                 && incremental.AdvisoryLastEnemyCycle == replayed.AdvisoryLastEnemyCycle)
             && incrementalStamp == replayedStamp

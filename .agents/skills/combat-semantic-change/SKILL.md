@@ -7,6 +7,8 @@ description: 修改 CombatSolver 的卡牌、Power、遗物、药水、球、怪
 
 本分支的多人军师语义必须单独验证：决策者是本机玩家，全队可变状态属于根/分支；队友未来不主动行动，但其阶段、被动、抽牌和受击仍结算。队友选择显式形成边界，不代选。修改全队回合或额外回合时对账完整 `ContinuationStamp`，并保留单人入口原行为；离线合同不代表真实联机验收。入口见 `docs/multiplayer-advisor.md`。
 
+原生中毒伤害的 dealer 为空，不能把 Power applier 或最后施加者伪造为扣血归属。多人仅额外记录无来源实际扣血，按值 Fork 并进入政策标签/增量核对，评分折算不改变实际伤害、个人目标或原生对账戳。`MULTIPLAYER-SHARED-DAMAGE` 覆盖混毒、全队原生周期、历史观察、治疗与分支隔离；`Intercept` 原型参考存在 `UnsupportedEffect`，不能把它计为已通过辅助语义。
+
 死亡玩家可留在阵容并保留 Power，活动 Hook 枚举不等于完整状态。多人根完整捕获，`SimulatedCombatState.Multiplayer` 持有逐玩家 Hook 资格并随 Fork、生产键及 ContinuationStamp 保存；死亡清理后停用、治疗复活时恢复，不能以 HP=0 提前停用而阻断救命效果。领域 Hook 补偿使用 `PowersForHooks`／逐玩家资格，完整快照与原生每回合能力初值继续保留残留状态。修改此边界以 `dead-teammate` 合同覆盖死亡、救命、复活、原生下一回合和根／Fork 隔离；不把其结果外推真实网络。
 
 遗物归属要分别核对根库存、逐持有者触发和显示来源。佩尔之眼的侧回合开始回调也观察未参加额外回合的持有者，不能先按参与者过滤而漏掉资格清除；持有者获得其他来源的额外回合时，原生 `AfterTakingExtraTurn` 同样消耗其佩尔之眼。分支状态和 Fork 用原有逐遗物状态表。最终路线触发记录以持有者、遗物和摘要去重，显示归属不进入战斗等价键。

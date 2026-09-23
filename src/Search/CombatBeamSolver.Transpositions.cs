@@ -11,7 +11,8 @@ internal sealed partial class CombatBeamSolver
         double Score,
         long AdvisoryLocalDamage = 0,
         long AdvisoryTotalDamage = 0,
-        MultiplayerCycleCheckpoint? AdvisoryLastEnemyCycle = null);
+        MultiplayerCycleCheckpoint? AdvisoryLastEnemyCycle = null,
+        long AdvisoryUnattributedDamage = 0);
 
     private sealed class TranspositionFrontier(TranspositionLabel first)
     {
@@ -56,6 +57,7 @@ internal sealed partial class CombatBeamSolver
                 && left.CumulativePlayerHpLost <= right.CumulativePlayerHpLost
                 && left.AdvisoryLocalDamage == right.AdvisoryLocalDamage
                 && left.AdvisoryTotalDamage == right.AdvisoryTotalDamage
+                && left.AdvisoryUnattributedDamage == right.AdvisoryUnattributedDamage
                 && left.AdvisoryLastEnemyCycle == right.AdvisoryLastEnemyCycle
                 && left.ActionCount <= right.ActionCount
                 && left.Score >= right.Score;

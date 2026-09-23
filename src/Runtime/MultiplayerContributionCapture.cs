@@ -12,18 +12,22 @@ internal static class MultiplayerContributionCapture
         Player player)
     {
         var combat = (SimulatedCombatState)simulator.State.CombatState;
-        long local = 0, total = 0;
+        long local = 0, total = 0, unattributed = 0;
         foreach (var entry in CombatManager.Instance.History.Entries.OfType<DamageReceivedEntry>())
         {
             if (entry.Receiver.Side != CombatSide.Enemy) continue;
             int damage = MultiplayerDamageAttribution.HpDamage(entry.Result);
             total = checked(total + damage);
             if (MultiplayerDamageAttribution.IsLocal(entry.Dealer, player)) local = checked(local + damage);
+            if (entry.Dealer == null) unattributed = checked(unattributed + damage);
         }
         return new(live.RoundNumber, combat.KnownEnemies.Sum(enemy =>
                 combat.EffectiveEnemyHp(enemy, simulator.State.GetCreature(enemy))),
             player.Creature.CurrentHp, player.Creature.MaxHp,
             Array.AsReadOnly(live.Players.Where(peer => peer.Creature.IsAlive)
-                .Select(peer => peer.NetId).Order().ToArray()), local, total);
+                .Select(peer => peer.NetId).Order().ToArray()), local, total)
+        {
+            UnattributedDamage = unattributed,
+        };
     }
 }

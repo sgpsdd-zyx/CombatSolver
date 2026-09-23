@@ -191,7 +191,8 @@ internal sealed partial class UnattendedTestRunner
                 runner._host.RootSceneContainer.SetCurrentScene(NRun.Create(savedState));
                 await RunManager.Instance.GenerateMap();
             }
-            else if (request.ScenarioId is "MULTIPLAYER-RELIC-OWNERSHIP" or "MULTIPLAYER-RELIC-EXTRA-TURN-SOURCE")
+            else if (request.ScenarioId is "MULTIPLAYER-RELIC-OWNERSHIP" or "MULTIPLAYER-RELIC-EXTRA-TURN-SOURCE"
+                or "MULTIPLAYER-SHARED-DAMAGE")
             {
                 var unlocks = SaveManager.Instance.GenerateUnlockStateFromProgress();
                 RunState multiplayer = RunState.CreateForNewRun(

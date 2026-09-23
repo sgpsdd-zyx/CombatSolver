@@ -10,7 +10,7 @@ internal sealed class MultiplayerContributionSession
     public MultiplayerContributionObjective Observe(MultiplayerRootObservation root, int horizon = 14)
     {
         if (_last != null && (root.Round < _last.Round || root.LocalDamage < _last.LocalDamage
-            || root.TotalDamage < _last.TotalDamage))
+            || root.TotalDamage < _last.TotalDamage || root.UnattributedDamage < _last.UnattributedDamage))
             throw new InvalidOperationException("Multiplayer stage observation moved backwards.");
         int paid = _start == null ? 0 : MultiplayerContributionObjective.NetProgress(
             _start.EnemyHp, root.EnemyHp, root.LocalDamage - _start.LocalDamage,
@@ -39,6 +39,7 @@ internal sealed class MultiplayerContributionSession
             PaidDamage = paid,
             ObservedLocalDamage = root.LocalDamage - _start!.LocalDamage,
             ObservedTotalDamage = root.TotalDamage - _start.TotalDamage,
+            ObservedUnattributedDamage = root.UnattributedDamage - _start.UnattributedDamage,
             RemainingCycles = Math.Clamp(_objective.DeadlineRound - root.Round + 1, 1, horizon),
         };
     }

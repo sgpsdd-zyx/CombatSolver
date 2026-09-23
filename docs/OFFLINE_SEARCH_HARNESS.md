@@ -17,6 +17,23 @@
 
 `--multiplayer-strategy-contracts` 现在等价于 `--multiplayer-review-contracts quota-contracts`：阶段期限、人数变化、净进展倒退、本机/队友归属、原生出牌与完整敌方周期、Fork、达标后反击、增量、极低预算 Unknown 和 eng/zhs/zht 投影。最小命令 `--encounter FUZZY_WURM_CRAWLER_WEAK --beam 8 --nodes 100 --budget-ms 3000 --dop 1`，输出 `quota-contracts.json`。`quota-selection` 另核对药水资格、最多4B前沿、840种排列和固定比较器；`quota-pressure` / `quota-defense` / `quota-investment` 用 Beam12/1400节点/3000ms 观察成长压力、低血防御与能力投资。默认十四周期上限，阶段默认三周期；所有测试不建立网络。
 
+`--multiplayer-review-contracts shared-ranking --character SILENT --encounter FUZZY_WURM_CRAWLER_WEAK --beam 2 --nodes 100 --budget-ms 1000 --dop 1` 检查无来源伤害折算的前沿/缓存及中英显示。CLI节点下限为100，夹具内部搜索用固定40节点；合成排名事实与原生毒结算分开，后者使用 `coverage/unattended/multiplayer-shared-damage.json`，Bash/PowerShell无人入口必须带实例清理开关。输出 `shared-ranking-contracts.json`。
+
+`race-dev` / `race-holdout` 对照当前共享信用关闭/开启，默认每根两个变体，必须DOP1且时间上限不超过5000ms。每个根单独进程运行，例如 Bash：
+
+```bash
+RACE_FIXTURE=poison dotnet tools/OfflineSearchHarness/bin/Release/net9.0/OfflineSearchHarness.dll \
+  --multiplayer-review-contracts race-dev --character SILENT \
+  --encounter FUZZY_WURM_CRAWLER_WEAK --seed RACE-DEV-20260923 \
+  --beam 12 --nodes 350 --budget-ms 3000 --dop 1 --out .local/race-poison
+```
+
+PowerShell在同一命令前设置 `$env:RACE_FIXTURE = 'poison'`，参数其余相同，完成后移除该变量。可另设 `RACE_VARIANT=0` 或 `1`、`RACE_ENEMY_HP`、`RACE_LOCAL_HP`；未知fixture/变体显式失败。当前0只关闭评分信用，仍保留真实归属计数；旧DLL通过 `OFFLINE_HARNESS_COMBATSOLVER_DLL` 指定且只能运行0。
+
+开发根为 `poison`、`fumes`、`mixed_poison`、`peer_guard`、`immediate_rescue`、`lift_rescue`、`defense`、`investment`、`burst`、`threat`；留出根名称为 `poison_holdout`、`fumes_holdout`、`peer_guard_holdout`、`protect_holdout`、`burst_holdout`、`threat_holdout`。固定根中存在刻意混用角色卡牌的合成局面。需要辅助目标时使用原生AnyAlly/AnyPlayer分类；未支持结算保留明确边界。
+
+输出 `race-experiments.json`：搜索的当前回合动作、固定预算、三种外部队友脚本（闲置/每周期一张防御/每周期一张打击）的实际五周期HP、存活、胜负及边界。搜索不读取这些脚本；外评续行使用固定防御/能力/ID顺序，不代表真人策略。不同变体和脚本不能计为独立战斗样本。最终采用、被拒绝五变体原型及已测根见[伤害归属实验](strategy/multiplayer-shared-damage-20260923/implementation.md)。
+
 旧 3 HP、A/C 覆盖与 `window-*` / `horizon-ordering` 的断言属于历史源码，当前命令显式拒绝并指向 `v0.43.6`。下列旧输入与证据保留作复现记录，不表示当前默认。新的实测数字和限制见[贡献策略实施](strategy/multiplayer-cooperative-planning-20260922/implementation.md)。
 
 `--multiplayer-long-term-contracts` 是首批多人长线收益诊断入口：固定双玩家、本机索引 1，用真实 Dark 球、星能和能力牌根捕获路径观察。它只消费已有 `SearchPathObserver` 的有界副本，记录路径在父内和保路边界的首次消失及已有评估字段；不改评分、Beam 席位、最终排序、状态键或预算。不能和 `--request` 或其他多人合同开关合用，不建立网络、不验证可见 UI；结果与限制见[长线收益归档](strategy/pro-long-term-20260918/README.md)。

@@ -448,6 +448,7 @@ internal sealed partial class SimulatedCombatState
         AdvisorLastEnemyCycle = source.AdvisorLastEnemyCycle;
         AdvisorLocalDamage = source.AdvisorLocalDamage;
         AdvisorTotalDamage = source.AdvisorTotalDamage;
+        AdvisorUnattributedDamage = source.AdvisorUnattributedDamage;
         AdvisorEtherealCounts = source.AdvisorEtherealCounts;
         _runRngSnapshot = source._runRngSnapshot;
         _currentActIndex = source._currentActIndex;

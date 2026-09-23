@@ -1251,6 +1251,7 @@ internal sealed class SimulationSnapshot(
     public int AdvisoryContribution { get; init; }
     public long AdvisoryLocalDamage { get; init; }
     public long AdvisoryTotalDamage { get; init; }
+    public long AdvisoryUnattributedDamage { get; init; }
     private string? _releasedBy;
     private int _releasedAtLine;
 
@@ -1441,6 +1442,7 @@ internal sealed class SolverResult
     public int AdvisoryComparisonCycles { get; internal set; }
     public MultiplayerContributionObjective? AdvisoryObjective { get; internal set; }
     public int AdvisoryPlannedContribution { get; internal set; }
+    public double AdvisorySharedDamageCredit { get; internal set; }
     public bool AdvisoryObjectiveWitness { get; internal set; }
     public int AdvisoryQuotaFrontierCount { get; internal set; }
     public int AdvisorySearchedEnemyCycles { get; internal set; }

@@ -1,0 +1,494 @@
+diff --git a/src/Runtime/MultiplayerContributionCapture.cs b/src/Runtime/MultiplayerContributionCapture.cs
+index 789d03ce..4def1a1d 100644
+--- a/src/Runtime/MultiplayerContributionCapture.cs
++++ b/src/Runtime/MultiplayerContributionCapture.cs
+@@ -12,18 +12,23 @@ internal static class MultiplayerContributionCapture
+         Player player)
+     {
+         var combat = (SimulatedCombatState)simulator.State.CombatState;
+-        long local = 0, total = 0;
++        long local = 0, total = 0, unattributed = 0;
+         foreach (var entry in CombatManager.Instance.History.Entries.OfType<DamageReceivedEntry>())
+         {
+             if (entry.Receiver.Side != CombatSide.Enemy) continue;
+             int damage = MultiplayerDamageAttribution.HpDamage(entry.Result);
+             total = checked(total + damage);
+             if (MultiplayerDamageAttribution.IsLocal(entry.Dealer, player)) local = checked(local + damage);
++            if (entry.Dealer == null) unattributed = checked(unattributed + damage);
+         }
+         return new(live.RoundNumber, combat.KnownEnemies.Sum(enemy =>
+                 combat.EffectiveEnemyHp(enemy, simulator.State.GetCreature(enemy))),
+             player.Creature.CurrentHp, player.Creature.MaxHp,
+             Array.AsReadOnly(live.Players.Where(peer => peer.Creature.IsAlive)
+-                .Select(peer => peer.NetId).Order().ToArray()), local, total);
++                .Select(peer => peer.NetId).Order().ToArray()), local, total)
++        {
++            UnattributedDamage = unattributed,
++            Enemies = combat.CaptureMultiplayerEnemyHealth(simulator),
++        };
+     }
+ }
+diff --git a/src/Runtime/MultiplayerContributionSession.cs b/src/Runtime/MultiplayerContributionSession.cs
+index 16658ae0..2a88038c 100644
+--- a/src/Runtime/MultiplayerContributionSession.cs
++++ b/src/Runtime/MultiplayerContributionSession.cs
+@@ -10,7 +10,7 @@ internal sealed class MultiplayerContributionSession
+     public MultiplayerContributionObjective Observe(MultiplayerRootObservation root, int horizon = 14)
+     {
+         if (_last != null && (root.Round < _last.Round || root.LocalDamage < _last.LocalDamage
+-            || root.TotalDamage < _last.TotalDamage))
++            || root.TotalDamage < _last.TotalDamage || root.UnattributedDamage < _last.UnattributedDamage))
+             throw new InvalidOperationException("Multiplayer stage observation moved backwards.");
+         int paid = _start == null ? 0 : MultiplayerContributionObjective.NetProgress(
+             _start.EnemyHp, root.EnemyHp, root.LocalDamage - _start.LocalDamage,
+@@ -39,6 +39,7 @@ internal sealed class MultiplayerContributionSession
+             PaidDamage = paid,
+             ObservedLocalDamage = root.LocalDamage - _start!.LocalDamage,
+             ObservedTotalDamage = root.TotalDamage - _start.TotalDamage,
++            ObservedUnattributedDamage = root.UnattributedDamage - _start.UnattributedDamage,
+             RemainingCycles = Math.Clamp(_objective.DeadlineRound - root.Round + 1, 1, horizon),
+         };
+     }
+diff --git a/src/Search/CombatBeamSolver.Expansion.Candidates.cs b/src/Search/CombatBeamSolver.Expansion.Candidates.cs
+index 4c7e3d70..ed8e87fc 100644
+--- a/src/Search/CombatBeamSolver.Expansion.Candidates.cs
++++ b/src/Search/CombatBeamSolver.Expansion.Candidates.cs
+@@ -885,7 +885,7 @@ internal sealed partial class CombatBeamSolver
+             candidate.Score,
+             candidate.Snapshot.AdvisoryLocalDamage,
+             candidate.Snapshot.AdvisoryTotalDamage,
+-            candidate.Snapshot.AdvisoryLastEnemyCycle);
++            candidate.Snapshot.AdvisoryLastEnemyCycle, candidate.Snapshot.AdvisoryUnattributedDamage);
+         if (!_run.Transpositions.TryGetValue(candidate.StateKey, out TranspositionFrontier? frontier))
+         {
+             if (AtTranspositionEntryLimit())
+@@ -947,7 +947,7 @@ internal sealed partial class CombatBeamSolver
+             node.Score,
+             node.Snapshot.AdvisoryLocalDamage,
+             node.Snapshot.AdvisoryTotalDamage,
+-            node.Snapshot.AdvisoryLastEnemyCycle);
++            node.Snapshot.AdvisoryLastEnemyCycle, node.Snapshot.AdvisoryUnattributedDamage);
+         if (!_run.ExpandedTranspositions.TryGetValue(node.StateKey, out TranspositionFrontier? frontier))
+         {
+             if (AtTranspositionEntryLimit())
+diff --git a/src/Search/CombatBeamSolver.Expansion.Replay.cs b/src/Search/CombatBeamSolver.Expansion.Replay.cs
+index cd1d00b5..ed02acf5 100644
+--- a/src/Search/CombatBeamSolver.Expansion.Replay.cs
++++ b/src/Search/CombatBeamSolver.Expansion.Replay.cs
+@@ -902,6 +902,8 @@ internal sealed partial class CombatBeamSolver
+             && incremental.TerminalStamp == replayed.TerminalStamp
+             && (!IsMultiplayerAdvice || incremental.AdvisoryLocalDamage == replayed.AdvisoryLocalDamage
+                 && incremental.AdvisoryTotalDamage == replayed.AdvisoryTotalDamage
++                && incremental.AdvisoryUnattributedDamage == replayed.AdvisoryUnattributedDamage
++                && Equals(incremental.AdvisoryEnemies, replayed.AdvisoryEnemies)
+                 && incremental.AdvisoryContribution == replayed.AdvisoryContribution
+                 && incremental.AdvisoryLastEnemyCycle == replayed.AdvisoryLastEnemyCycle)
+             && incrementalStamp == replayedStamp
+diff --git a/src/Search/CombatBeamSolver.Multiplayer.cs b/src/Search/CombatBeamSolver.Multiplayer.cs
+index 915e2509..ba3a43e0 100644
+--- a/src/Search/CombatBeamSolver.Multiplayer.cs
++++ b/src/Search/CombatBeamSolver.Multiplayer.cs
+@@ -49,6 +49,9 @@ internal sealed partial class CombatBeamSolver
+             MultiplayerPlanValue value = MultiplayerFactsAt(candidate, ordering.EnemyCycles);
+             if (frontier.Any(other => (!other.HasPredictionRisk || candidate.HasPredictionRisk)
+                 && FirstCycleRisk(other) <= FirstCycleRisk(candidate)
++                && (policy.Multiplayer!.Evaluation == MultiplayerEvaluationFeatures.None
++                    || MultiplayerObjectiveCost(other, MultiplayerFactsAt(other, ordering.EnemyCycles))
++                        <= MultiplayerObjectiveCost(candidate, value))
+                 && MultiplayerTailValue(other, MultiplayerFactsAt(other, ordering.EnemyCycles))
+                     >= MultiplayerTailValue(candidate, value)
+                 && MultiplayerQuotaSelection.Dominates(
+@@ -56,6 +59,9 @@ internal sealed partial class CombatBeamSolver
+                 continue;
+             frontier.RemoveAll(other => (!candidate.HasPredictionRisk || other.HasPredictionRisk)
+                 && FirstCycleRisk(candidate) <= FirstCycleRisk(other)
++                && (policy.Multiplayer!.Evaluation == MultiplayerEvaluationFeatures.None
++                    || MultiplayerObjectiveCost(candidate, value)
++                        <= MultiplayerObjectiveCost(other, MultiplayerFactsAt(other, ordering.EnemyCycles)))
+                 && MultiplayerTailValue(candidate, value)
+                     >= MultiplayerTailValue(other, MultiplayerFactsAt(other, ordering.EnemyCycles))
+                 && MultiplayerQuotaSelection.Dominates(value,
+@@ -138,6 +144,7 @@ internal sealed partial class CombatBeamSolver
+             }
+             var ranked = nodes.GroupBy(node => (node.StateKey,
+                     node.Snapshot.AdvisoryLocalDamage, node.Snapshot.AdvisoryTotalDamage,
++                    node.Snapshot.AdvisoryUnattributedDamage,
+                     node.Snapshot.AdvisoryLastEnemyCycle))
+                 .Select(group => group.OrderByDescending(node => node.Score)
+                     .ThenBy(node => node.Snapshot.CumulativePlayerHpLost).ThenBy(node => node.ActionCount).First())
+diff --git a/src/Search/CombatBeamSolver.MultiplayerEvaluation.cs b/src/Search/CombatBeamSolver.MultiplayerEvaluation.cs
+index df2e199f..237861b7 100644
+--- a/src/Search/CombatBeamSolver.MultiplayerEvaluation.cs
++++ b/src/Search/CombatBeamSolver.MultiplayerEvaluation.cs
+@@ -6,6 +6,20 @@ internal sealed partial class CombatBeamSolver
+ {
+     private sealed record MultiplayerPlanOrdering(int EnemyCycles, Comparison<SearchNode> Compare);
+     private int _maximumObservedEnemyCycles;
++    private readonly MultiplayerThreatPressure? _multiplayerThreat = policy.Multiplayer == null ? null : new(root);
++
++    private bool UseMultiplayerEvaluation(MultiplayerEvaluationFeatures feature)
++        => (policy.Multiplayer!.Evaluation & feature) != 0;
++
++    private double MultiplayerScoredProgress(int enemyHp, long local, long total, long shared)
++        => UseMultiplayerEvaluation(MultiplayerEvaluationFeatures.SharedDamage)
++            ? _contributionObjective!.SharedProgress(enemyHp, local, total, shared)
++            : ContributionProgress(enemyHp, local, total);
++
++    private double MultiplayerPressure(MultiplayerEnemyHealth? enemies, int enemyHp)
++        => 0.25 * root.InitialPlayerHp * (UseMultiplayerEvaluation(MultiplayerEvaluationFeatures.ThreatPressure)
++            ? _multiplayerThreat!.Fraction(enemies, enemyHp, root.MultiplayerObservation!.EnemyHp)
++            : enemyHp / Math.Max(1d, root.MultiplayerObservation!.EnemyHp));
+ 
+     private void CaptureMultiplayerCycle(CombatPredictionSimulator simulator, SimulatedCombatState combat)
+     {
+@@ -25,6 +39,8 @@ internal sealed partial class CombatBeamSolver
+             combat.PotionUses.Count, combat.AdvisorLastEnemyCycle)
+         {
+             LocalDamage = combat.AdvisorLocalDamage, TotalDamage = combat.AdvisorTotalDamage,
++            UnattributedDamage = combat.AdvisorUnattributedDamage,
++            Enemies = combat.CaptureMultiplayerEnemyHealth(simulator),
+             AliveEnemies = combat.KnownEnemies.Count(enemy => combat.ContainsCreature(enemy)
+                 && combat.EffectiveEnemyHp(enemy, simulator.State.GetCreature(enemy)) > 0),
+             PotionCost = combat.PotionUses.Sum(use => use.StrategicHpCost), MaxHp = player.MaxHp,
+@@ -52,12 +68,20 @@ internal sealed partial class CombatBeamSolver
+             return new(true, false, checkpoint.Hp <= 0, checkpoint.Hp, checkpoint.MaxHp,
+                 checkpoint.HpLost, checkpoint.DeathSaves, checkpoint.EnemyHp, checkpoint.AliveEnemies,
+                 checkpoint.TeamSurvivors, checkpoint.Potions, checkpoint.PotionCost,
+-                ContributionProgress(checkpoint.EnemyHp, checkpoint.LocalDamage, checkpoint.TotalDamage), depth);
++                ContributionProgress(checkpoint.EnemyHp, checkpoint.LocalDamage, checkpoint.TotalDamage), depth)
++            {
++                LocalDamage = checkpoint.LocalDamage, TotalDamage = checkpoint.TotalDamage,
++                UnattributedDamage = checkpoint.UnattributedDamage, Enemies = checkpoint.Enemies,
++            };
+         return new(snapshot.AllEnemiesDead || snapshot.PlayerDead, snapshot.AllEnemiesDead, snapshot.PlayerDead,
+             snapshot.PlayerHp, snapshot.PlayerMaxHp, snapshot.CumulativePlayerHpLost,
+             snapshot.DeathSaveUseCount, snapshot.EnemyHp, snapshot.AliveEnemyCount,
+             snapshot.TeamSurvivors, snapshot.PotionUseCount, snapshot.PotionStrategicCost,
+-            snapshot.AdvisoryContribution, snapshot.AdvisoryEnemyCycles);
++            snapshot.AdvisoryContribution, snapshot.AdvisoryEnemyCycles)
++        {
++            LocalDamage = snapshot.AdvisoryLocalDamage, TotalDamage = snapshot.AdvisoryTotalDamage,
++            UnattributedDamage = snapshot.AdvisoryUnattributedDamage, Enemies = snapshot.AdvisoryEnemies,
++        };
+     }
+ 
+     private int ContributionProgress(int enemyHp, long localDamage, long totalDamage)
+@@ -78,13 +102,15 @@ internal sealed partial class CombatBeamSolver
+         if (tail == null) return 0;
+         if (tail.Cycle <= stage.Cycle)
+             return node.Snapshot.PlayerDead && !stage.Dead ? -root.InitialPlayerHp : 0;
+-        int progress = ContributionProgress(tail.EnemyHp, tail.LocalDamage, tail.TotalDamage);
+-        double gain = root.InitialPlayerHp * Math.Clamp((progress - (double)stage.Progress)
++        double progress = MultiplayerScoredProgress(tail.EnemyHp, tail.LocalDamage, tail.TotalDamage, tail.UnattributedDamage);
++        double stageProgress = MultiplayerScoredProgress(stage.EnemyHp, stage.LocalDamage, stage.TotalDamage, stage.UnattributedDamage);
++        double gain = root.InitialPlayerHp * Math.Clamp((progress - stageProgress)
+             / Math.Max(1, _contributionObjective!.TargetDamage), 0, 1);
+         double cost = Math.Max(0, stage.Hp - tail.Hp) + Math.Max(0, stage.MaxHp - tail.MaxHp)
+             + Math.Max(0, tail.PotionCost - stage.PotionCost)
+-            + Math.Max(0, tail.DeathSaves - stage.DeathSaves) * (double)root.InitialPlayerHp
+-            + Math.Max(0, stage.TeamSurvivors - tail.TeamSurvivors) * (double)root.InitialPlayerHp;
++            + Math.Max(0, tail.DeathSaves - stage.DeathSaves) * (double)root.InitialPlayerHp;
++        if (!UseMultiplayerEvaluation(MultiplayerEvaluationFeatures.DiscountPeerRisk))
++            cost += Math.Max(0, stage.TeamSurvivors - tail.TeamSurvivors) * (double)root.InitialPlayerHp;
+         if (node.Snapshot.PlayerDead) cost += root.InitialPlayerHp;
+         // Discount uncertainty with distance, not average damage over time: averaging
+         // erased already-realized payback from long-lived setup cards.
+@@ -92,11 +118,28 @@ internal sealed partial class CombatBeamSolver
+     }
+ 
+     private double MultiplayerObjectiveCost(SearchNode node, MultiplayerPlanValue facts)
+-        => MultiplayerQuotaSelection.Cost(facts, _contributionObjective!, root.InitialPlayerHp,
+-            root.InitialPlayerMaxHp) - 0.5 * MultiplayerTailValue(node, facts)
+-            // Unknown ownership (for example mixed poison) never pays the local quota;
+-            // its actual effect still changes the common reference battle's pressure.
+-            + 0.25 * root.InitialPlayerHp * facts.EnemyHp / Math.Max(1d, root.MultiplayerObservation!.EnemyHp);
++    {
++        double cost = MultiplayerQuotaSelection.Cost(facts, _contributionObjective!, root.InitialPlayerHp,
++            root.InitialPlayerMaxHp);
++        if (UseMultiplayerEvaluation(MultiplayerEvaluationFeatures.SharedDamage) && !facts.Won)
++            cost += _contributionObjective!.DeficitCost(MultiplayerScoredProgress(facts.EnemyHp,
++                facts.LocalDamage, facts.TotalDamage, facts.UnattributedDamage), root.InitialPlayerHp)
++                - _contributionObjective.DeficitCost(facts.Progress, root.InitialPlayerHp);
++        if (UseMultiplayerEvaluation(MultiplayerEvaluationFeatures.DiscountPeerRisk))
++        {
++            cost -= Math.Max(0, _contributionObjective!.ParticipantCount - facts.TeamSurvivors) * (double)root.InitialPlayerHp;
++            int survivors = _contributionObjective.ParticipantCount;
++            for (var cycle = node.Snapshot.AdvisoryLastEnemyCycle; cycle != null; cycle = cycle.Previous)
++            {
++                if (cycle.Cycle > facts.Cycle) continue;
++                int priorSurvivors = cycle.Previous?.TeamSurvivors ?? survivors;
++                int localDeath = cycle.Hp <= 0 && (cycle.Previous?.Hp ?? root.InitialPlayerHp) > 0 ? 1 : 0;
++                int peerDeaths = Math.Max(0, priorSurvivors - cycle.TeamSurvivors - localDeath);
++                cost += peerDeaths * (double)root.InitialPlayerHp / cycle.Cycle;
++            }
++        }
++        return cost - 0.5 * MultiplayerTailValue(node, facts) + MultiplayerPressure(facts.Enemies, facts.EnemyHp);
++    }
+ 
+     private int CompareMultiplayerAtCycle(SearchNode left, SearchNode right, int depth)
+     {
+diff --git a/src/Search/CombatBeamSolver.Phases.cs b/src/Search/CombatBeamSolver.Phases.cs
+index f5ba2e72..33c3e345 100644
+--- a/src/Search/CombatBeamSolver.Phases.cs
++++ b/src/Search/CombatBeamSolver.Phases.cs
+@@ -1132,7 +1132,7 @@ internal sealed partial class CombatBeamSolver
+                     root.Score,
+                     root.Snapshot.AdvisoryLocalDamage,
+                     root.Snapshot.AdvisoryTotalDamage,
+-                    root.Snapshot.AdvisoryLastEnemyCycle));
++                    root.Snapshot.AdvisoryLastEnemyCycle, root.Snapshot.AdvisoryUnattributedDamage));
+             else
+                 _run.Transpositions.Add(
+                     root.StateKey,
+@@ -1145,7 +1145,7 @@ internal sealed partial class CombatBeamSolver
+                         root.Score,
+                         root.Snapshot.AdvisoryLocalDamage,
+                         root.Snapshot.AdvisoryTotalDamage,
+-                        root.Snapshot.AdvisoryLastEnemyCycle)));
++                        root.Snapshot.AdvisoryLastEnemyCycle, root.Snapshot.AdvisoryUnattributedDamage)));
+         }
+         if (frontier.Count == 0)
+             throw new InvalidOperationException("固定搜索前缀与全部回合准备选牌分支都不相容。");
+diff --git a/src/Search/CombatBeamSolver.StateEvaluation.cs b/src/Search/CombatBeamSolver.StateEvaluation.cs
+index 20741e4c..9d5dcf05 100644
+--- a/src/Search/CombatBeamSolver.StateEvaluation.cs
++++ b/src/Search/CombatBeamSolver.StateEvaluation.cs
+@@ -511,16 +511,19 @@ internal sealed partial class CombatBeamSolver
+             aliveEnemyMask,
+             potionInventoryKey,
+             boundary);
++        MultiplayerEnemyHealth? advisoryEnemies = IsMultiplayerAdvice ? combat.CaptureMultiplayerEnemyHealth(simulator) : null;
+         if (IsMultiplayerAdvice)
+         {
+-            int progress = ContributionProgress(enemyHp, combat.AdvisorLocalDamage, combat.AdvisorTotalDamage);
++            double progress = MultiplayerScoredProgress(enemyHp, combat.AdvisorLocalDamage, combat.AdvisorTotalDamage,
++                combat.AdvisorUnattributedDamage);
+             double loss = Math.Max(0, root.InitialPlayerHp - player.CurrentHp)
+                 + Math.Max(0, root.InitialPlayerMaxHp - player.MaxHp) + potionStrategicCost;
+             // Continuous quota shortfall preserves near-target low-cost choices. Safety is
+             // decided at completed enemy cycles, never from this exploration estimate.
+             score = (dead ? -1e12 : 0) + (won ? 1e11 : 0)
+                 - (loss + _contributionObjective!.DeficitCost(progress, root.InitialPlayerHp)) * 100d
+-                - enemyHp
++                - (UseMultiplayerEvaluation(MultiplayerEvaluationFeatures.ThreatPressure)
++                    ? 100 * MultiplayerPressure(advisoryEnemies, enemyHp) : enemyHp)
+                 + persistentBuffValue * 20d + reachableHandValue + playerState.Energy * 2d
+                 - potionUseCount * 0.1d - actionCount * 0.001d;
+         }
+@@ -610,6 +613,8 @@ internal sealed partial class CombatBeamSolver
+                 ? ContributionProgress(enemyHp, combat.AdvisorLocalDamage, combat.AdvisorTotalDamage) : 0,
+             AdvisoryLocalDamage = IsMultiplayerAdvice ? combat.AdvisorLocalDamage : 0,
+             AdvisoryTotalDamage = IsMultiplayerAdvice ? combat.AdvisorTotalDamage : 0,
++            AdvisoryUnattributedDamage = IsMultiplayerAdvice ? combat.AdvisorUnattributedDamage : 0,
++            AdvisoryEnemies = advisoryEnemies,
+             DefensiveBlockValue = IsMultiplayerAdvice
+                 ? Math.Min(Math.Max(0, player.Block), Math.Max(0, player.MaxHp))
+                 : MeasureDefensiveBlockReserve(combat, player, threat),
+diff --git a/src/Search/CombatBeamSolver.Transpositions.cs b/src/Search/CombatBeamSolver.Transpositions.cs
+index a4c082a1..11672778 100644
+--- a/src/Search/CombatBeamSolver.Transpositions.cs
++++ b/src/Search/CombatBeamSolver.Transpositions.cs
+@@ -11,7 +11,8 @@ internal sealed partial class CombatBeamSolver
+         double Score,
+         long AdvisoryLocalDamage = 0,
+         long AdvisoryTotalDamage = 0,
+-        MultiplayerCycleCheckpoint? AdvisoryLastEnemyCycle = null);
++        MultiplayerCycleCheckpoint? AdvisoryLastEnemyCycle = null,
++        long AdvisoryUnattributedDamage = 0);
+ 
+     private sealed class TranspositionFrontier(TranspositionLabel first)
+     {
+@@ -56,6 +57,7 @@ internal sealed partial class CombatBeamSolver
+                 && left.CumulativePlayerHpLost <= right.CumulativePlayerHpLost
+                 && left.AdvisoryLocalDamage == right.AdvisoryLocalDamage
+                 && left.AdvisoryTotalDamage == right.AdvisoryTotalDamage
++                && left.AdvisoryUnattributedDamage == right.AdvisoryUnattributedDamage
+                 && left.AdvisoryLastEnemyCycle == right.AdvisoryLastEnemyCycle
+                 && left.ActionCount <= right.ActionCount
+                 && left.Score >= right.Score;
+diff --git a/src/Search/CombatPlan.cs b/src/Search/CombatPlan.cs
+index eff30320..14d86e97 100644
+--- a/src/Search/CombatPlan.cs
++++ b/src/Search/CombatPlan.cs
+@@ -1251,6 +1251,8 @@ internal sealed class SimulationSnapshot(
+     public int AdvisoryContribution { get; init; }
+     public long AdvisoryLocalDamage { get; init; }
+     public long AdvisoryTotalDamage { get; init; }
++    public long AdvisoryUnattributedDamage { get; init; }
++    public MultiplayerEnemyHealth? AdvisoryEnemies { get; init; }
+     private string? _releasedBy;
+     private int _releasedAtLine;
+ 
+diff --git a/src/Search/MultiplayerContributionObjective.cs b/src/Search/MultiplayerContributionObjective.cs
+index ad67428c..68147e6f 100644
+--- a/src/Search/MultiplayerContributionObjective.cs
++++ b/src/Search/MultiplayerContributionObjective.cs
+@@ -1,7 +1,11 @@
+ namespace CombatSolver;
+ 
+ internal sealed record MultiplayerRootObservation(int Round, int EnemyHp, int LocalHp,
+-    int LocalMaxHp, IReadOnlyList<ulong> Participants, long LocalDamage, long TotalDamage);
++    int LocalMaxHp, IReadOnlyList<ulong> Participants, long LocalDamage, long TotalDamage)
++{
++    public long UnattributedDamage { get; init; }
++    public MultiplayerEnemyHealth? Enemies { get; init; }
++}
+ 
+ internal sealed record MultiplayerContributionObjective(
+     int Stage, int StartedRound, int DeadlineRound, int TargetDamage, int PaidDamage,
+@@ -12,6 +16,7 @@ internal sealed record MultiplayerContributionObjective(
+     public int StageEnemyHp { get; init; }
+     public long ObservedLocalDamage { get; init; }
+     public long ObservedTotalDamage { get; init; }
++    public long ObservedUnattributedDamage { get; init; }
+ 
+     public static MultiplayerContributionObjective Start(MultiplayerRootObservation root, int horizon)
+         => new(1, root.Round, checked(root.Round + Math.Min(StageCycles, horizon) - 1),
+@@ -39,6 +44,21 @@ internal sealed record MultiplayerContributionObjective(
+     }
+ 
+     public double DeficitCost(int progress, int localHp)
++        => DeficitCost((double)progress, localHp);
++
++    internal double SharedProgress(int enemyHp, long localDamage, long totalDamage, long unattributedDamage)
++    {
++        long local = checked(ObservedLocalDamage + localDamage);
++        long total = checked(ObservedTotalDamage + totalDamage);
++        long shared = checked(ObservedUnattributedDamage + unattributedDamage);
++        if (shared < 0 || local < 0 || total < local || shared > total - local)
++            throw new InvalidOperationException("Invalid multiplayer unattributed damage ledger.");
++        // Shared damage reduces everyone's outstanding work without acquiring a fictional dealer.
++        double credit = local + shared / (double)ParticipantCount;
++        return credit + Math.Min(0, StageEnemyHp - (double)enemyHp - total);
++    }
++
++    internal double DeficitCost(double progress, int localHp)
+     {
+         double deficit = Math.Clamp((TargetDamage - (double)progress) / Math.Max(1, TargetDamage), 0, 2);
+         return Math.Max(1, localHp) * deficit * deficit;
+diff --git a/src/Search/MultiplayerCycleCheckpoint.cs b/src/Search/MultiplayerCycleCheckpoint.cs
+index 2f12fc08..7d3d4aef 100644
+--- a/src/Search/MultiplayerCycleCheckpoint.cs
++++ b/src/Search/MultiplayerCycleCheckpoint.cs
+@@ -7,6 +7,8 @@ internal sealed record MultiplayerCycleCheckpoint(int Cycle, int Hp, int HpLost,
+ {
+     public long LocalDamage { get; init; }
+     public long TotalDamage { get; init; }
++    public long UnattributedDamage { get; init; }
++    public MultiplayerEnemyHealth? Enemies { get; init; }
+     public int AliveEnemies { get; init; }
+     public int PotionCost { get; init; }
+     public int MaxHp { get; init; }
+diff --git a/src/Search/MultiplayerPlanValue.cs b/src/Search/MultiplayerPlanValue.cs
+index 325f494d..879f87ec 100644
+--- a/src/Search/MultiplayerPlanValue.cs
++++ b/src/Search/MultiplayerPlanValue.cs
+@@ -4,6 +4,11 @@ internal readonly record struct MultiplayerPlanValue(bool Comparable, bool Won,
+     int Hp, int MaxHp, int HpLost, int DeathSaves, int EnemyHp, int AliveEnemies,
+     int TeamSurvivors, int Potions, int PotionCost, int Progress, int Cycle)
+ {
++    public long LocalDamage { get; init; }
++    public long TotalDamage { get; init; }
++    public long UnattributedDamage { get; init; }
++    public MultiplayerEnemyHealth? Enemies { get; init; }
++
+     public int HealthCost(int rootHp, int rootMaxHp)
+         => Math.Max(0, rootHp - Hp) + Math.Max(0, rootMaxHp - MaxHp);
+ }
+diff --git a/src/Search/MultiplayerSearchPolicy.cs b/src/Search/MultiplayerSearchPolicy.cs
+index 0d75d3a1..25211f6e 100644
+--- a/src/Search/MultiplayerSearchPolicy.cs
++++ b/src/Search/MultiplayerSearchPolicy.cs
+@@ -7,6 +7,7 @@ internal sealed record MultiplayerSearchPolicy(
+     internal const int LongHorizonBudgetMultiplier = 2;
+ 
+     public MultiplayerContributionObjective? Objective { get; init; }
++    public MultiplayerEvaluationFeatures Evaluation { get; init; }
+ 
+     public SolverSearchProfile ResolveSearchProfile(SearchPolicySnapshot policy)
+     {
+diff --git a/src/Search/SimulatedCombatState.CardEventHistory.cs b/src/Search/SimulatedCombatState.CardEventHistory.cs
+index 69dcc8af..a8c811d1 100644
+--- a/src/Search/SimulatedCombatState.CardEventHistory.cs
++++ b/src/Search/SimulatedCombatState.CardEventHistory.cs
+@@ -185,6 +185,8 @@ internal sealed partial class SimulatedCombatState
+             AdvisorTotalDamage = checked(AdvisorTotalDamage + damage);
+             if (MultiplayerDamageAttribution.IsLocal(dealer, advisor))
+                 AdvisorLocalDamage = checked(AdvisorLocalDamage + damage);
++            if (dealer == null)
++                AdvisorUnattributedDamage = checked(AdvisorUnattributedDamage + damage);
+         }
+         if (result.UnblockedDamage > 0)
+         {
+diff --git a/src/Search/SimulatedCombatState.Multiplayer.cs b/src/Search/SimulatedCombatState.Multiplayer.cs
+index 227b4752..b31ecb83 100644
+--- a/src/Search/SimulatedCombatState.Multiplayer.cs
++++ b/src/Search/SimulatedCombatState.Multiplayer.cs
+@@ -1,3 +1,4 @@
++using CombatSolver.Engine.InCombat.Simulation;
+ using MegaCrit.Sts2.Core.Entities.Players;
+ using MegaCrit.Sts2.Core.Entities.Creatures;
+ using MegaCrit.Sts2.Core.Models;
+@@ -15,10 +16,24 @@ internal sealed partial class SimulatedCombatState
+     internal MultiplayerCycleCheckpoint? AdvisorLastEnemyCycle { get; set; }
+     internal long AdvisorLocalDamage { get; private set; }
+     internal long AdvisorTotalDamage { get; private set; }
++    internal long AdvisorUnattributedDamage { get; private set; }
+     internal IReadOnlyDictionary<Player, int>? AdvisorEtherealCounts { get; set; }
+     internal bool ExternalChoiceReached { get; private set; }
+     private ForkableSet<Player>? _inactiveMultiplayerPlayers;
+ 
++    internal MultiplayerEnemyHealth CaptureMultiplayerEnemyHealth(CombatPredictionSimulator simulator)
++    {
++        EnemyDurabilityVectorBuilder health = new(KnownEnemies.Count);
++        for (int index = 0; index < KnownEnemies.Count; index++)
++        {
++            Creature enemy = KnownEnemies[index];
++            health.Set(index, new(enemy.CombatId
++                ?? throw new InvalidOperationException("Multiplayer enemy has no combat identity."),
++                EffectiveEnemyHp(enemy, simulator.State.GetCreature(enemy))));
++        }
++        return new(health.Build());
++    }
++
+     internal bool IsPlayerActiveForHooks(Player player)
+         => AdvisorPlayer == null || _inactiveMultiplayerPlayers?.Contains(player) != true;
+ 
+diff --git a/src/Search/SimulatedCombatState.cs b/src/Search/SimulatedCombatState.cs
+index 9274a32b..6912dde5 100644
+--- a/src/Search/SimulatedCombatState.cs
++++ b/src/Search/SimulatedCombatState.cs
+@@ -448,6 +448,7 @@ internal sealed partial class SimulatedCombatState
+         AdvisorLastEnemyCycle = source.AdvisorLastEnemyCycle;
+         AdvisorLocalDamage = source.AdvisorLocalDamage;
+         AdvisorTotalDamage = source.AdvisorTotalDamage;
++        AdvisorUnattributedDamage = source.AdvisorUnattributedDamage;
+         AdvisorEtherealCounts = source.AdvisorEtherealCounts;
+         _runRngSnapshot = source._runRngSnapshot;
+         _currentActIndex = source._currentActIndex;
+diff --git a/tools/OfflineSearchHarness/MultiplayerReviewContracts.cs b/tools/OfflineSearchHarness/MultiplayerReviewContracts.cs
+index 344e957c..c76f24c5 100644
+--- a/tools/OfflineSearchHarness/MultiplayerReviewContracts.cs
++++ b/tools/OfflineSearchHarness/MultiplayerReviewContracts.cs
+@@ -22,6 +22,8 @@ internal static class MultiplayerReviewContracts
+ 
+     public static string Run(CombatState state, HarnessOptions options, MainLoopContext loop)
+     {
++        if (options.Scenario.MultiplayerReviewStage is "race-dev" or "race-holdout")
++            return MultiplayerRaceExperiments.Run(state, options, loop);
+         if (options.Scenario.MultiplayerReviewStage == "quota-contracts")
+             return MultiplayerQuotaContracts.Run(state, options, loop);
+         if (options.Scenario.MultiplayerReviewStage == "quota-selection")
+diff --git a/tools/OfflineSearchHarness/Program.cs b/tools/OfflineSearchHarness/Program.cs
+index 27c537a0..fd1f02f3 100644
+--- a/tools/OfflineSearchHarness/Program.cs
++++ b/tools/OfflineSearchHarness/Program.cs
+@@ -645,7 +645,7 @@ internal sealed record HarnessOptions
+             throw new ArgumentException("--multiplayer-long-term-contracts requires its own two-player fixture.");
+         if (multiplayerReviewStage is "horizon-ordering" || multiplayerReviewStage?.StartsWith("window-", StringComparison.Ordinal) == true)
+             throw new ArgumentException("This historical ordering contract requires the v0.43.6 source; use quota-selection or quota-contracts for the current policy.");
+-        if (multiplayerReviewStage != null && (multiplayerReviewStage is not ("quota-selection" or "quota-contracts" or "quota-pressure" or "quota-defense" or "quota-investment" or "dead-teammate" or "upstream-compatibility" or "facts" or "stopping" or "horizon" or "horizon-fourteen" or "horizon-budget" or "horizon-native" or "horizon-ordering" or "window-selection" or "window-selection-payback" or "window-covered-payback" or "window-covered-sentinel" or "window-covered-contracts" or "window-covered-incremental" or "window-covered-defense") || multiplayerContracts
++        if (multiplayerReviewStage != null && (multiplayerReviewStage is not ("race-dev" or "race-holdout" or "quota-selection" or "quota-contracts" or "quota-pressure" or "quota-defense" or "quota-investment" or "dead-teammate" or "upstream-compatibility" or "facts" or "stopping" or "horizon" or "horizon-fourteen" or "horizon-budget" or "horizon-native" or "horizon-ordering" or "window-selection" or "window-selection-payback" or "window-covered-payback" or "window-covered-sentinel" or "window-covered-contracts" or "window-covered-incremental" or "window-covered-defense") || multiplayerContracts
+             || multiplayerStartContracts || multiplayerStrategyContracts || multiplayerLongTermContracts || requestPath != null))
+             throw new ArgumentException("--multiplayer-review-contracts requires quota-contracts, quota-selection, quota-pressure, quota-defense, quota-investment, dead-teammate, upstream-compatibility, facts, stopping, horizon, horizon-fourteen, horizon-budget, horizon-native, horizon-ordering, window-selection, window-selection-payback, window-covered-payback, window-covered-sentinel window-covered-contracts window-covered-incremental or window-covered-defense fixture of its own.");
+         if ((observePortfolio || portfolioModelPath != null) && (!usePortfolio || searchMode != "Coordinator"))

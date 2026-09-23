@@ -15,6 +15,7 @@ internal sealed partial class SimulatedCombatState
     internal MultiplayerCycleCheckpoint? AdvisorLastEnemyCycle { get; set; }
     internal long AdvisorLocalDamage { get; private set; }
     internal long AdvisorTotalDamage { get; private set; }
+    internal long AdvisorUnattributedDamage { get; private set; }
     internal IReadOnlyDictionary<Player, int>? AdvisorEtherealCounts { get; set; }
     internal bool ExternalChoiceReached { get; private set; }
     private ForkableSet<Player>? _inactiveMultiplayerPlayers;
