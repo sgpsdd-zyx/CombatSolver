@@ -98,6 +98,9 @@ settings_path.write_text(json.dumps(settings))
 requests = sys.argv[4:]
 for index, source_path in enumerate(requests, 1):
     request = json.loads(Path(source_path).read_text())
+    if request.get('multiplayerExperimentPath'):
+        request['multiplayerExperimentPath'] = str(
+            (Path(source_path).parent / request['multiplayerExperimentPath']).resolve(strict=True))
     request['runId'] = 'macos-' + uuid.uuid4().hex
     request['exitOnComplete'] = index == len(requests)
     request['timeoutSeconds'] = min(float(request.get('timeoutSeconds', 120)), int(sys.argv[3]))
@@ -123,7 +126,23 @@ for ((index=1; index<=${#requests}; index++)); do
         kill -0 "$game_pid" 2>/dev/null || break
         sleep 1
     done
-    [[ -f "$result_path" ]] || { print -u2 "No result for request $label; see $output_dir"; exit 1; }
+    if [[ ! -f "$result_path" ]]; then
+        termination_kind=game_exited
+        (( elapsed >= timeout_sec )) && termination_kind=timeout
+        python3 - "$output_dir/$label-request.json" "$termination_kind" <<'PY'
+import json, sys
+from pathlib import Path
+request = json.loads(Path(sys.argv[1]).read_text())
+evidence = Path(request['evidenceDirectory'])
+evidence.mkdir(parents=True, exist_ok=True)
+(evidence / 'launcher-result.json').write_text(json.dumps({
+    'runId': request['runId'], 'status': sys.argv[2],
+    'reason': 'Native process returned no request result.',
+}, indent=2) + '\n')
+PY
+        print -u2 "No result for request $label ($termination_kind); see $output_dir"
+        exit 1
+    fi
     cp "$result_path" "$output_dir/$label-result.json"
     python3 - "$output_dir/$label-result.json" "$output_dir/$label-request.json" <<'PY'
 import json, sys

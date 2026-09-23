@@ -1,0 +1,198 @@
+{
+  "schemaVersion": 1,
+  "manifestId": "multiplayer-native-openings-20260923-v1",
+  "nativeGameVersion": "0.111.0",
+  "verifiedIndependentHumanSources": 0,
+  "sourceTemplateGroups": 1,
+  "roots": [
+    {
+      "id": "defense_investment_control",
+      "seed": "MANUAL-LOOP-DEFENSE-SETUP-20260923",
+      "encounter": "FUZZY_WURM_CRAWLER_WEAK",
+      "sourceCluster": "controlled-ironclad-silent-template-v1",
+      "capture": ".local/multiplayer-native-20260923/a-calibration/02-evidence/multiplayer-opening.json",
+      "nativeStateBytes": 7671,
+      "fullContinuationCharacters": 5415,
+      "enemies": [
+        {
+          "combatId": 2,
+          "id": "FUZZY_WURM_CRAWLER",
+          "hp": 125,
+          "maxHp": 125,
+          "block": 0,
+          "nextMove": "FIRST_ACID_GOOP"
+        }
+      ],
+      "party": [
+        {
+          "actor": 2,
+          "character": "IRONCLAD",
+          "hp": 60,
+          "maxHp": 80,
+          "relics": [
+            "BURNING_BLOOD"
+          ],
+          "deckCount": 10
+        },
+        {
+          "actor": 1,
+          "character": "IRONCLAD",
+          "hp": 60,
+          "maxHp": 80,
+          "relics": [
+            "BURNING_BLOOD"
+          ],
+          "deckCount": 12
+        }
+      ],
+      "pairedRestoreEvidence": ".local/multiplayer-native-20260923/a-calibration/03-evidence/multiplayer-opening.json",
+      "admission": "Full continuation and normalized native state equal after deterministic recipe reconstruction before paired first requests. Does not validate arbitrary multiplayer checkpoint restoration."
+    },
+    {
+      "id": "local_only_poison",
+      "seed": "MANUAL-LOOP-LOCAL-POISON-20260923",
+      "encounter": "FUZZY_WURM_CRAWLER_WEAK",
+      "sourceCluster": "controlled-ironclad-silent-template-v1",
+      "capture": ".local/multiplayer-native-20260923/a-calibration/05-evidence/multiplayer-opening.json",
+      "nativeStateBytes": 7883,
+      "fullContinuationCharacters": 5903,
+      "enemies": [
+        {
+          "combatId": 2,
+          "id": "FUZZY_WURM_CRAWLER",
+          "hp": 123,
+          "maxHp": 123,
+          "block": 0,
+          "nextMove": "FIRST_ACID_GOOP"
+        }
+      ],
+      "party": [
+        {
+          "actor": 2,
+          "character": "IRONCLAD",
+          "hp": 60,
+          "maxHp": 80,
+          "relics": [
+            "BURNING_BLOOD"
+          ],
+          "deckCount": 10
+        },
+        {
+          "actor": 1,
+          "character": "SILENT",
+          "hp": 60,
+          "maxHp": 70,
+          "relics": [
+            "RING_OF_THE_SNAKE"
+          ],
+          "deckCount": 14
+        }
+      ],
+      "pairedRestoreEvidence": ".local/multiplayer-native-20260923/a-calibration/06-evidence/multiplayer-opening.json",
+      "admission": "Full continuation and normalized native state equal after deterministic recipe reconstruction before paired first requests. Does not validate arbitrary multiplayer checkpoint restoration."
+    },
+    {
+      "id": "mixed_poison",
+      "seed": "MANUAL-LOOP-MIXED-POISON-20260923",
+      "encounter": "FUZZY_WURM_CRAWLER_WEAK",
+      "sourceCluster": "controlled-ironclad-silent-template-v1",
+      "capture": ".local/multiplayer-native-20260923/a-calibration/07-evidence/multiplayer-opening.json",
+      "nativeStateBytes": 8275,
+      "fullContinuationCharacters": 6382,
+      "enemies": [
+        {
+          "combatId": 2,
+          "id": "FUZZY_WURM_CRAWLER",
+          "hp": 121,
+          "maxHp": 121,
+          "block": 0,
+          "nextMove": "FIRST_ACID_GOOP"
+        }
+      ],
+      "party": [
+        {
+          "actor": 2,
+          "character": "SILENT",
+          "hp": 60,
+          "maxHp": 70,
+          "relics": [
+            "RING_OF_THE_SNAKE"
+          ],
+          "deckCount": 14
+        },
+        {
+          "actor": 1,
+          "character": "SILENT",
+          "hp": 60,
+          "maxHp": 70,
+          "relics": [
+            "RING_OF_THE_SNAKE"
+          ],
+          "deckCount": 14
+        }
+      ],
+      "pairedRestoreEvidence": ".local/multiplayer-native-20260923/a-calibration/08-evidence/multiplayer-opening.json",
+      "admission": "Full continuation and normalized native state equal after deterministic recipe reconstruction before paired first requests. Does not validate arbitrary multiplayer checkpoint restoration."
+    },
+    {
+      "id": "multi_target_poison",
+      "seed": "MANUAL-LOOP-MULTI-TARGET-20260923",
+      "encounter": "BOWLBUGS_NORMAL",
+      "sourceCluster": "controlled-ironclad-silent-template-v1",
+      "capture": ".local/multiplayer-native-20260923/a-calibration/09-evidence/multiplayer-opening.json",
+      "nativeStateBytes": 8230,
+      "fullContinuationCharacters": 6179,
+      "enemies": [
+        {
+          "combatId": 2,
+          "id": "BOWLBUG_ROCK",
+          "hp": 105,
+          "maxHp": 105,
+          "block": 0,
+          "nextMove": "HEADBUTT_MOVE"
+        },
+        {
+          "combatId": 3,
+          "id": "BOWLBUG_EGG",
+          "hp": 48,
+          "maxHp": 48,
+          "block": 0,
+          "nextMove": "BITE_MOVE"
+        },
+        {
+          "combatId": 4,
+          "id": "BOWLBUG_NECTAR",
+          "hp": 83,
+          "maxHp": 83,
+          "block": 0,
+          "nextMove": "THRASH_MOVE"
+        }
+      ],
+      "party": [
+        {
+          "actor": 2,
+          "character": "IRONCLAD",
+          "hp": 60,
+          "maxHp": 80,
+          "relics": [
+            "BURNING_BLOOD"
+          ],
+          "deckCount": 11
+        },
+        {
+          "actor": 1,
+          "character": "SILENT",
+          "hp": 60,
+          "maxHp": 70,
+          "relics": [
+            "RING_OF_THE_SNAKE"
+          ],
+          "deckCount": 14
+        }
+      ],
+      "pairedRestoreEvidence": ".local/multiplayer-native-20260923/a-calibration/10-evidence/multiplayer-opening.json",
+      "admission": "Full continuation and normalized native state equal after deterministic recipe reconstruction before paired first requests. Does not validate arbitrary multiplayer checkpoint restoration."
+    }
+  ],
+  "nativeStateEncoding": "Base64 of UTF-8 normalized NetFullCombatState diagnostic text, not raw packet serialization. Existing normalization clears cross-request choice/reward counters."
+}

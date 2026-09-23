@@ -500,6 +500,8 @@ renderer 不得重新读取 `SolverResult`、`PlanAction`、`PlanCardChoice` 或
 
 `GeneratedCombatScenario` 只把配置解析为角色/遭遇/装备ID，原版池按ID排序、各类别独立种子流，不推进战斗RNG。`ScenarioBuilder` 的 `GeneratedScenario` 分片在主线程创建实际跑局，核对牌组/进阶之灾/药水槽与原生房间类型；`GeneratedScenarioCardSelector` 只在建局作用域提供确定性或显式选牌，退出建局即释放，不参与正式部署。`Writer` 独占解析配置、目录、战前装备与完整开局状态证据写入。`ProtocolHost.ConfigureSearchOverrides` 在建局配置解析后刷新同一套请求级开关；`Executor` 仍独占实际搜索/部署及设置恢复。批量Python工具只调度各平台原生启动器和证据目录，不接触游戏协议循环或搜索内部。详见[通用场景生成](GENERATED_COMBAT_SCENARIOS.md)。
 
+`MultiplayerExperimentSpec` 解析已登记的完整双人牌组和固定实验条件。`ScenarioBuilder` 的 `MultiplayerExperiment.Setup` 在开战前安装完整牌组，保留原生人数缩放、抽洗牌及起始遗物；`ProtocolHost` 的 `MultiplayerExperiment.Scope` 独占请求级消融、只读诊断与无头传输/界面补丁，reset 全部释放。`Executor` 分派 `MultiplayerExperimentDriver`，后者只模拟本机用户的逐项手动操作和独立队友行动：本机沿真实 Manual 请求链，队友不读军师结果，映射/入队/选牌复用现有 Runtime 原语。`Actions` 保存行动者合同和最小原生差分，`Evidence` 汇集事件与逐玩家生命变化，仍由 `Writer` 原子落盘。所有脚本、调度和测量状态只归 Testing，不进入生产 Search。`tools/MultiplayerExperiments` 负责登记成对请求、调用平台原生启动器和保留失败分母；环境绕过及证据范围见[实验工具](../tools/MultiplayerExperiments/README.md)。
+
 `tools/OfflineSearchHarness` 是不启动 Godot 的测量宿主，只通过 `UnattendedTestRunner.BeginOfflineSession` 和 `OfflineScenarioSession` 复用协议开关、生成或固定场景的同一初始状态注入与结果折叠；`SolverController.DisplayServerNameProvider` 只允许宿主提供固定的 headless 显示服务器名。宿主不拥有正确性断言，也不替代无人测试；搜索行为改动仍由游戏内无人场景验收。详见[离线搜索宿主](OFFLINE_SEARCH_HARNESS.md)。
 
 `UnattendedTestRunner.ReplayState.cs` 属于 `ScenarioBuilder` 的状态注入实现。它只接受同检查点的 `run-state` 与 schema 1 `replay-state` 组合，恢复后必须通过完整 `ContinuationStamp`；不能把部分字段相似的建局称为严格重放。

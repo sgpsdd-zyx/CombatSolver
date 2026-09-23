@@ -325,6 +325,7 @@ internal sealed partial class UnattendedTestRunner
 
         public void ConfigureSearchOverrides(UnattendedTestRequest request)
         {
+            ConfigureMultiplayerExperiment(request);
             VerifyIncrementalSearch = request.VerifyIncrementalSearch;
             FixedSearchBudget = request.FixedSearchBudget;
             MeasureSearchPhases = request.MeasureSearchPhases;
@@ -379,6 +380,7 @@ internal sealed partial class UnattendedTestRunner
 
         private void Reset()
         {
+            ResetMultiplayerExperiment();
             IsActive = false;
             AutomaticTurnSearchEnabled = true;
             VerifyIncrementalSearch = false;

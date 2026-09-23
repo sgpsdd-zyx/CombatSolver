@@ -1,6 +1,22 @@
 # CombatSolver 测试清单
 
-## 多人闭环实验协议（2026-09-23，设计记录）
+## 多人原生闭环实验（2026-09-23）
+
+仅本机使用军师、队友独立决策；测试工具与生产评分分离。[实施记录](strategy/multiplayer-experiments-20260923/implementation.md)和[结构化证据](strategy/multiplayer-experiments-20260923/implementation-evidence.json)包含所有配对及失败。
+
+- L2 `MULTIPLAYER-MANUAL-LOOP`：双方原生入队行动、4次手动查询、下一本机回合、持续阶段账本、ready撤销通过；首项本机动作完整全队actual/simulated戳相同，6次保留根检查通过。最终请求 `macos-c3ce89a1dedc4d8a8be78d9dd6ca5d98`，夹具 `coverage/unattended/multiplayer-manual-loop.json`。
+- 预热后同政策A/A完整动作/事件/查询/健康及全队状态一致，未触及时间截止；冷启动对因层级时限改变工作量，保留为不确定。4个完整牌组的开局重建与完整全队/规范化原生状态相同；它不是任意多人检查点恢复。
+- 冻结敏感根：350节点本机唯一毒源的首牌关/开为 `POISONED_STAB` / `STRIKE_SILENT`，独立请求断言复现；只是顺序敏感性。Medium时间截短首请求展开2608/2261、转移7679/6636，首牌改为 `STRIKE_SILENT` / `DEFEND_SILENT`，均三周期可比、未触及时间截止。
+- `RootIsolation`：worker进入求解器后、实际展开前暂停，队友原生动作发生于搜索会话内；旧根冻结、旧发布过期、新手动捕获当前，观察伤害0→8且个人实绩仍0。未覆盖任意展开中途并发、取消或真实网络。
+- B固定350节点共64条尝试：63条请求完成（47胜/16败）、1条120秒超时。32对中23双胜、8双败、1超时/胜；双胜本机战损改善3对/相同19对/恶化1对（-10至+4HP）。402次已保存查询中307次可比非终局阶段、79次预测胜利、16次预测死亡；无时间截止，真实Score回退次数未采集。8个多敌配对双败，均实际经过队友死亡后本机继续，未测相反死亡顺序/复活。
+- L1/L2边界：同进程多人后运行 `MULTIPLAYER-EXPERIMENT-INACTIVE`，请求 `macos-41aebe3b9fef402aafc854fc341e40e0`，确认实验补丁/政策/worker状态释放，普通单人根及一牌胜利建议正常。接着错误原根负对照 `macos-a76f64fbf136498596609e3b727f72fe` 按预期Failed、`root_mismatch`、0查询/0动作；启动器退出码1属于此负对照，不是新增未解释失败。
+- 原批超时臂不补造指标；独立五回合成功诊断不替换它，续批只执行未执行行。教学阻塞、错误教学旁路、原生枚举缓存并发问题、旧DLL误启动及一次未明停滞分别归档。所有实例按启动器清理凭证删除；最终Release构建零警告错误。Bash职责门禁、脚本语法及分析器分母/双败/重复臂/未执行分类检查通过，PowerShell及Windows/Linux原生未运行。
+
+实际Score回退计数、复杂选牌、有意未支持牌、失效旧建议（本轮0例）、本机先死后队友续行、三/四人、轨迹外隔离重搜、真人校准、可见性能未验证。原始证据根 `.local/multiplayer-native-20260923/`；生产行为与版本不变，没有发布。
+
+### 此前静态设计记录
+
+以下为实施前的L0状态，实际执行情况以上述本轮结果为准。
 
 [设计与协议](strategy/multiplayer-experiments-20260923/README.md)经[审查复核](strategy/multiplayer-experiments-20260923/review-response.md)完成L0文档/JSON一致性检查，`readyToExecute=false`，没有新行为通过结果。拟先验证双人原生行动、两次真实手动请求、下一回合、持续阶段账本和A/A复位，再校准正对照与搜索阶段覆盖。加入本机先手后，B为4候选配置×2队友×4个有效调度/重算组合×2臂，即64条计划轨迹、32对，替代初稿48条/24对；辅助控制与诊断另计、数量尚未冻结。[完整牌组候选](strategy/multiplayer-experiments-20260923/root-candidates.json)已登记但尚未原生捕获，0份已验证独立真人来源。执行器、全队恢复、选择/Actor合同及三/四人恢复仍待验证。新留存的7个原生参考类型仅属静态补证，不增加Passed项。
 

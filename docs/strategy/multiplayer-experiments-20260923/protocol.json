@@ -1,15 +1,15 @@
 {
-  "protocolId": "multiplayer-manual-loop-20260923-draft2",
+  "protocolId": "multiplayer-manual-loop-20260923-v3",
   "date": "2026-09-23",
-  "status": "DesignOnly",
-  "readyToExecute": false,
+  "status": "ExecutedWithOneUnavailableArm",
+  "readyToExecute": true,
   "documentation": "docs/strategy/multiplayer-experiments-20260923/README.md",
   "baselineBehaviorCommit": "fd976376c79cf87561d13397f2c5ddc330cc80ae",
   "baselineVersion": "0.44.2",
   "prerequisites": [
-    "Implement a test-owned single-action native driver reusing existing card mapping, queue capture and choice helpers; do not bypass the full single-player deployment workflow.",
+    "Implement a test-owned single-action native driver reusing existing card mapping, queue capture and choice helpers; do not treat bypassing full-turn solo deployment as the manual multiplayer loop.",
     "Verify a two-player native full-party loop, branch isolation, stable recapture, session accounting and request ownership.",
-    "Admit the registered whole-deck candidate recipes, capture complete party roots, and prove restoration of identity, historical state and game RNG state.",
+    "Admit the whole-deck recipes, capture complete party roots and prove deterministic recipe reconstruction. Generic multiplayer checkpoint restoration needs a separate contract.",
     "Implement a test-only shared-credit ablation binding through manual requests and prove it is the sole treatment difference.",
     "Freeze partner policies, schedules, request cadence and actor-specific choice adapters before measuring.",
     "Record explicit outcomes for every planned arm, including unavailable advice, errors and censoring.",
@@ -24,7 +24,10 @@
     "searchEnemyCycleLimit": 14,
     "increaseProductionBudgets": false,
     "visibleSteamAllowed": false,
-    "newReleaseRequested": false
+    "newReleaseRequested": false,
+    "singleAdvisorUser": true,
+    "teammatesRequiredToFollowAdvisor": false,
+    "teammateDecisionsControlledByAdvisor": false
   },
   "comparison": {
     "kind": "SameBuildPolicyFieldAblation",
@@ -61,7 +64,7 @@
     "allowedPolicyDifferences": [
       "Multiplayer.CreditSharedDamage"
     ],
-    "policySnapshotsCaptured": false,
+    "policySnapshotsCaptured": true,
     "estimand": "Effect of the existing shared-credit feature, including its gated frontier cost condition, under the registered roots and actor policies; not just the arithmetic credit formula.",
     "exposureStrata": "Register mechanism opportunities before building trajectories; report realized unattributed damage separately without conditioning the main outcome table on treatment-dependent exposure.",
     "zeroExposureControl": "Expected agreement requires zero unattributed damage on all relevant search paths and normal unsaturated arithmetic. A topic label or unchanged first action does not establish those premises."
@@ -121,9 +124,9 @@
     },
     "qualityWorldAdvancesDuringSearch": false,
     "stressBatchSeparatedFromQuality": true,
-    "currentStatus": "NotImplementedNotRun",
+    "currentStatus": "Completed64Attempts:47Wins16Losses1Timeout",
     "candidateRootManifest": "docs/strategy/multiplayer-experiments-20260923/root-candidates.json",
-    "capturedRootManifest": null,
+    "capturedRootManifest": "docs/strategy/multiplayer-experiments-20260923/native-root-manifest.json",
     "plannedCandidateConfigurations": 4,
     "verifiedIndependentHumanSources": 0,
     "sourceCluster": "controlled-ironclad-silent-template-v1",
@@ -135,7 +138,9 @@
       "coverage calibration requests",
       "interruption diagnostics",
       "correctness stress contracts"
-    ]
+    ],
+    "resultEvidence": "docs/strategy/multiplayer-experiments-20260923/implementation-evidence.json",
+    "implementationRecord": "docs/strategy/multiplayer-experiments-20260923/implementation.md"
   },
   "partnerPolicies": {
     "proposedFamilies": [
@@ -160,9 +165,33 @@
     "usesTestedSolverAsPartner": false,
     "randomPlayAndIdle": "Stress and negative controls only; not an empirical human population.",
     "humanCalibrated": false,
-    "parametersFrozen": false,
-    "pilotCardPool": "Use only peer decks and exact allowed IDs in root-candidates.json, pending native choice-chain admission. Freeze complete decks before combat; never skip an unsupported draw.",
-    "fullChoiceCoverage": false
+    "parametersFrozen": true,
+    "pilotCardPool": "Use exact peer deck IDs in root-candidates.json. Native openings and tested action chains are admitted; complex extra choices remain outside the pilot. Never skip an unsupported playable draw.",
+    "fullChoiceCoverage": false,
+    "frozenImplementation": "src/Testing/UnattendedTestRunner.MultiplayerExperiment.Actions.cs",
+    "pilotParameters": {
+      "version": "v1",
+      "deterministic": true,
+      "externalRngConsumed": false,
+      "priority": [
+        "estimated immediate kill",
+        "defense if survival_first and incoming intent exceeds block",
+        "BASH",
+        "POISONED_STAB",
+        "STRIKE_*",
+        "DEADLY_POISON",
+        "INFLAME",
+        "DEFEND_*"
+      ],
+      "killEstimate": "Explicit base damage 6 for Strike/Poisoned Stab, 8 for Bash; compares current enemy HP plus block, without branch simulation.",
+      "ties": [
+        "enemy current HP ascending",
+        "card ID ordinal",
+        "own hand occurrence"
+      ],
+      "survivalTrigger": "Current public attack intent exceeds own block; no hidden draw-order or future-RNG read.",
+      "unregisteredPlayableCard": "Fail the trajectory; never skip it."
+    }
   },
   "execution": {
     "environment": "Native game actions; managed harness transport/rendering bypasses must be declared, representative loop verified in native headless.",
@@ -172,8 +201,8 @@
     "staleAdvice": "Observe according to frozen request cadence; never relabel stale advice as current.",
     "invalidAdvice": "Record advice_invalid, abandon remaining old route and simulate an additional manual request; never silently substitute cards or targets.",
     "missingAdviceFallback": "None in pilot; stop explicitly and count unavailability.",
-    "localDeath": "Continue living teammates until native team terminal or a registered limit; resume local actor if revived.",
-    "reset": "Complete run/session reset per trajectory. Reuse a process only after reset correctness is established.",
+    "localDeath": "Driver continues living actors until native terminal or a cap. Pilot observed peer death with continuing local play, but not local-first death with peer continuation or revival.",
+    "reset": "Rebuild run/session per trajectory, compare full/native opening, clear request hooks. Warm A/A and final MP-to-solo scope reset passed; an original repeated-process timeout remains unexplained.",
     "nativeInstanceLocation": ".local/headless-instances/<instance>",
     "nativeInstanceCleanup": "Use existing platform cleanup flag on the last request; retain logs outside the instance.",
     "platformProtocolChanges": "Maintain Bash and PowerShell entry points together if parameters or capabilities change.",
@@ -185,7 +214,22 @@
     "cardMapping": "Preserve existing state-key/occurrence matching and existing ID/occurrence fallback for legacy actions. Log the actual native instance; do not invent a separate fuzzy matcher or claim permanent identity.",
     "deploymentBoundary": "Full DeployCurrentTurn also owns automatic drift/exhaustion requests and ending the turn; a test-only guard bypass alone does not implement the required interleaved manual-request loop.",
     "actorOwnership": "Prove each queued native action belongs to the scheduled actor. Existing peer OnPlayWrapper fixtures do not prove peer queue identity. Any LocalContext override must be stable, isolated and restored with no search or action in flight.",
-    "readyObservations": "Record per-player ready before/after, withdrawal, phase and actor turn in test events; do not infer future inactivity or require a new production root/UI field."
+    "readyObservations": "Record per-player ready before/after, withdrawal, phase and actor turn in test events; do not infer future inactivity or require a new production root/UI field.",
+    "testScope": "One local advisor user. Test actor scripts simulate independent teammates and local manual input; no player-facing team coordination requirement.",
+    "transportBypasses": [
+      "Advisor multiplayer gate over two-player native RunState using single-process transport",
+      "AllPlayersReadyToEndTurn waits for all native participants",
+      "Native single-process enemy-start barrier; no remote acknowledgement protocol tested"
+    ],
+    "renderingBypasses": [
+      "Existing unattended combat-rules tutorial skip",
+      "Test-scoped CardPileCmd.ShuffleFtueCheck returns a completed tutorial task, leaving actual shuffle intact",
+      "Test-scoped remote NCardPlayQueue.OnActionEnqueued visual bypass; local animation and native queue execution remain"
+    ],
+    "environmentPreparation": "Warm 153 nonempty int-backed native game enum values before run creation to avoid concurrent mutation of the native packet serializer enum cache.",
+    "recordingMetrics": "HP events distinguish IsInProgress=true combat changes from postcombat recovery; count both and do not treat victory healing as reduced damage taken.",
+    "processReuse": "Original plan used warmup plus up to 16 measured arms. After one unexplained timeout, continue only unexecuted arms with warmup plus at most 4; preserve original failure.",
+    "openingRepresentation": "Full-party ContinuationStamp plus normalized NetFullCombatState.ToString UTF-8 with the existing format marker; clears cross-request choice/reward counters, not a raw network-packet equality proof."
   },
   "randomness": {
     "gameRng": "Equal initial states; natural action-dependent consumption after branching, never forced alignment.",
@@ -239,7 +283,34 @@
     "minimumUsefulEffect": null,
     "formalStoppingRule": null,
     "pilotInference": "Descriptive apparatus coverage only; do not estimate human between-root variance or human confidence intervals from the four controlled recipes.",
-    "counting": "64 trajectories and 32 pairs cover only B. Auxiliary control/calibration/diagnostic counts are unfrozen and must not be represented as executed or included in a fabricated all-batch total."
+    "counting": "64 trajectories and 32 pairs cover only B. Auxiliary control/calibration/diagnostic counts are unfrozen and must not be represented as executed or included in a fabricated all-batch total.",
+    "executedCounts": {
+      "registeredTrajectories": 64,
+      "requestPassed": 63,
+      "nativeTeamWins": 47,
+      "nativeTeamLosses": 16,
+      "requestTimeouts": 1,
+      "completeTerminalPairs": 31,
+      "bothWinPairs": 23,
+      "completedQueries": 402,
+      "nativeLocalCardActions": 678,
+      "nativePeerCardActions": 596,
+      "stageNonterminalQueries": 307,
+      "predictedWinQueries": 79,
+      "predictedDeathQueries": 16,
+      "timeLimitedQueries": 0,
+      "invalidAdviceEvents": 0
+    },
+    "remainingCoverage": [
+      "Complex choices and intentionally unsupported playable-card negative control",
+      "Actual Score fallback count",
+      "Invalid-advice execution branch (0 occurrences in pilot)",
+      "Local-first death with peer continuation; revival; three/four participants",
+      "Isolated unexecuted requery diagnostic",
+      "Arbitrary mid-expansion concurrency and cancellation",
+      "Windows/Linux native execution and PowerShell execution",
+      "Real networking, visible performance and human calibration"
+    ]
   },
   "sources": [
     {
@@ -269,8 +340,9 @@
         "terminal or stopping outcome"
       ],
       "timeLimitRule": "If timing changes effective work, classify as an inconclusive determinism control, never an A/A pass.",
-      "plannedPairs": null,
-      "status": "NotRun"
+      "plannedPairs": 1,
+      "status": "PassedWarmPair;ColdPairInconclusiveDueToLayerTimeStop",
+      "evidence": ".local/multiplayer-native-20260923/a-final-comparison.json"
     },
     "positive": {
       "candidateSources": [
@@ -293,8 +365,35 @@
       ],
       "nativeCalibration": "Historical synthetic inputs locate sensitive cases, but do not establish that complete-deck native loops reproduce them. Calibrate and freeze an explicit native witness before claiming a positive-control pass.",
       "doesNotReplacePrimaryComparison": true,
-      "plannedPairs": null,
-      "status": "NotRun"
+      "plannedPairs": 1,
+      "status": "CalibratedAndFrozenNativeFirstRequestPassed",
+      "nativeWitness": {
+        "root": "local_only_poison",
+        "profile": "smoke_350",
+        "request": "opening with no peer action",
+        "shared_off": "POISONED_STAB",
+        "shared_on": "STRIKE_SILENT",
+        "meaning": "First-action order sensitivity only; not a predeclared benefit direction.",
+        "calibration": ".local/multiplayer-native-20260923/a-calibration/05-evidence;06-evidence",
+        "independentAssertion": ".local/multiplayer-native-20260923/a-final/04-evidence;05-evidence"
+      }
+    },
+    "scopeReset": {
+      "status": "Passed",
+      "evidence": ".local/multiplayer-native-20260923/final-contracts/02-result.json",
+      "checks": "No experiment hooks or test policy state; ordinary solo root and one-card winning advice."
+    },
+    "wrongOpening": {
+      "status": "PassedExpectedNegative",
+      "evidence": ".local/multiplayer-native-20260923/final-contracts/03-evidence/multiplayer-experiment.json",
+      "outcome": "root_mismatch",
+      "queries": 0,
+      "decisions": 0
+    },
+    "inflightPeer": {
+      "status": "PassedBoundedWorkerEntryOrdering",
+      "evidence": ".local/multiplayer-native-20260923/a-final/06-evidence",
+      "scope": "Worker held after root capture and before expansion; peer native action, frozen old root, stale old publication and fresh manual recapture. Not arbitrary concurrency/cancellation."
     }
   },
   "budgetCalibration": {
@@ -340,8 +439,19 @@
     "witnessGate": "Both arms on preregistered nonterminal witness requests must reach comparable stage facts or an actual early native terminal. Missing this gate is insufficient coverage, not automatic fallback to Score.",
     "populationStageCoverageThreshold": null,
     "diagnosticScope": "Choose representative initial or earliest manual-requery roots using A coverage results; freeze the diagnostic list before comparative measurement. Do not cross this profile with all 64 pilot trajectories by default.",
-    "plannedDiagnosticRequests": null,
-    "status": "NotRun"
+    "plannedDiagnosticRequests": 2,
+    "status": "CompletedFirstRequestPairOnLocalOnlyPoison",
+    "unavailableMetrics": [
+      "bothIncomparableScoreFallbackCount"
+    ],
+    "availableMetricsNote": "Selected facts captured from the actual final selection by a test-owned observer. Maximum observed unattributed damage covers values passed through MultiplayerFactsAt, not an exhaustive inventory of every generated snapshot.",
+    "actualSelectedFacts": {
+      "comparable": 402,
+      "nonterminalStageCovered": 307,
+      "predictedWin": 79,
+      "predictedDead": 16,
+      "bothIncomparableScoreFallbackCount": null
+    }
   },
   "interruptionDiagnostics": {
     "status": "NotRun",
@@ -359,5 +469,10 @@
     "cost": "Record diagnostic search work separately from actual manual queries and trajectory limits.",
     "interpretation": "Action disagreement is sensitivity to a new root, not the value of replanning. Only paired executed continuations can estimate downstream benefit.",
     "plannedRequests": null
+  },
+  "registrationHistory": {
+    "originalPlan": ".local/multiplayer-native-20260923/pilot-b/plan.json",
+    "originalProtocolId": "multiplayer-manual-loop-20260923-draft2",
+    "currentIdChange": "v3 records implementation status, environment bypasses and evidence. Root recipes, treatment, peer policies, schedules, cadence and budgets of B remained fixed."
   }
 }

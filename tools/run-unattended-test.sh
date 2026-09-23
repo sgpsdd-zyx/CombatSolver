@@ -74,6 +74,7 @@ add_option evidence-directory "" string raw_string
 add_option preserve-native-combat-state-for-test 0 switch bool
 add_option progress-snapshot-path "" string none
 add_option generated-scenario-path "" string optional_string
+add_option multiplayer-experiment-path "" string optional_string
 add_option ascension 0 int raw_int
 add_option act-index-for-test 0 int raw_int
 add_option mark-encounter-as-second-boss-for-test 0 switch bool
@@ -432,13 +433,15 @@ for path_option in replay-policy-override-path evidence-directory; do
         option_value[$path_option]="$(realpath -m -- "${option_value[$path_option]}")"
     fi
 done
-if [[ -n "${option_value[generated-scenario-path]}" ]]; then
-    generated_scenario_path="${option_value[generated-scenario-path]}"
-    option_value[generated-scenario-path]="$(realpath -e -- "$generated_scenario_path" 2>/dev/null)" || \
-        die "--generated-scenario-path not found: $generated_scenario_path"
-    [[ -f "${option_value[generated-scenario-path]}" ]] || \
-        die "--generated-scenario-path is not a file: ${option_value[generated-scenario-path]}"
-fi
+for path_option in generated-scenario-path multiplayer-experiment-path; do
+    if [[ -n "${option_value[$path_option]}" ]]; then
+        supplied_path="${option_value[$path_option]}"
+        option_value[$path_option]="$(realpath -e -- "$supplied_path" 2>/dev/null)" || \
+            die "--$path_option not found: $supplied_path"
+        [[ -f "${option_value[$path_option]}" ]] || \
+            die "--$path_option is not a file: ${option_value[$path_option]}"
+    fi
+done
 if [[ -n "${option_value[checkpoint-archive-path]}" ]]; then
     option_value[checkpoint-archive-path]="$(realpath -e -- "${option_value[checkpoint-archive-path]}")"
     if [[ "${option_value[replay-mode]}" == "Preflight" ]]; then

@@ -1614,6 +1614,13 @@ foreach ($forbidden in @('Task<', 'Func<', 'Action<')) {
 }
 
 $multiplayerAdviceRules = @(
+    @{ Path = 'src/Testing/UnattendedTestRunner.MultiplayerExperiment.Scope.cs'; Text = 'private void ResetMultiplayerExperiment()' }
+    @{ Path = 'src/Testing/UnattendedTestRunner.MultiplayerExperiment.Scope.cs'; Text = 'CreditSharedDamage = spec.Options.CreditSharedDamage' }
+    @{ Path = 'src/Testing/UnattendedTestRunner.MultiplayerExperiment.Actions.cs'; Text = 'SolverController.FindCardForDeployment(hand, action)' }
+    @{ Path = 'src/Testing/UnattendedTestRunner.MultiplayerExperiment.Actions.cs'; Text = 'SolverController.EnqueueAndCaptureActionAsync(' }
+    @{ Path = 'src/Testing/UnattendedTestRunner.MultiplayerExperiment.Actions.cs'; Text = 'played.OwnerId != actor.NetId' }
+    @{ Path = 'src/Testing/UnattendedTestRunner.MultiplayerExperiment.cs'; Text = 'SearchReason.Manual' }
+    @{ Path = 'src/Testing/UnattendedTestRunner.MultiplayerExperiment.Setup.cs'; Text = 'ClearRunDeck(run, player);' }
     @{ Path = 'src/Runtime/SolverController.cs'; Text = 'if (reason != SearchReason.Manual) return;' }
     @{ Path = 'src/Runtime/SolverController.cs'; Text = 'Multiplayer advice cannot deploy native actions.' }
     @{ Path = 'src/Search/CombatBeamSolver.Multiplayer.cs'; Text = '!CanReplayMultiplayerAction(node, action)' }

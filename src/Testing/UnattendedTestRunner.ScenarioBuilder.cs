@@ -71,6 +71,7 @@ internal sealed partial class UnattendedTestRunner
                 throw new InvalidOperationException("无人测试要求从无进行中跑局的独立游戏进程启动。");
 
             PrepareGeneratedScenario();
+            PrepareMultiplayerExperiment();
             using IDisposable? generatedChoices = BeginGeneratedSetupChoices();
             request = runner._request;
             CharacterModel character = ResolveUnique(ModelDb.AllCharacters, request.CharacterId, "角色");
@@ -192,11 +193,13 @@ internal sealed partial class UnattendedTestRunner
                 await RunManager.Instance.GenerateMap();
             }
             else if (request.ScenarioId is "MULTIPLAYER-RELIC-OWNERSHIP" or "MULTIPLAYER-RELIC-EXTRA-TURN-SOURCE"
-                or "MULTIPLAYER-SHARED-DAMAGE")
+                or "MULTIPLAYER-SHARED-DAMAGE" or MultiplayerExperimentSpec.ScenarioId)
             {
                 var unlocks = SaveManager.Instance.GenerateUnlockStateFromProgress();
+                CharacterModel peerCharacter = runner._protocolHost.MultiplayerExperiment is { } experiment
+                    ? ResolveUnique(ModelDb.AllCharacters, experiment.Root.Peer.CharacterId, "peer character") : character;
                 RunState multiplayer = RunState.CreateForNewRun(
-                    [Player.CreateForNewRun(character, unlocks, 2uL), Player.CreateForNewRun(character, unlocks, 1uL)],
+                    [Player.CreateForNewRun(peerCharacter, unlocks, 2uL), Player.CreateForNewRun(character, unlocks, 1uL)],
                     ActModel.GetDefaultList().Select(act => act.ToMutable()).ToList(), modifiers,
                     GameMode.Standard, request.Ascension, request.Seed);
                 RunManager.Instance.SetUpNewSingleplayer(multiplayer, shouldSave: false);
@@ -253,6 +256,7 @@ internal sealed partial class UnattendedTestRunner
                 foreach (UnattendedPotionInjection injection in request.Potions)
                     InjectPotionForTest(runPlayer, injection.PotionId);
             CaptureGeneratedLoadout(runState, runPlayer);
+            await PrepareMultiplayerExperimentDecks(runState);
             if (request.VerifyPreCombatForecastApi)
                 await VerifyPreCombatForecastApiAsync(runState, encounter);
 

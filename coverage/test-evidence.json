@@ -1,4 +1,29 @@
 {
+  "MULTIPLAYER-MANUAL-LOOP": {
+    "status": "Passed",
+    "level": "L2NativeManualMultiplayerBoundaryContracts",
+    "procedure": "Run coverage/unattended/multiplayer-manual-loop.json in native macOS headless, then the multiplayer-experiment-inactive fixture in the same process; compare a deliberately mismatched root as a negative control. Separately exercise warm A/A, frozen action-order witness, worker-entry peer action and two budget profiles. All requests use a 120-second cap and instance cleanup.",
+    "expected": "Only the local player consults the advisor. Independent peer actions enter native queues with the right actor; one combat session persists across Manual requests. Preserve full-party root isolation, contribution deadline/accounting and the ordinary solo path outside the test scope.",
+    "observed": "2026-09-23: final loop macos-c3ce89a1dedc4d8a8be78d9dd6ca5d98 passes four manual queries, both actors, next turn, ready undo, one full native/simulated action comparison and six retained-root checks. Warm A/A complete non-timing traces match; cold A/A with a layer time stop remains inconclusive. Frozen first-action witness and bounded worker-entry peer action pass. Following solo request macos-41aebe3b9fef402aafc854fc341e40e0 observes no experiment hooks and a normal one-card winning route. Wrong-root macos-a76f64fbf136498596609e3b727f72fe rejects with root_mismatch before queries/actions. Final Release build has zero warnings/errors; Bash boundaries pass. Launcher cleanup receipts retained.",
+    "evidence": "docs/strategy/multiplayer-experiments-20260923/implementation.md; docs/strategy/multiplayer-experiments-20260923/implementation-evidence.json; coverage/unattended/multiplayer-manual-loop.json; coverage/unattended/multiplayer-experiment-inactive.json; .local/multiplayer-native-20260923/",
+    "scope": "Passed applies only to named contracts. The separate 64-arm descriptive pilot has 47 native wins, 16 native losses and one unresolved timeout; it is not a 64-test pass or human quality result. The 23 both-win pairs improve/equal/worsen local damage 3/19/1, range -10 to +4 HP; 31 complete terminal pairs have no win/loss difference. Four synthetic whole-deck recipes are one template group with zero human sources. Search uses 350 nodes, while a separate time-capped Medium initial pair changes advice. Real networking, visible performance, arbitrary in-search concurrency, complex choices, invalid old-advice handling, local-first death and revival are unverified.",
+    "pilotCounts": {
+      "registeredTrajectories": 64,
+      "requestCompleted": 63,
+      "nativeTeamWins": 47,
+      "nativeTeamLosses": 16,
+      "requestTimeouts": 1,
+      "pairedBothWin": 23,
+      "pairedBothLose": 8,
+      "pairsWithUnknown": 1,
+      "savedManualQueries": 402,
+      "selectedNonterminalStageCovered": 307,
+      "selectedPredictedWin": 79,
+      "selectedPredictedDead": 16,
+      "actualScoreFallbackCount": null
+    },
+    "productionChange": "Testing-only input, driver and observers. Production behavior/version remain fd976376 / 0.44.2; no package, tag, push or release."
+  },
   "MULTIPLAYER-SHARED-DAMAGE": {
     "status": "Passed",
     "level": "TargetedNativeFullPartyForkIncrementalAndOfflineScoring",

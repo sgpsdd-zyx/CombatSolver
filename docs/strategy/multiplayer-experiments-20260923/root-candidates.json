@@ -1,11 +1,11 @@
 {
   "manifestId": "multiplayer-controlled-party-candidates-20260923-v1",
-  "status": "CandidateRecipesNotCaptured",
-  "readyToExecute": false,
-  "capturedRootManifest": null,
+  "status": "NativeOpeningsCapturedAndRebuilt",
+  "readyToExecute": true,
+  "capturedRootManifest": "docs/strategy/multiplayer-experiments-20260923/native-root-manifest.json",
   "verifiedIndependentHumanSources": 0,
   "sourceCluster": "controlled-ironclad-silent-template-v1",
-  "provenance": "Explicit synthetic whole-deck recipes for apparatus validation, not sampled human runs or already restored native roots.",
+  "provenance": "Explicit synthetic whole-deck recipes for apparatus validation, now captured and deterministically rebuilt in native headless; not sampled human runs or a generic checkpoint-restoration contract.",
   "common": {
     "partySize": 2,
     "localNetId": 1,
@@ -127,7 +127,7 @@
       "encounterId": "BOWLBUGS_NORMAL",
       "minimumActiveEnemies": 2,
       "plannedMechanismStratum": "UnattributedDamageOpportunity",
-      "purpose": "Observe poison investment, early kills and legal target changes with multiple native enemies; the required roster remains unverified until admission.",
+      "purpose": "Observe poison investment, early kills and legal target changes with three captured native enemies; native full-state admission is recorded separately.",
       "local": {
         "characterId": "SILENT",
         "deck": [

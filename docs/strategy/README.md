@@ -4,7 +4,7 @@
 
 当前搜索职责见 [架构地图](../ARCHITECTURE.md)，实际测试与未验证范围见 [测试矩阵](../TEST_MATRIX.md)。
 
-- [多人实验设计：交错行动与手动重算](multiplayer-experiments-20260923/README.md)：2026-09-23 设计稿，区分原生语义、受控闭环和真人校准；附[协议草案](multiplayer-experiments-20260923/protocol.json)与[候选完整牌组](multiplayer-experiments-20260923/root-candidates.json)，执行器与新实验尚未实现或运行。[审查意见](multiplayer-experiments-20260923/review.md)及[复核与采用](multiplayer-experiments-20260923/review-response.md)记录本机先手、A/A、覆盖校准、动作原语复用和重算敏感性；B修订为64条/32对计划轨迹，未将受控配置当成独立真人样本。
+- [多人实验：交错行动与手动重算](multiplayer-experiments-20260923/README.md)：2026-09-23 按“只有本机用军师、队友独立决策”实现原生完整牌组闭环；[实施与结果](multiplayer-experiments-20260923/implementation.md)记录A/A、敏感根、预算校准及64条/32对登记试跑，保留失败和恶化个案。[原生根](multiplayer-experiments-20260923/native-root-manifest.json)来自同一受控模板，真人来源仍为0，不修改生产策略。[审查原文](multiplayer-experiments-20260923/review.md)与[此前复核](multiplayer-experiments-20260923/review-response.md)保留。
 - [多人伤害归属审视：实验与采用](multiplayer-shared-damage-20260923/implementation.md)：2026-09-23 实验并实施无来源实际伤害按人数参与选路；个人贡献信用保留真实归属。原生差分与简化脚本收益分开记录，71次变体搜索不代表独立联机样本；两项撤回原型仅为当前夹具未检出收益。已完成[本地定版与知识归档](multiplayer-shared-damage-20260923/closeout.md)。
 - [多人策略审视：机制事实、现有实现与竞速模型建议](multiplayer-race-model-review-20260922.md)：2026-09-22 对 0.44.1 多人层的静态审视。从反编译源码确认全体受击、血量按人数缩放、共享 RNG 三项机制；指出闲置参照同时低估队友输出与防守、配额只补一半、十四周期两重失真、归属机制排斥 DoT；提出"守如单人，攻如团队"的竞速代价替代配额，团队速率取本场实测。未运行测试，不是实施授权。
 - [多人策略重设计：本机贡献配额与权衡前沿](multiplayer-cooperative-planning-20260922/README.md)：固定 0.43.6，取消 3 HP 优先；按用户后续要求不预测队友行为。两轮 6 Pro 原文、首轮 909 次抽象对照及本地反例保留；生产实施、弹性目标/条件尾值取舍与直接证据见[实施记录](multiplayer-cooperative-planning-20260922/implementation.md)。

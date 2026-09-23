@@ -39,6 +39,19 @@ internal sealed partial class UnattendedTestRunner
             bool expectedCardPlayed = request.ExpectedPlayedCardId == null;
             bool expectedPotionUsed = request.ExpectedUsedPotionId == null;
             bool expectedPlayerPowerObserved = request.ExpectedObservedPlayerPowerId == null;
+            if (request.ScenarioId == "MULTIPLAYER-EXPERIMENT-INACTIVE")
+            {
+                runner._protocolHost.AssertMultiplayerExperimentReset();
+                if (combatState.Players.Count != 1 || SolverController.IsMultiplayerSession
+                    || CombatRootSnapshot.Capture(combatState).IsMultiplayerAdvisor)
+                    throw new InvalidOperationException("Experiment scope altered the ordinary single-player entry.");
+                runner._completedChecks.Add("MultiplayerExperimentReset:NoHooks:SinglePlayerRoot");
+            }
+            if (request.ScenarioId == MultiplayerExperimentSpec.ScenarioId)
+            {
+                await runner.RunMultiplayerExperimentAsync(combatState);
+                return Observation(combatEnded: !CombatManager.Instance.IsInProgress);
+            }
             if (request.ScenarioId == "MULTIPLAYER-SHARED-DAMAGE")
             {
                 await runner.AssertMultiplayerSharedDamageAsync(combatState);

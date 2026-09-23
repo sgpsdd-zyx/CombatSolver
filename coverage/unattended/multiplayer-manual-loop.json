@@ -1,0 +1,7 @@
+{
+  "scenarioId": "MULTIPLAYER-MANUAL-LOOP",
+  "multiplayerExperimentPath": "../../docs/strategy/multiplayer-experiments-20260923/native-contract.json",
+  "timeoutSeconds": 120,
+  "cards": [],
+  "exitOnComplete": true
+}

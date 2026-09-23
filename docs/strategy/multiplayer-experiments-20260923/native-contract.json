@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "rootManifestPath": "root-candidates.json",
+  "candidateId": "defense_investment_control",
+  "partnerPolicy": "immediate_attack",
+  "schedule": "alternate_one_action",
+  "requestCadence": "after_peer_batch",
+  "profile": "smoke_350",
+  "mode": "Contract",
+  "creditSharedDamage": true,
+  "enemyCycleLimit": 3,
+  "decisionLimit": 40,
+  "queryLimit": 10
+}

@@ -1295,6 +1295,13 @@ done
 while IFS='|' read -r relative_path required; do
     require_fixed "$repository_root/$relative_path" "$required" 'missing multiplayer advice boundary'
 done <<'MULTIPLAYER_ADVICE_RULES'
+src/Testing/UnattendedTestRunner.MultiplayerExperiment.Scope.cs|private void ResetMultiplayerExperiment()
+src/Testing/UnattendedTestRunner.MultiplayerExperiment.Scope.cs|CreditSharedDamage = spec.Options.CreditSharedDamage
+src/Testing/UnattendedTestRunner.MultiplayerExperiment.Actions.cs|SolverController.FindCardForDeployment(hand, action)
+src/Testing/UnattendedTestRunner.MultiplayerExperiment.Actions.cs|SolverController.EnqueueAndCaptureActionAsync(
+src/Testing/UnattendedTestRunner.MultiplayerExperiment.Actions.cs|played.OwnerId != actor.NetId
+src/Testing/UnattendedTestRunner.MultiplayerExperiment.cs|SearchReason.Manual
+src/Testing/UnattendedTestRunner.MultiplayerExperiment.Setup.cs|ClearRunDeck(run, player);
 src/Runtime/SolverController.cs|if (reason != SearchReason.Manual) return;
 src/Runtime/SolverController.cs|Multiplayer advice cannot deploy native actions.
 src/Search/CombatBeamSolver.Multiplayer.cs|!CanReplayMultiplayerAction(node, action)
