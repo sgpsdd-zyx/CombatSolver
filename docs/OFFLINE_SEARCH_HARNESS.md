@@ -34,6 +34,8 @@ PowerShell在同一命令前设置 `$env:RACE_FIXTURE = 'poison'`，参数其余
 
 输出 `race-experiments.json`：搜索的当前回合动作、固定预算、三种外部队友脚本（闲置/每周期一张防御/每周期一张打击）的至多五周期模拟 HP、存活、清场与边界。搜索不读取这些脚本；外评与搜索共用模拟引擎，不能充当独立原生语义对照。夹具重建少量合成牌，队友在结束回合边界集中行动；首轮之后本机按固定防御/能力/ID顺序续行，不再重算，未模拟真人交错操作。外评也会在本机死亡或步数上限停止，`won=false` 不能直接解释为全队战败。不同变体和脚本不能计为独立战斗样本。最终采用、被撤回原型及适用边界见[伤害归属实验](strategy/multiplayer-shared-damage-20260923/implementation.md)。
 
+下一轮[交错行动与手动重算方案](strategy/multiplayer-experiments-20260923/README.md)拟改用原生动作驱动全队并重新捕获根，目前只有设计与协议草案。没有对应CLI入口；不要把草案 `protocol.json` 当作现有 `--request` 文件，通用随机场景仍只支持单人。
+
 旧 3 HP、A/C 覆盖与 `window-*` / `horizon-ordering` 的断言属于历史源码，当前命令显式拒绝并指向 `v0.43.6`。下列旧输入与证据保留作复现记录，不表示当前默认。新的实测数字和限制见[贡献策略实施](strategy/multiplayer-cooperative-planning-20260922/implementation.md)。
 
 `--multiplayer-long-term-contracts` 是首批多人长线收益诊断入口：固定双玩家、本机索引 1，用真实 Dark 球、星能和能力牌根捕获路径观察。它只消费已有 `SearchPathObserver` 的有界副本，记录路径在父内和保路边界的首次消失及已有评估字段；不改评分、Beam 席位、最终排序、状态键或预算。不能和 `--request` 或其他多人合同开关合用，不建立网络、不验证可见 UI；结果与限制见[长线收益归档](strategy/pro-long-term-20260918/README.md)。

@@ -1,0 +1,194 @@
+{
+  "protocolId": "multiplayer-manual-loop-20260923-draft1",
+  "date": "2026-09-23",
+  "status": "DesignOnly",
+  "readyToExecute": false,
+  "documentation": "docs/strategy/multiplayer-experiments-20260923/README.md",
+  "baselineBehaviorCommit": "fd976376c79cf87561d13397f2c5ddc330cc80ae",
+  "baselineVersion": "0.44.2",
+  "prerequisites": [
+    "Implement a test-owned native action and manual-request loop; no production teammate planner or auto-deployment.",
+    "Verify a two-player native full-party loop, branch isolation, stable recapture, session accounting and request ownership.",
+    "Register and restore complete party roots with source clusters, player identity, historical state and game RNG state.",
+    "Implement a test-only shared-credit ablation binding through manual requests and prove it is the sole treatment difference.",
+    "Freeze partner policies, schedules, request cadence and actor-specific choice adapters before measuring.",
+    "Record explicit outcomes for every planned arm, including unavailable advice, errors and censoring."
+  ],
+  "productionConstraints": {
+    "singlePlayerUnchanged": true,
+    "teammateActiveActionsProvidedToSearch": false,
+    "automaticMultiplayerRequests": false,
+    "automaticMultiplayerDeployment": false,
+    "searchEnemyCycleLimit": 14,
+    "increaseProductionBudgets": false,
+    "visibleSteamAllowed": false,
+    "newReleaseRequested": false
+  },
+  "comparison": {
+    "kind": "SameBuildSingleFactorAblation",
+    "arms": [
+      { "id": "shared_off", "creditSharedDamage": false },
+      { "id": "shared_on", "creditSharedDamage": true }
+    ],
+    "historicalDllComparison": "Optional separately labeled calibration, not the primary causal pair.",
+    "factorsHeldFixed": [
+      "complete party root and original source cluster",
+      "game and mod environment",
+      "all game RNG initial states",
+      "partner policy and parameters",
+      "action schedule and manual request cadence",
+      "test-only random seed",
+      "search profile and stopping limits"
+    ],
+    "factorsAllowedToDiverge": [
+      "native state after different local actions",
+      "partner decisions responding to that state",
+      "legal actions and targets",
+      "game RNG consumption caused by actual actions"
+    ]
+  },
+  "pilot": {
+    "purpose": "Validate execution and measurement, not estimate human multiplayer benefit.",
+    "rootManifest": null,
+    "plannedSourceRoots": 4,
+    "plannedPartySize": 2,
+    "partnerPolicyIds": ["immediate_attack", "survival_first"],
+    "scheduleIds": ["peer_batch_first", "alternate_one_action"],
+    "requestCadenceIds": ["turn_start", "after_peer_batch"],
+    "interactionCells": [
+      { "scheduleId": "peer_batch_first", "requestCadenceId": "turn_start" },
+      { "scheduleId": "alternate_one_action", "requestCadenceId": "turn_start" },
+      { "scheduleId": "alternate_one_action", "requestCadenceId": "after_peer_batch" }
+    ],
+    "omittedEquivalentCell": "peer_batch_first / after_peer_batch coalesces with the first local request; do not duplicate turn_start.",
+    "externalSeedReplicatesPerCell": 1,
+    "armsPerPair": 2,
+    "plannedPairs": 24,
+    "plannedTrajectories": 48,
+    "maximumIndependentRootClusters": 4,
+    "requiredCoverageThemes": [
+      "poison versus immediate teammate kill",
+      "defense and teammate self-protection",
+      "investment and later payoff",
+      "multiple enemies and target changes"
+    ],
+    "searchProfile": {
+      "fixedBudget": true,
+      "beamWidth": 12,
+      "maxExpandedNodes": 350,
+      "softTimeBudgetMilliseconds": 3000,
+      "maxDegreeOfParallelism": 1,
+      "enemyCycleLimit": 14,
+      "otherPolicySettings": "Freeze and record the full current multiplayer policy snapshot; no solo growth targets."
+    },
+    "trajectoryLimits": {
+      "requestTimeoutSeconds": 120,
+      "enemyCycles": 12,
+      "stableDecisions": 256,
+      "manualSearchRequests": 24,
+      "localDeathIsTerminal": false,
+      "searchWindowEqualsTrajectoryWindow": false,
+      "timeoutEscalationWithinSameBatch": false
+    },
+    "qualityWorldAdvancesDuringSearch": false,
+    "stressBatchSeparatedFromQuality": true,
+    "currentStatus": "NotImplementedNotRun"
+  },
+  "partnerPolicies": {
+    "proposedFamilies": [
+      "immediate_attack",
+      "survival_first",
+      "setup_then_burst",
+      "team_support",
+      "state_switching",
+      "bounded_mistakes"
+    ],
+    "allowedInformation": [
+      "own current hand and resources",
+      "public current battlefield and enemy intent",
+      "past observed events"
+    ],
+    "forbiddenInformation": [
+      "hidden deck order",
+      "future game RNG outcomes",
+      "tested advisor candidate scores or plans",
+      "counterfactual arm state or results"
+    ],
+    "usesTestedSolverAsPartner": false,
+    "randomPlayAndIdle": "Stress and negative controls only; not an empirical human population.",
+    "humanCalibrated": false,
+    "parametersFrozen": false
+  },
+  "execution": {
+    "environment": "Native game actions; managed harness transport/rendering bypasses must be declared, representative loop verified in native headless.",
+    "recaptureFrom": "Advanced stable live CombatState on main thread, not stale live objects beside an advanced shadow state.",
+    "sessionLifetime": "One production combat session across all manual requests of a trajectory.",
+    "actionBoundary": "Complete native action, choice and triggered transaction chain before next actor.",
+    "staleAdvice": "Observe according to frozen request cadence; never relabel stale advice as current.",
+    "invalidAdvice": "Record advice_invalid, abandon remaining old route and simulate an additional manual request; never silently substitute cards or targets.",
+    "missingAdviceFallback": "None in pilot; stop explicitly and count unavailability.",
+    "localDeath": "Continue living teammates until native team terminal or a registered limit; resume local actor if revived.",
+    "reset": "Complete run/session reset per trajectory. Reuse a process only after reset correctness is established.",
+    "nativeInstanceLocation": ".local/headless-instances/<instance>",
+    "nativeInstanceCleanup": "Use existing platform cleanup flag on the last request; retain logs outside the instance.",
+    "platformProtocolChanges": "Maintain Bash and PowerShell entry points together if parameters or capabilities change."
+  },
+  "randomness": {
+    "gameRng": "Equal initial states; natural action-dependent consumption after branching, never forced alignment.",
+    "externalRng": "Separate test-only actor and scheduler streams; never consume game RNG.",
+    "externalDrawCoordinates": ["pairId", "stableActorId", "actorTurn", "actorDecisionOrdinal"],
+    "replayActionTape": "Only validates its original path; not a responsive counterfactual partner.",
+    "sameSeedImpliesIndependentSample": false
+  },
+  "outcomeKinds": [
+    "team_win",
+    "team_loss",
+    "cycle_limit",
+    "decision_limit",
+    "query_limit",
+    "request_timeout",
+    "unsupported",
+    "no_advice",
+    "choice_adapter_missing",
+    "root_mismatch",
+    "execution_error"
+  ],
+  "reporting": {
+    "primary": [
+      "all planned pairs and arm availability",
+      "native team terminal and explicit nonterminal stop reason",
+      "per-player death and revival events",
+      "per-player damage, healing, maximum-HP loss and ending HP"
+    ],
+    "secondary": [
+      "per-player potion identity and count",
+      "manual request count and invalid advice count",
+      "search work and time-limit incidence",
+      "enemy cycles until actual terminal"
+    ],
+    "pairedHealthSubset": "Both arms complete and win; report subset size and exclusions alongside all-pair outcomes.",
+    "negativeCases": "List candidate-only defeats, deaths and unavailable outcomes, plus worst health regressions by source root.",
+    "unknownOutcomes": "Retain in denominator and report explicit bounds; do not relabel censoring as defeat or zero loss.",
+    "independentUnit": "Original run or source deck/root cluster, with generator-template sensitivity when sources share a template.",
+    "withinRootWeighting": "Aggregate frozen conditions within root, then weight independent roots equally; publish strata and mixture sensitivity.",
+    "formalUncertainty": "Paired cluster-level interval estimates only after a predeclared adequate sample design; pilot is descriptive.",
+    "holdout": "Separate source runs, deck provenance and partner families; once used for tuning, reclassify as development data.",
+    "formalSampleSize": null,
+    "minimumUsefulEffect": null,
+    "formalStoppingRule": null
+  },
+  "sources": [
+    {
+      "url": "https://arxiv.org/abs/1910.05789",
+      "title": "On the Utility of Learning about Humans for Human-AI Coordination",
+      "readScope": "Primary abstract page",
+      "application": "Independent partner families and later human calibration, not a guarantee for this game."
+    },
+    {
+      "url": "https://arxiv.org/abs/2108.13264",
+      "title": "Deep Reinforcement Learning at the Edge of the Statistical Precipice",
+      "readScope": "Primary abstract page",
+      "application": "Report uncertainty and distributions; source-cluster design is a project-specific inference."
+    }
+  ]
+}

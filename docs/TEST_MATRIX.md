@@ -1,5 +1,9 @@
 # CombatSolver 测试清单
 
+## 多人闭环实验协议（2026-09-23，设计记录）
+
+[设计与协议](strategy/multiplayer-experiments-20260923/README.md)只完成L0文档/JSON一致性检查，`readyToExecute=false`，没有新行为通过结果。拟先验证双人原生行动、两次真实手动请求、下一回合与持续阶段账本，再试跑4原根×2队友×3个有效调度/重算组合×2臂。48为计划轨迹数，不是已执行测试或独立样本；原根清单、执行器及三/四人恢复仍待补齐。
+
 ## 0.44.2（fork，本地准备）：多人无来源伤害选路（2026-09-23）
 
 - L2 原生 `MULTIPLAYER-SHARED-DAMAGE` / `macos-b3820fafd274467f93601a352371e20b`：20项 Passed。混合本机/队友毒仍为 null dealer，毒触发及完整敌方周期后全队 ContinuationStamp 相同；根/兄弟/子 Fork、已观察阶段账本、治疗冲回、重复重算、三人分数、人数变化、ready/撤销及严格增量通过。固定短搜、120秒请求；夹具为 `coverage/unattended/multiplayer-shared-damage.json`。

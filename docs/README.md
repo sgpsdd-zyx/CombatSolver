@@ -17,6 +17,7 @@
 
 | 要查什么 | 入口 |
 |---|---|
+| 如何实验未知队友、交错操作与反复手动重算 | [多人实验设计与待实现协议](strategy/multiplayer-experiments-20260923/README.md) |
 | 0.44.2 本地定版、实验结论边界与知识归档 | [本地记录](releases/0.44.2-PREPARE.md)、[归档凭证](strategy/multiplayer-shared-damage-20260923/closeout.md) |
 | 0.44.1 发布来源与 GitHub 交付 | [发布记录](releases/0.44.1-PUBLISH.md) |
 | 0.41.2 发布、独立尖塔军师修复及本地材料的归档状态 | [2026-09-18 归档记录](DEVELOPMENT_NOTES.md#归档状态2026-09-18) |
