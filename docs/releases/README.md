@@ -4,15 +4,15 @@
 
 按版本倒序列出已有玩家更新日志，包括历史草案。是否正式发布以对应 Git 标签和发布记录为准；未发布改动见 [开发笔记](../DEVELOPMENT_NOTES.md)。发布 ZIP 存放在仓库根目录的 `releases/`，此处只保存文档。
 
-**0.45.1 正在准备发布**，合入官方 `68700c23 / 0.45.0`，并包含此前0.44.2的多人无来源伤害折算。见[玩家更新日志](0.45.1-RELEASE_NOTES.md)与[合并/验证/归档](../strategy/upstream-0450-merge-20260923.md)。当前阶段尚未创建本版标签或外部Release，最终渠道凭证在发布后归入本目录。
+**0.45.1 已正式发布**，来源 `7d6ed2fc`，合入官方 `68700c23 / 0.45.0`，并包含此前0.44.2的多人无来源伤害折算。分支、annotated tag和[GitHub Release](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.45.1)已发布，见[渠道凭证](0.45.1-PUBLISH.md)、[玩家更新日志](0.45.1-RELEASE_NOTES.md)与[合并/验证/归档](../strategy/upstream-0450-merge-20260923.md)。
 
-最近已发布 fork 为 **[0.44.1](0.44.1-PUBLISH.md)**。此前 **[0.44.2](0.44.2-PREPARE.md)** 仅从 `fd976376` 完成本地构建与最小包，本次合并后由新版本统一交付，不补发旧包或旧标签。[实验结果](../strategy/multiplayer-experiments-20260923/implementation.md)保留失败和恶化个案，不作真人联机胜率承诺。
+前一公开 fork 为 **[0.44.1](0.44.1-PUBLISH.md)**。此前 **[0.44.2](0.44.2-PREPARE.md)** 仅从 `fd976376` 完成本地构建与最小包，本次合并后由0.45.1统一交付，不补发旧包或旧标签。[实验结果](../strategy/multiplayer-experiments-20260923/implementation.md)保留失败和恶化个案，不作真人联机胜率承诺。
 
 官方与 fork 的同号版本不相互替换；官方[0.44.1](upstream/0.44.1-RELEASE_NOTES.md)、[0.45.0](upstream/0.45.0-RELEASE_NOTES.md)及此前原文独立归档，官方标签保持原指向。独立尖塔军师工具由[工具目录](../../tools/SpireAdvisorMultiplayerFix/README.md#已交付产物)维护。
 
 | 版本系列 | 更新日志 |
 |---|---|
-| 0.45 | [0.45.1（fork，准备发布）](0.45.1-RELEASE_NOTES.md) · [0.45.0 官方原文](upstream/0.45.0-RELEASE_NOTES.md) |
+| 0.45 | [0.45.1（fork，已发布）](0.45.1-RELEASE_NOTES.md) · [0.45.0 官方原文](upstream/0.45.0-RELEASE_NOTES.md) |
 | 0.44 | [0.44.2（fork，历史准备版）](0.44.2-RELEASE_NOTES.md) · [0.44.1（fork）](0.44.1-RELEASE_NOTES.md) · [0.44.1 官方原文](upstream/0.44.1-RELEASE_NOTES.md) · [0.44.0 官方原文](upstream/0.44.0-RELEASE_NOTES.md) |
 | 0.43 | [0.43.6（fork）](0.43.6-RELEASE_NOTES.md) · [0.43.5（fork）](0.43.5-RELEASE_NOTES.md) · [0.43.4（fork，历史准备版）](0.43.4-RELEASE_NOTES.md) · [0.43.3（fork，历史准备版）](0.43.3-RELEASE_NOTES.md) · [0.43.2（fork，历史准备版）](0.43.2-RELEASE_NOTES.md) · [0.43.1（fork）](0.43.1-RELEASE_NOTES.md) · [0.43.0（上游）](0.43.0-RELEASE_NOTES.md) |
 | 0.42 | [0.42.0](0.42.0-RELEASE_NOTES.md) |

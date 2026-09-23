@@ -545,6 +545,30 @@
       "ruleBytes": 28139,
       "ruleLines": 233,
       "parser": "Exclude fenced/inline code examples; verify local path existence, not historical anchor semantics."
-    }
+    },
+    "runtimeStatus": "PublishedBySuccessfulCommands; live install/network/visible performance pending"
+  },
+  "release": {
+    "version": "0.45.1",
+    "source": "7d6ed2fc892431bc9176c7d8a4b9713873109b14",
+    "status": "Published",
+    "tag": "v0.45.1",
+    "tagType": "annotated",
+    "url": "https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.45.1",
+    "latest": true,
+    "zip": "releases/CombatSolver-0.45.1.zip",
+    "bytes": 2252861,
+    "build": {
+      "status": "Passed",
+      "warnings": 0,
+      "errors": 0,
+      "log": ".local/release-0.45.1/build.log",
+      "copyModOnBuild": false
+    },
+    "branchAndTagAtomicPush": "Passed",
+    "githubReleaseCreate": "Passed",
+    "receipt": ".local/release-0.45.1/release-receipt.json",
+    "publishRecord": "docs/releases/0.45.1-PUBLISH.md",
+    "visibleNetworkInstallVerification": false
   }
 }

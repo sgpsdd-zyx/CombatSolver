@@ -1,6 +1,6 @@
 # CombatSolver 文档导航
 
-当前源码 **0.45.1** 合入官方 `68700c23 / 0.45.0`，单人保留官方策略，多人沿用本机贡献目标与无来源伤害折算。合并取舍、当前验证和知识收尾见[本轮记录](strategy/upstream-0450-merge-20260923.md)，发布阶段统一见[版本索引](releases/README.md)。
+当前已发布 **0.45.1** 合入官方 `68700c23 / 0.45.0`，单人保留官方策略，多人沿用本机贡献目标与无来源伤害折算。合并取舍、当前验证和知识收尾见[本轮记录](strategy/upstream-0450-merge-20260923.md)，渠道凭证见[发布记录](releases/0.45.1-PUBLISH.md)。
 
 [多人原生实验](strategy/multiplayer-experiments-20260923/implementation.md)按“只有本机使用军师、队友独立决策”记录原生差分与受控脚本表现；收益、恶化和未知结果分开，真实联机仍未验收。现役操作与限制见[多人指南](multiplayer-advisor.md)。
 

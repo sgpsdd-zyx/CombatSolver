@@ -15,6 +15,8 @@
 
 没有重跑64条策略试验，未验证真人队友分布、联机胜率、真实网络、可见性能/鼠标观感、Loadout实装、任意第三方回合适配、Windows原生、干净安装或完整发布门禁。下文0.44.2和实验阶段的“未发布”描述均为当时记录；现役发布以版本索引为准。
 
+定版提交 `7d6ed2fc` 的Release构建0警告/0错误，最小ZIP与GitHub发布命令成功；[渠道凭证](releases/0.45.1-PUBLISH.md)与行为证据分开，不额外计算为测试通过项。发布后只改文档，未复测、解包或读取远端确认。
+
 ## 多人原生闭环实验（2026-09-23）
 
 仅本机使用军师、队友独立决策；测试工具与生产评分分离。[实施记录](strategy/multiplayer-experiments-20260923/implementation.md)和[结构化证据](strategy/multiplayer-experiments-20260923/implementation-evidence.json)包含所有配对及失败。
