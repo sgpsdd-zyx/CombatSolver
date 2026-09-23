@@ -1,6 +1,6 @@
 # 多人实验设计：交错行动与手动重算（2026-09-23）
 
-[策略索引](../README.md) · [当前结果归档](../multiplayer-shared-damage-20260923/closeout.md) · [协议草案](protocol.json) · [现役多人指南](../../multiplayer-advisor.md)
+[策略索引](../README.md) · [当前结果归档](../multiplayer-shared-damage-20260923/closeout.md) · [协议草案](protocol.json) · [现役多人指南](../../multiplayer-advisor.md) · [审查意见](review.md)
 
 状态：设计完成，执行器、原根清单和新实验尚未实现或运行。当前行为仍为 `fd976376 / 0.44.2`；本方案不调整评分、不增加生产预算、不预测队友主动行为，也不启动可见 Steam。协议里的批次数是计划运行数，不能计入已通过测试。
 
