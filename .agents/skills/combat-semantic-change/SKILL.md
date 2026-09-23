@@ -76,6 +76,8 @@ CombatRootSnapshot.Capture（主线程根）
 
 `AfterSideTurnEndLate` 的扩展使用 `AfterSideTurnEndLateMirrors.Register<TModel>`，在根捕获前完成登记；玩家和敌方共用 Hook facade，DisintegrationPower 不得恢复到独立晚期补偿。新增其他阶段时逐一核对原版顺序、选择暂停和状态所有权，不能把晚期入口当作所有回合事件的通用回调。
 
+`BeforeSideTurnStartMirrors` 与 `AfterPlayerTurnStartMirrors` 同样在根捕获前登记并冻结；单人和多人回合入口共用对应 Hook facade。无外部监听者的原版批次路径仍使用 `PowersForHooks` 与逐玩家遗物资格，不能因合入单人新入口恢复死亡队友的效果。外部登记路径按每阶段原生监听顺序派发；队友选择继续形成边界，不由军师代选。
+
 ## 3. 状态所有权清单
 
 - 单人历史六项累计值由 `CombatPredictionHistory.Record` 维护，普通、手动选牌与执行续接 Fork 均继承已有总数，复制尾段不重复入账。多人沿用按各效果持有者范围扫描历史，不能调用只接受单人 owner 的累计入口。更改历史事件或续接路径时使用 `VerifyHistoryCounters=true` 核对单人独立扫描，并以 `upstream-compatibility` 覆盖多人两位玩家、生产键及原生全队状态；Started/Finished 与原始/Resolved 的计数时点不能混用。

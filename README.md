@@ -4,13 +4,13 @@ Combat Solver 是《杀戮尖塔 2》的战斗路线求解器，本 fork 支持�
 
 单人模式下，玩家可以只查看建议，也可以让求解器执行当前回合，或连续接管整场战斗。多人模式只提供手动请求的建议。搜索不会修改游戏 RNG，也不会在后台操作真实战斗状态。
 
-当前已发布 **0.44.1**，基于官方 **0.44.0**，重新设计多人选路：以本机阶段贡献为目标，综合考虑战损、药水和后续收益，取消每周期 3 HP 目标。见 [中英更新日志](docs/releases/0.44.1-RELEASE_NOTES.md)、[GitHub 下载](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.44.1)与[多人军师](docs/multiplayer-advisor.md)。
+当前源码 **0.45.1** 合入官方 **0.45.0** 的战斗兼容修正、界面平滑更新和窗口位置保存，并包含多人持续伤害选路折算。正在完成发布准备，状态见 [版本索引](docs/releases/README.md)、[中英更新日志](docs/releases/0.45.1-RELEASE_NOTES.md)和[合并与归档](docs/strategy/upstream-0450-merge-20260923.md)。最近已发布 fork 为 0.44.1；0.44.2 的历史本地包不作为本次发布来源。
 
-当前源码的 **0.44.2** 已完成[本地构建与最小包](docs/releases/0.44.2-PREPARE.md)，为无来源实际伤害增加选路折算，尚未对外发布。[实验记录](docs/strategy/multiplayer-shared-damage-20260923/implementation.md)中的固定脚本收益不代表真人联机收益。
+多人实验已包含独立队友、交错操作和连续手动重算，保留收益与恶化个案；[实验记录](docs/strategy/multiplayer-experiments-20260923/implementation.md)不代表真人联机胜率。
 
 [多人军师](docs/multiplayer-advisor.md) 推荐本人的出牌和用药路线，最多推演十四个敌方回合。队友行动后自行决定何时重算；推演假设队友后续不主动出牌或用药，但仍结算其被动效果。多人功能目前供试用，尚未完成真实联机验收。
 
-**English UI:** Set the game language to English and restart the game. In single-player, use **Play turn** or **Auto: On**. Released version **0.44.1** is based on upstream **0.44.0**. Multiplayer replaces the per-cycle 3 HP target with a local contribution objective, balancing health, potions and observed longer-term returns. It retains manual advice for up to fourteen enemy cycles and doubled ordinary time and node limits. Teammates' future active actions are not modeled; live multiplayer is not yet verified. See the [release notes](docs/releases/0.44.1-RELEASE_NOTES.md) and [GitHub download](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.44.1). Configure potions, growth and search budgets in the overlay. **Settings > Reports > Upload report** submits a bug report. Logs, raw errors and some detailed diagnostics retain their original text.
+**English UI:** Set the game language to English and restart the game. In single-player, use **Play turn** or **Auto: On**. Current source **0.45.1** incorporates upstream **0.45.0** and is being prepared for release; see the [release status](docs/releases/README.md). Multiplayer replaces the per-cycle 3 HP target with a local contribution objective, balancing health, potions and observed longer-term returns. It retains manual advice for up to fourteen enemy cycles and doubled ordinary time and node limits. Teammates' future active actions are not modeled; live multiplayer is not yet verified. See the [release notes](docs/releases/0.45.1-RELEASE_NOTES.md). Configure potions, growth and search budgets in the overlay. **Settings > Reports > Upload report** submits a bug report. Logs, raw errors and some detailed diagnostics retain their original text.
 
 界面跟随游戏语言：简体/繁体中文使用现有中文文案，其他语言使用英文。简化版不提供独立语言开关；卡牌胶囊、选牌和相关悬停说明支持运行中切换语言，其他既有窗口可通过重启统一刷新。
 

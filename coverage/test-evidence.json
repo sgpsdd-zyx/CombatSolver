@@ -1,4 +1,13 @@
 {
+  "UPSTREAM-0450-MULTIPLAYER-COMPAT": {
+    "status": "Passed",
+    "level": "TargetedUpstreamMergeManagedContractsAndNativeHeadlessBoundaries",
+    "procedure": "Merge upstream 68700c23 / 0.45.0 into fork 70212bc2, preserve scoped multiplayer policies, and compare an independently built official DLL at the solo-power-compat root. Run turn-start registration contracts, native power-source/death differentials, full-party shared-damage replay, UI state/localization, multiplayer manual loop and a following single-player isolation request.",
+    "expected": "Single-player remains on upstream strategies and parameters. Multiplayer uses registered turn-start facades without reactivating dead teammates, predicting peer actions or changing shared-damage accounting, deadlines and manual-only entry.",
+    "observed": "2026-09-23: solo 92 non-timing fields plus complete root/route/continuations equal, 1750 expansions/4363 transitions/2 HP, four multiplayer entries zero. Compatibility 13 and shared-ranking 16 checks pass; native death/prevention/revival and next-turn full state match. Turn-start contracts 22+1 and 41+3, mask 61 bits. Three native power-source/death scenarios pass. Shared damage 21 checks include production facade order and full native cycle. Native UI catalog459 across eng/zhs/zht and bounded controller/position/memory checks pass. Manual loop has four queries, three actions per actor, one strict action and six frozen-root comparisons; next single-player request has no experiment hooks and a one-card winning suggestion. Eight final native requests pass; two earlier failed inputs remain recorded. All three native instances removed. Merged/official/tool builds, targeted coverage and Bash boundaries pass.",
+    "evidence": "docs/strategy/upstream-0450-merge-20260923.md; docs/strategy/upstream-0450-merge-20260923-evidence.json; coverage/unattended/upstream-0450-ui-state.json; .local/upstream-sync-20260923/",
+    "scope": "Only the named contracts pass. Wrong-encounter UI initialization and a 120-second post-assertion search wait failed before the corrected minimal fixtures. No 64-arm experiment rerun, human/network quality, visible performance, real Loadout install, arbitrary external turn adapters, Windows/PowerShell, clean install or full release gate. Upstream archived tests are not counted as new fork evidence."
+  },
   "MULTIPLAYER-MANUAL-LOOP": {
     "status": "Passed",
     "level": "L2NativeManualMultiplayerBoundaryContracts",

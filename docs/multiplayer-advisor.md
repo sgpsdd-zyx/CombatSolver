@@ -1,10 +1,10 @@
-# 多人军师（基于官方 0.44.0）
+# 多人军师（基于官方 0.45.0）
 
-本地定版 [0.44.2](releases/0.44.2-PREPARE.md) 增加无来源实际伤害的选路折算，个人贡献仍按真实归属；构建与最小包已完成，尚未对外发布。本文描述当前源码行为。[首轮实验](strategy/multiplayer-shared-damage-20260923/implementation.md)证明了已测语义与少量固定脚本下的局部收益。
+当前源码 fork **0.45.1** 合入官方 `68700c23 / 0.45.0` 的回合开始适配、伤害来源/死亡后结算修正与界面更新，单人沿用官方策略。合并证据见[本轮记录](strategy/upstream-0450-merge-20260923.md)，发布阶段统一见[版本索引](releases/README.md)。
 
-[后续原生实验](strategy/multiplayer-experiments-20260923/implementation.md)已加入完整牌组、独立队友、交错行动、连续手动重算和团队终局。前提始终是只有本机使用军师，队友按自己的判断行动，无需服从建议。受控实验已出现收益与恶化个案，仍不能代表真人联机表现；操作方式保持不变。
+多人使用三敌方周期的本机贡献目标、伤害/代价前沿与最长十四周期的条件续行。无来源实际伤害按阶段人数折算参与选路，个人贡献仍按真实归属。阶段目标的[实施依据](strategy/multiplayer-cooperative-planning-20260922/implementation.md)与[伤害归属实验](strategy/multiplayer-shared-damage-20260923/implementation.md)保留原始版本和结论范围。
 
-当前已发布 fork [0.44.1](releases/0.44.1-PUBLISH.md)，基于官方 `42e09028 / 0.44.0`，单人保持官方路径。多人改用三敌方周期的本机贡献目标、伤害/代价前沿和最长十四周期的条件续行，不预测队友主动操作。每周期 3 HP 和旧 A/C 覆盖选路已退休。新策略实现、采用取舍与直接证据见[贡献策略实施记录](strategy/multiplayer-cooperative-planning-20260922/implementation.md)；上游合并及第一次归档见[合并记录](strategy/upstream-0440-merge-20260922.md)。真实联机和可见性能尚未验收。
+[原生实验](strategy/multiplayer-experiments-20260923/implementation.md)包含完整牌组、独立队友、交错行动、连续手动请求和团队终局。前提始终是只有本机使用军师，队友按自己的判断行动，无需服从或等待建议。受控实验已出现收益与恶化个案，真实联机表现和可见性能仍未验收。
 
 ## 使用方式
 

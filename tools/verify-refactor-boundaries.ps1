@@ -1320,7 +1320,8 @@ $overlayRendererPaths = @(
     (Join-Path $repositoryRoot "src\UI\SolverOverlay.cs"),
     (Join-Path $repositoryRoot "src\UI\SolverRouteRow.cs"),
     (Join-Path $repositoryRoot "src\UI\SolverActionPill.cs"),
-    (Join-Path $repositoryRoot "src\UI\SolverActionBar.cs")
+    (Join-Path $repositoryRoot "src\UI\SolverActionBar.cs"),
+    (Join-Path $repositoryRoot "src\UI\SolverOverlayMotionDriver.cs")
 )
 foreach ($check in @(
     @{ Path = $overlaySnapshotPath; Text = "internal sealed record SolverOverlaySnapshot(" },
@@ -1328,6 +1329,7 @@ foreach ($check in @(
     @{ Path = Join-Path $repositoryRoot "src\UI\SolverOverlay.cs"; Text = "public static void ShowResult(Node host, SolverOverlaySnapshot snapshot)" },
     @{ Path = Join-Path $repositoryRoot "src\UI\SolverRouteRow.cs"; Text = "public void Populate(SolverOverlayTurnSnapshot turn)" },
     @{ Path = Join-Path $repositoryRoot "src\UI\SolverActionPill.cs"; Text = "public static Control Create(SolverOverlayActionSnapshot action)" },
+    @{ Path = Join-Path $repositoryRoot "src\UI\SolverOverlayMotionDriver.cs"; Text = "=> SolverOverlay.AdvanceSearchReadouts(delta);" },
     @{ Path = Join-Path $repositoryRoot "src\Engine\InCombat\Simulation\ActionRelicTriggerRecorder.cs"; Text = "new(relic.Id.Entry, summary, relic.Owner.NetId)" },
     @{ Path = Join-Path $repositoryRoot "src\Search\CombatBeamSolver.Phases.cs"; Text = "OwnerPlayerNumber = IsMultiplayerAdvice ? displayNames.PlayerNumber(trigger.OwnerNetId) : null" },
     @{ Path = $overlaySnapshotPath; Text = "effect.OwnerPlayerNumber, effect.OwnerIsLocal" },
@@ -1623,6 +1625,7 @@ $multiplayerAdviceRules = @(
     @{ Path = 'src/Testing/UnattendedTestRunner.MultiplayerExperiment.Setup.cs'; Text = 'ClearRunDeck(run, player);' }
     @{ Path = 'src/Runtime/SolverController.cs'; Text = 'if (reason != SearchReason.Manual) return;' }
     @{ Path = 'src/Runtime/SolverController.cs'; Text = 'Multiplayer advice cannot deploy native actions.' }
+    @{ Path = 'src/Search/CombatBeamSolver.MultiplayerRound.cs'; Text = 'CombatSolver.Engine.InCombat.Mirrors.HookMirrors.BeforeSideTurnStart(' }
     @{ Path = 'src/Search/CombatBeamSolver.Multiplayer.cs'; Text = '!CanReplayMultiplayerAction(node, action)' }
     @{ Path = 'src/Search/CombatBeamSolver.Models.cs'; Text = 'public int ReplayedAdviceActions;' }
     @{ Path = 'src/Search/CombatBeamSolver.cs'; Text = '_hasRegisteredPowerCards = policy.Multiplayer == null' }

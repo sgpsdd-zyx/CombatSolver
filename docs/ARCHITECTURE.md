@@ -30,7 +30,7 @@
 
 中间 Beam 继续覆盖防御、进攻和铺垫；单人 `FinalPlanOrdering`、能力承诺及预算不变。多人根前用药资格由 Runtime 原追踪窗口按 Actor 冻结。UI 从 `SolverResult` 投影阶段目标、已付/预计进展、是否存在选中达标见证、返回深度、曾到达深度和未知受击提示；不读取搜索树。详细默认参数与验证由[多人指南](multiplayer-advisor.md)及[实施记录](strategy/multiplayer-cooperative-planning-20260922/implementation.md)维护。
 
-当前单人基线为官方 `42e09028 / 0.44.0`。`PowerCardValuation` / `PowerCommitment` 和能力固定前缀组合用于单人。多人协调器继续在这些组合及强制／Smart 药水梯度之前返回；`CombatBeamSolver._hasRegisteredPowerCards` 另以 `policy.Multiplayer == null` 隔离共享候选展开中的能力承诺入口。Runtime 多人不捕获单人成长目标，`SimulatedCombatState` 多人根的疯狂科学升级信用容量为零，实际 Power 仍按持有者结算。单人继续官方登记、成长、保路和预算路径；[兼容证据](strategy/upstream-0440-merge-20260922.md)。
+当前单人基线为官方 `68700c23 / 0.45.0`。`PowerCardValuation` / `PowerCommitment` 和能力固定前缀组合用于单人。多人协调器继续在这些组合及强制／Smart 药水梯度之前返回；`CombatBeamSolver._hasRegisteredPowerCards` 另以 `policy.Multiplayer == null` 隔离共享候选展开中的能力承诺入口。Runtime 多人不捕获单人成长目标，`SimulatedCombatState` 多人根的疯狂科学升级信用容量为零，实际 Power 仍按持有者结算。单人继续官方登记、成长、保路和预算路径；[兼容证据](strategy/upstream-0450-merge-20260923.md)。
 
 官方 0.44.0 的余像前移审计与循环重放均显式拒绝多人；新的长期格挡折价仅用于单人，多人合并阶段保留原格挡探索值。历史依赖掩码来自根全牌堆、已登记生成来源与 Hook，追加历史值时单人读累计值，多人仍沿各效果持有者扫描；Bash/PowerShell 门禁同步这些接入。
 
@@ -79,7 +79,7 @@ Entry / turn hooks
 
 同一战斗回合已有计划、活动搜索、部署会话或已完成的部署时，迟到的 AutoTurnStart 在 RequestSearch 入口直接完成。搜索与部署会话分别冻结战斗身份和起始回合；开始部署清空 LatestResult 后由部署会话延续归属，完成后由 LastSolverDeployedTurn 保留。手动重算及下一回合请求继续原流程。
 
-`ICombatPredictionEffectSink.ApplyPowerFromSource` 将原版显式 cardSource 传入分支 Power 施加作用域，null 明确代表能力/遗物自身来源；完成后恢复外层来源。Envenom/Concoct 的附毒使用此入口，UnsettlingLamp 继续只响应卡牌直接施加。作用域存于分支，活动期间禁止 Fork。
+`ICombatPredictionEffectSink.ApplyPowerFromSource` 将原版显式 cardSource 传入分支 Power 施加作用域，null 明确代表能力/遗物自身来源；完成后恢复外层来源。Envenom/Concoct 的附毒使用此入口，UnsettlingLamp 继续只响应卡牌直接施加。原版凡是由能力或遗物驱动的附带减益（腐蚀波、吸取、手里剑、激怒、湮灭、撕裂、温柔、生命火花、军械库、破甲钻、红头骨、定形黏土、ReaperForm／Underworld 的灾厄等）都显式传 `null`，这些镜像必须走同一入口，不能沿用外层的卡牌作用域。作用域存于分支，活动期间禁止 Fork。
 
 ## 2. Runtime
 
@@ -330,7 +330,7 @@ Smart 层间使用 `SmartLayerMemoryForecast` 的同窗分配和转移高水位�
 
 - `Fork.cs`：统一稳定边界和对象图复制；
 - `MonsterAi.cs` / `MonsterState.cs`：分支行动、私有 AI、已知怪物静态值；
-- `DeathLifecycle.cs`：死亡、复活与阵容事务；
+- `DeathLifecycle.cs`：死亡、复活与阵容事务；`CanReceivePredictedPowers` 按「个体是否仍在战斗里」判 Power 是否可施加——实机在击杀当时就 `RemoveCreature`，而死亡效果要到 `ApplyEnemyDeathPowers` 才清扫，这个窗口里施加给已离场个体的 Power 是空操作；
 - `ActionChoices.cs` / `TurnStartChoices.cs` / `AutoPlay.cs`：嵌套选择与自动出牌；
 - `CardLifecycle.cs` / `CardPowerHistory.cs` / `PowerLifecycle.cs`：卡牌和 Power 跨事件状态；
 - 凡庸在 `ShouldPlayMirrors` 使用同一分支手牌/开始次数入口约束手动与自动打牌。`_cardPlayStartsThisTurn` 包含重复播放和仍在执行的外层卡牌，根来自 CardPlaysStarted，随 Fork 复制、回合开始清零，进入 fingerprint 和 `CardEventHistory` 的 live/predicted 续用文本；不能以完成次数或手动系列数代替。
@@ -404,6 +404,10 @@ Search在首回合、EndTurn及已知可能嵌套/重复的卡牌回放建立捕
 
 `MethodMirrorRegistry` 同时实现 `IMethodMirrorRegistryDescriptorProvider`。`MethodMirrorRegistryDescriptor` 描述基础方法、receiver、显式 Handled/Ignored 注册和当前 inferrer；CoverageCatalog 只消费该描述符，不读取 registry 私有字段或 `MirrorMethodSpec` 内部布局。
 
+`AfterPlayerTurnStartMirrors` 使用三张独立登记表覆盖抽牌后的 Early/普通/Late。`HookMirrors.AfterPlayerTurnStart` 在每轮取得分支监听快照，复用 Power/遗物单项结算体；未知有效覆写拒绝，回调挂起后禁止原版局部执行帧复用并完整重放。已有外部登记时始终使用三轮派发，以接纳普通阶段新出现的 Late 监听者；没有外部登记且入口没有第三方覆写时沿用 `SimulatedCombatState.TriggerAfterPlayerTurnStartVanilla` 的既有批次和帧。不改搜索策略或状态所有权。
+
+`BeforeSideTurnStartMirrors` 在回合初 Power 快照之后、清格挡之前派发。单人 `RoundTransition`、多人 `MultiplayerRound` 与敌方 `Expansion.Replay` 共用 `HookMirrors.BeforeSideTurnStart`，不再各自拼接旧遗物/Power 批次。无外部监听者时仍运行原批次的单项结算体；多人保留 `PowersForHooks` 与逐玩家遗物资格，死亡队友的状态继续保存但不触发已停用效果。抽牌后的三阶段也由各玩家准备流程进入同一 facade；队友选择继续形成明确边界。
+
 ## 5. Prediction 领域补偿
 
 `src/Prediction/` 处理基础命令和单个 mirror 不能独立表达的领域语义：
@@ -419,6 +423,8 @@ Search在首回合、EndTurn及已知可能嵌套/重复的卡牌回放建立捕
 这里可以保存具体领域规则，但不能决定 Beam 配额、最终路线或 UI 显示。新增补偿前检查 mirror、spec、support 和 `SimulatedCombatState` 的完整调用链，确保只有一个权威结算点。
 
 `PlayerTurnEndLifecycle.RunPhaseTwo` 拥有清空手牌后的玩家回合末顺序：常规 Power、遗物、`HookMirrors.AfterSideTurnEndLate`，最后规范化卡牌词条。Search、风险预估和无人差分共用此入口；每个阶段的挂起选择立即向上传播。敌方晚期入口由 `CorePowerSupport.TriggerEnemySideTurnEndEffects` 调用。晚期阶段按完整分支监听顺序固定成员并跟随卡牌 COW Preview；`AfterSideTurnEndLateMirrors` 独占原版 DisintegrationPower 效果，底层沿用标准 registry/descriptor。登记在首次根捕获或分发后冻结，未知战斗重写明确失败，不扩展状态或 Mod 门禁；见 [回合阶段镜像](third-party-turn-phase-mirrors.md)。
+
+`PredictionModHookSubscriberCapture` 对 Loadout `v0.5.6` 的 `PowerGiverSummonHook` 只接受公开快照中的空怪物能力配置。根保存该条件，`ContinuationStamp` 在 live 与 predicted 两侧记录配置是否仍为空；非空配置会在未来召唤和阶段切换时改变战斗结算，保持拒绝。worker 不读取 Loadout 的全局计数。
 
 DarkEmbrace 的延迟抽牌数由 AfterCardExhausted 镜像按实际虚无消耗事件写入 `DarkEmbracePredictionState`，根从原生内部计数捕获，StateStore/Fork 按值隔离并纳入指纹；常规 Power 回合末阶段抽牌后归零，稳定下一玩家回合不保留待抽事务。苍蓝星球的已触发标志由主线程从原生 Power 捕获至分支表，避免 Power 克隆重置内部数据后重复触发。
 
@@ -441,6 +447,8 @@ Mod 准入，具体契约见[模型状态适配](third-party-model-state.md)。
 偷窃策略由 `TheftEncounterStrategy.CompareRecovery` 统一胜利/追回资源的排序前缀；`SolverInterimResult` 携带 TheftPolicy，展示与搜索中的候选比较按同一策略处理。保策略的终局、保路与药水审计将追回置于战损之前，纯 HP 早停要求资源已追回，HP incumbent 剪枝在保策略下停用。放走继续普通战损/药水政策。
 
 状态摘要采用首行徽章/路线摘要/右侧详情，次行搜索上下文/耗时/统计的结构；`ShowResult` 使用已有 SummaryText 中的回合信息，不重复显示规划回合上下文。搜索中的上下文标签关闭内部换行，流式统计行负责整项换行；`SolverDetailsButton` 保留展开事件与箭头，使用轻量无背景样式。
+
+`SolverOverlayMotionDriver` 随覆盖层创建和释放，只逐帧推进 Overlay 已接收的搜索读数；`SolverMemoryUsageBar`、动作胶囊与上传面板各自推进显示过渡，不读搜索树、不改变原始统计或终态。隐藏时停止推进，再显示时同步最新采样。Overlay 分开保存用户请求位置与布局限制后的显示位置；全局输入桥在鼠标释放时提交位置/尺寸到 `SolverSettings`。多人准备、过期与停止状态仍由原手动请求链驱动。
 
 常规设置按开始计算、出牌速度、自动执行暂停条件、幕末 Boss、药水奖励预测、显示与通知、在线统计分组；性能设置按搜索预算、搜索停止条件、内存管理及折叠自定义参数分组。`Controls.AddSettingsSection` 提供统一分组容器，输入仍使用原保存/重载事件，页面滚动沿用伸展布局。结果卡片位于状态摘要上方，以流式排列显示原快照的扣血、药水、失窃与回血；收起时迁移同一结果卡片，展开时恢复正文首位，避免重复结果状态。
 

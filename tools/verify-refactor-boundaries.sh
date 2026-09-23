@@ -1058,6 +1058,7 @@ src/UI/SolverOverlaySnapshot.cs	public static SolverOverlaySnapshot Capture(Solv
 src/UI/SolverOverlay.cs	public static void ShowResult(Node host, SolverOverlaySnapshot snapshot)
 src/UI/SolverRouteRow.cs	public void Populate(SolverOverlayTurnSnapshot turn)
 src/UI/SolverActionPill.cs	public static Control Create(SolverOverlayActionSnapshot action)
+src/UI/SolverOverlayMotionDriver.cs	=> SolverOverlay.AdvanceSearchReadouts(delta);
 src/Engine/InCombat/Simulation/ActionRelicTriggerRecorder.cs	new(relic.Id.Entry, summary, relic.Owner.NetId)
 src/Search/CombatBeamSolver.Phases.cs	OwnerPlayerNumber = IsMultiplayerAdvice ? displayNames.PlayerNumber(trigger.OwnerNetId) : null
 src/UI/SolverOverlaySnapshot.cs	effect.OwnerPlayerNumber, effect.OwnerIsLocal
@@ -1069,6 +1070,7 @@ overlay_renderer_paths=(
     "$repository_root/src/UI/SolverRouteRow.cs"
     "$repository_root/src/UI/SolverActionPill.cs"
     "$repository_root/src/UI/SolverActionBar.cs"
+    "$repository_root/src/UI/SolverOverlayMotionDriver.cs"
 )
 for renderer_path in "${overlay_renderer_paths[@]}"; do
     for mutable_search_type in SolverResult PlanAction PlanCardChoice ModelDb; do
@@ -1304,6 +1306,7 @@ src/Testing/UnattendedTestRunner.MultiplayerExperiment.cs|SearchReason.Manual
 src/Testing/UnattendedTestRunner.MultiplayerExperiment.Setup.cs|ClearRunDeck(run, player);
 src/Runtime/SolverController.cs|if (reason != SearchReason.Manual) return;
 src/Runtime/SolverController.cs|Multiplayer advice cannot deploy native actions.
+src/Search/CombatBeamSolver.MultiplayerRound.cs|CombatSolver.Engine.InCombat.Mirrors.HookMirrors.BeforeSideTurnStart(
 src/Search/CombatBeamSolver.Multiplayer.cs|!CanReplayMultiplayerAction(node, action)
 src/Search/CombatBeamSolver.Models.cs|public int ReplayedAdviceActions;
 src/Search/CombatBeamSolver.cs|_hasRegisteredPowerCards = policy.Multiplayer == null

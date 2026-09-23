@@ -1,0 +1,550 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-09-23",
+  "releaseVersion": "0.45.1",
+  "sources": {
+    "startingFork": "70212bc2640b14e822523b060d7804a07620802f",
+    "upstream": "68700c2365e78e8e53aaf577522793f43da6594a",
+    "upstreamExport": ".local/upstream-sync-20260923/official-source",
+    "tagFetchDisabled": true
+  },
+  "scope": "Upstream integration with one local advisor user; named compatibility checks only, no new multiplayer quality experiment.",
+  "solo": {
+    "fixture": "coverage/multiplayer/solo-power-compat.json",
+    "beam": 12,
+    "nodeBudget": 350,
+    "budgetMilliseconds": 10000,
+    "dop": 1,
+    "searchMode": "Coordinator",
+    "portfolio": true,
+    "comparedFields": 92,
+    "mismatches": [],
+    "fullRouteRootAndContinuationsEqual": true,
+    "expandedNodes": 1750,
+    "transitions": 4363,
+    "hpLost": 2,
+    "timeBoundary": false,
+    "multiplayerIsolation": {
+      "observedMethods": [
+        "PrepareMultiplayerFinalCandidates",
+        "SelectMultiplayerFinal",
+        "CreateMultiplayerOrdering",
+        "PrepareMultiplayerPublicationCandidates"
+      ],
+      "multiplayerEntries": 0
+    },
+    "raw": ".local/upstream-sync-20260923/solo-comparison.json"
+  },
+  "contracts": {
+    "upstreamCompatibility": {
+      "status": "Passed",
+      "checks": [
+        "multiplayer_skips_single_player_growth_targets",
+        "multiplayer_has_no_upgrade_credit_capacity",
+        "history_keeps_per_effect_owner_scope",
+        "multiplayer_history_key_matches_scan_0",
+        "multiplayer_history_key_matches_scan_1",
+        "history_key_changes_only_in_child",
+        "history_key_survives_fork",
+        "gold_axe_observes_both_finished_plays",
+        "production_snapshot_distinguishes_history_and_preserves_forks",
+        "improvement_applies_to_owner_without_advisor_growth_credit",
+        "fork_cannot_create_multiplayer_upgrade_credit",
+        "mad_science_native_full_party_state_equal",
+        "root_unchanged_after_native_play"
+      ],
+      "localCounts": {
+        "FinishedPlays": 2,
+        "EtherealPlays": 0,
+        "LightningChannels": 0,
+        "UnblockedHitsReceived": 1,
+        "CardsDrawn": 1,
+        "CardsGenerated": 1
+      },
+      "peerCounts": {
+        "FinishedPlays": 2,
+        "EtherealPlays": 1,
+        "LightningChannels": 0,
+        "UnblockedHitsReceived": 1,
+        "CardsDrawn": 1,
+        "CardsGenerated": 1
+      }
+    },
+    "deadTeammate": {
+      "status": "Passed",
+      "ExpandedNodes": 100,
+      "SearchedTurns": 3,
+      "PlayerCount": 2,
+      "localIndex": 1,
+      "deathPrevention": "equal",
+      "deathAndRevival": "equal",
+      "nextPlayerTurn": "equal",
+      "frozenRoots": true,
+      "activationFingerprint": true
+    },
+    "sharedRanking": {
+      "checks": [
+        "counterexample_old_personal_axes_dominate_shared_route",
+        "shared_route_survives_frontier_and_wins",
+        "disabled_policy_preserves_personal_ranking",
+        "shared_route_survives_frontier_and_wins",
+        "disabled_policy_preserves_personal_ranking",
+        "same_combat_state_keeps_distinct_damage_attribution",
+        "transposition_keeps_new_attribution",
+        "transposition_still_removes_exact_duplicate",
+        "cache_rebuild_preserves_attribution",
+        "shared_explanation_eng",
+        "zero_shared_hidden_eng",
+        "shared_explanation_zhs",
+        "zero_shared_hidden_zhs",
+        "shared_explanation_zht",
+        "zero_shared_hidden_zht",
+        "shared_explanation_does_not_change_personal_witness"
+      ],
+      "passed": true,
+      "syntheticRankingFacts": true,
+      "nativeDamageValidation": "coverage/unattended/multiplayer-shared-damage.json"
+    },
+    "nativeSharedDamage": {
+      "checks": [
+        "predicted_poison_settles",
+        "mixed_poison_full_native_state",
+        "poison_stays_unattributed",
+        "sibling_shared_ledger_isolated",
+        "root_stays_frozen",
+        "native_observation_shared_not_personal",
+        "poison_recalculation_does_not_extend_deadline",
+        "healing_undoes_shared_progress_once",
+        "unchanged_recalculation_is_idempotent",
+        "known_peer_damage_never_becomes_shared",
+        "child_poison_settles",
+        "child_accumulates_without_mutating_parent",
+        "three_players_share_without_rounding_each_tick",
+        "fractional_shared_progress_preserved",
+        "roster_change_rebases_shared_history_without_extension",
+        "ready_observed",
+        "ready_can_be_undone",
+        "shared_scoring_incremental_replay_and_fixed_budget",
+        "multiplayer_cycle_uses_registered_turn_start_facades_in_order",
+        "poison_full_party_native_cycle_and_draw_equal",
+        "native_cycle_shared_damage_ledger_equal"
+      ],
+      "passed": true,
+      "nativeFullStateCompared": true,
+      "networkValidated": false
+    }
+  },
+  "turnRegistration": {
+    "beforeStartChecks": 22,
+    "beforeStartSealChecks": 1,
+    "afterPlayerStartChecks": 41,
+    "afterPlayerStartSealChecks": 3,
+    "distinctHookBits": 61,
+    "logs": [
+      ".local/upstream-sync-20260923/contract-start.log",
+      ".local/upstream-sync-20260923/contract-start-seal.log",
+      ".local/upstream-sync-20260923/contract-after-start.log",
+      ".local/upstream-sync-20260923/contract-after-start-seal.log",
+      ".local/upstream-sync-20260923/contract-mask.log"
+    ]
+  },
+  "nativeRequests": [
+    {
+      "evidence": ".local/upstream-sync-20260923/native/01-result.json",
+      "runId": "macos-6ca53edaca6e485da508aaf29e730eb3",
+      "scenarioId": "LAMP-DEBUFF-ON-KILL",
+      "status": "Passed",
+      "elapsedMilliseconds": 19833.3132,
+      "completedChecks": [
+        "LampDebuffOnKilledTarget:SkipsDebuffOnRemovedTarget:KeepsCharge:FullContinuationState"
+      ],
+      "error": null,
+      "input": {
+        "schemaVersion": 1,
+        "characterId": "SILENT",
+        "encounterId": "BOWLBUGS_NORMAL",
+        "seed": "UPSTREAM0450-COMPAT-20260923",
+        "timeoutSeconds": 120.0,
+        "headlessFastModeForTest": "Instant",
+        "deploymentFastModeForTest": "Instant",
+        "fixedSearchBudget": true,
+        "searchBudgetOverrideMilliseconds": 1000,
+        "searchMaxDegreeOfParallelism": 1,
+        "scenarioId": "LAMP-DEBUFF-ON-KILL",
+        "exitOnComplete": false
+      }
+    },
+    {
+      "evidence": ".local/upstream-sync-20260923/native/02-result.json",
+      "runId": "macos-15c2c702c2d64045b06c26ea18de4f7c",
+      "scenarioId": "LAMP-POWER-SOURCED-DEBUFF",
+      "status": "Passed",
+      "elapsedMilliseconds": 2576.6501,
+      "completedChecks": [
+        "LampPowerSourcedDebuff:NotAttributedToDrawnCard:KeepsCharge:FullContinuationState"
+      ],
+      "error": null,
+      "input": {
+        "schemaVersion": 1,
+        "characterId": "SILENT",
+        "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+        "seed": "UPSTREAM0450-COMPAT-20260923",
+        "timeoutSeconds": 120.0,
+        "headlessFastModeForTest": "Instant",
+        "deploymentFastModeForTest": "Instant",
+        "fixedSearchBudget": true,
+        "searchBudgetOverrideMilliseconds": 1000,
+        "searchMaxDegreeOfParallelism": 1,
+        "scenarioId": "LAMP-POWER-SOURCED-DEBUFF",
+        "exitOnComplete": false
+      }
+    },
+    {
+      "evidence": ".local/upstream-sync-20260923/native/03-result.json",
+      "runId": "macos-07312260279144759706e3b59b5bfdba",
+      "scenarioId": "LAMP-INDIRECT-POISON",
+      "status": "Passed",
+      "elapsedMilliseconds": 3033.5362,
+      "completedChecks": [
+        "LampIndirectPoison:ENVENOM_POWER:PreservesCharge:DirectPoisonDoubles:FullContinuationState",
+        "LampIndirectPoison:CONCOCT_POWER:PreservesCharge:DirectPoisonDoubles:FullContinuationState"
+      ],
+      "error": null,
+      "input": {
+        "schemaVersion": 1,
+        "characterId": "IRONCLAD",
+        "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+        "seed": "UPSTREAM0450-COMPAT-20260923",
+        "timeoutSeconds": 120.0,
+        "headlessFastModeForTest": "Instant",
+        "deploymentFastModeForTest": "Instant",
+        "fixedSearchBudget": true,
+        "searchBudgetOverrideMilliseconds": 1000,
+        "searchMaxDegreeOfParallelism": 1,
+        "scenarioId": "LAMP-INDIRECT-POISON",
+        "exitOnComplete": false
+      }
+    },
+    {
+      "evidence": ".local/upstream-sync-20260923/native/04-result.json",
+      "runId": "macos-737a459d34d84e38bddc9e696adce840",
+      "scenarioId": "MULTIPLAYER-SHARED-DAMAGE",
+      "status": "Passed",
+      "elapsedMilliseconds": 3131.8556,
+      "completedChecks": [
+        "MultiplayerSharedDamage:21:NativeState:Fork:Ledger:Incremental"
+      ],
+      "error": null,
+      "input": {
+        "schemaVersion": 1,
+        "characterId": "SILENT",
+        "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+        "seed": "MPSHAREDDAMAGE20260923",
+        "timeoutSeconds": 120.0,
+        "headlessFastModeForTest": "Instant",
+        "deploymentFastModeForTest": "Instant",
+        "fixedSearchBudget": true,
+        "searchBudgetOverrideMilliseconds": 1000,
+        "searchMaxDegreeOfParallelism": 1,
+        "scenarioId": "MULTIPLAYER-SHARED-DAMAGE",
+        "exitOnComplete": false
+      }
+    },
+    {
+      "evidence": ".local/upstream-sync-20260923/native/05-result.json",
+      "runId": "macos-4ca602b1f0f240fda6d6274a3613d7aa",
+      "scenarioId": "UI-LOCALIZATION",
+      "status": "Failed",
+      "elapsedMilliseconds": 3331.692,
+      "completedChecks": [
+        "CardLocaleRoundTrip:EnglishSnapshot:ChineseEnglishChinese:Upgrade:Choice:RelicOwner:SerializedPlan:LivePill:SubscriptionCleanup:NoReplan"
+      ],
+      "error": "System.InvalidOperationException: No valid next state found.",
+      "input": {
+        "schemaVersion": 1,
+        "characterId": "IRONCLAD",
+        "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+        "seed": "UPSTREAM0450-COMPAT-20260923",
+        "timeoutSeconds": 120.0,
+        "headlessFastModeForTest": "Instant",
+        "deploymentFastModeForTest": "Instant",
+        "fixedSearchBudget": true,
+        "searchBudgetOverrideMilliseconds": 1000,
+        "searchMaxDegreeOfParallelism": 1,
+        "scenarioId": "UI-LOCALIZATION",
+        "exitOnComplete": false
+      }
+    },
+    {
+      "evidence": ".local/upstream-sync-20260923/native-remaining/01-result.json",
+      "runId": "macos-70a619a0faa143248fd28e50c0ffcc8f",
+      "scenarioId": "UI-LOCALIZATION",
+      "status": "Passed",
+      "elapsedMilliseconds": 23860.621,
+      "completedChecks": [
+        "CardLocaleRoundTrip:EnglishSnapshot:ChineseEnglishChinese:Upgrade:Choice:RelicOwner:SerializedPlan:LivePill:SubscriptionCleanup:NoReplan",
+        "SpawnedEntityIdentity:eng:FourWrigglers:LeftToRight:NativeSlots=True:ForkStable:DeathStable",
+        "EntityIdentity:eng:DistinctEnemies=1:PlainAndInkyShiv",
+        "StrategyOutcome:eng:AlignedAndUnmet:GrowthCounts:PartialRoute:EmptyHidden",
+        "RelicOwnership:eng:Self:PeerNumber:SameRelic:Json:Tooltip:Identity",
+        "ActionAnnotations:eng:CapturedDamageSources:21RelicFormats:NestedChoices:Tooltip",
+        "LiveTurnStartChoicePreview:eng:Power:Relic",
+        "LoopDisplay:eng:41Actions:2OuterControls:CompactInlineCount:EnclosedPeriod:WideNarrowWide:ReplayCount:KillSuffix:Deployment:Reuse",
+        "StrategyPanels:eng:Potion:Growth:Relic:Collapse",
+        "UiLocalization:eng:Catalog459:Settings:UploadTransitions:DynamicStatus:FailureInstructions",
+        "SpawnedEntityIdentity:zhs:FourWrigglers:LeftToRight:NativeSlots=True:ForkStable:DeathStable",
+        "EntityIdentity:zhs:DistinctEnemies=1:PlainAndInkyShiv",
+        "StrategyOutcome:zhs:AlignedAndUnmet:GrowthCounts:PartialRoute:EmptyHidden",
+        "RelicOwnership:zhs:Self:PeerNumber:SameRelic:Json:Tooltip:Identity",
+        "ActionAnnotations:zhs:CapturedDamageSources:21RelicFormats:NestedChoices:Tooltip",
+        "LiveTurnStartChoicePreview:zhs/zht:Power:Relic",
+        "LoopDisplay:zh:41Actions:2OuterControls:CompactInlineCount:EnclosedPeriod:WideNarrowWide:ReplayCount:KillSuffix:Deployment:Reuse",
+        "StrategyPanels:zhs:Potion:Growth:Relic:Collapse",
+        "UiLocalization:zhs:Catalog459:Settings:UploadTransitions:DynamicStatus:FailureInstructions",
+        "SpawnedEntityIdentity:zht:FourWrigglers:LeftToRight:NativeSlots=True:ForkStable:DeathStable",
+        "EntityIdentity:zht:DistinctEnemies=1:PlainAndInkyShiv",
+        "StrategyOutcome:zht:AlignedAndUnmet:GrowthCounts:PartialRoute:EmptyHidden",
+        "RelicOwnership:zht:Self:PeerNumber:SameRelic:Json:Tooltip:Identity",
+        "ActionAnnotations:zht:CapturedDamageSources:21RelicFormats:NestedChoices:Tooltip",
+        "LiveTurnStartChoicePreview:zhs/zht:Power:Relic",
+        "LoopDisplay:zh:41Actions:2OuterControls:CompactInlineCount:EnclosedPeriod:WideNarrowWide:ReplayCount:KillSuffix:Deployment:Reuse",
+        "StrategyPanels:zht:Potion:Growth:Relic:Collapse",
+        "UiLocalization:zht:Catalog459:Settings:UploadTransitions:DynamicStatus:FailureInstructions"
+      ],
+      "error": null,
+      "input": {
+        "schemaVersion": 1,
+        "characterId": "IRONCLAD",
+        "encounterId": "PHROG_PARASITE_ELITE",
+        "seed": "UPSTREAM0450-COMPAT-20260923",
+        "timeoutSeconds": 120.0,
+        "headlessFastModeForTest": "Instant",
+        "deploymentFastModeForTest": "Instant",
+        "fixedSearchBudget": true,
+        "searchBudgetOverrideMilliseconds": 1000,
+        "searchMaxDegreeOfParallelism": 1,
+        "scenarioId": "UI-LOCALIZATION",
+        "exitOnComplete": false
+      }
+    },
+    {
+      "evidence": ".local/upstream-sync-20260923/native-remaining/02-result.json",
+      "runId": "macos-b5ed97d65ce84f26b15813a15d0af1d8",
+      "scenarioId": "UPSTREAM-0450-UI-STATE",
+      "status": "Failed",
+      "elapsedMilliseconds": 120012.7158,
+      "completedChecks": [
+        "SearchPortfolios:RefinementDefaultOn:NoveltyDefaultOff:DamageGuidanceThreshold8:SettingsRoundTrip:UiControl:PolicySnapshot",
+        "ControllerSessionLifecycle"
+      ],
+      "error": "System.TimeoutException: 无人测试在阶段 assert_initial_solver_result 超过 120 秒。",
+      "input": {
+        "schemaVersion": 1,
+        "characterId": "IRONCLAD",
+        "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+        "seed": "UPSTREAM0450-COMPAT-20260923",
+        "timeoutSeconds": 120.0,
+        "headlessFastModeForTest": "Instant",
+        "deploymentFastModeForTest": "Instant",
+        "fixedSearchBudget": true,
+        "searchBudgetOverrideMilliseconds": 1000,
+        "searchMaxDegreeOfParallelism": 1,
+        "scenarioId": "UPSTREAM-0450-UI-STATE",
+        "verifyControllerSessionLifecycle": true,
+        "stopAfterInitialSetupAssertion": true,
+        "exitOnComplete": false
+      }
+    },
+    {
+      "evidence": ".local/upstream-sync-20260923/native-final/01-result.json",
+      "runId": "macos-43edb7dc21ff41669b234de3a423e583",
+      "scenarioId": "UPSTREAM-0450-UI-STATE",
+      "status": "Passed",
+      "elapsedMilliseconds": 25452.684,
+      "completedChecks": [
+        "SearchPortfolios:RefinementDefaultOn:NoveltyDefaultOff:DamageGuidanceThreshold8:SettingsRoundTrip:UiControl:PolicySnapshot",
+        "ControllerSessionLifecycle"
+      ],
+      "error": null,
+      "input": {
+        "schemaVersion": 1,
+        "scenarioId": "UPSTREAM-0450-UI-STATE",
+        "characterId": "IRONCLAD",
+        "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+        "seed": "UPSTREAM0450-COMPAT-20260923",
+        "verifyControllerSessionLifecycle": true,
+        "stopAfterCombatRootSnapshotAssertion": true,
+        "timeoutSeconds": 120.0,
+        "exitOnComplete": false
+      }
+    },
+    {
+      "evidence": ".local/upstream-sync-20260923/native-final/02-result.json",
+      "runId": "macos-a1a046bfab084d3e9aa9ced0a9d1f1f1",
+      "scenarioId": "MULTIPLAYER-MANUAL-LOOP",
+      "status": "Passed",
+      "elapsedMilliseconds": 6322.7389,
+      "completedChecks": [
+        "NativePacketEnumWarmup:153",
+        "MultiplayerManualLoop:contract_complete:queries=4:local_actions=3:peer_actions=3"
+      ],
+      "error": null,
+      "input": {
+        "scenarioId": "MULTIPLAYER-MANUAL-LOOP",
+        "multiplayerExperimentPath": "docs/strategy/multiplayer-experiments-20260923/native-contract.json",
+        "timeoutSeconds": 120.0,
+        "cards": [],
+        "exitOnComplete": false
+      }
+    },
+    {
+      "evidence": ".local/upstream-sync-20260923/native-final/03-result.json",
+      "runId": "macos-5747a2147aa64c4696ff94cc92c06ef8",
+      "scenarioId": "MULTIPLAYER-EXPERIMENT-INACTIVE",
+      "status": "Passed",
+      "elapsedMilliseconds": 2957.5783,
+      "completedChecks": [
+        "MultiplayerExperimentReset:NoHooks:SinglePlayerRoot",
+        "PotionOutcomeNamesAndRewardGate",
+        "InitialWorldlineSummary",
+        "InitialFirstAction:STRIKE_IRONCLAD",
+        "InitialPolicy:SoldHp=0;Potion=0,Saved=0/0,Rejected=0;Theft=-,Outstanding=0;Turns=1;Shuffles=0;Unmirrored=0;HpLost=0;ProjectedBattleHpLost=0;Block=0/0;Pruned=0;Total=3.4ms/249360B;Gc=0.0ms/0.0msMax;Frame=53.7msMax/1Over50;CacheHits=0;ChoiceBranches=0;Actions=1;OnlyDeath=False;CombatEndedTurn=1;DeathTurn=-;ActEndingBoss=False;BossHpRelief=None"
+      ],
+      "error": null,
+      "input": {
+        "schemaVersion": 1,
+        "scenarioId": "MULTIPLAYER-EXPERIMENT-INACTIVE",
+        "characterId": "IRONCLAD",
+        "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+        "seed": "MULTIPLAYER-EXPERIMENT-INACTIVE-20260923",
+        "enemyCurrentHp": 1,
+        "cards": [
+          {
+            "cardId": "STRIKE_IRONCLAD",
+            "pile": "Hand",
+            "count": 1
+          }
+        ],
+        "fixedSearchBudget": true,
+        "searchBudgetOverrideMilliseconds": 1000,
+        "searchMaxDegreeOfParallelismForTest": 1,
+        "headlessFastModeForTest": "Instant",
+        "expectedInitialFirstActionCardId": "STRIKE_IRONCLAD",
+        "expectedInitialFinalEnemyHpAtMost": 0,
+        "stopAfterInitialSolverResultAssertion": true,
+        "timeoutSeconds": 120.0,
+        "exitOnComplete": true
+      }
+    }
+  ],
+  "manualLoop": {
+    "outcome": "contract_complete",
+    "round": 2,
+    "strictActionChecks": 1,
+    "frozenRootChecks": 6,
+    "localActions": 3,
+    "peerActions": 3,
+    "singleAdvisorUser": true,
+    "peerConsultedAdvisor": false,
+    "networkValidated": false,
+    "visiblePerformanceValidated": false,
+    "transport": "native single-process transport; test-scoped advisor gate and all-player ready check; native single-process enemy-start barrier, no remote acknowledgements",
+    "renderingBypasses": [
+      "combat-rules tutorial (existing unattended patch)",
+      "first-shuffle tutorial",
+      "remote-card queue visual (absent remote intent widget)"
+    ],
+    "availableMetrics": {
+      "actualScoreFallbackCount": false,
+      "selectedComparable": true
+    }
+  },
+  "builds": {
+    "testingMerged": "build-merge.log",
+    "harness": "build-harness.log",
+    "turnContracts": "build-turn-contracts.log",
+    "independentUpstream": "build-official.log",
+    "warnings": 0,
+    "errors": 0,
+    "baseDirectory": ".local/upstream-sync-20260923",
+    "releaseBuild": "Recorded separately after the source commit in docs/releases/0.45.1-PUBLISH.md."
+  },
+  "coverage": {
+    "arguments": [
+      "--verify",
+      "--verify-effective",
+      "--verify-branch-state-reads"
+    ],
+    "catalogEntries": 3035,
+    "unanalyzed": 0,
+    "pendingImplementation": 0,
+    "nonpassingTestReferences": 0,
+    "unclassifiedStateFields": 0,
+    "exactFallbackLiveBranchReads": 0,
+    "snapshotStateWritingOutsideReplayHorizon": 22,
+    "log": ".local/upstream-sync-20260923/coverage.log"
+  },
+  "boundaries": {
+    "bash": "Passed",
+    "searchFiles": 218,
+    "powershell": "UpdatedNotRun",
+    "log": ".local/upstream-sync-20260923/boundaries-final.log"
+  },
+  "headlessInstances": [
+    {
+      "name": "macos.2IEzL0",
+      "removed": true,
+      "receipt": ".local/upstream-sync-20260923/native-launch.log"
+    },
+    {
+      "name": "macos.spYqwf",
+      "removed": true,
+      "receipt": ".local/upstream-sync-20260923/native-remaining-launch.log"
+    },
+    {
+      "name": "macos.a3zzhn",
+      "removed": true,
+      "receipt": ".local/upstream-sync-20260923/native-final-launch.log"
+    }
+  ],
+  "failedAttemptHandling": [
+    "Wrong UI encounter: Fuzzy cannot initialize the four-Wriggler native-slot fixture. Corrected to PHROG_PARASITE_ELITE; no production workaround.",
+    "UI controller checks completed before StopAfterInitialSetupAssertion waited for a search and timed out at 120 seconds. Final fixture uses existing StopAfterCombatRootSnapshotAssertion; no timeout increase."
+  ],
+  "priorExperiment": "docs/strategy/multiplayer-experiments-20260923/implementation-evidence.json",
+  "unverified": [
+    "live multiplayer networking",
+    "human teammate distribution and general win rate",
+    "visible UI or performance",
+    "arbitrary third-party turn-start adapters",
+    "Loadout v0.5.6 installed integration",
+    "Windows and PowerShell",
+    "clean install",
+    "full release gate"
+  ],
+  "knowledgeCloseout": {
+    "generatedMemory": "generated-read-only",
+    "initialRuleBytes": 28096,
+    "initialRuleLines": 233,
+    "initialWorktrees": 1,
+    "initialDirtyEntries": 0,
+    "retained": [
+      ".local/upstream-sync-20260923/official-source",
+      ".local/upstream-sync-20260923/coverage-check",
+      ".local/upstream-sync-20260923/native",
+      ".local/upstream-sync-20260923/native-remaining",
+      ".local/upstream-sync-20260923/native-final"
+    ],
+    "destructiveCleanup": false,
+    "mechanicalChecks": {
+      "markdownFiles": 25,
+      "localLinks": 849,
+      "jsonFiles": 133,
+      "brokenLinks": [],
+      "mergeMarkers": [],
+      "ruleBytes": 28139,
+      "ruleLines": 233,
+      "parser": "Exclude fenced/inline code examples; verify local path existence, not historical anchor semantics."
+    }
+  }
+}

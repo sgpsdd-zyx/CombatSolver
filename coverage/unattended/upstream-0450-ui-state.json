@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "scenarioId": "UPSTREAM-0450-UI-STATE",
+  "characterId": "IRONCLAD",
+  "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+  "seed": "UPSTREAM0450-COMPAT-20260923",
+  "verifyControllerSessionLifecycle": true,
+  "stopAfterCombatRootSnapshotAssertion": true,
+  "timeoutSeconds": 120,
+  "exitOnComplete": true
+}

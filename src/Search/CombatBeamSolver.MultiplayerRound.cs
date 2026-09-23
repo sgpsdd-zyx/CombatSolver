@@ -62,8 +62,8 @@ internal sealed partial class CombatBeamSolver
         combat.ResetMultiplayerHistoryWindow();
         foreach (Creature creature in participants) combat.BeginSideTurn(creature);
         combat.SnapshotPowerAmountsAtTurnStart(participants);
-        if (!TurnStartRelicSupport.TriggerBeforeSideTurnStart(simulator, combat, participants)
-            || TurnStartPowerSupport.TriggerBeforeSideTurnStart(simulator, combat, participants))
+        if (!CombatSolver.Engine.InCombat.Mirrors.HookMirrors.BeforeSideTurnStart(
+                simulator, combat.CurrentSide, participants))
             return SearchBoundaryReason.PendingChoice;
         foreach (Player player in combat.Players)
             simulator.State.GetPlayerCombatState(player).Phase = PlayerTurnPhase.Start;

@@ -1,4 +1,5 @@
 using CombatSolver.Engine.InCombat.Simulation;
+using CombatSolver.Engine.InCombat.Mirrors;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
@@ -15,6 +16,14 @@ namespace CombatSolver;
 
 internal sealed partial class UnattendedTestRunner
 {
+    private static List<string>? _multiplayerTurnStartEvents;
+
+    private static void ObserveMultiplayerSideStart(CombatSide __1)
+        => _multiplayerTurnStartEvents!.Add("side:" + __1);
+
+    private static void ObserveMultiplayerPlayerStart(Player __1)
+        => _multiplayerTurnStartEvents!.Add("player:" + __1.NetId);
+
     private async Task AssertMultiplayerSharedDamageAsync(CombatState combat)
     {
         Player local = LocalContext.GetMe(combat) ?? throw new InvalidOperationException("Missing local player.");
@@ -118,7 +127,30 @@ internal sealed partial class UnattendedTestRunner
             var result = await search;
             Check(result.ExpandedNodes <= 100 && result.AdvisoryComparisonCycles > 0,
                 "shared_scoring_incremental_replay_and_fixed_budget");
-            var next = solver.ReplayMultiplayerForTesting([new(PlanActionKind.EndTurn, root.StartTurnNumber)]);
+            var sideStart = AccessTools.Method(typeof(HookMirrors), nameof(HookMirrors.BeforeSideTurnStart));
+            var playerStart = AccessTools.Method(typeof(HookMirrors), nameof(HookMirrors.AfterPlayerTurnStart));
+            var sideProbe = AccessTools.Method(typeof(UnattendedTestRunner), nameof(ObserveMultiplayerSideStart));
+            var playerProbe = AccessTools.Method(typeof(UnattendedTestRunner), nameof(ObserveMultiplayerPlayerStart));
+            SimulationSnapshot next;
+            _multiplayerTurnStartEvents = [];
+            try
+            {
+                // Observe the production replay entry points without replacing their effects.
+                harmony.Patch(sideStart, prefix: new HarmonyMethod(sideProbe));
+                harmony.Patch(playerStart, prefix: new HarmonyMethod(playerProbe));
+                next = solver.ReplayMultiplayerForTesting([new(PlanActionKind.EndTurn, root.StartTurnNumber)]);
+                Check(_multiplayerTurnStartEvents.SequenceEqual(new[]
+                {
+                    "side:Enemy", "side:Player",
+                }.Concat(combat.Players.Select(player => "player:" + player.NetId))),
+                    "multiplayer_cycle_uses_registered_turn_start_facades_in_order");
+            }
+            finally
+            {
+                harmony.Unpatch(sideStart, sideProbe);
+                harmony.Unpatch(playerStart, playerProbe);
+                _multiplayerTurnStartEvents = null;
+            }
             expected = ContinuationStamp.CapturePredicted(local, next.Simulator, next.Turn, root.Forecast, root.StartTurnNumber);
             int turn = local.PlayerCombatState!.TurnNumber;
             foreach (Player player in combat.Players) CombatManager.Instance.SetReadyToEndTurn(player, false);

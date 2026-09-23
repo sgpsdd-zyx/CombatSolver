@@ -1,8 +1,8 @@
 # CombatSolver 文档导航
 
-本地定版 [0.44.2](releases/0.44.2-PREPARE.md) 已从 `fd976376` 完成构建与最小包，尚未对外发布；[实验与采用](strategy/multiplayer-shared-damage-20260923/implementation.md)和[知识归档](strategy/multiplayer-shared-damage-20260923/closeout.md)区分原生差分、合成脚本收益与待验的真人联机表现。
+当前源码 **0.45.1** 合入官方 `68700c23 / 0.45.0`，单人保留官方策略，多人沿用本机贡献目标与无来源伤害折算。合并取舍、当前验证和知识收尾见[本轮记录](strategy/upstream-0450-merge-20260923.md)，发布阶段统一见[版本索引](releases/README.md)。
 
-当前 fork 已发布 **0.44.1** 基于官方 `42e09028 / 0.44.0`，单人保持官方策略，多人采用[本机贡献目标](strategy/multiplayer-cooperative-planning-20260922/implementation.md)，取消每周期 3 HP 目标，不预测队友主动行为。见[发布状态](releases/0.44.1-PUBLISH.md)、[玩家更新日志](releases/0.44.1-RELEASE_NOTES.md)与[多人指南](multiplayer-advisor.md)。上游合并与第一轮归档见[合并记录](strategy/upstream-0440-merge-20260922.md)，官方标签不移动。
+[多人原生实验](strategy/multiplayer-experiments-20260923/implementation.md)按“只有本机使用军师、队友独立决策”记录原生差分与受控脚本表现；收益、恶化和未知结果分开，真实联机仍未验收。现役操作与限制见[多人指南](multiplayer-advisor.md)。
 
 - [GC 完成链修复与优化筛选](performance/gc-completion-allocation-20260921.md)：替代 #116/#120 的窄修复、失败复现与重新实测取舍。
 - [增量历史计数](strategy/incremental-history-counters.md)：生命周期、测试构建与构键计时。
@@ -17,11 +17,12 @@
 
 | 要查什么 | 入口 |
 |---|---|
+| 官方 0.45.0 合并、fork 0.45.1 验证与知识收尾 | [本轮归档](strategy/upstream-0450-merge-20260923.md)、[版本状态](releases/README.md) |
 | 如何实验未知队友、交错操作与反复手动重算 | [多人实验设计与原生试跑](strategy/multiplayer-experiments-20260923/README.md) |
-| 0.44.2 本地定版、实验结论边界与知识归档 | [本地记录](releases/0.44.2-PREPARE.md)、[归档凭证](strategy/multiplayer-shared-damage-20260923/closeout.md) |
-| 0.44.1 发布来源与 GitHub 交付 | [发布记录](releases/0.44.1-PUBLISH.md) |
+| 0.44.2 历史本地定版、实验结论边界与知识归档 | [本地记录](releases/0.44.2-PREPARE.md)、[归档凭证](strategy/multiplayer-shared-damage-20260923/closeout.md) |
+| 0.44.1 历史发布来源与 GitHub 交付 | [发布记录](releases/0.44.1-PUBLISH.md) |
 | 0.41.2 发布、独立尖塔军师修复及本地材料的归档状态 | [2026-09-18 归档记录](DEVELOPMENT_NOTES.md#归档状态2026-09-18) |
-| 多人手动军师、本机贡献目标、阶段与长线选路、救援与官方 0.44.0 兼容 | [多人军师](multiplayer-advisor.md) |
+| 多人手动军师、本机贡献目标、阶段与长线选路、救援与官方 0.45.0 兼容 | [多人军师](multiplayer-advisor.md) |
 | 独立「尖塔军师」拿牌推荐模组误读房主卡组的修复与重跑 | [本机玩家修复工具](../tools/SpireAdvisorMultiplayerFix/README.md) |
 | 多人研究原文归档、已采用改进与暂缓方案 | [策略索引](strategy/README.md#多人研究归档)、[首批实施](multiplayer-advisor.md#首批策略优化已实施) |
 | 本机贡献策略的研究采用、实现、证据与限制 | [2026-09-22 实施与归档](strategy/multiplayer-cooperative-planning-20260922/implementation.md) |
@@ -29,6 +30,7 @@
 | 未击杀长线选路、浅比较与首回合方案的公平续行 | [6 Pro 研究与本地候选池观察](strategy/pro-window-selection-20260920/README.md)；[0.43.4 实施与知识收尾](strategy/pro-window-selection-20260920/implementation.md) |
 | 0.41.2 的第二轮 6 Pro 复审与首批修正 | [第二轮归档](strategy/pro-review-0412-20260918/README.md)、[本地复核](strategy/pro-review-0412-20260918/local-review.md)、[实施与收尾](strategy/pro-review-0412-20260918/implementation.md)；F01/F02/F03 纳入 0.41.3 定版 |
 | 0.41.1 的 ChatGPT 6 Pro 审查结论、策略设计原文与本地复核 | [复审归档](strategy/pro-review-20260918/README.md)、[本地复核与采用边界](strategy/pro-review-20260918/local-review.md)；旧版输入见[历史索引](strategy/README.md#多人研究归档) |
+| 官方回合开始适配、结算修正和界面更新的历史说明 | [0.44.1 原文](releases/upstream/0.44.1-RELEASE_NOTES.md)、[0.45.0 原文](releases/upstream/0.45.0-RELEASE_NOTES.md) |
 | 官方计算失败修复、循环优化与搜索组合调整的历史说明 | [0.44.0 上游原文](releases/upstream/0.44.0-RELEASE_NOTES.md) |
 | 小循环的质量（过量格挡/不取斩杀）、动作数上限与展示折叠落点 | [循环质量性能展示调研](research/loop-quality-performance-display-20260921.md) |
 | 循环请求共享额度、安全前缀续搜及历史依赖收尾 | [循环优化收尾](performance/loop-final-20260921.md) |
@@ -61,9 +63,9 @@
 | PR #114 离线宿主保真与 16 并行基线 | [16 并行阶段归因](performance/dop16-veryhigh-fidelity-20260919.md) |
 | 默认关闭的学习型组合选择器和训练反例 | [学习型门控](strategy/learned-portfolio-gate-20260917.md) |
 | 自生成场景、上下文排序实验与组合达标早停 | [实验与取舍](strategy/contextual-ordering-20260922.md)、[早停证据](strategy/contextual-target-stop-20260922-evidence.json)、[权重敏感度证据](strategy/contextual-weight-sensitivity-20260922-evidence.json)、[窄进攻成员证据](strategy/contextual-offensive-refinement-20260922-evidence.json)、[有界追加证据](strategy/contextual-bounded-refinement-20260922-evidence.json) |
-- [后置结构探索证据](strategy/contextual-adaptive-novelty-20260922-evidence.json)：完整原搜索后追加有限探索的32根质量、成本、时间截断与默认关闭决定。
-- [条件窄成员替换证据](strategy/contextual-structural-refinement-20260922-evidence.json)：已撤回原型的质量、成本及复现补丁。
-- [组合再分配证据](strategy/contextual-portfolio-reallocation-20260922-evidence.json)：默认组合再分配、独立35根、跨预设、ABBA与原生完整部署，以及质量/内存取舍。
+| 完整原搜索后追加有限探索的32根质量、成本与默认关闭决定 | [后置结构探索证据](strategy/contextual-adaptive-novelty-20260922-evidence.json) |
+| 已撤回窄成员原型的质量、成本及复现补丁 | [条件窄成员替换证据](strategy/contextual-structural-refinement-20260922-evidence.json) |
+| 默认组合再分配、独立35根、跨预设、ABBA与原生完整部署 | [组合再分配证据](strategy/contextual-portfolio-reallocation-20260922-evidence.json) |
 | 943份计划外重算报告、16类已修机制及证据缺口 | [2026-09-13批次结果](issues/report-replans-20260913.md) |
 | 环绕轨道、自动化的持续返能估值与实战对照 | [返能能力估值](issues/recurring-energy-valuation-20260913.md) |
 | 后续六方向的当前诊断、逐项实现与对照 | [六方向开发记录](performance/six-directions-20260913.md) |
