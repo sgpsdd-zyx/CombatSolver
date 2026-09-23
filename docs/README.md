@@ -1,6 +1,6 @@
 # CombatSolver 文档导航
 
-本地准备版 [0.44.2](releases/0.44.2-RELEASE_NOTES.md) 改善无来源伤害的多人选路价值，尚未对外发布；[实验与采用](strategy/multiplayer-shared-damage-20260923/implementation.md)记录本轮证据和未解决项。
+本地定版 [0.44.2](releases/0.44.2-PREPARE.md) 已从 `fd976376` 完成构建与最小包，尚未对外发布；[实验与采用](strategy/multiplayer-shared-damage-20260923/implementation.md)和[知识归档](strategy/multiplayer-shared-damage-20260923/closeout.md)区分原生差分、合成脚本收益与待验的真人联机表现。
 
 当前 fork 已发布 **0.44.1** 基于官方 `42e09028 / 0.44.0`，单人保持官方策略，多人采用[本机贡献目标](strategy/multiplayer-cooperative-planning-20260922/implementation.md)，取消每周期 3 HP 目标，不预测队友主动行为。见[发布状态](releases/0.44.1-PUBLISH.md)、[玩家更新日志](releases/0.44.1-RELEASE_NOTES.md)与[多人指南](multiplayer-advisor.md)。上游合并与第一轮归档见[合并记录](strategy/upstream-0440-merge-20260922.md)，官方标签不移动。
 
@@ -17,6 +17,7 @@
 
 | 要查什么 | 入口 |
 |---|---|
+| 0.44.2 本地定版、实验结论边界与知识归档 | [本地记录](releases/0.44.2-PREPARE.md)、[归档凭证](strategy/multiplayer-shared-damage-20260923/closeout.md) |
 | 0.44.1 发布来源与 GitHub 交付 | [发布记录](releases/0.44.1-PUBLISH.md) |
 | 0.41.2 发布、独立尖塔军师修复及本地材料的归档状态 | [2026-09-18 归档记录](DEVELOPMENT_NOTES.md#归档状态2026-09-18) |
 | 多人手动军师、本机贡献目标、阶段与长线选路、救援与官方 0.44.0 兼容 | [多人军师](multiplayer-advisor.md) |

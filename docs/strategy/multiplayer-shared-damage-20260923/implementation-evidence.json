@@ -1,6 +1,6 @@
 {
   "date": "2026-09-23",
-  "status": "ImplementedLocalPreparation",
+  "status": "ImplementedLocallyVerifiedAndPackaged",
   "baseCommit": "cad3ba35",
   "baselineBehaviorCommit": "86026b05",
   "upstreamBaseline": "42e09028 / 0.44.0",
@@ -14,7 +14,9 @@
   },
   "protocol": {
     "search": "Coordinator, Beam 12, 350 nodes, 3000 ms, DOP 1. Fixed budgets are not doubled.",
-    "externalEvaluation": "Replay selected current-turn actions; then fixed local guard/power/ID order for up to 5 enemy cycles. Peer idle/one Defend/one Strike scripts run only in the evaluator and obey legality.",
+    "externalEvaluation": "Replay selected current-turn actions; then fixed local guard/power/ID order for up to 5 enemy cycles. Peer idle/one Defend/one Strike scripts run only in the evaluator, at the local end-turn boundary, and obey legality.",
+    "environment": "Synthetic small decks and injected combat state; the evaluator and planner share the simulation engine. No repeated live-root capture or manual-advice closed loop after the first recommendation.",
+    "terminationInterpretation": "Evaluation also stops on local death or action/cycle limits. won=false does not establish team defeat; truncated HP is not final battle loss.",
     "sameSeedNotIndependentPopulation": true,
     "humanPolicyValidated": false,
     "prototypesAreNotFinalBinary": true
@@ -5563,7 +5565,10 @@
     "Intercept reference returns UnsupportedEffect; excluded from positive rescue conclusions.",
     "Noxious Fumes and later setup fixtures still expose unresolved strategy gaps.",
     "Low-HP guard-first sentinel preserves the opening, not full-fight survival under a fixed continuation script.",
-    "Original report race rate and ready inference were not implemented."
+    "Original report race rate and ready inference were not implemented.",
+    "First-turn sensitivity under three fixed scripts is not an estimate of benefit with human partners or repeated manual replanning.",
+    "No observed prototype benefit in these narrow fixtures does not establish that peer-risk discounting or threat weighting is generally ineffective.",
+    "External HP metrics avoid the modified score but are not independent native-engine correctness evidence."
   ],
   "fixtureFailures": [
     "Lift fixture initially omitted an AnyPlayer target; corrected before dev-lift-fixed.",
@@ -5579,5 +5584,25 @@
     "scope": "Pass the unattributed counter when ResetRebuildableCaches seeds transposition labels.",
     "validation": "shared-ranking-cache passes all 16 checks, including explicit reset with a nonzero counter. Release and updated boundaries pass; unrelated successful behavior evidence reused."
   },
-  "forkVersion": "0.44.2"
+  "forkVersion": "0.44.2",
+  "localPackage": {
+    "sourceCommit": "fd976376c79cf87561d13397f2c5ddc330cc80ae",
+    "version": "0.44.2",
+    "build": "Passed: Release, 0 warnings, 0 errors",
+    "buildLog": ".local/multiplayer-race-20260923/build-0442.log",
+    "package": "releases/CombatSolver-0.44.2.zip",
+    "packageCreation": "Passed",
+    "receipt": ".local/multiplayer-race-20260923/local-package-receipt.json",
+    "tag": "Not created",
+    "push": "Not requested",
+    "externalRelease": "Not requested",
+    "installationAndLiveMultiplayer": "Unverified"
+  },
+  "knowledgeCloseout": {
+    "date": "2026-09-23",
+    "record": "docs/strategy/multiplayer-shared-damage-20260923/closeout.md",
+    "scope": "Documentation, evidence interpretation and repository rules; no behavior changes or new behavior-test claims.",
+    "memory": "Generated Codex memory is read-only; no edits.",
+    "workspace": "Task evidence and baseline retained; no cleanup or external publication."
+  }
 }

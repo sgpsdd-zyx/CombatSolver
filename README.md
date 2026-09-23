@@ -6,6 +6,8 @@ Combat Solver 是《杀戮尖塔 2》的战斗路线求解器，本 fork 支持�
 
 当前已发布 **0.44.1**，基于官方 **0.44.0**，重新设计多人选路：以本机阶段贡献为目标，综合考虑战损、药水和后续收益，取消每周期 3 HP 目标。见 [中英更新日志](docs/releases/0.44.1-RELEASE_NOTES.md)、[GitHub 下载](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.44.1)与[多人军师](docs/multiplayer-advisor.md)。
 
+当前源码的 **0.44.2** 已完成[本地构建与最小包](docs/releases/0.44.2-PREPARE.md)，为无来源实际伤害增加选路折算，尚未对外发布。[实验记录](docs/strategy/multiplayer-shared-damage-20260923/implementation.md)中的固定脚本收益不代表真人联机收益。
+
 [多人军师](docs/multiplayer-advisor.md) 推荐本人的出牌和用药路线，最多推演十四个敌方回合。队友行动后自行决定何时重算；推演假设队友后续不主动出牌或用药，但仍结算其被动效果。多人功能目前供试用，尚未完成真实联机验收。
 
 **English UI:** Set the game language to English and restart the game. In single-player, use **Play turn** or **Auto: On**. Released version **0.44.1** is based on upstream **0.44.0**. Multiplayer replaces the per-cycle 3 HP target with a local contribution objective, balancing health, potions and observed longer-term returns. It retains manual advice for up to fourteen enemy cycles and doubled ordinary time and node limits. Teammates' future active actions are not modeled; live multiplayer is not yet verified. See the [release notes](docs/releases/0.44.1-RELEASE_NOTES.md) and [GitHub download](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.44.1). Configure potions, growth and search budgets in the overlay. **Settings > Reports > Upload report** submits a bug report. Logs, raw errors and some detailed diagnostics retain their original text.

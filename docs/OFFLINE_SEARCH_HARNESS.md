@@ -32,7 +32,7 @@ PowerShell在同一命令前设置 `$env:RACE_FIXTURE = 'poison'`，参数其余
 
 开发根为 `poison`、`fumes`、`mixed_poison`、`peer_guard`、`immediate_rescue`、`lift_rescue`、`defense`、`investment`、`burst`、`threat`；留出根名称为 `poison_holdout`、`fumes_holdout`、`peer_guard_holdout`、`protect_holdout`、`burst_holdout`、`threat_holdout`。固定根中存在刻意混用角色卡牌的合成局面。需要辅助目标时使用原生AnyAlly/AnyPlayer分类；未支持结算保留明确边界。
 
-输出 `race-experiments.json`：搜索的当前回合动作、固定预算、三种外部队友脚本（闲置/每周期一张防御/每周期一张打击）的实际五周期HP、存活、胜负及边界。搜索不读取这些脚本；外评续行使用固定防御/能力/ID顺序，不代表真人策略。不同变体和脚本不能计为独立战斗样本。最终采用、被拒绝五变体原型及已测根见[伤害归属实验](strategy/multiplayer-shared-damage-20260923/implementation.md)。
+输出 `race-experiments.json`：搜索的当前回合动作、固定预算、三种外部队友脚本（闲置/每周期一张防御/每周期一张打击）的至多五周期模拟 HP、存活、清场与边界。搜索不读取这些脚本；外评与搜索共用模拟引擎，不能充当独立原生语义对照。夹具重建少量合成牌，队友在结束回合边界集中行动；首轮之后本机按固定防御/能力/ID顺序续行，不再重算，未模拟真人交错操作。外评也会在本机死亡或步数上限停止，`won=false` 不能直接解释为全队战败。不同变体和脚本不能计为独立战斗样本。最终采用、被撤回原型及适用边界见[伤害归属实验](strategy/multiplayer-shared-damage-20260923/implementation.md)。
 
 旧 3 HP、A/C 覆盖与 `window-*` / `horizon-ordering` 的断言属于历史源码，当前命令显式拒绝并指向 `v0.43.6`。下列旧输入与证据保留作复现记录，不表示当前默认。新的实测数字和限制见[贡献策略实施](strategy/multiplayer-cooperative-planning-20260922/implementation.md)。
 

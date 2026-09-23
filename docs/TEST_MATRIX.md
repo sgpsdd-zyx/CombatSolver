@@ -10,6 +10,8 @@
 - Intercept参考返回 `UnsupportedEffect`，不计辅助通过；Lift首周期救援为有效负哨兵，固定后续并不保证队友生存。低血防御只证明首动保持，外评固定续行仍可能死亡；Noxious Fumes及晚投资缺口保留。首次Lift夹具目标遗漏、排名CLI预算低于最小值的运行均排除。
 - 未做真实联机、可见Steam、完整角色/遭遇回归、干净安装或完整发布门禁。证据根 `.local/multiplayer-race-20260923/`；可复现输入、原型与结果见[实施记录](strategy/multiplayer-shared-damage-20260923/implementation.md)和[结构化摘要](strategy/multiplayer-shared-damage-20260923/implementation-evidence.json)。
 
+同日[知识归档](strategy/multiplayer-shared-damage-20260923/closeout.md)只执行 L0 文档链接、JSON 与差异检查，复用以上成功证据。质量数字来自合成小牌组和与搜索共用引擎的外评；只执行首轮建议，后续不手动重算，队友只在结束回合边界行动。本机死亡/评价上限停止不等于团队失败；新种子、变体和同根脚本不是独立真人样本。本地构建与ZIP已完成，见[定版记录](releases/0.44.2-PREPARE.md)，不代表安装或联机验收。
+
 ## 0.44.1（fork）：本机贡献策略（2026-09-22）
 
 发布阶段从 `86026b05` 一次Release构建零警告错误、最小ZIP创建及GitHub正式Release命令成功；未重跑下列行为，凭证见[发布记录](releases/0.44.1-PUBLISH.md)。

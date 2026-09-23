@@ -4,7 +4,7 @@
 
 按版本倒序列出已有玩家更新日志，包括历史草案。是否正式发布以对应 Git 标签和发布记录为准；未发布改动见 [开发笔记](../DEVELOPMENT_NOTES.md)。发布 ZIP 存放在仓库根目录的 `releases/`，此处只保存文档。
 
-本地准备版 **[0.44.2](0.44.2-RELEASE_NOTES.md)** 改善无来源持续伤害的多人选路价值；[实验与原生证据](../strategy/multiplayer-shared-damage-20260923/implementation.md)单独归档。该版尚未创建标签、推送或发布到 GitHub。
+本地定版 **[0.44.2](0.44.2-RELEASE_NOTES.md)** 从 `fd976376` 完成 Release 构建与最小 ZIP，见[本地定版记录](0.44.2-PREPARE.md)。它为无来源实际伤害增加多人选路折算；[实验与原生证据](../strategy/multiplayer-shared-damage-20260923/implementation.md)单独归档，尚未创建标签、推送或发布到 GitHub。
 
 当前 fork 已发布 **[0.44.1](0.44.1-RELEASE_NOTES.md)** 基于官方 **0.44.0**，包含独立多人贡献策略，渠道事实见[发布记录](0.44.1-PUBLISH.md)。最近此前正式发布版为 [0.43.6](0.43.6-PUBLISH.md)，基于官方0.43.2；本次玩家日志以它为对比基线。此前 [0.43.5](0.43.5-PUBLISH.md) 已包含仅本地准备的0.43.2／0.43.3／0.43.4功能，中间版未补建标签。独立尖塔军师0.1.3由[工具目录](../../tools/SpireAdvisorMultiplayerFix/README.md#已交付产物)单独维护。
 
