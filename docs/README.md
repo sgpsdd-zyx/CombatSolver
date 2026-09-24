@@ -1,9 +1,10 @@
 # CombatSolver 文档导航
 
-当前已发布 **0.45.1** 合入官方 `68700c23 / 0.45.0`，单人保留官方策略，多人沿用本机贡献目标与无来源伤害折算。合并取舍、当前验证和知识收尾见[本轮记录](strategy/upstream-0450-merge-20260923.md)，渠道凭证见[发布记录](releases/0.45.1-PUBLISH.md)。
+官方仓库已到 **0.46.2**；多人 fork 当前已同步官方代码，项目版本为 `0.46.2`，但本轮合并尚未创建 fork 标签或外部 Release。最近已发布 fork 仍为 **0.45.1**，合并、验证与知识收尾见[本轮记录](strategy/upstream-0462-merge-20260924.md)。
 
 [多人原生实验](strategy/multiplayer-experiments-20260923/implementation.md)按“只有本机使用军师、队友独立决策”记录原生差分与受控脚本表现；收益、恶化和未知结果分开，真实联机仍未验收。现役操作与限制见[多人指南](multiplayer-advisor.md)。
 
+- [可选 ServerGC 启动配置](performance/server-gc-launch-profile-20260924.md)：仅本次进程生效的启动方式、保存设置边界与原生宿主验收。
 - [GC 完成链修复与优化筛选](performance/gc-completion-allocation-20260921.md)：替代 #116/#120 的窄修复、失败复现与重新实测取舍。
 - [增量历史计数](strategy/incremental-history-counters.md)：生命周期、测试构建与构键计时。
 - [转置表触顶证据](performance/transposition-cap-evidence-20260920.md)：默认条目上限、标签分布与逐根观测。
@@ -17,12 +18,12 @@
 
 | 要查什么 | 入口 |
 |---|---|
-| 官方 0.45.0 合并、fork 0.45.1 验证与知识收尾 | [本轮归档](strategy/upstream-0450-merge-20260923.md)、[版本状态](releases/README.md) |
+| 官方 0.46.2 合并、fork 当前验证与知识收尾 | [本轮归档](strategy/upstream-0462-merge-20260924.md)、[版本状态](releases/README.md) |
 | 如何实验未知队友、交错操作与反复手动重算 | [多人实验设计与原生试跑](strategy/multiplayer-experiments-20260923/README.md) |
 | 0.44.2 历史本地定版、实验结论边界与知识归档 | [本地记录](releases/0.44.2-PREPARE.md)、[归档凭证](strategy/multiplayer-shared-damage-20260923/closeout.md) |
 | 0.44.1 历史发布来源与 GitHub 交付 | [发布记录](releases/0.44.1-PUBLISH.md) |
 | 0.41.2 发布、独立尖塔军师修复及本地材料的归档状态 | [2026-09-18 归档记录](DEVELOPMENT_NOTES.md#归档状态2026-09-18) |
-| 多人手动军师、本机贡献目标、阶段与长线选路、救援与官方 0.45.0 兼容 | [多人军师](multiplayer-advisor.md) |
+| 多人手动军师、本机贡献目标、阶段与长线选路、救援与官方 0.46.2 兼容 | [多人军师](multiplayer-advisor.md) |
 | 独立「尖塔军师」拿牌推荐模组误读房主卡组的修复与重跑 | [本机玩家修复工具](../tools/SpireAdvisorMultiplayerFix/README.md) |
 | 多人研究原文归档、已采用改进与暂缓方案 | [策略索引](strategy/README.md#多人研究归档)、[首批实施](multiplayer-advisor.md#首批策略优化已实施) |
 | 本机贡献策略的研究采用、实现、证据与限制 | [2026-09-22 实施与归档](strategy/multiplayer-cooperative-planning-20260922/implementation.md) |

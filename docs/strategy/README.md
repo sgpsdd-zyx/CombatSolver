@@ -4,6 +4,7 @@
 
 当前搜索职责见 [架构地图](../ARCHITECTURE.md)，实际测试与未验证范围见 [测试矩阵](../TEST_MATRIX.md)。
 
+- [官方 0.46.2 合并与知识收尾](upstream-0462-merge-20260924.md)：同步官方单人代码、ServerGC 启动配置、连接元数据门禁和 UI 更新，保留多人手动军师及未发布边界；验证、规则和残留候选见记录。
 - [官方 0.45.0 合并与知识归档](upstream-0450-merge-20260923.md)：fork 0.45.1 的回合开始接入、单人同根对照、多人/界面验证、上游历史和实验限制；发布阶段见[版本索引](../releases/README.md)。
 - [多人实验：交错行动与手动重算](multiplayer-experiments-20260923/README.md)：2026-09-23 按“只有本机用军师、队友独立决策”实现原生完整牌组闭环；[实施与结果](multiplayer-experiments-20260923/implementation.md)记录A/A、敏感根、预算校准及64条/32对登记试跑，保留失败和恶化个案。[原生根](multiplayer-experiments-20260923/native-root-manifest.json)来自同一受控模板，真人来源仍为0，不修改生产策略。[审查原文](multiplayer-experiments-20260923/review.md)与[此前复核](multiplayer-experiments-20260923/review-response.md)保留。
 - [多人伤害归属审视：实验与采用](multiplayer-shared-damage-20260923/implementation.md)：2026-09-23 实验并实施无来源实际伤害按人数参与选路；个人贡献信用保留真实归属。原生差分与简化脚本收益分开记录，71次变体搜索不代表独立联机样本；两项撤回原型仅为当前夹具未检出收益。已完成[本地定版与知识归档](multiplayer-shared-damage-20260923/closeout.md)。
@@ -14,7 +15,7 @@
 - [单人历史累计维护](incremental-history-counters.md)：官方 0.43.2 实现与历史测量；多人保留各效果原持有者范围的完整扫描。
 - [多人未击杀长线选路研究](pro-window-selection-20260920/README.md)：固定 0.43.3，6 Pro 原文、269 次抽象对照与八次本地真实候选池观察；0.43.4 已实施受限 C 与 A 回退，保留缺代表、早期亏损和预算反例，见[实施与知识收尾](pro-window-selection-20260920/implementation.md)。
 - [十四周期长线规划与预算对照](multiplayer-fourteen-cycles-20260920.md)：2026-09-20 用户授权增加计算时间，7/14 同根比较、双倍额度、剩余敌方周期分摊及本轮验证；0.43.2 本地准备版。
-- [多人当前行为与实施取舍](../multiplayer-advisor.md)：多人功能的现役入口。首批三步优化基于兼容合并 `7160d2f` 完成；当前单人基线已同步为官方 `42e09028 / 0.44.0`；研究中的旧版本、类型草案与测试数字不覆盖当前实现。
+- [多人当前行为与实施取舍](../multiplayer-advisor.md)：多人功能的现役入口；当前官方基线与验证范围以该指南和本轮合并记录为准，研究中的旧版本、类型草案与测试数字不覆盖当前实现。
 - [策略优化日志](STRATEGY_OPTIMIZATION_LOG.md)：样例、策略认识与数值记录。
 - [状态键漏掉整场历史计数](state-key-history-counters-20260919.md)：金斧等六张牌读整场计数而键不含，条件式修法的逐根对照与无条件追加的代价。
 - [战后掉药预测与满栏用药门槛](potion-reward-outlook-20260918.md)：奖励 RNG 镜像的原版依据、额度口径、无头镜像校验、离线等价性与满栏对照。

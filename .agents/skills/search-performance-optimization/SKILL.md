@@ -17,7 +17,7 @@ description: 在战斗语义已证明正确后，审计或修改 CombatSolver �
 
 多人胜利早停捷径仍禁用，已有本机/队友药水资格沿原窗口捕获；用 `facts` 核对，不用最终路线长度推断搜索覆盖。结果分别报告返回深度、已观察最深周期和本次有效预算，不承诺十四周期最大输出或安全。
 
-当前官方基线为 `68700c23 / 0.45.0`。单人能力估值、承诺、固定前缀组合及强制／Smart 用药梯度保持官方行为；多人协调器提前返回，`_hasRegisteredPowerCards` 另以 `policy.Multiplayer == null` 隔离共享候选。Runtime 多人跳过单人成长目标捕获，影子根疯狂科学升级信用容量为零；不能等事后忽略收益才过滤单人假设。单人历史键用累计值，多人按各效果原持有者范围扫描，不能借队友身份使用单人计数。兼容检查使用 `upstream-compatibility`、真实多人能力牌、该官方版本单人对照。全队回合在 `Expansion.Replay`，目标/支配/转置标签在 `Expansion.Candidates`，排名分派在 `BeamRetentionPolicy.Ranking`。多人不预测战后奖励；默认百万条转置上限不变，低于上限的检查不能证明触顶质量。
+当前官方基线为 `4bfb4407 / 0.46.2`。单人能力估值、承诺、固定前缀组合及强制／Smart 用药梯度保持官方行为；多人协调器提前返回，`_hasRegisteredPowerCards` 另以 `policy.Multiplayer == null` 隔离共享候选。Runtime 多人跳过单人成长目标捕获，影子根疯狂科学升级信用容量为零；不能等事后忽略收益才过滤单人假设。单人历史键用累计值，多人按各效果原持有者范围扫描，不能借队友身份使用单人计数。兼容检查使用 `upstream-compatibility`、真实多人能力牌、该官方版本单人对照。全队回合在 `Expansion.Replay`，目标/支配/转置标签在 `Expansion.Candidates`，排名分派在 `BeamRetentionPolicy.Ranking`。多人不预测战后奖励；默认百万条转置上限不变，低于上限的检查不能证明触顶质量。
 
 先证明同一起点、同一动作的 actual/simulated 状态一致。存在根快照、语义或续用偏差时转 `combat-semantic-change`，不要调搜索掩盖。
 

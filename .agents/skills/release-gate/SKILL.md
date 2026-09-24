@@ -33,6 +33,7 @@ description: 用户要求准备或发布 CombatSolver 版本、生成 ZIP、创�
 
 ## 1. 版本与发布来源
 
+- CombatSolver 的中文版本术语：`小版本`只将末位加一，`0.a.b → 0.a.(b+1)`；`大版本`将中间位加一、末位归零，`0.a.b → 0.(a+1).0`。不要套用通用语义化版本的 minor/major 定义。用户给出精确版本号时按该版本号执行；已发布版本不追溯改号。
 - 同步 `CombatSolver.csproj`、`CombatSolver.json`、`docs/DEVELOPMENT_NOTES.md`、`docs/TEST_MATRIX.md` 和该版本玩家更新日志。
 - 玩家更新日志使用当前游戏官方简中译名，只写玩家可感知的变化。开发日志中的根因、内部职责、runId、构建和测试信息不复制进去。
 - 玩家更新日志和创意工坊 changeNote 同时提供简中与英文，使用各语言的游戏译名。PR 或其他外部贡献必须在对应变动条目的开头标明贡献者和 PR，并分别链接贡献者主页与 PR，例如“感谢 `[作者](主页)` 提交的 `[PR #123](链接)`：……”／“`[PR #123](链接)` by `[author](profile)`: …”，明确表示整项变动来自该贡献；禁止把致谢放在条目末尾，或在日志末尾另写脱离变动的笼统致谢段落。changeNote 直接采用同一版本玩家更新日志的完整中英正文，只允许将 Markdown 标题／列表语法转换为 Steam 富文本，不缩写、不合并或删减任何玩家变动、限制与致谢；转换到 Steam 富文本时也必须保留这两个链接。发布前逐项核对两种语言和两个渠道。若渠道长度限制无法容纳全文，停止该渠道并报告限制，不自行缩短。一次跨多个未上传版本时，先写好覆盖全部玩家变化的完整版本日志，再原样用于 changeNote。发布包含 UI 改动时参考 `../ui-localization/SKILL.md`，复用已完成的中英验证，不为了发包重复测试。
@@ -82,15 +83,17 @@ Windows（PowerShell 7）：
 
 ```powershell
 dotnet clean -c Release
-pwsh -NoProfile -File tools\build-local-stack.ps1 -Configuration Release
+pwsh -NoProfile -File tools\build-local-stack.ps1 -Configuration Release -ForPublication -PrivateConfigDirectory <私有配置目录>
 ```
 
 Linux（Bash）：
 
 ```bash
 dotnet clean -c Release
-./tools/build-local-stack.sh --configuration Release
+./tools/build-local-stack.sh --configuration Release --for-publication --private-config-directory <私有配置目录>
 ```
+
+私有配置目录必须包含 `presence.props` 和 `showcase.props`，可从本机部署定位文件确认；它不进入仓库或发布包。发布构建与统一发布脚本都会检查 DLL 中的在线连接元数据，缺失时停止。不要输出配置值。
 
 从 release source commit 构建，不从游戏 Mods 目录反向复制 DLL，不复用未知来源旧构建。构建成功后不再反射 DLL 版本、重复构建、再次复制部署或重跑已经通过的行为场景。
 

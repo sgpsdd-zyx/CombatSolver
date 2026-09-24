@@ -1,5 +1,51 @@
 # CombatSolver 测试清单
 
+## 0.46.2（fork）：官方合并与知识收尾（2026-09-24）
+
+本节只记录本 fork 对官方 `4bfb4407 / v0.46.2` 的合并边界。官方 0.46.x 的原始验证保留在下方“官方上游证据”小节；它们不自动成为本 fork 本轮的行为通过项。
+
+- 合并保留多人手动军师、三周期本机贡献目标、无来源伤害折算、最长十四周期和实验限制；吸收官方单人代码、可选 ServerGC 启动配置、在线连接元数据门禁、策略侧栏布局、UI 本地化和对应测试工具。
+- `CombatSolver.csproj` 继续排除 `docs/**/*.cs`；归档探针和原型只作研究材料，不进入生产编译。冲突取舍与规则同步见[合并归档](strategy/upstream-0462-merge-20260924.md)。
+- 本轮 Release 构建 0 警告/0 错误，Bash 职责门禁 `search_files=218`、运行库配置 25 项合同和缺发布配置负例通过；同源码 DLL、manifest 与两份许可文件已部署到 macOS 原生 Mod 目录。
+- 普通进程六请求全部 Passed：`UI-LOCALIZATION`（465 模板、eng/zhs/zht）、`ROUTE-ROW-REUSE`、`UPSTREAM-0450-UI-STATE`（含侧栏四坐标）、`UI-COMPACT-QOL`、`MULTIPLAYER-MANUAL-LOOP`、`MULTIPLAYER-EXPERIMENT-INACTIVE`。多人四次手动查询、本机/队友各三动作、第二回合及六次冻结根检查；首动作完整全队状态相等、0 差异。
+- 显式 ServerGC 的独立原生进程再运行会话/设置和单人最短请求，两项 Passed。CLR 9.0.7 实际 `serverGc=true / Active / savedNoGc=true / effectiveNoGc=false`；普通进程 `Default / serverGc=false / savedNoGc=true / effectiveNoGc=true`。完整搜索结果与事件输出成功；这不是性能 A/B 或一般路线等价结论。
+- 八次请求的运行 ID、输入与验证范围见[结构化证据](strategy/upstream-0462-merge-20260924-evidence.json)，原始根 `.local/upstream-0462-merge-20260924/`。两个实例 `macos.Vmi0aw`、`macos.NUFJll` 均由启动器删除。未执行 Windows/PowerShell、Linux `/proc` 启动器合同、可见 Steam、真实联机、在线端点或完整发布门禁。
+- 最终 JSON 检查发现上游四个同值重复键，去重后 465 项解析映射不变；因内嵌资源变更，重新构建并仅复跑 `UI-LOCALIZATION` / `macos-1ee16377ab9a494bbb113b19bdd40dad`，28 条检查 Passed。第三个实例由启动器删除，最终 DLL 已重新部署；未重复其他已通过场景。
+- 未创建本 fork 的 0.46.2 标签、GitHub Release 或 ZIP；最近已发布 fork 仍是 0.45.1。工作区残留候选按 neat-freak 规则只列出，未删除。
+
+## 官方上游证据：0.46.2 及近期历史（2026-09-24）
+
+### 0.46.2：可选 ServerGC 启动配置（2026-09-24）
+
+- PR #132 的 `RuntimeGcProfileChecks` 25 项纯值合同、跨平台启动器合同及五根十个原生宿主请求证据见[专项报告](performance/server-gc-launch-profile-20260924.md)；本轮集成验证另列于下。
+- 合入当前 `main` 后，Windows Release 构建 0 警告、0 错误，PowerShell 结构门禁 `REFACTOR_BOUNDARIES_OK search_files=208`，25 项 GC profile 纯值检查与 PowerShell 启动器合同通过。
+- 默认模式 `PR131-SIDEBAR-PR132-UI` / `cdf2a4755c3a4ba4a183e5548445d826` Passed；ServerGC 模式 `PR132-SERVER-GC-UI` / `890a55679cc546b293d4c17c37900fe7` Passed。两次均穿过侧栏四项坐标断言、设置页和控制器生命周期，首回合结束；默认模式有效 NoGC 为 true，ServerGC 模式为 false，私有无头实例均被启动器清理。此项验证不含可见排版或长线性能对照。
+
+### 0.46.2：策略侧栏展开方向（2026-09-24）
+
+- 控制器会话合同新增四个 1920 宽视口的侧栏横坐标断言：右侧可放、主面板贴右缘改放左侧且不相交、两侧都放不下时分别贴右缘和左缘。
+
+### 0.46.1：在线连接配置恢复（2026-09-24）
+
+- 0.46.0 发布 worktree 缺少 `presence.props`、`showcase.props`，其 MSBuild 监控端点属性为空；主仓库私有配置存在且属性非空。0.46.0 发布 DLL 的监控和战斗展示连接元数据均不存在，线上监控容器正常运行。
+- 新门禁拒绝缺少私有配置的发布构建，也拒绝 0.46.0 旧 DLL 缺失 `PresenceEndpoint`。从明确指定的私有配置目录执行 Windows Release 发布构建通过，0 警告、0 错误，产物通过两项连接元数据检查。
+- `ONLINE-PRESENCE-CONTRACT` / `db7129b3f04b41f38a9d1307670c114a` Passed：默认与关闭设置、当前战斗标量快照、真实 HTTPS 连接及错误证书指纹拒绝通过；只向端点发送应返回 400 的空请求，不生成在线玩家记录。无头实例已清理。
+- `git diff --check`、Bash 构建脚本语法与 PowerShell 脚本解析通过。未进行可见 Steam 在线状态验收；正式 0.46.1 构建将在最终提交后执行，不重复相同源码的行为场景。
+
+### 0.46.0 定版验证范围（2026-09-23）
+
+- 本次合并后只同步版本与发布文档，UI 行为源码沿用下列 0.46.0 无头路线场景与结构门禁证据；发布构建从最终提交执行，不重复相同输入的行为场景。
+
+### 0.46.0：UI 视觉层级重构与排版布局优化（2026-09-23）
+
+- Windows Release 构建通过，0 警告、0 错误。
+- PowerShell 结构门禁 `tools\verify-refactor-boundaries.ps1` 校验通过，`REFACTOR_BOUNDARIES_OK search_files=208`。
+- `git diff --check` 格式门禁通过，无空白行或悬挂空格。
+- `ROUTE-ROW-REUSE` / `3f480bd1bd3c468a8c0d73799ea1486d`、`e242a10e56dd4ddb8526912435a0c3b8`、`78160d7af1d040f9918539fc22a74f6b`、`8b1cf2751de34bf3a772d3f224501704`、`e1b78931a6644d0683789afdca4fe5f9` 与 `5f37adf0fff947188e17323a4823c926` Passed：动作块构造、路线行复用、执行状态、语言往返等既有布局与状态合同全部通过；已验证回合开始选牌胶囊专属色标与动画、循环组 `LoopBadge` 徽章随卡牌流式排版、消除下沉对齐与大框自适应贴合、循环结束胶囊淡化熄灭生命周期；已指定 `EvidenceDirectory`，无头实例由 `CleanupInstanceOnExit` 自动清理删除。
+- `UI-LOCALIZATION`：在基线提交（0c5f677b）夹具生成怪物时即因 `ConditionalBranchState.GetNextState` 抛出 `No valid next state found`，无法在当前夹具环境完整通过，如实记录未标记为通过。
+- 本轮只验证代码编译、结构门禁与无头交互合同；浅色、深色主题的可见画面排版与交互未进行 Steam 实机观感验收。
+
+
 ## 0.45.1（fork）：官方0.45.0合并（2026-09-23）
 
 本轮直接证据归[合并记录](strategy/upstream-0450-merge-20260923.md)及[结构化结果](strategy/upstream-0450-merge-20260923-evidence.json)，原始根 `.local/upstream-sync-20260923/`。以下通过仅适用于具名合同；上游历史未计作本轮运行。

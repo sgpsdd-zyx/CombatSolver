@@ -1,0 +1,336 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-09-24",
+  "branch": "codex/multiplayer-advisor",
+  "forkParent": "fdbe4e6c138449fca6c21ce548c2ffcf85b4a742",
+  "upstreamParent": "4bfb440796dc7940ba036127e13aed5f0b1e92f3",
+  "upstreamVersion": "0.46.2",
+  "latestPublishedFork": "0.45.1",
+  "sourceVersion": "0.46.2",
+  "remoteFetchReusedFromHandoff": true,
+  "sourceAudit": {
+    "upstreamSourceFiles": 20,
+    "exactUpstreamFiles": 16,
+    "forkOverlapFiles": [
+      "src/Testing/UnattendedTestRunner.UiLocalization.cs",
+      "src/UI/English.json",
+      "src/UI/SolverOverlay.cs",
+      "src/UI/SolverOverlaySnapshot.cs"
+    ],
+    "searchEnginePredictionChanges": [],
+    "evidence": ".local/upstream-0462-merge-20260924/source-audit.json"
+  },
+  "build": {
+    "configuration": "Release",
+    "warnings": 0,
+    "errors": 0,
+    "evidence": ".local/upstream-0462-merge-20260924/build-final.log",
+    "reason": "Four identical duplicate localization keys removed; parsed dictionary unchanged."
+  },
+  "boundaries": {
+    "platform": "Bash on macOS",
+    "result": "REFACTOR_BOUNDARIES_OK",
+    "searchFiles": 218
+  },
+  "runtimeProfileContracts": {
+    "checks": 25,
+    "status": "Passed"
+  },
+  "publicationMissingConfig": {
+    "status": "RejectedAsExpected",
+    "missing": "PresenceEndpoint",
+    "published": false
+  },
+  "syntax": {
+    "shellSyntax": [
+      "tools/build-local-stack.sh",
+      "tools/run-unattended-test.sh",
+      "tools/start-server-gc.sh",
+      "tools/test-runtime-profile-launchers.sh"
+    ],
+    "pythonSyntax": [
+      "tools/PerformanceBenchmarks/compare-runtime-profile.py"
+    ],
+    "platform": "macOS; Linux process-launch checks are not executable without /proc",
+    "individualShellChecks": true
+  },
+  "nativeRuns": [
+    {
+      "scenarioId": "UI-LOCALIZATION",
+      "runId": "macos-f7b13a23dc1648208fc9874a949583a6",
+      "status": "Passed",
+      "request": ".local/upstream-0462-merge-20260924/native/01-request.json",
+      "evidenceDirectory": ".local/upstream-0462-merge-20260924/native/01-evidence",
+      "timeoutSeconds": 120.0,
+      "completedChecks": [
+        "CardLocaleRoundTrip:EnglishSnapshot:ChineseEnglishChinese:Upgrade:Choice:RelicOwner:SerializedPlan:LivePill:SubscriptionCleanup:NoReplan",
+        "SpawnedEntityIdentity:eng:FourWrigglers:LeftToRight:NativeSlots=True:ForkStable:DeathStable",
+        "EntityIdentity:eng:DistinctEnemies=1:PlainAndInkyShiv",
+        "StrategyOutcome:eng:AlignedAndUnmet:GrowthCounts:PartialRoute:EmptyHidden",
+        "RelicOwnership:eng:Self:PeerNumber:SameRelic:Json:Tooltip:Identity",
+        "ActionAnnotations:eng:CapturedDamageSources:21RelicFormats:NestedChoices:Tooltip",
+        "LiveTurnStartChoicePreview:eng:Power:Relic",
+        "LoopDisplay:eng:41Actions:2OuterControls:CompactInlineCount:EnclosedPeriod:WideNarrowWide:ReplayCount:KillSuffix:Deployment:Reuse",
+        "StrategyPanels:eng:Potion:Growth:Relic:Collapse",
+        "UiLocalization:eng:Catalog465:Settings:UploadTransitions:DynamicStatus:FailureInstructions",
+        "SpawnedEntityIdentity:zhs:FourWrigglers:LeftToRight:NativeSlots=True:ForkStable:DeathStable",
+        "EntityIdentity:zhs:DistinctEnemies=1:PlainAndInkyShiv",
+        "StrategyOutcome:zhs:AlignedAndUnmet:GrowthCounts:PartialRoute:EmptyHidden",
+        "RelicOwnership:zhs:Self:PeerNumber:SameRelic:Json:Tooltip:Identity",
+        "ActionAnnotations:zhs:CapturedDamageSources:21RelicFormats:NestedChoices:Tooltip",
+        "LiveTurnStartChoicePreview:zhs/zht:Power:Relic",
+        "LoopDisplay:zh:41Actions:2OuterControls:CompactInlineCount:EnclosedPeriod:WideNarrowWide:ReplayCount:KillSuffix:Deployment:Reuse",
+        "StrategyPanels:zhs:Potion:Growth:Relic:Collapse",
+        "UiLocalization:zhs:Catalog465:Settings:UploadTransitions:DynamicStatus:FailureInstructions",
+        "SpawnedEntityIdentity:zht:FourWrigglers:LeftToRight:NativeSlots=True:ForkStable:DeathStable",
+        "EntityIdentity:zht:DistinctEnemies=1:PlainAndInkyShiv",
+        "StrategyOutcome:zht:AlignedAndUnmet:GrowthCounts:PartialRoute:EmptyHidden",
+        "RelicOwnership:zht:Self:PeerNumber:SameRelic:Json:Tooltip:Identity",
+        "ActionAnnotations:zht:CapturedDamageSources:21RelicFormats:NestedChoices:Tooltip",
+        "LiveTurnStartChoicePreview:zhs/zht:Power:Relic",
+        "LoopDisplay:zh:41Actions:2OuterControls:CompactInlineCount:EnclosedPeriod:WideNarrowWide:ReplayCount:KillSuffix:Deployment:Reuse",
+        "StrategyPanels:zht:Potion:Growth:Relic:Collapse",
+        "UiLocalization:zht:Catalog465:Settings:UploadTransitions:DynamicStatus:FailureInstructions"
+      ],
+      "fixture": "coverage/unattended/ui-localization.json"
+    },
+    {
+      "scenarioId": "ROUTE-ROW-REUSE",
+      "runId": "macos-0e68fd558bfa49c997542fec59776414",
+      "status": "Passed",
+      "request": ".local/upstream-0462-merge-20260924/native/02-request.json",
+      "evidenceDirectory": ".local/upstream-0462-merge-20260924/native/02-evidence",
+      "timeoutSeconds": 120.0,
+      "completedChecks": [
+        "RouteRowReuse:ValueEquality:ChangedFields:Choices:Kills:Order:Empty:Status:FailedPopulateRetry:Deployment:Locale:CoalescedRoundTrip",
+        "RouteRowReuse:MeasuredUnchangedRow"
+      ],
+      "fixture": "coverage/unattended/route-row-reuse.json"
+    },
+    {
+      "scenarioId": "UPSTREAM-0450-UI-STATE",
+      "runId": "macos-6c26746385b24410842ff50835c6fdbe",
+      "status": "Passed",
+      "request": ".local/upstream-0462-merge-20260924/native/03-request.json",
+      "evidenceDirectory": ".local/upstream-0462-merge-20260924/native/03-evidence",
+      "timeoutSeconds": 120.0,
+      "completedChecks": [
+        "SearchPortfolios:RefinementDefaultOn:NoveltyDefaultOff:DamageGuidanceThreshold8:SettingsRoundTrip:UiControl:PolicySnapshot",
+        "ControllerSessionLifecycle"
+      ],
+      "runtime": {
+        "clr": "9.0.7",
+        "serverGc": false,
+        "profile": "Default",
+        "savedNoGcRegionEnabled": true,
+        "effectiveNoGcRegionEnabled": true
+      },
+      "fixture": "coverage/unattended/upstream-0450-ui-state.json"
+    },
+    {
+      "scenarioId": "UI-COMPACT-QOL",
+      "runId": "macos-d0fc056445b94369a64bbb22e2d3c4eb",
+      "status": "Passed",
+      "request": ".local/upstream-0462-merge-20260924/native/04-request.json",
+      "evidenceDirectory": ".local/upstream-0462-merge-20260924/native/04-evidence",
+      "timeoutSeconds": 120.0,
+      "completedChecks": [],
+      "fixture": "coverage/unattended/ui-compact-multiplayer-boundary.json"
+    },
+    {
+      "scenarioId": "MULTIPLAYER-MANUAL-LOOP",
+      "runId": "macos-8a1037499a144045aa380e3f7a239da0",
+      "status": "Passed",
+      "request": ".local/upstream-0462-merge-20260924/native/05-request.json",
+      "evidenceDirectory": ".local/upstream-0462-merge-20260924/native/05-evidence",
+      "timeoutSeconds": 120.0,
+      "completedChecks": [
+        "NativePacketEnumWarmup:153",
+        "MultiplayerManualLoop:contract_complete:queries=4:local_actions=3:peer_actions=3"
+      ],
+      "fixture": "coverage/unattended/multiplayer-manual-loop.json"
+    },
+    {
+      "scenarioId": "MULTIPLAYER-EXPERIMENT-INACTIVE",
+      "runId": "macos-cfcaaf487d474c8c9f921ebc904c6c29",
+      "status": "Passed",
+      "request": ".local/upstream-0462-merge-20260924/native/06-request.json",
+      "evidenceDirectory": ".local/upstream-0462-merge-20260924/native/06-evidence",
+      "timeoutSeconds": 120.0,
+      "completedChecks": [
+        "MultiplayerExperimentReset:NoHooks:SinglePlayerRoot",
+        "PotionOutcomeNamesAndRewardGate",
+        "InitialWorldlineSummary",
+        "InitialFirstAction:STRIKE_IRONCLAD"
+      ],
+      "runtime": {
+        "clr": "9.0.7",
+        "serverGc": false,
+        "profile": "Default",
+        "savedNoGcRegionEnabled": true,
+        "effectiveNoGcRegionEnabled": true
+      },
+      "fixture": "coverage/unattended/multiplayer-experiment-inactive.json"
+    },
+    {
+      "scenarioId": "UPSTREAM-0450-UI-STATE",
+      "runId": "macos-7c5b7bc3301047d199f9cece4b76c881",
+      "status": "Passed",
+      "request": ".local/upstream-0462-merge-20260924/server-gc/01-request.json",
+      "evidenceDirectory": ".local/upstream-0462-merge-20260924/server-gc/01-evidence",
+      "timeoutSeconds": 120.0,
+      "completedChecks": [
+        "SearchPortfolios:RefinementDefaultOn:NoveltyDefaultOff:DamageGuidanceThreshold8:SettingsRoundTrip:UiControl:PolicySnapshot",
+        "ControllerSessionLifecycle"
+      ],
+      "runtime": {
+        "clr": "9.0.7",
+        "serverGc": true,
+        "profile": "Active",
+        "savedNoGcRegionEnabled": true,
+        "effectiveNoGcRegionEnabled": false
+      },
+      "fixture": "coverage/unattended/upstream-0450-ui-state.json"
+    },
+    {
+      "scenarioId": "MULTIPLAYER-EXPERIMENT-INACTIVE",
+      "runId": "macos-6c984abdcb874e71a9a569bfc79b4806",
+      "status": "Passed",
+      "request": ".local/upstream-0462-merge-20260924/server-gc/02-request.json",
+      "evidenceDirectory": ".local/upstream-0462-merge-20260924/server-gc/02-evidence",
+      "timeoutSeconds": 120.0,
+      "completedChecks": [
+        "MultiplayerExperimentReset:NoHooks:SinglePlayerRoot",
+        "PotionOutcomeNamesAndRewardGate",
+        "InitialWorldlineSummary",
+        "InitialFirstAction:STRIKE_IRONCLAD"
+      ],
+      "runtime": {
+        "clr": "9.0.7",
+        "serverGc": true,
+        "profile": "Active",
+        "savedNoGcRegionEnabled": true,
+        "effectiveNoGcRegionEnabled": false
+      },
+      "fixture": "coverage/unattended/multiplayer-experiment-inactive.json"
+    },
+    {
+      "scenarioId": "UI-LOCALIZATION",
+      "runId": "macos-1ee16377ab9a494bbb113b19bdd40dad",
+      "status": "Passed",
+      "request": ".local/upstream-0462-merge-20260924/native-final-ui/01-request.json",
+      "fixture": "coverage/unattended/ui-localization.json",
+      "evidenceDirectory": ".local/upstream-0462-merge-20260924/native-final-ui/01-evidence",
+      "timeoutSeconds": 120,
+      "completedChecks": [
+        "CardLocaleRoundTrip:EnglishSnapshot:ChineseEnglishChinese:Upgrade:Choice:RelicOwner:SerializedPlan:LivePill:SubscriptionCleanup:NoReplan",
+        "SpawnedEntityIdentity:eng:FourWrigglers:LeftToRight:NativeSlots=True:ForkStable:DeathStable",
+        "EntityIdentity:eng:DistinctEnemies=1:PlainAndInkyShiv",
+        "StrategyOutcome:eng:AlignedAndUnmet:GrowthCounts:PartialRoute:EmptyHidden",
+        "RelicOwnership:eng:Self:PeerNumber:SameRelic:Json:Tooltip:Identity",
+        "ActionAnnotations:eng:CapturedDamageSources:21RelicFormats:NestedChoices:Tooltip",
+        "LiveTurnStartChoicePreview:eng:Power:Relic",
+        "LoopDisplay:eng:41Actions:2OuterControls:CompactInlineCount:EnclosedPeriod:WideNarrowWide:ReplayCount:KillSuffix:Deployment:Reuse",
+        "StrategyPanels:eng:Potion:Growth:Relic:Collapse",
+        "UiLocalization:eng:Catalog465:Settings:UploadTransitions:DynamicStatus:FailureInstructions",
+        "SpawnedEntityIdentity:zhs:FourWrigglers:LeftToRight:NativeSlots=True:ForkStable:DeathStable",
+        "EntityIdentity:zhs:DistinctEnemies=1:PlainAndInkyShiv",
+        "StrategyOutcome:zhs:AlignedAndUnmet:GrowthCounts:PartialRoute:EmptyHidden",
+        "RelicOwnership:zhs:Self:PeerNumber:SameRelic:Json:Tooltip:Identity",
+        "ActionAnnotations:zhs:CapturedDamageSources:21RelicFormats:NestedChoices:Tooltip",
+        "LiveTurnStartChoicePreview:zhs/zht:Power:Relic",
+        "LoopDisplay:zh:41Actions:2OuterControls:CompactInlineCount:EnclosedPeriod:WideNarrowWide:ReplayCount:KillSuffix:Deployment:Reuse",
+        "StrategyPanels:zhs:Potion:Growth:Relic:Collapse",
+        "UiLocalization:zhs:Catalog465:Settings:UploadTransitions:DynamicStatus:FailureInstructions",
+        "SpawnedEntityIdentity:zht:FourWrigglers:LeftToRight:NativeSlots=True:ForkStable:DeathStable",
+        "EntityIdentity:zht:DistinctEnemies=1:PlainAndInkyShiv",
+        "StrategyOutcome:zht:AlignedAndUnmet:GrowthCounts:PartialRoute:EmptyHidden",
+        "RelicOwnership:zht:Self:PeerNumber:SameRelic:Json:Tooltip:Identity",
+        "ActionAnnotations:zht:CapturedDamageSources:21RelicFormats:NestedChoices:Tooltip",
+        "LiveTurnStartChoicePreview:zhs/zht:Power:Relic",
+        "LoopDisplay:zh:41Actions:2OuterControls:CompactInlineCount:EnclosedPeriod:WideNarrowWide:ReplayCount:KillSuffix:Deployment:Reuse",
+        "StrategyPanels:zht:Potion:Growth:Relic:Collapse",
+        "UiLocalization:zht:Catalog465:Settings:UploadTransitions:DynamicStatus:FailureInstructions"
+      ],
+      "finalEmbeddedResource": true
+    }
+  ],
+  "multiplayer": {
+    "outcome": "contract_complete",
+    "round": 2,
+    "queries": 4,
+    "localActions": 3,
+    "peerActions": 3,
+    "strictActionChecks": 1,
+    "frozenRootChecks": 6,
+    "invalidAdvice": 0,
+    "singleAdvisorUser": true,
+    "peerConsultedAdvisor": false,
+    "fullStateEqual": true,
+    "differences": 0,
+    "networkValidated": false,
+    "visiblePerformanceValidated": false
+  },
+  "cleanedHeadlessInstances": [
+    ".local/headless-instances/macos.Vmi0aw",
+    ".local/headless-instances/macos.NUFJll",
+    ".local/headless-instances/macos.kN649F"
+  ],
+  "deployment": {
+    "status": "deployed",
+    "targetRelativeToGameRoot": "SlayTheSpire2.app/Contents/MacOS/mods/CombatSolver",
+    "files": [
+      "CombatSolver.json",
+      "CombatSolver.dll",
+      "LICENSE",
+      "THIRD_PARTY_NOTICES.md"
+    ],
+    "windowsMemoryCleaner": "not-applicable",
+    "evidence": ".local/upstream-0462-merge-20260924/deployment-final.json"
+  },
+  "notRun": [
+    "Windows/PowerShell checks",
+    "Linux /proc process-launch contracts",
+    "real network multiplayer",
+    "visible Steam UI or performance",
+    "full release gate",
+    "new strategy quality batch",
+    "online endpoint validation",
+    "ZIP, fork tag, push, GitHub Release"
+  ],
+  "retainedArtifacts": {
+    "priorInventory": "/tmp/combatsolver-neat-inventory.txt (handoff inventory, not tracked)",
+    "currentEvidence": ".local/upstream-0462-merge-20260924",
+    "history": ".local/upstream-sync-20260923",
+    "cleanupAuthorized": false
+  },
+  "initialBuild": {
+    "configuration": "Release",
+    "warnings": 0,
+    "errors": 0,
+    "evidence": ".local/upstream-0462-merge-20260924/build.log"
+  },
+  "knowledgeChecks": {
+    "status": "Passed",
+    "markdownFiles": 431,
+    "affectedMarkdownFiles": 18,
+    "localFileLinks": 884,
+    "jsonFiles": 11,
+    "englishTemplates": 465,
+    "upstreamAndForkTranslationsPreserved": true,
+    "officialReleaseTextsPreserved": true,
+    "errors": []
+  },
+  "localizationDeduplication": {
+    "keys": [
+      "弃",
+      "耗尽",
+      "变换",
+      "选择"
+    ],
+    "source": "upstream",
+    "sameValues": true,
+    "parsedDictionaryUnchanged": true,
+    "finalRunId": "macos-1ee16377ab9a494bbb113b19bdd40dad"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "characterId": "IRONCLAD",
+  "encounterId": "PHROG_PARASITE_ELITE",
+  "seed": "UPSTREAM0450-COMPAT-20260923",
+  "timeoutSeconds": 120.0,
+  "headlessFastModeForTest": "Instant",
+  "deploymentFastModeForTest": "Instant",
+  "fixedSearchBudget": true,
+  "searchBudgetOverrideMilliseconds": 1000,
+  "searchMaxDegreeOfParallelism": 1,
+  "scenarioId": "UI-LOCALIZATION"
+}
