@@ -1,12 +1,12 @@
 # CombatSolver 开发笔记与未来构想
 
-## 0.46.3（fork，发布准备）：官方 0.46.2 合并版交付（2026-09-24）
+## 0.46.3（fork，已发布）：官方 0.46.2 合并版交付（2026-09-24）
 
 用户明确要求“发布release”。本次以已完成合并与最小验证的 `988d8cd5` 为行为来源，整理相对已发布 fork 0.45.1 的[完整中英玩家说明](releases/0.46.3-RELEASE_NOTES.md)。官方 `v0.46.2` 已固定于 `4bfb4407`，fork 使用空闲的补丁版本 0.46.3，不移动官方标签或修改官方日志。
 
 - 只同步版本、玩家说明和发布记录；行为源码、依赖与测试输入不变，复用下节合并验证，不重复行为测试。发布构建从包含这些版本文件的提交产生。
 - 本机没有私有 props；从已安装的官方 0.46.2 工坊 DLL 只读取五项客户端连接元数据，检查 HTTPS 与证书指纹格式，保存到忽略目录的权限受限配置文件。没有复制官方 DLL 作为发布物，没有输出配置值或访问在线端点；最终构建显式启用发布配置门禁并检查新 DLL 元数据。
-- 最小 ZIP 使用最终 manifest、新 Release DLL、LICENSE 和 THIRD_PARTY_NOTICES.md。macOS 不生成 Windows MemoryCleaner；同一构建部署到已确认的游戏 Mod 目录。随后发布当前多人分支、annotated tag 和 fork GitHub Release，渠道结果以[版本索引](releases/README.md)为准。
+- 从 `02d1523c` 完成一次正式 Release 构建，0 警告/0 错误，10.22 秒；新 DLL 的五项连接元数据检查通过。最小 ZIP 为 2,246,843 字节，使用最终 manifest、新 DLL、LICENSE 和 THIRD_PARTY_NOTICES.md；macOS 不生成 Windows MemoryCleaner。同一构建已部署到游戏 Mod 目录，分支与 annotated tag `v0.46.3` 原子推送成功，GitHub Release 已创建为最新版，见[渠道凭证](releases/0.46.3-PUBLISH.md)。发布后仅补文档归档，标签与发布包不变。
 
 ## 官方 0.46.2 合并阶段（fork，后续交付为 0.46.3）：知识收尾（2026-09-24）
 

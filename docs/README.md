@@ -1,6 +1,6 @@
 # CombatSolver 文档导航
 
-多人 fork 基于官方 **0.46.2**，以 **0.46.3** 定版发布，官方标签保持原指向。最近已发布 fork 为 **0.45.1**；[版本索引](releases/README.md)维护发布进度，[中英更新日志](releases/0.46.3-RELEASE_NOTES.md)说明玩家变化，合并、验证与知识收尾见[本轮记录](strategy/upstream-0462-merge-20260924.md)。
+多人 fork **0.46.3 已发布**，基于官方 **0.46.2**，官方标签保持原指向。[发布凭证](releases/0.46.3-PUBLISH.md)记录来源、构建、部署与 GitHub 交付；[中英更新日志](releases/0.46.3-RELEASE_NOTES.md)说明玩家变化，合并、验证与知识收尾见[本轮记录](strategy/upstream-0462-merge-20260924.md)。
 
 [多人原生实验](strategy/multiplayer-experiments-20260923/implementation.md)按“只有本机使用军师、队友独立决策”记录原生差分与受控脚本表现；收益、恶化和未知结果分开，真实联机仍未验收。现役操作与限制见[多人指南](multiplayer-advisor.md)。
 
@@ -18,7 +18,7 @@
 
 | 要查什么 | 入口 |
 |---|---|
-| 官方 0.46.2 合并、fork 当前验证与知识收尾 | [本轮归档](strategy/upstream-0462-merge-20260924.md)、[版本状态](releases/README.md) |
+| 官方 0.46.2 合并、fork 0.46.3 发布与当前验证 | [本轮归档](strategy/upstream-0462-merge-20260924.md)、[发布凭证](releases/0.46.3-PUBLISH.md)、[版本状态](releases/README.md) |
 | 如何实验未知队友、交错操作与反复手动重算 | [多人实验设计与原生试跑](strategy/multiplayer-experiments-20260923/README.md) |
 | 0.44.2 历史本地定版、实验结论边界与知识归档 | [本地记录](releases/0.44.2-PREPARE.md)、[归档凭证](strategy/multiplayer-shared-damage-20260923/closeout.md) |
 | 0.44.1 历史发布来源与 GitHub 交付 | [发布记录](releases/0.44.1-PUBLISH.md) |
