@@ -449,6 +449,16 @@ while IFS= read -r -d '' api_file; do
     done
 done < <(find "$repository_root/src/Api" -type f -name '*.cs' -print0 | sort -z)
 
+# Startup configuration owns next-process files, never live GC or search policy.
+require_fixed "$repository_root/src/Runtime/RuntimeGcStartup.cs" \
+    'RuntimeGcStartupConfig.ResolvePath(' 'missing installation path boundary'
+require_fixed "$repository_root/src/Runtime/RuntimeGcStartup.cs" \
+    '_ = RuntimeGcProfile.Current;' 'actual startup profile must be frozen before file changes'
+for forbidden_startup_reference in 'using Godot' 'SolverSettings' 'SearchGcPolicy' 'CombatBeamSolver' 'GC.Collect('; do
+    forbid_fixed "$repository_root/src/Runtime/RuntimeGcStartupConfig.cs" \
+        "$forbidden_startup_reference" 'startup file policy must remain independent of live runtime:'
+done
+
 search_gc_policy_path="$repository_root/src/Runtime/SearchGcPolicy.cs"
 forbid_fixed "$repository_root/src/Runtime/SearchGcPolicy.Recovery.cs" \
     'GC.Collect(' 'NoGC recovery must not induce a collection:'

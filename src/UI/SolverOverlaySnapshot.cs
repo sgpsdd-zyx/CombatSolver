@@ -147,7 +147,7 @@ internal sealed record SolverOverlaySnapshot(
             preview.Turn,
             SolverText.Format($"搜索前沿预览 · 已规划至第 {furthestTurn} 回合"),
             SolverOverlayTone.Accent,
-            SolverText.Format($"[color={SolverUiTokens.Palette.TextSecondaryHex}]搜索前沿预览，尚未验证完整胜利  │  {outcome}[/color]"),
+            string.Empty,
             string.Empty,
             preview.Actions.Count(action => action.Kind == PlanActionKind.UsePotion),
             projectedBattleHpLost,
@@ -178,8 +178,7 @@ internal sealed record SolverOverlaySnapshot(
             preview.StartTurnNumber,
             SolverText.Format($"求解器当前考虑 · 已演化至第 {furthestTurn} 回合"),
             SolverOverlayTone.Accent,
-            SolverText.Format($"[color={SolverUiTokens.Palette.WarningHex}]求解器当前考虑，尚未验证  │  ") +
-            SolverText.Format($"路线可能继续变化或回跳[/color]"),
+            string.Empty,
             string.Empty,
             preview.ProjectedBattlePotionCount,
             preview.ProjectedBattleHpLost,
@@ -276,10 +275,19 @@ internal sealed record SolverOverlaySnapshot(
                     summaryText += "\n" + SolverText.Format($"上一阶段已结算：目标 {previousTarget}，实际进展 {previousProgress}。");
             }
         }
+        double searchElapsedSeconds = result.TotalSearchElapsed.TotalSeconds;
+        long searchWorldlines = result.TotalExpandedNodes > 0
+            ? result.TotalExpandedNodes
+            : (result.ExpandedNodes > 0 ? result.ExpandedNodes : reviewedWorldlinesTotal);
+        long searchSpeed = searchElapsedSeconds > 0d
+            ? (long)Math.Round(searchWorldlines / searchElapsedSeconds)
+            : 0L;
         string reviewSummaryText = result.WasRestoredFromCache
             ? SolverText.Get("已恢复本场战斗记录的路线")
             : result.WasReused
             ? SolverText.Format($"路线已复用，共查阅了 {reviewedWorldlinesTotal:N0} 条世界线")
+            : searchSpeed > 0
+            ? SolverText.Format($"花费了 {result.TotalSearchElapsed.TotalSeconds:F1} 秒，共查阅了 {reviewedWorldlinesTotal:N0} 条世界线（{searchSpeed:N0} 条/s）")
             : SolverText.Format($"花费了 {result.TotalSearchElapsed.TotalSeconds:F1} 秒，共查阅了 {reviewedWorldlinesTotal:N0} 条世界线");
         bool projectedBattleHpLossKnown = result.CombatEndedTurn.HasValue;
         int alreadyLost = observedBattleDamage?.HpLostSoFar ?? result.BattleHpLostSoFar;

@@ -78,7 +78,7 @@ if [[ ${1:-} == --stop-only ]]; then
     stop_command() {
         COMBATSOLVER_HEADLESS_ROOT="$1" bash "$script_dir/run-unattended-test.sh" --stop-instance --headless-instance "$2" \
             --sts2-game-root "$stop_root/missing-source" --ritsu-workshop-root "$stop_root/missing-dependency" \
-            --combat-solver-build-dir "$stop_root/missing-build" >"$stop_root/$3.log" 2>&1
+            --combat-solver-build-dir "$stop_root/missing-build" "${@:4}" >"$stop_root/$3.log" 2>&1
     }
     expect_stop_rejected() {
         if stop_command "$1" "$2" "$3"; then echo "Expected stop rejection: $3" >&2; exit 1; fi
@@ -104,6 +104,10 @@ if [[ ${1:-} == --stop-only ]]; then
     stop_command "$stop_root/a" a absent
     printf '%s\n' 'STOP_NATIVE_PASS stale-and-absent-idempotent/no-new-process'
     printf '%s\n' '{}' >"$stop_root/a/process.json"
+    if stop_command "$stop_root/a" a invalid-cleanup --cleanup-instance-on-exit; then
+        echo 'Expected invalid marker cleanup rejection.' >&2; exit 1
+    fi
+    [[ -f $stop_root/a/process.json ]]
     expect_stop_rejected "$stop_root/a" a no-pid
     [[ $(<"$stop_root/a/process.json") == '{}' ]]
     write_stop_marker "$stop_root/a" "$peer_pid" "$((peer_birth+1))"
@@ -113,8 +117,13 @@ if [[ ${1:-} == --stop-only ]]; then
     mv "$stop_root/b/process.json" "$stop_root/b/saved-marker.json"
     expect_stop_rejected "$stop_root/b" b markerless
     mv "$stop_root/b/saved-marker.json" "$stop_root/b/process.json"
-    stop_command "$stop_root/b" b peer-final
+    stop_command "$stop_root/b" b peer-final --cleanup-instance-on-exit
     [[ ! -e $peer_lease ]]
+    [[ ! -d $stop_root/b ]]
+    rm -- "$stop_root/a/process.json"
+    stop_command "$stop_root/a" a absent-cleanup --cleanup-instance-on-exit
+    [[ ! -d $stop_root/a ]]
+    printf '%s\n' 'STOP_NATIVE_PASS owned-and-absent-cleanup/invalid-marker-preserved'
     printf 'STOP_NATIVE_PASS no-pid/reused-birth/peer-executable/markerless-preserved evidence=%s\n' "$stop_root"
     exit 0
 fi

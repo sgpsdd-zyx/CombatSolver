@@ -10,6 +10,7 @@ internal sealed partial class SolverSettingsPanel
     private CheckButton _noveltyPortfolioEnabled = null!;
     private CheckButton _noGcRegionEnabled = null!;
     private LineEdit _noGcRegionBudget = null!;
+    private Label _gcStartupStatus = null!;
     private Control _advancedParameters = null!;
     private Button _advancedParametersToggle = null!;
     private bool _advancedParametersExpanded;
@@ -174,16 +175,35 @@ internal sealed partial class SolverSettingsPanel
         AddSettingsSection(content, SolverText.Get("搜索预算"),
             SolverText.Get("选择性能预设与并行度；详细参数可在下方展开。"), budgetGrid);
         GridContainer memoryGrid = CreateSettingsGrid();
+        CheckButton automaticGc = CreateToggle();
+        _reloadInputs.Add(data => automaticGc.ButtonPressed = data.AutoConfigureServerGc);
+        _reloadInputs.Add(_ => _gcStartupStatus.Text = DescribeGcStartup());
+        automaticGc.Toggled += enabled =>
+        {
+            if (_loading) return;
+            SolverSettings.Update(SolverSettings.Current with { AutoConfigureServerGc = enabled });
+            RuntimeGcStartup.Prepare(enabled);
+            _gcStartupStatus.Text = DescribeGcStartup();
+            SetStatus(DescribeGcStartup(), RuntimeGcStartup.Status == "Failed"
+                ? SolverUiTokens.Palette.TextMuted : SolverUiTokens.Palette.Success);
+        };
+        AddBasicRow(memoryGrid, SolverText.Get("多核内存回收（推荐，重启生效）"), automaticGc,
+            SolverText.Get("【推荐开启】开启后，整个游戏将改用多核并发垃圾回收（Server GC）。\n· 用途：可降低部分复杂搜索的内存压力；实际内存、速度与流畅度取决于硬件、战斗和其他 Mod。\n· 注意：因回收模式由游戏启动时决定，开启或关闭均需重启游戏生效；直接卸载 Mod 不会自动还原配置，建议在卸载前先在此关闭。\n· 生效期间，后台会自动多核回收，下方旧版的“搜索时暂缓回收”将自动停用。"));
+        _gcStartupStatus = SolverUiTokens.CreateLabel(DescribeGcStartup(),
+            SolverUiTokens.Type.Caption, SolverUiTokens.Palette.TextMuted);
+        _gcStartupStatus.AutowrapMode = TextServer.AutowrapMode.WordSmart;
+        memoryGrid.AddChild(_gcStartupStatus);
+        memoryGrid.AddChild(new Control());
         _noGcRegionEnabled.Toggled += OnNoGcRegionEnabledToggled;
         AddBasicRow(
             memoryGrid,
-            SolverText.Get("启用 NoGC 区域"),
+            SolverText.Get("搜索时暂缓内存回收（备用）"),
             _noGcRegionEnabled,
-            SolverText.Get("开启时按下方预算建立战斗级 NoGC 区域，在安全分配检查点整理内存后继续；最终搜索完成后保留区域，战斗结束后延时清理。关闭时搜索期间使用 CLR 常规分代 GC。切换在下次搜索生效。"));
+            SolverText.Get("【备用方案】仅在未启用“多核内存回收”时生效。\n开启后，求解器会在战斗搜索期间向系统申请大内存并暂缓垃圾回收，以减少单核回收引起的搜索微卡顿，但这会占用大量内存（甚至数 GB 到十几 GB）。达到额度上限时仍会自动整理。修改从下次搜索生效。"));
         if (RuntimeGcProfile.Current.IsActive)
             _noGcRegionEnabled.TooltipText = DescribeRuntimeGcProfile();
         else if (!SearchGcPolicy.NoGcRegionSupported)
-            _noGcRegionEnabled.TooltipText = SolverText.Get("当前平台不支持 NoGC；设置保留，搜索使用常规 GC。");
+            _noGcRegionEnabled.TooltipText = SolverText.Get("当前设备不支持暂缓内存回收；已保存的选择保留，搜索照常回收。");
         _noGcRegionBudget = CreateRequiredDoubleInput(
             data => data.NoGcRegionBudgetGigabytes
                 ?? SolverSettings.DefaultNoGcRegionBudgetGigabytes,
@@ -192,9 +212,9 @@ internal sealed partial class SolverSettingsPanel
             SolverSettings.MaximumNoGcRegionBudgetGigabytes);
         AddBasicRow(
             memoryGrid,
-            SolverText.Get("搜索内存预算（GB）"),
+            SolverText.Get("暂缓回收的额度上限（GB）"),
             _noGcRegionBudget,
-            SolverText.Get("这是独立于性能预设的战斗级 NoGC 区域请求上限，不是进程总内存上限，也不等于实际驻留内存。求解器会按系统当前安全余量自动下调实际区域；提高后可容纳更多并行分支并减少长搜索中的整理次数，但会增加内存占用与系统换页风险。搜索接近分配额度或系统内存安全线时，会保留活动 Beam、整理后继续；最终搜索完成后保留区域，战斗结束后延时清理。"));
+            SolverText.Get("仅在“搜索时暂缓内存回收”启用时生效。指定求解器在搜索期间暂缓回收的内存配额上限（默认 16 GB），并非游戏的常驻内存或整机内存上限。系统可用内存不足时会自动下调。调高可减少长时间搜索中的整理停顿，但会大幅增加内存占用；多核内存回收生效时此项不生效。"));
         GridContainer stopGrid = CreateSettingsGrid();
         _acceptableBattleHpLoss = CreateAcceptableBattleHpLossInput();
         CheckButton stopAtHpTarget = CreateToggle();
@@ -211,10 +231,7 @@ internal sealed partial class SolverSettingsPanel
             SolverText.Get("默认 0，即零损。启用上方开关后，找到预计整场扣血不超过此值的完整胜利路线就停止搜索；仅保存成长额度而本场没有对应卡牌时仍可早停。"));
         AddSettingsSection(content, SolverText.Get("搜索停止条件"),
             SolverText.Get("战损阈值按整场累计扣血计算，下次搜索生效。"), stopGrid);
-        string memoryDescription = SolverText.Get("设置搜索内存预算；手动释放入口位于主界面内存条右侧。");
-        string runtimeProfileDescription = DescribeRuntimeGcProfile();
-        if (runtimeProfileDescription.Length > 0)
-            memoryDescription += "\n" + runtimeProfileDescription;
+        string memoryDescription = SolverText.Get("推荐使用多核内存回收（默认开启）：大幅降低内存占用并加速复杂搜索。若未生效，则备用下方的暂缓回收策略。主界面内存条右侧可随时手动释放内存。");
         AddSettingsSection(content, SolverText.Get("内存管理"), memoryDescription, memoryGrid);
 
         _advancedParametersToggle = SolverUiTokens.CreateButton(
@@ -318,20 +335,44 @@ internal sealed partial class SolverSettingsPanel
         SolverSettings.Update(SolverSettings.Current with { EnableNoGcRegion = enabled });
         _noGcRegionBudget.Editable = enabled && SearchGcPolicy.NoGcRegionSupported;
         SetStatus(
-            enabled ? SolverText.Get("NoGC 已启用，下次搜索生效") : SolverText.Get("NoGC 已关闭，下次搜索使用常规 GC"),
+            enabled ? SolverText.Get("已启用暂缓内存回收，下次搜索生效") : SolverText.Get("已关闭暂缓内存回收，下次搜索生效"),
             SolverUiTokens.Palette.Success);
+    }
+
+    private static string DescribeGcStartup()
+    {
+        if (RuntimeGcProfile.Current.IsActive)
+        {
+            return RuntimeGcStartup.Status switch
+            {
+                "AlreadyConfigured" or "Prepared" => SolverText.Get("当前状态：多核回收生效中（下次启动保持生效）。"),
+                "Restored" => SolverText.Get("已恢复原有启动配置；本次游戏仍维持多核回收，重启游戏后生效。"),
+                "Skipped" => SolverText.Get("当前由专用启动方式或测试环境管理，未修改游戏启动配置。"),
+                _ => SolverText.Get("未能修改游戏启动配置，详情见日志；本次继续维持多核回收。"),
+            };
+        }
+
+        return RuntimeGcStartup.Status switch
+        {
+            "Prepared" => SolverText.Get("配置已就绪：本次游戏尚未生效，请重启游戏以启用多核回收。"),
+            "AlreadyConfigured" => SolverText.Get("已配置多核回收，但本次启动未生效；重启游戏后生效。"),
+            "Restored" => SolverText.Get("已恢复原有启动配置，重启游戏后生效。本次使用备用回收。"),
+            "Unchanged" => SolverText.Get("未启用多核回收；当前使用备用的暂缓回收策略。"),
+            "Skipped" => SolverText.Get("当前由专用启动方式或测试环境管理，未修改游戏启动配置。"),
+            _ => SolverText.Get("未能修改游戏启动配置，详情见日志；本次继续使用备用回收。"),
+        };
     }
 
     private static string DescribeRuntimeGcProfile()
         => RuntimeGcProfile.Current.Status switch
         {
             RuntimeGcProfileStatus.Active => SolverText.Get(
-                "本次启动使用多核内存回收；NoGC 已临时关闭，已保存的设置保持不变。恢复普通启动后可修改此项。"),
+                "当前正在使用更优的“多核内存回收”，后台会自动并发清理内存，因此无需且已停用“暂缓回收”。如需改用此功能，请关闭上方开关并重启游戏。"),
             RuntimeGcProfileStatus.ServerGcUnavailable => SolverText.Get(
-                "本次启动的内存配置未生效：运行库未启用 ServerGC，继续使用已保存的 NoGC 设置。"),
+                "运行库未能启用多核内存回收，搜索按已保存的暂缓回收设置运行。"),
             RuntimeGcProfileStatus.UnknownProfile => SolverText.Get(
-                "无法识别本次启动的内存配置，继续使用已保存的 NoGC 设置。"),
-            _ => "",
+                "未知的内存回收配置，搜索按已保存的暂缓回收设置运行。"),
+            _ => SolverText.Get("本次未启用多核内存回收，搜索按下方暂缓回收设置运行。"),
         };
 
     private OptionButton CreatePerformancePresetInput()

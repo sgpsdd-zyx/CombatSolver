@@ -1059,11 +1059,14 @@ arm_owned_cleanup() {
 if ((option_value[stop-instance] == 1)); then
     # Stop-only never enters snapshot construction, request publication or host
     # admission. The ordinary producer lock and existing stop function own it.
+    process_pid=""
+    process_identity_start_time=""
     if [[ ! -f $process_marker_path ]]; then
         for candidate in /proc/[0-9]*/exe; do
             [[ $(readlink -f -- "$candidate" 2>/dev/null) != "$game_executable" ]] || \
                 runtime_error 'markerless private game preserved; stop cannot prove ownership'
         done
+        trap cleanup_owned_launcher EXIT
         echo "UNATTENDED_STOP instance=$headless_instance state=absent"
         exit 0
     fi
@@ -1080,6 +1083,7 @@ if ((option_value[stop-instance] == 1)); then
     # The existing function rechecks the /proc environment and birth before
     # signaling; a concurrent exit remains idempotent and cannot spawn a game.
     stop_test_process_and_remove_dependency "$stop_pid" "$stop_birth"
+    trap cleanup_owned_launcher EXIT
     echo "UNATTENDED_STOP instance=$headless_instance state=stopped_or_exited pid=$stop_pid"
     exit 0
 fi

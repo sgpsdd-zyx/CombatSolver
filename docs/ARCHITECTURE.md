@@ -30,7 +30,9 @@
 
 中间 Beam 继续覆盖防御、进攻和铺垫；单人 `FinalPlanOrdering`、能力承诺及预算不变。多人根前用药资格由 Runtime 原追踪窗口按 Actor 冻结。UI 从 `SolverResult` 投影阶段目标、已付/预计进展、是否存在选中达标见证、返回深度、曾到达深度和未知受击提示；不读取搜索树。详细默认参数与验证由[多人指南](multiplayer-advisor.md)及[实施记录](strategy/multiplayer-cooperative-planning-20260922/implementation.md)维护。
 
-当前单人基线为官方 `4bfb4407 / 0.46.2`。`PowerCardValuation` / `PowerCommitment` 和能力固定前缀组合用于单人。多人协调器继续在这些组合及强制／Smart 药水梯度之前返回；`CombatBeamSolver._hasRegisteredPowerCards` 另以 `policy.Multiplayer == null` 隔离共享候选展开中的能力承诺入口。Runtime 多人不捕获单人成长目标，`SimulatedCombatState` 多人根的疯狂科学升级信用容量为零，实际 Power 仍按持有者结算。单人继续官方登记、成长、保路和预算路径；兼容取舍与本轮同步见[0.46.2 合并记录](strategy/upstream-0462-merge-20260924.md)，此前行为基线见[0.45.0 合并证据](strategy/upstream-0450-merge-20260923.md)。
+当前单人基线为官方 `72295691 / 0.46.3`。`PowerCardValuation` / `PowerCommitment` 和能力固定前缀组合用于单人。多人协调器继续在这些组合及强制／Smart 药水梯度之前返回；`CombatBeamSolver._hasRegisteredPowerCards` 另以 `policy.Multiplayer == null` 隔离共享候选展开中的能力承诺入口。Runtime 多人不捕获单人成长目标，`SimulatedCombatState` 多人根的疯狂科学升级信用容量为零，实际 Power 仍按持有者结算。单人继续官方登记、成长、保路和预算路径；兼容取舍与本轮同步见[0.46.3 合并记录](strategy/upstream-0463-merge-20260924.md)，此前行为基线见[0.45.0 合并证据](strategy/upstream-0450-merge-20260923.md)。
+
+官方的新鲜资源待命探针在 `BeamRetentionPolicy.Ranking` 从既有 beam rank 取符合资源条件的前 64 个，保留原比较器。`RankBest` 的多人分派在单人通道前返回；探针上限不进入多人评分、前沿或预算。减少工作会改变单人候选和路线，取舍及反例保留在[官方报告](performance/fresh-resource-standpat-probe-cap-20260924.md)。
 
 官方 0.44.0 的余像前移审计与循环重放均显式拒绝多人；新的长期格挡折价仅用于单人，多人合并阶段保留原格挡探索值。历史依赖掩码来自根全牌堆、已登记生成来源与 Hook，追加历史值时单人读累计值，多人仍沿各效果持有者扫描；Bash/PowerShell 门禁同步这些接入。
 
@@ -100,7 +102,9 @@ Entry / turn hooks
 | `src/Runtime/PowerDynamicVarMaterializationGuardPatch.cs` | 搜索模拟惰性创建 Power 显示变量时立即报告根捕获缺失 | Power 语义、显示内容与搜索阶段串行化 |
 | `src/Runtime/PowerAmountComparisonPatch.cs` | 将原生 `GetTypeForAmount` 中两处精确匹配的同枚举装箱比较改为整数比较；保留虚 getter、decimal 分支和调用顺序，未知 IL 原样保留 | Power 状态缓存、跳过类型 getter 或改变显示类型规则 |
 | `src/Runtime/ModelDbGetIdCachePatch.cs` | 缓存原生 `ModelDb.GetId(Type)` 的纯类型→`ModelId` 映射（`GetEntry`/`GetCategory` 只由类型名决定）；缓存不可变 `ModelId` 值，不保存模型实例 | `ModelDb` 内容字典、`Inject`/`Remove`/`ResetForTest` 语义、模型实例身份与显示字段 |
-| `src/Runtime/RuntimeGcProfile.cs` | 一次解析显式进程 profile，按实际 ServerGC 状态决定是否覆盖有效 NoGC 开关，并提供激活／未生效状态；不变更已保存设置 | 启动或重启 CLR、GC 生命周期、搜索策略 |
+| `src/Runtime/RuntimeGcProfile.cs` | 一次解析显式环境或启动 AppContext profile，按实际 ServerGC 状态决定是否覆盖有效 NoGC 开关，并提供激活／未生效状态；不变更已保存设置 | 启动或重启 CLR、GC 生命周期、搜索策略 |
+| `src/Runtime/RuntimeGcStartup.cs` | Mod 初始化／设置开关时先冻结本次实际 profile，再把下次配置交给纯文件层；默认无头与显式 profile 跳过，失败可观测 | CLR 热切换、Steam 启动项、搜索算法 |
+| `src/Runtime/RuntimeGcStartupConfig.cs` | 验证普通安装或 macOS 同一 app 的 MacOS/Resources 边界；原子更新 runtimeconfig、保留原 GC 字段、仅恢复自有配置并拒绝外部变更 | Godot、设置、搜索对象、当前 GC 生命周期 |
 | `src/Runtime/SearchGcPolicy.cs` | 按有效快照管理进程级 GC 模式：开启时按原样预算建立战斗级 NoGC、执行搜索内安全检查点与引用释放后的压力回收；稳定关闭时使用 CLR 常规分代 GC 且不新增自动补账压力，从开启切换时仍结清此前义务；模式切换和手动释放与活动搜索计数共用安全边界 | Beam 剪枝、候选评分、模拟语义与同步阻塞 UI |
 | `src/Runtime/SearchGcPolicy.Recovery.cs` | 在已排空的提交边界评估可恢复 NoGC 回退；拥有完成 Gen2/冷却/次数上限、物理余量、scope 代次与恢复后区域上限 | 强制回收、等待搜索退出、搜索预算或候选策略 |
 | `src/Runtime/SearchGcLifecycleMetrics.cs` | 记录显式回收与 NoGC 启停/丢失；在 Runtime 准入 Gate 内冻结 scope 起止，区分独占搜索与共享进程窗口；暂停最大值仅为观测值 | 线程级 CLR 事件归因与 trace 最大值 |

@@ -1,0 +1,287 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-09-24",
+  "version": "0.46.4",
+  "upstream": {
+    "commit": "72295691457ec71eef9bf2d53c27f6b25d2c9f90",
+    "version": "0.46.3"
+  },
+  "previousFork": {
+    "version": "0.46.3",
+    "releaseSourceCommit": "02d1523c0909b0b5fb19dd93b76e9692f8b83dec",
+    "headBeforeMerge": "1532fd5056953f61bbd798f87a61f8ad6ea4488b"
+  },
+  "rawEvidenceRoot": ".local/upstream-update-20260924",
+  "platform": "macOS arm64; game CLR 9.0.7; game 0.111.0",
+  "builds": {
+    "fork": "fork-build.log: 0 warnings, 0 errors",
+    "official": "official-build.log: 0 warnings, 0 errors",
+    "harnesses": "fork-harness-build.log and official-harness-build.log: 0 warnings, 0 errors"
+  },
+  "runtimeGcContracts": {
+    "checks": 60,
+    "result": "Passed",
+    "log": "runtime-gc-contracts.log"
+  },
+  "nativeRequests": [
+    {
+      "scenarioId": "UI-LOCALIZATION",
+      "runId": "macos-f975d0993ad14df4b0daab4e99994f16",
+      "status": "Passed",
+      "completedChecks": [
+        "CardLocaleRoundTrip:EnglishSnapshot:ChineseEnglishChinese:Upgrade:Choice:RelicOwner:SerializedPlan:LivePill:SubscriptionCleanup:NoReplan",
+        "SpawnedEntityIdentity:eng:FourWrigglers:LeftToRight:NativeSlots=True:ForkStable:DeathStable",
+        "EntityIdentity:eng:DistinctEnemies=1:PlainAndInkyShiv",
+        "StrategyOutcome:eng:AlignedAndUnmet:GrowthCounts:PartialRoute:EmptyHidden",
+        "RelicOwnership:eng:Self:PeerNumber:SameRelic:Json:Tooltip:Identity",
+        "ActionAnnotations:eng:CapturedDamageSources:21RelicFormats:NestedChoices:Tooltip",
+        "LiveTurnStartChoicePreview:eng:Power:Relic",
+        "LoopDisplay:eng:41Actions:2OuterControls:CompactInlineCount:EnclosedPeriod:WideNarrowWide:ReplayCount:KillSuffix:Deployment:Reuse",
+        "StrategyPanels:eng:Potion:Growth:Relic:Collapse",
+        "UiLocalization:eng:Catalog476:Settings:UploadTransitions:DynamicStatus:FailureInstructions",
+        "SpawnedEntityIdentity:zhs:FourWrigglers:LeftToRight:NativeSlots=True:ForkStable:DeathStable",
+        "EntityIdentity:zhs:DistinctEnemies=1:PlainAndInkyShiv",
+        "StrategyOutcome:zhs:AlignedAndUnmet:GrowthCounts:PartialRoute:EmptyHidden",
+        "RelicOwnership:zhs:Self:PeerNumber:SameRelic:Json:Tooltip:Identity",
+        "ActionAnnotations:zhs:CapturedDamageSources:21RelicFormats:NestedChoices:Tooltip",
+        "LiveTurnStartChoicePreview:zhs/zht:Power:Relic",
+        "LoopDisplay:zh:41Actions:2OuterControls:CompactInlineCount:EnclosedPeriod:WideNarrowWide:ReplayCount:KillSuffix:Deployment:Reuse",
+        "StrategyPanels:zhs:Potion:Growth:Relic:Collapse",
+        "UiLocalization:zhs:Catalog476:Settings:UploadTransitions:DynamicStatus:FailureInstructions",
+        "SpawnedEntityIdentity:zht:FourWrigglers:LeftToRight:NativeSlots=True:ForkStable:DeathStable",
+        "EntityIdentity:zht:DistinctEnemies=1:PlainAndInkyShiv",
+        "StrategyOutcome:zht:AlignedAndUnmet:GrowthCounts:PartialRoute:EmptyHidden",
+        "RelicOwnership:zht:Self:PeerNumber:SameRelic:Json:Tooltip:Identity",
+        "ActionAnnotations:zht:CapturedDamageSources:21RelicFormats:NestedChoices:Tooltip",
+        "LiveTurnStartChoicePreview:zhs/zht:Power:Relic",
+        "LoopDisplay:zh:41Actions:2OuterControls:CompactInlineCount:EnclosedPeriod:WideNarrowWide:ReplayCount:KillSuffix:Deployment:Reuse",
+        "StrategyPanels:zht:Potion:Growth:Relic:Collapse",
+        "UiLocalization:zht:Catalog476:Settings:UploadTransitions:DynamicStatus:FailureInstructions"
+      ],
+      "evidence": "native-core/01-result.json"
+    },
+    {
+      "scenarioId": "UPSTREAM-0450-UI-STATE",
+      "runId": "macos-1bdae566ccc549a08391db9b4ef791e1",
+      "status": "Passed",
+      "completedChecks": [
+        "SearchPortfolios:RefinementDefaultOn:NoveltyDefaultOff:DamageGuidanceThreshold8:SettingsRoundTrip:UiControl:PolicySnapshot",
+        "ControllerSessionLifecycle"
+      ],
+      "evidence": "native-core/02-result.json"
+    },
+    {
+      "scenarioId": "MULTIPLAYER-MANUAL-LOOP",
+      "runId": "macos-836c8500621745fd8c3d804d650f6e08",
+      "status": "Passed",
+      "completedChecks": [
+        "NativePacketEnumWarmup:153",
+        "MultiplayerManualLoop:contract_complete:queries=4:local_actions=3:peer_actions=3"
+      ],
+      "evidence": "native-core/03-result.json"
+    },
+    {
+      "scenarioId": "MULTIPLAYER-EXPERIMENT-INACTIVE",
+      "runId": "macos-6552b1baf5b74bf3a8755fe170a4301e",
+      "status": "Passed",
+      "completedChecks": [
+        "MultiplayerExperimentReset:NoHooks:SinglePlayerRoot",
+        "PotionOutcomeNamesAndRewardGate",
+        "InitialWorldlineSummary",
+        "InitialFirstAction:STRIKE_IRONCLAD",
+        "InitialPolicy:SoldHp=0;Potion=0,Saved=0/0,Rejected=0;Theft=-,Outstanding=0;Turns=1;Shuffles=0;Unmirrored=0;HpLost=0;ProjectedBattleHpLost=0;Block=0/0;Pruned=0;Total=1.0ms/245056B;Gc=0.0ms/0.0msMax;Frame=41.8msMax/0Over50;CacheHits=0;ChoiceBranches=0;Actions=1;OnlyDeath=False;CombatEndedTurn=1;DeathTurn=-;ActEndingBoss=False;BossHpRelief=None"
+      ],
+      "evidence": "native-core/04-result.json"
+    }
+  ],
+  "nativeGcStartup": [
+    {
+      "launch": 1,
+      "runtime": {
+        "clr": "9.0.7",
+        "serverGc": false,
+        "profile": "Default",
+        "savedNoGcRegionEnabled": true,
+        "effectiveNoGcRegionEnabled": true
+      },
+      "nextLaunchPrepared": true,
+      "status": "Passed",
+      "runId": "macos-2f4d33cd859b413680ad5813d90f0371"
+    },
+    {
+      "launch": 2,
+      "runtime": {
+        "clr": "9.0.7",
+        "serverGc": true,
+        "profile": "Active",
+        "savedNoGcRegionEnabled": true,
+        "effectiveNoGcRegionEnabled": false
+      },
+      "nextLaunchPrepared": false,
+      "status": "Passed",
+      "runId": "macos-9a986c2c46554ab58527b7e9dcd92cfe"
+    },
+    {
+      "launch": 3,
+      "runtime": {
+        "clr": "9.0.7",
+        "serverGc": false,
+        "profile": "Default",
+        "savedNoGcRegionEnabled": true,
+        "effectiveNoGcRegionEnabled": true
+      },
+      "nextLaunchPrepared": false,
+      "status": "Passed",
+      "runId": "macos-7efcfd94d6f543e49a6a4e2864e07d0b"
+    }
+  ],
+  "offlineComparison": {
+    "roots": 2,
+    "comparedFields": 231,
+    "mismatchedRoots": [],
+    "leftOnly": [],
+    "rightOnly": [],
+    "scope": "Evaluate, VeryHigh, Beam 135, 60000 nodes, DOP 1, 60000 ms, Smart; fixed roots; no timing claim",
+    "samples": [
+      {
+        "root": "EQ-IRONCLAD-ELITE-00",
+        "arms": {
+          "previous-fork": {
+            "boundary": "None",
+            "projectedBattleHpLost": 52,
+            "onlyDeathRoutes": false,
+            "finalHp": 28,
+            "finalEnemyHp": 0,
+            "totalExpanded": 10834,
+            "totalTransitions": 54919,
+            "turnLayerTimeBudgetStops": 0,
+            "standPatProbes": 6269
+          },
+          "merged-fork": {
+            "boundary": "None",
+            "projectedBattleHpLost": 52,
+            "onlyDeathRoutes": false,
+            "finalHp": 28,
+            "finalEnemyHp": 0,
+            "totalExpanded": 8371,
+            "totalTransitions": 39693,
+            "turnLayerTimeBudgetStops": 0,
+            "standPatProbes": 3687
+          },
+          "official": {
+            "boundary": "None",
+            "projectedBattleHpLost": 52,
+            "onlyDeathRoutes": false,
+            "finalHp": 28,
+            "finalEnemyHp": 0,
+            "totalExpanded": 8371,
+            "totalTransitions": 39693,
+            "turnLayerTimeBudgetStops": 0,
+            "standPatProbes": 3687
+          }
+        }
+      },
+      {
+        "root": "FULL-REGENT-BOSS-00",
+        "arms": {
+          "previous-fork": {
+            "boundary": "None",
+            "projectedBattleHpLost": 55,
+            "onlyDeathRoutes": false,
+            "finalHp": 20,
+            "finalEnemyHp": 0,
+            "totalExpanded": 20022,
+            "totalTransitions": 201085,
+            "turnLayerTimeBudgetStops": 0,
+            "standPatProbes": 10493
+          },
+          "merged-fork": {
+            "boundary": "None",
+            "projectedBattleHpLost": 55,
+            "onlyDeathRoutes": false,
+            "finalHp": 20,
+            "finalEnemyHp": 0,
+            "totalExpanded": 16638,
+            "totalTransitions": 153040,
+            "turnLayerTimeBudgetStops": 0,
+            "standPatProbes": 7272
+          },
+          "official": {
+            "boundary": "None",
+            "projectedBattleHpLost": 55,
+            "onlyDeathRoutes": false,
+            "finalHp": 20,
+            "finalEnemyHp": 0,
+            "totalExpanded": 16638,
+            "totalTransitions": 153040,
+            "turnLayerTimeBudgetStops": 0,
+            "standPatProbes": 7272
+          }
+        }
+      }
+    ]
+  },
+  "notVerified": [
+    "Visible Steam, animation and frame-time performance",
+    "Real network multiplayer and win rates",
+    "Windows/PowerShell and Linux native launchers",
+    "DOP > 1 stand-pat quality, full regression and clean installation",
+    "Online endpoint requests"
+  ],
+  "multiplayerContract": {
+    "outcome": "contract_complete",
+    "round": 2,
+    "localActions": 3,
+    "peerActions": 3,
+    "strictActionChecks": 1,
+    "frozenRootChecks": 6,
+    "singleAdvisorUser": true,
+    "peerConsultedAdvisor": false,
+    "networkValidated": false,
+    "visiblePerformanceValidated": false,
+    "queries": 4,
+    "fullNativeStateEqual": true,
+    "nativeDifferences": 0
+  },
+  "structureGate": {
+    "result": "Passed",
+    "searchFiles": 218,
+    "log": "structure-gate.log"
+  },
+  "cleanup": {
+    "nativeInstances": [
+      "macos.ozLsuZ",
+      "macos.cHlDQ6"
+    ],
+    "result": "Removed by launcher",
+    "historicalAndComparisonEvidence": "Preserved pending post-report user approval"
+  },
+  "governance": {
+    "mainRuleBytes": 28882,
+    "defaultCodexBudgetBytes": 32768,
+    "memory": "generated-read-only; no writes",
+    "thirdPartyRegistration": "not-applicable: no registration entry changed",
+    "ruleFiles": "AGENTS.md and search-performance-optimization skill updated; global rules read-only"
+  },
+  "incrementalReplay": {
+    "result": "Passed",
+    "input": "EQ-IRONCLAD-ELITE-00",
+    "beam": 135,
+    "nodes": 1000,
+    "budgetMilliseconds": 10000,
+    "dop": 1,
+    "expanded": 1000,
+    "transitions": 5561,
+    "boundary": "NodeLimit",
+    "timingIsPerformanceEvidence": false,
+    "log": "incremental.log"
+  },
+  "documentValidation": {
+    "changedFilesAtFirstCheck": 45,
+    "localLinks": 927,
+    "jsonFiles": 5,
+    "issues": [],
+    "frozenForkNotesUnchanged": true,
+    "officialNotesPreserved": true
+  }
+}

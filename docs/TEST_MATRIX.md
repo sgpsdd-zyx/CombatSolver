@@ -1,5 +1,42 @@
 # CombatSolver 测试清单
 
+## 0.46.4（fork）：官方 0.46.3 合并验证（2026-09-24）
+
+本节是 fork 本轮实际证据，来源与完整限制见[合并归档](strategy/upstream-0463-merge-20260924.md)和[结构化结果](strategy/upstream-0463-merge-20260924-evidence.json)。下方官方历史单独保留。
+
+- fork、独立官方 0.46.3 及两个离线宿主 Release 构建均 0 警告／0 错误；Bash 职责门禁 `search_files=218`。PowerShell 门禁同步但本机未运行。
+- `RuntimeGcProfileChecks` 60 项 Passed，包含原字段完整恢复、幂等、外部变更拒绝、六组安装路径与三个真实 CLR 启动。
+- macOS 同一进程的四个请求 Passed：`UI-LOCALIZATION`（476 模板，eng/zhs/zht）、`UPSTREAM-0450-UI-STATE`（搜索速度与会话）、`MULTIPLAYER-MANUAL-LOOP`（4 次手动重算、各 3 动作、6 次冻结根检查、首动作全队全文 0 差异）、其后的 `MULTIPLAYER-EXPERIMENT-INACTIVE`。
+- macOS `--verify-runtime-gc-startup` 同一快照的三个新进程 Passed：实际 `serverGc=false/true/false`、有效 NoGC `true/false/true`，保存 NoGC 始终 true；恢复全部原配置字段，正式游戏启动文件不变。两个实例 `macos.ozLsuZ`、`macos.cHlDQ6` 均由启动器删除。
+- 旧 fork 0.46.3／合并 fork／独立官方各一次运行 `EQ-IRONCLAD-ELITE-00` 和 `FULL-REGENT-BOSS-00`，VeryHigh / Beam135 / 60000 节点 / DOP1 / 60000ms / Smart / Evaluate，六次都无时间边界。新 fork 对官方 231 字段 IDENTICAL，含根、动作和续行；旧→新战损 52→52、55→55，探针 6269→3687、10493→7272。只作两根工作量／质量证据，不声称普遍质量或可见提速。
+- 旗舰根另用 1000 节点／10000ms／DOP1 开启 `--verify-incremental`，1000 展开／5561 转移／NodeLimit，Passed；该次不用于性能数字。
+- Linux 新增三启动入口，停止入口补齐自有目录清理，并增加有主／无进程清理和损坏标记拒绝合同；Bash/zsh 语法可在 macOS 检查，Linux `/proc` 与 PowerShell 原生合同未运行。真实网络、可见 Steam、在线端点、DOP>1 质量、完整门禁未验证。官方已知 StandPat DOP 合同失败保留，未重跑也未标为通过。
+
+## 上游历史：0.46.3：搜索速度指标与状态行去噪（2026-09-24）
+
+- Windows Release 构建 0 警告、0 错误；PowerShell 结构门禁 `tools\verify-refactor-boundaries.ps1` 校验通过（`REFACTOR_BOUNDARIES_OK search_files=208`）。
+- `English.json` 447 项词条格式与参数占位符校验全部通过。
+- 控制器会话与 UI 状态生命周期无头测试通过：`pwsh -NoProfile -File tools\run-unattended-test.ps1 -ScenarioId QOL-CONTROLLER-STOP-172 -CharacterId IRONCLAD -EncounterId FUZZY_WURM_CRAWLER_WEAK -EnemyCurrentHp 1 -VerifyControllerSessionLifecycle -ExpectedFinishedTurn 1 -TimeoutSeconds 120 -CleanupInstanceOnExit` 执行 Passed，验证了世界线数字、速度读数（xx 条/s）与平滑缓动结算断言，临时测试实例已由启动器清理。未做可见 Steam 实机人工验收。
+
+## 上游历史：0.46.3：内存回收设置说明（2026-09-24）
+
+- 设置页回收相关的 32 个中英文词条均已精确映射对齐，面向玩家的文案清晰直观、消除术语堆砌。Windows Release 构建 0 警告、0 错误，PowerShell 结构门禁 `REFACTOR_BOUNDARIES_OK search_files=208`，`RuntimeGcProfileChecks` 54 项检查全数通过，`git diff --check` 通过。
+- 仅修改 UI 文本与状态显示结构，未修改底层 GC 策略；未启动可见 Steam，真实设置页实机排版由用户验收。
+
+## 上游历史：0.46.3：新鲜资源保路通道探测上限（2026-09-24）
+
+- Windows Release 构建 0 警告、0 错误（`-p:CopyModOnBuild=false`，不写实机 Mod 目录）；PowerShell 结构门禁 `REFACTOR_BOUNDARIES_OK search_files=208`；`git diff --check` 通过。
+- 旗舰根 `EQ-IRONCLAD-ELITE-00` 串行 8 次 ABBA（执行前固定 A B B A A B B A，两臂各 4 次，全部样本保留）：墙钟均值 12.448 → 10.488 s（−15.7%），两臂区间不重叠（9.711–11.191 对 11.769–13.005）；`standPatProbes` −41.2%、展开 −22.7%、转移 −27.7%、`forkCount` −27.2%、累计分配 −27.8%；8 次预计战损、分数与终止边界逐项相同（52 / 9999279964 / `None`）。
+- 60 根 `coverage/equivalence` 语料的上限扫描（VeryHigh / beam 135 / nodes 60000 / DOP1 / 60 s，workers 4）：8 名额三种预排与 32 档前缀均被否决（0～2 根存活/阵亡翻转、净战损 −45～+20），采用的 64 档在 58 可比根上 0 翻转、净战损 −7、更差 1 根（`EQ-DEFECT-ELITE-00` 0→2）、更好 2 根，探测 −13.7%、展开 −2.7%。`FULL-SILENT-ELITE-03` 两臂与 `FULL-DEFECT-ELITE-00` 候选臂为 `TimeLimit`，不计入判决。
+- `tools/OfflineSearchHarness/compare_results.py` 逐字段对照基线臂与采用臂：60 根对齐、无缺根、6447 个非时间/非内存字段；`rootState` 与 `catalog` 差异 0，`route` 231 处/15 根，`continuations` 15 根，`solverMetrics` 非时间字段 399 处/34 根。结构化样本：[fresh-resource-standpat-probe-cap-20260924.json](performance/fresh-resource-standpat-probe-cap-20260924.json)。
+- 未执行：游戏内 `UnattendedTestRunner.StandPatProbes` 契约（双车道探测、注入异常传播、并行与串行等价）、玩家检查点批量回放、DOP>1 与组合（Coordinator/portfolio）路径、可见 Steam 帧时间与 GC 暂停、No-GC 区域行为。`tools/BeamRankSortChecks` 在未改动的 `main` 上即因 `Snapshot.PlayerDead` 报错，本轮未修改。
+- 合并审查追加：PR #134 的 Windows Release 构建和结构门禁通过。`STAND-PAT-PROBE-BATCHES` 在默认小牌组未到达剪枝检查点；改用既有死灵药水输入后，PR head `aaf3ab0ce9124430a554535f232c2aa2` 与未改动 `main` `339d90af220949d8aa49fd8ed861c247` 均因同一 DOP1／DOP2 非时序计数差异失败，路线、评分、预计战损及边界相同。因此该合同未通过，失败不能归因于 PR #134；两次私有实例已清理。未由此取得 DOP>1 质量结论。
+
+## 上游历史：0.46.3：ServerGC 普通启动自动接入（2026-09-24）
+
+- PR #133 两平台配置／真实 CLR 合同各 54 项通过；Windows 私有实例首次准备、下次激活及另一次恢复启动均 Passed，详见[结构化证据](performance/server-gc-auto-startup-20260924.json)。本轮合并修正了空路径检查顺序，相关配置合同与 Release 构建另以最终合并源码为准。
+- 自动配置默认无头及显式启动器跳过；正式 Steam 设置开关、工坊更新链路和云存档未验证。此前可选 profile 的性能取舍沿用 PR #132 的五根原生宿主证据，不把启动配置合同当作可见性能验收。
+
 ## 0.46.3（fork）：发布定版（2026-09-24）
 
 - 行为来源为 `988d8cd5`，复用下一节官方 0.46.2 合并的八次初始原生请求、最终本地化复跑和 25 项运行库配置合同；此次只变更版本、文档和发布连接元数据，不重跑行为场景。

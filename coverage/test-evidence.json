@@ -1,4 +1,13 @@
 {
+  "UPSTREAM-0463-FORK-MERGE": {
+    "status": "Passed",
+    "level": "TargetedMergeComparisonAndNativeStartupContracts",
+    "procedure": "Merge official 72295691 / 0.46.3 into fork 1532fd50. Compare independent official and fork builds at two fixed single-player roots, check bounded incremental replay, 60 runtime configuration contracts, and seven macOS native requests with owned instance cleanup.",
+    "expected": "Single-player follows the official fresh-resource probe cap. Multiplayer retains manual requests and separate contribution policies. Startup files affect only the next CLR, preserve unrelated configuration, and restore owned fields.",
+    "observed": "2026-09-24: two roots and 231 non-timing fields identical to official, including full root, route and continuations; all six comparison runs avoid time boundaries. Previous/new fork projected HP loss remains 52/52 and 55/55; probes 6269/3687 and 10493/7272. Bounded incremental replay passes at 1000 nodes/5561 transitions. Runtime contracts 60 pass. Native UI catalog476, controller/search speed, four multiplayer manual queries, following single-player isolation, and three fresh game startups pass. Actual ServerGC false/true/false, effective NoGC true/false/true, saved NoGC always true; original game config unchanged. Two native instances removed. Builds have no warnings/errors; Bash boundaries cover 218 Search files.",
+    "evidence": "docs/strategy/upstream-0463-merge-20260924.md; docs/strategy/upstream-0463-merge-20260924-evidence.json; .local/upstream-update-20260924/",
+    "scope": "Named comparisons and contracts only; no visible Steam, real network, general quality or performance claim. Windows/PowerShell and Linux native launchers are not executed on macOS. New Bash startup/cleanup entries pass syntax checks only. Existing upstream StandPat DOP counter mismatch remains unverified; no full release gate or online endpoint request."
+  },
   "UPSTREAM-0450-MULTIPLAYER-COMPAT": {
     "status": "Passed",
     "level": "TargetedUpstreamMergeManagedContractsAndNativeHeadlessBoundaries",

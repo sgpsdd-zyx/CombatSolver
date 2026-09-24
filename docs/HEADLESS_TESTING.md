@@ -22,11 +22,13 @@ dotnet build CombatSolver.csproj -c Release -p:CopyModOnBuild=false
 Linux 示例（各终端/agent 运行自己的请求）：
 
 ```sh
-bash tools/run-unattended-test.sh --headless-instance semantic-a --headless-execution-mode parallel --headless-memory-reservation-mib 4096 --headless-cpu-reservation 2 --timeout-seconds 120 --exit-on-complete
-bash tools/run-unattended-test.sh --headless-instance semantic-b --headless-execution-mode parallel --headless-memory-reservation-mib 4096 --headless-cpu-reservation 2 --timeout-seconds 120 --exit-on-complete
+bash tools/run-unattended-test.sh --headless-instance semantic-a --headless-execution-mode parallel --headless-memory-reservation-mib 4096 --headless-cpu-reservation 2 --timeout-seconds 120 --cleanup-instance-on-exit
+bash tools/run-unattended-test.sh --headless-instance semantic-b --headless-execution-mode parallel --headless-memory-reservation-mib 4096 --headless-cpu-reservation 2 --timeout-seconds 120 --cleanup-instance-on-exit
+```
 
 macOS 最小入口为 `tools/run-unattended-test-macos.sh <请求 JSON> [...] --cleanup-instance-on-exit [--timeout-seconds 120] [--output-dir 路径]`。APFS 克隆游戏包到仓库 `.local/headless-instances/macos.<随机串>/`，只装当前构建的 CombatSolver 与 RitsuLib；以子进程的独立 HOME 承载 user://，不启动 Steam。只复制交互配置文件并在副本中启用 Mod，不复制存档。多个请求在同一进程依次执行，每个请求最多 120 秒，最后一项退出；失败或信号退出也终止自己启动的进程并删除整个实例，日志与逐请求结果保存在实例外。`COMBATSOLVER_HEADLESS_ROOT` 可指定一个尚不存在的精确实例目录；游戏和 RitsuLib 来源可由 `COMBATSOLVER_STS2_APP` / `COMBATSOLVER_RITSU_DIR` 指定。它不提供 Windows/Linux 入口的资源预约、排队或跨批次复用；成功清理日志是实例删除证据。
-```
+
+macOS 的 `--verify-runtime-gc-startup` 模式要求恰好三个请求，在同一个快照和独立资料目录中依次启动三个新进程：首次开启自动配置、第二次关闭并恢复、第三次验证恢复后的实际 GC。每次检查真实运行模式、已保存／有效 NoGC 与下一次配置；正式安装的启动文件保持原样。该模式仍必须带清理开关，不代表可见 Steam 或设置页点击验收。Windows 对应 `tools/test-runtime-gc-startup.ps1`，Linux 对应 `tools/test-runtime-gc-startup.sh`，参数及证据边界见[启动配置](performance/server-gc-launch-profile-20260924.md)。
 
 Windows 使用 PowerShell 7.4 或更新版本，参数对应 `-HeadlessInstance`、`-HeadlessExecutionMode Parallel`、`-HeadlessMemoryReservationMiB`、`-HeadlessCpuReservation`、`-HeadlessQueueTimeoutSeconds`；场景参数与已有原生启动器相同。
 

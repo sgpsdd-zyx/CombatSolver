@@ -375,6 +375,20 @@ foreach ($check in $forkBoundaryChecks) {
     }
 }
 
+# Startup configuration owns next-process files, never live GC or search policy.
+$gcStartupPath = Join-Path $repositoryRoot 'src/Runtime/RuntimeGcStartup.cs'
+$gcStartupConfigPath = Join-Path $repositoryRoot 'src/Runtime/RuntimeGcStartupConfig.cs'
+foreach ($required in @('RuntimeGcStartupConfig.ResolvePath(', '_ = RuntimeGcProfile.Current;')) {
+    if (-not (Select-String -LiteralPath $gcStartupPath -SimpleMatch $required -Quiet)) {
+        $violations.Add("${gcStartupPath}: missing next-process ownership boundary '$required'")
+    }
+}
+foreach ($forbidden in @('using Godot', 'SolverSettings', 'SearchGcPolicy', 'CombatBeamSolver', 'GC.Collect(')) {
+    if (Select-String -LiteralPath $gcStartupConfigPath -SimpleMatch $forbidden -Quiet) {
+        $violations.Add("${gcStartupConfigPath}: startup file policy depends on live runtime '$forbidden'")
+    }
+}
+
 $searchGcPolicyPath = Join-Path $repositoryRoot "src\Runtime\SearchGcPolicy.cs"
 $searchGcRecoveryPath = Join-Path $repositoryRoot "src\Runtime\SearchGcPolicy.Recovery.cs"
 foreach ($forbiddenRecoveryCall in @("GC.Collect(", "CollectGeneration2")) {
