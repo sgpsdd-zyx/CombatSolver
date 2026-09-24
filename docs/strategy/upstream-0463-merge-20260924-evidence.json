@@ -257,7 +257,7 @@
     "historicalAndComparisonEvidence": "Preserved pending post-report user approval"
   },
   "governance": {
-    "mainRuleBytes": 28882,
+    "mainRuleBytes": 28881,
     "defaultCodexBudgetBytes": 32768,
     "memory": "generated-read-only; no writes",
     "thirdPartyRegistration": "not-applicable: no registration entry changed",
@@ -283,5 +283,19 @@
     "issues": [],
     "frozenForkNotesUnchanged": true,
     "officialNotesPreserved": true
+  },
+  "publication": {
+    "status": "Published",
+    "sourceCommit": "441fad36d396901467b1a8a10b2ec89b08e73b93",
+    "tag": "v0.46.4",
+    "releaseUrl": "https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.46.4",
+    "zip": "releases/CombatSolver-0.46.4.zip",
+    "zipBytes": 2249615,
+    "buildWarnings": 0,
+    "buildErrors": 0,
+    "buildSeconds": 8.46,
+    "localDeployment": "Passed; same build, manifest and two license files",
+    "receipt": "docs/releases/0.46.4-PUBLISH.md",
+    "postPublicationRetesting": false
   }
 }

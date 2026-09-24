@@ -10,7 +10,8 @@
 - macOS `--verify-runtime-gc-startup` 同一快照的三个新进程 Passed：实际 `serverGc=false/true/false`、有效 NoGC `true/false/true`，保存 NoGC 始终 true；恢复全部原配置字段，正式游戏启动文件不变。两个实例 `macos.ozLsuZ`、`macos.cHlDQ6` 均由启动器删除。
 - 旧 fork 0.46.3／合并 fork／独立官方各一次运行 `EQ-IRONCLAD-ELITE-00` 和 `FULL-REGENT-BOSS-00`，VeryHigh / Beam135 / 60000 节点 / DOP1 / 60000ms / Smart / Evaluate，六次都无时间边界。新 fork 对官方 231 字段 IDENTICAL，含根、动作和续行；旧→新战损 52→52、55→55，探针 6269→3687、10493→7272。只作两根工作量／质量证据，不声称普遍质量或可见提速。
 - 旗舰根另用 1000 节点／10000ms／DOP1 开启 `--verify-incremental`，1000 展开／5561 转移／NodeLimit，Passed；该次不用于性能数字。
-- Linux 新增三启动入口，停止入口补齐自有目录清理，并增加有主／无进程清理和损坏标记拒绝合同；Bash/zsh 语法可在 macOS 检查，Linux `/proc` 与 PowerShell 原生合同未运行。真实网络、可见 Steam、在线端点、DOP>1 质量、完整门禁未验证。官方已知 StandPat DOP 合同失败保留，未重跑也未标为通过。
+- Linux 新增三启动入口，停止入口补齐自有目录清理，并增加有主／无进程清理和损坏标记拒绝合同；Bash/zsh 语法检查通过，Linux `/proc` 与 PowerShell 原生合同未运行。真实网络、可见 Steam、在线端点、DOP>1 质量、完整门禁未验证。官方已知 StandPat DOP 合同失败保留，未重跑也未标为通过。
+- 发布源 `441fad36` 完成一次正式 Release 构建（0 警告／0 错误，8.46 秒）及新 DLL 五项连接元数据检查；最小 ZIP、本地部署、分支／标签推送和 GitHub Release 创建成功，见[发布凭证](releases/0.46.4-PUBLISH.md)。未重复已通过场景。
 
 ## 上游历史：0.46.3：搜索速度指标与状态行去噪（2026-09-24）
 

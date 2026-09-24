@@ -4,7 +4,7 @@
 
 当前搜索职责见 [架构地图](../ARCHITECTURE.md)，实际测试与未验证范围见 [测试矩阵](../TEST_MATRIX.md)。
 
-- [官方 0.46.3 合并与知识收尾](upstream-0463-merge-20260924.md)：fork 0.46.4 的单人搜索对照、自动启动配置与 macOS 适配、多人／UI 验证；上游同号日志单独归档，交付状态见[版本索引](../releases/README.md)。
+- [官方 0.46.3 合并与知识收尾](upstream-0463-merge-20260924.md)：fork 0.46.4 的单人搜索对照、自动启动配置与 macOS 适配、多人／UI 验证；上游同号日志单独归档；fork 0.46.4 已发布，见[渠道凭证](../releases/0.46.4-PUBLISH.md)。
 - [官方 0.46.2 合并与知识收尾](upstream-0462-merge-20260924.md)：同步官方单人代码、ServerGC 启动配置、连接元数据门禁和 UI 更新，保留多人手动军师；合并阶段验证、规则和残留候选见记录，fork 0.46.3 已正式发布，见[渠道凭证](../releases/0.46.3-PUBLISH.md)。
 - [官方 0.45.0 合并与知识归档](upstream-0450-merge-20260923.md)：fork 0.45.1 的回合开始接入、单人同根对照、多人/界面验证、上游历史和实验限制；发布阶段见[版本索引](../releases/README.md)。
 - [多人实验：交错行动与手动重算](multiplayer-experiments-20260923/README.md)：2026-09-23 按“只有本机用军师、队友独立决策”实现原生完整牌组闭环；[实施与结果](multiplayer-experiments-20260923/implementation.md)记录A/A、敏感根、预算校准及64条/32对登记试跑，保留失败和恶化个案。[原生根](multiplayer-experiments-20260923/native-root-manifest.json)来自同一受控模板，真人来源仍为0，不修改生产策略。[审查原文](multiplayer-experiments-20260923/review.md)与[此前复核](multiplayer-experiments-20260923/review-response.md)保留。

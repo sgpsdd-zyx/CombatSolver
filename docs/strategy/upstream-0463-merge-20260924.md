@@ -41,7 +41,7 @@ macOS 无头入口增加三次独立进程的准备／启用／恢复模式，�
 
 本轮没有作普遍提速、零质量代价或联机胜率结论。官方 60 根历史对照有一根战损 0→2、两根改善、15 根路线／续行变化；上游 DOP1/DOP2 StandPat 计数合同在 PR 与旧基线上均失败，仍是未通过项，见[官方专项报告](../performance/fresh-resource-standpat-probe-cap-20260924.md)。没有为此次发布重跑该失败合同或整批历史实验。
 
-原始证据位于 `.local/upstream-update-20260924/`。macOS 两个实例 `macos.ozLsuZ` 与 `macos.cHlDQ6` 已由启动器删除，三启动检查证明正式游戏 runtimeconfig 未变。发布构建、部署和渠道凭证在定版后归入对应发布记录。
+原始证据位于 `.local/upstream-update-20260924/`。macOS 两个实例 `macos.ozLsuZ` 与 `macos.cHlDQ6` 已由启动器删除，三启动检查证明正式游戏 runtimeconfig 未变。发布源 `441fad36`、一次正式构建、本地部署、最小 ZIP 与 GitHub 交付已完成，见[0.46.4 发布凭证](../releases/0.46.4-PUBLISH.md)。
 
 ## neat-freak 真相矩阵
 
@@ -49,13 +49,13 @@ macOS 无头入口增加三次独立进程的准备／启用／恢复模式，�
 | --- | --- | --- |
 | 当前源码与运行机制 | verified-current | 合并取舍、60 项配置合同、七个原生请求与单人官方对照；可见游戏和真实网络 unverified |
 | 文档 | changed | 统一当前基线、版本／策略导航；保留官方历史，纠正“原生多人实验只有草案”的陈旧说明与无头文档代码围栏 |
-| 规则与 skills | changed | AGENTS 当前指针、搜索 skill、职责地图和双平台结构门禁同步；不新增历史流水账到主规则 |
+| 规则与 skills | verified-current | AGENTS 当前指针、搜索／UI skills、职责地图和双平台结构门禁同步；不新增历史流水账到主规则 |
 | 第三方适配与语义目录 | not-applicable | 没有登记点、公共战斗语义或支持面变化，不制造虚假的覆盖验收 |
 | 记忆与全局配置 | generated-read-only | 只读规则／记忆入口，不写平台生成记忆，不修改其他项目或全局规则 |
 | 工作区与历史现场 | pending cleanup approval | 开始时完整枚举项目 Markdown 和工作树；对照源码、旧 DLL、原始证据及历史包保留供复核 |
-| 发布与本地部署 | pending publication | 用户已授权 GitHub fork 发布；成功阶段以一次命令回执归档，不追加远端页面、下载或 ZIP 复核 |
+| 发布与本地部署 | verified-current | 源码 `441fad36` 构建并部署、最小 ZIP 创建、分支与标签原子推送、GitHub Release 创建均成功；不追加页面、下载或 ZIP 复核 |
 
-主规则开始时 28,951 字节，更新后 28,882 字节，占 Codex 默认 32 KiB 预算约 88.1%，已超过 70% 提示线但未超预算；本次缩短版本历史指针，未扩大规则。仓库无其他更具体 AGENTS；全局 Codex 规则为空，其他平台文件只读。项目 Markdown 在开始时机械枚举 433 份，受影响文件另按变更清单定向审阅。
+主规则开始时 28,951 字节，更新后 28,881 字节，占 Codex 默认 32 KiB 预算约 88.1%，已超过 70% 提示线但未超预算；本次缩短版本历史指针，未扩大规则。仓库无其他更具体 AGENTS；全局 Codex 规则为空，其他平台文件只读。项目 Markdown 在开始时机械枚举 433 份，受影响文件另按变更清单定向审阅。
 
 ## 保留项与限制
 

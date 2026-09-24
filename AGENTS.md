@@ -4,7 +4,7 @@
 >
 > 多人保持手动请求与操作、最多十四个敌方周期；使用三周期本机贡献目标、伤害/代价前沿和条件长线续行，不再使用每周期 3 HP 与旧 C/A 回退。无来源实际伤害按阶段人数折算参与选路，个人贡献仍按真实归属。治疗、重算及额外玩家回合不延后阶段截止，人数变化明确重建记账；不预测队友主动行为。普通时间/节点上限乘二，固定预算不变。多人不捕获单人成长目标，历史键保持原持有者范围扫描。禁止启动可见 Steam；无头结果不外推可见性能或联机胜率。
 >
-> 发布状态统一见[版本索引](docs/releases/README.md)：当前基于官方 `0.46.3`，fork `0.46.4` 正在发布准备；最近已发布 fork 为 `0.46.3`，与官方同号版本独立。官方标签不移动，同号日志单独归档。独立[尖塔军师修复工具](tools/SpireAdvisorMultiplayerFix/README.md)另有产物。历史批次、发布授权与证据归[开发笔记](docs/DEVELOPMENT_NOTES.md)和[策略索引](docs/strategy/README.md)，不作为新的操作授权。
+> 发布状态统一见[版本索引](docs/releases/README.md)：当前基于官方 `0.46.3`，fork `0.46.4` 已发布，来源 `441fad36`；分支、annotated tag 与 GitHub Release 已交付。官方标签不移动，同号日志单独归档。独立[尖塔军师修复工具](tools/SpireAdvisorMultiplayerFix/README.md)另有产物。历史批次、发布授权与证据归[开发笔记](docs/DEVELOPMENT_NOTES.md)和[策略索引](docs/strategy/README.md)，不作为新的操作授权。
 
 本文件约束所有在本仓库中工作的 coding agent。开始处理任务前完整阅读；子目录若有更具体的 `AGENTS.md`，其规则只补充对应目录，不能放宽这里的硬约束。
 
