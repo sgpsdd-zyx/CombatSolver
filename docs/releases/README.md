@@ -4,7 +4,7 @@
 
 按版本倒序列出已有玩家更新日志，包括历史草案。是否正式发布以对应 Git 标签和发布记录为准；未发布改动见 [开发笔记](../DEVELOPMENT_NOTES.md)。发布 ZIP 存放在仓库根目录的 `releases/`，此处只保存文档。
 
-**官方 0.46.2 已发布；fork 0.46.2 已合并并完成本地验证、部署，尚未发布**。本分支已同步官方代码与玩家更新日志，未创建 fork 标签、GitHub Release 或新 ZIP。最近已发布 fork 为 **0.45.1**，见[渠道凭证](0.45.1-PUBLISH.md)、[玩家更新日志](0.45.1-RELEASE_NOTES.md)与[本轮合并/验证/归档](../strategy/upstream-0462-merge-20260924.md)。
+**多人 fork 0.46.3 正在定版发布，基于官方 0.46.2**。合并与本地行为验证已完成；本次版本、正式连接配置、最小包和 GitHub 交付单独记录，见[完整中英玩家说明](0.46.3-RELEASE_NOTES.md)与[本轮合并/验证/归档](../strategy/upstream-0462-merge-20260924.md)。官方 `v0.46.2` 保持指向 `4bfb4407`。最近已发布 fork 为 **0.45.1**，见[渠道凭证](0.45.1-PUBLISH.md)和[玩家更新日志](0.45.1-RELEASE_NOTES.md)。
 
 前一公开 fork 为 **[0.44.1](0.44.1-PUBLISH.md)**。此前 **[0.44.2](0.44.2-PREPARE.md)** 仅从 `fd976376` 完成本地构建与最小包，本次合并后由0.45.1统一交付，不补发旧包或旧标签。[实验结果](../strategy/multiplayer-experiments-20260923/implementation.md)保留失败和恶化个案，不作真人联机胜率承诺。
 
@@ -12,7 +12,7 @@
 
 | 版本系列 | 更新日志 |
 |---|---|
-| 0.46 | [0.46.2 官方原文](0.46.2-RELEASE_NOTES.md)（fork 同步源码，尚未发布） · [0.46.1 官方原文](0.46.1-RELEASE_NOTES.md) · [0.46.0 官方原文](0.46.0-RELEASE_NOTES.md) |
+| 0.46 | [0.46.3（fork，发布准备）](0.46.3-RELEASE_NOTES.md) · [0.46.2 官方原文](0.46.2-RELEASE_NOTES.md) · [0.46.1 官方原文](0.46.1-RELEASE_NOTES.md) · [0.46.0 官方原文](0.46.0-RELEASE_NOTES.md) |
 | 0.45 | [0.45.1（fork，已发布）](0.45.1-RELEASE_NOTES.md) · [0.45.0 官方原文](upstream/0.45.0-RELEASE_NOTES.md) |
 | 0.44 | [0.44.2（fork，历史准备版）](0.44.2-RELEASE_NOTES.md) · [0.44.1（fork）](0.44.1-RELEASE_NOTES.md) · [0.44.1 官方原文](upstream/0.44.1-RELEASE_NOTES.md) · [0.44.0 官方原文](upstream/0.44.0-RELEASE_NOTES.md) |
 | 0.43 | [0.43.6（fork）](0.43.6-RELEASE_NOTES.md) · [0.43.5（fork）](0.43.5-RELEASE_NOTES.md) · [0.43.4（fork，历史准备版）](0.43.4-RELEASE_NOTES.md) · [0.43.3（fork，历史准备版）](0.43.3-RELEASE_NOTES.md) · [0.43.2（fork，历史准备版）](0.43.2-RELEASE_NOTES.md) · [0.43.1（fork）](0.43.1-RELEASE_NOTES.md) · [0.43.0（上游）](0.43.0-RELEASE_NOTES.md) |

@@ -4,7 +4,7 @@
 
 当前搜索职责见 [架构地图](../ARCHITECTURE.md)，实际测试与未验证范围见 [测试矩阵](../TEST_MATRIX.md)。
 
-- [官方 0.46.2 合并与知识收尾](upstream-0462-merge-20260924.md)：同步官方单人代码、ServerGC 启动配置、连接元数据门禁和 UI 更新，保留多人手动军师及未发布边界；验证、规则和残留候选见记录。
+- [官方 0.46.2 合并与知识收尾](upstream-0462-merge-20260924.md)：同步官方单人代码、ServerGC 启动配置、连接元数据门禁和 UI 更新，保留多人手动军师；合并阶段验证、规则和残留候选见记录，后续 fork 0.46.3 交付见[版本索引](../releases/README.md)。
 - [官方 0.45.0 合并与知识归档](upstream-0450-merge-20260923.md)：fork 0.45.1 的回合开始接入、单人同根对照、多人/界面验证、上游历史和实验限制；发布阶段见[版本索引](../releases/README.md)。
 - [多人实验：交错行动与手动重算](multiplayer-experiments-20260923/README.md)：2026-09-23 按“只有本机用军师、队友独立决策”实现原生完整牌组闭环；[实施与结果](multiplayer-experiments-20260923/implementation.md)记录A/A、敏感根、预算校准及64条/32对登记试跑，保留失败和恶化个案。[原生根](multiplayer-experiments-20260923/native-root-manifest.json)来自同一受控模板，真人来源仍为0，不修改生产策略。[审查原文](multiplayer-experiments-20260923/review.md)与[此前复核](multiplayer-experiments-20260923/review-response.md)保留。
 - [多人伤害归属审视：实验与采用](multiplayer-shared-damage-20260923/implementation.md)：2026-09-23 实验并实施无来源实际伤害按人数参与选路；个人贡献信用保留真实归属。原生差分与简化脚本收益分开记录，71次变体搜索不代表独立联机样本；两项撤回原型仅为当前夹具未检出收益。已完成[本地定版与知识归档](multiplayer-shared-damage-20260923/closeout.md)。

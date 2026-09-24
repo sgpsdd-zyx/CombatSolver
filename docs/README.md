@@ -1,6 +1,6 @@
 # CombatSolver 文档导航
 
-官方仓库已到 **0.46.2**；多人 fork 当前已同步官方代码，项目版本为 `0.46.2`，但本轮合并尚未创建 fork 标签或外部 Release。最近已发布 fork 仍为 **0.45.1**，合并、验证与知识收尾见[本轮记录](strategy/upstream-0462-merge-20260924.md)。
+多人 fork 基于官方 **0.46.2**，以 **0.46.3** 定版发布，官方标签保持原指向。最近已发布 fork 为 **0.45.1**；[版本索引](releases/README.md)维护发布进度，[中英更新日志](releases/0.46.3-RELEASE_NOTES.md)说明玩家变化，合并、验证与知识收尾见[本轮记录](strategy/upstream-0462-merge-20260924.md)。
 
 [多人原生实验](strategy/multiplayer-experiments-20260923/implementation.md)按“只有本机使用军师、队友独立决策”记录原生差分与受控脚本表现；收益、恶化和未知结果分开，真实联机仍未验收。现役操作与限制见[多人指南](multiplayer-advisor.md)。
 

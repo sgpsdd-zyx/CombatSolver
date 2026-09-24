@@ -1,6 +1,6 @@
 # 多人军师（基于官方 0.46.2）
 
-当前 fork 已同步官方 **0.46.2** 的单人代码、可选 ServerGC 启动配置、在线连接元数据门禁、策略侧栏布局和 UI 更新；多人手动军师仍沿用本分支贡献目标、无来源伤害折算与手动重算边界。`0.46.2` 尚未创建 fork 标签或外部 Release，最近已发布 fork 为 0.45.1。合并证据见[本轮记录](strategy/upstream-0462-merge-20260924.md)，版本状态见[发布索引](releases/README.md)。
+当前 fork 已同步官方 **0.46.2** 的单人代码、可选 ServerGC 启动配置、在线连接元数据门禁、策略侧栏布局和 UI 更新；多人手动军师仍沿用本分支贡献目标、无来源伤害折算与手动重算边界。本次以 fork **0.46.3** 定版发布，官方 `v0.46.2` 标签保持原指向。合并证据见[本轮记录](strategy/upstream-0462-merge-20260924.md)，版本状态见[发布索引](releases/README.md)。
 
 多人使用三敌方周期的本机贡献目标、伤害/代价前沿与最长十四周期的条件续行。无来源实际伤害按阶段人数折算参与选路，个人贡献仍按真实归属。阶段目标的[实施依据](strategy/multiplayer-cooperative-planning-20260922/implementation.md)与[伤害归属实验](strategy/multiplayer-shared-damage-20260923/implementation.md)保留原始版本和结论范围。
 

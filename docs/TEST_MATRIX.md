@@ -1,5 +1,11 @@
 # CombatSolver 测试清单
 
+## 0.46.3（fork）：发布定版（2026-09-24）
+
+- 行为来源为 `988d8cd5`，复用下一节官方 0.46.2 合并的八次初始原生请求、最终本地化复跑和 25 项运行库配置合同；此次只变更版本、文档和发布连接元数据，不重跑行为场景。
+- 已安装官方 0.46.2 DLL 的五项客户端连接元数据通过存在性、HTTPS 和证书指纹格式检查，仅写入忽略目录的私有 props。发布构建使用显式配置门禁；新 DLL 检查、最小 ZIP、部署和渠道凭证在定版后归档。
+- 无在线端点请求、可见 Steam、真实联机、Windows/PowerShell、Linux 原生启动器或完整发布门禁验收；源代码行为验证与发布元数据检查的证据分开。
+
 ## 0.46.2（fork）：官方合并与知识收尾（2026-09-24）
 
 本节只记录本 fork 对官方 `4bfb4407 / v0.46.2` 的合并边界。官方 0.46.x 的原始验证保留在下方“官方上游证据”小节；它们不自动成为本 fork 本轮的行为通过项。
@@ -11,7 +17,7 @@
 - 显式 ServerGC 的独立原生进程再运行会话/设置和单人最短请求，两项 Passed。CLR 9.0.7 实际 `serverGc=true / Active / savedNoGc=true / effectiveNoGc=false`；普通进程 `Default / serverGc=false / savedNoGc=true / effectiveNoGc=true`。完整搜索结果与事件输出成功；这不是性能 A/B 或一般路线等价结论。
 - 八次请求的运行 ID、输入与验证范围见[结构化证据](strategy/upstream-0462-merge-20260924-evidence.json)，原始根 `.local/upstream-0462-merge-20260924/`。两个实例 `macos.Vmi0aw`、`macos.NUFJll` 均由启动器删除。未执行 Windows/PowerShell、Linux `/proc` 启动器合同、可见 Steam、真实联机、在线端点或完整发布门禁。
 - 最终 JSON 检查发现上游四个同值重复键，去重后 465 项解析映射不变；因内嵌资源变更，重新构建并仅复跑 `UI-LOCALIZATION` / `macos-1ee16377ab9a494bbb113b19bdd40dad`，28 条检查 Passed。第三个实例由启动器删除，最终 DLL 已重新部署；未重复其他已通过场景。
-- 未创建本 fork 的 0.46.2 标签、GitHub Release 或 ZIP；最近已发布 fork 仍是 0.45.1。工作区残留候选按 neat-freak 规则只列出，未删除。
+- 合并阶段没有创建本 fork 的 0.46.2 标签、GitHub Release 或 ZIP；后续交付使用 0.46.3，官方标签保持原指向。工作区残留候选按 neat-freak 规则只列出，未删除。
 
 ## 官方上游证据：0.46.2 及近期历史（2026-09-24）
 

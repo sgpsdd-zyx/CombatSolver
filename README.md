@@ -4,7 +4,7 @@ Combat Solver 是《杀戮尖塔 2》的战斗路线求解器，本 fork 支持�
 
 单人模式下，玩家可以只查看建议，也可以让求解器执行当前回合，或连续接管整场战斗。多人模式只提供手动请求的建议。搜索不会修改游戏 RNG，也不会在后台操作真实战斗状态。
 
-当前源码已同步官方 **0.46.2**，并保留多人手动军师的策略边界；fork 版本号已同步为 **0.46.2**，但尚未创建 fork 标签、GitHub Release 或新 ZIP。最近已发布 fork 仍为 **0.45.1**，[下载最新版](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.45.1)，另见[发布凭证](docs/releases/0.45.1-PUBLISH.md)、[中英更新日志](docs/releases/0.45.1-RELEASE_NOTES.md)和[本轮合并与归档](docs/strategy/upstream-0462-merge-20260924.md)。0.44.2 的历史本地包不作为本次发布来源。
+当前源码已同步官方 **0.46.2**，并保留多人手动军师的策略边界；多人 fork **0.46.3** 正在定版发布，见[中英更新日志](docs/releases/0.46.3-RELEASE_NOTES.md)和[本轮合并与归档](docs/strategy/upstream-0462-merge-20260924.md)。最近已发布 fork 为 **0.45.1**，[下载最新版](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.45.1)，[版本索引](docs/releases/README.md)维护发布进度。官方 `v0.46.2` 标签保持原指向。
 
 多人实验已包含独立队友、交错操作和连续手动重算，保留收益与恶化个案；[实验记录](docs/strategy/multiplayer-experiments-20260923/implementation.md)不代表真人联机胜率。
 
@@ -83,17 +83,16 @@ if (PreCombatForecastApi.IsAvailable)
 - [RitsuLib](https://steamcommunity.com/sharedfiles/filedetails/?id=3747602295) `0.6.0` 或更高版本
 - 单人战斗；多人可使用手动军师试用功能
 
-安装本 fork 时，使用准备好的 `CombatSolver-0.40.5.zip`，或从 [GitHub Releases](https://github.com/sgpsdd-zyx/CombatSolver/releases) 下载所需公开版本的安装 ZIP（不是源码压缩包），将其中的以下文件解压到游戏的 `mods/CombatSolver` 目录：
+安装本 fork 时，从 [GitHub Releases](https://github.com/sgpsdd-zyx/CombatSolver/releases) 下载所需公开版本的安装 ZIP（不是源码压缩包），将其中的以下文件解压到游戏的 `mods/CombatSolver` 目录：
 
 ```text
 CombatSolver.dll
 CombatSolver.json
-CombatSolver.MemoryCleaner.exe
 LICENSE
 THIRD_PARTY_NOTICES.md
 ```
 
-RitsuLib 需要单独安装。替换旧版前退出游戏，并确保只启用一份 Combat Solver；已订阅上游版时先停用该副本，避免同时加载同名 Mod。`CombatSolver.MemoryCleaner.exe` 仅供 Windows 使用，其他系统无需运行它。
+RitsuLib 需要单独安装。替换旧版前退出游戏，并确保只启用一份 Combat Solver；已订阅上游版时先停用该副本，避免同时加载同名 Mod。Windows 构建另含 `CombatSolver.MemoryCleaner.exe`；本次 macOS 构建的最小包不含该 Windows 辅助程序。
 
 启用 RitsuLib 和 Combat Solver 后进入战斗。单人等待发牌和回合开始效果结算，路线面板会自动显示搜索进度和结果；多人在这些效果和选择完成后，点击「重新计算」取得建议，自己按建议操作。
 
