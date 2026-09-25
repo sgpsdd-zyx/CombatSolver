@@ -1,8 +1,6 @@
 # CombatSolver 文档导航
 
-本地准备版 **0.46.6** 新增多人烘焙手套原生选牌页内的手动计算，见[玩家说明](releases/0.46.6-RELEASE_NOTES.md)、[验证记录](TEST_MATRIX.md#0466fork多人烘焙手套选牌计算2026-09-25)和[多人指南](multiplayer-advisor.md)。本轮为本地修复包，公开 GitHub Release 仍为 0.46.5。
-
-多人 fork **0.46.5 已发布**，当前基于官方 **0.46.4**。本轮[合并与验证归档](strategy/upstream-0464-merge-20260925.md)区分官方历史与本机证据，[中英更新日志](releases/0.46.5-RELEASE_NOTES.md)说明玩家变化，[发布凭证](releases/0.46.5-PUBLISH.md)记录来源、构建、部署与 GitHub 交付，当前状态见[版本索引](releases/README.md)。前一公开版为 0.46.4，官方和 fork 的同号记录互不覆盖。
+多人 fork **0.46.6 已发布**，基于官方 **0.46.4**，修复多人烘焙手套原生选牌页内的手动计算。见[玩家说明](releases/0.46.6-RELEASE_NOTES.md)、[验证记录](TEST_MATRIX.md#0466fork多人烘焙手套选牌计算2026-09-25)、[发布与归档凭证](releases/0.46.6-PUBLISH.md)和[多人指南](multiplayer-advisor.md)。当前发布状态统一见[版本索引](releases/README.md)；前一公开版为 0.46.5，官方基线来源见[合并记录](strategy/upstream-0464-merge-20260925.md)，官方与 fork 的同号记录互不覆盖。
 
 [多人原生实验](strategy/multiplayer-experiments-20260923/implementation.md)按“只有本机使用军师、队友独立决策”记录原生差分与受控脚本表现；收益、恶化和未知结果分开，真实联机仍未验收。现役操作与限制见[多人指南](multiplayer-advisor.md)。
 
@@ -21,7 +19,8 @@
 
 | 要查什么 | 入口 |
 |---|---|
-| 官方 0.46.4 合并、fork 0.46.5 发布与当前验证 | [本轮归档](strategy/upstream-0464-merge-20260925.md)、[玩家说明](releases/0.46.5-RELEASE_NOTES.md)、[版本状态](releases/README.md) |
+| fork 0.46.6 烘焙手套修复、发布与知识归档 | [发布凭证](releases/0.46.6-PUBLISH.md)、[玩家说明](releases/0.46.6-RELEASE_NOTES.md)、[版本状态](releases/README.md) |
+| 官方 0.46.4 合并与 fork 0.46.5 历史验证 | [合并记录](strategy/upstream-0464-merge-20260925.md)、[发布记录](releases/0.46.5-PUBLISH.md) |
 | 如何实验未知队友、交错操作与反复手动重算 | [多人实验设计与原生试跑](strategy/multiplayer-experiments-20260923/README.md) |
 | 0.44.2 历史本地定版、实验结论边界与知识归档 | [本地记录](releases/0.44.2-PREPARE.md)、[归档凭证](strategy/multiplayer-shared-damage-20260923/closeout.md) |
 | 0.44.1 历史发布来源与 GitHub 交付 | [发布记录](releases/0.44.1-PUBLISH.md) |
