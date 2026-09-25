@@ -8,6 +8,7 @@ internal sealed record MultiplayerSearchPolicy(
 
     public MultiplayerContributionObjective? Objective { get; init; }
     public bool CreditSharedDamage { get; init; } = true;
+    public MultiplayerTurnSetup? TurnSetup { get; init; }
 
     public SolverSearchProfile ResolveSearchProfile(SearchPolicySnapshot policy)
     {
@@ -32,7 +33,7 @@ internal sealed record MultiplayerSearchPolicy(
         return policy with
         {
             Multiplayer = this,
-            IncludeTurnSetup = false,
+            IncludeTurnSetup = TurnSetup != null,
             IgnoreLongTermRewards = true,
             RelicTargets = [],
             TheftPolicy = null,

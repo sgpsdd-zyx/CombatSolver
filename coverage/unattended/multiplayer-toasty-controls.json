@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "scenarioId": "MULTIPLAYER-TOASTY-CONTROLS",
+  "characterId": "IRONCLAD",
+  "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+  "seed": "MULTIPLAYER-TOASTY-CONTROLS",
+  "relics": [
+    { "relicId": "TOASTY_MITTENS", "addWithoutObtainedEffects": true }
+  ],
+  "preserveNativeCombatStateForTest": true,
+  "fixedSearchBudget": true,
+  "searchBudgetOverrideMilliseconds": 1000,
+  "searchMaxDegreeOfParallelismForTest": 1,
+  "headlessFastModeForTest": "Instant",
+  "timeoutSeconds": 120
+}

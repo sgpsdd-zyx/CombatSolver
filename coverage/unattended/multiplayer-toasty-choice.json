@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "scenarioId": "MULTIPLAYER-TOASTY-CHOICE",
+  "characterId": "IRONCLAD",
+  "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+  "seed": "MULTIPLAYER-TOASTY-CHOICE",
+  "relics": [
+    { "relicId": "BAG_OF_PREPARATION", "addWithoutObtainedEffects": true },
+    { "relicId": "MERCURY_HOURGLASS", "addWithoutObtainedEffects": true },
+    { "relicId": "TOASTY_MITTENS", "addWithoutObtainedEffects": true },
+    { "relicId": "BLOOD_VIAL", "addWithoutObtainedEffects": true }
+  ],
+  "preCombatPlayerCurrentHpOverride": 60,
+  "preserveNativeCombatStateForTest": true,
+  "fixedSearchBudget": true,
+  "searchBudgetOverrideMilliseconds": 1000,
+  "searchMaxDegreeOfParallelismForTest": 1,
+  "headlessFastModeForTest": "Instant",
+  "timeoutSeconds": 120
+}

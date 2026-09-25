@@ -6,6 +6,8 @@ Harmony 补丁已经受支持。外部程序集使用与其他内部镜像相同
 
 ## 签名与登记
 
+多人烘焙手套的原生耗尽前暂停根是单独的原版接入：若有 `AfterPlayerTurnStartMirrors` 外部登记或第三方回合开始覆写，暂停页内的手动计算明确拒绝。完整阶段镜像不包含原生异步回调的中间进度；完成实际选牌后可按原有 Play 根继续使用已适配内容。单人完整准备根和未来回合派发不受此限制影响。
+
 命名空间：`CombatSolver.Engine.InCombat.Mirrors.Hooks.TurnEnd`。
 
 ```csharp

@@ -39,6 +39,8 @@ internal sealed partial class UnattendedTestRunner
             bool expectedCardPlayed = request.ExpectedPlayedCardId == null;
             bool expectedPotionUsed = request.ExpectedUsedPotionId == null;
             bool expectedPlayerPowerObserved = request.ExpectedObservedPlayerPowerId == null;
+            if (request.ScenarioId is MultiplayerTurnSetupScenario or MultiplayerTurnSetupControlsScenario)
+                return Observation(combatEnded: false);
             if (request.ScenarioId == "MULTIPLAYER-EXPERIMENT-INACTIVE")
             {
                 runner._protocolHost.AssertMultiplayerExperimentReset();

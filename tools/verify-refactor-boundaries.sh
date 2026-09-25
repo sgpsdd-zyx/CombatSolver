@@ -599,6 +599,7 @@ expected_beam_files=(
     CombatBeamSolver.MultiplayerEvaluation.cs
     CombatBeamSolver.MultiplayerWindow.cs
     CombatBeamSolver.MultiplayerRound.cs
+    CombatBeamSolver.MultiplayerTurnSetup.cs
     CombatBeamSolver.NoveltySearch.cs
     CombatBeamSolver.Transpositions.cs
     CombatBeamSolver.OrderedMutationRetention.cs
@@ -1316,6 +1317,16 @@ src/Testing/UnattendedTestRunner.MultiplayerExperiment.cs|SearchReason.Manual
 src/Testing/UnattendedTestRunner.MultiplayerExperiment.Setup.cs|ClearRunDeck(run, player);
 src/Runtime/SolverController.cs|if (reason != SearchReason.Manual) return;
 src/Runtime/SolverController.cs|Multiplayer advice cannot deploy native actions.
+src/Runtime/Entry.cs|patcher.RegisterPatch<MultiplayerToastyMittensChoicePatch>();
+src/Runtime/MultiplayerTurnSetupCoordinator.cs|State: GameActionState.GatheringPlayerChoice
+src/Runtime/MultiplayerTurnSetupCoordinator.cs|executor.CurrentlyRunningAction == null || ReferenceEquals(executor.CurrentlyRunningAction, action)
+src/Runtime/MultiplayerTurnSetupCoordinator.cs|executor.FinishedExecutingActions().IsCompletedSuccessfully;
+src/Runtime/MultiplayerTurnSetupCoordinator.cs|pending.Choices.LatestVisibleSequence != pending.Choices.FirstVisibleSequence
+src/Runtime/MultiplayerTurnSetupCoordinator.cs|AfterPlayerTurnStartMirrors.HasExternalRegistrations
+src/Search/MultiplayerSearchPolicy.cs|IncludeTurnSetup = TurnSetup != null
+src/Search/CombatBeamSolver.Expansion.Replay.cs|bool capturingExecution = policy.Multiplayer?.TurnSetup == null
+src/Search/CombatBeamSolver.MultiplayerTurnSetup.cs|HookMirrors.ResumeMultiplayerToastyMittens
+src/Engine/InCombat/Mirrors/HookMirrors.MultiplayerTurnSetup.cs|AfterPlayerTurnStartMirrors.Invoke(relics[index], context, phase: 1);
 src/Runtime/CombatRootSnapshot.cs|bool hasOnlyPostCombatHealing = !advisor
 src/Search/CombatBeamSolver.Retention.cs|if (IsMultiplayerAdvice || _hasGrowthTargets
 src/Search/CombatBeamSolver.MultiplayerRound.cs|CombatSolver.Engine.InCombat.Mirrors.HookMirrors.BeforeSideTurnStart(

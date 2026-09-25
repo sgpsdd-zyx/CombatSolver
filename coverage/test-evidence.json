@@ -1,4 +1,13 @@
 {
+  "MULTIPLAYER-TOASTY-CHOICE": {
+    "status": "Passed",
+    "level": "NativePendingChoiceFullStateAndRuntimeControls",
+    "procedure": "Use multiplayer-toasty-choice.json for the failure baseline and native post-choice differential; multiplayer-toasty-controls.json for stop, restart, an actual queued peer Defend while the local choice remains pending, and manual input during a paused worker; initial-toasty-mittens-396.json as the following single-player request in the same macOS headless process.",
+    "expected": "Manual multiplayer advice can plan Toasty Mittens from the actual exhaust pause without redrawing or replaying completed effects, selecting native cards, predicting active teammate actions, or changing the official single-player path.",
+    "observed": "2026-09-25: old behavior fails with zero searches at a pending native Hook action. Fixed native full-party ContinuationStamp equals actual after manual selection with zero differences (macos-b4da73df2c15471da7260f73ce065300). Four manual control requests initially pass with injected peer HP drift (macos-0269579d811c4dada6df8bf2fe172701). Following single-player setup and refresh pass (macos-54a6ab22044a472ba9ab9d1db7f8d706). Final control fixture replaces HP injection with a native peer Defend and passes after accounting for the cleared current-action pointer (macos-cb3f9956f2584b43be41a47f6210fed8): stale advice, fresh manual root, stop/input and a different selection during search all pass. Owned instances removed.",
+    "evidence": "docs/TEST_MATRIX.md; .local/multiplayer-toasty-20260925/",
+    "scope": "Native game model/action/selection semantics with the multiplayer mode guard patched for isolated testing and remote-card local queue visuals skipped. The initial peer HP drift was synthetic; the final fixture uses a test-scheduled native peer action. Neither supplies teammate policy to production search. No real network, visible Steam, later-turn or third-party combination validation. Windows and Linux runtime not executed. Startup fixture failures are not counted as passes."
+  },
   "UPSTREAM-0464-FORK-MERGE": {
     "status": "PassedWithExplicitScope",
     "level": "L1L2NativeRootContractsAndL3BoundedSearchComparison",

@@ -72,6 +72,8 @@ CombatRootSnapshot.Capture（主线程根）
 - 原生准备会话与搜索 worker 分别持有取消源；停止只取消并排空 worker，保留原生选择任务。等待页面后以原子状态转换确定唯一搜索所有者，重算沿同一流程重新创建 worker。结果发布结束采用/应用标志。
 - 搜索期间保留原生页面输入；原生 Task 完成或页面序号推进后淘汰旧根，按真实阶段继续。实际部署独占输入锁，先清除未提交的手动勾选再驱动计划。后续回合没有既有选择路线时，在选择发生前捕获稳定准备根。
 
+多人烘焙手套有独立的手动暂停点合同：`MultiplayerTurnSetupCoordinator` 观察其原生 Task 与页面，确认本机暂停动作身份、队列空闲和队友准备完成后才允许当前全队根。`MultiplayerTurnSetup` 只保存当前遗物位置；搜索从其耗尽前继续普通/Late 回调及本机自动出牌准备，复用唯一镜像，不重复抽牌、能量或全队 Side/orb 阶段。存在第三方回合开始登记/覆写时拒绝该暂停入口，不推断委托进度；其他原生中途选择沿既有等待边界。停止不取消原生选择，实际选择/队友变化使结果过期，均不自动重算或操作。验证使用 `multiplayer-toasty-choice.json` 的原生完整状态对账及 `multiplayer-toasty-controls.json` 的暂停/重算/漂移合同，另保留单人哨兵。
+
 新增或修改 mirror 注册时，由 `MethodMirrorRegistryDescriptor` 自动向 CoverageCatalog 描述支持状态；不要在工具侧复制 registry 私有布局或另建平行登记。
 
 `AfterSideTurnEndLate` 的扩展使用 `AfterSideTurnEndLateMirrors.Register<TModel>`，在根捕获前完成登记；玩家和敌方共用 Hook facade，DisintegrationPower 不得恢复到独立晚期补偿。新增其他阶段时逐一核对原版顺序、选择暂停和状态所有权，不能把晚期入口当作所有回合事件的通用回调。

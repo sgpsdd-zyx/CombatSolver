@@ -138,6 +138,7 @@ internal sealed partial class UnattendedTestRunner
         int startedTurn = 0;
         try
         {
+            InitializeMultiplayerTurnSetupTest();
             ScenarioContext scenario = await _scenarioBuilder.BuildAsync();
             _resetModelStateIntegrationReference?.Invoke();
             combatState = scenario.CombatState;
@@ -266,6 +267,7 @@ internal sealed partial class UnattendedTestRunner
         {
             _releaseAdaptedOnPlayIntegration?.Invoke();
             ReleaseTurnSetupControlCheck();
+            ReleaseMultiplayerTurnSetupTest();
             _executor.RestoreSettings();
             RestoreHeadlessFastModeOverride();
             ReleaseCheckpointImport();

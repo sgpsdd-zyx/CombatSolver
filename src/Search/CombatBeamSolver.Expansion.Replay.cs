@@ -254,7 +254,8 @@ internal sealed partial class CombatBeamSolver
                 processedEnemyDeaths.Add(combatId);
         }
 
-        bool capturingExecution = allowExecutionCapture && !_disableExecutionChoiceContinuationsForTesting
+        bool capturingExecution = policy.Multiplayer?.TurnSetup == null
+            && allowExecutionCapture && !_disableExecutionChoiceContinuationsForTesting
             && simulator.BeginExecutionContinuationCapture();
         TurnStartChoiceCursor cursor = new(choices);
         simulatedCombat.BeginActionChoices(cursor);
@@ -302,6 +303,8 @@ internal sealed partial class CombatBeamSolver
         TurnStartChoiceCursor choices,
         ISet<uint> processedEnemyDeaths)
     {
+        if (policy.Multiplayer?.TurnSetup is { } multiplayerSetup)
+            return ResumeMultiplayerTurnSetup(simulator, simulatedCombat, choices, processedEnemyDeaths, multiplayerSetup);
         SimPlayerCombatState playerState = simulator.State.GetPlayerCombatState(_player);
         // The setup root is already inside this turn. Preserve events that occurred before energy reset.
         if (PersistentRelicSupport.ShouldPlayerResetEnergy(simulatedCombat, _player))

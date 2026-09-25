@@ -1,5 +1,29 @@
 # CombatSolver 测试清单
 
+## 0.46.6（fork）：多人烘焙手套选牌计算（2026-09-25）
+
+本次仅修改多人原生 Start 选牌请求和对应剩余准备回放；原始证据保留在 `.local/multiplayer-toasty-20260925/`。
+
+| 请求 | 结果 | 本轮证据 |
+| --- | --- | --- |
+| `MULTIPLAYER-TOASTY-CHOICE` 旧行为基线 | 预期 Failed | `macos-ccbc77d49a194d82b6ff500d8470367a`；原生手牌页打开，Start、Hook 动作未完成、队列空闲，手动请求后搜索 0 次。 |
+| `MULTIPLAYER-TOASTY-CHOICE` 修复 | Passed | `macos-b4da73df2c15471da7260f73ce065300`；固定 1000 ms、DOP1；建议含烘焙手套 Exhaust，计算不改全队根、不确认原生页，手动选择后完整 ContinuationStamp 0 差异。抽牌袋、水银沙漏位于手套前，血瓶为 Late，验证无重复抽牌/先前伤害及漏算力量/治疗。 |
+| `MULTIPLAYER-TOASTY-CONTROLS` 初次控制验证 | Passed | `macos-0269579d811c4dada6df8bf2fe172701`；4 次手动搜索：停止并排空 worker 保留原生输入，恢复显示选牌建议，合成队友 HP 变化标记过期，手动重算使用新根，worker 暂停期间异选仍能进入 Play，旧结果标记过期。0 自动重算/部署。 |
+| `MULTIPLAYER-TOASTY-CONTROLS` 原生队友出牌 | Passed | `macos-cb3f9956f2584b43be41a47f6210fed8`；收尾发现队友动作完成会清空当前动作引用，修正暂停识别后将上述合成 HP 漂移替换为队友实际打出防御，原生格挡增加、队列完成且本机仍在选牌。过期提示、手动重算、停止保留输入、计算中异选与 0 自动重算/部署均通过；22713 ms。 |
+| `INITIAL-TOASTY-MITTENS-396` | Passed | `macos-54a6ab22044a472ba9ab9d1db7f8d706`；紧接多人控制请求在同一进程运行，单人原生准备、手动刷新 1 次、选牌顺序和初始结果断言通过。 |
+
+两份多人建局使用真实原版模型、选牌页面和动作队列；测试替换多人模式识别，并跳过队友出牌的本机队列视觉节点，没有网络传输。初次漂移为测试侧 HP 注入，最终控制请求通过原生出牌入口实际执行队友防御；测试安排的队友动作不进入生产搜索，也不构成真实联机证据。实际按钮外观、可见性能、后续回合、多名队友同时选牌、第三方回合扩展和 Windows/Linux 本机运行未验收。控制夹具最初的 Harmony 异常块生成失败和漏补丁注册保留为开发失败，不属于上述最终通过。`macos.6HP4Pv`、`macos.bdHA4e`、`macos.Ab8KqW`、`macos.TQPKzM`、`macos.Ofcc0U`、`macos.7bB6KY`、`macos.pLo31o` 均由启动器成功删除。
+
+可重跑入口（单请求总上限 120 秒；不启动可见 Steam）：
+
+```bash
+tools/run-unattended-test-macos.sh coverage/unattended/multiplayer-toasty-choice.json coverage/unattended/multiplayer-toasty-controls.json coverage/unattended/initial-toasty-mittens-396.json --cleanup-instance-on-exit --timeout-seconds 120
+```
+
+Windows/Bash 协议沿用现有参数：`ScenarioId/--scenario-id` 分别选以上场景，传入对应角色、遭遇、种子、遗物与固定预算，并使用 `-CleanupInstanceOnExit/--cleanup-instance-on-exit`。没有新增平台私有协议参数。语义通过后仅做文档、规则及版本更新，定版构建复用这些行为证据。
+
+L0：Release 开发构建 0 警告/0 错误；新增两个 Search 文件后同步两平台职责清单，Bash 结构门禁 `search_files=221` 通过。PowerShell 入口只做规则对应检查，未在本机执行。
+
 ## 0.46.5（fork）：官方 0.46.4 合并验证（2026-09-25）
 
 本轮证据见[合并归档](strategy/upstream-0464-merge-20260925.md)和[结构化结果](strategy/upstream-0464-merge-20260925-evidence.json)，下节官方历史不计为本机通过。

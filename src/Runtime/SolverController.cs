@@ -1018,8 +1018,12 @@ internal static partial class SolverController
             // Queue completion includes post-action victory checks; a paused choice also keeps
             // its action completion pending even when the queue temporarily has no ready work.
             setupStage = "native_action_barrier";
+            MultiplayerTurnSetup? multiplayerTurnSetup = IsMultiplayerSession
+                ? MultiplayerTurnSetupCoordinator.Capture(state) : null;
             ActionExecutor actionExecutor = RunManager.Instance.ActionExecutor;
-            Task nativeActionBarrier = actionExecutor.CurrentlyRunningAction is { } runningAction
+            Task nativeActionBarrier = multiplayerTurnSetup != null
+                ? Task.CompletedTask
+                : actionExecutor.CurrentlyRunningAction is { } runningAction
                 ? Task.WhenAll(actionExecutor.FinishedExecutingActions(), runningAction.CompletionTask)
                 : actionExecutor.FinishedExecutingActions();
             if (!nativeActionBarrier.IsCompleted)
@@ -1042,7 +1046,7 @@ internal static partial class SolverController
                 _combat.PendingCompleteProjectionBaseline = null;
                 _combat.PendingManualProjectionBaseline = null;
             }
-            if (!CanSolve(state, out string rejection))
+            if (!CanSolve(state, out string rejection, multiplayerTurnSetup != null))
             {
                 SolverOverlay.Show(host, $"[b]战斗路线求解器[/b]\n{rejection}");
                 Entry.Logger.Info($"[CombatSolver/Test] SEARCH_REJECT reason={rejection}");
@@ -1218,6 +1222,7 @@ internal static partial class SolverController
             if (IsMultiplayerSession)
                 searchPolicy = new MultiplayerSearchPolicy(PreviousRoutes: _combat.AdvisoryRoutes.ToArray())
                 {
+                    TurnSetup = multiplayerTurnSetup,
                     Objective = _combat.AdvisoryContribution.Observe(rootSnapshot.MultiplayerObservation
                         ?? throw new InvalidOperationException("Multiplayer root has no contribution observation.")),
                 }.Apply(searchPolicy);
@@ -2107,6 +2112,7 @@ internal static partial class SolverController
             || _search != null
             || PlayerTurnSetupCoordinator.IsSearching;
         Task turnSetupRelease = PlayerTurnSetupCoordinator.Reset(reason);
+        MultiplayerTurnSetupCoordinator.Reset();
         long forensicCaptureAllocatedAtStart = GC.GetTotalAllocatedBytes(precise: false);
         Task forensicCaptureRelease = CombatBugReportExporter.CompleteCombat(
             reason,
@@ -2298,6 +2304,7 @@ internal static partial class SolverController
             BeginCombat(current);
         }
         BattleDamageTracker.Observe(current);
+        MultiplayerTurnSetupCoordinator.Observe();
         if (IsMultiplayerSession)
             ObserveMultiplayerAdvice(current);
         // SL may replace the combat after TurnStarted. Reattach at the playable boundary.
@@ -3654,7 +3661,7 @@ internal static partial class SolverController
             _ => throw new ArgumentOutOfRangeException(nameof(mode), mode, null),
         };
 
-    private static bool CanSolve(CombatState state, out string rejection)
+    private static bool CanSolve(CombatState state, out string rejection, bool multiplayerTurnSetup = false)
     {
         Player? player = LocalContext.GetMe(state);
         if (_solverDisabled)
@@ -3665,12 +3672,13 @@ internal static partial class SolverController
             rejection = "第一版只支持单人战斗。";
         else if (IsMultiplayerSession && player?.Creature.IsAlive != true)
             rejection = "当前不是玩家出牌阶段。";
-        else if (IsMultiplayerSession && state.Players.Any(peer => peer.Creature.IsAlive
+        else if (IsMultiplayerSession && state.Players.Any(peer => peer != player && peer.Creature.IsAlive
                      && peer.PlayerCombatState?.Phase == PlayerTurnPhase.Start
                      && (CombatManager.Instance.PlayersTakingExtraTurn.Count == 0
                          || CombatManager.Instance.PlayersTakingExtraTurn.Contains(peer))))
             rejection = "请等待队友完成回合开始的选择后重新计算。";
-        else if (state.CurrentSide != CombatSide.Player || player?.PlayerCombatState?.Phase != PlayerTurnPhase.Play)
+        else if (state.CurrentSide != CombatSide.Player
+            || player?.PlayerCombatState?.Phase != PlayerTurnPhase.Play && !multiplayerTurnSetup)
             rejection = "当前不是玩家出牌阶段。";
         else if (CombatManager.Instance.PlayerActionsDisabled)
             rejection = "玩家操作当前被游戏禁用。";

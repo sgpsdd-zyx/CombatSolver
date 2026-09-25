@@ -16,6 +16,10 @@
 
 ### 多人手动建议分支
 
+`MultiplayerTurnSetupCoordinator` 只观察本机烘焙手套的原生暂停，不接管 `SetupPlayerTurn` 或选择输入。手牌页可见、其 `HookPlayerChoiceContext.GameAction` 仍在 `GatheringPlayerChoice`、队列正常空闲且当前动作为空或恰为该暂停动作时，`SolverController` 允许手动请求从当前全队状态捕获根；队友出牌完成后清空当前动作引用，不影响本机暂停的识别。其他存活参与者的 Start 阶段仍明确拒绝。取消、worker 排空、结果展示和过期标记继续归控制器。原生选择完成、战斗重置或退出场景时释放观察会话。
+
+`MultiplayerTurnSetup` 在多人政策内保存不可变遗物位置，仅作用于本次 Start 根；`CombatBeamSolver.MultiplayerTurnSetup` 从暂停位置进入已有选牌枚举。`HookMirrors.MultiplayerTurnSetup` 调用既有 `AfterPlayerTurnStartMirrors`，依次补完本机当前及其后遗物的普通回调与 Late 回调，再由原有自动出牌准备进入 Play。抽牌、能量重置、此前 Power/遗物及全队 Side/orb 阶段已经发生，不重复执行。该入口不捕获任意第三方回调内部进度，不复用执行续接帧；有外部回合开始登记/覆写时明确失败。阶段元数据不进入战斗状态键，完成准备后的候选仍按既有完整状态去重。官方单人完整回合准备路径不变。
+
 `SolverController` 在网络多人中只接受 Manual 请求，排空旧 worker 后主线程捕获整个战场。`SolverController.Multiplayer` 持有过期标记和有界纯动作路线，不做自动续用或部署；`ContinuationStamp.Multiplayer` 对账全队状态。`MultiplayerSearchPolicy` 注入最多十四次敌方周期与独立建议排序，`CombatBeamSolver.Multiplayer` 重放旧前缀，重放计数属于 `SearchRunContext`；`MultiplayerRound` 编排全队回合，不接管实机。已推演的敌方周期从分支按值复制至 `SimulationSnapshot`、`SolverSnapshot` 和 UI，与窗口上限分开显示。`MultiplayerSearchPolicy.ResolveSearchProfile` 在多人协调器入口解析一次有效额度：普通请求时间/节点乘二，固定或显式覆盖保持原值，不改持久化设置。`RemainingCycleLayers` 供 `Phases` 按前沿实际完成的敌方周期分摊原请求剩余额度，额外玩家回合不当作周期；单人保持官方 4/8 层。有效额度经 `SolverResult` 纯值传到 UI 详情，窗口、预算均只归多人政策所有。`SimulatedCombatState.Multiplayer` 的身份、窗口和额外回合参与者随 Fork 复制，其他队员数值继续属于既有影子状态。队友选择通过显式边界退出，本人选择继续搜索。UI 仍只渲染 snapshot，单人调用原有路径。详见 [行为与验证](multiplayer-advisor.md)。
 
 `MultiplayerContributionCapture` 在主线程从真实伤害历史、有效敌人生命与存活参与者捕获 `MultiplayerRootObservation`。`SolverCombatSession.AdvisoryContribution` 独占跨手动请求的阶段账本；`MultiplayerContributionSession` 按绝对敌方轮次维护三周期截止，人数变化/到期明确重建并保留上一任务结果。Search 只接收不可变 `MultiplayerContributionObjective`，不回读 live 历史，也不预测队友操作。

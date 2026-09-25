@@ -106,7 +106,10 @@ internal sealed class PlayerTurnSetupSceneExitPatch : IPatchMethod
 
     [HarmonyPriority(Priority.First)]
     public static void Prefix()
-        => PlayerTurnSetupCoordinator.PrepareForSceneExit();
+    {
+        PlayerTurnSetupCoordinator.PrepareForSceneExit();
+        MultiplayerTurnSetupCoordinator.PrepareForSceneExit();
+    }
 }
 
 internal static class PlayerTurnSetupCoordinator

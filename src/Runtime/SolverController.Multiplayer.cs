@@ -12,8 +12,9 @@ internal static partial class SolverController
         if (System.Environment.TickCount64 - _combat.AdvisoryCheckedAt < 500) return;
         _combat.AdvisoryCheckedAt = System.Environment.TickCount64;
         var executor = RunManager.Instance.ActionExecutor;
-        if (!executor.FinishedExecutingActions().IsCompleted
-            || executor.CurrentlyRunningAction is { CompletionTask.IsCompleted: false }) return;
+        if (!MultiplayerTurnSetupCoordinator.IsStablePendingChoice(state)
+            && (!executor.FinishedExecutingActions().IsCompleted
+                || executor.CurrentlyRunningAction is { CompletionTask.IsCompleted: false })) return;
         LiveCombatStamp? expected = _search?.Stamp ?? _combat.LatestStamp;
         if (expected == null) return;
         bool stale = LiveCombatStamp.Capture(state) != expected;

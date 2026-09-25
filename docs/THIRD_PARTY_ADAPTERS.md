@@ -449,6 +449,8 @@ CardRemovalValueMirrors.Register<YourDefend>(-10d);
 重新捕获监听表，轮内保持顺序；已有外部登记时始终按三轮派发，以覆盖普通阶段新增的监听者。没有外部登记且入口没有第三方覆写时保留原 Power/遗物批次与续执行帧。
 三张表共用冻结门；回调挂起时完整重放，不复用未知第三方内部的局部执行帧。
 
+多人在烘焙手套原生选牌页手动请求时使用独立的耗尽前暂停根。该入口仅允许原版回合开始回调；存在本表任何外部登记或已加载第三方回合开始覆写时明确拒绝，不能从完整阶段镜像推断原生委托已经执行到哪一步。完成实际选牌后的普通 Play 根仍按既有登记工作。此限制不改变单人完整准备根或未来回合的阶段派发。
+
 `AfterSideTurnEndLateMirrors.Register<TModel>(handler)` 为精确运行时类型登记
 `AbstractModel.AfterSideTurnEndLate` 的预测实现，适用于遗物、Modifier、Power 等模型。
 玩家与敌方回合末共用入口，回调自行根据 `Side`、`Participants` 判断是否生效。
@@ -593,6 +595,7 @@ CardRemovalValueMirrors.Register<YourDefend>(-10d);
 | 位置 | 症状 | 状态 |
 |---|---|---|
 | `CardOnPlaySupport.Multiplayer` / `MonsterMoveEffects.Multiplayer` | 原版多人卡牌补偿与怪物多目标结算；仅军师分支生效，没有增加第三方登记入口。队友选择和未支持效果形成边界，已有单人登记不等于多人通过验证 | 原版封闭派发 |
+| `MultiplayerTurnSetupCoordinator` / `HookMirrors.MultiplayerTurnSetup` | 多人烘焙手套的原生耗尽前暂停根，只继续本机剩余回合准备；第三方回合开始登记/覆写明确拒绝，不能登记任意原生异步进度 | 原版暂停点；无外部登记 |
 | `CombatHistoryCounterKey.ForCard` / `OpenGenerationSources` | 原版历史读者按所读计数入键，随机生成、变牌及间接生成药水来源保守全量入键；新增原版入口必须同步该表。根包含消耗堆。第三方模型、已捕获 Mod 订阅者、BaseLib 修饰器或存在 AdaptedOnPlay 快照时自动回退六项全量，不能据此支持六项之外的新历史语义；新计数仍须显式扩展历史、Fork 和指纹合同。 | 封闭语义依赖表 |
 | `CombatPredictionSimulator.SupportsManualCardChoiceContinuation` / `PredictionStateStore.SupportsManualCardChoiceContinuation` | 自身选牌续执行覆盖清单中的41张原版单人卡，要求无附魔/污染、手动单次执行；已生成的请求、候选、历史与活动格挡计数有显式复制合同，不能据此接纳第三方选牌委托；拒绝不透明外部状态以及所有 `IPredictionForkBoundary` 状态（包括模型状态适配器包装）。不符合时保留原完整回放，已有第三方战斗支持范围不因此扩大；无注册入口 | 封闭性能特化 |
 | `CombatPredictionSimulator.ExecutionContinuation` / `ExecutionDispatchScope` | 回合来源、抽牌、Hook及嵌套子出牌使用内部纯数据帧。未知派发未确认协议、未知历史、不可复制事务或不透明StateStore时拒绝捕获，继续既有完整回放；不会跳过游戏效果，也不把既有第三方登记等同于可复制回调。原Fork稳定断言保持；没有外部续跑注册入口 | 封闭性能特化 |

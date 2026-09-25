@@ -193,7 +193,8 @@ internal sealed partial class UnattendedTestRunner
                 await RunManager.Instance.GenerateMap();
             }
             else if (request.ScenarioId is "MULTIPLAYER-RELIC-OWNERSHIP" or "MULTIPLAYER-RELIC-EXTRA-TURN-SOURCE"
-                or "MULTIPLAYER-SHARED-DAMAGE" or MultiplayerExperimentSpec.ScenarioId)
+                or "MULTIPLAYER-SHARED-DAMAGE" or MultiplayerExperimentSpec.ScenarioId
+                or MultiplayerTurnSetupScenario or MultiplayerTurnSetupControlsScenario)
             {
                 var unlocks = SaveManager.Instance.GenerateUnlockStateFromProgress();
                 CharacterModel peerCharacter = runner._protocolHost.MultiplayerExperiment is { } experiment
@@ -319,6 +320,13 @@ internal sealed partial class UnattendedTestRunner
                     runner._writer.ReplayVerification["comparisonScope"] = "full_combat";
             }
             runner.SetStage("wait_player_turn");
+            if (request.ScenarioId is MultiplayerTurnSetupScenario or MultiplayerTurnSetupControlsScenario)
+            {
+                CombatState = await runner.VerifyMultiplayerTurnSetupAsync();
+                Player local = LocalContext.GetMe(CombatState)!;
+                StartedTurn = local.PlayerCombatState!.TurnNumber;
+                return new ScenarioContext(character, mutableEncounter, CombatState, local, StartedTurn, [], [], []);
+            }
             if (request.VerifyTurnSetupSceneExitCancellation)
             {
                 CombatState = await runner.WaitForPendingTurnSetupChoiceAsync();

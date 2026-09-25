@@ -44,6 +44,7 @@ public static class Entry
 
         var patcher = RitsuLibFramework.CreatePatcher(ModId, "combat-solver", "战斗路线求解器");
         patcher.RegisterPatch<PlayerTurnSetupPatch>();
+        patcher.RegisterPatch<MultiplayerToastyMittensChoicePatch>();
         patcher.RegisterPatch<PlayerTurnAutoPrePlayPatch>();
         patcher.RegisterPatch<PlayerTurnSetupSceneExitPatch>();
         patcher.RegisterPatch<ChooseCardObservationPatch>();

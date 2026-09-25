@@ -632,6 +632,7 @@ $expectedBeamFiles = @(
     "CombatBeamSolver.MultiplayerEvaluation.cs",
     "CombatBeamSolver.MultiplayerWindow.cs",
     "CombatBeamSolver.MultiplayerRound.cs",
+    "CombatBeamSolver.MultiplayerTurnSetup.cs",
     "CombatBeamSolver.NoveltySearch.cs",
     "CombatBeamSolver.Transpositions.cs",
     "CombatBeamSolver.OrderedMutationRetention.cs",
@@ -1639,6 +1640,16 @@ $multiplayerAdviceRules = @(
     @{ Path = 'src/Testing/UnattendedTestRunner.MultiplayerExperiment.Setup.cs'; Text = 'ClearRunDeck(run, player);' }
     @{ Path = 'src/Runtime/SolverController.cs'; Text = 'if (reason != SearchReason.Manual) return;' }
     @{ Path = 'src/Runtime/SolverController.cs'; Text = 'Multiplayer advice cannot deploy native actions.' }
+    @{ Path = 'src/Runtime/Entry.cs'; Text = 'patcher.RegisterPatch<MultiplayerToastyMittensChoicePatch>();' }
+    @{ Path = 'src/Runtime/MultiplayerTurnSetupCoordinator.cs'; Text = 'State: GameActionState.GatheringPlayerChoice' }
+    @{ Path = 'src/Runtime/MultiplayerTurnSetupCoordinator.cs'; Text = 'executor.CurrentlyRunningAction == null || ReferenceEquals(executor.CurrentlyRunningAction, action)' }
+    @{ Path = 'src/Runtime/MultiplayerTurnSetupCoordinator.cs'; Text = 'executor.FinishedExecutingActions().IsCompletedSuccessfully;' }
+    @{ Path = 'src/Runtime/MultiplayerTurnSetupCoordinator.cs'; Text = 'pending.Choices.LatestVisibleSequence != pending.Choices.FirstVisibleSequence' }
+    @{ Path = 'src/Runtime/MultiplayerTurnSetupCoordinator.cs'; Text = 'AfterPlayerTurnStartMirrors.HasExternalRegistrations' }
+    @{ Path = 'src/Search/MultiplayerSearchPolicy.cs'; Text = 'IncludeTurnSetup = TurnSetup != null' }
+    @{ Path = 'src/Search/CombatBeamSolver.Expansion.Replay.cs'; Text = 'bool capturingExecution = policy.Multiplayer?.TurnSetup == null' }
+    @{ Path = 'src/Search/CombatBeamSolver.MultiplayerTurnSetup.cs'; Text = 'HookMirrors.ResumeMultiplayerToastyMittens' }
+    @{ Path = 'src/Engine/InCombat/Mirrors/HookMirrors.MultiplayerTurnSetup.cs'; Text = 'AfterPlayerTurnStartMirrors.Invoke(relics[index], context, phase: 1);' }
     @{ Path = 'src/Runtime/CombatRootSnapshot.cs'; Text = 'bool hasOnlyPostCombatHealing = !advisor' }
     @{ Path = 'src/Search/CombatBeamSolver.Retention.cs'; Text = 'if (IsMultiplayerAdvice || _hasGrowthTargets' }
     @{ Path = 'src/Search/CombatBeamSolver.MultiplayerRound.cs'; Text = 'CombatSolver.Engine.InCombat.Mirrors.HookMirrors.BeforeSideTurnStart(' }
