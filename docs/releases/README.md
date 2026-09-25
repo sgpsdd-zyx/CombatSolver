@@ -4,7 +4,7 @@
 
 按版本倒序列出已有玩家更新日志，包括历史草案。是否正式发布以对应 Git 标签和发布记录为准；未发布改动见 [开发笔记](../DEVELOPMENT_NOTES.md)。发布 ZIP 存放在仓库根目录的 `releases/`，此处只保存文档。
 
-**本地准备版 0.46.6** 修复多人烘焙手套选牌页无法开始计算，见[完整中英说明](0.46.6-RELEASE_NOTES.md)与[验证记录](../TEST_MATRIX.md#0466fork多人烘焙手套选牌计算2026-09-25)。按本轮修复范围完成本地包和部署；尚未创建标签、推送或发布 GitHub Release。
+**本地准备版 0.46.6** 修复多人烘焙手套选牌页无法开始计算，见[准备凭证](0.46.6-PREPARE.md)、[完整中英说明](0.46.6-RELEASE_NOTES.md)与[验证记录](../TEST_MATRIX.md#0466fork多人烘焙手套选牌计算2026-09-25)。按本轮修复范围完成本地包和部署；尚未创建标签、推送或发布 GitHub Release。
 
 **多人 fork 0.46.5 已发布为 GitHub 最新正式版，基于官方 0.46.4**。[下载 Release](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.46.5)，见[渠道凭证](0.46.5-PUBLISH.md)、[完整中英说明](0.46.5-RELEASE_NOTES.md)与[合并验证归档](../strategy/upstream-0464-merge-20260925.md)。发布来源为 `58c4c3d7`，本地 Mod 与最小包来自同一次正式构建。
 
