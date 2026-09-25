@@ -2,7 +2,7 @@
 
 [策略索引](README.md) · [版本状态](../releases/README.md) · [玩家说明](../releases/0.46.5-RELEASE_NOTES.md) · [结构化证据](upstream-0464-merge-20260925-evidence.json)
 
-2026-09-25 按用户要求，从已发布 fork 0.46.4 的知识归档提交 `c226b8fb` 合入官方 `d231e9e51a0e58d6bfa1373c6265cce13ffd9a45`。官方清单为 0.46.4，相对此前官方 `72295691 / 0.46.3` 共六个提交、20 个路径。fork 使用未占用的 0.46.5；已有标签和已发布 fork 0.46.4 玩家说明保持原样，官方同号说明另存 [upstream](../releases/upstream/0.46.4-RELEASE_NOTES.md)。发布阶段以[版本索引](../releases/README.md)为准。
+2026-09-25 按用户要求，从已发布 fork 0.46.4 的知识归档提交 `c226b8fb` 合入官方 `d231e9e51a0e58d6bfa1373c6265cce13ffd9a45`。官方清单为 0.46.4，相对此前官方 `72295691 / 0.46.3` 共六个提交、20 个路径。fork 使用未占用的 0.46.5；已有标签和已发布 fork 0.46.4 玩家说明保持原样，官方同号说明另存 [upstream](../releases/upstream/0.46.4-RELEASE_NOTES.md)。fork 0.46.5 已从 `58c4c3d7` 发布，本地部署、最小 ZIP、分支／标签和 GitHub 凭证见[发布记录](../releases/0.46.5-PUBLISH.md)。
 
 ## 合并边界
 
@@ -45,9 +45,9 @@
 | 事实面 | 状态与依据 |
 | --- | --- |
 | 代码 | `changed-and-verified`：官方代码合并、多人与单人证书隔离、上述最小行为和结构门禁。 |
-| 运行态 | 发布构建、精确本地 Mod 部署、最小 ZIP、标签和 GitHub 阶段单独记录；成功命令即凭证，不追加下载、解包、哈希或远端页面复核。 |
-| 文档 | 更新 README、架构、多人指南、第三方适配手册、版本／策略索引、开发笔记和测试矩阵；本轮与上游历史分开。 |
-| 规则 | 更新当前官方基线与搜索 skill，Bash／PowerShell 同步多人边界；根 AGENTS 是当前仓库唯一规则文件。 |
+| 运行态 | `changed-and-verified`：一次正式构建、本机四文件部署、2,250,904 字节最小 ZIP、分支／标签原子推送与 GitHub Release 创建成功；可见游戏与在线服务仍未验证。 |
+| 文档 | `changed-and-verified`：更新 README、架构、多人指南、第三方适配手册、版本／策略索引、开发笔记和测试矩阵；本轮与上游历史分开。 |
+| 规则 | `changed-and-verified`：更新当前官方基线与搜索 skill，Bash／PowerShell 同步多人边界；根 AGENTS 是当前仓库唯一规则文件。 |
 | 记忆 | `generated-read-only`：未手改机器生成记忆，现役事实留在项目文档。 |
 | 工作区 | 单一任务 worktree。原生实例已按合同删除；独立官方源码、旧 DLL、对照和原始日志保留于忽略目录，证据清场 `pending`。 |
 

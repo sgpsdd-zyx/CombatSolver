@@ -10,6 +10,8 @@
 - 开发与独立官方、两份宿主构建零警告错误；Bash 职责门禁 `search_files=219`，在线统计 JS 语法通过。每请求上限 120 秒，启动器成功删除 `.local/headless-instances/macos.ZuddGf`。
 - 未测试真实 Loadout 2、非空怪物能力配置、Windows/PowerShell、Linux 原生、DOP>1、可见 Steam、真实联机、在线服务、完整回归及干净安装。正式发布只因版本／发布连接元数据再构建，不重复本轮行为测试。
 
+发布阶段：来源 `58c4c3d7` 的一次正式 Release 构建和指定连接元数据检查通过；同次构建完成本机部署、最小 ZIP 及 GitHub 交付。证据见[发布记录](releases/0.46.5-PUBLISH.md)，未重复行为测试。
+
 ## 上游历史：0.46.4：战损路线筛选与 Loadout 兼容（2026-09-25）
 
 - 本机最新独立战斗日志：`SEARCH_SETUP_FAILURE stage=combat_root_snapshot`，异常是 `PowerGiver summon powers are configured or this Loadout version is not verified`；`godot.log` 证实求解器 `0.46.4` 与 Loadout `v0.5.8` 均已加载。实际 `v0.5.8` 的召唤钩子和公开怪物能力计数读取，与保留的 `v0.5.6` 程序集反编译结果一致。

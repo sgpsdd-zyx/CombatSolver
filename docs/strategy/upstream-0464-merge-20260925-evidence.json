@@ -212,6 +212,18 @@
     "Full release gate and clean install"
   ],
   "evidenceDirectory": ".local/upstream-update-20260925/",
-  "publication": "See docs/releases/README.md and final publication receipt",
+  "publication": {
+    "status": "Published",
+    "sourceCommit": "58c4c3d7ea93d77e594674eff3ccfd9eba5c02f9",
+    "version": "0.46.5",
+    "tag": "v0.46.5",
+    "releaseUrl": "https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.46.5",
+    "zipBytes": 2250904,
+    "releaseBuild": "0 warnings, 0 errors, 7.79 seconds",
+    "localDeployment": "Passed, four explicit files from final build",
+    "receipt": "docs/releases/0.46.5-PUBLISH.md",
+    "localEvidence": ".local/release-0.46.5/",
+    "postReleaseRetest": false
+  },
   "cleanup": "Evidence retained pending user confirmation; generated memory read-only"
 }
