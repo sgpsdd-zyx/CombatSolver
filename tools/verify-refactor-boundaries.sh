@@ -1316,6 +1316,8 @@ src/Testing/UnattendedTestRunner.MultiplayerExperiment.cs|SearchReason.Manual
 src/Testing/UnattendedTestRunner.MultiplayerExperiment.Setup.cs|ClearRunDeck(run, player);
 src/Runtime/SolverController.cs|if (reason != SearchReason.Manual) return;
 src/Runtime/SolverController.cs|Multiplayer advice cannot deploy native actions.
+src/Runtime/CombatRootSnapshot.cs|bool hasOnlyPostCombatHealing = !advisor
+src/Search/CombatBeamSolver.Retention.cs|if (IsMultiplayerAdvice || _hasGrowthTargets
 src/Search/CombatBeamSolver.MultiplayerRound.cs|CombatSolver.Engine.InCombat.Mirrors.HookMirrors.BeforeSideTurnStart(
 src/Search/CombatBeamSolver.Multiplayer.cs|!CanReplayMultiplayerAction(node, action)
 src/Search/CombatBeamSolver.Models.cs|public int ReplayedAdviceActions;

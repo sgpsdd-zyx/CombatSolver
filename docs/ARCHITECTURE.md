@@ -30,7 +30,7 @@
 
 中间 Beam 继续覆盖防御、进攻和铺垫；单人 `FinalPlanOrdering`、能力承诺及预算不变。多人根前用药资格由 Runtime 原追踪窗口按 Actor 冻结。UI 从 `SolverResult` 投影阶段目标、已付/预计进展、是否存在选中达标见证、返回深度、曾到达深度和未知受击提示；不读取搜索树。详细默认参数与验证由[多人指南](multiplayer-advisor.md)及[实施记录](strategy/multiplayer-cooperative-planning-20260922/implementation.md)维护。
 
-当前单人基线为官方 `72295691 / 0.46.3`。`PowerCardValuation` / `PowerCommitment` 和能力固定前缀组合用于单人。多人协调器继续在这些组合及强制／Smart 药水梯度之前返回；`CombatBeamSolver._hasRegisteredPowerCards` 另以 `policy.Multiplayer == null` 隔离共享候选展开中的能力承诺入口。Runtime 多人不捕获单人成长目标，`SimulatedCombatState` 多人根的疯狂科学升级信用容量为零，实际 Power 仍按持有者结算。单人继续官方登记、成长、保路和预算路径；兼容取舍与本轮同步见[0.46.3 合并记录](strategy/upstream-0463-merge-20260924.md)，此前行为基线见[0.45.0 合并证据](strategy/upstream-0450-merge-20260923.md)。
+当前单人基线为官方 `d231e9e5 / 0.46.4`。`PowerCardValuation` / `PowerCommitment` 和能力固定前缀组合用于单人。多人协调器继续在这些组合及强制／Smart 药水梯度之前返回；`CombatBeamSolver._hasRegisteredPowerCards` 另以 `policy.Multiplayer == null` 隔离共享候选展开中的能力承诺入口。Runtime 多人不捕获单人成长目标，`SimulatedCombatState` 多人根的疯狂科学升级信用容量为零，实际 Power 仍按持有者结算。单人继续官方登记、成长、保路和预算路径；兼容取舍与本轮同步见[0.46.4 合并记录](strategy/upstream-0464-merge-20260925.md)，此前行为基线见[0.45.0 合并证据](strategy/upstream-0450-merge-20260923.md)。
 
 官方的新鲜资源待命探针在 `BeamRetentionPolicy.Ranking` 从既有 beam rank 取符合资源条件的前 64 个，保留原比较器。`RankBest` 的多人分派在单人通道前返回；探针上限不进入多人评分、前沿或预算。减少工作会改变单人候选和路线，取舍及反例保留在[官方报告](performance/fresh-resource-standpat-probe-cap-20260924.md)。
 
@@ -201,7 +201,7 @@ RitsuLib 0.6.0 自身拥有 BaseLib 目标类型的外部登记查询、按程�
 
 主 incumbent 只能由满足硬政策、且没有消耗或预计消耗保命资源的完整胜利建立。无主动用药入口要求实际生效政策为 `Disabled` 或 `Smart`、最少用药数为0、候选显式用药数为0；若启用逐槽指令，还必须实际满足全部强制使用要求。正数精确药水层保留原条件：最少与最多药量相等、有已审计无药基线、未启用需另证的逐槽强制指令，且完整胜利严格改善基线主质量。未完成路线、死亡路线或仅满足中间评分的候选不能建界。
 
-完整胜利先按保命资源消耗次数排序，再按统一战略战损计价：累计掉血、最终最大生命缺口、路线治疗、无条件战后遗物回血和保命资源消耗。瓶中精灵与蜥蜴尾巴的复活回复不算路线治疗，最终 Boss 同样保留消耗代价。未完成分支的乐观下界允许当前缺血全部恢复，保留已经发生的保命消耗代价；中间最大生命缺口可能恢复，不进入下界。搜索中的路线展示、主结果剪枝、保留和最终排序共用该口径；消耗保命资源的路线不触发战损早停。诊断日志以 `source=no_explicit_potion` 或 `source=exact_potion_layer` 区分建界来源。
+完整胜利先按保命资源消耗次数排序，再按统一战略战损计价：累计掉血、最终最大生命缺口、路线治疗、无条件战后遗物回血和保命资源消耗。瓶中精灵与蜥蜴尾巴的复活回复不算路线治疗，最终 Boss 同样保留消耗代价。多人根跳过 `HasOnlyPostCombatHealing` 证书捕获，快照的 `FutureHealPotential` 保持 `int.MaxValue`，主结果剪枝入口继续提前返回；单人未完成分支的乐观下界默认允许当前缺血全部恢复；仅在根牌组、遗物、Power、药水及扩展来源落入经核对的封闭集合时，才把未来回复限制为固定战后遗物回血。中间最大生命缺口可能恢复，不进入下界。灾厄只在玩家回合结束的原生结算后决定生死，不作为提前扣血。搜索中的路线展示、主结果剪枝、保留和最终排序共用该口径；消耗保命资源的路线不触发战损早停。诊断日志以 `source=no_explicit_potion` 或 `source=exact_potion_layer` 区分建界来源。
 
 Smart 层间使用 `SmartLayerMemoryForecast` 的同窗分配和转移高水位估算下一层容量；预测超出余量、样本不完整或区域丢失时回收并重建 NoGC。回收仍遵循原有药水层准入及停止条件。
 
@@ -253,6 +253,7 @@ Smart 层间使用 `SmartLayerMemoryForecast` 的同窗分配和转移高水位�
 | `ParallelExpansionWorkProfile.cs` | coordinator 所有的作业经过时间分布与 wave/等待/提交计时；不代表 CPU 时间 |
 | `CombatBeamSolver.PathDiagnostics.cs` | 可选路径观察的值复制与边界配对；分别记录生成、两类转置、实际展开、动作准入、完整保留及回合注释，不写搜索策略或账本 |
 | `CombatBeamSolver.Retention.cs` | prune/retention 调用边界与相关小型辅助 |
+| `StrategicHpRecoveryBound.cs` | 主结果战损下界的无治疗来源证明与乐观回复量；未知来源保留完整缺血余量 |
 | `CombatBeamSolver.BeamRetentionPolicy.cs` | 保路主构造与字段、既有合同类型、RankFinal/RankBest协调、状态去重、多样性通道及路由分组；初始化顺序保持在此文件 |
 | `CombatBeamSolver.BeamRetentionPolicy.OrderedMutation.cs` | 有序变异组合的统一准入、服务额度与续接群组结算 |
 | `CombatBeamSolver.BeamRetentionPolicy.OrderedMutationScheduling.cs` | 有序变异代表质量、包/声明公平调度、迟到初始项节奏、租约交接与确定性键 |
@@ -429,7 +430,7 @@ Search在首回合、EndTurn及已知可能嵌套/重复的卡牌回放建立捕
 
 `PlayerTurnEndLifecycle.RunPhaseTwo` 拥有清空手牌后的玩家回合末顺序：常规 Power、遗物、`HookMirrors.AfterSideTurnEndLate`，最后规范化卡牌词条。Search、风险预估和无人差分共用此入口；每个阶段的挂起选择立即向上传播。敌方晚期入口由 `CorePowerSupport.TriggerEnemySideTurnEndEffects` 调用。晚期阶段按完整分支监听顺序固定成员并跟随卡牌 COW Preview；`AfterSideTurnEndLateMirrors` 独占原版 DisintegrationPower 效果，底层沿用标准 registry/descriptor。登记在首次根捕获或分发后冻结，未知战斗重写明确失败，不扩展状态或 Mod 门禁；见 [回合阶段镜像](third-party-turn-phase-mirrors.md)。
 
-`PredictionModHookSubscriberCapture` 对 Loadout `v0.5.6` 的 `PowerGiverSummonHook` 只接受公开快照中的空怪物能力配置。根保存该条件，`ContinuationStamp` 在 live 与 predicted 两侧记录配置是否仍为空；非空配置会在未来召唤和阶段切换时改变战斗结算，保持拒绝。worker 不读取 Loadout 的全局计数。
+`PredictionModHookSubscriberCapture` 根据实际加载的 Loadout `PowerGiverSummonHook` 及公开计数快照接口捕获怪物能力配置，不读取 Mod 版本号。接口形状可用且计数为空时放行；接口变化或计数非空时明确失败。根保存空配置条件，`ContinuationStamp` 在 live 与 predicted 两侧记录配置是否仍为空；worker 不读取 Loadout 的全局计数。
 
 DarkEmbrace 的延迟抽牌数由 AfterCardExhausted 镜像按实际虚无消耗事件写入 `DarkEmbracePredictionState`，根从原生内部计数捕获，StateStore/Fork 按值隔离并纳入指纹；常规 Power 回合末阶段抽牌后归零，稳定下一玩家回合不保留待抽事务。苍蓝星球的已触发标志由主线程从原生 Power 捕获至分支表，避免 Power 克隆重置内部数据后重复触发。
 

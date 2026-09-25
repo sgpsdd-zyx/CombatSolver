@@ -98,6 +98,8 @@ internal sealed partial class UnattendedTestRunner
             if (_spec.Options.Mode == "Contract" && planned.IsExecutable)
             {
                 contractRoot = CombatRootSnapshot.Capture(_combat, multiplayerAdvisor: true);
+                if (contractRoot.HasOnlyPostCombatHealing)
+                    throw new InvalidOperationException("Multiplayer root used a single-player healing bound.");
                 if (actor == _local && _strictActionChecks == 0)
                 {
                     var policy = _runner._protocolHost.LastExperimentPolicy
@@ -107,6 +109,8 @@ internal sealed partial class UnattendedTestRunner
                     var snapshot = solver.ReplayMultiplayerForTesting([planned]);
                     try
                     {
+                        if (snapshot.FutureHealPotential != int.MaxValue)
+                            throw new InvalidOperationException("Multiplayer snapshot restricted future healing.");
                         if (!snapshot.AllEnemiesDead)
                             predicted = ContinuationStamp.CapturePredicted(_local, snapshot.Simulator, snapshot.Turn,
                                 contractRoot.Forecast, contractRoot.StartTurnNumber);

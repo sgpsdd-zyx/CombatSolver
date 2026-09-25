@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "scenarioId": "HEAL-BOUND-SAFE-ROOT",
+  "characterId": "IRONCLAD",
+  "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+  "seed": "HEAL-BOUND-20260925",
+  "enemyCurrentHp": 40,
+  "initialPlayerHp": 40,
+  "initialPlayerMaxHp": 80,
+  "initialPlayerEnergy": 3,
+  "clearRunDeck": true,
+  "clearPlayerPiles": true,
+  "clearAllPowers": true,
+  "cards": [
+    {
+      "cardId": "BLOODLETTING",
+      "pile": "Hand",
+      "treatAsDeckCard": true
+    },
+    {
+      "cardId": "STRIKE_IRONCLAD",
+      "pile": "Hand",
+      "count": 2,
+      "treatAsDeckCard": true
+    },
+    {
+      "cardId": "DEFEND_IRONCLAD",
+      "pile": "Hand",
+      "treatAsDeckCard": true
+    }
+  ],
+  "verifyCombatRootSnapshot": true,
+  "stopAfterCombatRootSnapshotAssertion": true,
+  "timeoutSeconds": 120
+}

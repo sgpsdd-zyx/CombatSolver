@@ -18,7 +18,6 @@ internal sealed class PredictionModHookSubscriberCapture
         "Loadout.Services.TildeKey.LoadoutEveryCardFreeCombatHook";
     private const string LoadoutPowerGiverSummonHookTypeName =
         "Loadout.Services.PowerGiver.PowerGiverSummonHook";
-    private const string SupportedLoadoutPowerGiverVersion = "v0.5.6";
     private static readonly HashSet<string> KnownPreRootSubscriberTypeNames =
     [
         LoadoutMaxHandSizeModifierTypeName,
@@ -105,17 +104,20 @@ internal sealed class PredictionModHookSubscriberCapture
         if (isBaseGame || manifest is null
             || !string.Equals(manifest.id, "Loadout", StringComparison.Ordinal))
             return "unknown_source";
-        if (!string.Equals(manifest.version, SupportedLoadoutPowerGiverVersion, StringComparison.Ordinal))
-            return $"unsupported_version:{manifest.version}";
         return ReadLoadoutMonsterPowerCounters(type).Count == 0 ? "empty" : "configured";
     }
 
     private static IReadOnlyDictionary<string, int> ReadLoadoutMonsterPowerCounters(Type hookType)
     {
         Assembly assembly = hookType.Assembly;
-        Type scopeType = assembly.GetType("Loadout.Services.Targets.LoadoutTargetScope", throwOnError: true)!;
-        Type selectionType = assembly.GetType("Loadout.Services.Targets.LoadoutTargetSelection", throwOnError: true)!;
-        Type serviceType = assembly.GetType("Loadout.Services.PowerGiver.PowerGiverStateService", throwOnError: true)!;
+        Type scopeType = assembly.GetType("Loadout.Services.Targets.LoadoutTargetScope")
+            ?? throw new PredictionUnsupportedException("Loadout PowerGiver target scope contract changed.");
+        Type selectionType = assembly.GetType("Loadout.Services.Targets.LoadoutTargetSelection")
+            ?? throw new PredictionUnsupportedException("Loadout PowerGiver target selection contract changed.");
+        Type serviceType = assembly.GetType("Loadout.Services.PowerGiver.PowerGiverStateService")
+            ?? throw new PredictionUnsupportedException("Loadout PowerGiver state service contract changed.");
+        if (!scopeType.IsEnum || !Enum.IsDefined(scopeType, "AllMonsters"))
+            throw new PredictionUnsupportedException("Loadout PowerGiver monster target contract changed.");
         ConstructorInfo constructor = selectionType.GetConstructor([scopeType, typeof(ulong?)])
             ?? throw new PredictionUnsupportedException("Loadout PowerGiver target selection contract changed.");
         MethodInfo snapshotMethod = serviceType.GetMethod(
@@ -204,12 +206,11 @@ internal sealed class PredictionModHookSubscriberCapture
             && manifest is not null
             && string.Equals(manifest.id, "Loadout", StringComparison.Ordinal))
         {
-            if (string.Equals(manifest.version, SupportedLoadoutPowerGiverVersion, StringComparison.Ordinal)
-                && ReadLoadoutMonsterPowerCounters(type).Count == 0)
+            if (ReadLoadoutMonsterPowerCounters(type).Count == 0)
                 return;
             throw new IncompatibleGameplayModException(
                 "Loadout", manifest.name ?? string.Empty,
-                "PowerGiver summon powers are configured or this Loadout version is not verified",
+                "PowerGiver summon powers are configured",
                 scope);
         }
         if (PredictionModModelSupport.IsBaseLibCardModifier(subscriber)

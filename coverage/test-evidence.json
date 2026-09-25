@@ -1,4 +1,12 @@
 {
+  "UPSTREAM-0464-FORK-MERGE": {
+    "status": "PassedWithExplicitScope",
+    "level": "L1L2NativeRootContractsAndL3BoundedSearchComparison",
+    "procedure": "Merge official d231e9e5 / 0.46.4; run six native requests in one owned macOS instance, fixed two-root old/new/official searches, one incremental replay and Bash boundaries.",
+    "expected": "Preserve official single-player search and manual multiplayer policies; do not certify multiplayer roots as having only post-combat healing.",
+    "observed": "2026-09-25: all six native requests pass; root certificate and potion fallback, Doom pre-end-turn win, manual loop with 4 requests/6 frozen roots and one full-party native equality. Two official comparison roots/168 fields equal; target expansions 1201 to 513 at unchanged 6 HP, sentinel unchanged 3 HP. Incremental 513/1411 passes; 219-file Bash boundary passes; instance removed. Loadout actual install, live network, visible performance, Windows/Linux and full release gate not verified.",
+    "evidence": "docs/strategy/upstream-0464-merge-20260925.md; docs/strategy/upstream-0464-merge-20260925-evidence.json; .local/upstream-update-20260925/"
+  },
   "UPSTREAM-0463-FORK-MERGE": {
     "status": "Passed",
     "level": "TargetedMergeComparisonAndNativeStartupContracts",

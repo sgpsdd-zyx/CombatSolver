@@ -1,6 +1,6 @@
 # CombatSolver 文档导航
 
-多人 fork **0.46.4 已发布**，当前基于官方 **0.46.3**。本轮[合并与验证归档](strategy/upstream-0463-merge-20260924.md)区分官方历史与本机证据，[中英更新日志](releases/0.46.4-RELEASE_NOTES.md)说明玩家变化，[发布凭证](releases/0.46.4-PUBLISH.md)记录来源、构建、部署和 GitHub 交付，当前状态见[版本索引](releases/README.md)。官方和 fork 的同号记录互不覆盖。
+多人 fork **0.46.5 正在定版**，当前基于官方 **0.46.4**。本轮[合并与验证归档](strategy/upstream-0464-merge-20260925.md)区分官方历史与本机证据，[中英更新日志](releases/0.46.5-RELEASE_NOTES.md)说明玩家变化，当前状态见[版本索引](releases/README.md)。前一公开版为 0.46.4，官方和 fork 的同号记录互不覆盖。
 
 [多人原生实验](strategy/multiplayer-experiments-20260923/implementation.md)按“只有本机使用军师、队友独立决策”记录原生差分与受控脚本表现；收益、恶化和未知结果分开，真实联机仍未验收。现役操作与限制见[多人指南](multiplayer-advisor.md)。
 
@@ -19,12 +19,12 @@
 
 | 要查什么 | 入口 |
 |---|---|
-| 官方 0.46.3 合并、fork 0.46.4 发布与当前验证 | [本轮归档](strategy/upstream-0463-merge-20260924.md)、[玩家说明](releases/0.46.4-RELEASE_NOTES.md)、[版本状态](releases/README.md) |
+| 官方 0.46.4 合并、fork 0.46.5 定版与当前验证 | [本轮归档](strategy/upstream-0464-merge-20260925.md)、[玩家说明](releases/0.46.5-RELEASE_NOTES.md)、[版本状态](releases/README.md) |
 | 如何实验未知队友、交错操作与反复手动重算 | [多人实验设计与原生试跑](strategy/multiplayer-experiments-20260923/README.md) |
 | 0.44.2 历史本地定版、实验结论边界与知识归档 | [本地记录](releases/0.44.2-PREPARE.md)、[归档凭证](strategy/multiplayer-shared-damage-20260923/closeout.md) |
 | 0.44.1 历史发布来源与 GitHub 交付 | [发布记录](releases/0.44.1-PUBLISH.md) |
 | 0.41.2 发布、独立尖塔军师修复及本地材料的归档状态 | [2026-09-18 归档记录](DEVELOPMENT_NOTES.md#归档状态2026-09-18) |
-| 多人手动军师、本机贡献目标、阶段与长线选路、救援与官方 0.46.3 兼容 | [多人军师](multiplayer-advisor.md) |
+| 多人手动军师、本机贡献目标、阶段与长线选路、救援与官方 0.46.4 兼容 | [多人军师](multiplayer-advisor.md) |
 | 独立「尖塔军师」拿牌推荐模组误读房主卡组的修复与重跑 | [本机玩家修复工具](../tools/SpireAdvisorMultiplayerFix/README.md) |
 | 多人研究原文归档、已采用改进与暂缓方案 | [策略索引](strategy/README.md#多人研究归档)、[首批实施](multiplayer-advisor.md#首批策略优化已实施) |
 | 本机贡献策略的研究采用、实现、证据与限制 | [2026-09-22 实施与归档](strategy/multiplayer-cooperative-planning-20260922/implementation.md) |

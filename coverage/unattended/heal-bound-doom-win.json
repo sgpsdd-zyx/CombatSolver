@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "scenarioId": "HEAL-BOUND-SAFE-ROOT",
+  "characterId": "NECROBINDER",
+  "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+  "seed": "HEAL-BOUND-20260925",
+  "enemyCurrentHp": 1,
+  "initialPlayerHp": 5,
+  "initialPlayerMaxHp": 80,
+  "initialPlayerEnergy": 3,
+  "clearRunDeck": true,
+  "clearPlayerPiles": true,
+  "clearAllPowers": true,
+  "cards": [
+    {
+      "cardId": "NEUROSURGE",
+      "pile": "Hand",
+      "treatAsDeckCard": true
+    },
+    {
+      "cardId": "STRIKE_NECROBINDER",
+      "pile": "Hand",
+      "treatAsDeckCard": true
+    }
+  ],
+  "verifyCombatRootSnapshot": true,
+  "stopAfterCombatRootSnapshotAssertion": false,
+  "timeoutSeconds": 120,
+  "powers": [
+    {
+      "powerId": "DOOM_POWER",
+      "target": "Player",
+      "amount": 10
+    }
+  ],
+  "fixedSearchBudget": true,
+  "searchBudgetOverrideMilliseconds": 2000,
+  "searchMaxDegreeOfParallelismForTest": 1,
+  "verifyIncrementalSearch": true,
+  "headlessFastModeForTest": "Instant",
+  "expectedInitialFirstActionCardId": "STRIKE_NECROBINDER",
+  "expectedInitialFinalEnemyHpAtMost": 0,
+  "expectedInitialProjectedBattleHpLost": 0,
+  "expectedInitialCombatEndedTurn": 1,
+  "stopAfterInitialSolverResultAssertion": true
+}

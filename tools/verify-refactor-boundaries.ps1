@@ -1639,6 +1639,8 @@ $multiplayerAdviceRules = @(
     @{ Path = 'src/Testing/UnattendedTestRunner.MultiplayerExperiment.Setup.cs'; Text = 'ClearRunDeck(run, player);' }
     @{ Path = 'src/Runtime/SolverController.cs'; Text = 'if (reason != SearchReason.Manual) return;' }
     @{ Path = 'src/Runtime/SolverController.cs'; Text = 'Multiplayer advice cannot deploy native actions.' }
+    @{ Path = 'src/Runtime/CombatRootSnapshot.cs'; Text = 'bool hasOnlyPostCombatHealing = !advisor' }
+    @{ Path = 'src/Search/CombatBeamSolver.Retention.cs'; Text = 'if (IsMultiplayerAdvice || _hasGrowthTargets' }
     @{ Path = 'src/Search/CombatBeamSolver.MultiplayerRound.cs'; Text = 'CombatSolver.Engine.InCombat.Mirrors.HookMirrors.BeforeSideTurnStart(' }
     @{ Path = 'src/Search/CombatBeamSolver.Multiplayer.cs'; Text = '!CanReplayMultiplayerAction(node, action)' }
     @{ Path = 'src/Search/CombatBeamSolver.Models.cs'; Text = 'public int ReplayedAdviceActions;' }

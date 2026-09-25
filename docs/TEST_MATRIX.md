@@ -1,5 +1,26 @@
 # CombatSolver 测试清单
 
+## 0.46.5（fork）：官方 0.46.4 合并验证（2026-09-25）
+
+本轮证据见[合并归档](strategy/upstream-0464-merge-20260925.md)和[结构化结果](strategy/upstream-0464-merge-20260925-evidence.json)，下节官方历史不计为本机通过。
+
+- 原生单进程六请求：`heal-bound-safe-root.json`、`heal-bound-potion-root.json`、`heal-bound-doom-win.json`、`heal-bound-bloodletting-search.json`、`multiplayer-manual-loop.json`、`multiplayer-experiment-inactive.json` 全部 Passed。两种角色的安全证书、advisory 不复用证书、药水回退、高灾厄抢先胜利与同进程单人回归已覆盖。
+- 多人 4 次手动查询、双方各 3 动作、6 次冻结根检查；首动作全队完整原生／预测状态相等，0 差异。新增断言确认多人根无单人证书、快照未来回血不收紧。达到第 2 回合停止，不声称完整联机战斗验收。
+- 两个固定根按旧 fork／合并 fork／独立官方各跑一次，DOP 1、Beam 32、3000 节点、15 秒上限、禁用药水；均无时间截止。官方对照 168 项非时序字段和完整根／路线／可用续行一致，单人未进入多人选路。目标 6 HP、展开 1201→513／转移 3406→1411；未知来源哨兵 3 HP、506／1396 不变。目标额外启用逐转移完整回放，513／1411 Passed；其时间不作性能数据。
+- 开发与独立官方、两份宿主构建零警告错误；Bash 职责门禁 `search_files=219`，在线统计 JS 语法通过。每请求上限 120 秒，启动器成功删除 `.local/headless-instances/macos.ZuddGf`。
+- 未测试真实 Loadout 2、非空怪物能力配置、Windows/PowerShell、Linux 原生、DOP>1、可见 Steam、真实联机、在线服务、完整回归及干净安装。正式发布只因版本／发布连接元数据再构建，不重复本轮行为测试。
+
+## 上游历史：0.46.4：战损路线筛选与 Loadout 兼容（2026-09-25）
+
+- 本机最新独立战斗日志：`SEARCH_SETUP_FAILURE stage=combat_root_snapshot`，异常是 `PowerGiver summon powers are configured or this Loadout version is not verified`；`godot.log` 证实求解器 `0.46.4` 与 Loadout `v0.5.8` 均已加载。实际 `v0.5.8` 的召唤钩子和公开怪物能力计数读取，与保留的 `v0.5.6` 程序集反编译结果一致。
+- 修改前用实际 Loadout `v0.5.8`、BaseLib 和隔离游戏源运行 `LOADOUT-EMPTY-ROOT` / `05c8f3d560324d2aa91baca0a8697ffd`，在根快照断言失败，错误为 `Loadout PowerGiver summon powers are not inactive`。中间版对同一场景的 `d571e61d9bbe496fa91379743c140df8` 报 `Passed`：真实订阅者加载、空配置捕获和 Fork 通过，5 秒固定预算内取得首回合一动作零战损胜利路线。测试脚本退出后清理首次遇到文件占用；原生进程退出后通过仓库的所有权校验清理函数删除该实例。
+- 最终实现不再以 Loadout 清单版本判定：仅在忽略目录的隔离游戏源把真实 `v0.5.8` 程序集对应清单临时改为模拟的 `v0.5.9`，`LOADOUT-EMPTY-ROOT` / `dd278b11f3f74d63a194e207e4d512fa` Passed。真实订阅者加载、公开怪物能力计数为空、根捕获与 Fork 均通过，5 秒固定预算内取得首回合一动作零战损胜利路线。测试实例由启动器删除，清单已恢复 `v0.5.8`。这证明版本号变化不会单独拒绝；没有取得真实未来版程序集，也未运行非空怪物能力配置差分或可见 Steam 实机。
+- 根证书与数值合同：`HEAL-BOUND-SAFE-ROOT` 铁甲战士 `502f0df041fd460d8355dd7fd8102c38`、含精神过载的亡灵契约师 `1aedd4e7daba44fcb81b92e530e6a6db` 均 Passed；带鲜血药水的 `HEAL-BOUND-UNKNOWN-ROOT` `fccb56555b6d41fb9541c85f31a1bc8a` Passed，确认退回完整缺血余量。三次无头实例均由启动器清理。
+- 战斗路径：放血短搜 `HEAL-BOUND-SEARCH` `1df1846a042948229de58f3088e67e5b` Passed，3 回合零战损获胜；该根提前达到可接受战损，剪枝数为 0，不作为提速证据。高灾厄、5 HP、敌 1 HP 的 `HEAL-BOUND-DOOM-TIMING` `39db271e55834aa8bfc23ab2773750ce` Passed，仍能在玩家回合结束前获胜；首次尝试因测试参数要求同时给卡牌 ID 与标题而未进入行为断言，修正输入后通过。实例均已清理。
+- 带鲜血药水的强制用药搜索夹具 `HEAL-BOUND-POTION-ROUTE` `428aad7ece014d2cb40cdc73e3f9410a` 未找到可执行的必用药路线，故没有取得该路线的行为证据；根证书退回宽松界已由上一项独立验证。尚未做同根 A/B、可见 Steam 帧时间或 GC 暂停测量。
+- 最终行为源码的合并哨兵 `HEAL-BOUND-SAFE-ROOT` `50b1cdcc907f424d894010ad48cd7e2f` Passed：亡灵契约师手中有精神过载、玩家 5 HP／10 层灾厄、敌 1 HP，根证书与数值合同通过，搜索仍在玩家回合结束前完成零战损胜利；实例已清理。该源码的 Windows Release 开发构建 0 警告、0 错误，结构门禁 `REFACTOR_BOUNDARIES_OK search_files=209`，`git diff --check` 通过。
+
+
 ## 0.46.4（fork）：官方 0.46.3 合并验证（2026-09-24）
 
 本节是 fork 本轮实际证据，来源与完整限制见[合并归档](strategy/upstream-0463-merge-20260924.md)和[结构化结果](strategy/upstream-0463-merge-20260924-evidence.json)。下方官方历史单独保留。
