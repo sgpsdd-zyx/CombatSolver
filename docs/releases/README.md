@@ -4,7 +4,7 @@
 
 按版本倒序列出已有玩家更新日志，包括历史草案。是否正式发布以对应 Git 标签和发布记录为准；未发布改动见 [开发笔记](../DEVELOPMENT_NOTES.md)。发布 ZIP 存放在仓库根目录的 `releases/`，此处只保存文档。
 
-**开发分支已合入官方 0.47.1，尚未发布新的 fork Release。** 清单和程序集沿用本次官方的 `0.47.1`，本轮仅合并、验证、提交与本地部署；新 fork 的版本定版留待发布指令。见[合并记录](../strategy/upstream-0471-merge-20260927.md)。本目录 0.47.0／0.47.1 更新日志均为官方原文。
+**多人 fork 0.47.2 正在发布准备，基于官方 0.47.1。** 本次发布获用户明确授权，见[玩家说明](0.47.2-RELEASE_NOTES.md)和[合并验证](../strategy/upstream-0471-merge-20260927.md)。当前公开版仍为下述 0.46.6；GitHub 创建成功后更新发布状态。本目录 0.47.0／0.47.1 更新日志均为官方原文。
 
 **多人 fork 0.46.6 已发布为 GitHub 最新正式版，基于官方 0.46.4**。[下载 Release](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.46.6)，修复多人烘焙手套选牌页无法开始计算。见[发布与归档凭证](0.46.6-PUBLISH.md)、[完整中英说明](0.46.6-RELEASE_NOTES.md)、[验证记录](../TEST_MATRIX.md#0466fork多人烘焙手套选牌计算2026-09-25)及[历史准备记录](0.46.6-PREPARE.md)。发布来源为 `24954f78`，直接复用已部署的正式构建与最小包。
 
@@ -14,7 +14,7 @@
 
 | 版本系列 | 更新日志 |
 |---|---|
-| 0.47 | [0.47.1 官方原文](0.47.1-RELEASE_NOTES.md) · [0.47.0 官方原文](0.47.0-RELEASE_NOTES.md) |
+| 0.47 | [0.47.2（fork，发布准备）](0.47.2-RELEASE_NOTES.md) · [0.47.1 官方原文](0.47.1-RELEASE_NOTES.md) · [0.47.0 官方原文](0.47.0-RELEASE_NOTES.md) |
 | 0.46 | [0.46.6（fork，已发布）](0.46.6-RELEASE_NOTES.md) · [0.46.5（fork，已发布）](0.46.5-RELEASE_NOTES.md) · [0.46.4 官方原文](upstream/0.46.4-RELEASE_NOTES.md) · [0.46.4（fork，已发布）](0.46.4-RELEASE_NOTES.md) · [0.46.3 官方原文](upstream/0.46.3-RELEASE_NOTES.md) · [0.46.3（fork，已发布）](0.46.3-RELEASE_NOTES.md) · [0.46.2 官方原文](0.46.2-RELEASE_NOTES.md) · [0.46.1 官方原文](0.46.1-RELEASE_NOTES.md) · [0.46.0 官方原文](0.46.0-RELEASE_NOTES.md) |
 | 0.45 | [0.45.1（fork，已发布）](0.45.1-RELEASE_NOTES.md) · [0.45.0 官方原文](upstream/0.45.0-RELEASE_NOTES.md) |
 | 0.44 | [0.44.2（fork，历史准备版）](0.44.2-RELEASE_NOTES.md) · [0.44.1（fork）](0.44.1-RELEASE_NOTES.md) · [0.44.1 官方原文](upstream/0.44.1-RELEASE_NOTES.md) · [0.44.0 官方原文](upstream/0.44.0-RELEASE_NOTES.md) |
