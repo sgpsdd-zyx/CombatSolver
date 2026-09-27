@@ -1,4 +1,13 @@
 {
+  "UPSTREAM-0471-FORK-MERGE": {
+    "status": "PassedWithExplicitScope",
+    "level": "L1L2NativeContractsAndBoundedOfficialSearchComparison",
+    "procedure": "Merge official 7d9b4bed / 0.47.1; run eight final macOS native scenarios, managed multiplayer compatibility and quota contracts, two independent official/fork short-search comparisons, Bash boundaries and targeted CoverageCatalog checks. Preserve failure attempts and scope.",
+    "expected": "Preserve official solo paths and multiplayer manual contribution policies; exclude solo early-turn exploration and development scripts from multiplayer. Track Entropic-generated potion cost in player/slot branch ownership, and preserve native choice controls.",
+    "observed": "2026-09-27: eight final native scenarios pass, including fixed-prefix annotation, Lamp/Inky full native state, Entropic potion differential, solo choice, multiplayer Toasty choice/controls, same-process solo reset and 480 UI templates. Managed compatibility 29 and quota 32 pass. Two official comparison roots/168 fields match with no time boundary. Bash 224 files and state-field/branch-read catalog 3035 pass after recognizing the old aggregate status. Two initial No-GC assertions fail; final choice test omits Low preset and makes no No-GC claim. All three native instances removed. Final Release build with existing private connection metadata and exact four-file local deployment succeed; no ZIP, tag, push or Release.",
+    "evidence": "docs/strategy/upstream-0471-merge-20260927.md; docs/strategy/upstream-0471-merge-20260927-evidence.json; .local/upstream-update-20260927/",
+    "scope": "Only named native and managed contracts. No live networking, visible performance, Windows/Linux runtime, full early-exploration quality or full release gate. Limited aggregate evidence does not grant Runtime coverage."
+  },
   "MULTIPLAYER-TOASTY-CHOICE": {
     "status": "Passed",
     "level": "NativePendingChoiceFullStateAndRuntimeControls",

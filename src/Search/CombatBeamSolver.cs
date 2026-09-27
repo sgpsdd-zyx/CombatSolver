@@ -37,7 +37,10 @@ internal sealed partial class CombatBeamSolver(
     IReadOnlyList<PlanAction>? fixedPrefixActions = null,
     bool resetFixedPrefixSchedulingBaseline = false,
     int? minimumPotionUses = null,
-    PrimarySearchIncumbent? primaryIncumbent = null)
+    PrimarySearchIncumbent? primaryIncumbent = null,
+    int? earliestPotionTurn = null,
+    int earlyTurnScoutDepth = 0,
+    Action<int, IReadOnlyList<EarlyTurnFrontierCandidate>>? earlyTurnScoutObserver = null)
 {
     private bool IsMultiplayerAdvice => policy.Multiplayer != null;
     private readonly MultiplayerContributionObjective? _contributionObjective = policy.Multiplayer == null ? null
@@ -73,11 +76,16 @@ internal sealed partial class CombatBeamSolver(
     private readonly bool _detailedDiagnostics = policy.DetailedDiagnostics;
     private readonly int? _maximumPotionUses = maximumPotionUses;
     private readonly int _minimumPotionUses = minimumPotionUses ?? 0;
+    private readonly int? _earliestPotionTurn = earliestPotionTurn;
     private readonly PotionFreePolicyBaseline? _potionFreePolicyBaseline = potionFreePolicyBaseline;
     private PrimarySearchIncumbent? _primaryIncumbent = primaryIncumbent;
     private readonly SearchInteractionState? _interaction = policy.Interaction;
+    private readonly DevelopmentSearchStrategy? _developmentStrategy = policy.Multiplayer == null
+        ? policy.DevelopmentStrategy : null;
     private readonly IReadOnlyList<PlanAction> _fixedPrefixActions = fixedPrefixActions ?? [];
     private readonly bool _resetFixedPrefixSchedulingBaseline = resetFixedPrefixSchedulingBaseline;
+    private readonly int _earlyTurnScoutDepth = earlyTurnScoutDepth;
+    private readonly Action<int, IReadOnlyList<EarlyTurnFrontierCandidate>>? _earlyTurnScoutObserver = earlyTurnScoutObserver;
     private readonly string? _progressPhaseOverride = DescribePotionProgressPhase(
         displayNames,
         potionPolicyOverride,
@@ -109,19 +117,18 @@ internal sealed partial class CombatBeamSolver(
         _potionPolicy,
         _potionStrategy,
         _enforcePotionDirectives,
-        root.HasRenewablePotionShapedRock,
         root.PotionRewardOutlook.ReplacementHpCredit,
         _run,
         EvaluateStandPat,
         PrepareStandPatProbes,
         policy.Multiplayer != null ? CompareMultiplayerPlans : null,
-        policy.Multiplayer != null ? CreateMultiplayerOrdering : null);
+        policy.Multiplayer != null ? CreateMultiplayerOrdering : null,
+        _developmentStrategy);
     private FinalPlanOrdering? _finalOrdering;
     private FinalPlanOrdering FinalOrdering => _finalOrdering ??= new FinalPlanOrdering(
         _potionPolicy,
         _potionStrategy,
         _enforcePotionDirectives,
-        root.HasRenewablePotionShapedRock,
         root.PotionRewardOutlook.ReplacementHpCredit,
         _theftPolicy,
         _strategicBossHpRelief,
@@ -131,8 +138,7 @@ internal sealed partial class CombatBeamSolver(
         _minimumPotionUses,
         policy.Diagnostics,
         _detailedDiagnostics,
-        battleDamage,
-        _run.PotionStrategicCosts);
+        battleDamage);
 
     private bool AllowsPotionUse(int slot, string potionId)
         => _potionStrategy.AllowsExplicitUse(

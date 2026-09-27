@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "scenarioId": "LAMP-INKY-SHIV",
+  "characterId": "SILENT",
+  "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+  "seed": "UPSTREAM-0471-INKY-SHIV",
+  "headlessFastModeForTest": "Instant",
+  "timeoutSeconds": 120
+}

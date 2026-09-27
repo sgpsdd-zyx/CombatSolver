@@ -15,6 +15,7 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Cards;
 using MegaCrit.Sts2.Core.Models.Events;
+using MegaCrit.Sts2.Core.Models.Potions;
 using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.Runs;
 
@@ -52,7 +53,19 @@ internal static class MultiplayerUpstreamContracts
         }
         SearchPolicySnapshot captured = SolverController.CaptureSearchPolicy(SolverSettings.Capture(), state, false, null);
         Check(!captured.GrowthOpportunityTargets.HasTargets, "multiplayer_skips_single_player_growth_targets");
-        SearchPolicySnapshot policy = new MultiplayerSearchPolicy().Apply(captured);
+        SearchPolicySnapshot policy = new MultiplayerSearchPolicy().Apply(captured with
+        {
+            EarlyTurnExplorationDepth = 2,
+            EarlyTurnExplorationBudgetMilliseconds = 2_400_000,
+            DevelopmentStrategy = new(new RejectSoloStrategy(), new Dictionary<string, double>()),
+            UseBeamWidthPortfolio = true,
+            UseNoveltyPortfolio = true,
+        });
+        Check(policy.EarlyTurnExplorationDepth == 0
+            && policy.EarlyTurnExplorationBudgetMilliseconds == 0
+            && policy.DevelopmentStrategy == null
+            && !policy.UseBeamWidthPortfolio && !policy.UseNoveltyPortfolio,
+            "multiplayer_discards_solo_exploration_and_script_policy");
         var root = CombatRootSnapshot.Capture(state, multiplayerAdvisor: true);
         var names = SolverDisplayNames.Capture(state);
         var damage = BattleDamageTracker.Observe(state);
@@ -163,9 +176,63 @@ internal static class MultiplayerUpstreamContracts
                 root.Forecast, root.StartTurnNumber).StateText == frozen.StateText, "root_unchanged_after_native_play");
         }
         finally { predicted.ReleaseSimulator(); }
+        VerifyEntropicCosts(state, local, peer, Check);
         File.WriteAllText(Path.Combine(options.OutputDirectory, "upstream-compatibility.json"),
             JsonSerializer.Serialize(new { status = "Passed", checks, localCounts, peerCounts },
                 new JsonSerializerOptions { WriteIndented = true }));
         return $"upstream_compatibility_checks={checks.Count} native_full_party_state_equal=true";
+    }
+
+    private sealed class RejectSoloStrategy : IDevelopmentSearchStrategy
+    {
+        public double Prioritize(StrategyActionFeatures action, double builtInPriority,
+            IReadOnlyDictionary<string, double> parameters)
+            => throw new InvalidOperationException("Solo development strategy reached multiplayer search.");
+    }
+
+    private static void VerifyEntropicCosts(CombatState state, Player local, Player peer,
+        Action<bool, string> check)
+    {
+        string live = ContinuationStamp.CaptureLive(state, multiplayerAdvisor: true).StateText;
+        var parent = new CombatPredictionSimulator(new SimulatedCombatState(state));
+        foreach (Player recipient in new[] { local, peer })
+        {
+            var branch = parent.Fork();
+            var combat = (SimulatedCombatState)branch.State.CombatState;
+            check(combat.TryProcurePotion(local, ModelDb.Potion<EntropicBrew>()),
+                "entropic_source_procured_" + recipient.Creature.CombatId);
+            int sourceSlot = Enumerable.Range(0, combat.PotionSlotCount(local))
+                .Single(slot => combat.GetPotionAtSlot(local, slot) is EntropicBrew);
+            PotionModel source = combat.GetPotionAtSlot(local, sourceSlot)!;
+            combat.ConsumePotion(local, sourceSlot);
+            combat.BeforePotionUsed(branch, source, recipient.Creature);
+            check(PotionOnUseSupport.Use(branch, combat, source, recipient.Creature),
+                "entropic_generated_without_pending_choice_" + recipient.Creature.CombatId);
+            combat.AfterPotionUsed(branch, source, recipient.Creature);
+            check(combat.PotionUses.Single().StrategicHpCost
+                    == PotionUsePolicy.StrategicHpCost(source, renewablePotionShapedRock: false),
+                "entropic_source_keeps_own_cost_" + recipient.Creature.CombatId);
+
+            int[] generatedSlots = Enumerable.Range(0, combat.PotionSlotCount(recipient))
+                .Where(slot => combat.GetPotionAtSlot(recipient, slot) != null).ToArray();
+            check(generatedSlots.Length > 0, "entropic_recipient_inventory_filled_" + recipient.Creature.CombatId);
+            var child = branch.Fork();
+            var childState = (SimulatedCombatState)child.State.CombatState;
+            foreach (int slot in generatedSlots) childState.ConsumePotion(recipient, slot);
+            check(childState.PotionUses.Skip(1).All(use => use.StrategicHpCost == 0)
+                    && combat.PotionUses.Count == 1
+                    && generatedSlots.All(slot => combat.GetPotionAtSlot(recipient, slot) != null),
+                "entropic_free_cost_and_inventory_are_fork_local_" + recipient.Creature.CombatId);
+            check(childState.TryProcurePotion(recipient, ModelDb.Potion<StrengthPotion>()),
+                "ordinary_replacement_procured_" + recipient.Creature.CombatId);
+            int replacementSlot = Enumerable.Range(0, childState.PotionSlotCount(recipient))
+                .Single(slot => childState.GetPotionAtSlot(recipient, slot) is StrengthPotion);
+            childState.ConsumePotion(recipient, replacementSlot);
+            check(childState.PotionUses[^1].StrategicHpCost > 0,
+                "ordinary_replacement_does_not_inherit_free_cost_" + recipient.Creature.CombatId);
+        }
+        check(((SimulatedCombatState)parent.State.CombatState).PotionUses.Count == 0
+                && ContinuationStamp.CaptureLive(state, multiplayerAdvisor: true).StateText == live,
+            "entropic_branches_preserve_root_and_live");
     }
 }

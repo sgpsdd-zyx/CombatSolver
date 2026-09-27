@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "scenarioId": "UPSTREAM-0471-ENTROPIC-BREW",
+  "characterId": "IRONCLAD",
+  "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+  "seed": "UPSTREAM-0471-ENTROPIC-BREW",
+  "potionCheck": {
+    "potionId": "ENTROPIC_BREW",
+    "target": "Player"
+  },
+  "headlessFastModeForTest": "Instant",
+  "timeoutSeconds": 120
+}

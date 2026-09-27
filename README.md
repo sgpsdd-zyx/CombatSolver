@@ -6,6 +6,8 @@ Combat Solver 是《杀戮尖塔 2》的战斗路线求解器，本 fork 支持�
 
 多人 fork **0.46.6 已发布**，基于官方 **0.46.4**。多人烘焙手套选牌页支持先计算推荐耗尽与后续路线，再由玩家手动确认。[下载最新版](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.46.6)，另见[中英更新日志](docs/releases/0.46.6-RELEASE_NOTES.md)、[发布与归档凭证](docs/releases/0.46.6-PUBLISH.md)和[官方基线合并记录](docs/strategy/upstream-0464-merge-20260925.md)。官方与 fork 的同号版本分别归档，既有标签不移动。
 
+开发分支另已合入官方 **0.47.1**，尚未发布 fork 新版。单人开局搜索和回归修复随官方更新，多人继续独立贡献选路；详见[合并记录](docs/strategy/upstream-0471-merge-20260927.md)。The development branch now includes upstream **0.47.1**; the latest published fork remains **0.46.6**.
+
 多人实验已包含独立队友、交错操作和连续手动重算，保留收益与恶化个案；[实验记录](docs/strategy/multiplayer-experiments-20260923/implementation.md)不代表真人联机胜率。
 
 [多人军师](docs/multiplayer-advisor.md) 推荐本人的出牌和用药路线，最多推演十四个敌方回合。队友行动后自行决定何时重算；推演假设队友后续不主动出牌或用药，但仍结算其被动效果。多人功能目前供试用，尚未完成真实联机验收。

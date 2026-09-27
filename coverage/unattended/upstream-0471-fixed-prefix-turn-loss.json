@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "scenarioId": "FIXED-PREFIX-TURN-LOSS",
+  "characterId": "IRONCLAD",
+  "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+  "seed": "UPSTREAM-0471-FIXED-PREFIX",
+  "clearPlayerPiles": true,
+  "clearAllPowers": true,
+  "initialPlayerEnergy": 3,
+  "fixedSearchBudget": true,
+  "searchBudgetOverrideMilliseconds": 3000,
+  "searchMaxDegreeOfParallelismForTest": 1,
+  "verifyIncrementalSearch": true,
+  "headlessFastModeForTest": "Instant",
+  "timeoutSeconds": 120
+}

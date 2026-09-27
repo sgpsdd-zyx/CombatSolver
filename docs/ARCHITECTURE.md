@@ -34,13 +34,15 @@
 
 中间 Beam 继续覆盖防御、进攻和铺垫；单人 `FinalPlanOrdering`、能力承诺及预算不变。多人根前用药资格由 Runtime 原追踪窗口按 Actor 冻结。UI 从 `SolverResult` 投影阶段目标、已付/预计进展、是否存在选中达标见证、返回深度、曾到达深度和未知受击提示；不读取搜索树。详细默认参数与验证由[多人指南](multiplayer-advisor.md)及[实施记录](strategy/multiplayer-cooperative-planning-20260922/implementation.md)维护。
 
-当前单人基线为官方 `d231e9e5 / 0.46.4`。`PowerCardValuation` / `PowerCommitment` 和能力固定前缀组合用于单人。多人协调器继续在这些组合及强制／Smart 药水梯度之前返回；`CombatBeamSolver._hasRegisteredPowerCards` 另以 `policy.Multiplayer == null` 隔离共享候选展开中的能力承诺入口。Runtime 多人不捕获单人成长目标，`SimulatedCombatState` 多人根的疯狂科学升级信用容量为零，实际 Power 仍按持有者结算。单人继续官方登记、成长、保路和预算路径；兼容取舍与本轮同步见[0.46.4 合并记录](strategy/upstream-0464-merge-20260925.md)，此前行为基线见[0.45.0 合并证据](strategy/upstream-0450-merge-20260923.md)。
+当前单人基线为官方 `7d9b4bed / 0.47.1`。`PowerCardValuation` / `PowerCommitment` 和能力固定前缀组合用于单人。多人协调器继续在这些组合及强制／Smart 药水梯度之前返回；`CombatBeamSolver._hasRegisteredPowerCards` 另以 `policy.Multiplayer == null` 隔离共享候选展开中的能力承诺入口。Runtime 多人不捕获单人成长目标，`SimulatedCombatState` 多人根的疯狂科学升级信用容量为零，实际 Power 仍按持有者结算。单人继续官方登记、成长、保路和预算路径；兼容取舍与本轮同步见[0.47.1 合并记录](strategy/upstream-0471-merge-20260927.md)，此前行为基线见[0.45.0 合并证据](strategy/upstream-0450-merge-20260923.md)。
 
 官方的新鲜资源待命探针在 `BeamRetentionPolicy.Ranking` 从既有 beam rank 取符合资源条件的前 64 个，保留原比较器。`RankBest` 的多人分派在单人通道前返回；探针上限不进入多人评分、前沿或预算。减少工作会改变单人候选和路线，取舍及反例保留在[官方报告](performance/fresh-resource-standpat-probe-cap-20260924.md)。
 
 官方 0.44.0 的余像前移审计与循环重放均显式拒绝多人；新的长期格挡折价仅用于单人，多人合并阶段保留原格挡探索值。历史依赖掩码来自根全牌堆、已登记生成来源与 Hook，追加历史值时单人读累计值，多人仍沿各效果持有者扫描；Bash/PowerShell 门禁同步这些接入。
 
 上游文件拆分后，全队回合与周期捕获位于 `Expansion.Replay`，队友目标与多人支配保护位于 `Expansion.Candidates`，多人排序分派位于 `BeamRetentionPolicy.Ranking`；多人账本仍进入两类转置标签。共享的整场历史键、惰性续用信息和默认 1,000,000 条转置记录上限沿用官方实现，不属于新的多人评分。`MultiplayerSearchPolicy` 关闭战后药水预测和单人组合实验，`CombatRootSnapshot` 也不在多人根预读奖励。`BattleDamageSnapshot.PotionIdsUsedSoFar` 在多人时只包含追踪窗口内本机 Actor 的药水 ID。冻结、采用和执行能力继续由 Runtime 拒绝多人调用；Overlay 两个刷新入口都向 `SolverActionBarState.AdviceOnly` 传递多人状态。全局单人奖励预测偏好的更改只保存设置，不使多人建议失效。
+
+官方 0.47.1 的开局后验与前两回合探索继续由单人协调器拥有。`MultiplayerSearchPolicy.Apply` 清空追加探索深度／预算和开发策略脚本，solver 在多人模式也不保留脚本；正常多人预算、保路和原生选牌接入均保持。`SimulatedCombatState.Potions` 按玩家／槽保存混沌药水的免费生成标记，Fork 复制、消费／替换清除；已有多人周期检查点直接读取分支已用药实际成本。该政策标记进入搜索指纹，不加入原生 `ContinuationStamp`。
 
 ### 单一搜索预算与兼容边界
 
@@ -50,7 +52,7 @@
 
 遗物目标包含优先级，达标优先值用于原 HP 轴之后的路线比较，掩码仍负责 Pareto 和早停。MeatOnTheBone 使用一个半血布尔目标；完整获胜且用户启用时，StateEvaluation 仅补入 HealFor 与 MonotoneHealFor 的差值，沿首领战略价值折算，不在模拟器重复治疗。
 
-开局后续动作探针通过 `ApplyFixedPrefix(seed, prefix)` 构造真实父链，保留前置资源/药水/准备动作的动作数与状态；不得用已经回放前缀的快照伪装成 action_count=0 的根。
+开局后续动作探针通过 `ApplyFixedPrefix(seed, prefix)` 构造真实父链，保留前置资源/药水/准备动作的动作数与状态；不得用已经回放前缀的快照伪装成 action_count=0 的根。固定前缀中的 `EndTurn` 必须从模拟前后状态写入 `TurnOutcome`，供逐回合战损展示与实机结束回合复核使用；缺失标注不能解释为零战损。回合准备的原生选择尚未结束时，搜索只运行可复用该选择根的主搜索成员。
 
 `SolverSettings` 将四档或自定义配置解析为一个 `Profile`，主线程冻结到 `SearchPolicySnapshot`。`CombatSearchCoordinator` 的主搜索、药水审计与恢复使用同一套预算维度；`FixedBudget` 只限制无胜利后的预算扩展，测试/API 可显式覆盖时间。Search 不再包含 Short/Deep 配置、枚举、检查点或分段累计统计；两端结构门禁禁止这些符号回流。`SearchRequestWorkTotals` 按请求累计唯一 elapsed 和工作计数。
 
@@ -167,6 +169,12 @@ RitsuLib 0.6.0 自身拥有 BaseLib 目标类型的外部登记查询、按程�
 `CombatPredictionSimulator.CardTargeting` 对君王之剑和小刀完整读取分支能力：能力存在时选择全体，不存在时选择单体。两侧都不能回退到可能读取实机 owner 的动态 TargetType；普通卡牌保持原生目标元数据入口。
 
 ## 3. Search
+
+本地策略迭代通过 `tools/CheckpointTool/StrategySessionRunner.cs` 持有 `start/run/status/stop` 会话和脚本单独编译。所有策略会话使用一个固定私有游戏副本；`start` 提交不建战斗的 `SessionStart` 就绪请求，`run` 直接复用其进程，`stop` 只结束进程和监控。Windows 启动器缓存稳定游戏文件的哈希，仅重算 Mod；停机后按差异替换私有副本。`run-unattended-test.ps1/.sh` 的复用入口跳过快照扫描，仍核对 PID、出生时间与可执行文件。`UnattendedTestRunner.ProtocolHost` 在每次请求开始加载冻结的脚本程序集和参数，`DevelopmentStrategyLoader` 持有可卸载加载上下文，在请求收尾释放。Search 只接收 `SearchPolicySnapshot.DevelopmentStrategy` 中的不可变策略引用和只读分支特征，不读取脚本文件或 live 设置。无脚本时保留既有候选顺序、Beam 评分和组合列表。脚本只接管中途优先级、评分、一个有界保路代表和既有组合成员编排；最终路线质量、预算、状态等价与战斗结算仍属原所有者。
+
+开发监控沿用 Runtime 的进度快照，Testing 的 `DevelopmentMonitorPublisher` 每秒最多一次复制纯标量并原子写入会话文件。独立窗口进程只读该文件，不访问模拟状态或游戏 UI；游戏始终以 `--headless` 启动。`StrategySessionRunner` 管理窗口进程身份、跨包状态和 stop 清理；关闭窗口不改变游戏请求生命周期。Windows 使用 WPF，Linux 入口使用独立终端显示同一状态协议。
+
+离线无人请求可显式开启 `EarlyTurnExplorationDepth`（1 或 2）；玩家性能设置也可开启前两回合探索，默认关闭，并随请求冻结深度 2、总计 40 分钟的上限。常规搜索结束后，`CombatBeamSolver` 在指定回合末剪枝前按完整状态键去重、按开局动作和跨回合特征选取有界前沿；`CombatSearchCoordinator.EarlyTurnExploration` 只持有动作前缀，重新从原根严格模拟并完整续搜。追加阶段有请求总时限、共享节点上限和现有内存压力准入；候选必须完整胜利且满足强制用药指令，才按原终局政策替换结果。无人测试协议和开发会话负责离线时限与超时记录，Search 不读取包路径或会话状态。
 
 开发中的反馈修复：`GrowthOpportunityPolicy` 在主线程从当前可用的物理牌实例冻结逐来源目标。能力牌和消耗牌的基础次数都是每个尚可打实例一次；遗传算法、巨镰与黏糊强化额外要求 `DeckVersion`，固定 `GetEnchantedReplayCount` 逐次加入目标。单一致命来源按敌人数和实体数取可证明上限；多个致命来源竞争、动态重放、复制、消耗回收或第三方缺少目标计算器时写入不可证明原因。第三方计算器只收到不可变 `GrowthOpportunityCardSnapshot`，不能读取实机对象；负次数直接拒绝策略捕获。`SearchPolicySnapshot.GrowthTargetSatisfied` 比较整个收益向量，任一来源不可证明都禁止成长早停。早停还要求实际用药不超出用户必要数量。偷窃分项沿既有 SimulatedCombatState 计数投影为 SimulationSnapshot → SolverSnapshot → OverlaySnapshot，只读 UI 不重新读取真实战斗。Runtime 在选牌部署失配时暂停并交还手动选择，只有退出场景才取消原生选择；缺失战斗通知的面板恢复由 MonitorCombatPresence 在稳定回合负责。
 `SearchPolicySnapshot.CanStopAtHpTarget` 统一默认开启的战损目标早停与实际成长目标。主线程冻结 `GrowthOpportunityTargets`，额度本身不代表持有对应牌；目标向量和不可证明原因进入路线缓存与问题包。Phases 在已准入候选提交时检查完整胜利、全部有界成长目标、遗物、偷窃和强制用药要求，命中后排空当前父节点/并行批次，释放后续工作并从达标候选收尾；Coordinator 在补充搜索结果边界沿用同一开关与阈值。profile `StopPortfolioAtHpTarget` 默认将同一达标判定延伸至宽度/能力组合的已选incumbent及能力前缀入口/成员边界；玩家关闭达标早停仍保留原搜索。Runtime 在根捕获中、变量主线程物化后冻结 `HasVisibleHealingSource`（牌/玩家Power/可搜索药水的Heal、HealPercent、RegenPower变量或已有RegenPower），Search 只读该布尔值和已选路线的实际回血；任一存在则保留追加审计。它不改变终局比较，也不是穷举治疗来源或收益上界，不能将“达标”称为全目标最优。“不考虑局外收益”从统一入口移除成长目标。
@@ -569,7 +577,7 @@ NativeReplayDriver 保存开战/结束观察器抛出的原始异常，由 Advan
 - `tools/headless-runtime.ps1` / `tools/headless-runtime.sh`：拥有实例目录、私有游戏/Mod 内容快照与每用户主机租约。实例默认位于当前仓库 `.local/headless-instances/<实例>`；用户目录只保存跨任务互斥所需的小型主机租约，不保存游戏快照。默认 exclusive，显式 parallel 最多两个游戏；CPU/内存预约随游戏进程存活，暖进程也占名额。实例清理要求租约已释放、私有游戏已退出、所有权标记完全匹配且目录不含重解析点/符号链接。它们不改变 Search DOP、NoGC、战斗语义或请求协议。详见 [实例与并行说明](HEADLESS_TESTING.md)。
 
 - `tools/run-visible-steam-benchmark.ps1` / `tools/run-visible-steam-benchmark.sh`：Windows / Linux 的平台原生入口，负责正常可见 Steam 会话的搜索、GC 与帧口径。
-- `tools/CoverageCatalog/Program.cs`：当前程序集和 registry descriptor 的覆盖目录生成/验证。构建导入RitsuLib多程序集引用；带限制的聚合证据状态保留原含义，不授予Runtime覆盖。
+- `tools/CoverageCatalog/Program.cs`：当前程序集和 registry descriptor 的覆盖目录生成/验证。构建导入RitsuLib多程序集引用；带限制的聚合证据状态（包括 `PassedWithExplicitScope`）保留原含义，不授予Runtime覆盖。
 - `tools/verify-refactor-boundaries.ps1` / `tools/verify-refactor-boundaries.sh`：Windows / Linux 的等价门禁，阻止 Search 全局依赖、旧 controller 字段、worker live 回读、Beam 职责回流、unattended 编排回流、UI mutable 类型回流和 registry 私有反射；规则变化时必须同步维护两端。
 
 纯职责移动至少运行 Release 编译与当前平台的结构门禁。改变语义、搜索或显示行为时，再按影响面选择严格差分、完整 headless、CoverageCatalog 或可见 Steam。

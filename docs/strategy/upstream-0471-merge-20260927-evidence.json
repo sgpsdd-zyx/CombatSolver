@@ -1,0 +1,480 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-09-27",
+  "status": "PassedWithExplicitScope",
+  "request": "尝试合并最新官方仓库。",
+  "source": {
+    "branch": "codex/multiplayer-advisor",
+    "forkBefore": "ab60699e",
+    "officialBefore": "d231e9e51a0e58d6bfa1373c6265cce13ffd9a45",
+    "officialMerged": "7d9b4bed20397a8870afd759fd5801c0c61d8627",
+    "upstreamVersion": "0.47.1",
+    "publishedForkVersion": "0.46.6",
+    "publishedForkSource": "24954f785f21fb2e3be76372e36fdf00c07f539e",
+    "fetchLog": ".local/upstream-update-20260927/upstream-fetch.log"
+  },
+  "environment": {
+    "platform": "macOS arm64",
+    "gameVersion": "0.111.0",
+    "ritsuLibVersion": "0.6.2",
+    "dotnetSdk": "9.0.318",
+    "nativeRequestTimeoutSeconds": 120,
+    "visibleSteamLaunched": false,
+    "realNetworking": false
+  },
+  "nativeRequests": [
+    {
+      "scenarioId": "FIXED-PREFIX-TURN-LOSS",
+      "runId": "macos-2e3265b6d9b04eb69f97a8d012da4c4c",
+      "status": "Passed",
+      "elapsedMilliseconds": 17714.6705,
+      "completedChecks": [
+        "FixedPrefixTurnLoss:FirstTurnAnnotationMatchesSimulation"
+      ],
+      "resultPath": ".local/upstream-update-20260927/native/01-result.json",
+      "replayInput": "coverage/unattended/upstream-0471-fixed-prefix-turn-loss.json"
+    },
+    {
+      "scenarioId": "LAMP-INKY-SHIV",
+      "runId": "macos-5577c1db54e142fb9607d7e48680b223",
+      "status": "Passed",
+      "elapsedMilliseconds": 2460.7863,
+      "completedChecks": [
+        "LampInkyShiv:ExplicitCardSource:WeakAndLamp:FullContinuationState"
+      ],
+      "resultPath": ".local/upstream-update-20260927/native/02-result.json",
+      "replayInput": "coverage/unattended/upstream-0471-lamp-inky-shiv.json"
+    },
+    {
+      "scenarioId": "UPSTREAM-0471-ENTROPIC-BREW",
+      "runId": "macos-698c8d04c06b455fabf3e1331ad05d08",
+      "status": "Passed",
+      "elapsedMilliseconds": 2636.051,
+      "completedChecks": [
+        "Potion:ENTROPIC_BREW"
+      ],
+      "resultPath": ".local/upstream-update-20260927/native/03-result.json",
+      "replayInput": "coverage/unattended/upstream-0471-entropic-brew.json"
+    },
+    {
+      "scenarioId": "NOVELTY-TURN-SETUP-CHOICE-0400",
+      "runId": "macos-26695eb5034c4517ac5f15e3d0d483d0",
+      "status": "Passed",
+      "elapsedMilliseconds": 24378.0612,
+      "completedChecks": [
+        "PotionOutcomeNamesAndRewardGate",
+        "InitialWorldlineSummary",
+        "TurnSetupNativeChoiceOrder",
+        "InitialPolicy:SoldHp=0;Potion=0,Saved=0/0,Rejected=0;Theft=-,Outstanding=0;Turns=3;Shuffles=1;Unmirrored=0;HpLost=0;ProjectedBattleHpLost=0;Block=5/5;Pruned=0;Total=1969.1ms/512901800B;Gc=111.6ms/5.6msMax;Frame=0.0msMax/0Over50;CacheHits=0;ChoiceBranches=2330;Actions=2;OnlyDeath=False;CombatEndedTurn=3;DeathTurn=-;ActEndingBoss=False;BossHpRelief=None",
+        "InitialSetupChoices"
+      ],
+      "resultPath": ".local/upstream-update-20260927/native-final/01-result.json",
+      "replayInput": "coverage/unattended/upstream-0471-turn-setup-choice.json"
+    },
+    {
+      "scenarioId": "MULTIPLAYER-TOASTY-CHOICE",
+      "runId": "macos-e842c17c8bbd4efda26509dd5aab9609",
+      "status": "Passed",
+      "elapsedMilliseconds": 4697.8738,
+      "completedChecks": [
+        "PreCombatPlayerHp:60",
+        "MultiplayerTurnSetup:ManualRequest:NativeChoiceRemainsOpen:FrozenFullPartyRoot",
+        "MultiplayerTurnSetup:ManualNativeSelection:FullStateEquivalent:NoAutomaticRecalculation"
+      ],
+      "resultPath": ".local/upstream-update-20260927/native-final/02-result.json",
+      "replayInput": "coverage/unattended/multiplayer-toasty-choice.json"
+    },
+    {
+      "scenarioId": "MULTIPLAYER-TOASTY-CONTROLS",
+      "runId": "macos-080d3cb023a54ff4bd74e24f7f3dfc80",
+      "status": "Passed",
+      "elapsedMilliseconds": 7647.2507,
+      "completedChecks": [
+        "MultiplayerTurnSetup:StopDrainsWorker:NativeInputPreserved",
+        "MultiplayerTurnSetup:ChoiceDisplayed:NativePeerActionClearsCurrent:AdviceStale:ManualFreshRoot",
+        "MultiplayerTurnSetup:ManualDifferentChoiceDuringWorker:ResultStale:NoAutomation"
+      ],
+      "resultPath": ".local/upstream-update-20260927/native-final/03-result.json",
+      "replayInput": "coverage/unattended/multiplayer-toasty-controls.json"
+    },
+    {
+      "scenarioId": "MULTIPLAYER-EXPERIMENT-INACTIVE",
+      "runId": "macos-915bc665410f48b684259b8ee9981736",
+      "status": "Passed",
+      "elapsedMilliseconds": 2602.0885,
+      "completedChecks": [
+        "MultiplayerExperimentReset:NoHooks:SinglePlayerRoot",
+        "PotionOutcomeNamesAndRewardGate",
+        "InitialWorldlineSummary",
+        "InitialFirstAction:STRIKE_IRONCLAD",
+        "InitialPolicy:SoldHp=0;Potion=0,Saved=0/0,Rejected=0;Theft=-,Outstanding=0;Turns=1;Shuffles=0;Unmirrored=0;HpLost=0;ProjectedBattleHpLost=0;Block=0/0;Pruned=0;Total=0.9ms/248824B;Gc=0.0ms/0.0msMax;Frame=32.2msMax/0Over50;CacheHits=0;ChoiceBranches=0;Actions=1;OnlyDeath=False;CombatEndedTurn=1;DeathTurn=-;ActEndingBoss=False;BossHpRelief=None"
+      ],
+      "resultPath": ".local/upstream-update-20260927/native-final/04-result.json",
+      "replayInput": "coverage/unattended/multiplayer-experiment-inactive.json"
+    },
+    {
+      "scenarioId": "UI-LOCALIZATION",
+      "runId": "macos-27ab9b47538349abbd97d6ec05fff08f",
+      "status": "Passed",
+      "elapsedMilliseconds": 5704.2744,
+      "completedChecks": [
+        "CardLocaleRoundTrip:EnglishSnapshot:ChineseEnglishChinese:Upgrade:Choice:RelicOwner:SerializedPlan:LivePill:SubscriptionCleanup:NoReplan",
+        "SpawnedEntityIdentity:eng:FourWrigglers:LeftToRight:NativeSlots=True:ForkStable:DeathStable",
+        "EntityIdentity:eng:DistinctEnemies=1:PlainAndInkyShiv",
+        "StrategyOutcome:eng:AlignedAndUnmet:GrowthCounts:PartialRoute:EmptyHidden",
+        "RelicOwnership:eng:Self:PeerNumber:SameRelic:Json:Tooltip:Identity",
+        "ActionAnnotations:eng:CapturedDamageSources:21RelicFormats:NestedChoices:Tooltip",
+        "LiveTurnStartChoicePreview:eng:Power:Relic",
+        "LoopDisplay:eng:41Actions:2OuterControls:CompactInlineCount:EnclosedPeriod:WideNarrowWide:ReplayCount:KillSuffix:Deployment:Reuse",
+        "StrategyPanels:eng:Potion:Growth:Relic:Collapse",
+        "UiLocalization:eng:Catalog480:Settings:UploadTransitions:DynamicStatus:FailureInstructions",
+        "SpawnedEntityIdentity:zhs:FourWrigglers:LeftToRight:NativeSlots=True:ForkStable:DeathStable",
+        "EntityIdentity:zhs:DistinctEnemies=1:PlainAndInkyShiv",
+        "StrategyOutcome:zhs:AlignedAndUnmet:GrowthCounts:PartialRoute:EmptyHidden",
+        "RelicOwnership:zhs:Self:PeerNumber:SameRelic:Json:Tooltip:Identity",
+        "ActionAnnotations:zhs:CapturedDamageSources:21RelicFormats:NestedChoices:Tooltip",
+        "LiveTurnStartChoicePreview:zhs/zht:Power:Relic",
+        "LoopDisplay:zh:41Actions:2OuterControls:CompactInlineCount:EnclosedPeriod:WideNarrowWide:ReplayCount:KillSuffix:Deployment:Reuse",
+        "StrategyPanels:zhs:Potion:Growth:Relic:Collapse",
+        "UiLocalization:zhs:Catalog480:Settings:UploadTransitions:DynamicStatus:FailureInstructions",
+        "SpawnedEntityIdentity:zht:FourWrigglers:LeftToRight:NativeSlots=True:ForkStable:DeathStable",
+        "EntityIdentity:zht:DistinctEnemies=1:PlainAndInkyShiv",
+        "StrategyOutcome:zht:AlignedAndUnmet:GrowthCounts:PartialRoute:EmptyHidden",
+        "RelicOwnership:zht:Self:PeerNumber:SameRelic:Json:Tooltip:Identity",
+        "ActionAnnotations:zht:CapturedDamageSources:21RelicFormats:NestedChoices:Tooltip",
+        "LiveTurnStartChoicePreview:zhs/zht:Power:Relic",
+        "LoopDisplay:zh:41Actions:2OuterControls:CompactInlineCount:EnclosedPeriod:WideNarrowWide:ReplayCount:KillSuffix:Deployment:Reuse",
+        "StrategyPanels:zht:Potion:Growth:Relic:Collapse",
+        "UiLocalization:zht:Catalog480:Settings:UploadTransitions:DynamicStatus:FailureInstructions"
+      ],
+      "resultPath": ".local/upstream-update-20260927/native-final/05-result.json",
+      "replayInput": "coverage/unattended/ui-localization.json"
+    }
+  ],
+  "failedNativeAttempts": [
+    {
+      "scenarioId": "NOVELTY-TURN-SETUP-CHOICE-0400",
+      "runId": "macos-d86b99b1fa4e4807967464e68c69e3b2",
+      "status": "Failed",
+      "elapsedMilliseconds": 8724.3456,
+      "completedChecks": [],
+      "resultPath": ".local/upstream-update-20260927/native/04-result.json",
+      "error": "System.InvalidOperationException: No-GC 搜索没有按配置建立并保留战斗级区域：configured_enabled=true configured_budget=16000000000 expected_fallback=False allowed_fallback=False established_budget=0 actual_active=False actual_budget=0 latency=Interactive。\n   at CombatSolver.UnattendedTestRunner.AssertAppliedNoGcConfiguration()\n   at CombatSolver.UnattendedTestRunner.AssertInitialSolverResultAsync(Int32 startedTurn)\n   at CombatSolver.UnattendedTestRunner.Executor.ExecuteAsync(ScenarioContext scenario)\n   at CombatSolver.UnattendedTestRunner.RunAsync()"
+    },
+    {
+      "scenarioId": "NOVELTY-TURN-SETUP-CHOICE-0400",
+      "runId": "macos-86bf408a195e4deda38c573595363103",
+      "status": "Failed",
+      "elapsedMilliseconds": 23644.395,
+      "completedChecks": [],
+      "resultPath": ".local/upstream-update-20260927/native-remaining/01-result.json",
+      "error": "System.InvalidOperationException: No-GC 搜索没有按配置建立并保留战斗级区域：configured_enabled=true configured_budget=16000000000 expected_fallback=False allowed_fallback=False established_budget=0 actual_active=False actual_budget=0 latency=Interactive。\n   at CombatSolver.UnattendedTestRunner.AssertAppliedNoGcConfiguration()\n   at CombatSolver.UnattendedTestRunner.AssertInitialSolverResultAsync(Int32 startedTurn)\n   at CombatSolver.UnattendedTestRunner.Executor.ExecuteAsync(ScenarioContext scenario)\n   at CombatSolver.UnattendedTestRunner.RunAsync()"
+    }
+  ],
+  "nativeChoiceScope": "Final choice fixture omits performancePresetForTest=Low. Search budget 5000ms, DOP2, novelty portfolio and native choices remain. The preceding two No-GC assertions fail and are not counted as passes. No production GC change.",
+  "nativeInstances": [
+    {
+      "instance": "macos.Kzk3xU",
+      "removed": true,
+      "receipt": ".local/upstream-update-20260927/native.log"
+    },
+    {
+      "instance": "macos.gTCUqL",
+      "removed": true,
+      "receipt": ".local/upstream-update-20260927/native-remaining.log"
+    },
+    {
+      "instance": "macos.3tNt0P",
+      "removed": true,
+      "receipt": ".local/upstream-update-20260927/native-final.log"
+    }
+  ],
+  "managedContracts": [
+    {
+      "name": "upstream-compatibility",
+      "status": "Passed",
+      "checkCount": 29,
+      "checks": [
+        "multiplayer_skips_single_player_growth_targets",
+        "multiplayer_discards_solo_exploration_and_script_policy",
+        "multiplayer_has_no_upgrade_credit_capacity",
+        "history_keeps_per_effect_owner_scope",
+        "multiplayer_history_key_matches_scan_0",
+        "multiplayer_history_key_matches_scan_1",
+        "history_key_changes_only_in_child",
+        "history_key_survives_fork",
+        "gold_axe_observes_both_finished_plays",
+        "production_snapshot_distinguishes_history_and_preserves_forks",
+        "improvement_applies_to_owner_without_advisor_growth_credit",
+        "fork_cannot_create_multiplayer_upgrade_credit",
+        "mad_science_native_full_party_state_equal",
+        "root_unchanged_after_native_play",
+        "entropic_source_procured_1",
+        "entropic_generated_without_pending_choice_1",
+        "entropic_source_keeps_own_cost_1",
+        "entropic_recipient_inventory_filled_1",
+        "entropic_free_cost_and_inventory_are_fork_local_1",
+        "ordinary_replacement_procured_1",
+        "ordinary_replacement_does_not_inherit_free_cost_1",
+        "entropic_source_procured_0",
+        "entropic_generated_without_pending_choice_0",
+        "entropic_source_keeps_own_cost_0",
+        "entropic_recipient_inventory_filled_0",
+        "entropic_free_cost_and_inventory_are_fork_local_0",
+        "ordinary_replacement_procured_0",
+        "ordinary_replacement_does_not_inherit_free_cost_0",
+        "entropic_branches_preserve_root_and_live"
+      ],
+      "resultPath": ".local/upstream-update-20260927/upstream-compatibility/upstream-compatibility.json"
+    },
+    {
+      "name": "quota-contracts",
+      "status": "Passed",
+      "checkCount": 32,
+      "checks": [
+        "stage_share_and_absolute_deadline",
+        "same_round_recalculation_does_not_renew",
+        "healing_and_continued_progress_share_stage_origin",
+        "roster_change_preserves_deadline_and_previous_result",
+        "elapsed_stage_renews_explicitly",
+        "recalculation_does_not_add_nonadditive_capped_progress",
+        "no_last_damage_point_health_cliff",
+        "local_index_one",
+        "native_overkill_counts_only_actual_hp",
+        "local_damage_credited",
+        "damage_ledger_fork_and_root_isolation",
+        "child_foreign_and_unknown_damage_stays_in_child",
+        "native_local_play_accepted",
+        "local_play_full_party_native_equal",
+        "native_recalculation_keeps_paid_damage",
+        "native_peer_play_accepted",
+        "native_peer_damage_does_not_pay_or_postpone_local_quota",
+        "enemy_healing_reopens_progress",
+        "native_changes_do_not_mutate_frozen_prediction",
+        "quota_does_not_skip_real_retaliation_incremental_equal",
+        "fixed_node_budget_respected",
+        "risk_cannot_dominate_reliable_witness",
+        "real_victory_overrides_stale_cycle",
+        "victory_after_deadline_does_not_backdate_stage",
+        "fixed_batch_ordering_125_triples",
+        "unassessed_budget_fallback_remains_unknown",
+        "quota_and_unknown_ui_eng",
+        "quota_and_unknown_ui_zhs",
+        "quota_and_unknown_ui_zht",
+        "native_retaliation_play_STRIKE_IRONCLAD",
+        "native_retaliation_play_DEFEND_IRONCLAD",
+        "retaliation_full_party_native_cycle_equal"
+      ],
+      "resultPath": ".local/upstream-update-20260927/quota-contracts/quota-contracts.json"
+    }
+  ],
+  "officialComparison": {
+    "rootCount": 2,
+    "comparedFields": 168,
+    "mismatchedRoots": [],
+    "groups": [
+      "solverMetrics",
+      "route",
+      "rootState",
+      "catalog",
+      "continuations"
+    ],
+    "roots": [
+      {
+        "root": "SOLO-POTION",
+        "comparedFields": 79,
+        "mismatches": [],
+        "input": "coverage/unattended/opening-strength-potion-0170.json",
+        "budget": {
+          "Profile": "Custom",
+          "BeamWidth": 12,
+          "MaxExpandedNodes": 350,
+          "MaxCardBranchesPerNode": 32,
+          "MaxPileChoiceBranchesPerAction": 18,
+          "MaxHandChoiceBranchesPerAction": 24,
+          "MaxDegreeOfParallelism": 1,
+          "BudgetMilliseconds": 15000,
+          "PotionPolicy": "RequireAtLeastOne",
+          "SearchMode": "Coordinator",
+          "UsePortfolio": true,
+          "fixedSearchBudget": true,
+          "enableNoGcRegion": false
+        },
+        "timeBoundaryObserved": false,
+        "selectedMetrics": {
+          "selectedExpanded": 90,
+          "selectedTransitions": 210,
+          "projectedBattleHpLost": 4,
+          "potionCount": 1,
+          "combatEndedTurn": 2,
+          "boundary": "None",
+          "turnLayerTimeBudgetStops": 0,
+          "turnLayerNodeBudgetStops": 0
+        },
+        "singlePlayerIsolation": {
+          "observedMethods": [
+            "PrepareMultiplayerFinalCandidates",
+            "SelectMultiplayerFinal",
+            "CreateMultiplayerOrdering",
+            "PrepareMultiplayerPublicationCandidates"
+          ],
+          "multiplayerEntries": 0
+        }
+      },
+      {
+        "root": "SOLO-POWER",
+        "comparedFields": 89,
+        "mismatches": [],
+        "input": "coverage/unattended/upstream-0471-solo-power.json",
+        "budget": {
+          "Profile": "Custom",
+          "BeamWidth": 12,
+          "MaxExpandedNodes": 350,
+          "MaxCardBranchesPerNode": 32,
+          "MaxPileChoiceBranchesPerAction": 18,
+          "MaxHandChoiceBranchesPerAction": 24,
+          "MaxDegreeOfParallelism": 1,
+          "BudgetMilliseconds": 15000,
+          "PotionPolicy": "Disabled",
+          "SearchMode": "Coordinator",
+          "UsePortfolio": true,
+          "fixedSearchBudget": true,
+          "enableNoGcRegion": false
+        },
+        "timeBoundaryObserved": false,
+        "selectedMetrics": {
+          "selectedExpanded": 196,
+          "selectedTransitions": 594,
+          "projectedBattleHpLost": 1,
+          "potionCount": 0,
+          "combatEndedTurn": 4,
+          "boundary": "None",
+          "turnLayerTimeBudgetStops": 0,
+          "turnLayerNodeBudgetStops": 0
+        },
+        "singlePlayerIsolation": {
+          "observedMethods": [
+            "PrepareMultiplayerFinalCandidates",
+            "SelectMultiplayerFinal",
+            "CreateMultiplayerOrdering",
+            "PrepareMultiplayerPublicationCandidates"
+          ],
+          "multiplayerEntries": 0
+        }
+      }
+    ],
+    "runCommands": ".local/upstream-update-20260927/comparison-runs.json",
+    "fullComparison": ".local/upstream-update-20260927/official-comparison.json",
+    "scope": "Two controlled short-search roots, not universal solo equivalence or live performance."
+  },
+  "staticValidation": {
+    "boundaries": {
+      "status": "Passed",
+      "searchFiles": 224,
+      "log": ".local/upstream-update-20260927/boundaries.log",
+      "powershellExecuted": false
+    },
+    "coverage": {
+      "status": "Passed",
+      "hookEntries": 3035,
+      "unclassifiedStateFields": 0,
+      "exactOriginalFallbacksReadingLiveBranchState": 0,
+      "arguments": [
+        "--verify-state-fields",
+        "--verify-branch-state-reads"
+      ],
+      "log": ".local/upstream-update-20260927/coverage-check-final.log",
+      "firstAttempt": {
+        "status": "Failed",
+        "log": ".local/upstream-update-20260927/coverage-check.log",
+        "reason": "Existing PassedWithExplicitScope aggregate status missing from the tool enum; added without granting Runtime coverage."
+      }
+    }
+  },
+  "builds": [
+    {
+      "target": "Merged mod",
+      "status": "Succeeded",
+      "warnings": 0,
+      "errors": 0,
+      "log": ".local/upstream-update-20260927/build.log"
+    },
+    {
+      "target": "OfflineSearchHarness",
+      "status": "Succeeded",
+      "warnings": 0,
+      "errors": 0,
+      "log": ".local/upstream-update-20260927/build-harness.log"
+    },
+    {
+      "target": "Official mod",
+      "status": "Succeeded",
+      "warnings": 0,
+      "errors": 0,
+      "log": ".local/upstream-update-20260927/build-official.log"
+    },
+    {
+      "target": "Official OfflineSearchHarness",
+      "status": "Succeeded",
+      "warnings": 0,
+      "errors": 0,
+      "log": ".local/upstream-update-20260927/build-official-harness.log"
+    },
+    {
+      "target": "CheckpointTool",
+      "status": "Succeeded",
+      "warnings": 0,
+      "errors": 0,
+      "log": ".local/upstream-update-20260927/build-checkpoint-restored.log"
+    },
+    {
+      "target": "Local deployment with existing private connection metadata",
+      "status": "Succeeded",
+      "warnings": 0,
+      "errors": 0,
+      "log": ".local/upstream-update-20260927/build-deployment-final.log"
+    }
+  ],
+  "failedBuildAttempts": [
+    {
+      "log": ".local/upstream-update-20260927/build-checkpoint.log",
+      "reason": "Missing restored assets in initial --no-restore CheckpointTool build; normal restore build succeeded."
+    },
+    {
+      "log": ".local/upstream-update-20260927/build-deployment.log",
+      "reason": "Incorrect private showcase props path in build command; corrected directory, build succeeded."
+    }
+  ],
+  "localDelivery": {
+    "completedAtUtc": "2026-09-27T11:51:19.341232+00:00",
+    "status": "Copied",
+    "developmentMetadataVersion": "0.47.1",
+    "target": "/Users/sgpsdd/Library/Application Support/Steam/steamapps/common/Slay the Spire 2/SlayTheSpire2.app/Contents/MacOS/mods/CombatSolver",
+    "files": [
+      "CombatSolver.dll",
+      "CombatSolver.json",
+      "LICENSE",
+      "THIRD_PARTY_NOTICES.md"
+    ],
+    "buildLog": ".local/upstream-update-20260927/build-deployment-final.log",
+    "privateConfiguration": "Existing locally stored presence/showcase properties; values omitted",
+    "windowsMemoryCleaner": "Not applicable on macOS",
+    "releasePublished": false
+  },
+  "externalDelivery": {
+    "tagCreated": false,
+    "zipCreated": false,
+    "pushed": false,
+    "releasePublished": false
+  },
+  "unverified": [
+    "Real network play and simultaneous remote choices",
+    "Visible UI layout and performance",
+    "Windows/PowerShell and Linux runtime",
+    "No-GC establishment at the initial choice entry",
+    "Third-party gameplay mod combinations",
+    "Full 40-minute early-turn exploration quality",
+    "Full release gate"
+  ],
+  "ownership": "Native tests use actual game models/actions with fixture mode/network-visual isolation. Managed potion cost contracts are branch policy checks; they do not measure native potion opportunity cost. No teammate policy is added to production search."
+}

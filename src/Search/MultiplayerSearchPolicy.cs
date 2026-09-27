@@ -42,6 +42,9 @@ internal sealed record MultiplayerSearchPolicy(
             PredictPotionReward = false,
             UseNoveltyPortfolio = false,
             UseBeamWidthPortfolio = false,
+            EarlyTurnExplorationDepth = 0,
+            EarlyTurnExplorationBudgetMilliseconds = 0,
+            DevelopmentStrategy = null,
             PortfolioExperiment = null,
             NoveltySearch = null,
         };

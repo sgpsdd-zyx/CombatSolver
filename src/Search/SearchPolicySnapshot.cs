@@ -21,6 +21,8 @@ internal sealed record SearchPolicySnapshot(
 {
     public MultiplayerSearchPolicy? Multiplayer { get; init; }
     public bool UseNoveltyPortfolio { get; init; }
+    public int EarlyTurnExplorationDepth { get; init; }
+    public int EarlyTurnExplorationBudgetMilliseconds { get; init; }
     public bool PredictPotionReward { get; init; }
     public NoveltySearchOptions? NoveltySearch { get; init; }
     public NoveltyPortfolioBudget NoveltyBudget { get; init; } = NoveltyPortfolioBudget.Default;
@@ -127,4 +129,5 @@ internal sealed record SearchPolicySnapshot(
     public BeamWidthPortfolioTelemetry? PortfolioTelemetry { get; init; }
     public SearchRequestWorkTotals? RequestWorkTotals { get; init; }
     public SearchInteractionState? Interaction { get; init; }
+    internal DevelopmentSearchStrategy? DevelopmentStrategy { get; init; }
 }

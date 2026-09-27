@@ -34,7 +34,7 @@ Power 的原版克隆会重置 `_internalData`。跨根保留的数据必须从�
 
 计算型动态变量必须有分支规则。第三方卡牌进入 `CalculatedVar` 求值且没有 `CalculatedVarSpecRegistry` 支持时，按卡牌所属 Mod 报不兼容，日志包含卡牌 ID；界面和报告账本不引导玩家上传。不能回退调用会读取 live 状态的原生计算器。20260911 的 `LIFEMASTERMOD-TENTACLES` 属于该情况，本次没有为该 Mod 提供适配。
 
-Power 来源也是语义的一部分：精确镜像可通过 `ICombatPredictionEffectSink.ApplyPowerFromSource` 显式提供 `CardModel? cardSource`，原版传 null 时必须保持 null，避免能力附带效果被误判成外层卡牌直接效果。普通 `ApplyPower` 仍沿用当前卡牌作用域；两者不能按调用栈有无卡牌随意替代。
+Power 来源也是语义的一部分：精确镜像可通过 `ICombatPredictionEffectSink.ApplyPowerFromSource` 显式提供 `CardModel? cardSource`，原版传 null 时必须保持 null，避免能力附带效果被误判成外层卡牌直接效果。普通 `ApplyPower` 仍沿用当前卡牌作用域；两者不能按调用栈有无卡牌随意替代。官方 0.47.1 的 Inky 附魔明确传入其卡牌来源，使不安油灯按原版触发；自定义附魔也须按原生调用提供来源，不能只核对虚弱层数。
 
 普通能力的 `Owner` 与可空 `Target` 不可混用：无显式目标的施加保持 Target=null，定向施加入口保留真实目标。临时力量族的回调使用经过修正的请求偏移，封顶后的净增量不能替代；其类型检查不扩大第三方能力支持面。内置 Weak/Vulnerable/Frail 的首 tick 标记进入精确状态比较，第三方持续能力仍须登记自己的状态与结算，不自动按这三个类型处理。
 
@@ -89,6 +89,10 @@ CrabRagePower 的同伴死亡结算由 `AfterDeathMirrors` 独占：力量、格
 用于暴露缺失语义，适配者必须登记真实可打出条件，才能保证搜索按预测手牌判断合法性。
 
 ## 2. 登记点总表
+
+### 本地开发策略接口
+
+`IDevelopmentSearchStrategy` 是本地单人回放的实验接口，由 `DevelopmentStrategyLoader` 在请求开始时加载单独程序集和只读参数，结束时卸载。程序集须恰有一个公开、非抽象的实现类，且有公开无参构造器；参数和返回评分必须为有限数值。`Rank`、`Prioritize`、`Retain` 接收分支的纯值特征，`OrganizeMembers` 可重排有界组合成员。最终胜负与资源排序、预算、战斗结算和状态等价仍归原有实现；该接口不能代替任何玩法内容的镜像登记。多人政策移除脚本和单人追加探索，不承诺此接口适用于联机军师。用法见[策略会话](strategy/development-session.md)。
 
 ### 2.1 统一形状的镜像注册表（46 张）
 

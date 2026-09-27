@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "scenarioId": "UPSTREAM-0471-SOLO-POWER",
+  "characterId": "IRONCLAD",
+  "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+  "seed": "MULTIPLAYER-UPSTREAM-0410-COMPAT",
+  "enemyCurrentHp": 50,
+  "initialPlayerEnergy": 3,
+  "clearRunDeck": true,
+  "clearPlayerPiles": true,
+  "clearAllPowers": true,
+  "cards": [
+    {
+      "cardId": "INFLAME",
+      "pile": "Hand",
+      "treatAsDeckCard": true
+    },
+    {
+      "cardId": "STRIKE_IRONCLAD",
+      "pile": "Hand",
+      "treatAsDeckCard": true
+    },
+    {
+      "cardId": "STRIKE_IRONCLAD",
+      "pile": "Hand",
+      "treatAsDeckCard": true
+    },
+    {
+      "cardId": "DEFEND_IRONCLAD",
+      "pile": "Hand",
+      "treatAsDeckCard": true
+    },
+    {
+      "cardId": "DEFEND_IRONCLAD",
+      "pile": "Hand",
+      "treatAsDeckCard": true
+    }
+  ],
+  "fixedSearchBudget": true,
+  "searchBudgetOverrideMilliseconds": 15000,
+  "searchMaxDegreeOfParallelismForTest": 1,
+  "timeoutSeconds": 120
+}

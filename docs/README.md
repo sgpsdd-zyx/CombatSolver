@@ -4,8 +4,16 @@
 
 [多人原生实验](strategy/multiplayer-experiments-20260923/implementation.md)按“只有本机使用军师、队友独立决策”记录原生差分与受控脚本表现；收益、恶化和未知结果分开，真实联机仍未验收。现役操作与限制见[多人指南](multiplayer-advisor.md)。
 
+当前开发分支已合入官方 **0.47.1**（`7d9b4bed`），尚未发布新的 fork；开发基线与已发布 0.46.6 分开记录，见[本轮合并与验证](strategy/upstream-0471-merge-20260927.md)。
+
 - [ServerGC 自动启动与显式配置](performance/server-gc-launch-profile-20260924.md)：下次启动的准备／恢复、实际运行模式、跨平台入口和证据边界。
 - [官方新鲜资源探测上限](performance/fresh-resource-standpat-probe-cap-20260924.md)：单人搜索的工作削减、路线变化与已知取舍。
+- [更优世界线逐包策略记录](strategy/strategy-optimization-20260923.md)：逐包同根基线、人工对照和优化结果。
+- [策略优化 Part 1 交接](strategy/strategy-optimization-part1-handoff-20260927.md)：实验开关、已测作用、剩余包与继续排查口径。
+- [日志站更优世界线前 150 包](strategy/worldline-top150-20260926.md)：按站点战损下降值固定的处理顺序。
+
+- [常驻策略迭代会话](strategy/development-session.md)：跨包复用无头游戏、C# 策略脚本与参数热更新。
+
 - [GC 完成链修复与优化筛选](performance/gc-completion-allocation-20260921.md)：替代 #116/#120 的窄修复、失败复现与重新实测取舍。
 - [增量历史计数](strategy/incremental-history-counters.md)：生命周期、测试构建与构键计时。
 - [转置表触顶证据](performance/transposition-cap-evidence-20260920.md)：默认条目上限、标签分布与逐根观测。
@@ -19,13 +27,14 @@
 
 | 要查什么 | 入口 |
 |---|---|
+| 官方 0.47.1 回归修复与 0.47.0 策略更新 | [0.47.1 官方说明](releases/0.47.1-RELEASE_NOTES.md) · [0.47.0 官方说明](releases/0.47.0-RELEASE_NOTES.md) |
 | fork 0.46.6 烘焙手套修复、发布与知识归档 | [发布凭证](releases/0.46.6-PUBLISH.md)、[玩家说明](releases/0.46.6-RELEASE_NOTES.md)、[版本状态](releases/README.md) |
 | 官方 0.46.4 合并与 fork 0.46.5 历史验证 | [合并记录](strategy/upstream-0464-merge-20260925.md)、[发布记录](releases/0.46.5-PUBLISH.md) |
 | 如何实验未知队友、交错操作与反复手动重算 | [多人实验设计与原生试跑](strategy/multiplayer-experiments-20260923/README.md) |
 | 0.44.2 历史本地定版、实验结论边界与知识归档 | [本地记录](releases/0.44.2-PREPARE.md)、[归档凭证](strategy/multiplayer-shared-damage-20260923/closeout.md) |
 | 0.44.1 历史发布来源与 GitHub 交付 | [发布记录](releases/0.44.1-PUBLISH.md) |
 | 0.41.2 发布、独立尖塔军师修复及本地材料的归档状态 | [2026-09-18 归档记录](DEVELOPMENT_NOTES.md#归档状态2026-09-18) |
-| 多人手动军师、本机贡献目标、阶段与长线选路、救援与官方 0.46.4 兼容 | [多人军师](multiplayer-advisor.md) |
+| 多人手动军师、本机贡献目标、阶段与长线选路、救援与官方 0.47.1 兼容 | [多人军师](multiplayer-advisor.md) |
 | 独立「尖塔军师」拿牌推荐模组误读房主卡组的修复与重跑 | [本机玩家修复工具](../tools/SpireAdvisorMultiplayerFix/README.md) |
 | 多人研究原文归档、已采用改进与暂缓方案 | [策略索引](strategy/README.md#多人研究归档)、[首批实施](multiplayer-advisor.md#首批策略优化已实施) |
 | 本机贡献策略的研究采用、实现、证据与限制 | [2026-09-22 实施与归档](strategy/multiplayer-cooperative-planning-20260922/implementation.md) |

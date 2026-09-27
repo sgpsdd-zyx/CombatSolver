@@ -615,6 +615,8 @@ internal sealed partial class CombatBeamSolver
             DefensiveBlockValue = IsMultiplayerAdvice
                 ? Math.Min(Math.Max(0, player.Block), Math.Max(0, player.MaxHp))
                 : MeasureDefensiveBlockReserve(combat, player, threat),
+            ExplicitPotionStrategicCost = combat.PotionUses
+                .Where(use => !use.Automatic).Sum(use => use.StrategicHpCost),
             GrowthHpCredit = growthHpCredit,
             RelicCounters = relicCounters,
             GrowthRewards = growthRewards,
