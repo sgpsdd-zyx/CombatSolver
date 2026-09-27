@@ -1,10 +1,10 @@
 # CombatSolver 文档导航
 
-多人 fork **0.46.6 已发布**，基于官方 **0.46.4**，修复多人烘焙手套原生选牌页内的手动计算。见[玩家说明](releases/0.46.6-RELEASE_NOTES.md)、[验证记录](TEST_MATRIX.md#0466fork多人烘焙手套选牌计算2026-09-25)、[发布与归档凭证](releases/0.46.6-PUBLISH.md)和[多人指南](multiplayer-advisor.md)。当前发布状态统一见[版本索引](releases/README.md)；前一公开版为 0.46.5，官方基线来源见[合并记录](strategy/upstream-0464-merge-20260925.md)，官方与 fork 的同号记录互不覆盖。
+多人 fork **0.47.2 已发布**，基于官方 **0.47.1**，更新单人搜索、药水计价与墨刃联动预测，多人保留独立贡献选路和手动计算。见[玩家说明](releases/0.47.2-RELEASE_NOTES.md)、[合并验证](strategy/upstream-0471-merge-20260927.md)、[发布凭证](releases/0.47.2-PUBLISH.md)和[多人指南](multiplayer-advisor.md)。当前发布状态统一见[版本索引](releases/README.md)；前一公开版为 0.46.6，官方与 fork 的同号记录互不覆盖。
 
 [多人原生实验](strategy/multiplayer-experiments-20260923/implementation.md)按“只有本机使用军师、队友独立决策”记录原生差分与受控脚本表现；收益、恶化和未知结果分开，真实联机仍未验收。现役操作与限制见[多人指南](multiplayer-advisor.md)。
 
-当前开发分支已合入官方 **0.47.1**（`7d9b4bed`），尚未发布新的 fork；开发基线与已发布 0.46.6 分开记录，见[本轮合并与验证](strategy/upstream-0471-merge-20260927.md)。
+官方基线为 `7d9b4bed`，fork 发布来源为 `41e73efa`；行为验证沿用合并阶段，未验证项保持明确记录。
 
 - [ServerGC 自动启动与显式配置](performance/server-gc-launch-profile-20260924.md)：下次启动的准备／恢复、实际运行模式、跨平台入口和证据边界。
 - [官方新鲜资源探测上限](performance/fresh-resource-standpat-probe-cap-20260924.md)：单人搜索的工作削减、路线变化与已知取舍。
@@ -27,6 +27,7 @@
 
 | 要查什么 | 入口 |
 |---|---|
+| fork 0.47.2 单人搜索、药水与墨刃修正及发布 | [发布凭证](releases/0.47.2-PUBLISH.md)、[玩家说明](releases/0.47.2-RELEASE_NOTES.md) |
 | 官方 0.47.1 回归修复与 0.47.0 策略更新 | [0.47.1 官方说明](releases/0.47.1-RELEASE_NOTES.md) · [0.47.0 官方说明](releases/0.47.0-RELEASE_NOTES.md) |
 | fork 0.46.6 烘焙手套修复、发布与知识归档 | [发布凭证](releases/0.46.6-PUBLISH.md)、[玩家说明](releases/0.46.6-RELEASE_NOTES.md)、[版本状态](releases/README.md) |
 | 官方 0.46.4 合并与 fork 0.46.5 历史验证 | [合并记录](strategy/upstream-0464-merge-20260925.md)、[发布记录](releases/0.46.5-PUBLISH.md) |

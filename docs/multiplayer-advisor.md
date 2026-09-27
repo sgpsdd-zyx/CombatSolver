@@ -1,6 +1,6 @@
 # 多人军师（基于官方 0.47.1）
 
-当前开发分支已合入官方 **0.47.1**（`7d9b4bed`）的开局搜索与回归修复；多人继续使用本机贡献目标、无来源伤害折算与手动重算边界。公开 fork 仍是基于官方 0.46.4 的 **0.46.6**，来源 `24954f78`，支持烘焙手套原生选牌期间手动计算，见[发布凭证](releases/0.46.6-PUBLISH.md)。本次合并尚未发布，当前状态见[发布索引](releases/README.md)，取舍与验证见[合并记录](strategy/upstream-0471-merge-20260927.md)。官方与 fork 的同号日志分别归档，既有标签不移动。
+当前 fork **0.47.2 已发布**，来源 `41e73efa`，基于官方 **0.47.1**（`7d9b4bed`）的开局搜索与回归修复。多人继续使用本机贡献目标、无来源伤害折算与手动重算边界，支持烘焙手套原生选牌期间手动计算。见[发布凭证](releases/0.47.2-PUBLISH.md)、[发布索引](releases/README.md)及[合并取舍与验证](strategy/upstream-0471-merge-20260927.md)。官方与 fork 的同号日志分别归档，既有标签不移动。
 
 多人使用三敌方周期的本机贡献目标、伤害/代价前沿与最长十四周期的条件续行。无来源实际伤害按阶段人数折算参与选路，个人贡献仍按真实归属。阶段目标的[实施依据](strategy/multiplayer-cooperative-planning-20260922/implementation.md)与[伤害归属实验](strategy/multiplayer-shared-damage-20260923/implementation.md)保留原始版本和结论范围。
 

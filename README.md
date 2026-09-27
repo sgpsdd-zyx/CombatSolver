@@ -4,15 +4,15 @@ Combat Solver 是《杀戮尖塔 2》的战斗路线求解器，本 fork 支持�
 
 单人模式下，玩家可以只查看建议，也可以让求解器执行当前回合，或连续接管整场战斗。多人模式只提供手动请求的建议。搜索不会修改游戏 RNG，也不会在后台操作真实战斗状态。
 
-多人 fork **0.46.6 已发布**，基于官方 **0.46.4**。多人烘焙手套选牌页支持先计算推荐耗尽与后续路线，再由玩家手动确认。[下载最新版](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.46.6)，另见[中英更新日志](docs/releases/0.46.6-RELEASE_NOTES.md)、[发布与归档凭证](docs/releases/0.46.6-PUBLISH.md)和[官方基线合并记录](docs/strategy/upstream-0464-merge-20260925.md)。官方与 fork 的同号版本分别归档，既有标签不移动。
+多人 fork **0.47.2 已发布**，基于官方 **0.47.1**。更新单人搜索、药水计价与墨刃联动预测，多人继续保持手动军师和烘焙手套选牌计算。[下载最新版](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.47.2)，另见[中英更新日志](docs/releases/0.47.2-RELEASE_NOTES.md)、[发布凭证](docs/releases/0.47.2-PUBLISH.md)和[官方基线合并记录](docs/strategy/upstream-0471-merge-20260927.md)。官方与 fork 的同号版本分别归档，既有标签不移动。
 
-开发分支另已合入官方 **0.47.1**，尚未发布 fork 新版。单人开局搜索和回归修复随官方更新，多人继续独立贡献选路；详见[合并记录](docs/strategy/upstream-0471-merge-20260927.md)。The development branch now includes upstream **0.47.1**; the latest published fork remains **0.46.6**.
+本版的单人“前两回合深入探索（实验）”默认关闭，开启后最多计算 40 分钟，可随时停止；多人不启用此项探索。
 
 多人实验已包含独立队友、交错操作和连续手动重算，保留收益与恶化个案；[实验记录](docs/strategy/multiplayer-experiments-20260923/implementation.md)不代表真人联机胜率。
 
 [多人军师](docs/multiplayer-advisor.md) 推荐本人的出牌和用药路线，最多推演十四个敌方回合。队友行动后自行决定何时重算；推演假设队友后续不主动出牌或用药，但仍结算其被动效果。多人功能目前供试用，尚未完成真实联机验收。
 
-**English UI:** Set the game language to English and restart the game. In single-player, use **Play turn** or **Auto: On**. Multiplayer fork **0.46.6 is released**, based on upstream **0.46.4**. [Download the latest published release](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.46.6). You can calculate advice while Toasty Mittens awaits your exhaust choice, then confirm the choice yourself. Multiplayer uses a local contribution objective, balancing health, potions and observed longer-term returns. It retains manual advice for up to fourteen enemy cycles and doubled ordinary time and node limits. Teammates' future active actions are not modeled; live multiplayer is not yet verified. See the [release notes](docs/releases/0.46.6-RELEASE_NOTES.md). Configure potions, growth and search budgets in the overlay. **Settings > Reports > Upload report** submits a bug report. Logs, raw errors and some detailed diagnostics retain their original text.
+**English UI:** Set the game language to English and restart the game. In single-player, use **Play turn** or **Auto: On**. Multiplayer fork **0.47.2 is released**, based on upstream **0.47.1**. [Download the latest published release](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.47.2). You can calculate advice while Toasty Mittens awaits your exhaust choice, then confirm the choice yourself. Multiplayer uses a local contribution objective, balancing health, potions and observed longer-term returns. It retains manual advice for up to fourteen enemy cycles and doubled ordinary time and node limits. Teammates' future active actions are not modeled; live multiplayer is not yet verified. See the [release notes](docs/releases/0.47.2-RELEASE_NOTES.md). Configure potions, growth and search budgets in the overlay. **Settings > Reports > Upload report** submits a bug report. Logs, raw errors and some detailed diagnostics retain their original text.
 
 界面跟随游戏语言：简体/繁体中文使用现有中文文案，其他语言使用英文。简化版不提供独立语言开关；卡牌胶囊、选牌和相关悬停说明支持运行中切换语言，其他既有窗口可通过重启统一刷新。
 
