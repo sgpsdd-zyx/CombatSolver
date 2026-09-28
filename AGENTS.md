@@ -4,7 +4,7 @@
 >
 > 多人保持手动请求与操作、最多十四个敌方周期；使用三周期本机贡献目标、伤害/代价前沿和条件长线续行，不再使用每周期 3 HP 与旧 C/A 回退。无来源实际伤害按阶段人数折算参与选路，个人贡献仍按真实归属。治疗、重算及额外玩家回合不延后阶段截止，人数变化明确重建记账；不预测队友主动行为。普通时间/节点上限乘二，固定预算不变。多人不捕获单人成长目标，历史键保持原持有者范围扫描。禁止启动可见 Steam；无头结果不外推可见性能或联机胜率。
 >
-> 发布状态统一见[版本索引](docs/releases/README.md)：fork `0.47.3` 已完成合并验证并准备发布，基于官方 `72363308 / 0.47.2`；前一公开 fork 为 `0.47.2`，来源 `41e73efa`。本轮验证与未验证边界见[合并记录](docs/strategy/upstream-0472-merge-20260928.md)。官方标签不移动，同号日志单独归档。独立[尖塔军师修复工具](tools/SpireAdvisorMultiplayerFix/README.md)另有产物。历史批次、发布授权与证据归[开发笔记](docs/DEVELOPMENT_NOTES.md)和[策略索引](docs/strategy/README.md)，不作为新的操作授权。
+> 发布状态统一见[版本索引](docs/releases/README.md)：fork `0.47.3` 已发布，基于官方 `72363308 / 0.47.2`，来源 `06018378`；任务分支、annotated tag 与 GitHub 最新正式版已交付。前一公开 fork 为 `0.47.2`，来源 `41e73efa`。本轮验证与未验证边界见[合并记录](docs/strategy/upstream-0472-merge-20260928.md)。官方标签不移动，同号日志单独归档。独立[尖塔军师修复工具](tools/SpireAdvisorMultiplayerFix/README.md)另有产物。历史批次、发布授权与证据归[开发笔记](docs/DEVELOPMENT_NOTES.md)和[策略索引](docs/strategy/README.md)，不作为新的操作授权。
 >
 > 多人烘焙手套耗尽前允许手动计算，原生输入仍归玩家；原生暂停和队友准备边界成立后，当前全队根只补完本机剩余准备。第三方回合开始扩展明确拒绝该暂停入口。行为与验证由[多人指南](docs/multiplayer-advisor.md)维护。
 

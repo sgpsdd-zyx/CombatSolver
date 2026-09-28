@@ -1,6 +1,6 @@
 # CombatSolver 文档导航
 
-多人 fork **0.47.3 正在发布**，基于官方 **0.47.2**（`72363308`，含后续PR #144），同步单人跨回合路线、共享选牌语义、兼容性与内存显示；多人保持独立贡献目标和手动操作。见[玩家说明](releases/0.47.3-RELEASE_NOTES.md)、[合并验证](strategy/upstream-0472-merge-20260928.md)、[发布凭证](releases/0.47.3-PUBLISH.md)及[多人指南](multiplayer-advisor.md)。当前状态统一见[版本索引](releases/README.md)。
+多人 fork **[0.47.3 已发布](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.47.3)**，基于官方 **0.47.2**（`72363308`，含后续PR #144），同步单人跨回合路线、共享选牌语义、兼容性与内存显示；多人保持独立贡献目标和手动操作。见[玩家说明](releases/0.47.3-RELEASE_NOTES.md)、[合并验证](strategy/upstream-0472-merge-20260928.md)、[发布凭证](releases/0.47.3-PUBLISH.md)及[多人指南](multiplayer-advisor.md)。当前状态统一见[版本索引](releases/README.md)。
 
 [多人原生实验](strategy/multiplayer-experiments-20260923/implementation.md)按“只有本机使用军师、队友独立决策”记录原生差分与受控脚本表现；收益、恶化和未知结果分开，真实联机仍未验收。现役操作与限制见[多人指南](multiplayer-advisor.md)。
 

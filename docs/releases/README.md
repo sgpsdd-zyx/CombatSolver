@@ -4,7 +4,7 @@
 
 按版本倒序列出已有玩家更新日志，包括历史草案。是否正式发布以对应 Git 标签和发布记录为准；未发布改动见 [开发笔记](../DEVELOPMENT_NOTES.md)。发布 ZIP 存放在仓库根目录的 `releases/`，此处只保存文档。
 
-**多人 fork 0.47.3 已完成合并验证，正在发布。** 基于官方 `72363308 / 0.47.2`，含其正式版之后的PR #144，更新跨回合路线、选牌、第三方兼容与内存显示。见[完整中英说明](0.47.3-RELEASE_NOTES.md)、[发布凭证](0.47.3-PUBLISH.md)和[合并验证](../strategy/upstream-0472-merge-20260928.md)。
+**多人 fork [0.47.3 已发布](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.47.3)。** 基于官方 `72363308 / 0.47.2`，含其正式版之后的PR #144，更新跨回合路线、选牌、第三方兼容与内存显示。见[完整中英说明](0.47.3-RELEASE_NOTES.md)、[发布凭证](0.47.3-PUBLISH.md)和[合并验证](../strategy/upstream-0472-merge-20260928.md)。
 
 前一公开 fork 为 **[0.47.2](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.47.2)**，基于官方0.47.1，来源 `41e73efa`，见[发布凭证](0.47.2-PUBLISH.md)；再之前为 **[0.46.6](0.46.6-PUBLISH.md)**，基于官方0.46.4，来源 `24954f78`，修复多人烘焙手套选牌页无法开始计算。
 
@@ -14,7 +14,7 @@
 
 | 版本系列 | 更新日志 |
 |---|---|
-| 0.47 | [0.47.3（fork，准备发布）](0.47.3-RELEASE_NOTES.md) · [0.47.2 官方原文](upstream/0.47.2-RELEASE_NOTES.md) · [0.47.2（fork，已发布）](0.47.2-RELEASE_NOTES.md) · [0.47.1 官方原文](0.47.1-RELEASE_NOTES.md) · [0.47.0 官方原文](0.47.0-RELEASE_NOTES.md) |
+| 0.47 | [0.47.3（fork，已发布）](0.47.3-RELEASE_NOTES.md) · [0.47.2 官方原文](upstream/0.47.2-RELEASE_NOTES.md) · [0.47.2（fork，已发布）](0.47.2-RELEASE_NOTES.md) · [0.47.1 官方原文](0.47.1-RELEASE_NOTES.md) · [0.47.0 官方原文](0.47.0-RELEASE_NOTES.md) |
 | 0.46 | [0.46.6（fork，已发布）](0.46.6-RELEASE_NOTES.md) · [0.46.5（fork，已发布）](0.46.5-RELEASE_NOTES.md) · [0.46.4 官方原文](upstream/0.46.4-RELEASE_NOTES.md) · [0.46.4（fork，已发布）](0.46.4-RELEASE_NOTES.md) · [0.46.3 官方原文](upstream/0.46.3-RELEASE_NOTES.md) · [0.46.3（fork，已发布）](0.46.3-RELEASE_NOTES.md) · [0.46.2 官方原文](0.46.2-RELEASE_NOTES.md) · [0.46.1 官方原文](0.46.1-RELEASE_NOTES.md) · [0.46.0 官方原文](0.46.0-RELEASE_NOTES.md) |
 | 0.45 | [0.45.1（fork，已发布）](0.45.1-RELEASE_NOTES.md) · [0.45.0 官方原文](upstream/0.45.0-RELEASE_NOTES.md) |
 | 0.44 | [0.44.2（fork，历史准备版）](0.44.2-RELEASE_NOTES.md) · [0.44.1（fork）](0.44.1-RELEASE_NOTES.md) · [0.44.1 官方原文](upstream/0.44.1-RELEASE_NOTES.md) · [0.44.0 官方原文](upstream/0.44.0-RELEASE_NOTES.md) |
