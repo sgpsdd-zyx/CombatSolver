@@ -1,10 +1,10 @@
 # CombatSolver 仓库工作指令
 
-> **当前多人分支：** `codex/multiplayer-advisor` 基于官方 `7d9b4bed / 0.47.1`。单人保持该官方版本的原路径、参数和行为；fork 自有评分、保路、剪枝、预算和缓存只归多人政策/对象所有，公共文件仅允许显式多人接入。官方单人能力承诺、前两回合追加探索和开发策略脚本不得进入多人候选；涉及公共战斗语义的依赖单列，不混入策略优化。现役行为见[多人军师](docs/multiplayer-advisor.md)。
+> **当前多人分支：** `codex/multiplayer-advisor` 基于官方 `72363308 / 0.47.2`（含正式版后的 PR #144）。单人保持该官方版本的原路径、参数和行为；fork 自有评分、保路、剪枝、预算和缓存只归多人政策/对象所有，公共文件仅允许显式多人接入。官方单人能力／计划承诺、前两回合追加探索和开发策略脚本不得进入多人候选；涉及公共战斗语义的依赖单列，不混入策略优化。现役行为见[多人军师](docs/multiplayer-advisor.md)。
 >
 > 多人保持手动请求与操作、最多十四个敌方周期；使用三周期本机贡献目标、伤害/代价前沿和条件长线续行，不再使用每周期 3 HP 与旧 C/A 回退。无来源实际伤害按阶段人数折算参与选路，个人贡献仍按真实归属。治疗、重算及额外玩家回合不延后阶段截止，人数变化明确重建记账；不预测队友主动行为。普通时间/节点上限乘二，固定预算不变。多人不捕获单人成长目标，历史键保持原持有者范围扫描。禁止启动可见 Steam；无头结果不外推可见性能或联机胜率。
 >
-> 发布状态统一见[版本索引](docs/releases/README.md)：fork `0.47.2` 已发布，基于官方 `0.47.1`，来源 `41e73efa`；任务分支、annotated tag 与 GitHub 最新正式版已交付。合并 `cfff52e8` 的行为验证复用，未验证边界继续保留。官方标签不移动，同号日志单独归档。独立[尖塔军师修复工具](tools/SpireAdvisorMultiplayerFix/README.md)另有产物。历史批次、发布授权与证据归[开发笔记](docs/DEVELOPMENT_NOTES.md)和[策略索引](docs/strategy/README.md)，不作为新的操作授权。
+> 发布状态统一见[版本索引](docs/releases/README.md)：fork `0.47.3` 已完成合并验证并准备发布，基于官方 `72363308 / 0.47.2`；前一公开 fork 为 `0.47.2`，来源 `41e73efa`。本轮验证与未验证边界见[合并记录](docs/strategy/upstream-0472-merge-20260928.md)。官方标签不移动，同号日志单独归档。独立[尖塔军师修复工具](tools/SpireAdvisorMultiplayerFix/README.md)另有产物。历史批次、发布授权与证据归[开发笔记](docs/DEVELOPMENT_NOTES.md)和[策略索引](docs/strategy/README.md)，不作为新的操作授权。
 >
 > 多人烘焙手套耗尽前允许手动计算，原生输入仍归玩家；原生暂停和队友准备边界成立后，当前全队根只补完本机剩余准备。第三方回合开始扩展明确拒绝该暂停入口。行为与验证由[多人指南](docs/multiplayer-advisor.md)维护。
 
@@ -79,10 +79,14 @@ CombatSolver 是《杀戮尖塔 2》的单人战斗路线求解器 Mod，使用 
 ### 4.2 Search
 
 - `CombatSearchCoordinator`：主搜索、无药和强制用药反事实审计。
+- `SearchBudgetLedger`、`SearchRequestPipeline` 与协调器分片：单人请求预算、阶段和后处理；多人入口在这些阶段之前返回。
+- `FrontierContinuationScheduler`：单人固定前缀派发；`PlanCommitment` 和 `PlanHorizonPolicy` 的计划保路／续行不进入多人。
 - `CombatBeamSolver.cs`：构造参数、不可变根配置及各策略对象接线，不承载 `Solve` 循环。
 - `CombatPlan.cs`：节点、快照、动作与最终计划数据；`CombatBeamSolver.Models.cs`：`SearchFeatures` 和单次运行的 `SearchRunContext`。
 - `CombatBeamSolver.Phases.cs`：`Solve` 与阶段推进。
 - `CombatBeamSolver.Expansion.cs`：候选展开与动作回放入口。
+- `CombatBeamSolver.ExpansionPlan.cs`：串行／并行共用动作准备和子节点准入；首动作 live 目标门禁只用于单人。
+- `CombatBeamSolver.AdmittedExpansion.cs` 中的 `AdmittedJobScheduler` 与 `CombatBeamSolver.ExpansionExecutor.cs`：共用作业选择和子节点接收合同，保留两种执行器的消费顺序。
 - `CombatBeamSolver.ParallelExpansion.cs`：固定 worker lane、动作准备/原始候选物化与确定性串行提交。
 - `CombatBeamSolver.AdmittedExpansion.cs`：已准入父节点的动作、选择链、药水与回合尾部作业；有界派发、唯一快照所有权和在途排空。
 - `CombatBeamSolver.PrimaryChoiceReplay.cs`：保证原预算必经的首层选择回放、快照暂存与原序消费；不并发消费动态选择预算。

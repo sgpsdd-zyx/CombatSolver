@@ -340,7 +340,8 @@ internal sealed partial class CombatBeamSolver
         ManualCardChoiceFrame? cardChoiceFrame = null,
         PotionChoiceFrame? potionChoiceFrame = null,
         bool countTransition = true,
-        bool allowExecutionCapture = true)
+        bool allowExecutionCapture = true,
+        ContinuationCapture? continuationCapture = null)
     {
         _run.WorkPacer.YieldIfNeeded();
         CombatPredictionSimulator simulator;
@@ -437,6 +438,7 @@ internal sealed partial class CombatBeamSolver
                 }
                 turn = simulatedCombat.GetPlayerTurnNumber(_player);
                 LogAnnotatedReplayState(simulator, action, priorActionCount + actionOffset, turn, replayEvidence);
+                continuationCapture?.Observe(this, simulator, priorActionCount + actionOffset, turn, boundary);
                 continue;
             }
 
@@ -489,6 +491,7 @@ internal sealed partial class CombatBeamSolver
                 boundary = ResolveRequestedPlayerTurnEnd(
                     simulator, simulatedCombat, action, processedEnemyDeaths, ref turn, ref shufflesCrossed);
                 LogAnnotatedReplayState(simulator, action, priorActionCount + actionOffset, turn, replayEvidence);
+                continuationCapture?.Observe(this, simulator, priorActionCount + actionOffset, turn, boundary);
                 continue;
             }
 
@@ -577,6 +580,12 @@ internal sealed partial class CombatBeamSolver
             boundary = ResolveRequestedPlayerTurnEnd(
                 simulator, simulatedCombat, action, processedEnemyDeaths, ref turn, ref shufflesCrossed);
             LogAnnotatedReplayState(simulator, action, priorActionCount + actionOffset, turn, replayEvidence);
+            if (continuationCapture != null)
+            {
+                // Continuation stamps describe stable post-action state, outside the card scope.
+                cardExecutionScope.Dispose();
+                continuationCapture.Observe(this, simulator, priorActionCount + actionOffset, turn, boundary);
+            }
         }
         }
         finally { _run.Performance.End(SearchMetricPhase.Action, actionMeasurement); }

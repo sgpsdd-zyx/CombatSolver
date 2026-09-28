@@ -69,6 +69,20 @@ internal static class MultiplayerUpstreamContracts
         var root = CombatRootSnapshot.Capture(state, multiplayerAdvisor: true);
         var names = SolverDisplayNames.Capture(state);
         var damage = BattleDamageTracker.Observe(state);
+        var soloPlan = new PlanCommitment(PlanCommitmentKind.CopyPower, [], root.StartTurnNumber,
+            new(PlanPayoffEvidenceKind.RegisteredPowerBenefit, "IMPROVEMENT_POWER", root.StartTurnNumber),
+            UsesPotion: false, Priority: 1);
+        foreach (bool multiplayer in new[] { false, true })
+        {
+            var configured = new CombatBeamSolver(root, names, damage,
+                policy with { Multiplayer = multiplayer ? policy.Multiplayer : null },
+                searchProfile: policy.Profile, planCommitment: soloPlan);
+            object? retained = typeof(CombatBeamSolver)
+                .GetField("_planCommitment", BindingFlags.Instance | BindingFlags.NonPublic)!
+                .GetValue(configured);
+            Check(multiplayer ? retained == null : ReferenceEquals(retained, soloPlan),
+                multiplayer ? "multiplayer_rejects_solo_plan_commitment" : "solo_retains_official_plan_commitment");
+        }
         var solver = new CombatBeamSolver(root, names, damage, policy, searchProfile: policy.Profile);
         var parent = root.ForkSimulator();
         var child = parent.Fork();

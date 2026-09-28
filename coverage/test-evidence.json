@@ -1,4 +1,21 @@
 {
+  "UPSTREAM-0472-FORK-MERGE": {
+    "status": "PassedWithExplicitScope",
+    "level": "L1L2NativeContractsAndBoundedOfficialSearchComparison",
+    "procedure": "Merge 72363308 / official 0.47.2 plus PR 144; execute nine final native scenarios, multiplayer compatibility/quota contracts, isolated tool checks, two official roots at DOP1/DOP2, Bash boundaries and targeted CoverageCatalog verification.",
+    "expected": "Official single-player paths preserved; shared candidate generation retains frozen multiplayer targeting and excludes solo plan commitments. Multiplayer remains manually requested with its contribution policy and bounded horizon.",
+    "observed": "2026-09-28: nine final native scenarios Passed; 31 compatibility, 32 quota and 14 Infused Core checks Passed. Four official/fork pairs and 340 non-timing fields identical. Model ID 7, turn phase 28/3/27/2/52/5, precombat request 11, recovery state machine 11 Passed. Bash 250 files and 3035 catalog entries Passed for requested flags. Native tutorial timeout, conflicting hold lifecycle, two setup NoGC assertion failures and macOS CLR region-size failures are preserved with their exact scopes. All five headless instances removed.",
+    "evidence": "docs/strategy/upstream-0472-merge-20260928.md; docs/strategy/upstream-0472-merge-20260928-evidence.json; .local/upstream-update-20260928/",
+    "scope": "No real network play, visible performance, Windows/Linux runtime, complete third-party stack or full release gate. Real NoGC lifecycle/checkpoint checks could not enter a supported region on this macOS CLR. Aggregate evidence grants no additional runtime coverage."
+  },
+  "INFUSED-CORE-0472-FORK-MERGE": {
+    "status": "Passed",
+    "level": "NativeInitialSetupFullStateAndOfflineHookContracts",
+    "procedure": "Run initial-toolbox-infused-core.json with a 1500 ms fixed search and incremental verification; require native choice order and TURN_SETUP_STATE_MATCH validation=exact_state_text. Run OFFLINE_HARNESS_INFUSED_CORE_CHECKS=1 --character DEFECT --milestone M1 for first-turn owner/orb values, later turns and Fork isolation.",
+    "expected": "First-turn Infused Core prediction matches the native Play root after Toolbox selection; three owner Lightning orbs, 4/9 values, three history channels, no later-turn repeat and no parent/sibling/live mutation.",
+    "observed": "2026-09-28 macOS: native run macos-ee1ea2e059894692b393aa6a89024396 Passed with exact-state-text match, initial setup choices and native choice order. Fourteen offline production-hook checks Passed. The original fixture also requested holdAfterInitialSearch despite stopping after setup, so its process was non-reusable after the successful semantic assertion; the incompatible hold flag was removed and final batch lifecycle is recorded separately. Final fixture run macos-18165949eca4438282e275937636cc3a also Passed after the lifecycle correction; subsequent UI and memory requests completed in the same owned process.",
+    "evidence": "coverage/unattended/initial-toolbox-infused-core.json; tools/OfflineSearchHarness/InfusedCoreChecks.cs; docs/strategy/upstream-0472-merge-20260928.md; .local/upstream-update-20260928/native-final/03-evidence/runtime-events.json; .local/upstream-update-20260928/infused-core/infused-core-checks.json"
+  },
   "UPSTREAM-0471-FORK-MERGE": {
     "status": "PassedWithExplicitScope",
     "level": "L1L2NativeContractsAndBoundedOfficialSearchComparison",
@@ -191,14 +208,6 @@
     "observed": "2026-09-17: automatic merge produced 6 power frontier evaluations, 6 commitments and 11 expirations in multiplayer. Guarded version reports all 7 power-strategy counters zero, selects INFLAME plus two attacks, 20 nodes and one advisory session. Nine original HP cases, incremental/native boundary and ledger contracts passed (1.577 s including new isolation contract); seven-cycle native/choice/potion/manual controls passed (8.340 s); host/client startup contracts passed (1.823 s). Official versus merged solo: 80 comparisons equal, including all 17 route actions and complete route JSON; 1820 total nodes, 4583 transitions, 2 HP loss. Build 0 warnings/errors; Bash boundaries search_files=196; official pure power contracts total=104. No Godot, Steam, network, Windows PowerShell or full deployment verification; timing is not a performance comparison.",
     "evidence": "tools/OfflineSearchHarness/MultiplayerStrategyContracts.cs; coverage/multiplayer/solo-power-compat.json; docs/TEST_MATRIX.md; docs/multiplayer-advisor.md; .local/upstream-0410-compat/mp-before-guard-blocked/; .local/upstream-0410-compat/mp-final/; .local/upstream-0410-compat/solo-comparison.json; .local/upstream-0410-compat/mp-window/; .local/upstream-0410-compat/mp-start/"
   },
-  "POWER-CARD-VALUATION-ALL-POOLS": {
-    "status": "Passed",
-    "level": "PureContractAndHeadlessShortSearch",
-    "procedure": "六个卡池104张单人能力牌登记完整性、唯一性、池/ID一致、MultiplayerOnly排除、纯战后收益不承诺、每池五类覆盖、零触发拒绝、免费与高费硬开差异、单/双能力承诺与生命周期；每角色一个 novelty-search 精英短场景集成验收",
-    "expected": "纯合同输出 POWER_CARD_VALUATION_CHECKS_OK；Release 编译0错误；结构门禁 REFACTOR_BOUNDARIES_OK；五个短场景全部 Passed 且实例目录清理为空",
-    "observed": "POWER_CARD_VALUATION_CHECKS_OK total=104 silent=17 ironclad=19 defect=20 regent=18 necrobinder=18 colorless=12; REFACTOR_BOUNDARIES_OK search_files=192（新增 Projection/PowerCardProjectionMath.cs）; dev-00/dev-01/dev-02/dev-03/dev-04 五个 novelty-search 精英场景全部 Passed, error=null; headless-instances 为空。审计后：PowerLiveCards 排除消耗堆；群星之子按实际可花费星能点数（PowerStarSpendCapacity）；缓冲/凶恶/自动化/环绕轨道改纯数学并加合同断言；承诺证据语义改为路线进展/解除保护，撤回按池隔离与铁甲专用因果兑现（因果版哨兵铁甲 62、储君 52），恢复 540e4cb6 的通用进展释放；最终五哨兵铁甲 43、静默 40（行为未变沿用）、故障 13、储君 45、亡灵 25，与原结果一致。玩家联合评审采纳：优先级与专搜标记更新并同步投影数值；专搜标记接入前缀顺序/承诺席位会使 ironclad-elite 由 43 劣化为 62，已撤回，最终仍为 43 战损。",
-    "evidence": "tools/PowerCardValuationChecks/Program.cs; docs/TEST_MATRIX.md; docs/strategy/power-card-valuation/all-pools-implementation-20260917.md"
-  },
   "MULTIPLAYER-ADVISOR-HP-ALLOWANCE": {
     "status": "Passed",
     "level": "OfflineManagedNativeDifferentialAndSearchContract",
@@ -230,6 +239,22 @@
     "expected": "Same non-timing search metrics, route actions, complete root state and catalog identity",
     "observed": "2026-09-17: 61 solver metrics, 9 actions, 1 root state and 1 catalog comparison equal; 126 expanded nodes, 376 transitions, turn-3 victory, 4 HP cumulative loss. One sentinel, not a full single-player regression.",
     "evidence": "tools/OfflineSearchHarness/compare_results.py; docs/multiplayer-advisor.md; .local/solo-seven/; .local/solo-seven-comparison.json"
+  },
+  "INFUSED-CORE-INITIAL-SETUP-20260927": {
+    "status": "Pending",
+    "level": "OfflineProductionHookDiagnostic",
+    "procedure": "OFFLINE_HARNESS_INFUSED_CORE_CHECKS=1；OfflineSearchHarness --character DEFECT --milestone M1；真实生产Hook的首回合空球根诊断。原生短搜夹具initial-toolbox-infused-core.json未运行。",
+    "expected": "首回合参与者生成3个闪电球、4/9数值与3次产球历史；后续回合不重复；根与父子兄弟隔离；原生准备完成后完整状态匹配。",
+    "observed": "修改前actual=0失败，修改后14项离线检查Passed。用户游戏运行中，未启动原生无人测试，也未将离线诊断当作原生完整状态等价。Windows Release构建0警告0错误。",
+    "evidence": "tools/OfflineSearchHarness/InfusedCoreChecks.cs; coverage/unattended/initial-toolbox-infused-core.json; docs/TEST_MATRIX.md"
+  },
+  "POWER-CARD-VALUATION-ALL-POOLS": {
+    "status": "Passed",
+    "level": "PureContractAndHeadlessShortSearch",
+    "procedure": "六个卡池104张单人能力牌登记完整性、唯一性、池/ID一致、MultiplayerOnly排除、纯战后收益不承诺、每池五类覆盖、零触发拒绝、免费与高费硬开差异、单/双能力承诺与生命周期；每角色一个 novelty-search 精英短场景集成验收",
+    "expected": "纯合同输出 POWER_CARD_VALUATION_CHECKS_OK；Release 编译0错误；结构门禁 REFACTOR_BOUNDARIES_OK；五个短场景全部 Passed 且实例目录清理为空",
+    "observed": "POWER_CARD_VALUATION_CHECKS_OK total=104 silent=17 ironclad=19 defect=20 regent=18 necrobinder=18 colorless=12; REFACTOR_BOUNDARIES_OK search_files=192（新增 Projection/PowerCardProjectionMath.cs）; dev-00/dev-01/dev-02/dev-03/dev-04 五个 novelty-search 精英场景全部 Passed, error=null; headless-instances 为空。审计后：PowerLiveCards 排除消耗堆；群星之子按实际可花费星能点数（PowerStarSpendCapacity）；缓冲/凶恶/自动化/环绕轨道改纯数学并加合同断言；承诺证据语义改为路线进展/解除保护，撤回按池隔离与铁甲专用因果兑现（因果版哨兵铁甲 62、储君 52），恢复 540e4cb6 的通用进展释放；最终五哨兵铁甲 43、静默 40（行为未变沿用）、故障 13、储君 45、亡灵 25，与原结果一致。玩家联合评审采纳：优先级与专搜标记更新并同步投影数值；专搜标记接入前缀顺序/承诺席位会使 ironclad-elite 由 43 劣化为 62，已撤回，最终仍为 43 战损。",
+    "evidence": "tools/PowerCardValuationChecks/Program.cs; docs/TEST_MATRIX.md; docs/strategy/power-card-valuation/all-pools-implementation-20260917.md"
   },
   "REPORT-CARDS-ORBIT-ENERGY-GATE": {
     "status": "Passed",

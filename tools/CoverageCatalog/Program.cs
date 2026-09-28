@@ -1894,7 +1894,7 @@ static RuntimeEvidenceGapEntry ToRuntimeEvidenceGap(CoverageEntry entry)
 {
     Type? type = typeof(AbstractModel).Assembly.GetType(entry.EntityType, throwOnError: false);
     AbstractModel? model = type is { IsAbstract: false }
-        ? Activator.CreateInstance(type) as AbstractModel
+        ? ModelDb.GetById<AbstractModel>(ModelDb.GetId(type))
         : null;
     return new RuntimeEvidenceGapEntry(
         entry.Key,

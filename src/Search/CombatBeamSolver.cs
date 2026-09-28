@@ -40,7 +40,10 @@ internal sealed partial class CombatBeamSolver(
     PrimarySearchIncumbent? primaryIncumbent = null,
     int? earliestPotionTurn = null,
     int earlyTurnScoutDepth = 0,
-    Action<int, IReadOnlyList<EarlyTurnFrontierCandidate>>? earlyTurnScoutObserver = null)
+    Action<int, IReadOnlyList<EarlyTurnFrontierCandidate>>? earlyTurnScoutObserver = null,
+    PlanCommitment? planCommitment = null,
+    ContinuationPurpose? attributionPurpose = null,
+    DirectSearchPurpose? directSearchPurpose = null)
 {
     private bool IsMultiplayerAdvice => policy.Multiplayer != null;
     private readonly MultiplayerContributionObjective? _contributionObjective = policy.Multiplayer == null ? null
@@ -83,6 +86,9 @@ internal sealed partial class CombatBeamSolver(
     private readonly DevelopmentSearchStrategy? _developmentStrategy = policy.Multiplayer == null
         ? policy.DevelopmentStrategy : null;
     private readonly IReadOnlyList<PlanAction> _fixedPrefixActions = fixedPrefixActions ?? [];
+    private readonly PlanCommitment? _planCommitment = policy.Multiplayer == null ? planCommitment : null;
+    private readonly ContinuationPurpose? _attributionPurpose = attributionPurpose;
+    private readonly DirectSearchPurpose? _directSearchPurpose = directSearchPurpose;
     private readonly bool _resetFixedPrefixSchedulingBaseline = resetFixedPrefixSchedulingBaseline;
     private readonly int _earlyTurnScoutDepth = earlyTurnScoutDepth;
     private readonly Action<int, IReadOnlyList<EarlyTurnFrontierCandidate>>? _earlyTurnScoutObserver = earlyTurnScoutObserver;
@@ -123,7 +129,8 @@ internal sealed partial class CombatBeamSolver(
         PrepareStandPatProbes,
         policy.Multiplayer != null ? CompareMultiplayerPlans : null,
         policy.Multiplayer != null ? CreateMultiplayerOrdering : null,
-        _developmentStrategy);
+        _developmentStrategy,
+        _planCommitment);
     private FinalPlanOrdering? _finalOrdering;
     private FinalPlanOrdering FinalOrdering => _finalOrdering ??= new FinalPlanOrdering(
         _potionPolicy,

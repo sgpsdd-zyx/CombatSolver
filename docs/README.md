@@ -1,19 +1,23 @@
 # CombatSolver 文档导航
 
-多人 fork **0.47.2 已发布**，基于官方 **0.47.1**，更新单人搜索、药水计价与墨刃联动预测，多人保留独立贡献选路和手动计算。见[玩家说明](releases/0.47.2-RELEASE_NOTES.md)、[合并验证](strategy/upstream-0471-merge-20260927.md)、[发布凭证](releases/0.47.2-PUBLISH.md)和[多人指南](multiplayer-advisor.md)。当前发布状态统一见[版本索引](releases/README.md)；前一公开版为 0.46.6，官方与 fork 的同号记录互不覆盖。
+多人 fork **0.47.3 正在发布**，基于官方 **0.47.2**（`72363308`，含后续PR #144），同步单人跨回合路线、共享选牌语义、兼容性与内存显示；多人保持独立贡献目标和手动操作。见[玩家说明](releases/0.47.3-RELEASE_NOTES.md)、[合并验证](strategy/upstream-0472-merge-20260928.md)、[发布凭证](releases/0.47.3-PUBLISH.md)及[多人指南](multiplayer-advisor.md)。当前状态统一见[版本索引](releases/README.md)。
 
 [多人原生实验](strategy/multiplayer-experiments-20260923/implementation.md)按“只有本机使用军师、队友独立决策”记录原生差分与受控脚本表现；收益、恶化和未知结果分开，真实联机仍未验收。现役操作与限制见[多人指南](multiplayer-advisor.md)。
 
-官方基线为 `7d9b4bed`，fork 发布来源为 `41e73efa`；行为验证沿用合并阶段，未验证项保持明确记录。
+前一公开 fork 为0.47.2，来源 `41e73efa`。本轮九类原生场景、托管合同与四对官方单人对照通过；GC实测和平台边界保留在合并记录中。
 
 - [ServerGC 自动启动与显式配置](performance/server-gc-launch-profile-20260924.md)：下次启动的准备／恢复、实际运行模式、跨平台入口和证据边界。
 - [官方新鲜资源探测上限](performance/fresh-resource-standpat-probe-cap-20260924.md)：单人搜索的工作削减、路线变化与已知取舍。
+- [官方策略重构与 PR 合并审计](refactoring/merge-audit-20260928.md)：上游审查及历史验证边界，本 fork 的本轮证据见合并验证。
+- [固定并行度优化试验](performance/fixed-dop-20260927.md)：当前采样、撤回的列表复制原型、长路线单次收尾回放及验证限制。
+
 - [更优世界线逐包策略记录](strategy/strategy-optimization-20260923.md)：逐包同根基线、人工对照和优化结果。
 - [策略优化 Part 1 交接](strategy/strategy-optimization-part1-handoff-20260927.md)：实验开关、已测作用、剩余包与继续排查口径。
 - [日志站更优世界线前 150 包](strategy/worldline-top150-20260926.md)：按站点战损下降值固定的处理顺序。
 
 - [常驻策略迭代会话](strategy/development-session.md)：跨包复用无头游戏、C# 策略脚本与参数热更新。
 
+- [搜索热路径分配](performance/search-hotpath-allocation-20260925.md)：Server GC 多预设与 17 个战斗根的直接交错对照、固定工作量等价及未采用实验。
 - [GC 完成链修复与优化筛选](performance/gc-completion-allocation-20260921.md)：替代 #116/#120 的窄修复、失败复现与重新实测取舍。
 - [增量历史计数](strategy/incremental-history-counters.md)：生命周期、测试构建与构键计时。
 - [转置表触顶证据](performance/transposition-cap-evidence-20260920.md)：默认条目上限、标签分布与逐根观测。
@@ -27,6 +31,8 @@
 
 | 要查什么 | 入口 |
 |---|---|
+| fork 0.47.3 跨回合路线、选牌、兼容与内存显示 | [发布凭证](releases/0.47.3-PUBLISH.md)、[玩家说明](releases/0.47.3-RELEASE_NOTES.md) |
+| 官方0.47.2原始发布说明 | [官方原文](releases/upstream/0.47.2-RELEASE_NOTES.md) |
 | fork 0.47.2 单人搜索、药水与墨刃修正及发布 | [发布凭证](releases/0.47.2-PUBLISH.md)、[玩家说明](releases/0.47.2-RELEASE_NOTES.md) |
 | 官方 0.47.1 回归修复与 0.47.0 策略更新 | [0.47.1 官方说明](releases/0.47.1-RELEASE_NOTES.md) · [0.47.0 官方说明](releases/0.47.0-RELEASE_NOTES.md) |
 | fork 0.46.6 烘焙手套修复、发布与知识归档 | [发布凭证](releases/0.46.6-PUBLISH.md)、[玩家说明](releases/0.46.6-RELEASE_NOTES.md)、[版本状态](releases/README.md) |
@@ -102,6 +108,10 @@
 | 小改动优化文献、源码切口与独立分配探针 | [精简优化深入研究](performance/surgical-research-20260912.md) |
 | 遗物独立开关、目标范围、血量额度与早停 | [战斗末遗物计数策略](relic-counters.md) |
 | 组件职责、状态所有权和调用链 | [架构与职责地图](ARCHITECTURE.md) |
+| 当前求解与搜索策略的全链路深度分析 | [求解与搜索策略深度分析（2026-09-27 快照）](strategy/solver-search-strategy-analysis-20260927.md) |
+| P0–P6 策略与搜索重构的实际改动、证据及未完成项 | [策略与搜索重构实施总结](refactoring/strategy-search-refactor-summary-20260928.md) |
+| 后续策略优化方向、建议改动与架构不足 | [策略优化方向与架构不足分析](strategy/strategy-optimization-directions-20260927.md) |
+| 面向搜索层的大重构计划（目标架构、P0–P8、门禁与里程碑） | [策略与搜索大重构计划](refactoring/strategy-refactor-plan-20260927.md) |
 | 当前搜索、卡牌评分、保路剪枝与最终选路 | [搜索逻辑详解（2026-09-12 开发快照）](strategy/search-logic-explained-20260912.md) |
 | 当前 UI 重设计、按钮区整理与 Gemini 建议审计 | [UI 建议复核与重构方案](audits/ui-redesign-gemini-review-20260911.md) |
 | 本批未发布改动、版本演进与开发记录 | [开发笔记](DEVELOPMENT_NOTES.md) |
