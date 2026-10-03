@@ -1,192 +1,24 @@
-# CombatSolver 文档导航
+# CombatSolver 文档
 
-当前代码已合入官方 **0.48.0**（`a789aad2`），多人 fork **[0.48.1 已发布](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.48.1)**。本地部署、正式包及渠道结果见[发布凭证](releases/0.48.1-PUBLISH.md)，当前版本状态统一见[版本索引](releases/README.md)；本次[玩家说明](releases/0.48.1-RELEASE_NOTES.md)、[合并验证与归档](strategy/upstream-0480-merge-20261002.md)和[多人指南](multiplayer-advisor.md)分别维护变化、证据与现役行为。
+持续规则见 [AGENTS.md](../AGENTS.md)，玩家介绍见 [README](../README.md)。现行指南以源码和实际验证为准；历史结果保留生成版本与局限。
 
-[多人原生实验](strategy/multiplayer-experiments-20260923/implementation.md)按“只有本机使用军师、队友独立决策”记录原生差分与受控脚本表现；收益、恶化和未知结果分开，真实联机仍未验收。现役操作与限制见[多人指南](multiplayer-advisor.md)。
-
-上一公开 fork 为0.47.3，来源 `06018378`。本轮验证单列于合并记录；下方上游历史不作为本机通过证据。
-
-- [ServerGC 自动启动与显式配置](performance/server-gc-launch-profile-20260924.md)：下次启动的准备／恢复、实际运行模式、跨平台入口和证据边界。
-- [官方新鲜资源探测上限](performance/fresh-resource-standpat-probe-cap-20260924.md)：单人搜索的工作削减、路线变化与已知取舍。
-- [官方策略重构与 PR 合并审计](refactoring/merge-audit-20260928.md)：上游审查及历史验证边界，本 fork 的本轮证据见合并验证。
-
-## 上游专题与历史证据
-
-以下文档保留官方的实施和验证记录，不等于本 fork 本轮验证或新的操作授权。
-
-- [五角色、所有原版遭遇的已知回血剪枝](performance/native-healing-bound-generalization-20261003.md)：千足虫 PR 的加速机制、通用政策、遗物目标保路与跨成员复用。
-
-- [社区 PR 合并与已知回血策略审计](refactoring/merge-audit-20261003.md)：六个正式 PR 完整分支的审查、最小验证、多成员胜利界复用和未验证边界。
-
-- [B015后续证据](community/b015-follow-up.md)：T016余像前移失效目标回退、T018队列故障隔离，以及其余主题来源/原生对照边界。
-- [B015阶段一证据](community/b015-stage-one.md)：五主题分诊、T018统计消费者失败隔离及未验收边界。
-- [静默猎手基础根的生命界认证](performance/silent-recovery-bound-20261001.md)：窄范围来源证明、原生治疗旁路及两个固定根的工作量和评分尾键取舍。
-
-- [早期回合探索实机复核与后续候选](performance/early-turn-log-review-20261001.md)：19 场日志保留、外部生命界命中、达标停止与候选预算研究切口。
-- [铁甲巨型千足虫阶段优化 C59](performance/iron-generation-closure-research-20261003.md)：A/B/B/A中位数4.02倍、37战损/0瓶；完整原生部署及三个哨兵通过，原始波动保留。
-
-- [储君巨型千足虫搜索阶段优化 C58](performance/regent-potion-cap-bound-research-20261003.md)：完整请求保守提速32.91倍、原生0战损；29根回归及峰值复核完成，全部原始波动样本保留。
-
-- [社区贡献指南](../CONTRIBUTING.md)：整批自动认领、环境与 PR 验收。
-- [夹具与开发脚手架](community/testing-guide.md)：最小差分、问题包回放、生成场景、策略脚本与离线宿主。
-- [社区任务资料](community/task-data.md)：报告范围、分类去重、公开材料与后续批次。
-- [社区任务发布 skill](../.agents/skills/combatsolver-community-tasks/SKILL.md)：0.47.x 静态根因归并、五主题组批与重复主题包清理；[主题登记](community/theme-registry.json)与[发布账本](community/publication-ledger.json)记录匹配规则和去向。
-
-- [手动释放后自动执行内存回涨](performance/manual-memory-release-20261001.md)：PR #147 本轮审计证据、页面回载根因及释放后生成路线部署验证。
-
-- [策略重构与 PR 合并审计](refactoring/merge-audit-20260928.md)：本轮源码审查、修复、合并及验证边界。
-- [固定并行度优化试验](performance/fixed-dop-20260927.md)：当前采样、撤回的列表复制原型、长路线单次收尾回放及验证限制。
-
-- [更优世界线逐包策略记录](strategy/strategy-optimization-20260923.md)：逐包同根基线、人工对照和优化结果。
-- [策略优化 Part 1 交接](strategy/strategy-optimization-part1-handoff-20260927.md)：实验开关、已测作用、剩余包与继续排查口径。
-- [日志站更优世界线前 150 包](strategy/worldline-top150-20260926.md)：按站点战损下降值固定的处理顺序。
-
-- [常驻策略迭代会话](strategy/development-session.md)：跨包复用无头游戏、C# 策略脚本与参数热更新。
-
-- [搜索热路径分配](performance/search-hotpath-allocation-20260925.md)：Server GC 多预设与 17 个战斗根的直接交错对照、固定工作量等价及未采用实验。
-- [GC 完成链修复与优化筛选](performance/gc-completion-allocation-20260921.md)：替代 #116/#120 的窄修复、失败复现与重新实测取舍。
-- [增量历史计数](strategy/incremental-history-counters.md)：生命周期、测试构建与构键计时。
-- [转置表触顶证据](performance/transposition-cap-evidence-20260920.md)：默认条目上限、标签分布与逐根观测。
-
-通用随机/指定战斗测试入口：[场景生成与批量重跑](GENERATED_COMBAT_SCENARIOS.md)。
-
-
-玩家安装、操作与兼容性说明见 [项目 README](../README.md)。源码规则见 [AGENTS.md](../AGENTS.md)。
-
-## 当前文档
-
-| 要查什么 | 入口 |
-|---|---|
-| 官方 0.48.0：复杂战斗提速、全角色回血剪枝、日志保留与社区修复 | [0.48.0 更新日志](releases/0.48.0-RELEASE_NOTES.md) |
-| 官方多人规划（参考，fork 现役合同见多人军师） | [多人适配实施规划](MULTIPLAYER_PLAN.md) |
-| 官方 0.47.3：手动内存释放、重复选牌与内存紧张后的策略恢复 | [0.47.3 更新日志](releases/upstream/0.47.3-RELEASE_NOTES.md) |
-| fork 0.47.3 跨回合路线、选牌、兼容与内存显示 | [发布凭证](releases/0.47.3-PUBLISH.md)、[玩家说明](releases/0.47.3-RELEASE_NOTES.md) |
-| 官方0.47.2原始发布说明 | [官方原文](releases/upstream/0.47.2-RELEASE_NOTES.md) |
-| fork 0.47.2 单人搜索、药水与墨刃修正及发布 | [发布凭证](releases/0.47.2-PUBLISH.md)、[玩家说明](releases/0.47.2-RELEASE_NOTES.md) |
-| 官方 0.47.1 回归修复与 0.47.0 策略更新 | [0.47.1 官方说明](releases/0.47.1-RELEASE_NOTES.md) · [0.47.0 官方说明](releases/0.47.0-RELEASE_NOTES.md) |
-| fork 0.46.6 烘焙手套修复、发布与知识归档 | [发布凭证](releases/0.46.6-PUBLISH.md)、[玩家说明](releases/0.46.6-RELEASE_NOTES.md)、[版本状态](releases/README.md) |
-| 官方 0.46.4 合并与 fork 0.46.5 历史验证 | [合并记录](strategy/upstream-0464-merge-20260925.md)、[发布记录](releases/0.46.5-PUBLISH.md) |
-| 如何实验未知队友、交错操作与反复手动重算 | [多人实验设计与原生试跑](strategy/multiplayer-experiments-20260923/README.md) |
-| 0.44.2 历史本地定版、实验结论边界与知识归档 | [本地记录](releases/0.44.2-PREPARE.md)、[归档凭证](strategy/multiplayer-shared-damage-20260923/closeout.md) |
-| 0.44.1 历史发布来源与 GitHub 交付 | [发布记录](releases/0.44.1-PUBLISH.md) |
-| 0.41.2 发布、独立尖塔军师修复及本地材料的归档状态 | [2026-09-18 归档记录](DEVELOPMENT_NOTES.md#归档状态2026-09-18) |
-| 多人手动军师、本机贡献目标、阶段与长线选路、救援与官方 0.47.1 兼容 | [多人军师](multiplayer-advisor.md) |
-| 独立「尖塔军师」拿牌推荐模组误读房主卡组的修复与重跑 | [本机玩家修复工具](../tools/SpireAdvisorMultiplayerFix/README.md) |
-| 多人研究原文归档、已采用改进与暂缓方案 | [策略索引](strategy/README.md#多人研究归档)、[首批实施](multiplayer-advisor.md#首批策略优化已实施) |
-| 本机贡献策略的研究采用、实现、证据与限制 | [2026-09-22 实施与归档](strategy/multiplayer-cooperative-planning-20260922/implementation.md) |
-| 十四周期规划、计算额度与队友偏移 | [2026-09-20 对照与采用](strategy/multiplayer-fourteen-cycles-20260920.md)；[旧七周期研究](strategy/pro-horizon-20260919/README.md)保留当时原始结果与动作成本实验 |
-| 未击杀长线选路、浅比较与首回合方案的公平续行 | [6 Pro 研究与本地候选池观察](strategy/pro-window-selection-20260920/README.md)；[0.43.4 实施与知识收尾](strategy/pro-window-selection-20260920/implementation.md) |
-| 0.41.2 的第二轮 6 Pro 复审与首批修正 | [第二轮归档](strategy/pro-review-0412-20260918/README.md)、[本地复核](strategy/pro-review-0412-20260918/local-review.md)、[实施与收尾](strategy/pro-review-0412-20260918/implementation.md)；F01/F02/F03 纳入 0.41.3 定版 |
-| 0.41.1 的 ChatGPT 6 Pro 审查结论、策略设计原文与本地复核 | [复审归档](strategy/pro-review-20260918/README.md)、[本地复核与采用边界](strategy/pro-review-20260918/local-review.md)；旧版输入见[历史索引](strategy/README.md#多人研究归档) |
-| 官方回合开始适配、结算修正和界面更新的历史说明 | [0.44.1 原文](releases/upstream/0.44.1-RELEASE_NOTES.md)、[0.45.0 原文](releases/upstream/0.45.0-RELEASE_NOTES.md) |
-| 官方计算失败修复、循环优化与搜索组合调整的历史说明 | [0.44.0 上游原文](releases/upstream/0.44.0-RELEASE_NOTES.md) |
-| 小循环的质量（过量格挡/不取斩杀）、动作数上限与展示折叠落点 | [循环质量性能展示调研](research/loop-quality-performance-display-20260921.md) |
-| 循环请求共享额度、安全前缀续搜及历史依赖收尾 | [循环优化收尾](performance/loop-final-20260921.md) |
-| 19 个循环边界场景、4096 回放耗尽反例及外部审计复核 | [循环边界扩展](performance/loop-boundaries-20260921.md) |
-| 状态键为什么要含整场历史计数、条件式与无条件追加的对照 | [状态键历史计数报告](strategy/state-key-history-counters-20260919.md) |
-| 战后掉药预测（奖励 RNG 镜像）与满栏用药门槛 | [战后掉药预测报告](strategy/potion-reward-outlook-20260918.md) |
-| 0.41.0代码体量、死代码诊断与保持行为的轻度清理 | [代码整洁度审查](refactoring/code-hygiene-review-2026-09-18.md) |
-| 全量静态诊断、克隆、耦合与技术债分批清理 | [技术债深挖](refactoring/tech-debt-audit-2026-09-18.md) |
-| 能力牌逐卡建模、统一估值接口与后续独立搜索分支 | [能力牌优化计划](strategy/power-card-valuation-plan-20260917.md) |
-| 无需训练的有界新颖性／Beam 组合、实验开关和完整对照 | [有界多策略搜索](strategy/bounded-novelty-search-20260916.md) |
-| 不启动 Godot 批量跑搜索、量宽度与预算 | [离线搜索宿主](OFFLINE_SEARCH_HARNESS.md) |
-| 完整性能优化正式 PR、路线控件复用、0.38.6 合并验证与对照 | [正式 PR 验收](performance/performance-pr-20260915.md) |
-| 自身弃牌续执行正式接入、搜索等价与整场对照 | [正式续执行与整搜](performance/choice-continuation-search-20260914.md) |
-| 卡牌、药水、遗物与Power选牌续执行的批量扩展可行性 | [选牌续执行扩展研究](performance/choice-continuation-expansion-20260914.md) |
-| 选牌续执行三阶段实施进度与验证 | [选牌续执行批量实施](performance/choice-continuation-expansion-implementation-20260914.md) |
-| 投掷匕首、杂技、早有准备的暂停恢复窄原型与修正后对照 | [选牌暂停与恢复原型](performance/choice-continuation-prototype-20260914.md) |
-| 蟹战后续延迟、抽牌洗牌前缀、生成池与全部反例 | [蟹战后续优化](performance/crab-latency-20260914.md) |
-| 极高慢/高内存场景的通用优化、完整对照与高成本TODO | [通用分配与重复工作](performance/general-allocation-20260914.md) |
-| PR #90全部性能尝试、采用/撤回与效果 | [尝试总账](performance/pr90-attempts-20260913.md) |
-| 女王原配置10秒目标、回合前缀复用及未达标限制 | [回合前缀与10秒目标](performance/queen-round-prefix-20260913.md) |
-| 女王慢在哪些卡牌/CPU路径、按需估值收益 | [CPU与回放归因](performance/queen-cpu-20260913.md) |
-| NoGC退出后能否恢复、GC频率与峰值代价 | [回退恢复报告](performance/queen-gc-recovery-20260913.md) |
-| 女王原包为何恢复失败、为何频繁GC及本轮优化取舍 | [恢复与性能报告](performance/queen-replay-optimization-20260913.md) |
-| 未变状态共享、标签/大牌堆容器优化与女王GC问题 | [调查与实测](performance/state-sharing-20260913.md) |
-| 内存主要花在哪里，什么条件才能缩至十分之一 | [分配与峰值研究](performance/memory-tenfold-20260913.md) |
-| 重型根的纯值模型 ID 缓存与定向 A/B | [ModelDb.GetId 记忆化](performance/defect-modeldb-getid-cache-20260919.md) |
-| 遗物印牌站点仅 Crossbow 复用根生成池 | [遗物印牌站点复用](performance/relic-generation-pool-reuse-20260919.md) |
-| PR #114 转置表上限的决策代价和固定根证据 | [搜索保留表](performance/search-retention-bounds-20260919.md) |
-| PR #114 内存截断、续用戳与排他阶段测量 | [搜索内存恢复](performance/search-memory-recovery-20260919.md) |
-| PR #114 离线宿主保真与 16 并行基线 | [16 并行阶段归因](performance/dop16-veryhigh-fidelity-20260919.md) |
-| 默认关闭的学习型组合选择器和训练反例 | [学习型门控](strategy/learned-portfolio-gate-20260917.md) |
-| 自生成场景、上下文排序实验与组合达标早停 | [实验与取舍](strategy/contextual-ordering-20260922.md)、[早停证据](strategy/contextual-target-stop-20260922-evidence.json)、[权重敏感度证据](strategy/contextual-weight-sensitivity-20260922-evidence.json)、[窄进攻成员证据](strategy/contextual-offensive-refinement-20260922-evidence.json)、[有界追加证据](strategy/contextual-bounded-refinement-20260922-evidence.json) |
-| 完整原搜索后追加有限探索的32根质量、成本与默认关闭决定 | [后置结构探索证据](strategy/contextual-adaptive-novelty-20260922-evidence.json) |
-| 已撤回窄成员原型的质量、成本及复现补丁 | [条件窄成员替换证据](strategy/contextual-structural-refinement-20260922-evidence.json) |
-| 默认组合再分配、独立35根、跨预设、ABBA与原生完整部署 | [组合再分配证据](strategy/contextual-portfolio-reallocation-20260922-evidence.json) |
-| 943份计划外重算报告、16类已修机制及证据缺口 | [2026-09-13批次结果](issues/report-replans-20260913.md) |
-| 环绕轨道、自动化的持续返能估值与实战对照 | [返能能力估值](issues/recurring-energy-valuation-20260913.md) |
-| 后续六方向的当前诊断、逐项实现与对照 | [六方向开发记录](performance/six-directions-20260913.md) |
-| 当前性能PR全部改动、撤回方案与各轮指标 | [累计记录](performance/surgical-pr-summary-20260913.md) |
-| 提前计算回合尾部、所有权合同与16线程对照 | [尾部并行报告](performance/early-tail-parallelism-20260913.md) |
-| 普通Power免锁、理论收益模型与16并行实测 | [Power克隆并行](performance/power-clone-parallelism-20260913.md) |
-| 克隆优化后剩余Power锁、同父Fork和回合尾部并行瓶颈 | [并行瓶颈定位](performance/parallel-bottlenecks-20260913.md) |
-| 真实 BaseLib 下原版卡牌克隆并行、保守回退与验证限制 | [克隆并行边界](performance/native-clone-parallelism-20260913.md) |
-| 当前精简 fork、旧移植暂停、实测收益与小优化候选 | [手术刀式移植](performance/surgical-fixes-20260912.md) |
-| 盛碗虫群小区域并行预约、实测提速与边界验证 | [父节点预约优化](performance/bowlbugs-wave-admission-20260912.md) |
-| 盛碗虫群慢搜索：原包分析、诊断恢复与药水历史分配优化 | [慢搜索原包分析](performance/bowlbugs-slow-search-20260912.md) |
-| 通用选牌令牌计数、卡牌/药水生成查询的迁移与搜索耗时 | [选牌小优化验证](performance/choice-migration-20260912.md) |
-| 全量选牌来源、间接印牌/自动出牌放大器与逐项优化判断 | [213项来源盘点](performance/choice-source-inventory-20260912.md) |
-| 印牌长战斗、历史反向查询与累计分配验证 | [生成历史查询](performance/generation-history-20260912.md) |
-| 同次快照按需读取关键字，保持原模拟器与评分 | [快照内部局部复用](performance/snapshot-reuse-20260912.md) |
-| 当前 CPU 热点、快照释放优化与交错对照 | [热点可消除工作](performance/hotspot-cuts-20260912.md) |
-| 已开发的空状态清理、排名预计算及真实对照 | [精简优化开发结果](performance/surgical-development-20260912.md) |
-| 合并到上游后的新性能分支、热点与优化对照 | [合并后的性能探索](performance/hotspot-exploration-20260913.md) |
-| 最终代码在 VeryHigh 极高负载样例中的结果 | [VeryHigh 最终压力测试](performance/veryhigh-final-20260913.md) |
-| 五个后续候选的工作量、原型与采用/撤回决策 | [五候选成本与验证](performance/five-candidates-20260913.md) |
-| 小改动优化文献、源码切口与独立分配探针 | [精简优化深入研究](performance/surgical-research-20260912.md) |
-| 遗物独立开关、目标范围、血量额度与早停 | [战斗末遗物计数策略](relic-counters.md) |
-| 组件职责、状态所有权和调用链 | [架构与职责地图](ARCHITECTURE.md) |
-| 当前求解与搜索策略的全链路深度分析 | [求解与搜索策略深度分析（2026-09-27 快照）](strategy/solver-search-strategy-analysis-20260927.md) |
-| P0–P6 策略与搜索重构的实际改动、证据及未完成项 | [策略与搜索重构实施总结](refactoring/strategy-search-refactor-summary-20260928.md) |
-| 后续策略优化方向、建议改动与架构不足 | [策略优化方向与架构不足分析](strategy/strategy-optimization-directions-20260927.md) |
-| 面向搜索层的大重构计划（目标架构、P0–P8、门禁与里程碑） | [策略与搜索大重构计划](refactoring/strategy-refactor-plan-20260927.md) |
-| 当前搜索、卡牌评分、保路剪枝与最终选路 | [搜索逻辑详解（2026-09-12 开发快照）](strategy/search-logic-explained-20260912.md) |
-| 当前 UI 重设计、按钮区整理与 Gemini 建议审计 | [UI 建议复核与重构方案](audits/ui-redesign-gemini-review-20260911.md) |
-| 本批未发布改动、版本演进与开发记录 | [开发笔记](DEVELOPMENT_NOTES.md) |
-| 已执行测试、复跑方式和未验证范围 | [测试矩阵](TEST_MATRIX.md) |
-| 跨跑局卡顿、第三方 Mod 性能取证 | [进程全程性能录制](performance/long-session-recording.md) |
-| 三层秒级卡顿与自动回收 | [2026-09-11 实录诊断](performance/player-lag-diagnosis-20260911.md) |
-| 最新快照/重放复查与 PR 验证 | [快照与重放热点复查](performance/snapshot-replay-followup-20260909.md) |
-| 保路元数据合入证据 | [perf-2 选择性合入与后续热点试验](performance/perf2-integration-20260909.md) |
-| 上一轮性能目标与逐轮证据 | [回合结束探针与元数据热路径](performance/standpat-and-metadata-20260909.md) |
-| 无人测试环境与请求协议 | [无头测试](HEADLESS_TESTING.md) |
-| 在线状态、隐私设置与管理后台 | [在线统计](ONLINE_STATISTICS.md) |
-| 在线监控工作台、筛选与刷新行为 | [监控工作台](ONLINE_WORKBENCH.md) |
-| 两个在线服务的权威源码与部署来源 | [在线服务维护入口](ONLINE_SERVICES.md) |
-| 跑局胜负、连胜、历史快照与筛选 | [跑局战绩](RUN_STATISTICS.md) |
-| 创意工坊中英文介绍与语言字段 | [创意工坊介绍](workshop/README.md) |
-| 玩家问题包、检查点恢复与回放 | [检查点回放](CHECKPOINT_REPLAY.md) |
-| 2026-09-09 22:56 的 34 份实验体报告 | [实验体批次修复与未定位项](issues/test-subject-reports-20260909.md) |
-| 问题包目录、提交元数据和后台筛选口径 | [报告协议](BUG_REPORT_PROTOCOL.md) |
-| 188 份计划外重算报告的分类与高频修复 | [2026-09-08 重算分诊](issues/report-replans-20260908.md) |
-| 0.33.0 修复批次的剩余问题与交接 | [2026-09-07 修复交接](issues/report-logic-bugs-20260907-handoff.md) |
-| 第三方卡牌、Power、药水等登记入口 | [第三方 Mod 适配手册](THIRD_PARTY_ADAPTERS.md) |
-| 第三方 Power 的搜索估值 | [战略估值登记](third-party-strategic-effects.md) |
-| 遗物与 Modifier 的捕获、Fork 与续用状态 | [模型状态适配](third-party-model-state.md) |
-| 模型状态中的卡牌引用、重映射及集合描述 | [卡牌引用辅助接口](third-party-model-state.md#卡牌引用辅助接口) |
-| 精确 OnPlay 补丁组合及完整预测实现 | [OnPlay 补丁适配](third-party-onplay-patches.md) |
-| 战斗语义适配与验证方法 | [适配验证](ADAPTATION_VERIFICATION.md) |
-| 原版 Hook 支持和覆盖证据 | [战斗 Hook 覆盖目录](COMBAT_HOOK_COVERAGE.md) |
-
-战前预测 API 的公开调用方式与最低依赖版本见 [项目 README](../README.md#战前预测-api面向-mod-开发者)。开发分支的新入口以适配手册中的发布状态为准。
-
-## 专题目录
-
-| 目录 | 内容 |
-|---|---|
-| [releases/](releases/README.md) | 按版本整理的玩家更新日志与历史草案 |
-| [pr/](pr/README.md) | PR 审查、集成修正与验证记录 |
-| [refactoring/](refactoring/README.md) | 滚动重构路线与核验记录 |
-| [issues/](issues/README.md) | 玩家问题批次、分诊与修复计划 |
-| [strategy/](strategy/README.md) | 策略需求、优化日志与搜索研究 |
-| [performance/](performance/README.md) | 性能实验、复现方法、结果数据与历史样例 |
-| [audits/](audits/README.md) | 历史仓库、架构和 UI 审计及处理记录 |
-
-## 维护约定
-
-- 当前架构和支持范围以源码、当前文档及可重跑证据为准；专题报告保留各自的基线、日期和验证限制。
-- 新改动先写入开发笔记的“下一版本（开发中）”。更新日志统一放在 `releases/<版本>-RELEASE_NOTES.md`；有日志文件不等于该版本已经发布。
-- 历史审计、建议和已撤回实验保留原结论，不作为当前任务指令或当前测试成绩。
-- 新增专题文档时更新对应索引；移动文件时同步 Markdown 链接、脚本、skill 和结构化证据中的路径。
-- `COMBAT_HOOK_COVERAGE.md` 等工具生成文档保留固定入口，内容由对应工具维护。
+| 入口 | 内容 |
+| --- | --- |
+| [架构](ARCHITECTURE.md) | 当前职责与状态所有权 |
+| [开发笔记](DEVELOPMENT_NOTES.md) | 当前未发布变化 |
+| [测试入口](TEST_MATRIX.md) | 当前证据与历史索引 |
+| [无人测试](HEADLESS_TESTING.md) | 原生、差分与部署方法 |
+| [检查点回放](CHECKPOINT_REPLAY.md) | 问题包恢复和批量回放 |
+| [离线宿主](OFFLINE_SEARCH_HARNESS.md) | 固定根搜索指标 |
+| [覆盖材料](../coverage/README.md) / [覆盖目录](COMBAT_HOOK_COVERAGE.md) / [适配验证](ADAPTATION_VERIFICATION.md) | 输入、证据、生成状态与验证入口 |
+| [生成场景](GENERATED_COMBAT_SCENARIOS.md) | 场景生成与材料 |
+| [第三方适配](third-party/README.md) | 外部登记合同与封闭入口 |
+| [遗物计数](relic-counters.md) | 玩家战略目标 |
+| [多人军师](multiplayer-advisor.md) | 当前多人 fork 的操作、推演假设与限制 |
+| [多人历史](archive/multiplayer/README.md) | 区分本 fork 历史与官方冻结分支 |
+| [问题](issues/README.md) / [社区验收](community/testing-guide.md) | 未解决问题和贡献证据 |
+| [性能](performance/README.md) / [策略](strategy/README.md) / [重构](refactoring/README.md) | 当前工作与历史路由 |
+| [在线统计](ONLINE_STATISTICS.md) / [跑局战绩](RUN_STATISTICS.md) | 模组上报、隐私与客户端生命周期 |
+| [问题报告协议](BUG_REPORT_PROTOCOL.md) | 客户端导出与上传 |
+| [玩家更新日志](releases/README.md) / [工坊介绍](workshop/README.md) | 已发布正文与渠道介绍 |
+| [历史资料](archive/README.md) | 冻结报告、计划和开发/测试分卷 |

@@ -23,8 +23,6 @@ internal sealed partial class CombatBeamSolver
                 return false;
             if (takingExtra) extra.Add(player);
         }
-        combat.AdvisorEtherealCounts = players.ToDictionary(player => player,
-            player => combat.CountEtherealCardsInHand(simulator, player));
         if (!PlayerTurnEndLifecycle.RunPhaseOne(simulator, combat, _player, participants)) return false;
         foreach (Player player in players) combat.CommitHistoryCourseTurn(player);
         combat.NormalizeAeonglassWithers(simulator);
@@ -38,7 +36,6 @@ internal sealed partial class CombatBeamSolver
             if (combat.HasPendingChoice) return false;
         }
         if (!PlayerTurnEndLifecycle.RunPhaseTwo(simulator, combat, participants)) return false;
-        combat.AdvisorEtherealCounts = null;
         if (!CorePowerSupport.ApplyEnemyDeathPowers(simulator, combat, combat.KnownEnemies, deaths)) return false;
         combat.AdvisorExtraTurnPlayers = extra.ToArray();
         foreach (Player player in extra) combat.ConsumeExtraTurnSources(player);

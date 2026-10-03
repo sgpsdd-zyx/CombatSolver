@@ -17,6 +17,8 @@ description: 修改 CombatSolver 的卡牌、Power、遗物、药水、球、怪
 
 ## 适用边界
 
+金币获得后的跑局监听序列在派发前固定。单人保留官方成员快照与失活拒绝；多人由 `SimulatedCombatState.GoldHooks` 按分支 Hook 资格枚举全队牌、遗物和药水，死亡停用、复活恢复，不读 live 或把来源限制为收钱玩家。全局来源在根冻结；最小验证覆盖存活、死亡、从死亡根复活后的获得金币与完整原生状态。金纸累计和延迟虚无计数只用逐遗物 `JossPaperState`，多人不另设副本；按持有者分别结算并验证 Fork 隔离。
+
 本 skill 处理会改变合法动作或战斗结算的语义。纯 UI、职责移动、Beam/评分调优和发布工作分别使用对应 skill。
 
 开始前读取 `docs/ARCHITECTURE.md` 的 Runtime、Search、模拟引擎与 Prediction 章节。若 actual/simulated、增量回放和续用均一致，问题才可能属于搜索质量，转用 `search-performance-optimization`。
@@ -100,7 +102,7 @@ CombatRootSnapshot.Capture（主线程根）
 第三方遗物／Modifier 的根内隐藏状态优先使用 `ModelPredictionStateMirrors`，同时登记 capture、
 writeLive 和 writePredicted，复用 store 的 Fork context。状态描述按有序实例绑定并进入续用核对；
 首次根或续用捕获后不可登记，不允许未捕获时读取 live 或默认初始化。状态登记不代表 Hook 或
-补丁语义已适配，仍需沿实际结算链验证。签名和范围见 `docs/third-party-model-state.md`。
+补丁语义已适配，仍需沿实际结算链验证。签名和范围见 `docs/third-party/model-state.md`。
 
 活动 roster 和已知怪物状态是不同生命周期。怪物死亡或离开可行动阵容后，其正在执行行动仍可能读取根 AI/静态参数；不要随 roster 移除提前删除这些数据。
 
@@ -116,7 +118,7 @@ writeLive 和 writePredicted，复用 store 的 Fork context。状态描述按�
 - 不新增宽泛 catch、静默默认值或“跳过该候选”。未支持行为让搜索明确失败或形成已定义边界。
 - gameplay mod subscriber 必须在根阶段识别所有权；未知来源显式拒绝，不做通用浅拷贝。
 - 根可达卡牌的第三方 OnPlay Harmony 补丁由 `PredictionModPatchAudit` 检查；跨根读取当前补丁表，避免缓存已卸载或后来安装的补丁。新增适配时明确其来源与语义，不能用未知来源放行代替适配；此入口不代表所有第三方方法已覆盖。
-- 已适配 OnPlay 必须登记完整组合，由根冻结唯一标准 registry 镜像；命中后直接返回，不能再运行 vanilla/spec。配置变更只在主线程 live stamp 检查，worker 消费根标记；适配状态机另有 MoveNext 补丁、Inner 补丁及未审计新类型明确失败。条件支持通过标准 descriptor 加组合签名描述，不增加无条件原版覆盖。见 `docs/third-party-onplay-patches.md`。
+- 已适配 OnPlay 必须登记完整组合，由根冻结唯一标准 registry 镜像；命中后直接返回，不能再运行 vanilla/spec。配置变更只在主线程 live stamp 检查，worker 消费根标记；适配状态机另有 MoveNext 补丁、Inner 补丁及未审计新类型明确失败。条件支持通过标准 descriptor 加组合签名描述，不增加无条件原版覆盖。见 `docs/third-party/onplay-patches.md`。
 
 ## 5. 验证选择
 
@@ -158,3 +160,7 @@ writeLive 和 writePredicted，复用 store 的 Fork context。状态描述按�
 - 9种原版手动选牌药水共用 `PotionExecutionSupport.Prepare/Complete`；检查点在消费槽位和Use完成后、选择应用及AfterPotionUsed之前，种子仍须通过普通Fork断言。四种生成药水从检查点运行原空选择探测，使用后钩子执行完才读取候选；其他五种仍从父状态准备候选。Search的串行/并行准备共用入口，同父完整动作匹配且仅Choice可替换；frontier或串行枚举拥有检查点并在排空后释放。生成候选历史只读共享，Apply继续Clone选中牌；分支可变牌/RNG由普通Fork隔离。嵌套再次挂起从原父完整回放；额外前缀Fork与fallback分别记账，不改变transition/choice预算；worker合并和归零须包含四个药水计数。第三方药水或登记覆盖原版选择的药水不进入此特化。不保存Task或闭包。验证全部九种原生结算、完整状态/历史/RNG、消耗/后置钩子、兄弟修改及DOP/取消/异常/增量对账。
 
 - 嵌套执行检查点保存纯数据帧与明确程序阶段/下一循环序号。所有CLR作用域退出后，核对领域事务、StateStore、活动CardPlay及延迟抽牌/生成历史的精确配对；普通Fork继续拒绝捕获/挂起/已准备种子。一次PredictionForkContext重映射状态、帧、候选、历史、CardPlay、Power来源及共享死亡集合，保留trace来源身份和抽牌深度限制；外层列表所持但已离开所有牌堆的wrapper也必须显式Fork，不能假设State已登记。未知派发必须拒绝整次捕获，继续原完整回放，不能默认缺失尾部已执行。已确认的抽牌、弃牌、Hook、重复子出牌与回合来源循环复用唯一普通执行体，恢复可以再次挂起。Search匹配同父完整动作及已消费选择前缀，只追加下一选择；选择层/frontier排空后释放全部图引用。不保存Task/闭包，不跨搜索缓存；严格增量基线禁用捕获。ExecutionChoiceCaptures/Reuses不扣选择预算，reuse替代一次原转移Fork，不能作为额外物理Fork从比较器扣除。源循环、深层选牌、DOP/取消/异常、有限预算耗尽与原生完整状态分别验证。
+
+- 金币 Modify/AfterModify 使用带 combat child 的跑局监听表，AfterGoldGained 使用 null-child 跑局序列。只在主线程冻结根成员，资源与 HP 消费分支状态；未知 override 不能依 manifest 的 Ignored 分类放行。最大生命增加后只回复实际封顶差值，并经过通用 Heal 的 HP 回调；原生严格差分覆盖小数、金币修正顺序、owner、熔化、封顶和成长/长期资源记录。
+
+- Hook 参与位图的金币方法族共用一位时，只允许保守保留更多监听成员；精确 dispatch 仍按方法查表。不得用超过 ulong 位宽的移位产生别名，也不得借共用位跳过有回调的成员。

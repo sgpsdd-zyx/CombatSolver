@@ -1,0 +1,446 @@
+{
+  "schemaVersion": 1,
+  "upstream": "acc05d8511d8bce01aa37dea3869cfb96af67790",
+  "nativeRequests": [
+    {
+      "scenarioId": "GOLD-HEALING-MECHANISMS",
+      "request": {
+        "schemaVersion": 1,
+        "scenarioId": "GOLD-HEALING-MECHANISMS",
+        "characterId": "IRONCLAD",
+        "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+        "seed": "UPSTREAM0490-GOLD-HEALING-MECHANISMS",
+        "enemyCurrentHp": 1000,
+        "fixedSearchBudget": true,
+        "searchBudgetOverrideMilliseconds": 1000,
+        "headlessFastModeForTest": "Instant",
+        "deploymentFastModeForTest": "Instant",
+        "deploymentInterActionDelaySecondsForTest": 0,
+        "timeoutSeconds": 120,
+        "enableNoGcRegionForTest": false,
+        "initialPlayerHp": 50,
+        "initialPlayerMaxHp": 80
+      }
+    },
+    {
+      "scenarioId": "MAX-HP-HEALING-CALLBACKS",
+      "request": {
+        "schemaVersion": 1,
+        "scenarioId": "MAX-HP-HEALING-CALLBACKS",
+        "characterId": "IRONCLAD",
+        "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+        "seed": "UPSTREAM0490-MAX-HP-HEALING-CALLBACKS",
+        "enemyCurrentHp": 1000,
+        "fixedSearchBudget": true,
+        "searchBudgetOverrideMilliseconds": 1000,
+        "headlessFastModeForTest": "Instant",
+        "deploymentFastModeForTest": "Instant",
+        "deploymentInterActionDelaySecondsForTest": 0,
+        "timeoutSeconds": 120,
+        "enableNoGcRegionForTest": false,
+        "initialPlayerHp": 50,
+        "initialPlayerMaxHp": 80
+      }
+    },
+    {
+      "scenarioId": "FEED-MAX-HP-CAP",
+      "request": {
+        "schemaVersion": 1,
+        "scenarioId": "FEED-MAX-HP-CAP",
+        "characterId": "IRONCLAD",
+        "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+        "seed": "UPSTREAM0490-FEED-MAX-HP-CAP",
+        "enemyCurrentHp": 1000,
+        "fixedSearchBudget": true,
+        "searchBudgetOverrideMilliseconds": 1000,
+        "headlessFastModeForTest": "Instant",
+        "deploymentFastModeForTest": "Instant",
+        "deploymentInterActionDelaySecondsForTest": 0,
+        "timeoutSeconds": 120,
+        "enableNoGcRegionForTest": false,
+        "initialPlayerHp": 50,
+        "initialPlayerMaxHp": 80
+      }
+    },
+    {
+      "scenarioId": "RELIC-MAX-HP-HEALING-BOUNDS",
+      "request": {
+        "schemaVersion": 1,
+        "scenarioId": "RELIC-MAX-HP-HEALING-BOUNDS",
+        "characterId": "IRONCLAD",
+        "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+        "seed": "UPSTREAM0490-RELIC-MAX-HP-HEALING-BOUNDS",
+        "enemyCurrentHp": 1000,
+        "fixedSearchBudget": true,
+        "searchBudgetOverrideMilliseconds": 1000,
+        "headlessFastModeForTest": "Instant",
+        "deploymentFastModeForTest": "Instant",
+        "deploymentInterActionDelaySecondsForTest": 0,
+        "timeoutSeconds": 120,
+        "enableNoGcRegionForTest": false,
+        "initialPlayerHp": 50,
+        "initialPlayerMaxHp": 80
+      }
+    },
+    {
+      "scenarioId": "AXEBOT-JOSS-DEFERRED-FORK",
+      "request": {
+        "schemaVersion": 1,
+        "scenarioId": "AXEBOT-JOSS-DEFERRED-FORK",
+        "characterId": "IRONCLAD",
+        "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+        "seed": "UPSTREAM0490-AXEBOT-JOSS-DEFERRED-FORK",
+        "enemyCurrentHp": 1000,
+        "fixedSearchBudget": true,
+        "searchBudgetOverrideMilliseconds": 1000,
+        "headlessFastModeForTest": "Instant",
+        "deploymentFastModeForTest": "Instant",
+        "deploymentInterActionDelaySecondsForTest": 0,
+        "timeoutSeconds": 120,
+        "enableNoGcRegionForTest": false,
+        "relics": [
+          {
+            "relicId": "JOSS_PAPER",
+            "integerMembers": {
+              "CardsExhausted": 1,
+              "EtherealCount": 2
+            }
+          }
+        ]
+      }
+    },
+    {
+      "scenarioId": "B013-FIXED-PREFIX-TERMINAL-BOUNDARY",
+      "request": {
+        "schemaVersion": 1,
+        "scenarioId": "B013-FIXED-PREFIX-TERMINAL-BOUNDARY",
+        "characterId": "IRONCLAD",
+        "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+        "seed": "UPSTREAM0490-B013-FIXED-PREFIX-TERMINAL-BOUNDARY",
+        "enemyCurrentHp": 1000,
+        "fixedSearchBudget": true,
+        "searchBudgetOverrideMilliseconds": 1000,
+        "headlessFastModeForTest": "Instant",
+        "deploymentFastModeForTest": "Instant",
+        "deploymentInterActionDelaySecondsForTest": 0,
+        "timeoutSeconds": 120,
+        "enableNoGcRegionForTest": false
+      }
+    },
+    {
+      "scenarioId": "B013-RADIANT-PEARL-HAND-DRAW",
+      "request": {
+        "schemaVersion": 1,
+        "scenarioId": "B013-RADIANT-PEARL-HAND-DRAW",
+        "characterId": "IRONCLAD",
+        "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+        "seed": "UPSTREAM0490-B013-RADIANT-PEARL-HAND-DRAW",
+        "enemyCurrentHp": 1000,
+        "fixedSearchBudget": true,
+        "searchBudgetOverrideMilliseconds": 1000,
+        "headlessFastModeForTest": "Instant",
+        "deploymentFastModeForTest": "Instant",
+        "deploymentInterActionDelaySecondsForTest": 0,
+        "timeoutSeconds": 120,
+        "enableNoGcRegionForTest": false
+      }
+    },
+    {
+      "scenarioId": "B013-BLOCK-DECIMAL-BOUNDARY",
+      "request": {
+        "schemaVersion": 1,
+        "scenarioId": "B013-BLOCK-DECIMAL-BOUNDARY",
+        "characterId": "IRONCLAD",
+        "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+        "seed": "UPSTREAM0490-B013-BLOCK-DECIMAL-BOUNDARY",
+        "enemyCurrentHp": 1000,
+        "fixedSearchBudget": true,
+        "searchBudgetOverrideMilliseconds": 1000,
+        "headlessFastModeForTest": "Instant",
+        "deploymentFastModeForTest": "Instant",
+        "deploymentInterActionDelaySecondsForTest": 0,
+        "timeoutSeconds": 120,
+        "enableNoGcRegionForTest": false
+      }
+    },
+    {
+      "scenarioId": "B013-DEFAULT-GC-LIMIT",
+      "request": {
+        "schemaVersion": 1,
+        "scenarioId": "B013-DEFAULT-GC-LIMIT",
+        "characterId": "IRONCLAD",
+        "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+        "seed": "UPSTREAM0490-B013-DEFAULT-GC-LIMIT",
+        "enemyCurrentHp": 1000,
+        "fixedSearchBudget": true,
+        "searchBudgetOverrideMilliseconds": 1000,
+        "headlessFastModeForTest": "Instant",
+        "deploymentFastModeForTest": "Instant",
+        "deploymentInterActionDelaySecondsForTest": 0,
+        "timeoutSeconds": 120,
+        "enableNoGcRegionForTest": false
+      }
+    },
+    {
+      "scenarioId": "FIXED-PREFIX-POTION-POLICY",
+      "request": {
+        "schemaVersion": 1,
+        "scenarioId": "FIXED-PREFIX-POTION-POLICY",
+        "characterId": "IRONCLAD",
+        "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+        "seed": "UPSTREAM0490-FIXED-PREFIX-POTION-POLICY",
+        "enemyCurrentHp": 1000,
+        "fixedSearchBudget": true,
+        "searchBudgetOverrideMilliseconds": 1000,
+        "headlessFastModeForTest": "Instant",
+        "deploymentFastModeForTest": "Instant",
+        "deploymentInterActionDelaySecondsForTest": 0,
+        "timeoutSeconds": 120,
+        "enableNoGcRegionForTest": false
+      }
+    },
+    {
+      "scenarioId": "CALCULATED-HISTORY-FREEZE",
+      "request": {
+        "schemaVersion": 1,
+        "scenarioId": "CALCULATED-HISTORY-FREEZE",
+        "characterId": "IRONCLAD",
+        "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+        "seed": "UPSTREAM0490-CALCULATED-HISTORY-FREEZE",
+        "enemyCurrentHp": 1000,
+        "fixedSearchBudget": true,
+        "searchBudgetOverrideMilliseconds": 1000,
+        "headlessFastModeForTest": "Instant",
+        "deploymentFastModeForTest": "Instant",
+        "deploymentInterActionDelaySecondsForTest": 0,
+        "timeoutSeconds": 120,
+        "enableNoGcRegionForTest": false
+      }
+    },
+    {
+      "scenarioId": "RITUAL-TEMPORARY-STRENGTH",
+      "request": {
+        "schemaVersion": 1,
+        "scenarioId": "RITUAL-TEMPORARY-STRENGTH",
+        "characterId": "IRONCLAD",
+        "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+        "seed": "UPSTREAM0490-RITUAL-TEMPORARY-STRENGTH",
+        "enemyCurrentHp": 1000,
+        "fixedSearchBudget": true,
+        "searchBudgetOverrideMilliseconds": 1000,
+        "headlessFastModeForTest": "Instant",
+        "deploymentFastModeForTest": "Instant",
+        "deploymentInterActionDelaySecondsForTest": 0,
+        "timeoutSeconds": 120,
+        "enableNoGcRegionForTest": false
+      }
+    },
+    {
+      "scenarioId": "ROUTE-ADOPTION-LIFETIME",
+      "request": {
+        "schemaVersion": 1,
+        "scenarioId": "ROUTE-ADOPTION-LIFETIME",
+        "characterId": "IRONCLAD",
+        "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+        "seed": "UPSTREAM0490-ROUTE-ADOPTION-LIFETIME",
+        "enemyCurrentHp": 1000,
+        "fixedSearchBudget": true,
+        "searchBudgetOverrideMilliseconds": 1000,
+        "headlessFastModeForTest": "Instant",
+        "deploymentFastModeForTest": "Instant",
+        "deploymentInterActionDelaySecondsForTest": 0,
+        "timeoutSeconds": 120,
+        "enableNoGcRegionForTest": false
+      }
+    },
+    {
+      "scenarioId": "SEEKER-ORDERED-OPTIONS",
+      "request": {
+        "schemaVersion": 1,
+        "scenarioId": "SEEKER-ORDERED-OPTIONS",
+        "characterId": "IRONCLAD",
+        "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+        "seed": "UPSTREAM0490-SEEKER-ORDERED-OPTIONS",
+        "enemyCurrentHp": 1000,
+        "fixedSearchBudget": true,
+        "searchBudgetOverrideMilliseconds": 1000,
+        "headlessFastModeForTest": "Instant",
+        "deploymentFastModeForTest": "Instant",
+        "deploymentInterActionDelaySecondsForTest": 0,
+        "timeoutSeconds": 120,
+        "enableNoGcRegionForTest": false
+      }
+    },
+    {
+      "scenarioId": "B013-FIXED-PREFIX-TURN-END-CARD",
+      "request": {
+        "schemaVersion": 1,
+        "scenarioId": "B013-FIXED-PREFIX-TURN-END-CARD",
+        "characterId": "REGENT",
+        "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+        "seed": "UPSTREAM0490-B013-FIXED-PREFIX-TURN-END-CARD",
+        "enemyCurrentHp": 1000,
+        "fixedSearchBudget": true,
+        "searchBudgetOverrideMilliseconds": 1000,
+        "headlessFastModeForTest": "Instant",
+        "deploymentFastModeForTest": "Instant",
+        "deploymentInterActionDelaySecondsForTest": 0,
+        "timeoutSeconds": 120,
+        "enableNoGcRegionForTest": false
+      }
+    },
+    {
+      "scenarioId": "VOID-FORM-TURN-CHOICES",
+      "request": {
+        "schemaVersion": 1,
+        "scenarioId": "VOID-FORM-TURN-CHOICES",
+        "characterId": "REGENT",
+        "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+        "seed": "UPSTREAM0490-VOID-FORM-TURN-CHOICES",
+        "enemyCurrentHp": 1000,
+        "fixedSearchBudget": true,
+        "searchBudgetOverrideMilliseconds": 1000,
+        "headlessFastModeForTest": "Instant",
+        "deploymentFastModeForTest": "Instant",
+        "deploymentInterActionDelaySecondsForTest": 0,
+        "timeoutSeconds": 120,
+        "enableNoGcRegionForTest": false
+      }
+    },
+    {
+      "scenarioId": "NATIVE-CHOOSE-OPEN-GATE",
+      "request": {
+        "schemaVersion": 1,
+        "scenarioId": "NATIVE-CHOOSE-OPEN-GATE",
+        "characterId": "SILENT",
+        "encounterId": "CHOMPERS_NORMAL",
+        "seed": "UPSTREAM0490-NATIVE-CHOOSE-OPEN-GATE",
+        "enemyCurrentHp": 1000,
+        "fixedSearchBudget": true,
+        "searchBudgetOverrideMilliseconds": 1000,
+        "headlessFastModeForTest": "Instant",
+        "deploymentFastModeForTest": "Instant",
+        "deploymentInterActionDelaySecondsForTest": 0,
+        "timeoutSeconds": 120,
+        "enableNoGcRegionForTest": false
+      }
+    },
+    {
+      "scenarioId": "PAELS-LEGION-FINISHED-REFERENCE",
+      "request": {
+        "schemaVersion": 1,
+        "scenarioId": "PAELS-LEGION-FINISHED-REFERENCE",
+        "characterId": "SILENT",
+        "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+        "seed": "UPSTREAM0490-PAELS-LEGION-FINISHED-REFERENCE",
+        "enemyCurrentHp": 1000,
+        "fixedSearchBudget": true,
+        "searchBudgetOverrideMilliseconds": 1000,
+        "headlessFastModeForTest": "Instant",
+        "deploymentFastModeForTest": "Instant",
+        "deploymentInterActionDelaySecondsForTest": 0,
+        "timeoutSeconds": 120,
+        "enableNoGcRegionForTest": false
+      }
+    },
+    {
+      "scenarioId": "CASCADE-EMPTY-HAND-NATIVE",
+      "request": {
+        "schemaVersion": 1,
+        "scenarioId": "CASCADE-EMPTY-HAND-NATIVE",
+        "characterId": "IRONCLAD",
+        "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+        "seed": "UPSTREAM0490-CASCADE-EMPTY-HAND-NATIVE",
+        "enemyCurrentHp": 1000,
+        "fixedSearchBudget": true,
+        "searchBudgetOverrideMilliseconds": 1000,
+        "headlessFastModeForTest": "Instant",
+        "deploymentFastModeForTest": "Instant",
+        "deploymentInterActionDelaySecondsForTest": 0,
+        "timeoutSeconds": 120,
+        "enableNoGcRegionForTest": false
+      }
+    },
+    {
+      "scenarioId": "EFFECT-SCOPE-ADJACENT-CONTRACT",
+      "request": {
+        "schemaVersion": 1,
+        "scenarioId": "EFFECT-SCOPE-ADJACENT-CONTRACT",
+        "characterId": "IRONCLAD",
+        "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+        "seed": "UPSTREAM0490-EFFECT-SCOPE-ADJACENT-CONTRACT",
+        "enemyCurrentHp": 1000,
+        "fixedSearchBudget": true,
+        "searchBudgetOverrideMilliseconds": 1000,
+        "headlessFastModeForTest": "Instant",
+        "deploymentFastModeForTest": "Instant",
+        "deploymentInterActionDelaySecondsForTest": 0,
+        "timeoutSeconds": 120,
+        "enableNoGcRegionForTest": false
+      }
+    },
+    {
+      "scenarioId": "MULTIPLAYER-TOASTY-CHOICE",
+      "fixturePath": "coverage/fixtures/scenarios/state/multiplayer-toasty-choice.json"
+    },
+    {
+      "scenarioId": "MULTIPLAYER-TOASTY-CONTROLS",
+      "fixturePath": "coverage/fixtures/scenarios/state/upstream-0472-multiplayer-toasty-controls-dop2.json"
+    },
+    {
+      "scenarioId": "MULTIPLAYER-SHARED-DAMAGE",
+      "fixturePath": "coverage/fixtures/scenarios/state/multiplayer-shared-damage.json"
+    },
+    {
+      "scenarioId": "MULTIPLAYER-RELIC-OWNERSHIP",
+      "fixturePath": "coverage/fixtures/scenarios/state/multiplayer-relic-ownership.json"
+    },
+    {
+      "scenarioId": "MULTIPLAYER-EXPERIMENT-INACTIVE",
+      "fixturePath": "coverage/fixtures/scenarios/state/multiplayer-experiment-inactive.json"
+    }
+  ],
+  "singlePlayerSentinel": {
+    "schemaVersion": 1,
+    "scenarioId": "UPSTREAM-0490-SOLO-POWER",
+    "characterId": "IRONCLAD",
+    "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+    "seed": "MULTIPLAYER-UPSTREAM-0410-COMPAT",
+    "enemyCurrentHp": 50,
+    "initialPlayerEnergy": 3,
+    "clearRunDeck": true,
+    "clearPlayerPiles": true,
+    "clearAllPowers": true,
+    "cards": [
+      {
+        "cardId": "INFLAME",
+        "pile": "Hand",
+        "treatAsDeckCard": true
+      },
+      {
+        "cardId": "STRIKE_IRONCLAD",
+        "pile": "Hand",
+        "treatAsDeckCard": true
+      },
+      {
+        "cardId": "STRIKE_IRONCLAD",
+        "pile": "Hand",
+        "treatAsDeckCard": true
+      },
+      {
+        "cardId": "DEFEND_IRONCLAD",
+        "pile": "Hand",
+        "treatAsDeckCard": true
+      },
+      {
+        "cardId": "DEFEND_IRONCLAD",
+        "pile": "Hand",
+        "treatAsDeckCard": true
+      }
+    ],
+    "fixedSearchBudget": true,
+    "searchBudgetOverrideMilliseconds": 15000,
+    "searchMaxDegreeOfParallelismForTest": 1,
+    "timeoutSeconds": 120
+  }
+}

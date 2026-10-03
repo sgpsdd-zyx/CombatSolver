@@ -1,0 +1,15 @@
+[
+  {
+    "monsterId": "BigDummy", "moveId": "NOTHING", "enemyHpBefore": 999,
+    "clearAllRelicsBeforeMove": true,
+    "relicsBeforeMove": [{ "relicId": "JOSS_PAPER" }, { "relicId": "MUSIC_BOX" }],
+    "clearAllPowersBeforeMove": true, "clearPlayerPilesBeforeMove": true,
+    "cardsBeforeMove": [
+      { "cardId": "HOWL_FROM_BEYOND", "pile": "Exhaust" },
+      { "cardId": "STRIKE_IRONCLAD", "pile": "Draw" }
+    ],
+    "triggerPlayerTurnEndAfterMove": true,
+    "expectedMirrorRelicState": ";mirrorRelics=JOSS_PAPER/1,MUSIC_BOX/1",
+    "expectedPlayerPileCards": { "Exhaust:HOWL_FROM_BEYOND": 1 }
+  }
+]

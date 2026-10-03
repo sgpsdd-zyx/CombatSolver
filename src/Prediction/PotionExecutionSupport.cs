@@ -13,7 +13,10 @@ internal static class PotionExecutionSupport
     {
         combat.ConsumePotion(potion.Owner, slot);
         combat.BeforePotionUsed(simulator, potion, target);
-        bool completed = !combat.HasPendingChoice && PotionOnUseSupport.Use(simulator, combat, potion, target);
+        if (combat.HasPendingChoice) return false;
+        bool completed;
+        using (simulator.BeginCardOrPotionEffect(potion.Owner))
+            completed = PotionOnUseSupport.Use(simulator, combat, potion, target);
         if (combat.AdvisorPlayer != null && target?.Player is { } recipient
             && PotionChoiceSupport.RequiresChoice(potion))
             combat.RequireLocalChoice(recipient);
@@ -24,7 +27,8 @@ internal static class PotionExecutionSupport
         PotionModel potion, Creature? target, PlanCardChoice? choice, int historyStart,
         ISet<uint> processedEnemyDeaths)
     {
-        if (choice != null && !PotionChoiceSupport.Apply(simulator, potion, choice)) return false;
+        using (simulator.BeginCardOrPotionEffect(potion.Owner))
+            if (choice != null && !PotionChoiceSupport.Apply(simulator, potion, choice)) return false;
         if (combat.HasPendingChoice) return false;
         if (simulator.State.GetCreature(potion.Owner.Creature).IsAlive)
             combat.AfterPotionUsed(simulator, potion, target);

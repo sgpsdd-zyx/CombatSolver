@@ -4,17 +4,17 @@ Combat Solver 是《杀戮尖塔 2》的战斗路线求解器，本 fork 支持�
 
 单人模式下，玩家可以只查看建议，也可以让求解器执行当前回合，或连续接管整场战斗。多人模式只提供手动请求的建议。搜索不会修改游戏 RNG，也不会在后台操作真实战斗状态。
 
-多人 fork **[0.48.1 已发布](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.48.1)**，已合入官方 **0.48.0**。本次同步单人复杂战斗搜索、卡牌费用身份、充能球与回合末结算、召唤目标和日志设置更新；多人保持手动军师、烘焙手套选牌计算和十四敌方周期。见[中英更新日志](docs/releases/0.48.1-RELEASE_NOTES.md)、[发布状态](docs/releases/README.md)和[合并验证](docs/strategy/upstream-0480-merge-20261002.md)。上一公开版为[0.47.3](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.47.3)。
+多人 fork **0.49.1 正在准备发布**，已合入官方 **0.49.0**。同步金币与最大生命、卡牌历史和费用、选牌与回合结算修复；多人保持手动军师、烘焙手套选牌计算和十四敌方周期。见[中英更新日志](docs/releases/0.49.1-RELEASE_NOTES.md)、[发布状态](docs/releases/README.md)和[合并验证](docs/archive/strategy/upstream-0490-merge-20261003.md)。上一公开版为[0.48.1](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.48.1)。
 
 **参与开发：** [社区任务入口](https://github.com/Torch1230/CombatSolver/issues/171)按每批五个主题发布故障修复与路线优化任务，每主题一至两个 0.47.x 代表包。[贡献指南](CONTRIBUTING.md)说明整批认领与 PR 流程，[夹具与脚手架指南](docs/community/testing-guide.md)说明差分、包回放与策略实验入口。
 
 本版的单人“前两回合深入探索（实验）”默认关闭，开启后最多计算 40 分钟，可随时停止；多人不启用此项探索。
 
-多人实验已包含独立队友、交错操作和连续手动重算，保留收益与恶化个案；[实验记录](docs/strategy/multiplayer-experiments-20260923/implementation.md)不代表真人联机胜率。
+多人实验已包含独立队友、交错操作和连续手动重算，保留收益与恶化个案；[实验记录](docs/archive/strategy/multiplayer-experiments-20260923/implementation.md)不代表真人联机胜率。
 
 [多人军师](docs/multiplayer-advisor.md) 推荐本人的出牌和用药路线，最多推演十四个敌方回合。队友行动后自行决定何时重算；推演假设队友后续不主动出牌或用药，但仍结算其被动效果。多人功能目前供试用，尚未完成真实联机验收。
 
-**English UI:** Set the game language to English. Card pills and choices refresh during play; restart to refresh other existing windows. In single-player, use **Play turn** or **Auto: On**. Multiplayer fork **[0.48.1 is released](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.48.1)**, based on upstream **0.48.0**; see the [release status](docs/releases/README.md) and [release notes](docs/releases/0.48.1-RELEASE_NOTES.md). You can calculate advice while Toasty Mittens awaits your exhaust choice, then confirm the choice yourself. Multiplayer retains manual advice, local contribution goals, up to fourteen enemy cycles, and doubled ordinary time and node limits. Teammates' future active actions are not modeled; live multiplayer is not yet verified. **Settings > Reports > Upload report** submits a bug report. Logs, raw errors, and some detailed diagnostics retain their original text.
+**English UI:** Set the game language to English. Card pills and choices refresh during play; restart to refresh other existing windows. In single-player, use **Play turn** or **Auto: On**. Multiplayer fork **0.49.1 is being prepared**, based on upstream **0.49.0**; see the [release status](docs/releases/README.md) and [release notes](docs/releases/0.49.1-RELEASE_NOTES.md). You can calculate advice while Toasty Mittens awaits your exhaust choice, then confirm the choice yourself. Multiplayer retains manual advice, local contribution goals, up to fourteen enemy cycles, and doubled ordinary time and node limits. Teammates' future active actions are not modeled; live multiplayer is not yet verified. **Settings > Reports > Upload report** submits a bug report. Logs, raw errors, and some detailed diagnostics retain their original text.
 
 界面跟随游戏语言：简体/繁体中文使用现有中文文案，其他语言使用英文。简化版不提供独立语言开关；卡牌胶囊、选牌和相关悬停说明支持运行中切换语言，其他既有窗口可通过重启统一刷新。
 
@@ -79,7 +79,7 @@ if (PreCombatForecastApi.IsAvailable)
 
 `0.31.3` 合入 PR #50–#55，提供第三方 Power 战略估值、药水玩家选择与牌堆可选弃牌入口，并补充未镜像可打出条件的覆盖提示。使用这些入口的适配 Mod 应将 CombatSolver 最低依赖设为 `0.31.3`。
 
-各角色的具体战斗效果由适配层实现与验证。登记方式、分支状态要求和验证方法见 [第三方 Mod 适配手册](docs/THIRD_PARTY_ADAPTERS.md)。
+各角色的具体战斗效果由适配层实现与验证。登记方式、分支状态要求和验证方法见 [第三方 Mod 适配手册](docs/third-party/README.md)。
 
 ## 安装与兼容性
 
@@ -135,7 +135,7 @@ RitsuLib 需要单独安装。替换旧版前退出游戏，并确保只启用�
 
 现有配置与新安装均默认启用 NoGC，并使用独立于性能预设的 `16 GB` 区域请求预算；这不是进程总内存上限。可手动关闭并使用 CLR 常规分代 GC：稳定关闭状态不建立 No-GC 区域、不切换 GC latency，也不新增自动内存检查点或补账回收；若同一场战斗从开启切到关闭，仍会先安全完成此前已登记的区域退出与回收义务。关闭不会清除预算值，重新启用时会继续使用原设置。
 
-包含此改动的版本默认准备[搜索内存优化启动配置](docs/performance/server-gc-launch-profile-20260924.md)：首次加载后，下次照常从 Steam 启动自动生效，无需脚本。可在设置页关闭并于下次启动恢复；直接退订不会恢复启动文件，请先关闭再退订。此模式影响整个游戏，部分场景可能更慢或改变路线，实测取舍见链接。
+包含此改动的版本默认准备[搜索内存优化启动配置](docs/archive/performance/server-gc-launch-profile-20260924.md)：首次加载后，下次照常从 Steam 启动自动生效，无需脚本。可在设置页关闭并于下次启动恢复；直接退订不会恢复启动文件，请先关闭再退订。此模式影响整个游戏，部分场景可能更慢或改变路线，实测取舍见链接。
 
 至少有 4 个逻辑处理器时，新安装默认使用 `4` 路并行；2-3 个逻辑处理器时默认使用 `2` 路；只有 1 个时使用单线程。用户可在单线程和 `2-16` 路之间手动选择，实际并行度不会超过进程可用的逻辑处理器，还会受当前可独立展开的分支数与内存安全准入限制。超过物理核心数后通常收益很小，甚至会因超线程竞争而变慢，因此默认值不会自动追求最高 CPU 占用。
 
@@ -156,13 +156,13 @@ Combat Solver 使用受时间、节点和内存预算约束的 Beam Search。它
 项目使用 C#、.NET 9 和 Godot。Windows 构建命令：
 
 ```powershell
-pwsh -NoProfile -File tools/build-local-stack.ps1 -Configuration Release
+pwsh -NoProfile -File tools/build/build-local-stack.ps1 -Configuration Release
 ```
 
 Linux 构建命令：
 
 ```bash
-./tools/build-local-stack.sh --configuration Release
+./tools/build/build-local-stack.sh --configuration Release
 ```
 
 构建脚本会探测常见 Steam 安装路径。自动探测不适用时，复制 `local.props.example` 为 `local.props` 并配置本机路径；不要提交个人绝对路径。
@@ -175,7 +175,7 @@ Linux 构建命令：
 - [测试矩阵](docs/TEST_MATRIX.md)
 - [重构路线](docs/refactoring/refactor-roadmap.md)
 
-Windows 和 Linux 的无人测试入口分别为 `tools/run-unattended-test.ps1` 与 `tools/run-unattended-test.sh`。测试会启动隔离的游戏 `--headless` 进程；涉及真实布局、动画、输入和性能的结论仍需在可见 Steam 会话中验证。
+Windows 和 Linux 的无人测试入口分别为 `tools/testing/run-unattended-test.ps1` 与 `tools/testing/run-unattended-test.sh`。测试会启动隔离的游戏 `--headless` 进程；涉及真实布局、动画、输入和性能的结论仍需在可见 Steam 会话中验证。
 
 ## 问题反馈
 

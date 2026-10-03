@@ -1,10 +1,10 @@
 # CombatSolver 仓库工作指令
 
-> **当前多人分支：** `codex/multiplayer-advisor` 基于官方 `a789aad2 / 0.48.0`。单人保持该官方版本的原路径、参数和行为；fork 自有评分、保路、剪枝、预算和缓存只归多人政策/对象所有，公共文件仅允许显式多人接入。官方单人能力／计划承诺、治疗与药水资格界、前两回合追加探索和开发策略脚本不得进入多人候选；涉及公共战斗语义的依赖单列，不混入策略优化。现役行为见[多人军师](docs/multiplayer-advisor.md)。
+> **当前多人分支：** `codex/multiplayer-advisor` 基于官方 `acc05d85 / 0.49.0`。单人保持该官方版本的原路径、参数和行为；fork 自有评分、保路、剪枝、预算和缓存只归多人政策/对象所有，公共文件仅允许显式多人接入。官方单人能力／计划承诺、治疗与药水资格界、前两回合追加探索和开发策略脚本不得进入多人候选；涉及公共战斗语义的依赖单列，不混入策略优化。现役行为见[多人军师](docs/multiplayer-advisor.md)。
 >
 > 多人保持手动请求与操作、最多十四个敌方周期；使用三周期本机贡献目标、伤害/代价前沿和条件长线续行，不再使用每周期 3 HP 与旧 C/A 回退。无来源实际伤害按阶段人数折算参与选路，个人贡献仍按真实归属。治疗、重算及额外玩家回合不延后阶段截止，人数变化明确重建记账；不预测队友主动行为。普通时间/节点上限乘二，固定预算不变。多人不捕获单人成长目标，历史键保持原持有者范围扫描。禁止启动可见 Steam；无头结果不外推可见性能或联机胜率。
 >
-> 发布状态统一见[版本索引](docs/releases/README.md)，本轮验证与边界见[合并记录](docs/strategy/upstream-0480-merge-20261002.md)。官方标签不移动，同号日志单独归档；历史批次、授权和证据不作为新的操作授权。独立[尖塔军师修复工具](tools/SpireAdvisorMultiplayerFix/README.md)另有产物。
+> 发布状态统一见[版本索引](docs/releases/README.md)，本轮验证与边界见[合并记录](docs/archive/strategy/upstream-0490-merge-20261003.md)。官方标签不移动，同号日志单独归档；历史批次、授权和证据不作为新的操作授权。独立[尖塔军师修复工具](tools/runtime/SpireAdvisorMultiplayerFix/README.md)另有产物。
 >
 > 多人烘焙手套耗尽前允许手动计算，原生输入仍归玩家；原生暂停和队友准备边界成立后，当前全队根只补完本机剩余准备。第三方回合开始扩展明确拒绝该暂停入口。行为与验证由[多人指南](docs/multiplayer-advisor.md)维护。
 
@@ -47,69 +47,22 @@ CombatSolver 是《杀戮尖塔 2》的单人战斗路线求解器 Mod，使用 
 
 - [文档总目录](docs/README.md)：当前指南与专题索引；玩家更新日志统一位于 `docs/releases/`，专题资料按目录维护。新增或移动文档时同步索引与引用。
 - [架构与职责地图](docs/ARCHITECTURE.md)：当前源码入口、所有权和禁止依赖的单一维护入口。
-- [滚动重构路线](docs/refactoring/refactor-roadmap.md)：已完成批次和明确不做项。
-- [核验审计](docs/refactoring/verified-audit-4117eb0.md)：本轮重构的逐阶段证据；它是历史结果，不是持续规则。
-- [测试矩阵](docs/TEST_MATRIX.md) 与 `coverage/test-evidence.json`：可重跑场景和结构化证据。
-- [开发笔记](docs/DEVELOPMENT_NOTES.md)：版本历史与未发布行为变化。
-- [第三方 Mod 适配手册](docs/THIRD_PARTY_ADAPTERS.md)：面向外部 Mod 作者的登记点总表、登记纪律与验收标准；同时是「哪些位置还是封闭开关」的单一维护入口。
-- `tools/verify-refactor-boundaries.ps1`（Windows / PowerShell 7）与 `tools/verify-refactor-boundaries.sh`（Linux / Bash）：当前架构边界的等价可执行门禁。
-- `tools/OfflineSearchHarness/`：不启动 Godot、在普通 .NET 进程里批量跑搜索的离线宿主，用法与口径见 [离线搜索宿主](docs/OFFLINE_SEARCH_HARNESS.md)。只产指标，不做正确性验收。
+- [滚动重构路线](docs/refactoring/refactor-roadmap.md)：当前状态、待证据项与历史入口。
+- [测试矩阵](docs/TEST_MATRIX.md) 与 `coverage/evidence/test-evidence.json`：可重跑场景和结构化证据。
+- [开发笔记](docs/DEVELOPMENT_NOTES.md)：当前未发布行为变化与历史入口。
+- [第三方 Mod 适配手册](docs/third-party/README.md)：面向外部 Mod 作者的登记点总表、登记纪律与验收标准；同时是「哪些位置还是封闭开关」的单一维护入口。
+- `tools/inspection/verify-refactor-boundaries.ps1`（Windows / PowerShell 7）与 `tools/inspection/verify-refactor-boundaries.sh`（Linux / Bash）：当前架构边界的等价可执行门禁。
+- `tools/search/OfflineSearchHarness/`：不启动 Godot、在普通 .NET 进程里批量跑搜索的离线宿主，用法与口径见 [离线搜索宿主](docs/OFFLINE_SEARCH_HARNESS.md)。只产指标，不做正确性验收。
+
+目录与引用门禁为 `python3 tools/inspection/verify-documentation.py`、`verify-tools.py` 和 `verify-coverage.py`（后两者同目录）。Testing 按 Host/Support/Replay/Contracts/Regressions 分类；工具按职责目录分类，输出统一归 `.local/tool-build`。当前指南只维护现役合同，已完成报告与原始失败归 `docs/archive`；索引必须区分官方历史与多人 fork。
 
 源码与当前可重跑结果优先于历史说明。职责发生变化时，同一提交更新 `docs/ARCHITECTURE.md`、相关 skill 和结构门禁，避免多份地图继续漂移。
 
-## 4. 核心职责摘要
+## 4. 职责边界
 
-完整地图见 `docs/ARCHITECTURE.md`。以下边界不可混写：
+当前源码入口和所有权由 [架构地图](docs/ARCHITECTURE.md) 统一维护。Runtime 捕获根与编排部署，Search 决定候选政策，模拟引擎执行通用语义，Prediction 持有领域补偿，UI 消费只读 snapshot，Testing 分层持有协议、建局、执行、断言和输出。
 
-### 4.1 Runtime 与搜索根
-
-- `src/Runtime/Entry.cs`：Mod 初始化和战斗生命周期入口。
-- `src/Runtime/SolverController.cs`：主线程编排；创建搜索请求、处理结果、续用、部署和全自动。
-- `src/Runtime/SolverControllerSessions.cs`：`SolverCombatSession`、`SolverSearchSession`、`SolverDeploymentSession` 的生命周期所有权。
-- `src/Runtime/CombatRootSnapshot.cs`：只能在主线程捕获并验证 live 状态稳定；后台搜索只接收该根。
-- `src/Runtime/ContinuationStamp.cs`：跨回合 live/predicted 一致性和字段级差异。
-- `src/Runtime/SearchGcPolicy.cs`：进程级 GC / No-GC 生命周期、搜索内后台回收续搜和跨战斗回收协调，不属于 Search 算法。
-- `src/Runtime/SearchMemoryPressureSignal.cs`：Runtime 注入 Search 的分配边界与回收续搜入口；Search 不直接读取设置或操作 GC 模式。
-- `src/Runtime/PlayerTurnSetupPatches.cs`：首回合选牌后搜索、全自动后续回合的计划重放，以及单步执行在下一回合原生选牌页交还玩家并允许执行/全自动入口接管既有选择。
-- `src/Runtime/NativeChoiceRuntime.cs`：原生选牌页面观察与计划卡牌逐实例匹配；不枚举搜索分支。
-- `src/Runtime/BaseLibCloneConcurrencyPatch.cs`：BaseLib 克隆扩展已加载时，串行保护原版 `MutableClone` 的第三方扩展段；预测克隆只允许 `NativeModelCloneConcurrency` 核对过的隔离域普通原版卡牌及默认内部初始化 Power 旁路；不得扩大成整段搜索串行化。
-- `src/Runtime/PowerDynamicVarWarmup.cs`：主线程捕获根状态时物化规范 Power 与当前战斗 Power 的显示变量，禁止把惰性本地化工作带入 worker。
-- `src/Runtime/PowerDynamicVarMaterializationGuardPatch.cs`：搜索模拟期间禁止惰性创建 Power 显示变量；命中表示根捕获缺少必要实例的物化。
-
-### 4.2 Search
-
-- `CombatSearchCoordinator`：主搜索、无药和强制用药反事实审计。
-- `SearchBudgetLedger`、`SearchRequestPipeline` 与协调器分片：单人请求预算、阶段和后处理；多人入口在这些阶段之前返回。
-- `FrontierContinuationScheduler`：单人固定前缀派发；`PlanCommitment` 和 `PlanHorizonPolicy` 的计划保路／续行不进入多人。
-- `CombatBeamSolver.cs`：构造参数、不可变根配置及各策略对象接线，不承载 `Solve` 循环。
-- `CombatPlan.cs`：节点、快照、动作与最终计划数据；`CombatBeamSolver.Models.cs`：`SearchFeatures` 和单次运行的 `SearchRunContext`。
-- `CombatBeamSolver.Phases.cs`：`Solve` 与阶段推进。
-- `CombatBeamSolver.Expansion.cs`：候选展开与动作回放入口。
-- `CombatBeamSolver.ExpansionPlan.cs`：串行／并行共用动作准备和子节点准入；首动作 live 目标门禁只用于单人。
-- `CombatBeamSolver.AdmittedExpansion.cs` 中的 `AdmittedJobScheduler` 与 `CombatBeamSolver.ExpansionExecutor.cs`：共用作业选择和子节点接收合同，保留两种执行器的消费顺序。
-- `CombatBeamSolver.ParallelExpansion.cs`：固定 worker lane、动作准备/原始候选物化与确定性串行提交。
-- `CombatBeamSolver.AdmittedExpansion.cs`：已准入父节点的动作、选择链、药水与回合尾部作业；有界派发、唯一快照所有权和在途排空。
-- `CombatBeamSolver.PrimaryChoiceReplay.cs`：保证原预算必经的首层选择回放、快照暂存与原序消费；不并发消费动态选择预算。
-- `CombatBeamSolver.Retention.cs`：剪枝调用边界；具体中间保路属于 `BeamRetentionPolicy`。
-- `CombatBeamSolver.BeamRetentionPolicy.cs`：状态去重、Beam 排名、多样性通道、动作/回合开始选牌保路、药水配额和小型 Pareto。
-- `CombatBeamSolver.FinalPlanOrdering.cs`：终局胜负、战损、药水、偷窃、卖血和边界排序。
-- `CombatBeamSolver.StateEvaluation.cs`：快照、威胁与评分特征。
-- `CombatBeamSolver.Terminal.cs`：终局回放、回合结果和路线标注。
-- `SimulatedCombatState*.cs`：搜索面对的分支战斗领域状态；不得把候选政策塞进这里。
-
-### 4.3 模拟、Mirror 与领域补偿
-
-- `src/Engine/InCombat/Simulation/*`：通用命令时序、历史、RNG、牌堆、伤害和 Fork。
-- `src/Engine/InCombat/Mirrors/*`：原版 Hook / Model 方法的精确镜像。
-- `src/Engine/Common/Mirrors/MethodMirrorRegistryDescriptor.cs`：registry 对 CoverageCatalog 提供支持元数据的唯一接口。CoverageCatalog 不反射 registry 私有字段。
-- `src/Prediction/*`：跨 Hook 生命周期、怪物 AI/行动、隐藏状态、死亡/召唤、选择和第三方 subscriber 捕获等领域补偿。
-
-### 4.4 UI 与测试
-
-- `SolverOverlaySnapshot.Capture` 是搜索结果到 UI 的转换边界；它可以读取 `SolverResult` 和显示元数据。
-- `SolverOverlay`、`SolverRouteRow`、`SolverActionPill` 只渲染只读 snapshot，不读取 `SolverResult`、`PlanAction`、`PlanCardChoice` 或 `ModelDb`。
-- `UnattendedTestRunner` 负责请求级编排和共享 fixture helper。
-- `ProtocolHost` 独占请求循环与每请求开关；`ScenarioBuilder` 独占建局和状态注入；`Executor` 独占差分/搜索/部署执行和临时设置；`Assertions` 独占执行前后断言；`Writer` 独占结果协议与原子写入。
+多人金币监听资格和金纸计数由分支状态与逐遗物状态持有；单人路径保留官方行为。不可用主线程活动成员快照替代多人死亡/复活后的监听序列，也不另设重复计数。
 
 ## 5. 状态所有权
 
@@ -189,20 +142,20 @@ Windows（PowerShell 7）常用命令：
 
 ```powershell
 dotnet build CombatSolver.csproj -c Release
-pwsh -NoProfile -File tools\verify-refactor-boundaries.ps1
-pwsh -NoProfile -File tools\run-unattended-test.ps1 <fixture 参数> -CleanupInstanceOnExit
-dotnet run --project tools\CoverageCatalog\CoverageCatalog.csproj -c Release -- . <verify 参数>
-pwsh -NoProfile -File tools\run-visible-steam-benchmark.ps1 <固定基准参数>
+pwsh -NoProfile -File tools\inspection\verify-refactor-boundaries.ps1
+pwsh -NoProfile -File tools\testing\run-unattended-test.ps1 <fixture 参数> -CleanupInstanceOnExit
+dotnet run --project tools\inspection\CoverageCatalog\CoverageCatalog.csproj -c Release -- . <verify 参数>
+pwsh -NoProfile -File tools\performance\run-visible-steam-benchmark.ps1 <固定基准参数>
 ```
 
 Linux（Bash）等价命令：
 
 ```bash
 dotnet build CombatSolver.csproj -c Release
-./tools/verify-refactor-boundaries.sh
-./tools/run-unattended-test.sh <fixture 参数> --cleanup-instance-on-exit
-dotnet run --project tools/CoverageCatalog/CoverageCatalog.csproj -c Release -- . <verify 参数>
-./tools/run-visible-steam-benchmark.sh <固定基准参数>
+./tools/inspection/verify-refactor-boundaries.sh
+./tools/testing/run-unattended-test.sh <fixture 参数> --cleanup-instance-on-exit
+dotnet run --project tools/inspection/CoverageCatalog/CoverageCatalog.csproj -c Release -- . <verify 参数>
+./tools/performance/run-visible-steam-benchmark.sh <固定基准参数>
 ```
 
 Windows `.ps1` 与 Linux `.sh` 都是受维护的平台原生入口：PowerShell 使用 PascalCase 参数，Bash 使用 GNU 风格长参数；`.sh` 不调用 PowerShell。两端无人测试脚本均允许覆盖游戏和依赖路径，Linux 脚本还会探测标准 Steam 安装；这些本地入口仍不是可移植 CI。修改协议、门禁或测试能力时同步维护两端脚本，不要提交个人绝对路径更新。
@@ -212,14 +165,14 @@ Windows `.ps1` 与 Linux `.sh` 都是受维护的平台原生入口：PowerShell
 - 当前多人 fork 发布到 `origin` 的任务分支、当前版本 annotated tag 和 GitHub Release。官方 `main` 的创意工坊身份、夸克目录及三渠道脚本配置不用于此分支；本分支用 Git 和 GitHub CLI 完成对应发布阶段，来源仍是已定版提交与最小 ZIP。
 - 改动职责边界：更新 `docs/ARCHITECTURE.md`、相关 skill、结构门禁及必要的重构路线/核验记录。
 - 改动语义、搜索、性能、UI 或测试方式：更新 `docs/DEVELOPMENT_NOTES.md` 与 `docs/TEST_MATRIX.md`；需要进入覆盖目录时同步结构化证据。
-- 改动任何第三方登记点：在同一提交更新 `docs/THIRD_PARTY_ADAPTERS.md`。登记点指外部 Mod 能写入的入口——镜像注册表、`StrategicEffectMirrors` 这类按类型登记的表、订阅者门禁，以及手册第 6 节列出的封闭开关。新增登记入口要写进第 2 节并从第 6 节移除对应行；改动既有入口的签名、语义或登记时机要更新对应章节；发现新的封闭开关要补进第 6 节。登记点有专属子文档时（例如 `docs/third-party-strategic-effects.md`）一并更新，手册只保留概述和链接。
+- 改动任何第三方登记点：在同一提交更新 `docs/third-party/README.md`。登记点指外部 Mod 能写入的入口——镜像注册表、`StrategicEffectMirrors` 这类按类型登记的表、订阅者门禁，以及手册第 6 节列出的封闭开关。新增登记入口要写进第 2 节并从第 6 节移除对应行；改动既有入口的签名、语义或登记时机要更新对应章节；发现新的封闭开关要补进第 6 节。登记点有专属子文档时（例如 `docs/third-party/strategic-effects.md`）一并更新，手册只保留概述和链接。
 - 功能修复顺带暴露出手册没讲清的行为时，把它补进手册，不要只写进开发笔记——手册是外部作者唯一会读的那份。
 - 面向玩家的更新日志和开发文档使用当前支持游戏版本的官方中文译名；名称从游戏内本地化或实机路线日志核对，不沿用玩家口语、旧译名或自行翻译。原始问题摘录保持用户原文，并明确标记为原始描述。
 - 版本术语按本项目约定：`小版本`只将末位加一，`大版本`将中间位加一、末位归零；已发布版本不追溯改号，具体版本操作见 `release-gate`。
 - 用户声明“这一批不发版”“直到我说发版都记入 `X`”或等价要求时，建立活动发布批次。批次内每项改动均写入 `X（开发中）` 并正常提交，不逐项提升版本、构建、打包、创建标签或上传；直到用户明确结束批次。该批次声明优先于“修复后默认最小发包”。
 - 版本创建标签或成功上传创意工坊后即冻结。后续行为改动进入新的“下一版本（开发中）”记录，不追加到已发布版本的更新日志或开发章节；用户尚未指定新版本号时不擅自编造，等下次版本指令再统一命名。
 - 没有活动发布批次时，玩家问题包修复和用户提出的功能修改默认以补丁版本、提交、一次 Release 构建和一次最小 ZIP 定版；用户明确说不发包时停止在提交。
-- 发布口令按字面分层执行：`准备发版` 完成版本同步、玩家更新日志、提交、一次 Release 构建和一次最小 ZIP，不创建标签、不上传、不推送；带有“给我审核/我拍板后”的请求只整理并提交更新日志草案，等用户批准后再构建定版。`发版/发布` 在必要时补齐准备步骤、创建当前版本的 annotated tag，并发布本分支适用渠道；官方 `main` 用 `tools/publish-release.ps1` 同步创意工坊、GitHub Release 与夸克网盘，多人 fork 遵循本节首条。`上传/更新创意工坊` 只发布当前已定版版本；`推送/同步远端` 只提交明确属于当前任务的跟踪文件并推送当前分支及已存在的当前版本标签。监控后台最新版提示由用户维护，发布流程不读写。只有用户明确要求“完整发布门禁/完整验收/干净安装”才执行完整门禁。
+- 发布口令按字面分层执行：`准备发版` 完成版本同步、玩家更新日志、提交、一次 Release 构建和一次最小 ZIP，不创建标签、不上传、不推送；带有“给我审核/我拍板后”的请求只整理并提交更新日志草案，等用户批准后再构建定版。`发版/发布` 在必要时补齐准备步骤、创建当前版本的 annotated tag，并发布本分支适用渠道；官方 `main` 用 `tools/release/publish-release.ps1` 同步创意工坊、GitHub Release 与夸克网盘，多人 fork 遵循本节首条。`上传/更新创意工坊` 只发布当前已定版版本；`推送/同步远端` 只提交明确属于当前任务的跟踪文件并推送当前分支及已存在的当前版本标签。监控后台最新版提示由用户维护，发布流程不读写。只有用户明确要求“完整发布门禁/完整验收/干净安装”才执行完整门禁。
 - 最小发包链固定为：完成必要行为验证、提交、一次 Release 构建、一次最小 ZIP 创建。后续没有行为源码或构建输入变化时，到 ZIP 创建成功即结束，不追加发布后复测或包内容复核；前一阶段已有成功证据时直接复用，不重做。
 - GitHub Release 的最小 ZIP 统一写入仓库根目录的 `releases/CombatSolver-<版本号>.zip`。夸克网盘由统一脚本另建 `releases/CombatSolver-<版本号>-Quark.zip`：只保留 CombatSolver 最小包内容，不加入 RitsuLib 或其他依赖；不足时增加无压缩的 `QUARK_UPLOAD_PADDING.bin`，使总大小严格超过 15 MiB。填充条目不参与 Mod 加载，解压后可以删除。发布目录相对于当前仓库，所有发布产物均由 Git 忽略。
 - 用户明确要求“上传/更新创意工坊”时，直接上传仓库当前已经定版的最新版，并在创意工坊 `changeNote` 中使用同版本玩家更新日志的完整中英正文，只转换 Steam 排版语法；逐项核对，不能缩写、合并或删减玩家变动、限制与致谢。创意工坊暂存目录中的旧 DLL、manifest 或旧 `changeNote` 不是最新版来源；存在尚未定版的当前改动时，只补齐缺失的最小发包阶段。上传成功后不打开页面或重新下载确认。

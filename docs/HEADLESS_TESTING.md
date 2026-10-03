@@ -9,7 +9,7 @@
 
 ## 用法
 
-回收生命周期的最小独立验证可用 `dotnet run --project tools/CombatSolver.GcPolicyChecks/CombatSolver.GcPolicyChecks.csproj -c Release -- checkpoint`，不启动 Godot；该模式链接生产 GC 政策，建立真实 NoGC 区域并验证续用与收集中取消。它不替代完整游戏里的延迟手动请求及引用释放 epoch 合同。
+回收生命周期的最小独立验证可用 `dotnet run --project tools/testing/checks/CombatSolver.GcPolicyChecks/CombatSolver.GcPolicyChecks.csproj -c Release -- checkpoint`，不启动 Godot；该模式链接生产 GC 政策，建立真实 NoGC 区域并验证续用与收集中取消。它不替代完整游戏里的延迟手动请求及引用释放 epoch 合同。
 
 固定小预算搜索使用 `-FixedSearchBudget -SearchBudgetOverrideMilliseconds 1500`，Bash 对应 `--fixed-search-budget --search-budget-override-milliseconds 1500`。需要在不改玩家设置的情况下覆盖多策略路线搜索时，使用 `-UseNoveltyPortfolioForTest` / `--use-novelty-portfolio-for-test`；该开关只存在于无人测试协议，结束请求时由 `ProtocolHost` 重置。生产只有一套搜索配置；旧 ForceShortSearchOnly 和短/深预算输入仅作为兼容入口，不能据此断言阶段。旧 ExpectedInitialSearchPhase/DeepSearchTriggered/DeepSearchImprovedResult 参数已删除，改断言总工作量、边界和实际路线。新回放政策覆盖文件使用 `profile` / `fixedBudget`；旧归档的 `deepProfile` 仍可读取。
 
@@ -22,13 +22,13 @@ dotnet build CombatSolver.csproj -c Release -p:CopyModOnBuild=false
 Linux 示例（各终端/agent 运行自己的请求）：
 
 ```sh
-bash tools/run-unattended-test.sh --headless-instance semantic-a --headless-execution-mode parallel --headless-memory-reservation-mib 4096 --headless-cpu-reservation 2 --timeout-seconds 120 --cleanup-instance-on-exit
-bash tools/run-unattended-test.sh --headless-instance semantic-b --headless-execution-mode parallel --headless-memory-reservation-mib 4096 --headless-cpu-reservation 2 --timeout-seconds 120 --cleanup-instance-on-exit
+bash tools/testing/run-unattended-test.sh --headless-instance semantic-a --headless-execution-mode parallel --headless-memory-reservation-mib 4096 --headless-cpu-reservation 2 --timeout-seconds 120 --cleanup-instance-on-exit
+bash tools/testing/run-unattended-test.sh --headless-instance semantic-b --headless-execution-mode parallel --headless-memory-reservation-mib 4096 --headless-cpu-reservation 2 --timeout-seconds 120 --cleanup-instance-on-exit
 ```
 
-macOS 最小入口为 `tools/run-unattended-test-macos.sh <请求 JSON> [...] --cleanup-instance-on-exit [--timeout-seconds 120] [--output-dir 路径]`。APFS 克隆游戏包到仓库 `.local/headless-instances/macos.<随机串>/`，只装当前构建的 CombatSolver 与 RitsuLib；以子进程的独立 HOME 承载 user://，不启动 Steam。只复制交互配置文件并在副本中启用 Mod，不复制存档。多个请求在同一进程依次执行，每个请求最多 120 秒，最后一项退出；失败或信号退出也终止自己启动的进程并删除整个实例，日志与逐请求结果保存在实例外。`COMBATSOLVER_HEADLESS_ROOT` 可指定一个尚不存在的精确实例目录；游戏和 RitsuLib 来源可由 `COMBATSOLVER_STS2_APP` / `COMBATSOLVER_RITSU_DIR` 指定。它不提供 Windows/Linux 入口的资源预约、排队或跨批次复用；成功清理日志是实例删除证据。
+macOS 最小入口为 `tools/testing/run-unattended-test-macos.sh <请求 JSON> [...] --cleanup-instance-on-exit [--timeout-seconds 120] [--output-dir 路径]`。APFS 克隆游戏包到仓库 `.local/headless-instances/macos.<随机串>/`，只装当前构建的 CombatSolver 与 RitsuLib；以子进程的独立 HOME 承载 user://，不启动 Steam。只复制交互配置文件并在副本中启用 Mod，不复制存档。多个请求在同一进程依次执行，每个请求最多 120 秒，最后一项退出；失败或信号退出也终止自己启动的进程并删除整个实例，日志与逐请求结果保存在实例外。`COMBATSOLVER_HEADLESS_ROOT` 可指定一个尚不存在的精确实例目录；游戏和 RitsuLib 来源可由 `COMBATSOLVER_STS2_APP` / `COMBATSOLVER_RITSU_DIR` 指定。它不提供 Windows/Linux 入口的资源预约、排队或跨批次复用；成功清理日志是实例删除证据。
 
-macOS 的 `--verify-runtime-gc-startup` 模式要求恰好三个请求，在同一个快照和独立资料目录中依次启动三个新进程：首次开启自动配置、第二次关闭并恢复、第三次验证恢复后的实际 GC。每次检查真实运行模式、已保存／有效 NoGC 与下一次配置；正式安装的启动文件保持原样。该模式仍必须带清理开关，不代表可见 Steam 或设置页点击验收。Windows 对应 `tools/test-runtime-gc-startup.ps1`，Linux 对应 `tools/test-runtime-gc-startup.sh`，参数及证据边界见[启动配置](performance/server-gc-launch-profile-20260924.md)。
+macOS 的 `--verify-runtime-gc-startup` 模式要求恰好三个请求，在同一个快照和独立资料目录中依次启动三个新进程：首次开启自动配置、第二次关闭并恢复、第三次验证恢复后的实际 GC。每次检查真实运行模式、已保存／有效 NoGC 与下一次配置；正式安装的启动文件保持原样。该模式仍必须带清理开关，不代表可见 Steam 或设置页点击验收。Windows 对应 `tools/testing/test-runtime-gc-startup.ps1`，Linux 对应 `tools/testing/test-runtime-gc-startup.sh`，参数及证据边界见[启动配置](archive/performance/server-gc-launch-profile-20260924.md)。
 
 Windows 使用 PowerShell 7.4 或更新版本，参数对应 `-HeadlessInstance`、`-HeadlessExecutionMode Parallel`、`-HeadlessMemoryReservationMiB`、`-HeadlessCpuReservation`、`-HeadlessQueueTimeoutSeconds`；场景参数与已有原生启动器相同。
 
@@ -58,10 +58,10 @@ Coding agent 运行无头游戏测试时必须加 `-CleanupInstanceOnExit`，Bas
 
 ## 验证边界
 
-`bash tools/test-headless-runtime.sh` 使用原生子进程替身验证租约、排队与隔离，不启动游戏；`--snapshots` 单独验证产物隔离，`--snapshot-failures` 单独注入哈希/复制/发布失败。Windows helper 自测为 `pwsh -File tools/test-headless-runtime.ps1`，`-ProfileOnly` 单独检查资料复制与重解析点拒绝。这些结果不等于真实双游戏、真实 Mod 加载或 Windows 进程生命周期通过；真实验收另记入 TEST_MATRIX。
+`bash tools/testing/test-headless-runtime.sh` 使用原生子进程替身验证租约、排队与隔离，不启动游戏；`--snapshots` 单独验证产物隔离，`--snapshot-failures` 单独注入哈希/复制/发布失败。Windows helper 自测为 `pwsh -File tools/testing/test-headless-runtime.ps1`，`-ProfileOnly` 单独检查资料复制与重解析点拒绝。这些结果不等于真实双游戏、真实 Mod 加载或 Windows 进程生命周期通过；真实验收另记入 TEST_MATRIX。
 
 两端 helper 自测同时验证完整实例清理：只有所有权标记匹配、租约不存在、私有游戏未运行且目录内没有重解析点/符号链接时才删除；归属不明时保留现场并失败。
 
-GC 研究分支移植时，Linux 暖进程准入改为只预约尚未兑现的增长量（预约减已用 RSS，最小为 0），与 Windows 口径一致；总预约、CPU 和主机余量限制仍生效。`bash tools/test-headless-runtime.sh --warm-memory` 定向覆盖该边界和等待期间的租约替换。HoldAfterInitialSearch 与 StopAfterInitialSolverResultAssertion 互斥，两端入口在准入前拒绝同时使用；采样停在初次结果时使用 Hold 保持游戏存活。
+GC 研究分支移植时，Linux 暖进程准入改为只预约尚未兑现的增长量（预约减已用 RSS，最小为 0），与 Windows 口径一致；总预约、CPU 和主机余量限制仍生效。`bash tools/testing/test-headless-runtime.sh --warm-memory` 定向覆盖该边界和等待期间的租约替换。HoldAfterInitialSearch 与 StopAfterInitialSolverResultAssertion 互斥，两端入口在准入前拒绝同时使用；采样停在初次结果时使用 Hold 保持游戏存活。
 
 `test-headless-matrix-runtime.sh` / `.ps1` 检查矩阵参数、暖进程尾部清理、拒绝外来身份和取消隔离；`--stop-only` / `-StopOnly` 另调用真实启动器入口，验证无构建产物时也不会为清理启动游戏。Linux 停止测试使用原生进程替身；Linux 上的 PowerShell 测试不代表 Windows 实机或原生 Ctrl+C 通过。

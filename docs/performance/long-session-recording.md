@@ -6,14 +6,14 @@
 
 1. 正常从 Steam 启动，看到左上角绿色“性能录制中（状态日志＋调用栈）”再开始。保持平常的 Mod 与求解器设置，按平常方式使用 SL。
 2. 尽量在同一个游戏进程内连续打两局；第一局结束后在主菜单停留约 15 秒，再开第二局，以便记录空闲和新建跑局的差别。
-3. **当前停止启用 Ctrl＋F8 内存转储，配置中的 DumpToolPath 留空。** 2026-09-10 的玩家长局中，转储未完成并伴随整进程挂起；微型进程测试不能覆盖该场景。先使用已有的连续轨迹和状态日志诊断，事件经过见 [玩家实录诊断](player-lag-diagnosis-20260910.md)。
+3. **当前停止启用 Ctrl＋F8 内存转储，配置中的 DumpToolPath 留空。** 2026-09-10 的玩家长局中，转储未完成并伴随整进程挂起；微型进程测试不能覆盖该场景。先使用已有的连续轨迹和状态日志诊断，事件经过见 [玩家实录诊断](../archive/performance/player-lag-diagnosis-20260910.md)。
 4. 最后正常退出整个游戏，等采集器收尾。保留本次进程目录中的全部文件；只给普通 `godot.log` 会缺少调用栈和内存证据。红色提示表示记录失败；黄色常见于启动或分段切换，持续黄色表示录制中断。
 
 内存快照可包含该进程当时的完整数据，用于本地对象引用分析。正在录制的段仍使用原始 trace；段完成后，由单独的低优先级进程无损压缩为 `.nettrace.zip`，ZIP 完整落盘后移除同段冗余原文件。压缩与下一段录制并行，所有段的事件均保留。实际玩家样本 280,502,570 字节压为 26,455,804 字节，约缩小 90.6%；不能保证所有场景都有相同比例。采集器每两秒检查磁盘，剩余不足 5 GB 时明确停止。移除启用文件并重启游戏即可关闭诊断。
 
 ## 配置与产物
 
-配置字段：`TraceToolPath` 指向 dotnet-trace 9.0.661903，`DumpToolPath` 保持 null，`WatcherScriptPath` 指向本仓库 `tools/watch-performance.ps1`，`OutputDirectory` 是本地输出目录，`SourceRevision` 记录源码身份。`SegmentSeconds` 正常使用 300，`HandleWindowSeconds` 默认 10（允许 0—30；实际不超过周期的一半）。单采集器交替录制 10 秒句柄窗口和 290 秒普通段，约每五分钟一次句柄窗口；设 0 恢复普通分段。每段的实际模式、provider 和时长写在 collector.jsonl，不按文件编号猜测采集范围。启动记录另外保存实际 DLL SHA-256，避免把诊断 DLL 和同版本正式 DLL 混淆。
+配置字段：`TraceToolPath` 指向 dotnet-trace 9.0.661903，`DumpToolPath` 保持 null，`WatcherScriptPath` 指向本仓库 `tools/performance/watch-performance.ps1`，`OutputDirectory` 是本地输出目录，`SourceRevision` 记录源码身份。`SegmentSeconds` 正常使用 300，`HandleWindowSeconds` 默认 10（允许 0—30；实际不超过周期的一半）。单采集器交替录制 10 秒句柄窗口和 290 秒普通段，约每五分钟一次句柄窗口；设 0 恢复普通分段。每段的实际模式、provider 和时长写在 collector.jsonl，不按文件编号猜测采集范围。启动记录另外保存实际 DLL SHA-256，避免把诊断 DLL 和同版本正式 DLL 混淆。
 
 每个进程目录包含：
 
@@ -29,7 +29,7 @@
 | `*FAILED.txt` | 记录器、采集器或内存快照失败；不能把这些会话报告成完整记录 |
 | `godot.log` | 正常收尾时复制的游戏主日志 |
 
-`tools/export-performance.ps1 -SessionDirectory <目录>` 在采集和压缩收尾完成后创建相邻 ZIP。会话目录保留。异常退出、工具报错时保留已有目录供分析，不伪造正常完成标记。
+`tools/performance/export-performance.ps1 -SessionDirectory <目录>` 在采集和压缩收尾完成后创建相邻 ZIP。会话目录保留。异常退出、工具报错时保留已有目录供分析，不伪造正常完成标记。
 
 ## 采集范围与口径
 

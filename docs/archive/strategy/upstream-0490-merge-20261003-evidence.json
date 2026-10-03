@@ -1,0 +1,660 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-03",
+  "forkBefore": "1d7115c71bc0c7b152a3efba874388c9d1398214",
+  "upstream": "acc05d8511d8bce01aa37dea3869cfb96af67790",
+  "upstreamVersion": "0.49.0",
+  "forkVersion": "0.49.1",
+  "environment": {
+    "os": "macOS arm64",
+    "game": "0.111.0",
+    "dotnetSdk": "9.0.318",
+    "visibleSteamStarted": false
+  },
+  "nativeRequests": [
+    {
+      "batch": "native",
+      "receipt": ".local/upstream-update-20261003/native/01-result.json",
+      "scenarioId": "GOLD-HEALING-MECHANISMS",
+      "status": "Passed",
+      "elapsedMilliseconds": 17330.4636,
+      "completedChecks": [
+        "GoldHealing:NoHealing:FullNativeStateRng:ForkParentLiveIsolation",
+        "GoldHealing:DragonNegative:FullNativeStateRng:ForkParentLiveIsolation",
+        "GoldHealing:DragonZero:FullNativeStateRng:ForkParentLiveIsolation",
+        "GoldHealing:DragonFractional:FullNativeStateRng:ForkParentLiveIsolation",
+        "GoldHealing:DragonPositive:FullNativeStateRng:ForkParentLiveIsolation",
+        "GoldHealing:BowlerDragon:FullNativeStateRng:ForkParentLiveIsolation",
+        "GoldHealing:BowlerDragonFractional:FullNativeStateRng:ForkParentLiveIsolation",
+        "GoldHealing:EctoplasmBlocksDragon:FullNativeStateRng:ForkParentLiveIsolation",
+        "GoldHealing:BowlerThenEctoplasm:FullNativeStateRng:ForkParentLiveIsolation",
+        "GoldHealing:EctoplasmThenBowler:FullNativeStateRng:ForkParentLiveIsolation",
+        "GoldHealing:MeltedDragon:FullNativeStateRng:ForkParentLiveIsolation",
+        "GoldHealing:UnknownThreeCallbacksRejectedWithoutExecution:ParentIsolation",
+        "GoldHealing:HandOfGreedFatal:NativePlay:Gold=25:GrowthResource:FullStateRng:ParentLiveIsolation",
+        "GoldHealing:HandOfGreedFatal:NativePlay:Gold=0:GrowthResource:FullStateRng:ParentLiveIsolation",
+        "NativeOutcome:combatEnded=False:turn=1:hp=55:maxHp=85"
+      ],
+      "error": null
+    },
+    {
+      "batch": "native",
+      "receipt": ".local/upstream-update-20261003/native/02-result.json",
+      "scenarioId": "MAX-HP-HEALING-CALLBACKS",
+      "status": "Passed",
+      "elapsedMilliseconds": 2636.2997,
+      "completedChecks": [
+        "MaxHpHealing:Zero:FullNativeStateRng:ParentLiveIsolation",
+        "MaxHpHealing:FractionalTruncated:FullNativeStateRng:ParentLiveIsolation",
+        "MaxHpHealing:Positive:FullNativeStateRng:ParentLiveIsolation",
+        "MaxHpHealing:PartialCap:FullNativeStateRng:ParentLiveIsolation",
+        "MaxHpHealing:FullCapGold:FullNativeStateRng:ParentLiveIsolation",
+        "MaxHpHealing:WrongOwnerNativeCallbackIdentity:NoStateChanges",
+        "MaxHpHealing:RedSkullThresholdCrossing:FullNativeStateRng:ParentLiveIsolation",
+        "MaxHpHealing:FruitJuiceNativeUse:RedSkullHpCallback:FullStateRng:ParentLiveIsolation",
+        "NativeOutcome:combatEnded=False:turn=1:hp=45:maxHp=85"
+      ],
+      "error": null
+    },
+    {
+      "batch": "native",
+      "receipt": ".local/upstream-update-20261003/native/03-result.json",
+      "scenarioId": "FEED-MAX-HP-CAP",
+      "status": "Passed",
+      "elapsedMilliseconds": 2636.3585,
+      "completedChecks": [
+        "MaxHpHealing:FeedNativeFatal:ActualGain=2:GrowthProtected:FullStateRng:ParentLiveIsolation",
+        "MaxHpHealing:FeedNativeFatal:ActualGain=0:GrowthProtected:FullStateRng:ParentLiveIsolation",
+        "NativeOutcome:combatEnded=False:turn=1:hp=50:maxHp=999999999"
+      ],
+      "error": null
+    },
+    {
+      "batch": "native",
+      "receipt": ".local/upstream-update-20261003/native/04-result.json",
+      "scenarioId": "RELIC-MAX-HP-HEALING-BOUNDS",
+      "status": "Passed",
+      "elapsedMilliseconds": 2593.2685,
+      "completedChecks": [
+        "RelicMaxHpHealing:CHOSEN_CHEESE:NativeCallback:FullStateRng:ForkParentLiveIsolation:UnclosedBound",
+        "RelicMaxHpHealing:CHOSEN_CHEESE:MeltedSourceExcluded",
+        "RelicMaxHpHealing:DARKSTONE_PERIAPT:NativeCallback:FullStateRng:ForkParentLiveIsolation:UnclosedBound",
+        "RelicMaxHpHealing:DARKSTONE_PERIAPT:MeltedSourceExcluded",
+        "NativeOutcome:combatEnded=False:turn=1:hp=56:maxHp=86"
+      ],
+      "error": null
+    },
+    {
+      "batch": "native",
+      "receipt": ".local/upstream-update-20261003/native/05-result.json",
+      "scenarioId": "AXEBOT-JOSS-DEFERRED-FORK",
+      "status": "Passed",
+      "elapsedMilliseconds": 2587.6945,
+      "completedChecks": [
+        "JossPaper:RootDeferredCount:LiveAdvance:Fingerprint:Continuation:SiblingFork:ConsumeOnce",
+        "JossPaper:ZeroDeferred:DistinctFingerprint:ConsumeZero:ParentSiblingIsolation",
+        "NativeOutcome:combatEnded=False:turn=1:hp=80:maxHp=80"
+      ],
+      "error": null
+    },
+    {
+      "batch": "native",
+      "receipt": ".local/upstream-update-20261003/native/06-result.json",
+      "scenarioId": "B013-FIXED-PREFIX-TERMINAL-BOUNDARY",
+      "status": "Passed",
+      "elapsedMilliseconds": 2702.0266,
+      "completedChecks": [
+        "FixedPrefixTerminalBoundary:TruncatedAtVictory:Actions=1",
+        "NativeOutcome:combatEnded=False:turn=1:hp=80:maxHp=80"
+      ],
+      "error": null
+    },
+    {
+      "batch": "native",
+      "receipt": ".local/upstream-update-20261003/native/07-result.json",
+      "scenarioId": "B013-RADIANT-PEARL-HAND-DRAW",
+      "status": "Passed",
+      "elapsedMilliseconds": 2578.5615,
+      "completedChecks": [
+        "RadiantPearlBeforeHandDraw:GeneratedLuminesce:HandTop:NativeMatched",
+        "NativeOutcome:combatEnded=False:turn=1:hp=80:maxHp=80"
+      ],
+      "error": null
+    },
+    {
+      "batch": "native",
+      "receipt": ".local/upstream-update-20261003/native/08-result.json",
+      "scenarioId": "B013-BLOCK-DECIMAL-BOUNDARY",
+      "status": "Passed",
+      "elapsedMilliseconds": 2609.0242,
+      "completedChecks": [
+        "ShadowmeldFrail:NativeFullStateRng:RepresentableProduct:ForkIsolation",
+        "ShadowmeldBlockDecimalBoundary:Normal=48:Saturated=999999999:BeyondFactorRange=999999999",
+        "NativeOutcome:combatEnded=False:turn=1:hp=80:maxHp=80"
+      ],
+      "error": null
+    },
+    {
+      "batch": "native",
+      "receipt": ".local/upstream-update-20261003/native/09-result.json",
+      "scenarioId": "B013-DEFAULT-GC-LIMIT",
+      "status": "Passed",
+      "elapsedMilliseconds": 2968.8057,
+      "completedChecks": [
+        "DefaultGcAllocationLimit:Bounded:SystemLimitReclaimKept:RegionFree:ClearedOnExit",
+        "NativeOutcome:combatEnded=False:turn=1:hp=80:maxHp=80"
+      ],
+      "error": null
+    },
+    {
+      "batch": "native",
+      "receipt": ".local/upstream-update-20261003/native/10-result.json",
+      "scenarioId": "FIXED-PREFIX-POTION-POLICY",
+      "status": "Passed",
+      "elapsedMilliseconds": 2611.6977,
+      "completedChecks": [
+        "FixedPotionPrefix:Disabled:Quota:EarliestTurn:Target:Protect:RequiredPair",
+        "NativeOutcome:combatEnded=False:turn=1:hp=80:maxHp=80"
+      ],
+      "error": null
+    },
+    {
+      "batch": "native",
+      "receipt": ".local/upstream-update-20261003/native/11-result.json",
+      "scenarioId": "CALCULATED-HISTORY-FREEZE",
+      "status": "Passed",
+      "elapsedMilliseconds": 2604.6142,
+      "completedChecks": [
+        "CalculatedHistory:SixReaders:NativeAdvance:Parent:Sibling:Fork:BranchIncrement",
+        "NativeOutcome:combatEnded=False:turn=1:hp=79:maxHp=80"
+      ],
+      "error": null
+    },
+    {
+      "batch": "native",
+      "receipt": ".local/upstream-update-20261003/native/12-result.json",
+      "scenarioId": "RITUAL-TEMPORARY-STRENGTH",
+      "status": "Passed",
+      "elapsedMilliseconds": 2609.4549,
+      "completedChecks": [
+        "Ritual:TemporaryStrength:BothListenerOrders:Native:Fork",
+        "NativeOutcome:combatEnded=False:turn=1:hp=80:maxHp=80"
+      ],
+      "error": null
+    },
+    {
+      "batch": "native",
+      "receipt": ".local/upstream-update-20261003/native/13-result.json",
+      "scenarioId": "ROUTE-ADOPTION-LIFETIME",
+      "status": "Passed",
+      "elapsedMilliseconds": 2729.6188,
+      "completedChecks": [
+        "RouteAdoption:PublishedPreview:ExpiredPass:ActiveRequest:ExactActions",
+        "NativeOutcome:combatEnded=False:turn=1:hp=80:maxHp=80"
+      ],
+      "error": null
+    },
+    {
+      "batch": "native",
+      "receipt": ".local/upstream-update-20261003/native/14-result.json",
+      "scenarioId": "SEEKER-ORDERED-OPTIONS",
+      "status": "Passed",
+      "elapsedMilliseconds": 3077.8652,
+      "completedChecks": [
+        "SeekerStrike:RandomSample:FilteredPileOrder:DuplicateInstances:Native:Fork",
+        "NativeOutcome:combatEnded=False:turn=1:hp=80:maxHp=80"
+      ],
+      "error": null
+    },
+    {
+      "batch": "native",
+      "receipt": ".local/upstream-update-20261003/native/15-result.json",
+      "scenarioId": "B013-FIXED-PREFIX-TURN-END-CARD",
+      "status": "Passed",
+      "elapsedMilliseconds": 2314.1085,
+      "completedChecks": [
+        "FixedPrefixTurnEndCard:VoidFormAccepted:TurnAdvanced",
+        "NativeOutcome:combatEnded=False:turn=1:hp=75:maxHp=75"
+      ],
+      "error": null
+    },
+    {
+      "batch": "native",
+      "receipt": ".local/upstream-update-20261003/native/16-result.json",
+      "scenarioId": "VOID-FORM-TURN-CHOICES",
+      "status": "Failed",
+      "elapsedMilliseconds": 32268.6737,
+      "completedChecks": [],
+      "error": "System.InvalidOperationException: Native forced turn stalled: turn=2 phase=Start; setup=inactive operation=RanToCompletion; choices=\n ---> System.Threading.Tasks.TaskCanceledException: A task was canceled.\n   at CombatSolver.UnattendedTestRunner.AssertVoidFormTurnChoicesAsync(CombatState combat, Player player)\n   --- End of inner exception stack trace ---\n   at CombatSolver.UnattendedTestRunner.AssertVoidFormTurnChoicesAsync(CombatState combat, Player player)\n   at CombatSolver.UnattendedTestRunner.Executor.ExecuteAsync(ScenarioContext scenario)\n   at CombatSolver.UnattendedTestRunner.RunAsync()"
+    },
+    {
+      "batch": "native-continuation",
+      "receipt": ".local/upstream-update-20261003/native-continuation/01-result.json",
+      "scenarioId": "VOID-FORM-TURN-CHOICES",
+      "status": "Passed",
+      "elapsedMilliseconds": 18327.718,
+      "completedChecks": [
+        "VoidForm:ForcedTurn:Tyranny:Stratagem:FullReplay:ExecutionContinuation:Native",
+        "NativeOutcome:combatEnded=False:turn=2:hp=71:maxHp=75"
+      ],
+      "error": null
+    },
+    {
+      "batch": "native-continuation",
+      "receipt": ".local/upstream-update-20261003/native-continuation/02-result.json",
+      "scenarioId": "NATIVE-CHOOSE-OPEN-GATE",
+      "status": "Passed",
+      "elapsedMilliseconds": 3552.6209,
+      "completedChecks": [
+        "NativeChoose:ReopenedPage:NativeOpenGate:AcceptedIdentity",
+        "NativeChoose:CandidateOrderMismatch:PageRetained",
+        "NativeChoose:Skip:NativeAccepted",
+        "NativeOutcome:combatEnded=False:turn=1:hp=70:maxHp=70"
+      ],
+      "error": null
+    },
+    {
+      "batch": "native-continuation",
+      "receipt": ".local/upstream-update-20261003/native-continuation/03-result.json",
+      "scenarioId": "PAELS-LEGION-FINISHED-REFERENCE",
+      "status": "Passed",
+      "elapsedMilliseconds": 2498.8218,
+      "completedChecks": [
+        "Lifecycle:DEFEND_SILENT:EnemyHp=55/55:NativePlayPile=",
+        "Lifecycle:DEFEND_SILENT:EnemyHp=55/55:NativePlayPile=",
+        "Lifecycle:DEFEND_SILENT:EnemyHp=55/55:NativePlayPile=",
+        "PaelsLegion:FinishedNativeReference:FrozenRoot:LaterBlock:Cooldown:Native:Fork",
+        "NativeOutcome:combatEnded=False:turn=1:hp=70:maxHp=70"
+      ],
+      "error": null
+    },
+    {
+      "batch": "native-continuation",
+      "receipt": ".local/upstream-update-20261003/native-continuation/04-result.json",
+      "scenarioId": "CASCADE-EMPTY-HAND-NATIVE",
+      "status": "Passed",
+      "elapsedMilliseconds": 5414.4281,
+      "completedChecks": [
+        "CascadeEmptyHand:UnceasingTop:Shuffle:TrueGrit:FullReplay:ExecutionContinuation:Fork:NativeState:RNG",
+        "NativeOutcome:combatEnded=False:turn=1:hp=80:maxHp=80"
+      ],
+      "error": null
+    },
+    {
+      "batch": "native-continuation",
+      "receipt": ".local/upstream-update-20261003/native-continuation/05-result.json",
+      "scenarioId": "EFFECT-SCOPE-ADJACENT-CONTRACT",
+      "status": "Passed",
+      "elapsedMilliseconds": 20754.6533,
+      "completedChecks": [
+        "EmptyHandEffectBoundary:Havoc:UnceasingTop:ResultPile:Shuffle:NativeState:RNG:Fork",
+        "EmptyHandEffectBoundary:SingleCard:UnceasingTop:ResultPile:Shuffle:NativeState:RNG:Fork",
+        "EmptyHandEffectBoundary:Repeat:UnceasingTop:ResultPile:Shuffle:NativeState:RNG:Fork",
+        "CardExecutionContinuation:Havoc:sources=PREPARED:all-branches:recapture:state:history:identity:RNG:DOP2:native",
+        "CardExecutionContinuation:Cascade:sources=PREPARED,ACROBATICS,PREPARED:all-branches:recapture:state:history:identity:RNG:DOP2:native",
+        "CardExecutionContinuation:DrawPrefix:sources=STRATAGEM_POWER,:all-branches:recapture:state:history:identity:RNG:DOP2:native",
+        "CardExecutionContinuation:Repeat:sources=,:all-branches:recapture:state:history:identity:RNG:DOP2:native",
+        "CardExecutionContinuation:Decisions:sources=,DECISIONS_DECISIONS,DECISIONS_DECISIONS,DECISIONS_DECISIONS:all-branches:recapture:state:history:identity:RNG:DOP2:native",
+        "CardContinuationContract:AllOptions:FullStateRngHistory:Identity:SiblingMutation:Revisit:DOP2:Cancel:InvalidChoice",
+        "CardContinuationContract:PriorHistory:Shuffle:Upgrade:FallbackReplayAttachmentPairSly:OwnedDamage",
+        "CardContinuationContract:NativeDaggerThrow:FullContinuation",
+        "CardContinuationContract:ACROBATICS+0:all=9:draw=3:discard=1:full-state-history-rng:shuffle:DOP2:nested-fallback",
+        "CardContinuationContract:ACROBATICS+0:杂技:native-full-continuation",
+        "CardContinuationContract:ACROBATICS+1:all=10:draw=4:discard=1:full-state-history-rng:shuffle:DOP2:nested-fallback",
+        "CardContinuationContract:ACROBATICS+1:杂技+:native-full-continuation",
+        "CardContinuationContract:PREPARED+0:all=8:draw=1:discard=1:full-state-history-rng:shuffle:DOP2:nested-fallback",
+        "CardContinuationContract:PREPARED+0:早有准备:native-full-continuation",
+        "CardContinuationContract:PREPARED+1:all=36:draw=2:discard=2:full-state-history-rng:shuffle:DOP2:nested-fallback",
+        "CardContinuationContract:PREPARED+1:早有准备+:native-full-continuation",
+        "PotionContinuation:ATTACK_POTION:choices=4:search-choices=5:state:history:RNG:post-hooks:siblings:DOP2",
+        "PotionContinuation:ATTACK_POTION:native-full-continuation",
+        "PotionContinuation:SKILL_POTION:choices=4:search-choices=5:state:history:RNG:post-hooks:siblings:DOP2",
+        "PotionContinuation:SKILL_POTION:native-full-continuation",
+        "PotionContinuation:POWER_POTION:choices=4:search-choices=5:state:history:RNG:post-hooks:siblings:DOP2",
+        "PotionContinuation:POWER_POTION:native-full-continuation",
+        "PotionContinuation:COLORLESS_POTION:choices=4:search-choices=5:state:history:RNG:post-hooks:siblings:DOP2",
+        "PotionContinuation:COLORLESS_POTION:native-full-continuation",
+        "PotionContinuation:ASHWATER:choices=8:search-choices=9:state:history:RNG:post-hooks:siblings:DOP2",
+        "PotionContinuation:ASHWATER:native-full-continuation",
+        "PotionContinuation:DROPLET_OF_PRECOGNITION:choices=3:search-choices=4:state:history:RNG:post-hooks:siblings:DOP2",
+        "PotionContinuation:DROPLET_OF_PRECOGNITION:native-full-continuation",
+        "PotionContinuation:GAMBLERS_BREW:choices=8:search-choices=9:state:history:RNG:post-hooks:siblings:DOP2",
+        "PotionContinuation:GAMBLERS_BREW:native-full-continuation",
+        "PotionContinuation:LIQUID_MEMORIES:choices=3:search-choices=4:state:history:RNG:post-hooks:siblings:DOP2",
+        "PotionContinuation:LIQUID_MEMORIES:native-full-continuation",
+        "PotionContinuation:TOUCH_OF_INSANITY:choices=3:search-choices=4:state:history:RNG:post-hooks:siblings:DOP2",
+        "PotionContinuation:TOUCH_OF_INSANITY:native-full-continuation",
+        "NativeOutcome:combatEnded=False:turn=1:hp=80:maxHp=80"
+      ],
+      "error": null
+    },
+    {
+      "batch": "native-continuation",
+      "receipt": ".local/upstream-update-20261003/native-continuation/06-result.json",
+      "scenarioId": "MULTIPLAYER-TOASTY-CHOICE",
+      "status": "Passed",
+      "elapsedMilliseconds": 4940.5208,
+      "completedChecks": [
+        "PreCombatPlayerHp:60",
+        "MultiplayerTurnSetup:ManualRequest:NativeChoiceRemainsOpen:FrozenFullPartyRoot",
+        "MultiplayerTurnSetup:ManualNativeSelection:FullStateEquivalent:NoAutomaticRecalculation",
+        "NativeOutcome:combatEnded=False:turn=1:hp=62:maxHp=80"
+      ],
+      "error": null
+    },
+    {
+      "batch": "native-continuation",
+      "receipt": ".local/upstream-update-20261003/native-continuation/07-result.json",
+      "scenarioId": "MULTIPLAYER-TOASTY-CONTROLS",
+      "status": "Passed",
+      "elapsedMilliseconds": 7692.9216,
+      "completedChecks": [
+        "MultiplayerTurnSetup:StopDrainsWorker:NativeInputPreserved",
+        "MultiplayerTurnSetup:ChoiceDisplayed:NativePeerActionClearsCurrent:AdviceStale:ManualFreshRoot",
+        "MultiplayerTurnSetup:ManualDifferentChoiceDuringWorker:ResultStale:NoAutomation",
+        "NativeOutcome:combatEnded=False:turn=1:hp=80:maxHp=80"
+      ],
+      "error": null
+    },
+    {
+      "batch": "native-continuation",
+      "receipt": ".local/upstream-update-20261003/native-continuation/08-result.json",
+      "scenarioId": "MULTIPLAYER-SHARED-DAMAGE",
+      "status": "Passed",
+      "elapsedMilliseconds": 2590.981,
+      "completedChecks": [
+        "MultiplayerSharedDamage:21:NativeState:Fork:Ledger:Incremental",
+        "NativeOutcome:combatEnded=False:turn=2:hp=76:maxHp=80"
+      ],
+      "error": null
+    },
+    {
+      "batch": "native-continuation",
+      "receipt": ".local/upstream-update-20261003/native-continuation/09-result.json",
+      "scenarioId": "MULTIPLAYER-RELIC-OWNERSHIP",
+      "status": "Passed",
+      "elapsedMilliseconds": 3117.9463,
+      "completedChecks": [
+        "MultiplayerRelicOwnership:PeerOnly:LocalExtra:BothExtra:NativeFullState:Fork:DisplayOwner",
+        "NativeOutcome:combatEnded=False:turn=5:hp=500:maxHp=500"
+      ],
+      "error": null
+    },
+    {
+      "batch": "native-continuation",
+      "receipt": ".local/upstream-update-20261003/native-continuation/10-result.json",
+      "scenarioId": "MULTIPLAYER-EXPERIMENT-INACTIVE",
+      "status": "Passed",
+      "elapsedMilliseconds": 2646.4952,
+      "completedChecks": [
+        "MultiplayerExperimentReset:NoHooks:SinglePlayerRoot",
+        "PotionOutcomeNamesAndRewardGate",
+        "InitialWorldlineSummary",
+        "InitialFirstAction:STRIKE_IRONCLAD",
+        "InitialPolicy:SoldHp=0;Potion=0,Saved=0/0,Rejected=0;Theft=-,Outstanding=0;Turns=1;Shuffles=0;Unmirrored=0;HpLost=0;ProjectedBattleHpLost=0;Block=0/0;Pruned=0;Total=14.1ms/364056B;Gc=0.0ms/0.0msMax;Frame=67.4msMax/1Over50;CacheHits=0;ChoiceBranches=0;Actions=1;OnlyDeath=False;CombatEndedTurn=1;DeathTurn=-;ActEndingBoss=False;BossHpRelief=None",
+        "NativeOutcome:combatEnded=False:turn=1:hp=80:maxHp=80"
+      ],
+      "error": null
+    }
+  ],
+  "nativeFinalPassed": 25,
+  "nativeLaunches": [
+    {
+      "exitCode": 1,
+      "wallSeconds": 113.69,
+      "command": [
+        "tools/testing/run-unattended-test-macos.sh",
+        ".local/upstream-update-20261003/requests/gold-healing-mechanisms.json",
+        ".local/upstream-update-20261003/requests/max-hp-healing-callbacks.json",
+        ".local/upstream-update-20261003/requests/feed-max-hp-cap.json",
+        ".local/upstream-update-20261003/requests/relic-max-hp-healing-bounds.json",
+        ".local/upstream-update-20261003/requests/axebot-joss-deferred-fork.json",
+        ".local/upstream-update-20261003/requests/b013-fixed-prefix-terminal-boundary.json",
+        ".local/upstream-update-20261003/requests/b013-radiant-pearl-hand-draw.json",
+        ".local/upstream-update-20261003/requests/b013-block-decimal-boundary.json",
+        ".local/upstream-update-20261003/requests/b013-default-gc-limit.json",
+        ".local/upstream-update-20261003/requests/fixed-prefix-potion-policy.json",
+        ".local/upstream-update-20261003/requests/calculated-history-freeze.json",
+        ".local/upstream-update-20261003/requests/ritual-temporary-strength.json",
+        ".local/upstream-update-20261003/requests/route-adoption-lifetime.json",
+        ".local/upstream-update-20261003/requests/seeker-ordered-options.json",
+        ".local/upstream-update-20261003/requests/b013-fixed-prefix-turn-end-card.json",
+        ".local/upstream-update-20261003/requests/void-form-turn-choices.json",
+        ".local/upstream-update-20261003/requests/native-choose-open-gate.json",
+        ".local/upstream-update-20261003/requests/paels-legion-finished-reference.json",
+        ".local/upstream-update-20261003/requests/cascade-empty-hand-native.json",
+        ".local/upstream-update-20261003/requests/effect-scope-adjacent-contract.json",
+        "coverage/fixtures/scenarios/state/multiplayer-toasty-choice.json",
+        "coverage/fixtures/scenarios/state/upstream-0472-multiplayer-toasty-controls-dop2.json",
+        "coverage/fixtures/scenarios/state/multiplayer-shared-damage.json",
+        "coverage/fixtures/scenarios/state/multiplayer-relic-ownership.json",
+        "coverage/fixtures/scenarios/state/multiplayer-experiment-inactive.json",
+        "--cleanup-instance-on-exit",
+        "--timeout-seconds",
+        "120",
+        "--output-dir",
+        ".local/upstream-update-20261003/native"
+      ],
+      "instanceCleanup": "launcher confirmed instance removed"
+    },
+    {
+      "exitCode": 0,
+      "wallSeconds": 93.73,
+      "command": [
+        "tools/testing/run-unattended-test-macos.sh",
+        ".local/upstream-update-20261003/requests/void-form-turn-choices.json",
+        ".local/upstream-update-20261003/requests/native-choose-open-gate.json",
+        ".local/upstream-update-20261003/requests/paels-legion-finished-reference.json",
+        ".local/upstream-update-20261003/requests/cascade-empty-hand-native.json",
+        ".local/upstream-update-20261003/requests/effect-scope-adjacent-contract.json",
+        "coverage/fixtures/scenarios/state/multiplayer-toasty-choice.json",
+        "coverage/fixtures/scenarios/state/upstream-0472-multiplayer-toasty-controls-dop2.json",
+        "coverage/fixtures/scenarios/state/multiplayer-shared-damage.json",
+        "coverage/fixtures/scenarios/state/multiplayer-relic-ownership.json",
+        "coverage/fixtures/scenarios/state/multiplayer-experiment-inactive.json",
+        "--cleanup-instance-on-exit",
+        "--timeout-seconds",
+        "120",
+        "--output-dir",
+        ".local/upstream-update-20261003/native-continuation"
+      ],
+      "instanceCleanup": "launcher confirmed instance removed"
+    }
+  ],
+  "multiplayerCompatibility": {
+    "status": "Passed",
+    "checks": [
+      "multiplayer_skips_single_player_growth_targets",
+      "multiplayer_discards_solo_exploration_and_script_policy",
+      "multiplayer_root_excludes_all_solo_healing_bounds",
+      "solo_retains_official_plan_commitment",
+      "multiplayer_rejects_solo_plan_commitment",
+      "multiplayer_has_no_upgrade_credit_capacity",
+      "history_keeps_per_effect_owner_scope",
+      "multiplayer_history_key_matches_scan_0",
+      "multiplayer_history_key_matches_scan_1",
+      "history_key_changes_only_in_child",
+      "history_key_survives_fork",
+      "gold_axe_observes_both_finished_plays",
+      "production_snapshot_distinguishes_history_and_preserves_forks",
+      "improvement_applies_to_owner_without_advisor_growth_credit",
+      "fork_cannot_create_multiplayer_upgrade_credit",
+      "mad_science_native_full_party_state_equal",
+      "root_unchanged_after_native_play",
+      "entropic_source_procured_1",
+      "entropic_generated_without_pending_choice_1",
+      "entropic_source_keeps_own_cost_1",
+      "entropic_recipient_inventory_filled_1",
+      "entropic_free_cost_and_inventory_are_fork_local_1",
+      "ordinary_replacement_procured_1",
+      "ordinary_replacement_does_not_inherit_free_cost_1",
+      "entropic_source_procured_0",
+      "entropic_generated_without_pending_choice_0",
+      "entropic_source_keeps_own_cost_0",
+      "entropic_recipient_inventory_filled_0",
+      "entropic_free_cost_and_inventory_are_fork_local_0",
+      "ordinary_replacement_procured_0",
+      "ordinary_replacement_does_not_inherit_free_cost_0",
+      "entropic_branches_preserve_root_and_live",
+      "gold_alive_owner_does_not_mutate_live",
+      "gold_alive_owner_native_full_party_state",
+      "gold_alive_owner_parent_and_fork_isolation",
+      "gold_peer_death_settles",
+      "gold_peer_death_native_full_party_state",
+      "gold_peer_death_parent_and_fork_isolation",
+      "gold_with_dead_peer_does_not_mutate_live",
+      "gold_with_dead_peer_native_full_party_state",
+      "gold_with_dead_peer_parent_and_fork_isolation",
+      "gold_peer_revived_native_full_party_state",
+      "gold_peer_revived_parent_and_fork_isolation",
+      "gold_revived_owner_does_not_mutate_live",
+      "gold_revived_owner_native_full_party_state",
+      "gold_revived_owner_parent_and_fork_isolation",
+      "joss_deferred_settles",
+      "joss_participants_1_native_full_party_state",
+      "joss_participants_1_parent_and_fork_isolation",
+      "joss_deferred_settles",
+      "joss_participants_2_native_full_party_state",
+      "joss_participants_2_parent_and_fork_isolation",
+      "joss_deferred_settles",
+      "joss_participants_1_2_native_full_party_state",
+      "joss_participants_1_2_parent_and_fork_isolation",
+      "joss_owner_deferred_consumed_once"
+    ],
+    "localCounts": {
+      "FinishedPlays": 2,
+      "EtherealPlays": 0,
+      "LightningChannels": 0,
+      "UnblockedHitsReceived": 1,
+      "CardsDrawn": 1,
+      "CardsGenerated": 1
+    },
+    "peerCounts": {
+      "FinishedPlays": 2,
+      "EtherealPlays": 1,
+      "LightningChannels": 0,
+      "UnblockedHitsReceived": 1,
+      "CardsDrawn": 1,
+      "CardsGenerated": 1
+    }
+  },
+  "multiplayerOtherContracts": [
+    {
+      "stage": "quota-contracts",
+      "exitCode": 0,
+      "wallSeconds": 1.77
+    },
+    {
+      "stage": "dead-teammate",
+      "exitCode": 0,
+      "wallSeconds": 2.59
+    }
+  ],
+  "soloComparison": {
+    "roots": 4,
+    "comparedFields": 344,
+    "mismatchedRoots": [],
+    "leftOnly": [],
+    "rightOnly": [],
+    "inputs": "upstream-0490-merge-20261003-inputs.json",
+    "rawReceipt": ".local/upstream-update-20261003/comparison.json"
+  },
+  "gcContracts": [
+    {
+      "mode": "default-entry",
+      "exitCode": 0,
+      "wallSeconds": 2.68
+    },
+    {
+      "mode": "diagnostic-failure",
+      "exitCode": 134,
+      "wallSeconds": 0.56
+    },
+    {
+      "mode": "scopes",
+      "exitCode": 0,
+      "wallSeconds": 0.29
+    }
+  ],
+  "staticChecks": {
+    "structure": {
+      "status": "Passed",
+      "searchFiles": 259,
+      "receipt": ".local/upstream-update-20261003/boundaries-final.json"
+    },
+    "documentation": {
+      "status": "Passed",
+      "files": 552,
+      "links": 2828
+    },
+    "coverageLayout": {
+      "status": "Passed",
+      "dataFiles": 559,
+      "fixtures": 509,
+      "groups": 37
+    },
+    "coverageCatalog": {
+      "status": "Passed",
+      "entries": 3035,
+      "checks": [
+        "state-fields",
+        "branch-state-reads"
+      ],
+      "version": "0.49.1",
+      "generatedSnapshot": "coverage/catalog/generated"
+    },
+    "tools": {
+      "status": "PassedWithDocumentedBoundaries",
+      "files": 318,
+      "projects": 38,
+      "unverified": "PowerShell 7 unavailable; PowerShell parsing not executed"
+    },
+    "transposition": {
+      "status": "Passed",
+      "checks": 1024015
+    },
+    "advisorFixBuild": {
+      "status": "Passed",
+      "warnings": 0,
+      "errors": 0
+    }
+  },
+  "publication": {
+    "status": "pending",
+    "scope": "origin task branch, own annotated tag, GitHub latest release, local mod deployment"
+  },
+  "notVerified": [
+    "actual No-GC region diagnostic-failure prerequisite",
+    "PowerShell syntax and Windows/Linux execution",
+    "visible Steam UI/performance",
+    "real network multiplayer",
+    "all report ZIP replays",
+    "full third-party mod stack",
+    "full release gate and clean installation"
+  ],
+  "knowledge": {
+    "inventory": {
+      "files": 2404,
+      "markdown": 552,
+      "releaseDocuments": 159,
+      "ruleBytes": 25302,
+      "ruleLines": 194
+    },
+    "sourceRules": "AGENTS.md; no symlink or nested override found",
+    "memory": "generated-read-only",
+    "retainedReviewCandidates": [
+      {
+        "path": ".local/upstream-update-20261002",
+        "bytes": 175825103,
+        "reason": "independent official source, baseline/failure logs and validation outputs; archive contains compact evidence",
+        "action": "retain pending post-report cleanup confirmation"
+      },
+      {
+        "path": ".local/upstream-update-20261003",
+        "bytes": 191925905,
+        "reason": "independent official source, baseline/failure logs and validation outputs; archive contains compact evidence",
+        "action": "retain pending post-report cleanup confirmation"
+      }
+    ]
+  }
+}

@@ -1,0 +1,17 @@
+[
+  {
+    "monsterId": "BigDummy", "moveId": "NOTHING", "enemyHpBefore": 999,
+    "clearAllRelicsBeforeMove": true, "clearAllPowersBeforeMove": true,
+    "clearPlayerPilesBeforeMove": true, "playerEnergyBefore": 3,
+    "cardsBeforeMove": [
+      { "cardId": "DAZED", "pile": "Hand" },
+      { "cardId": "STRIKE_DEFECT", "pile": "Hand" },
+      { "cardId": "VOID", "pile": "Hand" },
+      { "cardId": "DEFEND_DEFECT", "pile": "Hand" },
+      { "cardId": "COMPACT", "pile": "Hand", "upgradeLevels": 1 }
+    ],
+    "cardPlayChecksAfterMove": [{ "cardId": "COMPACT", "target": "None", "assertForkableAfterPlay": true }],
+    "expectedPlayerPileCards": { "Hand:FUEL": 2, "Hand:STRIKE_DEFECT": 1, "Hand:DEFEND_DEFECT": 1 },
+    "expectedPlayerCardUpgrades": { "Hand:FUEL:1": 2 }
+  }
+]

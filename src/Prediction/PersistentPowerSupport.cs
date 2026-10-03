@@ -216,7 +216,12 @@ internal static class PersistentPowerSupport
             foreach (Creature opponent in combat.GetOpponentsOf(owner))
             {
                 if (simulator.State.IsHittable(opponent))
+                {
                     combat.Apply<PoisonPower>(opponent, noxiousFumes, owner);
+                    PowerLifecycleSupport.ResolvePowerAmountChanges(simulator, combat);
+                    if (simulator.HasPendingChoice)
+                        return false;
+                }
             }
         }
 

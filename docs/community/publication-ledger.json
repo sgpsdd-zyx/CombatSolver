@@ -3,6 +3,8 @@
   "repository": "Torch1230/CombatSolver",
   "releaseTag": "community-tasks-2026-10-02",
   "claimUnit": "batch",
+  "queueIssueNumber": 202,
+  "queueIssueUrl": "https://github.com/Torch1230/CombatSolver/issues/202",
   "batches": [
     {
       "batchId": "B012",

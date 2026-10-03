@@ -27,7 +27,7 @@ description: 用户要求准备或发布 CombatSolver 版本、生成 ZIP、创�
 
 用户声明活动发布批次时，批次规则优先：在用户结束批次前只提交到指定开发版本，不逐项定版。普通“发版”不等于完整发布门禁。
 
-官方 `main` 正式发版通过 `tools/publish-release.ps1` 同步发布创意工坊、GitHub Release 与夸克网盘。`准备发版`、普通开发提交和单独推送源码不运行统一发布脚本；只有进入 `发版/发布` 阶段时执行。多人 fork 使用本 skill 首节的 GitHub 路径。监控后台的 `latestVersion` 由用户维护，agent 不读取或写入。
+官方 `main` 正式发版通过 `tools/release/publish-release.ps1` 同步发布创意工坊、GitHub Release 与夸克网盘。`准备发版`、普通开发提交和单独推送源码不运行统一发布脚本；只有进入 `发版/发布` 阶段时执行。多人 fork 使用本 skill 首节的 GitHub 路径。监控后台的 `latestVersion` 由用户维护，agent 不读取或写入。
 
 一句请求包含多个口令时，执行覆盖其全部要求的最窄阶段；“给我审核/我拍板后”始终暂停构建、标签和外部动作，直到用户批准。
 
@@ -36,7 +36,7 @@ description: 用户要求准备或发布 CombatSolver 版本、生成 ZIP、创�
 - CombatSolver 的中文版本术语：`小版本`只将末位加一，`0.a.b → 0.a.(b+1)`；`大版本`将中间位加一、末位归零，`0.a.b → 0.(a+1).0`。不要套用通用语义化版本的 minor/major 定义。用户给出精确版本号时按该版本号执行；已发布版本不追溯改号。
 - 同步 `CombatSolver.csproj`、`CombatSolver.json`、`docs/DEVELOPMENT_NOTES.md`、`docs/TEST_MATRIX.md` 和该版本玩家更新日志。
 - 玩家更新日志使用当前游戏官方简中译名，只写玩家可感知的变化。开发日志中的根因、内部职责、runId、构建和测试信息不复制进去。
-- 玩家更新日志和创意工坊 changeNote 同时提供简中与英文，使用各语言的游戏译名。PR 或其他外部贡献必须在对应变动条目的开头标明贡献者和 PR，并分别链接贡献者主页与 PR，例如“感谢 `[作者](主页)` 提交的 `[PR #123](链接)`：……”／“`[PR #123](链接)` by `[author](profile)`: …”，明确表示整项变动来自该贡献；禁止把致谢放在条目末尾，或在日志末尾另写脱离变动的笼统致谢段落。changeNote 直接采用同一版本玩家更新日志的完整中英正文，只允许将 Markdown 标题／列表语法转换为 Steam 富文本，不缩写、不合并或删减任何玩家变动、限制与致谢；转换到 Steam 富文本时也必须保留这两个链接。发布前逐项核对两种语言和两个渠道。若渠道长度限制无法容纳全文，停止该渠道并报告限制，不自行缩短。一次跨多个未上传版本时，先写好覆盖全部玩家变化的完整版本日志，再原样用于 changeNote。发布包含 UI 改动时参考 `../ui-localization/SKILL.md`，复用已完成的中英验证，不为了发包重复测试。
+- 玩家更新日志和创意工坊 changeNote 同时提供简中与英文，使用各语言的游戏译名。PR 或其他外部贡献必须在对应变动条目的开头标明贡献者和 PR，并分别链接贡献者主页与 PR，例如“感谢 `[作者](%E4%B8%BB%E9%A1%B5)` 提交的 `[PR #123](%E9%93%BE%E6%8E%A5)`：……”／“`[PR #123](%E9%93%BE%E6%8E%A5)` by `[author](profile)`: …”，明确表示整项变动来自该贡献；禁止把致谢放在条目末尾，或在日志末尾另写脱离变动的笼统致谢段落。changeNote 直接采用同一版本玩家更新日志的完整中英正文，只允许将 Markdown 标题／列表语法转换为 Steam 富文本，不缩写、不合并或删减任何玩家变动、限制与致谢；转换到 Steam 富文本时也必须保留这两个链接。发布前逐项核对两种语言和两个渠道。若渠道长度限制无法容纳全文，停止该渠道并报告限制，不自行缩短。一次跨多个未上传版本时，先写好覆盖全部玩家变化的完整版本日志，再原样用于 changeNote。发布包含 UI 改动时参考 `../ui-localization/SKILL.md`，复用已完成的中英验证，不为了发包重复测试。
 - 提交源码、fixture 和文档后，从该提交构建；记录该提交为 release source commit。构建后行为源码、编译配置、依赖或 manifest 变化才使构建失效，纯渠道暂存变化不会。
 - “当前最新版”来自仓库中已同步、已提交且完成最小发包的最高版本，不来自游戏 Mods 目录或创意工坊暂存目录。
 - 版本创建标签或成功上传创意工坊后即冻结。后续行为改动进入新的“下一版本（开发中）”，不回写已发布版本；用户未指定新版本号时保留待定，不自行猜版本。
@@ -83,14 +83,14 @@ Windows（PowerShell 7）：
 
 ```powershell
 dotnet clean -c Release
-pwsh -NoProfile -File tools\build-local-stack.ps1 -Configuration Release -ForPublication -PrivateConfigDirectory <私有配置目录>
+pwsh -NoProfile -File tools\build\build-local-stack.ps1 -Configuration Release -ForPublication -PrivateConfigDirectory <私有配置目录>
 ```
 
 Linux（Bash）：
 
 ```bash
 dotnet clean -c Release
-./tools/build-local-stack.sh --configuration Release --for-publication --private-config-directory <私有配置目录>
+./tools/build/build-local-stack.sh --configuration Release --for-publication --private-config-directory <私有配置目录>
 ```
 
 私有配置目录必须包含 `presence.props` 和 `showcase.props`，可从本机部署定位文件确认；它不进入仓库或发布包。发布构建与统一发布脚本都会检查 DLL 中的在线连接元数据，缺失时停止。不要输出配置值。
@@ -145,7 +145,7 @@ Linux 不使用上述 Windows 路径。上传前必须设置 `COMBATSOLVER_MOD_U
 3. 按第 1 节“Steam 更新日志排版合同”将该版本完整简中和英文正文写入 `workshop.json` 的 `changeNote`，完成允许标签、正文与链接核对；
 4. Windows 执行一次 `ModUploader.exe upload -w .\CombatSolverWorkshop`；Linux 执行一次 `"$COMBATSOLVER_MOD_UPLOADER" upload -w "$COMBATSOLVER_WORKSHOP_DIR"`。
 
-创意工坊介绍已有 English / 简体中文两套，正文维护于 `docs/workshop/`。官方 ModUploader 未指定语言时写 English，因此本地 workshop.json 的默认标题和 description 必须保持英文；简中介绍通过明确的 `SetItemUpdateLanguage("schinese")` 独立维护，不能把中文塞回默认 description，或仅改 tags 代替语言字段。只更新介绍时提交元数据，不顺带上传二进制。
+创意工坊介绍已有 English / 简体中文两套，标题与正文来源维护于 `docs/workshop/`。官方 ModUploader 未指定语言时写 English，因此本地 workshop.json 的默认标题和 description 必须保持英文。单独维护任一种语言的标题或介绍时使用 `tools/release/WorkshopMetadata`（[工具说明](../../../tools/release/WorkshopMetadata/README.md)），以 `docs/workshop/metadata.json` 和完整介绍为输入：先设置语言，再成对设置非空标题与完整介绍，最后提交并检查结果。简中使用明确的 `schinese`；不能把中文塞回默认 description，或仅改 tags 代替语言字段。标题与介绍按完整语言记录维护，单字段更新返回 OK 不能证明遗漏字段保持原值。元数据维护使用空 changeNote，只更新该语言的标题与介绍。
 
 英文界面发布时语言 tags 包含 English 与 Simplified Chinese，保留其他标签；tags 用于发现，不能代替上述介绍语言字段。仅发包且介绍未变化时保留既有两种语言，不重复提交介绍。英文介绍和中文介绍各自保留依赖、单人限制、代码来源与许可署名。
 
@@ -157,7 +157,7 @@ Linux 不使用上述 Windows 路径。上传前必须设置 `COMBATSOLVER_MOD_U
 
 ### 必做：统一发布脚本
 
-官方 `main` 正式发版只使用 `tools/publish-release.ps1` 作为三个渠道的执行入口。外部服务无法组成原子事务，脚本按创意工坊、GitHub、夸克网盘顺序执行，并在 `releases/CombatSolver-<版本号>.publish-state.json` 记录成功阶段；失败后从未完成阶段恢复，不重复已经成功的渠道。
+官方 `main` 正式发版只使用 `tools/release/publish-release.ps1` 作为三个渠道的执行入口。外部服务无法组成原子事务，脚本按创意工坊、GitHub、夸克网盘顺序执行，并在 `releases/CombatSolver-<版本号>.publish-state.json` 记录成功阶段；失败后从未完成阶段恢复，不重复已经成功的渠道。
 
 脚本执行前必须满足：
 
@@ -170,7 +170,7 @@ Linux 不使用上述 Windows 路径。上传前必须设置 `COMBATSOLVER_MOD_U
 Windows 入口：
 
 ```powershell
-pwsh -NoProfile -File tools\publish-release.ps1 -Version <版本号> -QuarkSessionInput "<用户本次发布原话>" -QuarkSessionId "<timestamp-random>"
+pwsh -NoProfile -File tools\release\publish-release.ps1 -Version <版本号> -QuarkSessionInput "<用户本次发布原话>" -QuarkSessionId "<timestamp-random>"
 ```
 
 夸克网盘固定使用 `战斗路线求解器` 下三个发布子目录：
@@ -202,7 +202,7 @@ pwsh -NoProfile -File tools\publish-release.ps1 -Version <版本号> -QuarkSessi
 
 只有用户明确说“完整发布门禁”“完整验收”或“干净安装”时执行：
 
-1. 运行 `tools/verify-refactor-boundaries.ps1`；
+1. 运行 `tools/inspection/verify-refactor-boundaries.ps1`；
 2. 对当前 DLL 运行 CoverageCatalog 全 verify；
 3. 运行目标严格差分、相关类型族、增量等价和至少一场完整自动部署；
 4. 跑一场稳定长线质量基准，断言跨回合复用与零非预期重算；

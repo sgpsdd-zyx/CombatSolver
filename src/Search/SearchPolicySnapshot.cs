@@ -20,6 +20,7 @@ internal sealed record SearchPolicySnapshot(
     SearchMemoryPressureSignal MemoryPressureSignal)
 {
     public MultiplayerSearchPolicy? Multiplayer { get; init; }
+    internal CancellationToken? RouteAdoptionCancellationToken { get; init; }
     public bool UseNoveltyPortfolio { get; init; }
     public int EarlyTurnExplorationDepth { get; init; }
     public int EarlyTurnExplorationBudgetMilliseconds { get; init; }

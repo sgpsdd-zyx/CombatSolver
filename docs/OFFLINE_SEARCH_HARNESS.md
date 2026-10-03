@@ -1,6 +1,6 @@
 # 离线搜索宿主
 
-`tools/OfflineSearchHarness/` 是一个普通的 .NET 9 控制台程序：它加载 `sts2.dll` 但**不启动 Godot
+`tools/search/OfflineSearchHarness/` 是一个普通的 .NET 9 控制台程序：它加载 `sts2.dll` 但**不启动 Godot
 引擎**，用游戏自己的核心层建出一场战斗、推进到玩家第一回合，再在同一个进程里调
 `CombatRootSnapshot.Capture` 与 `CombatSearchCoordinator.Solve`（或单次 `CombatBeamSolver`）跑一次
 固定预算搜索，把指标、选中路线和搜索策略写成 JSON。
@@ -17,12 +17,12 @@
 
 `--multiplayer-strategy-contracts` 现在等价于 `--multiplayer-review-contracts quota-contracts`：阶段期限、人数变化、净进展倒退、本机/队友归属、原生出牌与完整敌方周期、Fork、达标后反击、增量、极低预算 Unknown 和 eng/zhs/zht 投影。最小命令 `--encounter FUZZY_WURM_CRAWLER_WEAK --beam 8 --nodes 100 --budget-ms 3000 --dop 1`，输出 `quota-contracts.json`。`quota-selection` 另核对药水资格、最多4B前沿、840种排列和固定比较器；`quota-pressure` / `quota-defense` / `quota-investment` 用 Beam12/1400节点/3000ms 观察成长压力、低血防御与能力投资。默认十四周期上限，阶段默认三周期；所有测试不建立网络。
 
-`--multiplayer-review-contracts shared-ranking --character SILENT --encounter FUZZY_WURM_CRAWLER_WEAK --beam 2 --nodes 100 --budget-ms 1000 --dop 1` 检查无来源伤害折算的前沿/缓存及中英显示。CLI节点下限为100，夹具内部搜索用固定40节点；合成排名事实与原生毒结算分开，后者使用 `coverage/unattended/multiplayer-shared-damage.json`，Bash/PowerShell无人入口必须带实例清理开关。输出 `shared-ranking-contracts.json`。
+`--multiplayer-review-contracts shared-ranking --character SILENT --encounter FUZZY_WURM_CRAWLER_WEAK --beam 2 --nodes 100 --budget-ms 1000 --dop 1` 检查无来源伤害折算的前沿/缓存及中英显示。CLI节点下限为100，夹具内部搜索用固定40节点；合成排名事实与原生毒结算分开，后者使用 `coverage/fixtures/scenarios/state/multiplayer-shared-damage.json`，Bash/PowerShell无人入口必须带实例清理开关。输出 `shared-ranking-contracts.json`。
 
 `race-dev` / `race-holdout` 对照当前共享信用关闭/开启，默认每根两个变体，必须DOP1且时间上限不超过5000ms。每个根单独进程运行，例如 Bash：
 
 ```bash
-RACE_FIXTURE=poison dotnet tools/OfflineSearchHarness/bin/Release/net9.0/OfflineSearchHarness.dll \
+RACE_FIXTURE=poison dotnet tools/search/OfflineSearchHarness/bin/Release/net9.0/OfflineSearchHarness.dll \
   --multiplayer-review-contracts race-dev --character SILENT \
   --encounter FUZZY_WURM_CRAWLER_WEAK --seed RACE-DEV-20260923 \
   --beam 12 --nodes 350 --budget-ms 3000 --dop 1 --out .local/race-poison
@@ -32,33 +32,33 @@ PowerShell在同一命令前设置 `$env:RACE_FIXTURE = 'poison'`，参数其余
 
 开发根为 `poison`、`fumes`、`mixed_poison`、`peer_guard`、`immediate_rescue`、`lift_rescue`、`defense`、`investment`、`burst`、`threat`；留出根名称为 `poison_holdout`、`fumes_holdout`、`peer_guard_holdout`、`protect_holdout`、`burst_holdout`、`threat_holdout`。固定根中存在刻意混用角色卡牌的合成局面。需要辅助目标时使用原生AnyAlly/AnyPlayer分类；未支持结算保留明确边界。
 
-输出 `race-experiments.json`：搜索的当前回合动作、固定预算、三种外部队友脚本（闲置/每周期一张防御/每周期一张打击）的至多五周期模拟 HP、存活、清场与边界。搜索不读取这些脚本；外评与搜索共用模拟引擎，不能充当独立原生语义对照。夹具重建少量合成牌，队友在结束回合边界集中行动；首轮之后本机按固定防御/能力/ID顺序续行，不再重算，未模拟真人交错操作。外评也会在本机死亡或步数上限停止，`won=false` 不能直接解释为全队战败。不同变体和脚本不能计为独立战斗样本。最终采用、被撤回原型及适用边界见[伤害归属实验](strategy/multiplayer-shared-damage-20260923/implementation.md)。
+输出 `race-experiments.json`：搜索的当前回合动作、固定预算、三种外部队友脚本（闲置/每周期一张防御/每周期一张打击）的至多五周期模拟 HP、存活、清场与边界。搜索不读取这些脚本；外评与搜索共用模拟引擎，不能充当独立原生语义对照。夹具重建少量合成牌，队友在结束回合边界集中行动；首轮之后本机按固定防御/能力/ID顺序续行，不再重算，未模拟真人交错操作。外评也会在本机死亡或步数上限停止，`won=false` 不能直接解释为全队战败。不同变体和脚本不能计为独立战斗样本。最终采用、被撤回原型及适用边界见[伤害归属实验](archive/strategy/multiplayer-shared-damage-20260923/implementation.md)。
 
-现有[交错行动与手动重算装置](strategy/multiplayer-experiments-20260923/implementation.md)已通过 `tools/MultiplayerExperiments` 和无人测试协议驱动原生全队动作、手动重算与持续阶段账本；它独立于本离线宿主。早期方案中的草案 `protocol.json` 不是本宿主的 `--request` 输入，通用随机场景仍只支持单人。
+现有[交错行动与手动重算装置](archive/strategy/multiplayer-experiments-20260923/implementation.md)已通过 `tools/search/MultiplayerExperiments` 和无人测试协议驱动原生全队动作、手动重算与持续阶段账本；它独立于本离线宿主。早期方案中的草案 `protocol.json` 不是本宿主的 `--request` 输入，通用随机场景仍只支持单人。
 
-旧 3 HP、A/C 覆盖与 `window-*` / `horizon-ordering` 的断言属于历史源码，当前命令显式拒绝并指向 `v0.43.6`。下列旧输入与证据保留作复现记录，不表示当前默认。新的实测数字和限制见[贡献策略实施](strategy/multiplayer-cooperative-planning-20260922/implementation.md)。
+旧 3 HP、A/C 覆盖与 `window-*` / `horizon-ordering` 的断言属于历史源码，当前命令显式拒绝并指向 `v0.43.6`。下列旧输入与证据保留作复现记录，不表示当前默认。新的实测数字和限制见[贡献策略实施](archive/strategy/multiplayer-cooperative-planning-20260922/implementation.md)。
 
-`--multiplayer-long-term-contracts` 是首批多人长线收益诊断入口：固定双玩家、本机索引 1，用真实 Dark 球、星能和能力牌根捕获路径观察。它只消费已有 `SearchPathObserver` 的有界副本，记录路径在父内和保路边界的首次消失及已有评估字段；不改评分、Beam 席位、最终排序、状态键或预算。不能和 `--request` 或其他多人合同开关合用，不建立网络、不验证可见 UI；结果与限制见[长线收益归档](strategy/pro-long-term-20260918/README.md)。
+`--multiplayer-long-term-contracts` 是首批多人长线收益诊断入口：固定双玩家、本机索引 1，用真实 Dark 球、星能和能力牌根捕获路径观察。它只消费已有 `SearchPathObserver` 的有界副本，记录路径在父内和保路边界的首次消失及已有评估字段；不改评分、Beam 席位、最终排序、状态键或预算。不能和 `--request` 或其他多人合同开关合用，不建立网络、不验证可见 UI；结果与限制见[长线收益归档](archive/strategy/pro-long-term-20260918/README.md)。
 
 当前 `--multiplayer-review-contracts quota-selection` 单独调用 `MultiplayerFinalSelectionContracts`：用无模拟器的指定排名事实调用生产候选准备/选择函数，检查 `4B` 前用药资格、五/六候选的 840 种排列、固定比较器、空集与可展开前缀，输出 `final-selection.json`。这些纯政策反例不代表游戏触发频率；历史一周期短搜 `preview-final-selection.json` 属旧政策；当前原生动作、反击和增量回放由 `quota-contracts.json` 记录。普通单人搜索在宿主中观察当前 DLL 的多人候选入口，输出 `single-player-isolation.json` 并断言零进入；官方旧 DLL 缺少这些方法时记录空观察列表。完整路线质量仍按固定场景单独比较。
 
-完整回合覆盖选路使用 `--multiplayer-review-contracts window-covered-*`，固定 `--encounter FUZZY_WURM_CRAWLER_WEAK --beam 8 --budget-ms 3000 --dop 1`。`window-covered-contracts --nodes 100` 用纯排名事实检查完整身份、覆盖、祖先/好坏后缀、`4B` 前集合、固定比较器、额外回合与费用门禁；不冒充战斗语义验收。`window-covered-payback --nodes 100` 在内部 52 节点分别关闭/开启 C，断言真实池/工作量相同且共同周期 4→5；`window-covered-sentinel --nodes 180` 检查缺少独立代表后续时维持周期 1 与原整条路线；`window-covered-defense --nodes 180` 用本机无缓冲、50 HP、15 敏捷与一张防御的固定来伤局检查 6→7 周期、3 HP 损失和首动作不变。外部统一续行单独记账，不算额外免费搜索；其第十四周期 37 HP 损失不被前七周期的 3 HP 遮盖。`window-covered-incremental --nodes 100` 在晚回本同根启用逐转移完整回放，仅用于正确性。原 `window-selection*` 阶段显式关闭 C，继续作为 0.43.3 的 A/离线深组观察入口。详见[实施与证据](strategy/pro-window-selection-20260920/implementation.md)。
+完整回合覆盖选路使用 `--multiplayer-review-contracts window-covered-*`，固定 `--encounter FUZZY_WURM_CRAWLER_WEAK --beam 8 --budget-ms 3000 --dop 1`。`window-covered-contracts --nodes 100` 用纯排名事实检查完整身份、覆盖、祖先/好坏后缀、`4B` 前集合、固定比较器、额外回合与费用门禁；不冒充战斗语义验收。`window-covered-payback --nodes 100` 在内部 52 节点分别关闭/开启 C，断言真实池/工作量相同且共同周期 4→5；`window-covered-sentinel --nodes 180` 检查缺少独立代表后续时维持周期 1 与原整条路线；`window-covered-defense --nodes 180` 用本机无缓冲、50 HP、15 敏捷与一张防御的固定来伤局检查 6→7 周期、3 HP 损失和首动作不变。外部统一续行单独记账，不算额外免费搜索；其第十四周期 37 HP 损失不被前七周期的 3 HP 遮盖。`window-covered-incremental --nodes 100` 在晚回本同根启用逐转移完整回放，仅用于正确性。原 `window-selection*` 阶段显式关闭 C，继续作为 0.43.3 的 A/离线深组观察入口。详见[实施与证据](archive/strategy/pro-window-selection-20260920/implementation.md)。
 
 `--multiplayer-review-contracts facts` 使用双玩家、本机索引 1、双打击与敌方 10 HP 的固定小局，验证真实终局与旧检查点混合、实际搜索继续展开、原生本机/队友药水历史和资格。内部固定 Beam 4 / 120 节点 / 1 秒 / DOP 1 / 三周期，输出 `review-facts.json`；单独复核提前停止可用 `--multiplayer-review-contracts stopping`，输出 `review-stopping.json`，只观察搜索实际展开到的回合。该入口不能与 `--request` 或其他多人合同合用。`SearchedTurns` 是最终选中路线的长度，不是所有搜索层的覆盖量。终局被截断、两条真胜利的结束回合和本机死亡优先控制另由现有 `final-selection.json` 覆盖。普通离线指标、原生托管合同、真实联机验收的边界不变。
 
-`--multiplayer-review-contracts upstream-compatibility --encounter FUZZY_WURM_CRAWLER_WEAK --beam 4 --nodes 100 --budget-ms 1000 --dop 1` 检查官方 0.43.2 的多人接入：双玩家／本机索引 1，空局外成长目标、疯狂科学改进正常施加但不产生信用，两位玩家历史／金斧计算、生产状态键、Fork 与冻结根；最后逐字段比较原生出牌和预测的全队状态。13 项结果写入 `upstream-compatibility.json`。原生动作时间戳局部替换 Godot 时钟，牌效果不替换；历史事件部分是人工构造，不等同全部卡牌或真实联机验证。见[本轮合并](strategy/upstream-0432-merge-20260920.md)。
+`--multiplayer-review-contracts upstream-compatibility --encounter FUZZY_WURM_CRAWLER_WEAK --beam 4 --nodes 100 --budget-ms 1000 --dop 1` 检查当前官方合并的多人接入。56 项覆盖双玩家/本机索引 1、单人成长/治疗/计划隔离、持有者历史、生产键/Fork、改进与药水生成；金币包含死亡与从死亡根复活后的监听资格，金纸按本机/队友/全队分别结算。完整原生全队状态与根/Fork 隔离逐字段核对，输出 `upstream-compatibility.json`。托管宿主旁路渲染和网络，原生动作时间戳替换 Godot 时钟；不代替真实联机。来源见 [0.49.0 合并](archive/strategy/upstream-0490-merge-20261003.md)。
 
-窗口专项复用该入口的三个阶段：`horizon` 对六个固定根运行 3/5/7/9 上限，输出 `horizon-comparison.json`；`horizon-native` 只核对本机铺垫与队友攻击两个原生手动动作的完整状态；`horizon-ordering` 分别记录现役完整动作数比较和仅在宿主中计算的共同周期成本提案，不改变生产比较器。固定输入为 `--encounter FUZZY_WURM_CRAWLER_WEAK --beam 8 --nodes 350 --budget-ms 3000 --dop 1`，要求单 worker、时间不超过 5000ms。`horizon` 把相同当前回合动作交给统一九周期评价器，队友攻击仅是测试侧的固定扰动；输出区分搜索工作与评价回放。Ethereal 铺垫牌是明确的实验改造，不是原版默认效果。窗口数字与首动作结果见[研究归档](strategy/pro-horizon-20260919/README.md)，不能把这些条件世界线当作真人策略或胜率验收。
+窗口专项复用该入口的三个阶段：`horizon` 对六个固定根运行 3/5/7/9 上限，输出 `horizon-comparison.json`；`horizon-native` 只核对本机铺垫与队友攻击两个原生手动动作的完整状态；`horizon-ordering` 分别记录现役完整动作数比较和仅在宿主中计算的共同周期成本提案，不改变生产比较器。固定输入为 `--encounter FUZZY_WURM_CRAWLER_WEAK --beam 8 --nodes 350 --budget-ms 3000 --dop 1`，要求单 worker、时间不超过 5000ms。`horizon` 把相同当前回合动作交给统一九周期评价器，队友攻击仅是测试侧的固定扰动；输出区分搜索工作与评价回放。Ethereal 铺垫牌是明确的实验改造，不是原版默认效果。窗口数字与首动作结果见[研究归档](archive/strategy/pro-horizon-20260919/README.md)，不能把这些条件世界线当作真人策略或胜率验收。
 
-`horizon-fourteen` 复用窗口根，比较 7/14 周期并加入第十四周期才回本的输入；当前回合动作统一交给十四周期外部评价器。`horizon-budget` 用十张原版卡牌、抽牌与生成牌的固定长战斗，对照 H7/原额度、H14/原额度、H14/双倍额度，记录实际展开分布、选中周期、共同周期和动作；第三级显式倍增测试上限，不触发生产默认倍增。可用 Beam24/1200 节点/3000ms 或 Beam96/7000 节点/5000ms，单搜索最多等待 20 秒。十四周期语义与有效请求额度由 `--multiplayer-contracts --encounter FOGMOG_NORMAL --beam 12 --nodes 700 --budget-ms 12000 --dop 2` 验证，包含十三次原生完整状态对账、旧七周期控制、额外回合、边界及 UI 投影。结果和限制见[十四周期记录](strategy/multiplayer-fourteen-cycles-20260920.md)。
+`horizon-fourteen` 复用窗口根，比较 7/14 周期并加入第十四周期才回本的输入；当前回合动作统一交给十四周期外部评价器。`horizon-budget` 用十张原版卡牌、抽牌与生成牌的固定长战斗，对照 H7/原额度、H14/原额度、H14/双倍额度，记录实际展开分布、选中周期、共同周期和动作；第三级显式倍增测试上限，不触发生产默认倍增。可用 Beam24/1200 节点/3000ms 或 Beam96/7000 节点/5000ms，单搜索最多等待 20 秒。十四周期语义与有效请求额度由 `--multiplayer-contracts --encounter FOGMOG_NORMAL --beam 12 --nodes 700 --budget-ms 12000 --dop 2` 验证，包含十三次原生完整状态对账、旧七周期控制、额外回合、边界及 UI 投影。结果和限制见[十四周期记录](archive/strategy/multiplayer-fourteen-cycles-20260920.md)。
 
-未击杀长线选路诊断：`--multiplayer-review-contracts window-selection --encounter FUZZY_WURM_CRAWLER_WEAK --beam 8 --nodes 180 --budget-ms 3000 --dop 1` 运行 7 个内部固定预算点，记录真实最终输入池后，仅在离线阶段按深度筛选并调用原比较器；不更改生产搜索。`window-selection-payback` 使用 1 点力量和内部 52 节点的晚回本输入，外部 `--nodes` 仍需至少 100 以满足设置入口。两者输出 `window-selection.json`，把实际展开、观察生成、选中、共同周期、首回合动作与统一 3/7/14 周期外部评价分开。外部后续仅每回合至多一次攻击，不使用保留药水；药水时机差异不能当作资源匹配收益。输入和本轮结果见[选路研究](strategy/pro-window-selection-20260920/local-review.md)。
+未击杀长线选路诊断：`--multiplayer-review-contracts window-selection --encounter FUZZY_WURM_CRAWLER_WEAK --beam 8 --nodes 180 --budget-ms 3000 --dop 1` 运行 7 个内部固定预算点，记录真实最终输入池后，仅在离线阶段按深度筛选并调用原比较器；不更改生产搜索。`window-selection-payback` 使用 1 点力量和内部 52 节点的晚回本输入，外部 `--nodes` 仍需至少 100 以满足设置入口。两者输出 `window-selection.json`，把实际展开、观察生成、选中、共同周期、首回合动作与统一 3/7/14 周期外部评价分开。外部后续仅每回合至多一次攻击，不使用保留药水；药水时机差异不能当作资源匹配收益。输入和本轮结果见[选路研究](archive/strategy/pro-window-selection-20260920/local-review.md)。
 
 ## 构建
 
 ```
 dotnet build CombatSolver.csproj -c Release -p:CopyModOnBuild=false
-dotnet build tools/OfflineSearchHarness/OfflineSearchHarness.csproj -c Release
+dotnet build tools/search/OfflineSearchHarness/OfflineSearchHarness.csproj -c Release
 ```
 
 路径解析与 `CombatSolver.csproj` 同一套：先 `Import` 仓库根的 `local.props`，再按操作系统给
@@ -73,7 +73,7 @@ dotnet build tools/OfflineSearchHarness/OfflineSearchHarness.csproj -c Release
 ## 单根用法
 
 ```
-dotnet tools/OfflineSearchHarness/bin/Release/net9.0/OfflineSearchHarness.dll \
+dotnet .local/tool-build/OfflineSearchHarness/bin/Release/net9.0/OfflineSearchHarness.dll \
     --request <无人测试请求.json> --label R1 --out <产物目录> \
     --profile VeryHigh --beam 135 --nodes 100000 --dop 1 --budget-ms 600000
 ```
@@ -105,20 +105,20 @@ dotnet tools/OfflineSearchHarness/bin/Release/net9.0/OfflineSearchHarness.dll \
 
 启用阶段测量时，`BEAM_WIDTH_PORTFOLIO_MEMBER_START` 在进入成员前记录实际运行序号、宽度、次段/基础分/能力承诺身份，以及有效节点/时间额度。`run_index` 只计算实际运行的成员，不能当作包含跳过项的最终成员表索引。即使后续成员超时，配合同步诊断也可识别正在执行的成员；不能仅凭“正在精炼路线”的进度文案推断策略身份。
 
-启用 `OFFLINE_HARNESS_INFUSED_CORE_CHECKS=1` 并使用 `--character DEFECT --milestone M1` 可运行注能核心的生产 Hook 诊断：从空球队列检查首回合生成、后续回合不重复、参与者条件、4/9 数值及 Fork 隔离，结果写入 `infused-core-checks.json`。该入口只修改宿主内的测试战斗；它不经过原生工具箱页面，不能替代 `coverage/unattended/initial-toolbox-infused-core.json` 的原生准备状态验收。
+启用 `OFFLINE_HARNESS_INFUSED_CORE_CHECKS=1` 并使用 `--character DEFECT --milestone M1` 可运行注能核心的生产 Hook 诊断：从空球队列检查首回合生成、后续回合不重复、参与者条件、4/9 数值及 Fork 隔离，结果写入 `infused-core-checks.json`。该入口只修改宿主内的测试战斗；它不经过原生工具箱页面，不能替代 `coverage/fixtures/scenarios/state/initial-toolbox-infused-core.json` 的原生准备状态验收。
 
-启用 `OFFLINE_HARNESS_FIXED_PREFIX_CONTINUATIONS=1` 并以 `coverage/unattended/generic-cross-turn-hidden-buffer-positive-v0111.json` 为 `--request`，使用 `--dop 1 --search-mode Evaluate` 且关闭NoGC／增量验证，可运行4／8／17回合完整固定前缀基准。每根预热一次、测量三次生产 `Solve`，计时外用独立前缀重放对账完整续用戳，输出 `fixed-prefix-continuations.json`。它只度量人工长路线的前缀建立与收尾，不代表普通搜索或原生正确性；用 `OFFLINE_HARNESS_COMBATSOLVER_DLL` 交错切换基线／候选，完整比较根、政策和 `annotatedResult`，见[本轮证据](performance/fixed-dop-20260927.md)。
+启用 `OFFLINE_HARNESS_FIXED_PREFIX_CONTINUATIONS=1` 并以 `coverage/fixtures/search/generic-cross-turn-hidden-buffer-positive-v0111.json` 为 `--request`，使用 `--dop 1 --search-mode Evaluate` 且关闭NoGC／增量验证，可运行4／8／17回合完整固定前缀基准。每根预热一次、测量三次生产 `Solve`，计时外用独立前缀重放对账完整续用戳，输出 `fixed-prefix-continuations.json`。它只度量人工长路线的前缀建立与收尾，不代表普通搜索或原生正确性；用 `OFFLINE_HARNESS_COMBATSOLVER_DLL` 交错切换基线／候选，完整比较根、政策和 `annotatedResult`，见[本轮证据](archive/performance/fixed-dop-20260927.md)。
 
-纯 ETC 外部生命界合同可运行 `dotnet tools/OfflineSearchHarness/bin/Release/net9.0/OfflineSearchHarness.dll --check-early-turn-continuation-bound`，直接调用生产门禁及剪枝谓词，不建游戏状态。当前覆盖 143 条断言。普通 ETC 诊断起始行新增 `incumbent_bound=eligible_strict_hp`，已完成续搜行输出 `incumbent_hp`（`-` 表示旁路）及 `incumbent_pruned`；后者包含原有内部生命界剪枝，不能直接视为外部界的净收益。新版本另输出 `incumbent_certified_healing_bound_pruned`，只归因于根认证治疗上界的边际剪枝；根捕获行记录认证状态、首个拒绝原因和固定战后治疗量。两个计数的口径不同，前者是成员内合计，后者只统计认证上界相对完整缺血余量增加剪掉的候选节点。它不是所有阶段的总剪枝量或节省的节点数。固定根对照及实际适用范围见 [测试矩阵](TEST_MATRIX.md#早期回合探索的外部生命界2026-10-01)。
+纯 ETC 外部生命界合同可运行 `dotnet .local/tool-build/OfflineSearchHarness/bin/Release/net9.0/OfflineSearchHarness.dll --check-early-turn-continuation-bound`，直接调用生产门禁及剪枝谓词，不建游戏状态。当前覆盖 143 条断言。普通 ETC 诊断起始行新增 `incumbent_bound=eligible_strict_hp`，已完成续搜行输出 `incumbent_hp`（`-` 表示旁路）及 `incumbent_pruned`；后者包含原有内部生命界剪枝，不能直接视为外部界的净收益。新版本另输出 `incumbent_certified_healing_bound_pruned`，只归因于根认证治疗上界的边际剪枝；根捕获行记录认证状态、首个拒绝原因和固定战后治疗量。两个计数的口径不同，前者是成员内合计，后者只统计认证上界相对完整缺血余量增加剪掉的候选节点。它不是所有阶段的总剪枝量或节省的节点数。固定根对照及实际适用范围见 [测试矩阵](archive/testing/volume-01.md#早期回合探索的外部生命界2026-10-01)。
 
 ## 批量用法
 
-`OFFLINE_HARNESS_EQUIVALENCE_PROBE=1` 可在小预算 `Evaluate` 请求中观察已有转置拒绝、候选分类次数和自然出现的两步反向动作，输出 `equivalence-probe.json`。每个求解器最多保存20,000个分离出的两步索引，不持有节点/模型，也不改变剪枝结果；指纹相同只是研究线索，不是交换性证明。该模式有额外锁和序列化开销，不能用于时间或分配评测。适用范围和复现命令见[准入优化与采样](performance/equivalence-admission-20260929.md)。
+`OFFLINE_HARNESS_EQUIVALENCE_PROBE=1` 可在小预算 `Evaluate` 请求中观察已有转置拒绝、候选分类次数和自然出现的两步反向动作，输出 `equivalence-probe.json`。每个求解器最多保存20,000个分离出的两步索引，不持有节点/模型，也不改变剪枝结果；指纹相同只是研究线索，不是交换性证明。该模式有额外锁和序列化开销，不能用于时间或分配评测。适用范围和复现命令见[准入优化与采样](archive/performance/equivalence-admission-20260929.md)。
 
-`tools/OfflineSearchHarness/run_plan.py` 吃一份 plan JSON（数组），起 N 个宿主进程并行消费：
+`tools/search/OfflineSearchHarness/run_plan.py` 吃一份 plan JSON（数组），起 N 个宿主进程并行消费：
 
 ```
-python3 tools/OfflineSearchHarness/run_plan.py --plan <plan.json> --workspace <dir> --workers 3
+python3 tools/search/OfflineSearchHarness/run_plan.py --plan <plan.json> --workspace <dir> --workers 3
 ```
 
 plan 每项的字段：`label`（必填，简单目录名）、`request`（必填）、`profile`、`beam`、`nodes`、
@@ -129,7 +129,7 @@ plan 每项的字段：`label`（必填，简单目录名）、`request`（必�
 
 产物在 `<workspace>/runs/<label>/`，另有 `<workspace>/runs.jsonl` 与 `plan-summary.json`。
 
-`tools/OfflineSearchHarness/compare_results.py` 把两份 `runs/` 目录逐字段比较（两侧都提供时还比较选中路径的续用戳；`solverMetrics` 里
+`tools/search/OfflineSearchHarness/compare_results.py` 把两份 `runs/` 目录逐字段比较（两侧都提供时还比较选中路径的续用戳；`solverMetrics` 里
 与时间/内存/GC 无关的字段、选中路线每个动作的 `turn/kind/cardId/potionId/targetCombatId/cardStateKey`、
 根 `ContinuationStamp`、生成场景目录指纹），全等返回 0，有差异返回 1 并把明细写进 `--out`。
 
@@ -172,7 +172,7 @@ plan 每项的字段：`label`（必填，简单目录名）、`request`（必�
 ## Godot 绕过
 
 宿主不启动引擎，凡是会打到 Godot 原生层的入口都要绕开。绕过点全部集中在
-`tools/OfflineSearchHarness/GameBootstrap.cs` 一个类里，类头有完整的表（目标、为什么必须绕、绕过后
+`tools/search/OfflineSearchHarness/GameBootstrap.cs` 一个类里，类头有完整的表（目标、为什么必须绕、绕过后
 返回什么、对搜索结果有没有影响），结果 JSON 的 `bypasses` 字段列出实际装上的那些。摘要：
 
 | 目标 | 绕过后 | 对搜索结果 |
@@ -232,7 +232,7 @@ plan 每项的字段：`label`（必填，简单目录名）、`request`（必�
 
 ## 循环边界对照
 
-`run_loop_boundaries.py` 接受逐 case 的 Evaluate / Coordinator。Evaluate 的局部 time/nodes 计数与日志对账；Coordinator 从全部成员日志提取请求级时间截断，不把所选 solver 的计数当请求总数。新版用 `TotalCycleReplayActions` 检查请求 4096 上限；旧版只在 Evaluate 可回退单 solver 值，旧 Coordinator 缺失请求数明确标为 unavailable。时间截断返回 Inconclusive/2；可比较差异、建局或质量断言失败返回 1，保留全部原始观察。工具的显式 suite 断言不等于原生 expected* 验收。见[完整输入、设计和结果](performance/loop-final-20260921.md)。
+`run_loop_boundaries.py` 接受逐 case 的 Evaluate / Coordinator。Evaluate 的局部 time/nodes 计数与日志对账；Coordinator 从全部成员日志提取请求级时间截断，不把所选 solver 的计数当请求总数。新版用 `TotalCycleReplayActions` 检查请求 4096 上限；旧版只在 Evaluate 可回退单 solver 值，旧 Coordinator 缺失请求数明确标为 unavailable。时间截断返回 Inconclusive/2；可比较差异、建局或质量断言失败返回 1，保留全部原始观察。工具的显式 suite 断言不等于原生 expected* 验收。见[完整输入、设计和结果](archive/performance/loop-final-20260921.md)。
 
 
 ### 后置结构探索实验

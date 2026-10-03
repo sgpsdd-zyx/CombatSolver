@@ -1,0 +1,29 @@
+[
+  {
+    "monsterId": "BigDummy", "moveId": "NOTHING", "enemyHpBefore": 999,
+    "clearAllRelicsBeforeMove": true, "clearAllPowersBeforeMove": true,
+    "clearPlayerPilesBeforeMove": true, "playerEnergyBefore": 9,
+    "cardsBeforeMove": [
+      { "cardId": "STRIKE_IRONCLAD", "pile": "Hand" },
+      { "cardId": "DEFEND_IRONCLAD", "pile": "Hand" },
+      { "cardId": "ANGER", "pile": "Hand" },
+      { "cardId": "DAZED", "pile": "Hand" },
+      { "cardId": "PRIMAL_FORCE", "pile": "Hand", "upgradeLevels": 1 }
+    ],
+    "cardPlayChecksAfterMove": [{ "cardId": "PRIMAL_FORCE", "target": "None", "assertForkableAfterPlay": true }],
+    "expectedPlayerPileCards": { "Hand:GIANT_ROCK": 2, "Hand:DEFEND_IRONCLAD": 1, "Hand:DAZED": 1 },
+    "expectedPlayerCardUpgrades": { "Hand:GIANT_ROCK:1": 2 }
+  },
+  {
+    "monsterId": "BigDummy", "moveId": "NOTHING", "enemyHpBefore": 999,
+    "clearAllRelicsBeforeMove": true, "clearAllPowersBeforeMove": true,
+    "clearPlayerPilesBeforeMove": true, "playerEnergyBefore": 9,
+    "cardsBeforeMove": [
+      { "cardId": "SEANCE", "pile": "Hand" },
+      { "cardId": "STRIKE_IRONCLAD", "pile": "Draw" },
+      { "cardId": "DEFEND_IRONCLAD", "pile": "Hand" }
+    ],
+    "cardPlayChecksAfterMove": [{ "cardId": "SEANCE", "target": "None", "useChoice": true, "choiceCardIds": ["STRIKE_IRONCLAD"], "assertForkableAfterPlay": true }],
+    "expectedPlayerPileCards": { "Draw:SOUL": 1, "Hand:DEFEND_IRONCLAD": 1 }
+  }
+]
