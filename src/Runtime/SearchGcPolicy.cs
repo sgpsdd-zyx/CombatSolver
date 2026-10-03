@@ -750,14 +750,15 @@ internal static partial class SearchGcPolicy
                 checkpointToken,
                 reason,
                 keepDefaultGcLimit: true),
+            // Explicit indivisible commits transfer allocation ownership to the CLR.
             checkpointToken => ReclaimWithinSearch(
                 signal,
                 configuredBudgetBytes,
                 Math.Max(1, configuredBudgetBytes / 6),
                 restartNoGcRegion: false,
                 checkpointToken,
-                "default_gc_limit",
-                keepDefaultGcLimit: true),
+                "default_gc_indivisible_commit",
+                keepDefaultGcLimit: false),
             unexpectedNoGcLossProbe: null,
             OperatingSystem.IsWindows() ? CaptureCurrentPhysicalMemoryLoad : null,
             reusableHeap);

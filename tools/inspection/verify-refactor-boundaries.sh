@@ -1231,6 +1231,9 @@ require_fixed "$repository_root/src/Runtime/CombatRootSnapshot.cs" 'CanUseKnownN
 for closure_component in 'PendingReturningCards' 'AllCards' 'EffectivePowers()' 'GetPotionSlotCount(player)' 'HasCertifiedRemainingAttachments' 'typeof(InfestedPrism)' 'typeof(FuzzyWurmCrawler)'; do
     require_fixed "$remaining_healing_bound_path" "$closure_component" 'remaining-healing proof lost a closure component:'
 done
+require_fixed "$repository_root/src/Runtime/SearchGcPolicy.cs" '"default_gc_indivisible_commit",' 'explicit default-GC commit exit lost its owner:'
+require_fixed "$repository_root/src/Runtime/SearchGcPolicy.cs" 'keepDefaultGcLimit: false),' 'explicit default-GC commit must transfer allocation ownership to CLR:'
+require_fixed "$repository_root/src/Runtime/SearchGcPolicy.cs" 'keepDefaultGcLimit: true),' 'regular default-GC checkpoints must retain their allocation bound:'
 require_fixed "$repository_root/src/Search/SimulatedCombatState.cs" '_goldRunHookSnapshot = GoldRunHookSnapshot.Capture(' 'gold/max-HP command ownership changed:'
 require_fixed "$repository_root/src/Search/SimulatedCombatState.cs" '_goldRunHookSnapshot = source._goldRunHookSnapshot;' 'gold/max-HP command ownership changed:'
 require_fixed "$repository_root/src/Search/SimulatedCombatState.GoldHooks.cs" 'run.IterateHookListeners(null)' 'gold/max-HP command ownership changed:'

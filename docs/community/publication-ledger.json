@@ -664,156 +664,6 @@
       ]
     },
     {
-      "batchId": "Q004",
-      "title": "[更优世界线 Q004] 5 个遭遇主题：机甲骑士、异蛙寄生虫、旧日雕像、盛碗虫群、多尼斯异鸟",
-      "kind": "optimization",
-      "themeIds": [
-        "O011",
-        "O012",
-        "O013",
-        "O014",
-        "O015"
-      ],
-      "claimUnit": "batch",
-      "themesPerBatch": 5,
-      "representativeCount": 5,
-      "versionScope": "0.47.x",
-      "verification": "static_only",
-      "archive": "Q004.zip",
-      "issueNumber": 184,
-      "issueUrl": "https://github.com/Torch1230/CombatSolver/issues/184",
-      "assetId": 605225097,
-      "assetUrl": "https://github.com/Torch1230/CombatSolver/releases/download/community-tasks-2026-10-02/Q004.zip",
-      "assetSizeBytes": 1667877,
-      "themes": [
-        {
-          "themeId": "O011",
-          "title": "机甲骑士战斗的路线搜索质量",
-          "mechanismKey": "encounter-route-quality:MECHA_KNIGHT_ELITE",
-          "representativeIds": [
-            "38eff40a9b3145c78a18846d4fdbe20e"
-          ],
-          "evidenceLevel": "shared_mechanism",
-          "legacyTaskIds": []
-        },
-        {
-          "themeId": "O012",
-          "title": "异蛙寄生虫战斗的路线搜索质量",
-          "mechanismKey": "encounter-route-quality:PHROG_PARASITE_ELITE",
-          "representativeIds": [
-            "4f4bbba076974da88eb308b5398e55b9"
-          ],
-          "evidenceLevel": "shared_mechanism",
-          "legacyTaskIds": []
-        },
-        {
-          "themeId": "O013",
-          "title": "旧日雕像战斗的路线搜索质量",
-          "mechanismKey": "encounter-route-quality:BYGONE_EFFIGY_ELITE",
-          "representativeIds": [
-            "c27f3e301dbd4a66a1a2a1a4bd2da885"
-          ],
-          "evidenceLevel": "shared_mechanism",
-          "legacyTaskIds": []
-        },
-        {
-          "themeId": "O014",
-          "title": "盛碗虫群战斗的路线搜索质量",
-          "mechanismKey": "encounter-route-quality:BOWLBUGS_NORMAL",
-          "representativeIds": [
-            "fdeff387600d43b6b9d402aa832aa330"
-          ],
-          "evidenceLevel": "shared_mechanism",
-          "legacyTaskIds": []
-        },
-        {
-          "themeId": "O015",
-          "title": "多尼斯异鸟战斗的路线搜索质量",
-          "mechanismKey": "encounter-route-quality:BYRDONIS_ELITE",
-          "representativeIds": [
-            "5a4088bbc2864a58af963fcfb9dc11a7"
-          ],
-          "evidenceLevel": "shared_mechanism",
-          "legacyTaskIds": []
-        }
-      ]
-    },
-    {
-      "batchId": "Q005",
-      "title": "[更优世界线 Q005] 5 个遭遇主题：感染棱柱、灵魂异鱼、墨影幻灵、花园幽灵鳗、拳击构装体",
-      "kind": "optimization",
-      "themeIds": [
-        "O016",
-        "O017",
-        "O018",
-        "O019",
-        "O020"
-      ],
-      "claimUnit": "batch",
-      "themesPerBatch": 5,
-      "representativeCount": 5,
-      "versionScope": "0.47.x",
-      "verification": "static_only",
-      "archive": "Q005.zip",
-      "issueNumber": 185,
-      "issueUrl": "https://github.com/Torch1230/CombatSolver/issues/185",
-      "assetId": 605225174,
-      "assetUrl": "https://github.com/Torch1230/CombatSolver/releases/download/community-tasks-2026-10-02/Q005.zip",
-      "assetSizeBytes": 1474486,
-      "themes": [
-        {
-          "themeId": "O016",
-          "title": "感染棱柱战斗的路线搜索质量",
-          "mechanismKey": "encounter-route-quality:INFESTED_PRISMS_ELITE",
-          "representativeIds": [
-            "67ad4fc605164b66b93d8b77f13a222e"
-          ],
-          "evidenceLevel": "shared_mechanism",
-          "legacyTaskIds": []
-        },
-        {
-          "themeId": "O017",
-          "title": "灵魂异鱼战斗的路线搜索质量",
-          "mechanismKey": "encounter-route-quality:SOUL_FYSH_BOSS",
-          "representativeIds": [
-            "604d7330bac9443caa3d89fd5a06b42c"
-          ],
-          "evidenceLevel": "shared_mechanism",
-          "legacyTaskIds": []
-        },
-        {
-          "themeId": "O018",
-          "title": "墨影幻灵战斗的路线搜索质量",
-          "mechanismKey": "encounter-route-quality:VANTOM_BOSS",
-          "representativeIds": [
-            "a4201ea911ae41389ec8333f14081f76"
-          ],
-          "evidenceLevel": "shared_mechanism",
-          "legacyTaskIds": []
-        },
-        {
-          "themeId": "O019",
-          "title": "花园幽灵鳗战斗的路线搜索质量",
-          "mechanismKey": "encounter-route-quality:PHANTASMAL_GARDENERS_ELITE",
-          "representativeIds": [
-            "1e40d2a74f8c40b983370884dd0c4255"
-          ],
-          "evidenceLevel": "shared_mechanism",
-          "legacyTaskIds": []
-        },
-        {
-          "themeId": "O020",
-          "title": "拳击构装体战斗的路线搜索质量",
-          "mechanismKey": "encounter-route-quality:PUNCH_OFF_EVENT_ENCOUNTER",
-          "representativeIds": [
-            "97495b8bffcf401bb7995f8034b4bc13"
-          ],
-          "evidenceLevel": "shared_mechanism",
-          "legacyTaskIds": []
-        }
-      ]
-    },
-    {
       "batchId": "Q006",
       "title": "[更优世界线 Q006] 5 个遭遇主题：地道虫、瀑布巨兽、蜂群术士、墨宝、Knight Gang",
       "kind": "optimization",
@@ -962,6 +812,234 @@
           "legacyTaskIds": []
         }
       ]
+    },
+    {
+      "batchId": "Q008",
+      "title": "[更优世界线 Q008] 总折算战损改善量：34 HP",
+      "kind": "optimization",
+      "themeIds": [
+        "O031",
+        "O032",
+        "O033",
+        "O034",
+        "O035"
+      ],
+      "claimUnit": "batch",
+      "themesPerBatch": 5,
+      "representativeCount": 5,
+      "versionScope": "0.44.0–0.48.0",
+      "verification": "static_only",
+      "archive": "Q008.zip",
+      "totalPotionAdjustedHpReduction": 34,
+      "themes": [
+        {
+          "themeId": "O031",
+          "title": "高塔炮手与活体盾战斗的路线搜索质量",
+          "mechanismKey": "encounter-route-quality:TURRET_OPERATOR",
+          "representativeIds": [
+            "630463289bdc4dd28e9f11f405928a6c"
+          ],
+          "evidenceLevel": "shared_mechanism",
+          "legacyTaskIds": []
+        },
+        {
+          "themeId": "O032",
+          "title": "神秘骑士战斗的路线搜索质量",
+          "mechanismKey": "encounter-route-quality:MYSTERIOUS_KNIGHT_EVENT_ENCOUNTER",
+          "representativeIds": [
+            "42e8af7403e94f58b9a05309bbf5c0f7"
+          ],
+          "evidenceLevel": "shared_mechanism",
+          "legacyTaskIds": []
+        },
+        {
+          "themeId": "O033",
+          "title": "两只小啃兽战斗的路线搜索质量",
+          "mechanismKey": "encounter-route-quality:NIBBITS",
+          "representativeIds": [
+            "ef0609b147064dda8851705a9e858a96"
+          ],
+          "evidenceLevel": "shared_mechanism",
+          "legacyTaskIds": []
+        },
+        {
+          "themeId": "O034",
+          "title": "地精佣兵战斗的路线搜索质量",
+          "mechanismKey": "encounter-route-quality:GREMLIN_MERC",
+          "representativeIds": [
+            "bac565acc9004dda9e7d2cd5bb42fcc0"
+          ],
+          "evidenceLevel": "shared_mechanism",
+          "legacyTaskIds": []
+        },
+        {
+          "themeId": "O035",
+          "title": "组装师战斗的路线搜索质量",
+          "mechanismKey": "encounter-route-quality:FABRICATOR",
+          "representativeIds": [
+            "ad442f69de5e40838c16e9de636a670d"
+          ],
+          "evidenceLevel": "shared_mechanism",
+          "legacyTaskIds": []
+        }
+      ],
+      "issueNumber": 208,
+      "issueUrl": "https://github.com/Torch1230/CombatSolver/issues/208",
+      "assetId": 608215726,
+      "assetUrl": "https://github.com/Torch1230/CombatSolver/releases/download/community-tasks-2026-10-02/Q008.zip",
+      "assetSizeBytes": 1276803
+    },
+    {
+      "batchId": "Q009",
+      "title": "[更优世界线 Q009] 总折算战损改善量：25 HP",
+      "kind": "optimization",
+      "themeIds": [
+        "O036",
+        "O037",
+        "O038",
+        "O039",
+        "O040"
+      ],
+      "claimUnit": "batch",
+      "themesPerBatch": 5,
+      "representativeCount": 5,
+      "versionScope": "0.44.0–0.48.0",
+      "verification": "static_only",
+      "archive": "Q009.zip",
+      "totalPotionAdjustedHpReduction": 25,
+      "themes": [
+        {
+          "themeId": "O036",
+          "title": "雾菇与利齿之眼战斗的路线搜索质量",
+          "mechanismKey": "encounter-route-quality:FOGMOG",
+          "representativeIds": [
+            "26fd23b7213d4aa988736ddd428f485e"
+          ],
+          "evidenceLevel": "shared_mechanism",
+          "legacyTaskIds": []
+        },
+        {
+          "themeId": "O037",
+          "title": "许多咬人卷轴战斗的路线搜索质量",
+          "mechanismKey": "encounter-route-quality:SCROLLS_OF_BITING",
+          "representativeIds": [
+            "721e17a8d7fa4f9283ed4714310a494b"
+          ],
+          "evidenceLevel": "shared_mechanism",
+          "legacyTaskIds": []
+        },
+        {
+          "themeId": "O038",
+          "title": "扼杀者与伙伴战斗的路线搜索质量",
+          "mechanismKey": "encounter-route-quality:SLITHERING_STRANGLER",
+          "representativeIds": [
+            "42f86b66b9c3464eabf986f03461fa48"
+          ],
+          "evidenceLevel": "shared_mechanism",
+          "legacyTaskIds": []
+        },
+        {
+          "themeId": "O039",
+          "title": "许多外骨骼虫战斗的路线搜索质量",
+          "mechanismKey": "encounter-route-quality:EXOSKELETONS",
+          "representativeIds": [
+            "e4460d3a3b894444922b712e43346c41"
+          ],
+          "evidenceLevel": "shared_mechanism",
+          "legacyTaskIds": []
+        },
+        {
+          "themeId": "O040",
+          "title": "同族小队战斗的路线搜索质量",
+          "mechanismKey": "encounter-route-quality:THE_KIN_BOSS",
+          "representativeIds": [
+            "e6609669f8f04a148086dfaf9c04b990"
+          ],
+          "evidenceLevel": "shared_mechanism",
+          "legacyTaskIds": []
+        }
+      ],
+      "issueNumber": 209,
+      "issueUrl": "https://github.com/Torch1230/CombatSolver/issues/209",
+      "assetId": 608215805,
+      "assetUrl": "https://github.com/Torch1230/CombatSolver/releases/download/community-tasks-2026-10-02/Q009.zip",
+      "assetSizeBytes": 1375656
+    },
+    {
+      "batchId": "Q010",
+      "title": "[更优世界线 Q010] 总折算战损改善量：19 HP",
+      "kind": "optimization",
+      "themeIds": [
+        "O041",
+        "O042",
+        "O043",
+        "O044",
+        "O045"
+      ],
+      "claimUnit": "batch",
+      "themesPerBatch": 5,
+      "representativeCount": 5,
+      "versionScope": "0.44.0–0.48.0",
+      "verification": "static_only",
+      "archive": "Q010.zip",
+      "totalPotionAdjustedHpReduction": 19,
+      "themes": [
+        {
+          "themeId": "O041",
+          "title": "猎人杀手战斗的路线搜索质量",
+          "mechanismKey": "encounter-route-quality:HUNTER_KILLER",
+          "representativeIds": [
+            "7113e143fecf424ab8419924a649d2e1"
+          ],
+          "evidenceLevel": "shared_mechanism",
+          "legacyTaskIds": []
+        },
+        {
+          "themeId": "O042",
+          "title": "偷窃草蜢战斗的路线搜索质量",
+          "mechanismKey": "encounter-route-quality:THIEVING_HOPPER",
+          "representativeIds": [
+            "85ef4e1d1bb04f7e93a126c05ffc2cdd"
+          ],
+          "evidenceLevel": "shared_mechanism",
+          "legacyTaskIds": []
+        },
+        {
+          "themeId": "O043",
+          "title": "棘刺蟾蜍战斗的路线搜索质量",
+          "mechanismKey": "encounter-route-quality:SPINY_TOAD",
+          "representativeIds": [
+            "e87d5139cbc94eafb8b8de07334f80a7"
+          ],
+          "evidenceLevel": "shared_mechanism",
+          "legacyTaskIds": []
+        },
+        {
+          "themeId": "O044",
+          "title": "熟睡派对战斗的路线搜索质量",
+          "mechanismKey": "encounter-route-quality:SLUMBERING_BEETLE",
+          "representativeIds": [
+            "4dc0ba71acec4d1499eaeea48cd29458"
+          ],
+          "evidenceLevel": "shared_mechanism",
+          "legacyTaskIds": []
+        },
+        {
+          "themeId": "O045",
+          "title": "虱虫之祖战斗的路线搜索质量",
+          "mechanismKey": "encounter-route-quality:LOUSE_PROGENITOR",
+          "representativeIds": [
+            "38d72af359ba4163abd73e297cb6727a"
+          ],
+          "evidenceLevel": "shared_mechanism",
+          "legacyTaskIds": []
+        }
+      ],
+      "issueNumber": 210,
+      "issueUrl": "https://github.com/Torch1230/CombatSolver/issues/210",
+      "assetId": 608215993,
+      "assetUrl": "https://github.com/Torch1230/CombatSolver/releases/download/community-tasks-2026-10-02/Q010.zip",
+      "assetSizeBytes": 1403699
     }
   ],
   "retiredArchives": {
@@ -7570,6 +7648,186 @@
       "reason": "published",
       "themeId": "O030",
       "reportDeletedAt": "2026-10-02T09:09:56.398221+00:00"
+    },
+    "630463289bdc4dd28e9f11f405928a6c": {
+      "reportId": "630463289bdc4dd28e9f11f405928a6c",
+      "batchId": "Q008",
+      "localDeleted": true,
+      "cosDeleted": false,
+      "reportRetained": false,
+      "reportDeleted": true,
+      "resolvedBeforeDeletion": false,
+      "reason": "published",
+      "themeId": null,
+      "reportDeletedAt": "2026-10-03T17:25:52.072915+00:00"
+    },
+    "42e8af7403e94f58b9a05309bbf5c0f7": {
+      "reportId": "42e8af7403e94f58b9a05309bbf5c0f7",
+      "batchId": "Q008",
+      "localDeleted": true,
+      "cosDeleted": false,
+      "reportRetained": false,
+      "reportDeleted": true,
+      "resolvedBeforeDeletion": false,
+      "reason": "published",
+      "themeId": null,
+      "reportDeletedAt": "2026-10-03T17:25:52.072915+00:00"
+    },
+    "ef0609b147064dda8851705a9e858a96": {
+      "reportId": "ef0609b147064dda8851705a9e858a96",
+      "batchId": "Q008",
+      "localDeleted": true,
+      "cosDeleted": false,
+      "reportRetained": false,
+      "reportDeleted": true,
+      "resolvedBeforeDeletion": false,
+      "reason": "published",
+      "themeId": null,
+      "reportDeletedAt": "2026-10-03T17:25:52.072915+00:00"
+    },
+    "bac565acc9004dda9e7d2cd5bb42fcc0": {
+      "reportId": "bac565acc9004dda9e7d2cd5bb42fcc0",
+      "batchId": "Q008",
+      "localDeleted": true,
+      "cosDeleted": false,
+      "reportRetained": false,
+      "reportDeleted": true,
+      "resolvedBeforeDeletion": false,
+      "reason": "published",
+      "themeId": null,
+      "reportDeletedAt": "2026-10-03T17:25:52.072915+00:00"
+    },
+    "ad442f69de5e40838c16e9de636a670d": {
+      "reportId": "ad442f69de5e40838c16e9de636a670d",
+      "batchId": "Q008",
+      "localDeleted": true,
+      "cosDeleted": false,
+      "reportRetained": false,
+      "reportDeleted": true,
+      "resolvedBeforeDeletion": false,
+      "reason": "published",
+      "themeId": null,
+      "reportDeletedAt": "2026-10-03T17:25:52.072915+00:00"
+    },
+    "26fd23b7213d4aa988736ddd428f485e": {
+      "reportId": "26fd23b7213d4aa988736ddd428f485e",
+      "batchId": "Q009",
+      "localDeleted": true,
+      "cosDeleted": false,
+      "reportRetained": false,
+      "reportDeleted": true,
+      "resolvedBeforeDeletion": false,
+      "reason": "published",
+      "themeId": null,
+      "reportDeletedAt": "2026-10-03T17:25:52.072915+00:00"
+    },
+    "721e17a8d7fa4f9283ed4714310a494b": {
+      "reportId": "721e17a8d7fa4f9283ed4714310a494b",
+      "batchId": "Q009",
+      "localDeleted": true,
+      "cosDeleted": false,
+      "reportRetained": false,
+      "reportDeleted": true,
+      "resolvedBeforeDeletion": false,
+      "reason": "published",
+      "themeId": null,
+      "reportDeletedAt": "2026-10-03T17:25:52.072915+00:00"
+    },
+    "42f86b66b9c3464eabf986f03461fa48": {
+      "reportId": "42f86b66b9c3464eabf986f03461fa48",
+      "batchId": "Q009",
+      "localDeleted": true,
+      "cosDeleted": false,
+      "reportRetained": false,
+      "reportDeleted": true,
+      "resolvedBeforeDeletion": false,
+      "reason": "published",
+      "themeId": null,
+      "reportDeletedAt": "2026-10-03T17:25:52.072915+00:00"
+    },
+    "e4460d3a3b894444922b712e43346c41": {
+      "reportId": "e4460d3a3b894444922b712e43346c41",
+      "batchId": "Q009",
+      "localDeleted": true,
+      "cosDeleted": false,
+      "reportRetained": false,
+      "reportDeleted": true,
+      "resolvedBeforeDeletion": false,
+      "reason": "published",
+      "themeId": null,
+      "reportDeletedAt": "2026-10-03T17:25:52.072915+00:00"
+    },
+    "e6609669f8f04a148086dfaf9c04b990": {
+      "reportId": "e6609669f8f04a148086dfaf9c04b990",
+      "batchId": "Q009",
+      "localDeleted": true,
+      "cosDeleted": false,
+      "reportRetained": false,
+      "reportDeleted": true,
+      "resolvedBeforeDeletion": false,
+      "reason": "published",
+      "themeId": null,
+      "reportDeletedAt": "2026-10-03T17:25:52.072915+00:00"
+    },
+    "7113e143fecf424ab8419924a649d2e1": {
+      "reportId": "7113e143fecf424ab8419924a649d2e1",
+      "batchId": "Q010",
+      "localDeleted": true,
+      "cosDeleted": false,
+      "reportRetained": false,
+      "reportDeleted": true,
+      "resolvedBeforeDeletion": false,
+      "reason": "published",
+      "themeId": null,
+      "reportDeletedAt": "2026-10-03T17:25:52.072915+00:00"
+    },
+    "85ef4e1d1bb04f7e93a126c05ffc2cdd": {
+      "reportId": "85ef4e1d1bb04f7e93a126c05ffc2cdd",
+      "batchId": "Q010",
+      "localDeleted": true,
+      "cosDeleted": false,
+      "reportRetained": false,
+      "reportDeleted": true,
+      "resolvedBeforeDeletion": false,
+      "reason": "published",
+      "themeId": null,
+      "reportDeletedAt": "2026-10-03T17:25:52.072915+00:00"
+    },
+    "e87d5139cbc94eafb8b8de07334f80a7": {
+      "reportId": "e87d5139cbc94eafb8b8de07334f80a7",
+      "batchId": "Q010",
+      "localDeleted": true,
+      "cosDeleted": false,
+      "reportRetained": false,
+      "reportDeleted": true,
+      "resolvedBeforeDeletion": false,
+      "reason": "published",
+      "themeId": null,
+      "reportDeletedAt": "2026-10-03T17:25:52.072915+00:00"
+    },
+    "4dc0ba71acec4d1499eaeea48cd29458": {
+      "reportId": "4dc0ba71acec4d1499eaeea48cd29458",
+      "batchId": "Q010",
+      "localDeleted": true,
+      "cosDeleted": false,
+      "reportRetained": false,
+      "reportDeleted": true,
+      "resolvedBeforeDeletion": false,
+      "reason": "published",
+      "themeId": null,
+      "reportDeletedAt": "2026-10-03T17:25:52.072915+00:00"
+    },
+    "38d72af359ba4163abd73e297cb6727a": {
+      "reportId": "38d72af359ba4163abd73e297cb6727a",
+      "batchId": "Q010",
+      "localDeleted": true,
+      "cosDeleted": false,
+      "reportRetained": false,
+      "reportDeleted": true,
+      "resolvedBeforeDeletion": false,
+      "reason": "published",
+      "themeId": null,
+      "reportDeletedAt": "2026-10-03T17:25:52.072915+00:00"
     }
   },
   "contentPolicy": "base_game_content_only; no proactive third_party_gameplay_adaptation",
@@ -7612,8 +7870,8 @@
       "sourceEvidenceRequiredForGenericExceptions": "passed"
     }
   },
-  "totalRetiredArchives": 571,
-  "actualServerFilesDeleted": 571,
+  "totalRetiredArchives": 586,
+  "actualServerFilesDeleted": 586,
   "localCleanup": {
     "directory": ".local/community-tasks/20261002",
     "completed": true,
@@ -9096,6 +9354,168 @@
           "publicationSignature": "InvalidOperationException：回放时找不到手牌 ROCKET_PUNCH"
         }
       ]
+    },
+    {
+      "batchId": "Q004",
+      "title": "[更优世界线 Q004] 5 个遭遇主题：机甲骑士、异蛙寄生虫、旧日雕像、盛碗虫群、多尼斯异鸟",
+      "kind": "optimization",
+      "themeIds": [
+        "O011",
+        "O012",
+        "O013",
+        "O014",
+        "O015"
+      ],
+      "claimUnit": "batch",
+      "themesPerBatch": 5,
+      "representativeCount": 5,
+      "versionScope": "0.47.x",
+      "verification": "static_only",
+      "archive": "Q004.zip",
+      "issueNumber": 184,
+      "issueUrl": "https://github.com/Torch1230/CombatSolver/issues/184",
+      "assetId": 605225097,
+      "assetUrl": "https://github.com/Torch1230/CombatSolver/releases/download/community-tasks-2026-10-02/Q004.zip",
+      "assetSizeBytes": 1667877,
+      "themes": [
+        {
+          "themeId": "O011",
+          "title": "机甲骑士战斗的路线搜索质量",
+          "mechanismKey": "encounter-route-quality:MECHA_KNIGHT_ELITE",
+          "representativeIds": [
+            "38eff40a9b3145c78a18846d4fdbe20e"
+          ],
+          "evidenceLevel": "shared_mechanism",
+          "legacyTaskIds": []
+        },
+        {
+          "themeId": "O012",
+          "title": "异蛙寄生虫战斗的路线搜索质量",
+          "mechanismKey": "encounter-route-quality:PHROG_PARASITE_ELITE",
+          "representativeIds": [
+            "4f4bbba076974da88eb308b5398e55b9"
+          ],
+          "evidenceLevel": "shared_mechanism",
+          "legacyTaskIds": []
+        },
+        {
+          "themeId": "O013",
+          "title": "旧日雕像战斗的路线搜索质量",
+          "mechanismKey": "encounter-route-quality:BYGONE_EFFIGY_ELITE",
+          "representativeIds": [
+            "c27f3e301dbd4a66a1a2a1a4bd2da885"
+          ],
+          "evidenceLevel": "shared_mechanism",
+          "legacyTaskIds": []
+        },
+        {
+          "themeId": "O014",
+          "title": "盛碗虫群战斗的路线搜索质量",
+          "mechanismKey": "encounter-route-quality:BOWLBUGS_NORMAL",
+          "representativeIds": [
+            "fdeff387600d43b6b9d402aa832aa330"
+          ],
+          "evidenceLevel": "shared_mechanism",
+          "legacyTaskIds": []
+        },
+        {
+          "themeId": "O015",
+          "title": "多尼斯异鸟战斗的路线搜索质量",
+          "mechanismKey": "encounter-route-quality:BYRDONIS_ELITE",
+          "representativeIds": [
+            "5a4088bbc2864a58af963fcfb9dc11a7"
+          ],
+          "evidenceLevel": "shared_mechanism",
+          "legacyTaskIds": []
+        }
+      ],
+      "status": "withdrawn",
+      "withdrawnAt": "2026-10-03T17:13:15.958761+00:00",
+      "withdrawalReason": "maintainer_withdrawal",
+      "issueState": "closed",
+      "issueStateReason": "not_planned",
+      "archiveAvailable": false
+    },
+    {
+      "batchId": "Q005",
+      "title": "[更优世界线 Q005] 5 个遭遇主题：感染棱柱、灵魂异鱼、墨影幻灵、花园幽灵鳗、拳击构装体",
+      "kind": "optimization",
+      "themeIds": [
+        "O016",
+        "O017",
+        "O018",
+        "O019",
+        "O020"
+      ],
+      "claimUnit": "batch",
+      "themesPerBatch": 5,
+      "representativeCount": 5,
+      "versionScope": "0.47.x",
+      "verification": "static_only",
+      "archive": "Q005.zip",
+      "issueNumber": 185,
+      "issueUrl": "https://github.com/Torch1230/CombatSolver/issues/185",
+      "assetId": 605225174,
+      "assetUrl": "https://github.com/Torch1230/CombatSolver/releases/download/community-tasks-2026-10-02/Q005.zip",
+      "assetSizeBytes": 1474486,
+      "themes": [
+        {
+          "themeId": "O016",
+          "title": "感染棱柱战斗的路线搜索质量",
+          "mechanismKey": "encounter-route-quality:INFESTED_PRISMS_ELITE",
+          "representativeIds": [
+            "67ad4fc605164b66b93d8b77f13a222e"
+          ],
+          "evidenceLevel": "shared_mechanism",
+          "legacyTaskIds": []
+        },
+        {
+          "themeId": "O017",
+          "title": "灵魂异鱼战斗的路线搜索质量",
+          "mechanismKey": "encounter-route-quality:SOUL_FYSH_BOSS",
+          "representativeIds": [
+            "604d7330bac9443caa3d89fd5a06b42c"
+          ],
+          "evidenceLevel": "shared_mechanism",
+          "legacyTaskIds": []
+        },
+        {
+          "themeId": "O018",
+          "title": "墨影幻灵战斗的路线搜索质量",
+          "mechanismKey": "encounter-route-quality:VANTOM_BOSS",
+          "representativeIds": [
+            "a4201ea911ae41389ec8333f14081f76"
+          ],
+          "evidenceLevel": "shared_mechanism",
+          "legacyTaskIds": []
+        },
+        {
+          "themeId": "O019",
+          "title": "花园幽灵鳗战斗的路线搜索质量",
+          "mechanismKey": "encounter-route-quality:PHANTASMAL_GARDENERS_ELITE",
+          "representativeIds": [
+            "1e40d2a74f8c40b983370884dd0c4255"
+          ],
+          "evidenceLevel": "shared_mechanism",
+          "legacyTaskIds": []
+        },
+        {
+          "themeId": "O020",
+          "title": "拳击构装体战斗的路线搜索质量",
+          "mechanismKey": "encounter-route-quality:PUNCH_OFF_EVENT_ENCOUNTER",
+          "representativeIds": [
+            "97495b8bffcf401bb7995f8034b4bc13"
+          ],
+          "evidenceLevel": "shared_mechanism",
+          "legacyTaskIds": []
+        }
+      ],
+      "status": "withdrawn",
+      "withdrawnAt": "2026-10-03T17:13:15.958761+00:00",
+      "withdrawalReason": "maintainer_withdrawal",
+      "issueState": "closed",
+      "issueStateReason": "not_planned",
+      "archiveAvailable": false
     }
   ],
   "themesPerBatch": 5,
@@ -9103,7 +9523,7 @@
     1,
     2
   ],
-  "versionPrefix": "0.47.",
+  "versionPrefix": "per_batch",
   "duplicateThemeAction": "delete_report_and_archive_and_skip",
   "migration": {
     "mode": "static_root_theme_regrouping",
@@ -9218,106 +9638,269 @@
     "cosObjectsDeleted": 0
   },
   "latestPublicIndex": {
-    "assetId": 605230216,
+    "assetId": 608221404,
     "assetUrl": "https://github.com/Torch1230/CombatSolver/releases/download/community-tasks-2026-10-02/community-task-index.json",
-    "assetSizeBytes": 1725139,
+    "assetSizeBytes": 1920973,
     "cleanupCompleted": true
   },
   "latestLocalCleanup": {
-    "run": "publish-047-20261002-q003-q007",
-    "completedAt": "2026-10-02T09:11:01.2608303Z",
-    "deletedFiles": 248,
-    "deletedZipFiles": 65,
-    "deletedZipBytes": 32439526,
-    "taskScratchFilesRetained": 0,
-    "privateSnapshotsRemoved": true,
-    "emptyDirectoriesMayRemain": true
+    "run": "publish-q008-q010",
+    "completedAt": "2026-10-03T17:26:16.822730+00:00",
+    "deletedZipFiles": 3,
+    "deletedZipBytes": 4056158,
+    "files": [
+      {
+        "file": "Q008.zip",
+        "sizeBytes": 1276803
+      },
+      {
+        "file": "Q009.zip",
+        "sizeBytes": 1375656
+      },
+      {
+        "file": "Q010.zip",
+        "sizeBytes": 1403699
+      }
+    ],
+    "verification": "filesystem_deletion_receipts"
   },
   "contributionPriority": [
     "bugfix",
     "better_worldline_optimization"
   ],
   "latestOptimizationPublication": {
+    "publishedAt": "2026-10-03T17:23:19.099830+00:00",
     "batchIds": [
-      "Q003",
-      "Q004",
-      "Q005",
-      "Q006",
-      "Q007"
+      "Q008",
+      "Q009",
+      "Q010"
     ],
     "themeIds": [
-      "O006",
-      "O007",
-      "O008",
-      "O009",
-      "O010",
-      "O011",
-      "O012",
-      "O013",
-      "O014",
-      "O015",
-      "O016",
-      "O017",
-      "O018",
-      "O019",
-      "O020",
-      "O021",
-      "O022",
-      "O023",
-      "O024",
-      "O025",
-      "O026",
-      "O027",
-      "O028",
-      "O029",
-      "O030"
+      "O031",
+      "O032",
+      "O033",
+      "O034",
+      "O035",
+      "O036",
+      "O037",
+      "O038",
+      "O039",
+      "O040",
+      "O041",
+      "O042",
+      "O043",
+      "O044",
+      "O045"
     ],
-    "representativeReports": 25,
+    "representativeReports": 15,
+    "totalPotionAdjustedHpReduction": 78,
     "verification": "static_only",
     "snapshot": {
-      "at": "2026-10-02T08:59:11.191400+00:00",
-      "versionScope": "0.47.x",
-      "reportCount": 103,
-      "eligibleReportCount": 98,
-      "newEncounterCount": 34
+      "preparedAt": "2026-10-03T16:48:36.321300+00:00",
+      "minimumVersion": "0.44.0",
+      "snapshotCandidateCount": 175,
+      "availableNewThemes": 27,
+      "rankMetric": "potionAdjustedHpReduction"
     },
     "validation": {
-      "themes": 25,
-      "batches": 5,
-      "representativeReports": 25,
-      "versionScope": "0.47.x",
-      "replayBytesPreserved": true,
-      "replayNetIds": [
-        "1"
-      ],
-      "privacyChecks": "passed",
+      "batches": 3,
+      "themes": 15,
+      "representativeReports": 15,
       "comparisonLogs": "matched",
+      "potionAdjustment": "reconstructed",
+      "privacyChecks": "passed",
+      "replayBytesPreserved": true,
       "runtimeVerification": "not_run"
     },
-    "excluded": [
-      {
-        "reportId": "5cf547c84b7d4479856421e4f14a07d2",
-        "reason": "recorded_Ascension100_modifier_and_ascension_18",
-        "action": "retained_on_backend; not_distributed"
-      }
-    ],
     "cleanupCompleted": true,
     "localCleanupCompleted": true
   },
   "latestOptimizationCleanup": {
     "batchIds": [
-      "Q003",
-      "Q004",
-      "Q005",
-      "Q006",
-      "Q007"
+      "Q008",
+      "Q009",
+      "Q010"
     ],
-    "completedAt": "2026-10-02T09:09:56.398221+00:00",
-    "publishedReports": 25,
-    "duplicateThemeReports": 59,
-    "serverZipFilesDeleted": 84,
-    "backendReportsDeleted": 84,
+    "completedAt": "2026-10-03T17:25:52.072915+00:00",
+    "publishedReports": 15,
+    "duplicateThemeReports": 0,
+    "serverZipFilesDeleted": 15,
+    "backendReportsDeleted": 15,
     "cosObjectsDeleted": 0,
-    "verification": "server_deletion_receipts"
+    "alreadyAbsentReports": 0,
+    "verification": "server_deletion_receipts",
+    "results": [
+      {
+        "reportId": "630463289bdc4dd28e9f11f405928a6c",
+        "batchId": "Q008",
+        "localDeleted": true,
+        "cosDeleted": false,
+        "reportRetained": false,
+        "reportDeleted": true,
+        "resolvedBeforeDeletion": false,
+        "reason": "published",
+        "themeId": null
+      },
+      {
+        "reportId": "42e8af7403e94f58b9a05309bbf5c0f7",
+        "batchId": "Q008",
+        "localDeleted": true,
+        "cosDeleted": false,
+        "reportRetained": false,
+        "reportDeleted": true,
+        "resolvedBeforeDeletion": false,
+        "reason": "published",
+        "themeId": null
+      },
+      {
+        "reportId": "ef0609b147064dda8851705a9e858a96",
+        "batchId": "Q008",
+        "localDeleted": true,
+        "cosDeleted": false,
+        "reportRetained": false,
+        "reportDeleted": true,
+        "resolvedBeforeDeletion": false,
+        "reason": "published",
+        "themeId": null
+      },
+      {
+        "reportId": "bac565acc9004dda9e7d2cd5bb42fcc0",
+        "batchId": "Q008",
+        "localDeleted": true,
+        "cosDeleted": false,
+        "reportRetained": false,
+        "reportDeleted": true,
+        "resolvedBeforeDeletion": false,
+        "reason": "published",
+        "themeId": null
+      },
+      {
+        "reportId": "ad442f69de5e40838c16e9de636a670d",
+        "batchId": "Q008",
+        "localDeleted": true,
+        "cosDeleted": false,
+        "reportRetained": false,
+        "reportDeleted": true,
+        "resolvedBeforeDeletion": false,
+        "reason": "published",
+        "themeId": null
+      },
+      {
+        "reportId": "26fd23b7213d4aa988736ddd428f485e",
+        "batchId": "Q009",
+        "localDeleted": true,
+        "cosDeleted": false,
+        "reportRetained": false,
+        "reportDeleted": true,
+        "resolvedBeforeDeletion": false,
+        "reason": "published",
+        "themeId": null
+      },
+      {
+        "reportId": "721e17a8d7fa4f9283ed4714310a494b",
+        "batchId": "Q009",
+        "localDeleted": true,
+        "cosDeleted": false,
+        "reportRetained": false,
+        "reportDeleted": true,
+        "resolvedBeforeDeletion": false,
+        "reason": "published",
+        "themeId": null
+      },
+      {
+        "reportId": "42f86b66b9c3464eabf986f03461fa48",
+        "batchId": "Q009",
+        "localDeleted": true,
+        "cosDeleted": false,
+        "reportRetained": false,
+        "reportDeleted": true,
+        "resolvedBeforeDeletion": false,
+        "reason": "published",
+        "themeId": null
+      },
+      {
+        "reportId": "e4460d3a3b894444922b712e43346c41",
+        "batchId": "Q009",
+        "localDeleted": true,
+        "cosDeleted": false,
+        "reportRetained": false,
+        "reportDeleted": true,
+        "resolvedBeforeDeletion": false,
+        "reason": "published",
+        "themeId": null
+      },
+      {
+        "reportId": "e6609669f8f04a148086dfaf9c04b990",
+        "batchId": "Q009",
+        "localDeleted": true,
+        "cosDeleted": false,
+        "reportRetained": false,
+        "reportDeleted": true,
+        "resolvedBeforeDeletion": false,
+        "reason": "published",
+        "themeId": null
+      },
+      {
+        "reportId": "7113e143fecf424ab8419924a649d2e1",
+        "batchId": "Q010",
+        "localDeleted": true,
+        "cosDeleted": false,
+        "reportRetained": false,
+        "reportDeleted": true,
+        "resolvedBeforeDeletion": false,
+        "reason": "published",
+        "themeId": null
+      },
+      {
+        "reportId": "85ef4e1d1bb04f7e93a126c05ffc2cdd",
+        "batchId": "Q010",
+        "localDeleted": true,
+        "cosDeleted": false,
+        "reportRetained": false,
+        "reportDeleted": true,
+        "resolvedBeforeDeletion": false,
+        "reason": "published",
+        "themeId": null
+      },
+      {
+        "reportId": "e87d5139cbc94eafb8b8de07334f80a7",
+        "batchId": "Q010",
+        "localDeleted": true,
+        "cosDeleted": false,
+        "reportRetained": false,
+        "reportDeleted": true,
+        "resolvedBeforeDeletion": false,
+        "reason": "published",
+        "themeId": null
+      },
+      {
+        "reportId": "4dc0ba71acec4d1499eaeea48cd29458",
+        "batchId": "Q010",
+        "localDeleted": true,
+        "cosDeleted": false,
+        "reportRetained": false,
+        "reportDeleted": true,
+        "resolvedBeforeDeletion": false,
+        "reason": "published",
+        "themeId": null
+      },
+      {
+        "reportId": "38d72af359ba4163abd73e297cb6727a",
+        "batchId": "Q010",
+        "localDeleted": true,
+        "cosDeleted": false,
+        "reportRetained": false,
+        "reportDeleted": true,
+        "resolvedBeforeDeletion": false,
+        "reason": "published",
+        "themeId": null
+      }
+    ]
+  },
+  "activePublicationSummary": {
+    "batchCount": 12,
+    "themeCount": 60,
+    "representativeReportCount": 68,
+    "updatedAt": "2026-10-03T17:23:43.743508+00:00"
   }
 }

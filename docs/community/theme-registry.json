@@ -2109,702 +2109,6 @@
       "assetSizeBytes": 1563377
     },
     {
-      "themeId": "O011",
-      "batchId": "Q004",
-      "title": "机甲骑士战斗的路线搜索质量",
-      "kind": "optimization",
-      "mechanismKey": "encounter-route-quality:MECHA_KNIGHT_ELITE",
-      "encounterId": "MECHA_KNIGHT_ELITE",
-      "representativeIds": [
-        "38eff40a9b3145c78a18846d4fdbe20e"
-      ],
-      "groupIds": [],
-      "legacyTaskIds": [],
-      "signaturePatterns": [],
-      "sourcePaths": [
-        "src/Runtime/SolverController.cs",
-        "src/Search/CombatBeamSolver.Expansion.cs",
-        "src/Search/CombatBeamSolver.BeamRetentionPolicy.cs",
-        "src/Search/CombatBeamSolver.StateEvaluation.cs",
-        "src/Search/CombatBeamSolver.FinalPlanOrdering.cs"
-      ],
-      "sourceSymbols": [
-        "RecordManualProjectionComparison",
-        "ApplyProjectionBaselines",
-        "BeamRetentionPolicy",
-        "FinalPlanOrdering"
-      ],
-      "staticCause": "MANUAL_ROUTE_IMPROVED 记录手操改变状态后的重新预测，比较值与报告和搜索结果条目一致；按具体原版遭遇归并质量排查范围，算法首因尚未定位。",
-      "unresolved": "先验证模拟、部署与资源政策，再从 combat_start 对照同根同政策同预算路线，定位展开、保路、去重或排序中的通用机制。",
-      "evidenceLevel": "shared_mechanism",
-      "verification": "static_only",
-      "rootCauseVerifiedByExecution": false,
-      "hpLoss": {
-        "kind": "manual_projection",
-        "before": 21,
-        "after": 6,
-        "reduction": 15
-      },
-      "comparisonTurns": [
-        1,
-        2
-      ],
-      "comparisonCheckpointIds": {
-        "original": "6dd66690464944a5885b982d3885fe70:3",
-        "current": "6dd66690464944a5885b982d3885fe70:5"
-      },
-      "limitations": [
-        "比较跨回合发生，属于手操后重新预测。",
-        "比较期间累计用药数量改变，收益评价必须核对药水政策与消耗。"
-      ],
-      "logEvidence": [
-        {
-          "file": "diagnostics/logs/combat/008.jsonl",
-          "line": 382,
-          "message": "[CombatSolver/Test] MANUAL_ROUTE_IMPROVED original_turn=1 current_turn=2 previous_projected_battle_hp_lost=21 current_projected_battle_hp_lost=6 difference=-15 field=hp expected={63} actual={81}"
-        }
-      ],
-      "archive": "Q004.zip",
-      "requiresSourceSymbolForMatch": false,
-      "acceptance": [
-        "combat_start 恢复与状态对账",
-        "语义和原生部署正确",
-        "同根同政策同预算比较并单列额外用药",
-        "定位通用策略缺口并验证回归哨兵"
-      ],
-      "issueNumber": 184,
-      "issueUrl": "https://github.com/Torch1230/CombatSolver/issues/184#o011",
-      "assetId": 605225097,
-      "assetUrl": "https://github.com/Torch1230/CombatSolver/releases/download/community-tasks-2026-10-02/Q004.zip",
-      "assetSizeBytes": 1667877
-    },
-    {
-      "themeId": "O012",
-      "batchId": "Q004",
-      "title": "异蛙寄生虫战斗的路线搜索质量",
-      "kind": "optimization",
-      "mechanismKey": "encounter-route-quality:PHROG_PARASITE_ELITE",
-      "encounterId": "PHROG_PARASITE_ELITE",
-      "representativeIds": [
-        "4f4bbba076974da88eb308b5398e55b9"
-      ],
-      "groupIds": [],
-      "legacyTaskIds": [],
-      "signaturePatterns": [],
-      "sourcePaths": [
-        "src/Runtime/SolverController.cs",
-        "src/Search/CombatBeamSolver.Expansion.cs",
-        "src/Search/CombatBeamSolver.BeamRetentionPolicy.cs",
-        "src/Search/CombatBeamSolver.StateEvaluation.cs",
-        "src/Search/CombatBeamSolver.FinalPlanOrdering.cs"
-      ],
-      "sourceSymbols": [
-        "RecordManualProjectionComparison",
-        "ApplyProjectionBaselines",
-        "BeamRetentionPolicy",
-        "FinalPlanOrdering"
-      ],
-      "staticCause": "MANUAL_ROUTE_IMPROVED 记录手操改变状态后的重新预测，比较值与报告和搜索结果条目一致；按具体原版遭遇归并质量排查范围，算法首因尚未定位。",
-      "unresolved": "先验证模拟、部署与资源政策，再从 combat_start 对照同根同政策同预算路线，定位展开、保路、去重或排序中的通用机制。",
-      "evidenceLevel": "shared_mechanism",
-      "verification": "static_only",
-      "rootCauseVerifiedByExecution": false,
-      "hpLoss": {
-        "kind": "manual_projection",
-        "before": 19,
-        "after": 4,
-        "reduction": 15
-      },
-      "comparisonTurns": [
-        3,
-        4
-      ],
-      "comparisonCheckpointIds": {
-        "original": "cc9a6319e7e54f1f93612b43a54aca18:5",
-        "current": "cc9a6319e7e54f1f93612b43a54aca18:9"
-      },
-      "limitations": [
-        "比较跨回合发生，属于手操后重新预测。"
-      ],
-      "logEvidence": [
-        {
-          "file": "diagnostics/logs/combat/009.jsonl",
-          "line": 422,
-          "message": "[CombatSolver/Test] MANUAL_ROUTE_IMPROVED original_turn=3 current_turn=4 previous_projected_battle_hp_lost=19 current_projected_battle_hp_lost=4 difference=-15 field=live_combat_stamp expected={solver_result} actual={manual_state_change}"
-        }
-      ],
-      "archive": "Q004.zip",
-      "requiresSourceSymbolForMatch": false,
-      "acceptance": [
-        "combat_start 恢复与状态对账",
-        "语义和原生部署正确",
-        "同根同政策同预算比较并单列额外用药",
-        "定位通用策略缺口并验证回归哨兵"
-      ],
-      "issueNumber": 184,
-      "issueUrl": "https://github.com/Torch1230/CombatSolver/issues/184#o012",
-      "assetId": 605225097,
-      "assetUrl": "https://github.com/Torch1230/CombatSolver/releases/download/community-tasks-2026-10-02/Q004.zip",
-      "assetSizeBytes": 1667877
-    },
-    {
-      "themeId": "O013",
-      "batchId": "Q004",
-      "title": "旧日雕像战斗的路线搜索质量",
-      "kind": "optimization",
-      "mechanismKey": "encounter-route-quality:BYGONE_EFFIGY_ELITE",
-      "encounterId": "BYGONE_EFFIGY_ELITE",
-      "representativeIds": [
-        "c27f3e301dbd4a66a1a2a1a4bd2da885"
-      ],
-      "groupIds": [],
-      "legacyTaskIds": [],
-      "signaturePatterns": [],
-      "sourcePaths": [
-        "src/Runtime/SolverController.cs",
-        "src/Search/CombatBeamSolver.Expansion.cs",
-        "src/Search/CombatBeamSolver.BeamRetentionPolicy.cs",
-        "src/Search/CombatBeamSolver.StateEvaluation.cs",
-        "src/Search/CombatBeamSolver.FinalPlanOrdering.cs"
-      ],
-      "sourceSymbols": [
-        "RecordManualProjectionComparison",
-        "ApplyProjectionBaselines",
-        "BeamRetentionPolicy",
-        "FinalPlanOrdering"
-      ],
-      "staticCause": "MANUAL_ROUTE_IMPROVED 记录手操改变状态后的重新预测，比较值与报告和搜索结果条目一致；按具体原版遭遇归并质量排查范围，算法首因尚未定位。",
-      "unresolved": "先验证模拟、部署与资源政策，再从 combat_start 对照同根同政策同预算路线，定位展开、保路、去重或排序中的通用机制。",
-      "evidenceLevel": "shared_mechanism",
-      "verification": "static_only",
-      "rootCauseVerifiedByExecution": false,
-      "hpLoss": {
-        "kind": "manual_projection",
-        "before": 60,
-        "after": 46,
-        "reduction": 14
-      },
-      "comparisonTurns": [
-        2,
-        3
-      ],
-      "comparisonCheckpointIds": {
-        "original": "59c8a91d7e5b4901956194cc46c713d8:3",
-        "current": "59c8a91d7e5b4901956194cc46c713d8:5"
-      },
-      "limitations": [
-        "比较跨回合发生，属于手操后重新预测。"
-      ],
-      "logEvidence": [
-        {
-          "file": "diagnostics/logs/combat/001.jsonl",
-          "line": 397,
-          "message": "[CombatSolver/Test] MANUAL_ROUTE_IMPROVED original_turn=2 current_turn=3 previous_projected_battle_hp_lost=60 current_projected_battle_hp_lost=46 difference=-14 field=C[7] expected={STRIKE_SILENT+0/False:1/False:-1/0/False/False/False/True/False/-:0:0/-:0[Damage=6,]/private=-/keywords=[]/baselib=-} actual={DEFEND_SILENT+0/False:1/False:-1/0/False/False/False/True/False/-:0:0/-:0[Block=5,]/private=-/keywords=[]/baselib=-} expected_count=12 actual_count=12"
-        }
-      ],
-      "archive": "Q004.zip",
-      "requiresSourceSymbolForMatch": false,
-      "acceptance": [
-        "combat_start 恢复与状态对账",
-        "语义和原生部署正确",
-        "同根同政策同预算比较并单列额外用药",
-        "定位通用策略缺口并验证回归哨兵"
-      ],
-      "issueNumber": 184,
-      "issueUrl": "https://github.com/Torch1230/CombatSolver/issues/184#o013",
-      "assetId": 605225097,
-      "assetUrl": "https://github.com/Torch1230/CombatSolver/releases/download/community-tasks-2026-10-02/Q004.zip",
-      "assetSizeBytes": 1667877
-    },
-    {
-      "themeId": "O014",
-      "batchId": "Q004",
-      "title": "盛碗虫群战斗的路线搜索质量",
-      "kind": "optimization",
-      "mechanismKey": "encounter-route-quality:BOWLBUGS_NORMAL",
-      "encounterId": "BOWLBUGS_NORMAL",
-      "representativeIds": [
-        "fdeff387600d43b6b9d402aa832aa330"
-      ],
-      "groupIds": [],
-      "legacyTaskIds": [],
-      "signaturePatterns": [],
-      "sourcePaths": [
-        "src/Runtime/SolverController.cs",
-        "src/Search/CombatBeamSolver.Expansion.cs",
-        "src/Search/CombatBeamSolver.BeamRetentionPolicy.cs",
-        "src/Search/CombatBeamSolver.StateEvaluation.cs",
-        "src/Search/CombatBeamSolver.FinalPlanOrdering.cs"
-      ],
-      "sourceSymbols": [
-        "RecordManualProjectionComparison",
-        "ApplyProjectionBaselines",
-        "BeamRetentionPolicy",
-        "FinalPlanOrdering"
-      ],
-      "staticCause": "MANUAL_ROUTE_IMPROVED 记录手操改变状态后的重新预测，比较值与报告和搜索结果条目一致；按具体原版遭遇归并质量排查范围，算法首因尚未定位。",
-      "unresolved": "先验证模拟、部署与资源政策，再从 combat_start 对照同根同政策同预算路线，定位展开、保路、去重或排序中的通用机制。",
-      "evidenceLevel": "shared_mechanism",
-      "verification": "static_only",
-      "rootCauseVerifiedByExecution": false,
-      "hpLoss": {
-        "kind": "manual_projection",
-        "before": 13,
-        "after": 0,
-        "reduction": 13
-      },
-      "comparisonTurns": [
-        1,
-        2
-      ],
-      "comparisonCheckpointIds": {
-        "original": null,
-        "current": "c703f6bbe92a42bc80881f92a208c04e:3"
-      },
-      "limitations": [
-        "originalCheckpointId 缺失或对应快照未保留；用搜索结果条目定位旧预测，从 combat_start 重建比较。",
-        "比较跨回合发生，属于手操后重新预测。",
-        "比较期间累计用药数量改变，收益评价必须核对药水政策与消耗。"
-      ],
-      "logEvidence": [
-        {
-          "file": "diagnostics/logs/combat/000.jsonl",
-          "line": 363,
-          "message": "[CombatSolver/Test] MANUAL_ROUTE_IMPROVED original_turn=1 current_turn=2 previous_projected_battle_hp_lost=13 current_projected_battle_hp_lost=0 difference=-13 field=E0.hp expected={38} actual={34}"
-        }
-      ],
-      "archive": "Q004.zip",
-      "requiresSourceSymbolForMatch": false,
-      "acceptance": [
-        "combat_start 恢复与状态对账",
-        "语义和原生部署正确",
-        "同根同政策同预算比较并单列额外用药",
-        "定位通用策略缺口并验证回归哨兵"
-      ],
-      "issueNumber": 184,
-      "issueUrl": "https://github.com/Torch1230/CombatSolver/issues/184#o014",
-      "assetId": 605225097,
-      "assetUrl": "https://github.com/Torch1230/CombatSolver/releases/download/community-tasks-2026-10-02/Q004.zip",
-      "assetSizeBytes": 1667877
-    },
-    {
-      "themeId": "O015",
-      "batchId": "Q004",
-      "title": "多尼斯异鸟战斗的路线搜索质量",
-      "kind": "optimization",
-      "mechanismKey": "encounter-route-quality:BYRDONIS_ELITE",
-      "encounterId": "BYRDONIS_ELITE",
-      "representativeIds": [
-        "5a4088bbc2864a58af963fcfb9dc11a7"
-      ],
-      "groupIds": [],
-      "legacyTaskIds": [],
-      "signaturePatterns": [],
-      "sourcePaths": [
-        "src/Runtime/SolverController.cs",
-        "src/Search/CombatBeamSolver.Expansion.cs",
-        "src/Search/CombatBeamSolver.BeamRetentionPolicy.cs",
-        "src/Search/CombatBeamSolver.StateEvaluation.cs",
-        "src/Search/CombatBeamSolver.FinalPlanOrdering.cs"
-      ],
-      "sourceSymbols": [
-        "RecordManualProjectionComparison",
-        "ApplyProjectionBaselines",
-        "BeamRetentionPolicy",
-        "FinalPlanOrdering"
-      ],
-      "staticCause": "MANUAL_ROUTE_IMPROVED 记录手操改变状态后的重新预测，比较值与报告和搜索结果条目一致；按具体原版遭遇归并质量排查范围，算法首因尚未定位。",
-      "unresolved": "先验证模拟、部署与资源政策，再从 combat_start 对照同根同政策同预算路线，定位展开、保路、去重或排序中的通用机制。",
-      "evidenceLevel": "shared_mechanism",
-      "verification": "static_only",
-      "rootCauseVerifiedByExecution": false,
-      "hpLoss": {
-        "kind": "manual_projection",
-        "before": 18,
-        "after": 5,
-        "reduction": 13
-      },
-      "comparisonTurns": [
-        1,
-        1
-      ],
-      "comparisonCheckpointIds": {
-        "original": "0444c18ed1ce49ea8597e6dc4a9b03f5:2",
-        "current": "0444c18ed1ce49ea8597e6dc4a9b03f5:4"
-      },
-      "limitations": [
-        "currentCheckpointId 对应快照未保留；录制事件与搜索结果条目保留，从 combat_start 重建比较。",
-        "比较期间累计用药数量改变，收益评价必须核对药水政策与消耗。"
-      ],
-      "logEvidence": [
-        {
-          "file": "diagnostics/logs/combat/005.jsonl",
-          "line": 66,
-          "message": "[CombatSolver/Test] MANUAL_ROUTE_IMPROVED original_turn=1 current_turn=1 previous_projected_battle_hp_lost=18 current_projected_battle_hp_lost=5 difference=-13 field=live_combat_stamp expected={solver_result} actual={manual_state_change}"
-        }
-      ],
-      "archive": "Q004.zip",
-      "requiresSourceSymbolForMatch": false,
-      "acceptance": [
-        "combat_start 恢复与状态对账",
-        "语义和原生部署正确",
-        "同根同政策同预算比较并单列额外用药",
-        "定位通用策略缺口并验证回归哨兵"
-      ],
-      "issueNumber": 184,
-      "issueUrl": "https://github.com/Torch1230/CombatSolver/issues/184#o015",
-      "assetId": 605225097,
-      "assetUrl": "https://github.com/Torch1230/CombatSolver/releases/download/community-tasks-2026-10-02/Q004.zip",
-      "assetSizeBytes": 1667877
-    },
-    {
-      "themeId": "O016",
-      "batchId": "Q005",
-      "title": "感染棱柱战斗的路线搜索质量",
-      "kind": "optimization",
-      "mechanismKey": "encounter-route-quality:INFESTED_PRISMS_ELITE",
-      "encounterId": "INFESTED_PRISMS_ELITE",
-      "representativeIds": [
-        "67ad4fc605164b66b93d8b77f13a222e"
-      ],
-      "groupIds": [],
-      "legacyTaskIds": [],
-      "signaturePatterns": [],
-      "sourcePaths": [
-        "src/Runtime/SolverController.cs",
-        "src/Search/CombatBeamSolver.Expansion.cs",
-        "src/Search/CombatBeamSolver.BeamRetentionPolicy.cs",
-        "src/Search/CombatBeamSolver.StateEvaluation.cs",
-        "src/Search/CombatBeamSolver.FinalPlanOrdering.cs"
-      ],
-      "sourceSymbols": [
-        "RecordManualProjectionComparison",
-        "ApplyProjectionBaselines",
-        "BeamRetentionPolicy",
-        "FinalPlanOrdering"
-      ],
-      "staticCause": "MANUAL_ROUTE_IMPROVED 记录手操改变状态后的重新预测，比较值与报告和搜索结果条目一致；按具体原版遭遇归并质量排查范围，算法首因尚未定位。",
-      "unresolved": "先验证模拟、部署与资源政策，再从 combat_start 对照同根同政策同预算路线，定位展开、保路、去重或排序中的通用机制。",
-      "evidenceLevel": "shared_mechanism",
-      "verification": "static_only",
-      "rootCauseVerifiedByExecution": false,
-      "hpLoss": {
-        "kind": "manual_projection",
-        "before": 19,
-        "after": 8,
-        "reduction": 11
-      },
-      "comparisonTurns": [
-        2,
-        2
-      ],
-      "comparisonCheckpointIds": {
-        "original": null,
-        "current": "57fa55a4dcd546529b38a832168a7556:4"
-      },
-      "limitations": [
-        "originalCheckpointId 缺失或对应快照未保留；用搜索结果条目定位旧预测，从 combat_start 重建比较。",
-        "比较期间累计用药数量改变，收益评价必须核对药水政策与消耗。"
-      ],
-      "logEvidence": [
-        {
-          "file": "diagnostics/logs/combat/002.jsonl",
-          "line": 59,
-          "message": "[CombatSolver/Test] MANUAL_ROUTE_IMPROVED original_turn=2 current_turn=2 previous_projected_battle_hp_lost=19 current_projected_battle_hp_lost=8 difference=-11 field=live_combat_stamp expected={solver_result} actual={manual_state_change}"
-        }
-      ],
-      "archive": "Q005.zip",
-      "requiresSourceSymbolForMatch": false,
-      "acceptance": [
-        "combat_start 恢复与状态对账",
-        "语义和原生部署正确",
-        "同根同政策同预算比较并单列额外用药",
-        "定位通用策略缺口并验证回归哨兵"
-      ],
-      "issueNumber": 185,
-      "issueUrl": "https://github.com/Torch1230/CombatSolver/issues/185#o016",
-      "assetId": 605225174,
-      "assetUrl": "https://github.com/Torch1230/CombatSolver/releases/download/community-tasks-2026-10-02/Q005.zip",
-      "assetSizeBytes": 1474486
-    },
-    {
-      "themeId": "O017",
-      "batchId": "Q005",
-      "title": "灵魂异鱼战斗的路线搜索质量",
-      "kind": "optimization",
-      "mechanismKey": "encounter-route-quality:SOUL_FYSH_BOSS",
-      "encounterId": "SOUL_FYSH_BOSS",
-      "representativeIds": [
-        "604d7330bac9443caa3d89fd5a06b42c"
-      ],
-      "groupIds": [],
-      "legacyTaskIds": [],
-      "signaturePatterns": [],
-      "sourcePaths": [
-        "src/Runtime/SolverController.cs",
-        "src/Search/CombatBeamSolver.Expansion.cs",
-        "src/Search/CombatBeamSolver.BeamRetentionPolicy.cs",
-        "src/Search/CombatBeamSolver.StateEvaluation.cs",
-        "src/Search/CombatBeamSolver.FinalPlanOrdering.cs"
-      ],
-      "sourceSymbols": [
-        "RecordManualProjectionComparison",
-        "ApplyProjectionBaselines",
-        "BeamRetentionPolicy",
-        "FinalPlanOrdering"
-      ],
-      "staticCause": "MANUAL_ROUTE_IMPROVED 记录手操改变状态后的重新预测，比较值与报告和搜索结果条目一致；按具体原版遭遇归并质量排查范围，算法首因尚未定位。",
-      "unresolved": "先验证模拟、部署与资源政策，再从 combat_start 对照同根同政策同预算路线，定位展开、保路、去重或排序中的通用机制。",
-      "evidenceLevel": "shared_mechanism",
-      "verification": "static_only",
-      "rootCauseVerifiedByExecution": false,
-      "hpLoss": {
-        "kind": "manual_projection",
-        "before": 28,
-        "after": 17,
-        "reduction": 11
-      },
-      "comparisonTurns": [
-        1,
-        1
-      ],
-      "comparisonCheckpointIds": {
-        "original": "6a8b9882f39943ea925510aeb988811b:1",
-        "current": "6a8b9882f39943ea925510aeb988811b:3"
-      },
-      "limitations": [
-        "比较期间累计用药数量改变，收益评价必须核对药水政策与消耗。"
-      ],
-      "logEvidence": [
-        {
-          "file": "diagnostics/logs/combat/001.jsonl",
-          "line": 250,
-          "message": "[CombatSolver/Test] MANUAL_ROUTE_IMPROVED original_turn=1 current_turn=1 previous_projected_battle_hp_lost=28 current_projected_battle_hp_lost=17 difference=-11 field=live_combat_stamp expected={solver_result} actual={manual_state_change}"
-        }
-      ],
-      "archive": "Q005.zip",
-      "requiresSourceSymbolForMatch": false,
-      "acceptance": [
-        "combat_start 恢复与状态对账",
-        "语义和原生部署正确",
-        "同根同政策同预算比较并单列额外用药",
-        "定位通用策略缺口并验证回归哨兵"
-      ],
-      "issueNumber": 185,
-      "issueUrl": "https://github.com/Torch1230/CombatSolver/issues/185#o017",
-      "assetId": 605225174,
-      "assetUrl": "https://github.com/Torch1230/CombatSolver/releases/download/community-tasks-2026-10-02/Q005.zip",
-      "assetSizeBytes": 1474486
-    },
-    {
-      "themeId": "O018",
-      "batchId": "Q005",
-      "title": "墨影幻灵战斗的路线搜索质量",
-      "kind": "optimization",
-      "mechanismKey": "encounter-route-quality:VANTOM_BOSS",
-      "encounterId": "VANTOM_BOSS",
-      "representativeIds": [
-        "a4201ea911ae41389ec8333f14081f76"
-      ],
-      "groupIds": [],
-      "legacyTaskIds": [],
-      "signaturePatterns": [],
-      "sourcePaths": [
-        "src/Runtime/SolverController.cs",
-        "src/Search/CombatBeamSolver.Expansion.cs",
-        "src/Search/CombatBeamSolver.BeamRetentionPolicy.cs",
-        "src/Search/CombatBeamSolver.StateEvaluation.cs",
-        "src/Search/CombatBeamSolver.FinalPlanOrdering.cs"
-      ],
-      "sourceSymbols": [
-        "RecordManualProjectionComparison",
-        "ApplyProjectionBaselines",
-        "BeamRetentionPolicy",
-        "FinalPlanOrdering"
-      ],
-      "staticCause": "MANUAL_ROUTE_IMPROVED 记录手操改变状态后的重新预测，比较值与报告和搜索结果条目一致；按具体原版遭遇归并质量排查范围，算法首因尚未定位。",
-      "unresolved": "先验证模拟、部署与资源政策，再从 combat_start 对照同根同政策同预算路线，定位展开、保路、去重或排序中的通用机制。",
-      "evidenceLevel": "shared_mechanism",
-      "verification": "static_only",
-      "rootCauseVerifiedByExecution": false,
-      "hpLoss": {
-        "kind": "manual_projection",
-        "before": 37,
-        "after": 26,
-        "reduction": 11
-      },
-      "comparisonTurns": [
-        1,
-        2
-      ],
-      "comparisonCheckpointIds": {
-        "original": "975745a6a1aa49088ea53e3e91430034:1",
-        "current": "975745a6a1aa49088ea53e3e91430034:3"
-      },
-      "limitations": [
-        "currentCheckpointId 对应快照未保留；录制事件与搜索结果条目保留，从 combat_start 重建比较。",
-        "比较跨回合发生，属于手操后重新预测。"
-      ],
-      "logEvidence": [
-        {
-          "file": "diagnostics/logs/combat/001.jsonl",
-          "line": 81,
-          "message": "[CombatSolver/Test] MANUAL_ROUTE_IMPROVED original_turn=1 current_turn=2 previous_projected_battle_hp_lost=37 current_projected_battle_hp_lost=26 difference=-11 field=C[0] expected={STRIKE_IRONCLAD+0/False:1/False:-1/0/False/False/False/True/False/-:0:0/-:0[Damage=6,]/private=-/keywords=[]/baselib=-} actual={BASH+0/False:2/False:-1/0/False/False/False/True/False/-:0:0/-:0[Damage=8,VulnerablePower=2,]/private=-/keywords=[]/baselib=-} expected_count=5 actual_count=5"
-        }
-      ],
-      "archive": "Q005.zip",
-      "requiresSourceSymbolForMatch": false,
-      "acceptance": [
-        "combat_start 恢复与状态对账",
-        "语义和原生部署正确",
-        "同根同政策同预算比较并单列额外用药",
-        "定位通用策略缺口并验证回归哨兵"
-      ],
-      "issueNumber": 185,
-      "issueUrl": "https://github.com/Torch1230/CombatSolver/issues/185#o018",
-      "assetId": 605225174,
-      "assetUrl": "https://github.com/Torch1230/CombatSolver/releases/download/community-tasks-2026-10-02/Q005.zip",
-      "assetSizeBytes": 1474486
-    },
-    {
-      "themeId": "O019",
-      "batchId": "Q005",
-      "title": "花园幽灵鳗战斗的路线搜索质量",
-      "kind": "optimization",
-      "mechanismKey": "encounter-route-quality:PHANTASMAL_GARDENERS_ELITE",
-      "encounterId": "PHANTASMAL_GARDENERS_ELITE",
-      "representativeIds": [
-        "1e40d2a74f8c40b983370884dd0c4255"
-      ],
-      "groupIds": [],
-      "legacyTaskIds": [],
-      "signaturePatterns": [],
-      "sourcePaths": [
-        "src/Runtime/SolverController.cs",
-        "src/Search/CombatBeamSolver.Expansion.cs",
-        "src/Search/CombatBeamSolver.BeamRetentionPolicy.cs",
-        "src/Search/CombatBeamSolver.StateEvaluation.cs",
-        "src/Search/CombatBeamSolver.FinalPlanOrdering.cs"
-      ],
-      "sourceSymbols": [
-        "RecordManualProjectionComparison",
-        "ApplyProjectionBaselines",
-        "BeamRetentionPolicy",
-        "FinalPlanOrdering"
-      ],
-      "staticCause": "MANUAL_ROUTE_IMPROVED 记录手操改变状态后的重新预测，比较值与报告和搜索结果条目一致；按具体原版遭遇归并质量排查范围，算法首因尚未定位。",
-      "unresolved": "先验证模拟、部署与资源政策，再从 combat_start 对照同根同政策同预算路线，定位展开、保路、去重或排序中的通用机制。",
-      "evidenceLevel": "shared_mechanism",
-      "verification": "static_only",
-      "rootCauseVerifiedByExecution": false,
-      "hpLoss": {
-        "kind": "manual_projection",
-        "before": 77,
-        "after": 67,
-        "reduction": 10
-      },
-      "comparisonTurns": [
-        4,
-        5
-      ],
-      "comparisonCheckpointIds": {
-        "original": "d2320cbc9c78427fa75b917a3d3b0425:6",
-        "current": "d2320cbc9c78427fa75b917a3d3b0425:8"
-      },
-      "limitations": [
-        "比较跨回合发生，属于手操后重新预测。"
-      ],
-      "logEvidence": [
-        {
-          "file": "diagnostics/logs/combat/005.jsonl",
-          "line": 523,
-          "message": "[CombatSolver/Test] MANUAL_ROUTE_IMPROVED original_turn=4 current_turn=5 previous_projected_battle_hp_lost=77 current_projected_battle_hp_lost=67 difference=-10 field=hp expected={25} actual={30}"
-        }
-      ],
-      "archive": "Q005.zip",
-      "requiresSourceSymbolForMatch": false,
-      "acceptance": [
-        "combat_start 恢复与状态对账",
-        "语义和原生部署正确",
-        "同根同政策同预算比较并单列额外用药",
-        "定位通用策略缺口并验证回归哨兵"
-      ],
-      "issueNumber": 185,
-      "issueUrl": "https://github.com/Torch1230/CombatSolver/issues/185#o019",
-      "assetId": 605225174,
-      "assetUrl": "https://github.com/Torch1230/CombatSolver/releases/download/community-tasks-2026-10-02/Q005.zip",
-      "assetSizeBytes": 1474486
-    },
-    {
-      "themeId": "O020",
-      "batchId": "Q005",
-      "title": "拳击构装体战斗的路线搜索质量",
-      "kind": "optimization",
-      "mechanismKey": "encounter-route-quality:PUNCH_OFF_EVENT_ENCOUNTER",
-      "encounterId": "PUNCH_OFF_EVENT_ENCOUNTER",
-      "representativeIds": [
-        "97495b8bffcf401bb7995f8034b4bc13"
-      ],
-      "groupIds": [],
-      "legacyTaskIds": [],
-      "signaturePatterns": [],
-      "sourcePaths": [
-        "src/Runtime/SolverController.cs",
-        "src/Search/CombatBeamSolver.Expansion.cs",
-        "src/Search/CombatBeamSolver.BeamRetentionPolicy.cs",
-        "src/Search/CombatBeamSolver.StateEvaluation.cs",
-        "src/Search/CombatBeamSolver.FinalPlanOrdering.cs"
-      ],
-      "sourceSymbols": [
-        "RecordManualProjectionComparison",
-        "ApplyProjectionBaselines",
-        "BeamRetentionPolicy",
-        "FinalPlanOrdering"
-      ],
-      "staticCause": "MANUAL_ROUTE_IMPROVED 记录手操改变状态后的重新预测，比较值与报告和搜索结果条目一致；按具体原版遭遇归并质量排查范围，算法首因尚未定位。",
-      "unresolved": "先验证模拟、部署与资源政策，再从 combat_start 对照同根同政策同预算路线，定位展开、保路、去重或排序中的通用机制。",
-      "evidenceLevel": "shared_mechanism",
-      "verification": "static_only",
-      "rootCauseVerifiedByExecution": false,
-      "hpLoss": {
-        "kind": "manual_projection",
-        "before": 14,
-        "after": 4,
-        "reduction": 10
-      },
-      "comparisonTurns": [
-        2,
-        2
-      ],
-      "comparisonCheckpointIds": {
-        "original": "b32d24322be544cb8f9e391b06bf6a44:1",
-        "current": "b32d24322be544cb8f9e391b06bf6a44:5"
-      },
-      "limitations": [
-        "比较期间累计用药数量改变，收益评价必须核对药水政策与消耗。"
-      ],
-      "logEvidence": [
-        {
-          "file": "diagnostics/logs/combat/001.jsonl",
-          "line": 133,
-          "message": "[CombatSolver/Test] MANUAL_ROUTE_IMPROVED original_turn=2 current_turn=2 previous_projected_battle_hp_lost=14 current_projected_battle_hp_lost=4 difference=-10 field=live_combat_stamp expected={solver_result} actual={manual_state_change}"
-        }
-      ],
-      "archive": "Q005.zip",
-      "requiresSourceSymbolForMatch": false,
-      "acceptance": [
-        "combat_start 恢复与状态对账",
-        "语义和原生部署正确",
-        "同根同政策同预算比较并单列额外用药",
-        "定位通用策略缺口并验证回归哨兵"
-      ],
-      "issueNumber": 185,
-      "issueUrl": "https://github.com/Torch1230/CombatSolver/issues/185#o020",
-      "assetId": 605225174,
-      "assetUrl": "https://github.com/Torch1230/CombatSolver/releases/download/community-tasks-2026-10-02/Q005.zip",
-      "assetSizeBytes": 1474486
-    },
-    {
       "themeId": "O021",
       "batchId": "Q006",
       "title": "地道虫战斗的路线搜索质量",
@@ -3496,10 +2800,2174 @@
       "assetId": 605225335,
       "assetUrl": "https://github.com/Torch1230/CombatSolver/releases/download/community-tasks-2026-10-02/Q007.zip",
       "assetSizeBytes": 1322456
+    },
+    {
+      "themeId": "O031",
+      "batchId": "Q008",
+      "title": "高塔炮手与活体盾战斗的路线搜索质量",
+      "mechanismKey": "encounter-route-quality:TURRET_OPERATOR",
+      "representativeIds": [
+        "630463289bdc4dd28e9f11f405928a6c"
+      ],
+      "version": "0.48.0",
+      "encounterId": "TURRET_OPERATOR_WEAK",
+      "hpLoss": {
+        "kind": "manual_projection",
+        "before": 9,
+        "after": 0,
+        "reduction": 9,
+        "additionalPotionCount": 0,
+        "potionHpCost": 0,
+        "potionAdjustedHpReduction": 9
+      },
+      "potionAdjustment": {
+        "status": "reconstructed",
+        "source": "recorded_checkpoints_and_search_results",
+        "rule": {
+          "hpPerAdditionalPotion": 9
+        },
+        "previousProjectedBattlePotionCount": 2,
+        "currentProjectedBattlePotionCount": 1,
+        "additionalPotionCount": 0,
+        "potionHpCost": 0,
+        "potionAdjustedHpReduction": 9,
+        "isImprovement": true,
+        "evidence": {
+          "indexPath": "replay/checkpoint.json",
+          "previous": {
+            "checkpointId": "2c5d5037ee1d47439c517d0302b7281e:3",
+            "metadataPath": "replay/current/checkpoints/000003-search_request_Manual.json",
+            "projectedBattleHpLost": 9,
+            "scope": "RequestBaseline",
+            "startTurnNumber": 1
+          },
+          "current": {
+            "checkpointId": "2c5d5037ee1d47439c517d0302b7281e:3",
+            "projectedBattleHpLost": 0,
+            "matchingRecords": 2,
+            "scope": "SearchCompletion",
+            "startTurnNumber": 1,
+            "actualPotionsUsed": 1
+          }
+        }
+      },
+      "evidenceLevel": "shared_mechanism",
+      "verification": "static_only",
+      "rootCauseVerifiedByExecution": false,
+      "acceptanceFocus": "技能药水的使用时点及生成选牌。录制先使用 SKILL_POTION，原路线也包含该瓶药；核对从开局进入生成选择时是否能保留更低战损的分支。",
+      "evidenceBoundaries": [
+        "比较发生在同一玩家回合；从 combat_start 核对手操前缀与随机输入，再作同根对照。"
+      ],
+      "characterId": "IRONCLAD",
+      "originalTurnNumber": 1,
+      "currentTurnNumber": 1,
+      "kind": "optimization",
+      "groupIds": [],
+      "legacyTaskIds": [],
+      "signaturePatterns": [],
+      "sourcePaths": [
+        "src/Runtime/SolverController.cs",
+        "src/Runtime/ManualProjectionComparison.cs",
+        "src/Search/CombatBeamSolver.Expansion.cs",
+        "src/Search/CombatBeamSolver.BeamRetentionPolicy.cs",
+        "src/Search/CombatBeamSolver.FinalPlanOrdering.cs"
+      ],
+      "sourceSymbols": [
+        "RecordManualProjectionComparison",
+        "ManualProjectionComparison",
+        "BeamRetentionPolicy",
+        "FinalPlanOrdering"
+      ],
+      "staticCause": "报告、比较日志、请求基线与搜索结果的战损及总用药一致；按原版遭遇归并质量调查范围，算法首因待定位。",
+      "unresolved": "从 combat_start 核对模拟、部署与 RNG，固定药水政策和预算作同根质量与耗时对照。",
+      "archive": "Q008.zip",
+      "requiresSourceSymbolForMatch": false,
+      "acceptance": [
+        "combat_start 恢复与状态对账",
+        "语义和原生部署正确",
+        "同根同政策同预算比较折算战损",
+        "固定哨兵质量无退化与耗时无明显增加"
+      ],
+      "issueNumber": 208,
+      "issueUrl": "https://github.com/Torch1230/CombatSolver/issues/208",
+      "assetId": 608215726,
+      "assetUrl": "https://github.com/Torch1230/CombatSolver/releases/download/community-tasks-2026-10-02/Q008.zip",
+      "assetSizeBytes": 1276803
+    },
+    {
+      "themeId": "O032",
+      "batchId": "Q008",
+      "title": "神秘骑士战斗的路线搜索质量",
+      "mechanismKey": "encounter-route-quality:MYSTERIOUS_KNIGHT_EVENT_ENCOUNTER",
+      "representativeIds": [
+        "42e8af7403e94f58b9a05309bbf5c0f7"
+      ],
+      "version": "0.48.0",
+      "encounterId": "MYSTERIOUS_KNIGHT_EVENT_ENCOUNTER",
+      "hpLoss": {
+        "kind": "manual_projection",
+        "before": 13,
+        "after": 5,
+        "reduction": 8,
+        "additionalPotionCount": 0,
+        "potionHpCost": 0,
+        "potionAdjustedHpReduction": 8
+      },
+      "potionAdjustment": {
+        "status": "reconstructed",
+        "source": "recorded_checkpoints_and_search_results",
+        "rule": {
+          "hpPerAdditionalPotion": 9
+        },
+        "previousProjectedBattlePotionCount": 0,
+        "currentProjectedBattlePotionCount": 0,
+        "additionalPotionCount": 0,
+        "potionHpCost": 0,
+        "potionAdjustedHpReduction": 8,
+        "isImprovement": true,
+        "evidence": {
+          "indexPath": "replay/checkpoint.json",
+          "previous": {
+            "checkpointId": "00ddb5a8e7cc40fb96964281a2bb5513:3",
+            "metadataPath": "replay/current/checkpoints/000003-search_request_AutoTurnStart.json",
+            "projectedBattleHpLost": 13,
+            "scope": "RequestBaseline",
+            "startTurnNumber": 1
+          },
+          "current": {
+            "checkpointId": "00ddb5a8e7cc40fb96964281a2bb5513:3",
+            "projectedBattleHpLost": 5,
+            "matchingRecords": 2,
+            "scope": "SearchCompletion",
+            "startTurnNumber": 2,
+            "actualPotionsUsed": 0
+          }
+        }
+      },
+      "evidenceLevel": "shared_mechanism",
+      "verification": "static_only",
+      "rootCauseVerifiedByExecution": false,
+      "acceptanceFocus": "首回合启动、抽牌与次回合衔接。录制首回合包含 BOOT_SEQUENCE、FLASH_OF_STEEL、STRIKE_DEFECT 和 ZAP，比较触发字段是牌序 C[0]。",
+      "evidenceBoundaries": [
+        "比较跨 T1 → T2；固定开局与录制前缀后再作同根对照。"
+      ],
+      "characterId": "DEFECT",
+      "originalTurnNumber": 1,
+      "currentTurnNumber": 2,
+      "kind": "optimization",
+      "groupIds": [],
+      "legacyTaskIds": [],
+      "signaturePatterns": [],
+      "sourcePaths": [
+        "src/Runtime/SolverController.cs",
+        "src/Runtime/ManualProjectionComparison.cs",
+        "src/Search/CombatBeamSolver.Expansion.cs",
+        "src/Search/CombatBeamSolver.BeamRetentionPolicy.cs",
+        "src/Search/CombatBeamSolver.FinalPlanOrdering.cs"
+      ],
+      "sourceSymbols": [
+        "RecordManualProjectionComparison",
+        "ManualProjectionComparison",
+        "BeamRetentionPolicy",
+        "FinalPlanOrdering"
+      ],
+      "staticCause": "报告、比较日志、请求基线与搜索结果的战损及总用药一致；按原版遭遇归并质量调查范围，算法首因待定位。",
+      "unresolved": "从 combat_start 核对模拟、部署与 RNG，固定药水政策和预算作同根质量与耗时对照。",
+      "archive": "Q008.zip",
+      "requiresSourceSymbolForMatch": false,
+      "acceptance": [
+        "combat_start 恢复与状态对账",
+        "语义和原生部署正确",
+        "同根同政策同预算比较折算战损",
+        "固定哨兵质量无退化与耗时无明显增加"
+      ],
+      "issueNumber": 208,
+      "issueUrl": "https://github.com/Torch1230/CombatSolver/issues/208",
+      "assetId": 608215726,
+      "assetUrl": "https://github.com/Torch1230/CombatSolver/releases/download/community-tasks-2026-10-02/Q008.zip",
+      "assetSizeBytes": 1276803
+    },
+    {
+      "themeId": "O033",
+      "batchId": "Q008",
+      "title": "两只小啃兽战斗的路线搜索质量",
+      "mechanismKey": "encounter-route-quality:NIBBITS",
+      "representativeIds": [
+        "ef0609b147064dda8851705a9e858a96"
+      ],
+      "version": "0.47.3",
+      "encounterId": "NIBBITS_NORMAL",
+      "hpLoss": {
+        "kind": "manual_projection",
+        "before": 6,
+        "after": 0,
+        "reduction": 6,
+        "additionalPotionCount": 0,
+        "potionHpCost": 0,
+        "potionAdjustedHpReduction": 6
+      },
+      "potionAdjustment": {
+        "status": "reconstructed",
+        "source": "recorded_checkpoints_and_search_results",
+        "rule": {
+          "hpPerAdditionalPotion": 9
+        },
+        "previousProjectedBattlePotionCount": 1,
+        "currentProjectedBattlePotionCount": 1,
+        "additionalPotionCount": 0,
+        "potionHpCost": 0,
+        "potionAdjustedHpReduction": 6,
+        "isImprovement": true,
+        "evidence": {
+          "indexPath": "replay/checkpoint.json",
+          "previous": {
+            "checkpointId": "39a487f3baeb4de5a9887016fd4a60f1:10",
+            "metadataPath": "replay/current/checkpoints/000010-search_request_AutoTurnStart.json",
+            "projectedBattleHpLost": 6,
+            "scope": "RequestBaseline",
+            "startTurnNumber": 1
+          },
+          "current": {
+            "checkpointId": "39a487f3baeb4de5a9887016fd4a60f1:10",
+            "projectedBattleHpLost": 0,
+            "matchingRecords": 2,
+            "scope": "SearchCompletion",
+            "startTurnNumber": 2,
+            "actualPotionsUsed": 1
+          }
+        }
+      },
+      "evidenceLevel": "shared_mechanism",
+      "verification": "static_only",
+      "rootCauseVerifiedByExecution": false,
+      "acceptanceFocus": "强制使用能力药水后的选牌与跨回合保路。POWER_POTION 标为 Force，STRENGTH_POTION 标为 Disabled；两条路线都预计用一瓶药。",
+      "evidenceBoundaries": [
+        "比较跨 T1 → T2；固定开局与录制前缀后再作同根对照。"
+      ],
+      "characterId": "REGENT",
+      "originalTurnNumber": 1,
+      "currentTurnNumber": 2,
+      "kind": "optimization",
+      "groupIds": [],
+      "legacyTaskIds": [],
+      "signaturePatterns": [],
+      "sourcePaths": [
+        "src/Runtime/SolverController.cs",
+        "src/Runtime/ManualProjectionComparison.cs",
+        "src/Search/CombatBeamSolver.Expansion.cs",
+        "src/Search/CombatBeamSolver.BeamRetentionPolicy.cs",
+        "src/Search/CombatBeamSolver.FinalPlanOrdering.cs"
+      ],
+      "sourceSymbols": [
+        "RecordManualProjectionComparison",
+        "ManualProjectionComparison",
+        "BeamRetentionPolicy",
+        "FinalPlanOrdering"
+      ],
+      "staticCause": "报告、比较日志、请求基线与搜索结果的战损及总用药一致；按原版遭遇归并质量调查范围，算法首因待定位。",
+      "unresolved": "从 combat_start 核对模拟、部署与 RNG，固定药水政策和预算作同根质量与耗时对照。",
+      "archive": "Q008.zip",
+      "requiresSourceSymbolForMatch": false,
+      "acceptance": [
+        "combat_start 恢复与状态对账",
+        "语义和原生部署正确",
+        "同根同政策同预算比较折算战损",
+        "固定哨兵质量无退化与耗时无明显增加"
+      ],
+      "issueNumber": 208,
+      "issueUrl": "https://github.com/Torch1230/CombatSolver/issues/208",
+      "assetId": 608215726,
+      "assetUrl": "https://github.com/Torch1230/CombatSolver/releases/download/community-tasks-2026-10-02/Q008.zip",
+      "assetSizeBytes": 1276803
+    },
+    {
+      "themeId": "O034",
+      "batchId": "Q008",
+      "title": "地精佣兵战斗的路线搜索质量",
+      "mechanismKey": "encounter-route-quality:GREMLIN_MERC",
+      "representativeIds": [
+        "bac565acc9004dda9e7d2cd5bb42fcc0"
+      ],
+      "version": "0.45.0",
+      "encounterId": "GREMLIN_MERC_NORMAL",
+      "hpLoss": {
+        "kind": "manual_projection",
+        "before": 16,
+        "after": 10,
+        "reduction": 6,
+        "additionalPotionCount": 0,
+        "potionHpCost": 0,
+        "potionAdjustedHpReduction": 6
+      },
+      "potionAdjustment": {
+        "status": "reconstructed",
+        "source": "recorded_checkpoints_and_search_results",
+        "rule": {
+          "hpPerAdditionalPotion": 9
+        },
+        "previousProjectedBattlePotionCount": 0,
+        "currentProjectedBattlePotionCount": 0,
+        "additionalPotionCount": 0,
+        "potionHpCost": 0,
+        "potionAdjustedHpReduction": 6,
+        "isImprovement": true,
+        "evidence": {
+          "indexPath": "replay/checkpoint.json",
+          "previous": {
+            "checkpointId": "96a18b93c9634de99712f01a600cae8f:1",
+            "projectedBattleHpLost": 16,
+            "matchingRecords": 1,
+            "scope": "SearchCompletion",
+            "startTurnNumber": null,
+            "actualPotionsUsed": null
+          },
+          "current": {
+            "checkpointId": "96a18b93c9634de99712f01a600cae8f:5",
+            "projectedBattleHpLost": 10,
+            "matchingRecords": 2,
+            "scope": "SearchCompletion",
+            "startTurnNumber": 3,
+            "actualPotionsUsed": 0
+          }
+        }
+      },
+      "evidenceLevel": "shared_mechanism",
+      "verification": "static_only",
+      "rootCauseVerifiedByExecution": false,
+      "acceptanceFocus": "早期防御、过牌与九回合后缀质量。录制前缀包含两次 SHRUG_IT_OFF 与 POMMEL_STRIKE，比较从第一回合跨到第三回合。",
+      "evidenceBoundaries": [
+        "比较跨 T1 → T3；固定开局与录制前缀后再作同根对照。"
+      ],
+      "characterId": "IRONCLAD",
+      "originalTurnNumber": 1,
+      "currentTurnNumber": 3,
+      "kind": "optimization",
+      "groupIds": [],
+      "legacyTaskIds": [],
+      "signaturePatterns": [],
+      "sourcePaths": [
+        "src/Runtime/SolverController.cs",
+        "src/Runtime/ManualProjectionComparison.cs",
+        "src/Search/CombatBeamSolver.Expansion.cs",
+        "src/Search/CombatBeamSolver.BeamRetentionPolicy.cs",
+        "src/Search/CombatBeamSolver.FinalPlanOrdering.cs"
+      ],
+      "sourceSymbols": [
+        "RecordManualProjectionComparison",
+        "ManualProjectionComparison",
+        "BeamRetentionPolicy",
+        "FinalPlanOrdering"
+      ],
+      "staticCause": "报告、比较日志、请求基线与搜索结果的战损及总用药一致；按原版遭遇归并质量调查范围，算法首因待定位。",
+      "unresolved": "从 combat_start 核对模拟、部署与 RNG，固定药水政策和预算作同根质量与耗时对照。",
+      "archive": "Q008.zip",
+      "requiresSourceSymbolForMatch": false,
+      "acceptance": [
+        "combat_start 恢复与状态对账",
+        "语义和原生部署正确",
+        "同根同政策同预算比较折算战损",
+        "固定哨兵质量无退化与耗时无明显增加"
+      ],
+      "issueNumber": 208,
+      "issueUrl": "https://github.com/Torch1230/CombatSolver/issues/208",
+      "assetId": 608215726,
+      "assetUrl": "https://github.com/Torch1230/CombatSolver/releases/download/community-tasks-2026-10-02/Q008.zip",
+      "assetSizeBytes": 1276803
+    },
+    {
+      "themeId": "O035",
+      "batchId": "Q008",
+      "title": "组装师战斗的路线搜索质量",
+      "mechanismKey": "encounter-route-quality:FABRICATOR",
+      "representativeIds": [
+        "ad442f69de5e40838c16e9de636a670d"
+      ],
+      "version": "0.48.0",
+      "encounterId": "FABRICATOR_NORMAL",
+      "hpLoss": {
+        "kind": "manual_projection",
+        "before": 5,
+        "after": 0,
+        "reduction": 5,
+        "additionalPotionCount": 0,
+        "potionHpCost": 0,
+        "potionAdjustedHpReduction": 5
+      },
+      "potionAdjustment": {
+        "status": "reconstructed",
+        "source": "recorded_checkpoints_and_search_results",
+        "rule": {
+          "hpPerAdditionalPotion": 9
+        },
+        "previousProjectedBattlePotionCount": 0,
+        "currentProjectedBattlePotionCount": 0,
+        "additionalPotionCount": 0,
+        "potionHpCost": 0,
+        "potionAdjustedHpReduction": 5,
+        "isImprovement": true,
+        "evidence": {
+          "indexPath": "replay/checkpoint.json",
+          "previous": {
+            "checkpointId": "68bfe9e19f47403693b7a314451c827a:7",
+            "metadataPath": "replay/current/checkpoints/000007-search_request_Manual.json",
+            "projectedBattleHpLost": 5,
+            "scope": "RequestBaseline",
+            "startTurnNumber": 3
+          },
+          "current": {
+            "checkpointId": "68bfe9e19f47403693b7a314451c827a:7",
+            "projectedBattleHpLost": 0,
+            "matchingRecords": 1,
+            "scope": "SearchCompletion",
+            "startTurnNumber": 3,
+            "actualPotionsUsed": 0
+          }
+        }
+      },
+      "evidenceLevel": "shared_mechanism",
+      "verification": "static_only",
+      "rootCauseVerifiedByExecution": false,
+      "acceptanceFocus": "第三回合的续用路线与重新搜索结果。请求快照保存旧路线的完整 plannedActions，可从开局核对为何旧计划继续预计损失5 HP，而同回合重搜得到0 HP。",
+      "evidenceBoundaries": [
+        "原比较检查点 ID 缺失，旧完整计划保存在本次请求的 result.plannedActions，资源基线采用 RequestBaseline。",
+        "比较端事件游标有缺项；从 combat_start 结合原生录制事件与保留的请求/结果恢复动作顺序。"
+      ],
+      "characterId": "SILENT",
+      "originalTurnNumber": 3,
+      "currentTurnNumber": 3,
+      "kind": "optimization",
+      "groupIds": [],
+      "legacyTaskIds": [],
+      "signaturePatterns": [],
+      "sourcePaths": [
+        "src/Runtime/SolverController.cs",
+        "src/Runtime/ManualProjectionComparison.cs",
+        "src/Search/CombatBeamSolver.Expansion.cs",
+        "src/Search/CombatBeamSolver.BeamRetentionPolicy.cs",
+        "src/Search/CombatBeamSolver.FinalPlanOrdering.cs"
+      ],
+      "sourceSymbols": [
+        "RecordManualProjectionComparison",
+        "ManualProjectionComparison",
+        "BeamRetentionPolicy",
+        "FinalPlanOrdering"
+      ],
+      "staticCause": "报告、比较日志、请求基线与搜索结果的战损及总用药一致；按原版遭遇归并质量调查范围，算法首因待定位。",
+      "unresolved": "从 combat_start 核对模拟、部署与 RNG，固定药水政策和预算作同根质量与耗时对照。",
+      "archive": "Q008.zip",
+      "requiresSourceSymbolForMatch": false,
+      "acceptance": [
+        "combat_start 恢复与状态对账",
+        "语义和原生部署正确",
+        "同根同政策同预算比较折算战损",
+        "固定哨兵质量无退化与耗时无明显增加"
+      ],
+      "issueNumber": 208,
+      "issueUrl": "https://github.com/Torch1230/CombatSolver/issues/208",
+      "assetId": 608215726,
+      "assetUrl": "https://github.com/Torch1230/CombatSolver/releases/download/community-tasks-2026-10-02/Q008.zip",
+      "assetSizeBytes": 1276803
+    },
+    {
+      "themeId": "O036",
+      "batchId": "Q009",
+      "title": "雾菇与利齿之眼战斗的路线搜索质量",
+      "mechanismKey": "encounter-route-quality:FOGMOG",
+      "representativeIds": [
+        "26fd23b7213d4aa988736ddd428f485e"
+      ],
+      "version": "0.47.2",
+      "encounterId": "FOGMOG_NORMAL",
+      "hpLoss": {
+        "kind": "manual_projection",
+        "before": 10,
+        "after": 5,
+        "reduction": 5,
+        "additionalPotionCount": 0,
+        "potionHpCost": 0,
+        "potionAdjustedHpReduction": 5
+      },
+      "potionAdjustment": {
+        "status": "reconstructed",
+        "source": "recorded_checkpoints_and_search_results",
+        "rule": {
+          "hpPerAdditionalPotion": 9
+        },
+        "previousProjectedBattlePotionCount": 0,
+        "currentProjectedBattlePotionCount": 0,
+        "additionalPotionCount": 0,
+        "potionHpCost": 0,
+        "potionAdjustedHpReduction": 5,
+        "isImprovement": true,
+        "evidence": {
+          "indexPath": "replay/checkpoint.json",
+          "previous": {
+            "checkpointId": "1ffcf02ebb304dfebb302865a6cff136:7",
+            "metadataPath": "replay/current/checkpoints/000007-search_request_Manual.json",
+            "projectedBattleHpLost": 10,
+            "scope": "RequestBaseline",
+            "startTurnNumber": 3
+          },
+          "current": {
+            "checkpointId": "1ffcf02ebb304dfebb302865a6cff136:7",
+            "projectedBattleHpLost": 5,
+            "matchingRecords": 2,
+            "scope": "SearchCompletion",
+            "startTurnNumber": 3,
+            "actualPotionsUsed": 0
+          }
+        }
+      },
+      "evidenceLevel": "shared_mechanism",
+      "verification": "static_only",
+      "rootCauseVerifiedByExecution": false,
+      "acceptanceFocus": "第三回合的防守与收尾路线。旧路线从第三回合继续预计损失10 HP，重搜结果为5 HP，双方预计用药均为0。",
+      "evidenceBoundaries": [
+        "比较发生在同一玩家回合；从 combat_start 核对手操前缀与随机输入，再作同根对照。"
+      ],
+      "characterId": "SILENT",
+      "originalTurnNumber": 3,
+      "currentTurnNumber": 3,
+      "kind": "optimization",
+      "groupIds": [],
+      "legacyTaskIds": [],
+      "signaturePatterns": [],
+      "sourcePaths": [
+        "src/Runtime/SolverController.cs",
+        "src/Runtime/ManualProjectionComparison.cs",
+        "src/Search/CombatBeamSolver.Expansion.cs",
+        "src/Search/CombatBeamSolver.BeamRetentionPolicy.cs",
+        "src/Search/CombatBeamSolver.FinalPlanOrdering.cs"
+      ],
+      "sourceSymbols": [
+        "RecordManualProjectionComparison",
+        "ManualProjectionComparison",
+        "BeamRetentionPolicy",
+        "FinalPlanOrdering"
+      ],
+      "staticCause": "报告、比较日志、请求基线与搜索结果的战损及总用药一致；按原版遭遇归并质量调查范围，算法首因待定位。",
+      "unresolved": "从 combat_start 核对模拟、部署与 RNG，固定药水政策和预算作同根质量与耗时对照。",
+      "archive": "Q009.zip",
+      "requiresSourceSymbolForMatch": false,
+      "acceptance": [
+        "combat_start 恢复与状态对账",
+        "语义和原生部署正确",
+        "同根同政策同预算比较折算战损",
+        "固定哨兵质量无退化与耗时无明显增加"
+      ],
+      "issueNumber": 209,
+      "issueUrl": "https://github.com/Torch1230/CombatSolver/issues/209",
+      "assetId": 608215805,
+      "assetUrl": "https://github.com/Torch1230/CombatSolver/releases/download/community-tasks-2026-10-02/Q009.zip",
+      "assetSizeBytes": 1375656
+    },
+    {
+      "themeId": "O037",
+      "batchId": "Q009",
+      "title": "许多咬人卷轴战斗的路线搜索质量",
+      "mechanismKey": "encounter-route-quality:SCROLLS_OF_BITING",
+      "representativeIds": [
+        "721e17a8d7fa4f9283ed4714310a494b"
+      ],
+      "version": "0.46.3",
+      "encounterId": "SCROLLS_OF_BITING_NORMAL",
+      "hpLoss": {
+        "kind": "manual_projection",
+        "before": 7,
+        "after": 2,
+        "reduction": 5,
+        "additionalPotionCount": 0,
+        "potionHpCost": 0,
+        "potionAdjustedHpReduction": 5
+      },
+      "potionAdjustment": {
+        "status": "reconstructed",
+        "source": "recorded_checkpoints_and_search_results",
+        "rule": {
+          "hpPerAdditionalPotion": 9
+        },
+        "previousProjectedBattlePotionCount": 1,
+        "currentProjectedBattlePotionCount": 1,
+        "additionalPotionCount": 0,
+        "potionHpCost": 0,
+        "potionAdjustedHpReduction": 5,
+        "isImprovement": true,
+        "evidence": {
+          "indexPath": "replay/checkpoint.json",
+          "previous": {
+            "checkpointId": "f2ee8d4a3f244016a82e9715767f3fb4:1",
+            "projectedBattleHpLost": 7,
+            "matchingRecords": 1,
+            "scope": "SearchCompletion",
+            "startTurnNumber": null,
+            "actualPotionsUsed": null
+          },
+          "current": {
+            "checkpointId": "f2ee8d4a3f244016a82e9715767f3fb4:4",
+            "projectedBattleHpLost": 2,
+            "matchingRecords": 2,
+            "scope": "RouteAdoption",
+            "startTurnNumber": 3,
+            "actualPotionsUsed": 1
+          }
+        }
+      },
+      "evidenceLevel": "shared_mechanism",
+      "verification": "static_only",
+      "rootCauseVerifiedByExecution": false,
+      "acceptanceFocus": "敏捷铺垫、过牌与多目标收尾。原计划首段为 BACKFLIP → FOOTWORK → PREPARED，录制首段为 FOOTWORK → BACKFLIP → PREPARED；比较跨到第三回合。",
+      "evidenceBoundaries": [
+        "比较跨 T1 → T3；固定开局与录制前缀后再作同根对照。"
+      ],
+      "characterId": "SILENT",
+      "originalTurnNumber": 1,
+      "currentTurnNumber": 3,
+      "kind": "optimization",
+      "groupIds": [],
+      "legacyTaskIds": [],
+      "signaturePatterns": [],
+      "sourcePaths": [
+        "src/Runtime/SolverController.cs",
+        "src/Runtime/ManualProjectionComparison.cs",
+        "src/Search/CombatBeamSolver.Expansion.cs",
+        "src/Search/CombatBeamSolver.BeamRetentionPolicy.cs",
+        "src/Search/CombatBeamSolver.FinalPlanOrdering.cs"
+      ],
+      "sourceSymbols": [
+        "RecordManualProjectionComparison",
+        "ManualProjectionComparison",
+        "BeamRetentionPolicy",
+        "FinalPlanOrdering"
+      ],
+      "staticCause": "报告、比较日志、请求基线与搜索结果的战损及总用药一致；按原版遭遇归并质量调查范围，算法首因待定位。",
+      "unresolved": "从 combat_start 核对模拟、部署与 RNG，固定药水政策和预算作同根质量与耗时对照。",
+      "archive": "Q009.zip",
+      "requiresSourceSymbolForMatch": false,
+      "acceptance": [
+        "combat_start 恢复与状态对账",
+        "语义和原生部署正确",
+        "同根同政策同预算比较折算战损",
+        "固定哨兵质量无退化与耗时无明显增加"
+      ],
+      "issueNumber": 209,
+      "issueUrl": "https://github.com/Torch1230/CombatSolver/issues/209",
+      "assetId": 608215805,
+      "assetUrl": "https://github.com/Torch1230/CombatSolver/releases/download/community-tasks-2026-10-02/Q009.zip",
+      "assetSizeBytes": 1375656
+    },
+    {
+      "themeId": "O038",
+      "batchId": "Q009",
+      "title": "扼杀者与伙伴战斗的路线搜索质量",
+      "mechanismKey": "encounter-route-quality:SLITHERING_STRANGLER",
+      "representativeIds": [
+        "42f86b66b9c3464eabf986f03461fa48"
+      ],
+      "version": "0.46.2",
+      "encounterId": "SLITHERING_STRANGLER_NORMAL",
+      "hpLoss": {
+        "kind": "manual_projection",
+        "before": 23,
+        "after": 18,
+        "reduction": 5,
+        "additionalPotionCount": 0,
+        "potionHpCost": 0,
+        "potionAdjustedHpReduction": 5
+      },
+      "potionAdjustment": {
+        "status": "reconstructed",
+        "source": "recorded_checkpoints_and_search_results",
+        "rule": {
+          "hpPerAdditionalPotion": 9
+        },
+        "previousProjectedBattlePotionCount": 0,
+        "currentProjectedBattlePotionCount": 0,
+        "additionalPotionCount": 0,
+        "potionHpCost": 0,
+        "potionAdjustedHpReduction": 5,
+        "isImprovement": true,
+        "evidence": {
+          "indexPath": "replay/checkpoint.json",
+          "previous": {
+            "checkpointId": "73a07fbcbc454ada82520cd9608a496d:1",
+            "projectedBattleHpLost": 23,
+            "matchingRecords": 1,
+            "scope": "SearchCompletion",
+            "startTurnNumber": null,
+            "actualPotionsUsed": null
+          },
+          "current": {
+            "checkpointId": "73a07fbcbc454ada82520cd9608a496d:3",
+            "projectedBattleHpLost": 18,
+            "matchingRecords": 1,
+            "scope": "RouteAdoption",
+            "startTurnNumber": 2,
+            "actualPotionsUsed": null
+          }
+        }
+      },
+      "evidenceLevel": "shared_mechanism",
+      "verification": "static_only",
+      "rootCauseVerifiedByExecution": false,
+      "acceptanceFocus": "多目标战斗的抽牌与防御分配。旧结果记录 TimeLimit，新路线从第二回合接续；先核对搜索预算消耗与手操前缀，再定位候选覆盖或保路线索。",
+      "evidenceBoundaries": [
+        "比较端事件游标有缺项；从 combat_start 结合原生录制事件与保留的请求/结果恢复动作顺序。",
+        "比较跨 T1 → T2；固定开局与录制前缀后再作同根对照。",
+        "原结果的搜索边界为 TimeLimit；先核对原预算、耗时与展开/转移量。"
+      ],
+      "characterId": "SILENT",
+      "originalTurnNumber": 1,
+      "currentTurnNumber": 2,
+      "kind": "optimization",
+      "groupIds": [],
+      "legacyTaskIds": [],
+      "signaturePatterns": [],
+      "sourcePaths": [
+        "src/Runtime/SolverController.cs",
+        "src/Runtime/ManualProjectionComparison.cs",
+        "src/Search/CombatBeamSolver.Expansion.cs",
+        "src/Search/CombatBeamSolver.BeamRetentionPolicy.cs",
+        "src/Search/CombatBeamSolver.FinalPlanOrdering.cs"
+      ],
+      "sourceSymbols": [
+        "RecordManualProjectionComparison",
+        "ManualProjectionComparison",
+        "BeamRetentionPolicy",
+        "FinalPlanOrdering"
+      ],
+      "staticCause": "报告、比较日志、请求基线与搜索结果的战损及总用药一致；按原版遭遇归并质量调查范围，算法首因待定位。",
+      "unresolved": "从 combat_start 核对模拟、部署与 RNG，固定药水政策和预算作同根质量与耗时对照。",
+      "archive": "Q009.zip",
+      "requiresSourceSymbolForMatch": false,
+      "acceptance": [
+        "combat_start 恢复与状态对账",
+        "语义和原生部署正确",
+        "同根同政策同预算比较折算战损",
+        "固定哨兵质量无退化与耗时无明显增加"
+      ],
+      "issueNumber": 209,
+      "issueUrl": "https://github.com/Torch1230/CombatSolver/issues/209",
+      "assetId": 608215805,
+      "assetUrl": "https://github.com/Torch1230/CombatSolver/releases/download/community-tasks-2026-10-02/Q009.zip",
+      "assetSizeBytes": 1375656
+    },
+    {
+      "themeId": "O039",
+      "batchId": "Q009",
+      "title": "许多外骨骼虫战斗的路线搜索质量",
+      "mechanismKey": "encounter-route-quality:EXOSKELETONS",
+      "representativeIds": [
+        "e4460d3a3b894444922b712e43346c41"
+      ],
+      "version": "0.46.0",
+      "encounterId": "EXOSKELETONS_NORMAL",
+      "hpLoss": {
+        "kind": "manual_projection",
+        "before": 5,
+        "after": 0,
+        "reduction": 5,
+        "additionalPotionCount": 0,
+        "potionHpCost": 0,
+        "potionAdjustedHpReduction": 5
+      },
+      "potionAdjustment": {
+        "status": "reconstructed",
+        "source": "recorded_checkpoints_and_search_results",
+        "rule": {
+          "hpPerAdditionalPotion": 9
+        },
+        "previousProjectedBattlePotionCount": 0,
+        "currentProjectedBattlePotionCount": 0,
+        "additionalPotionCount": 0,
+        "potionHpCost": 0,
+        "potionAdjustedHpReduction": 5,
+        "isImprovement": true,
+        "evidence": {
+          "indexPath": "replay/checkpoint.json",
+          "previous": {
+            "checkpointId": "1732f581f36e4888a874f770bb693556:3",
+            "metadataPath": "replay/current/checkpoints/000003-search_request_AutoTurnStart.json",
+            "projectedBattleHpLost": 5,
+            "scope": "RequestBaseline",
+            "startTurnNumber": 1
+          },
+          "current": {
+            "checkpointId": "1732f581f36e4888a874f770bb693556:3",
+            "projectedBattleHpLost": 0,
+            "matchingRecords": 2,
+            "scope": "SearchCompletion",
+            "startTurnNumber": 2,
+            "actualPotionsUsed": 0
+          }
+        }
+      },
+      "evidenceLevel": "shared_mechanism",
+      "verification": "static_only",
+      "rootCauseVerifiedByExecution": false,
+      "acceptanceFocus": "多敌人集火顺序与第二回合防守。比较触发字段 E0.hp 为7与16；这是记录到的分叉位置，首个动作差异须从开局逐项对账。",
+      "evidenceBoundaries": [
+        "比较跨 T1 → T2；固定开局与录制前缀后再作同根对照。"
+      ],
+      "characterId": "SILENT",
+      "originalTurnNumber": 1,
+      "currentTurnNumber": 2,
+      "kind": "optimization",
+      "groupIds": [],
+      "legacyTaskIds": [],
+      "signaturePatterns": [],
+      "sourcePaths": [
+        "src/Runtime/SolverController.cs",
+        "src/Runtime/ManualProjectionComparison.cs",
+        "src/Search/CombatBeamSolver.Expansion.cs",
+        "src/Search/CombatBeamSolver.BeamRetentionPolicy.cs",
+        "src/Search/CombatBeamSolver.FinalPlanOrdering.cs"
+      ],
+      "sourceSymbols": [
+        "RecordManualProjectionComparison",
+        "ManualProjectionComparison",
+        "BeamRetentionPolicy",
+        "FinalPlanOrdering"
+      ],
+      "staticCause": "报告、比较日志、请求基线与搜索结果的战损及总用药一致；按原版遭遇归并质量调查范围，算法首因待定位。",
+      "unresolved": "从 combat_start 核对模拟、部署与 RNG，固定药水政策和预算作同根质量与耗时对照。",
+      "archive": "Q009.zip",
+      "requiresSourceSymbolForMatch": false,
+      "acceptance": [
+        "combat_start 恢复与状态对账",
+        "语义和原生部署正确",
+        "同根同政策同预算比较折算战损",
+        "固定哨兵质量无退化与耗时无明显增加"
+      ],
+      "issueNumber": 209,
+      "issueUrl": "https://github.com/Torch1230/CombatSolver/issues/209",
+      "assetId": 608215805,
+      "assetUrl": "https://github.com/Torch1230/CombatSolver/releases/download/community-tasks-2026-10-02/Q009.zip",
+      "assetSizeBytes": 1375656
+    },
+    {
+      "themeId": "O040",
+      "batchId": "Q009",
+      "title": "同族小队战斗的路线搜索质量",
+      "mechanismKey": "encounter-route-quality:THE_KIN_BOSS",
+      "representativeIds": [
+        "e6609669f8f04a148086dfaf9c04b990"
+      ],
+      "version": "0.45.0",
+      "encounterId": "THE_KIN_BOSS",
+      "hpLoss": {
+        "kind": "manual_projection",
+        "before": 18,
+        "after": 13,
+        "reduction": 5,
+        "additionalPotionCount": 0,
+        "potionHpCost": 0,
+        "potionAdjustedHpReduction": 5
+      },
+      "potionAdjustment": {
+        "status": "reconstructed",
+        "source": "recorded_checkpoints_and_search_results",
+        "rule": {
+          "hpPerAdditionalPotion": 9
+        },
+        "previousProjectedBattlePotionCount": 1,
+        "currentProjectedBattlePotionCount": 1,
+        "additionalPotionCount": 0,
+        "potionHpCost": 0,
+        "potionAdjustedHpReduction": 5,
+        "isImprovement": true,
+        "evidence": {
+          "indexPath": "replay/checkpoint.json",
+          "previous": {
+            "checkpointId": "4635c9c5a27f4d0c83691648e21c30f9:5",
+            "metadataPath": "replay/current/checkpoints/000005-search_request_Manual.json",
+            "projectedBattleHpLost": 18,
+            "scope": "RequestBaseline",
+            "startTurnNumber": 2
+          },
+          "current": {
+            "checkpointId": "4635c9c5a27f4d0c83691648e21c30f9:5",
+            "projectedBattleHpLost": 13,
+            "matchingRecords": 2,
+            "scope": "SearchCompletion",
+            "startTurnNumber": 2,
+            "actualPotionsUsed": 1
+          }
+        }
+      },
+      "evidenceLevel": "shared_mechanism",
+      "verification": "static_only",
+      "rootCauseVerifiedByExecution": false,
+      "acceptanceFocus": "同一回合内的能力铺垫、毒伤与目标分配。旧路线预计第12回合结束，新路线预计第11回合结束；总用药同为一瓶。",
+      "evidenceBoundaries": [
+        "比较发生在同一玩家回合；从 combat_start 核对手操前缀与随机输入，再作同根对照。"
+      ],
+      "characterId": "SILENT",
+      "originalTurnNumber": 2,
+      "currentTurnNumber": 2,
+      "kind": "optimization",
+      "groupIds": [],
+      "legacyTaskIds": [],
+      "signaturePatterns": [],
+      "sourcePaths": [
+        "src/Runtime/SolverController.cs",
+        "src/Runtime/ManualProjectionComparison.cs",
+        "src/Search/CombatBeamSolver.Expansion.cs",
+        "src/Search/CombatBeamSolver.BeamRetentionPolicy.cs",
+        "src/Search/CombatBeamSolver.FinalPlanOrdering.cs"
+      ],
+      "sourceSymbols": [
+        "RecordManualProjectionComparison",
+        "ManualProjectionComparison",
+        "BeamRetentionPolicy",
+        "FinalPlanOrdering"
+      ],
+      "staticCause": "报告、比较日志、请求基线与搜索结果的战损及总用药一致；按原版遭遇归并质量调查范围，算法首因待定位。",
+      "unresolved": "从 combat_start 核对模拟、部署与 RNG，固定药水政策和预算作同根质量与耗时对照。",
+      "archive": "Q009.zip",
+      "requiresSourceSymbolForMatch": false,
+      "acceptance": [
+        "combat_start 恢复与状态对账",
+        "语义和原生部署正确",
+        "同根同政策同预算比较折算战损",
+        "固定哨兵质量无退化与耗时无明显增加"
+      ],
+      "issueNumber": 209,
+      "issueUrl": "https://github.com/Torch1230/CombatSolver/issues/209",
+      "assetId": 608215805,
+      "assetUrl": "https://github.com/Torch1230/CombatSolver/releases/download/community-tasks-2026-10-02/Q009.zip",
+      "assetSizeBytes": 1375656
+    },
+    {
+      "themeId": "O041",
+      "batchId": "Q010",
+      "title": "猎人杀手战斗的路线搜索质量",
+      "mechanismKey": "encounter-route-quality:HUNTER_KILLER",
+      "representativeIds": [
+        "7113e143fecf424ab8419924a649d2e1"
+      ],
+      "version": "0.44.0",
+      "encounterId": "HUNTER_KILLER_NORMAL",
+      "hpLoss": {
+        "kind": "manual_projection",
+        "before": 17,
+        "after": 12,
+        "reduction": 5,
+        "additionalPotionCount": 0,
+        "potionHpCost": 0,
+        "potionAdjustedHpReduction": 5
+      },
+      "potionAdjustment": {
+        "status": "reconstructed",
+        "source": "recorded_checkpoints_and_search_results",
+        "rule": {
+          "hpPerAdditionalPotion": 9
+        },
+        "previousProjectedBattlePotionCount": 1,
+        "currentProjectedBattlePotionCount": 0,
+        "additionalPotionCount": 0,
+        "potionHpCost": 0,
+        "potionAdjustedHpReduction": 5,
+        "isImprovement": true,
+        "evidence": {
+          "indexPath": "replay/checkpoint.json",
+          "previous": {
+            "checkpointId": "bea35bc404c94089afb451e59d533133:1",
+            "projectedBattleHpLost": 17,
+            "matchingRecords": 1,
+            "scope": "SearchCompletion",
+            "startTurnNumber": null,
+            "actualPotionsUsed": null
+          },
+          "current": {
+            "checkpointId": "bea35bc404c94089afb451e59d533133:4",
+            "projectedBattleHpLost": 12,
+            "matchingRecords": 2,
+            "scope": "SearchCompletion",
+            "startTurnNumber": 3,
+            "actualPotionsUsed": 0
+          }
+        }
+      },
+      "evidenceLevel": "shared_mechanism",
+      "verification": "static_only",
+      "rootCauseVerifiedByExecution": false,
+      "acceptanceFocus": "早期虚弱、防御与用药决策。旧路线首段包含 BLOOD_POTION，新路线预计总用药从一瓶降至零瓶；按总用药正差折算。",
+      "evidenceBoundaries": [
+        "比较跨 T1 → T3；固定开局与录制前缀后再作同根对照。"
+      ],
+      "characterId": "IRONCLAD",
+      "originalTurnNumber": 1,
+      "currentTurnNumber": 3,
+      "kind": "optimization",
+      "groupIds": [],
+      "legacyTaskIds": [],
+      "signaturePatterns": [],
+      "sourcePaths": [
+        "src/Runtime/SolverController.cs",
+        "src/Runtime/ManualProjectionComparison.cs",
+        "src/Search/CombatBeamSolver.Expansion.cs",
+        "src/Search/CombatBeamSolver.BeamRetentionPolicy.cs",
+        "src/Search/CombatBeamSolver.FinalPlanOrdering.cs"
+      ],
+      "sourceSymbols": [
+        "RecordManualProjectionComparison",
+        "ManualProjectionComparison",
+        "BeamRetentionPolicy",
+        "FinalPlanOrdering"
+      ],
+      "staticCause": "报告、比较日志、请求基线与搜索结果的战损及总用药一致；按原版遭遇归并质量调查范围，算法首因待定位。",
+      "unresolved": "从 combat_start 核对模拟、部署与 RNG，固定药水政策和预算作同根质量与耗时对照。",
+      "archive": "Q010.zip",
+      "requiresSourceSymbolForMatch": false,
+      "acceptance": [
+        "combat_start 恢复与状态对账",
+        "语义和原生部署正确",
+        "同根同政策同预算比较折算战损",
+        "固定哨兵质量无退化与耗时无明显增加"
+      ],
+      "issueNumber": 210,
+      "issueUrl": "https://github.com/Torch1230/CombatSolver/issues/210",
+      "assetId": 608215993,
+      "assetUrl": "https://github.com/Torch1230/CombatSolver/releases/download/community-tasks-2026-10-02/Q010.zip",
+      "assetSizeBytes": 1403699
+    },
+    {
+      "themeId": "O042",
+      "batchId": "Q010",
+      "title": "偷窃草蜢战斗的路线搜索质量",
+      "mechanismKey": "encounter-route-quality:THIEVING_HOPPER",
+      "representativeIds": [
+        "85ef4e1d1bb04f7e93a126c05ffc2cdd"
+      ],
+      "version": "0.47.2",
+      "encounterId": "THIEVING_HOPPER_WEAK",
+      "hpLoss": {
+        "kind": "manual_projection",
+        "before": 5,
+        "after": 1,
+        "reduction": 4,
+        "additionalPotionCount": 0,
+        "potionHpCost": 0,
+        "potionAdjustedHpReduction": 4
+      },
+      "potionAdjustment": {
+        "status": "reconstructed",
+        "source": "recorded_checkpoints_and_search_results",
+        "rule": {
+          "hpPerAdditionalPotion": 9
+        },
+        "previousProjectedBattlePotionCount": 0,
+        "currentProjectedBattlePotionCount": 0,
+        "additionalPotionCount": 0,
+        "potionHpCost": 0,
+        "potionAdjustedHpReduction": 4,
+        "isImprovement": true,
+        "evidence": {
+          "indexPath": "replay/checkpoint.json",
+          "previous": {
+            "checkpointId": "b1d68583384c4ead81bb566bb4191683:1",
+            "projectedBattleHpLost": 5,
+            "matchingRecords": 1,
+            "scope": "SearchCompletion",
+            "startTurnNumber": null,
+            "actualPotionsUsed": null
+          },
+          "current": {
+            "checkpointId": "b1d68583384c4ead81bb566bb4191683:5",
+            "projectedBattleHpLost": 1,
+            "matchingRecords": 2,
+            "scope": "SearchCompletion",
+            "startTurnNumber": 3,
+            "actualPotionsUsed": 0
+          }
+        }
+      },
+      "evidenceLevel": "shared_mechanism",
+      "verification": "static_only",
+      "rootCauseVerifiedByExecution": false,
+      "acceptanceFocus": "跨回合防御、终局收尾与药水政策捕获。前后记录的药水指令清单由空清单变为灵巧药水 Smart，核对持有药水和政策捕获的具体时点。",
+      "evidenceBoundaries": [
+        "比较跨 T1 → T3；固定开局与录制前缀后再作同根对照。"
+      ],
+      "characterId": "IRONCLAD",
+      "originalTurnNumber": 1,
+      "currentTurnNumber": 3,
+      "kind": "optimization",
+      "groupIds": [],
+      "legacyTaskIds": [],
+      "signaturePatterns": [],
+      "sourcePaths": [
+        "src/Runtime/SolverController.cs",
+        "src/Runtime/ManualProjectionComparison.cs",
+        "src/Search/CombatBeamSolver.Expansion.cs",
+        "src/Search/CombatBeamSolver.BeamRetentionPolicy.cs",
+        "src/Search/CombatBeamSolver.FinalPlanOrdering.cs"
+      ],
+      "sourceSymbols": [
+        "RecordManualProjectionComparison",
+        "ManualProjectionComparison",
+        "BeamRetentionPolicy",
+        "FinalPlanOrdering"
+      ],
+      "staticCause": "报告、比较日志、请求基线与搜索结果的战损及总用药一致；按原版遭遇归并质量调查范围，算法首因待定位。",
+      "unresolved": "从 combat_start 核对模拟、部署与 RNG，固定药水政策和预算作同根质量与耗时对照。",
+      "archive": "Q010.zip",
+      "requiresSourceSymbolForMatch": false,
+      "acceptance": [
+        "combat_start 恢复与状态对账",
+        "语义和原生部署正确",
+        "同根同政策同预算比较折算战损",
+        "固定哨兵质量无退化与耗时无明显增加"
+      ],
+      "issueNumber": 210,
+      "issueUrl": "https://github.com/Torch1230/CombatSolver/issues/210",
+      "assetId": 608215993,
+      "assetUrl": "https://github.com/Torch1230/CombatSolver/releases/download/community-tasks-2026-10-02/Q010.zip",
+      "assetSizeBytes": 1403699
+    },
+    {
+      "themeId": "O043",
+      "batchId": "Q010",
+      "title": "棘刺蟾蜍战斗的路线搜索质量",
+      "mechanismKey": "encounter-route-quality:SPINY_TOAD",
+      "representativeIds": [
+        "e87d5139cbc94eafb8b8de07334f80a7"
+      ],
+      "version": "0.47.1",
+      "encounterId": "SPINY_TOAD_NORMAL",
+      "hpLoss": {
+        "kind": "manual_projection",
+        "before": 12,
+        "after": 8,
+        "reduction": 4,
+        "additionalPotionCount": 0,
+        "potionHpCost": 0,
+        "potionAdjustedHpReduction": 4
+      },
+      "potionAdjustment": {
+        "status": "reconstructed",
+        "source": "recorded_checkpoints_and_search_results",
+        "rule": {
+          "hpPerAdditionalPotion": 9
+        },
+        "previousProjectedBattlePotionCount": 0,
+        "currentProjectedBattlePotionCount": 0,
+        "additionalPotionCount": 0,
+        "potionHpCost": 0,
+        "potionAdjustedHpReduction": 4,
+        "isImprovement": true,
+        "evidence": {
+          "indexPath": "replay/checkpoint.json",
+          "previous": {
+            "checkpointId": "6fddf9d339354589ae8bd4420037e113:9",
+            "metadataPath": "replay/current/checkpoints/000009-search_request_AutoTurnStart.json",
+            "projectedBattleHpLost": 12,
+            "scope": "RequestBaseline",
+            "startTurnNumber": 1
+          },
+          "current": {
+            "checkpointId": "6fddf9d339354589ae8bd4420037e113:9",
+            "projectedBattleHpLost": 8,
+            "matchingRecords": 1,
+            "scope": "SearchCompletion",
+            "startTurnNumber": 2,
+            "actualPotionsUsed": 0
+          }
+        }
+      },
+      "evidenceLevel": "shared_mechanism",
+      "verification": "static_only",
+      "rootCauseVerifiedByExecution": false,
+      "acceptanceFocus": "首回合保路与第二回合抽牌顺序。旧结果记录 NodeLimit，首段为结束回合 → INFLAME → DEFEND_IRONCLAD；先核对预算边界与第一处合法动作差异。",
+      "evidenceBoundaries": [
+        "比较跨 T1 → T2；固定开局与录制前缀后再作同根对照。",
+        "原结果的搜索边界为 NodeLimit；先核对原预算、耗时与展开/转移量。"
+      ],
+      "characterId": "IRONCLAD",
+      "originalTurnNumber": 1,
+      "currentTurnNumber": 2,
+      "kind": "optimization",
+      "groupIds": [],
+      "legacyTaskIds": [],
+      "signaturePatterns": [],
+      "sourcePaths": [
+        "src/Runtime/SolverController.cs",
+        "src/Runtime/ManualProjectionComparison.cs",
+        "src/Search/CombatBeamSolver.Expansion.cs",
+        "src/Search/CombatBeamSolver.BeamRetentionPolicy.cs",
+        "src/Search/CombatBeamSolver.FinalPlanOrdering.cs"
+      ],
+      "sourceSymbols": [
+        "RecordManualProjectionComparison",
+        "ManualProjectionComparison",
+        "BeamRetentionPolicy",
+        "FinalPlanOrdering"
+      ],
+      "staticCause": "报告、比较日志、请求基线与搜索结果的战损及总用药一致；按原版遭遇归并质量调查范围，算法首因待定位。",
+      "unresolved": "从 combat_start 核对模拟、部署与 RNG，固定药水政策和预算作同根质量与耗时对照。",
+      "archive": "Q010.zip",
+      "requiresSourceSymbolForMatch": false,
+      "acceptance": [
+        "combat_start 恢复与状态对账",
+        "语义和原生部署正确",
+        "同根同政策同预算比较折算战损",
+        "固定哨兵质量无退化与耗时无明显增加"
+      ],
+      "issueNumber": 210,
+      "issueUrl": "https://github.com/Torch1230/CombatSolver/issues/210",
+      "assetId": 608215993,
+      "assetUrl": "https://github.com/Torch1230/CombatSolver/releases/download/community-tasks-2026-10-02/Q010.zip",
+      "assetSizeBytes": 1403699
+    },
+    {
+      "themeId": "O044",
+      "batchId": "Q010",
+      "title": "熟睡派对战斗的路线搜索质量",
+      "mechanismKey": "encounter-route-quality:SLUMBERING_BEETLE",
+      "representativeIds": [
+        "4dc0ba71acec4d1499eaeea48cd29458"
+      ],
+      "version": "0.47.3",
+      "encounterId": "SLUMBERING_BEETLE_NORMAL",
+      "hpLoss": {
+        "kind": "manual_projection",
+        "before": 8,
+        "after": 5,
+        "reduction": 3,
+        "additionalPotionCount": 0,
+        "potionHpCost": 0,
+        "potionAdjustedHpReduction": 3
+      },
+      "potionAdjustment": {
+        "status": "reconstructed",
+        "source": "recorded_checkpoints_and_search_results",
+        "rule": {
+          "hpPerAdditionalPotion": 9
+        },
+        "previousProjectedBattlePotionCount": 0,
+        "currentProjectedBattlePotionCount": 0,
+        "additionalPotionCount": 0,
+        "potionHpCost": 0,
+        "potionAdjustedHpReduction": 3,
+        "isImprovement": true,
+        "evidence": {
+          "indexPath": "replay/checkpoint.json",
+          "previous": {
+            "checkpointId": "2b121d8db37a4dba8d5db3a1096e511f:3",
+            "metadataPath": "replay/current/checkpoints/000003-search_request_AutoTurnStart.json",
+            "projectedBattleHpLost": 8,
+            "scope": "RequestBaseline",
+            "startTurnNumber": 1
+          },
+          "current": {
+            "checkpointId": "2b121d8db37a4dba8d5db3a1096e511f:3",
+            "projectedBattleHpLost": 5,
+            "matchingRecords": 2,
+            "scope": "RouteAdoption",
+            "startTurnNumber": 2,
+            "actualPotionsUsed": 0
+          }
+        }
+      },
+      "evidenceLevel": "shared_mechanism",
+      "verification": "static_only",
+      "rootCauseVerifiedByExecution": false,
+      "acceptanceFocus": "首回合铸剑、过牌和第二回合能力铺垫。旧路线含 SPOILS_OF_BATTLE，新结果首段含 GENESIS 与 VENERATE；比较跨回合。",
+      "evidenceBoundaries": [
+        "原比较检查点 ID 缺失，旧完整计划保存在本次请求的 result.plannedActions，资源基线采用 RequestBaseline。",
+        "比较端事件游标有缺项；从 combat_start 结合原生录制事件与保留的请求/结果恢复动作顺序。",
+        "比较跨 T1 → T2；固定开局与录制前缀后再作同根对照。"
+      ],
+      "characterId": "REGENT",
+      "originalTurnNumber": 1,
+      "currentTurnNumber": 2,
+      "kind": "optimization",
+      "groupIds": [],
+      "legacyTaskIds": [],
+      "signaturePatterns": [],
+      "sourcePaths": [
+        "src/Runtime/SolverController.cs",
+        "src/Runtime/ManualProjectionComparison.cs",
+        "src/Search/CombatBeamSolver.Expansion.cs",
+        "src/Search/CombatBeamSolver.BeamRetentionPolicy.cs",
+        "src/Search/CombatBeamSolver.FinalPlanOrdering.cs"
+      ],
+      "sourceSymbols": [
+        "RecordManualProjectionComparison",
+        "ManualProjectionComparison",
+        "BeamRetentionPolicy",
+        "FinalPlanOrdering"
+      ],
+      "staticCause": "报告、比较日志、请求基线与搜索结果的战损及总用药一致；按原版遭遇归并质量调查范围，算法首因待定位。",
+      "unresolved": "从 combat_start 核对模拟、部署与 RNG，固定药水政策和预算作同根质量与耗时对照。",
+      "archive": "Q010.zip",
+      "requiresSourceSymbolForMatch": false,
+      "acceptance": [
+        "combat_start 恢复与状态对账",
+        "语义和原生部署正确",
+        "同根同政策同预算比较折算战损",
+        "固定哨兵质量无退化与耗时无明显增加"
+      ],
+      "issueNumber": 210,
+      "issueUrl": "https://github.com/Torch1230/CombatSolver/issues/210",
+      "assetId": 608215993,
+      "assetUrl": "https://github.com/Torch1230/CombatSolver/releases/download/community-tasks-2026-10-02/Q010.zip",
+      "assetSizeBytes": 1403699
+    },
+    {
+      "themeId": "O045",
+      "batchId": "Q010",
+      "title": "虱虫之祖战斗的路线搜索质量",
+      "mechanismKey": "encounter-route-quality:LOUSE_PROGENITOR",
+      "representativeIds": [
+        "38d72af359ba4163abd73e297cb6727a"
+      ],
+      "version": "0.46.4",
+      "encounterId": "LOUSE_PROGENITOR_NORMAL",
+      "hpLoss": {
+        "kind": "manual_projection",
+        "before": 13,
+        "after": 1,
+        "reduction": 12,
+        "additionalPotionCount": 1,
+        "potionHpCost": 9,
+        "potionAdjustedHpReduction": 3
+      },
+      "potionAdjustment": {
+        "status": "reconstructed",
+        "source": "recorded_checkpoints_and_search_results",
+        "rule": {
+          "hpPerAdditionalPotion": 9
+        },
+        "previousProjectedBattlePotionCount": 0,
+        "currentProjectedBattlePotionCount": 1,
+        "additionalPotionCount": 1,
+        "potionHpCost": 9,
+        "potionAdjustedHpReduction": 3,
+        "isImprovement": true,
+        "evidence": {
+          "indexPath": "replay/checkpoint.json",
+          "previous": {
+            "checkpointId": "dc3b7d570c9c4213a64f182f1427b1b6:3",
+            "metadataPath": "replay/current/checkpoints/000003-search_request_Manual.json",
+            "projectedBattleHpLost": 13,
+            "scope": "RequestBaseline",
+            "startTurnNumber": 1
+          },
+          "current": {
+            "checkpointId": "dc3b7d570c9c4213a64f182f1427b1b6:3",
+            "projectedBattleHpLost": 1,
+            "matchingRecords": 2,
+            "scope": "SearchCompletion",
+            "startTurnNumber": 1,
+            "actualPotionsUsed": 1
+          }
+        }
+      },
+      "evidenceLevel": "shared_mechanism",
+      "verification": "static_only",
+      "rootCauseVerifiedByExecution": false,
+      "acceptanceFocus": "迅捷药水后抽牌与第一回合出牌顺序。原路线预计用药0瓶，新路线1瓶；原始下降12 HP，扣9 HP药水成本后改善3 HP。",
+      "evidenceBoundaries": [
+        "比较发生在同一玩家回合；从 combat_start 核对手操前缀与随机输入，再作同根对照。"
+      ],
+      "characterId": "IRONCLAD",
+      "originalTurnNumber": 1,
+      "currentTurnNumber": 1,
+      "kind": "optimization",
+      "groupIds": [],
+      "legacyTaskIds": [],
+      "signaturePatterns": [],
+      "sourcePaths": [
+        "src/Runtime/SolverController.cs",
+        "src/Runtime/ManualProjectionComparison.cs",
+        "src/Search/CombatBeamSolver.Expansion.cs",
+        "src/Search/CombatBeamSolver.BeamRetentionPolicy.cs",
+        "src/Search/CombatBeamSolver.FinalPlanOrdering.cs"
+      ],
+      "sourceSymbols": [
+        "RecordManualProjectionComparison",
+        "ManualProjectionComparison",
+        "BeamRetentionPolicy",
+        "FinalPlanOrdering"
+      ],
+      "staticCause": "报告、比较日志、请求基线与搜索结果的战损及总用药一致；按原版遭遇归并质量调查范围，算法首因待定位。",
+      "unresolved": "从 combat_start 核对模拟、部署与 RNG，固定药水政策和预算作同根质量与耗时对照。",
+      "archive": "Q010.zip",
+      "requiresSourceSymbolForMatch": false,
+      "acceptance": [
+        "combat_start 恢复与状态对账",
+        "语义和原生部署正确",
+        "同根同政策同预算比较折算战损",
+        "固定哨兵质量无退化与耗时无明显增加"
+      ],
+      "issueNumber": 210,
+      "issueUrl": "https://github.com/Torch1230/CombatSolver/issues/210",
+      "assetId": 608215993,
+      "assetUrl": "https://github.com/Torch1230/CombatSolver/releases/download/community-tasks-2026-10-02/Q010.zip",
+      "assetSizeBytes": 1403699
     }
   ],
   "contributionPriority": [
     "bugfix",
     "better_worldline_optimization"
+  ],
+  "historicalThemes": [
+    {
+      "themeId": "O011",
+      "batchId": "Q004",
+      "title": "机甲骑士战斗的路线搜索质量",
+      "kind": "optimization",
+      "mechanismKey": "encounter-route-quality:MECHA_KNIGHT_ELITE",
+      "encounterId": "MECHA_KNIGHT_ELITE",
+      "representativeIds": [
+        "38eff40a9b3145c78a18846d4fdbe20e"
+      ],
+      "groupIds": [],
+      "legacyTaskIds": [],
+      "signaturePatterns": [],
+      "sourcePaths": [
+        "src/Runtime/SolverController.cs",
+        "src/Search/CombatBeamSolver.Expansion.cs",
+        "src/Search/CombatBeamSolver.BeamRetentionPolicy.cs",
+        "src/Search/CombatBeamSolver.StateEvaluation.cs",
+        "src/Search/CombatBeamSolver.FinalPlanOrdering.cs"
+      ],
+      "sourceSymbols": [
+        "RecordManualProjectionComparison",
+        "ApplyProjectionBaselines",
+        "BeamRetentionPolicy",
+        "FinalPlanOrdering"
+      ],
+      "staticCause": "MANUAL_ROUTE_IMPROVED 记录手操改变状态后的重新预测，比较值与报告和搜索结果条目一致；按具体原版遭遇归并质量排查范围，算法首因尚未定位。",
+      "unresolved": "先验证模拟、部署与资源政策，再从 combat_start 对照同根同政策同预算路线，定位展开、保路、去重或排序中的通用机制。",
+      "evidenceLevel": "shared_mechanism",
+      "verification": "static_only",
+      "rootCauseVerifiedByExecution": false,
+      "hpLoss": {
+        "kind": "manual_projection",
+        "before": 21,
+        "after": 6,
+        "reduction": 15
+      },
+      "comparisonTurns": [
+        1,
+        2
+      ],
+      "comparisonCheckpointIds": {
+        "original": "6dd66690464944a5885b982d3885fe70:3",
+        "current": "6dd66690464944a5885b982d3885fe70:5"
+      },
+      "limitations": [
+        "比较跨回合发生，属于手操后重新预测。",
+        "比较期间累计用药数量改变，收益评价必须核对药水政策与消耗。"
+      ],
+      "logEvidence": [
+        {
+          "file": "diagnostics/logs/combat/008.jsonl",
+          "line": 382,
+          "message": "[CombatSolver/Test] MANUAL_ROUTE_IMPROVED original_turn=1 current_turn=2 previous_projected_battle_hp_lost=21 current_projected_battle_hp_lost=6 difference=-15 field=hp expected={63} actual={81}"
+        }
+      ],
+      "archive": "Q004.zip",
+      "requiresSourceSymbolForMatch": false,
+      "acceptance": [
+        "combat_start 恢复与状态对账",
+        "语义和原生部署正确",
+        "同根同政策同预算比较并单列额外用药",
+        "定位通用策略缺口并验证回归哨兵"
+      ],
+      "issueNumber": 184,
+      "issueUrl": "https://github.com/Torch1230/CombatSolver/issues/184#o011",
+      "assetId": 605225097,
+      "assetUrl": "https://github.com/Torch1230/CombatSolver/releases/download/community-tasks-2026-10-02/Q004.zip",
+      "assetSizeBytes": 1667877,
+      "status": "withdrawn",
+      "withdrawnAt": "2026-10-03T17:13:15.958761+00:00",
+      "withdrawalReason": "maintainer_withdrawal",
+      "issueState": "closed",
+      "issueStateReason": "not_planned",
+      "archiveAvailable": false
+    },
+    {
+      "themeId": "O012",
+      "batchId": "Q004",
+      "title": "异蛙寄生虫战斗的路线搜索质量",
+      "kind": "optimization",
+      "mechanismKey": "encounter-route-quality:PHROG_PARASITE_ELITE",
+      "encounterId": "PHROG_PARASITE_ELITE",
+      "representativeIds": [
+        "4f4bbba076974da88eb308b5398e55b9"
+      ],
+      "groupIds": [],
+      "legacyTaskIds": [],
+      "signaturePatterns": [],
+      "sourcePaths": [
+        "src/Runtime/SolverController.cs",
+        "src/Search/CombatBeamSolver.Expansion.cs",
+        "src/Search/CombatBeamSolver.BeamRetentionPolicy.cs",
+        "src/Search/CombatBeamSolver.StateEvaluation.cs",
+        "src/Search/CombatBeamSolver.FinalPlanOrdering.cs"
+      ],
+      "sourceSymbols": [
+        "RecordManualProjectionComparison",
+        "ApplyProjectionBaselines",
+        "BeamRetentionPolicy",
+        "FinalPlanOrdering"
+      ],
+      "staticCause": "MANUAL_ROUTE_IMPROVED 记录手操改变状态后的重新预测，比较值与报告和搜索结果条目一致；按具体原版遭遇归并质量排查范围，算法首因尚未定位。",
+      "unresolved": "先验证模拟、部署与资源政策，再从 combat_start 对照同根同政策同预算路线，定位展开、保路、去重或排序中的通用机制。",
+      "evidenceLevel": "shared_mechanism",
+      "verification": "static_only",
+      "rootCauseVerifiedByExecution": false,
+      "hpLoss": {
+        "kind": "manual_projection",
+        "before": 19,
+        "after": 4,
+        "reduction": 15
+      },
+      "comparisonTurns": [
+        3,
+        4
+      ],
+      "comparisonCheckpointIds": {
+        "original": "cc9a6319e7e54f1f93612b43a54aca18:5",
+        "current": "cc9a6319e7e54f1f93612b43a54aca18:9"
+      },
+      "limitations": [
+        "比较跨回合发生，属于手操后重新预测。"
+      ],
+      "logEvidence": [
+        {
+          "file": "diagnostics/logs/combat/009.jsonl",
+          "line": 422,
+          "message": "[CombatSolver/Test] MANUAL_ROUTE_IMPROVED original_turn=3 current_turn=4 previous_projected_battle_hp_lost=19 current_projected_battle_hp_lost=4 difference=-15 field=live_combat_stamp expected={solver_result} actual={manual_state_change}"
+        }
+      ],
+      "archive": "Q004.zip",
+      "requiresSourceSymbolForMatch": false,
+      "acceptance": [
+        "combat_start 恢复与状态对账",
+        "语义和原生部署正确",
+        "同根同政策同预算比较并单列额外用药",
+        "定位通用策略缺口并验证回归哨兵"
+      ],
+      "issueNumber": 184,
+      "issueUrl": "https://github.com/Torch1230/CombatSolver/issues/184#o012",
+      "assetId": 605225097,
+      "assetUrl": "https://github.com/Torch1230/CombatSolver/releases/download/community-tasks-2026-10-02/Q004.zip",
+      "assetSizeBytes": 1667877,
+      "status": "withdrawn",
+      "withdrawnAt": "2026-10-03T17:13:15.958761+00:00",
+      "withdrawalReason": "maintainer_withdrawal",
+      "issueState": "closed",
+      "issueStateReason": "not_planned",
+      "archiveAvailable": false
+    },
+    {
+      "themeId": "O013",
+      "batchId": "Q004",
+      "title": "旧日雕像战斗的路线搜索质量",
+      "kind": "optimization",
+      "mechanismKey": "encounter-route-quality:BYGONE_EFFIGY_ELITE",
+      "encounterId": "BYGONE_EFFIGY_ELITE",
+      "representativeIds": [
+        "c27f3e301dbd4a66a1a2a1a4bd2da885"
+      ],
+      "groupIds": [],
+      "legacyTaskIds": [],
+      "signaturePatterns": [],
+      "sourcePaths": [
+        "src/Runtime/SolverController.cs",
+        "src/Search/CombatBeamSolver.Expansion.cs",
+        "src/Search/CombatBeamSolver.BeamRetentionPolicy.cs",
+        "src/Search/CombatBeamSolver.StateEvaluation.cs",
+        "src/Search/CombatBeamSolver.FinalPlanOrdering.cs"
+      ],
+      "sourceSymbols": [
+        "RecordManualProjectionComparison",
+        "ApplyProjectionBaselines",
+        "BeamRetentionPolicy",
+        "FinalPlanOrdering"
+      ],
+      "staticCause": "MANUAL_ROUTE_IMPROVED 记录手操改变状态后的重新预测，比较值与报告和搜索结果条目一致；按具体原版遭遇归并质量排查范围，算法首因尚未定位。",
+      "unresolved": "先验证模拟、部署与资源政策，再从 combat_start 对照同根同政策同预算路线，定位展开、保路、去重或排序中的通用机制。",
+      "evidenceLevel": "shared_mechanism",
+      "verification": "static_only",
+      "rootCauseVerifiedByExecution": false,
+      "hpLoss": {
+        "kind": "manual_projection",
+        "before": 60,
+        "after": 46,
+        "reduction": 14
+      },
+      "comparisonTurns": [
+        2,
+        3
+      ],
+      "comparisonCheckpointIds": {
+        "original": "59c8a91d7e5b4901956194cc46c713d8:3",
+        "current": "59c8a91d7e5b4901956194cc46c713d8:5"
+      },
+      "limitations": [
+        "比较跨回合发生，属于手操后重新预测。"
+      ],
+      "logEvidence": [
+        {
+          "file": "diagnostics/logs/combat/001.jsonl",
+          "line": 397,
+          "message": "[CombatSolver/Test] MANUAL_ROUTE_IMPROVED original_turn=2 current_turn=3 previous_projected_battle_hp_lost=60 current_projected_battle_hp_lost=46 difference=-14 field=C[7] expected={STRIKE_SILENT+0/False:1/False:-1/0/False/False/False/True/False/-:0:0/-:0[Damage=6,]/private=-/keywords=[]/baselib=-} actual={DEFEND_SILENT+0/False:1/False:-1/0/False/False/False/True/False/-:0:0/-:0[Block=5,]/private=-/keywords=[]/baselib=-} expected_count=12 actual_count=12"
+        }
+      ],
+      "archive": "Q004.zip",
+      "requiresSourceSymbolForMatch": false,
+      "acceptance": [
+        "combat_start 恢复与状态对账",
+        "语义和原生部署正确",
+        "同根同政策同预算比较并单列额外用药",
+        "定位通用策略缺口并验证回归哨兵"
+      ],
+      "issueNumber": 184,
+      "issueUrl": "https://github.com/Torch1230/CombatSolver/issues/184#o013",
+      "assetId": 605225097,
+      "assetUrl": "https://github.com/Torch1230/CombatSolver/releases/download/community-tasks-2026-10-02/Q004.zip",
+      "assetSizeBytes": 1667877,
+      "status": "withdrawn",
+      "withdrawnAt": "2026-10-03T17:13:15.958761+00:00",
+      "withdrawalReason": "maintainer_withdrawal",
+      "issueState": "closed",
+      "issueStateReason": "not_planned",
+      "archiveAvailable": false
+    },
+    {
+      "themeId": "O014",
+      "batchId": "Q004",
+      "title": "盛碗虫群战斗的路线搜索质量",
+      "kind": "optimization",
+      "mechanismKey": "encounter-route-quality:BOWLBUGS_NORMAL",
+      "encounterId": "BOWLBUGS_NORMAL",
+      "representativeIds": [
+        "fdeff387600d43b6b9d402aa832aa330"
+      ],
+      "groupIds": [],
+      "legacyTaskIds": [],
+      "signaturePatterns": [],
+      "sourcePaths": [
+        "src/Runtime/SolverController.cs",
+        "src/Search/CombatBeamSolver.Expansion.cs",
+        "src/Search/CombatBeamSolver.BeamRetentionPolicy.cs",
+        "src/Search/CombatBeamSolver.StateEvaluation.cs",
+        "src/Search/CombatBeamSolver.FinalPlanOrdering.cs"
+      ],
+      "sourceSymbols": [
+        "RecordManualProjectionComparison",
+        "ApplyProjectionBaselines",
+        "BeamRetentionPolicy",
+        "FinalPlanOrdering"
+      ],
+      "staticCause": "MANUAL_ROUTE_IMPROVED 记录手操改变状态后的重新预测，比较值与报告和搜索结果条目一致；按具体原版遭遇归并质量排查范围，算法首因尚未定位。",
+      "unresolved": "先验证模拟、部署与资源政策，再从 combat_start 对照同根同政策同预算路线，定位展开、保路、去重或排序中的通用机制。",
+      "evidenceLevel": "shared_mechanism",
+      "verification": "static_only",
+      "rootCauseVerifiedByExecution": false,
+      "hpLoss": {
+        "kind": "manual_projection",
+        "before": 13,
+        "after": 0,
+        "reduction": 13
+      },
+      "comparisonTurns": [
+        1,
+        2
+      ],
+      "comparisonCheckpointIds": {
+        "original": null,
+        "current": "c703f6bbe92a42bc80881f92a208c04e:3"
+      },
+      "limitations": [
+        "originalCheckpointId 缺失或对应快照未保留；用搜索结果条目定位旧预测，从 combat_start 重建比较。",
+        "比较跨回合发生，属于手操后重新预测。",
+        "比较期间累计用药数量改变，收益评价必须核对药水政策与消耗。"
+      ],
+      "logEvidence": [
+        {
+          "file": "diagnostics/logs/combat/000.jsonl",
+          "line": 363,
+          "message": "[CombatSolver/Test] MANUAL_ROUTE_IMPROVED original_turn=1 current_turn=2 previous_projected_battle_hp_lost=13 current_projected_battle_hp_lost=0 difference=-13 field=E0.hp expected={38} actual={34}"
+        }
+      ],
+      "archive": "Q004.zip",
+      "requiresSourceSymbolForMatch": false,
+      "acceptance": [
+        "combat_start 恢复与状态对账",
+        "语义和原生部署正确",
+        "同根同政策同预算比较并单列额外用药",
+        "定位通用策略缺口并验证回归哨兵"
+      ],
+      "issueNumber": 184,
+      "issueUrl": "https://github.com/Torch1230/CombatSolver/issues/184#o014",
+      "assetId": 605225097,
+      "assetUrl": "https://github.com/Torch1230/CombatSolver/releases/download/community-tasks-2026-10-02/Q004.zip",
+      "assetSizeBytes": 1667877,
+      "status": "withdrawn",
+      "withdrawnAt": "2026-10-03T17:13:15.958761+00:00",
+      "withdrawalReason": "maintainer_withdrawal",
+      "issueState": "closed",
+      "issueStateReason": "not_planned",
+      "archiveAvailable": false
+    },
+    {
+      "themeId": "O015",
+      "batchId": "Q004",
+      "title": "多尼斯异鸟战斗的路线搜索质量",
+      "kind": "optimization",
+      "mechanismKey": "encounter-route-quality:BYRDONIS_ELITE",
+      "encounterId": "BYRDONIS_ELITE",
+      "representativeIds": [
+        "5a4088bbc2864a58af963fcfb9dc11a7"
+      ],
+      "groupIds": [],
+      "legacyTaskIds": [],
+      "signaturePatterns": [],
+      "sourcePaths": [
+        "src/Runtime/SolverController.cs",
+        "src/Search/CombatBeamSolver.Expansion.cs",
+        "src/Search/CombatBeamSolver.BeamRetentionPolicy.cs",
+        "src/Search/CombatBeamSolver.StateEvaluation.cs",
+        "src/Search/CombatBeamSolver.FinalPlanOrdering.cs"
+      ],
+      "sourceSymbols": [
+        "RecordManualProjectionComparison",
+        "ApplyProjectionBaselines",
+        "BeamRetentionPolicy",
+        "FinalPlanOrdering"
+      ],
+      "staticCause": "MANUAL_ROUTE_IMPROVED 记录手操改变状态后的重新预测，比较值与报告和搜索结果条目一致；按具体原版遭遇归并质量排查范围，算法首因尚未定位。",
+      "unresolved": "先验证模拟、部署与资源政策，再从 combat_start 对照同根同政策同预算路线，定位展开、保路、去重或排序中的通用机制。",
+      "evidenceLevel": "shared_mechanism",
+      "verification": "static_only",
+      "rootCauseVerifiedByExecution": false,
+      "hpLoss": {
+        "kind": "manual_projection",
+        "before": 18,
+        "after": 5,
+        "reduction": 13
+      },
+      "comparisonTurns": [
+        1,
+        1
+      ],
+      "comparisonCheckpointIds": {
+        "original": "0444c18ed1ce49ea8597e6dc4a9b03f5:2",
+        "current": "0444c18ed1ce49ea8597e6dc4a9b03f5:4"
+      },
+      "limitations": [
+        "currentCheckpointId 对应快照未保留；录制事件与搜索结果条目保留，从 combat_start 重建比较。",
+        "比较期间累计用药数量改变，收益评价必须核对药水政策与消耗。"
+      ],
+      "logEvidence": [
+        {
+          "file": "diagnostics/logs/combat/005.jsonl",
+          "line": 66,
+          "message": "[CombatSolver/Test] MANUAL_ROUTE_IMPROVED original_turn=1 current_turn=1 previous_projected_battle_hp_lost=18 current_projected_battle_hp_lost=5 difference=-13 field=live_combat_stamp expected={solver_result} actual={manual_state_change}"
+        }
+      ],
+      "archive": "Q004.zip",
+      "requiresSourceSymbolForMatch": false,
+      "acceptance": [
+        "combat_start 恢复与状态对账",
+        "语义和原生部署正确",
+        "同根同政策同预算比较并单列额外用药",
+        "定位通用策略缺口并验证回归哨兵"
+      ],
+      "issueNumber": 184,
+      "issueUrl": "https://github.com/Torch1230/CombatSolver/issues/184#o015",
+      "assetId": 605225097,
+      "assetUrl": "https://github.com/Torch1230/CombatSolver/releases/download/community-tasks-2026-10-02/Q004.zip",
+      "assetSizeBytes": 1667877,
+      "status": "withdrawn",
+      "withdrawnAt": "2026-10-03T17:13:15.958761+00:00",
+      "withdrawalReason": "maintainer_withdrawal",
+      "issueState": "closed",
+      "issueStateReason": "not_planned",
+      "archiveAvailable": false
+    },
+    {
+      "themeId": "O016",
+      "batchId": "Q005",
+      "title": "感染棱柱战斗的路线搜索质量",
+      "kind": "optimization",
+      "mechanismKey": "encounter-route-quality:INFESTED_PRISMS_ELITE",
+      "encounterId": "INFESTED_PRISMS_ELITE",
+      "representativeIds": [
+        "67ad4fc605164b66b93d8b77f13a222e"
+      ],
+      "groupIds": [],
+      "legacyTaskIds": [],
+      "signaturePatterns": [],
+      "sourcePaths": [
+        "src/Runtime/SolverController.cs",
+        "src/Search/CombatBeamSolver.Expansion.cs",
+        "src/Search/CombatBeamSolver.BeamRetentionPolicy.cs",
+        "src/Search/CombatBeamSolver.StateEvaluation.cs",
+        "src/Search/CombatBeamSolver.FinalPlanOrdering.cs"
+      ],
+      "sourceSymbols": [
+        "RecordManualProjectionComparison",
+        "ApplyProjectionBaselines",
+        "BeamRetentionPolicy",
+        "FinalPlanOrdering"
+      ],
+      "staticCause": "MANUAL_ROUTE_IMPROVED 记录手操改变状态后的重新预测，比较值与报告和搜索结果条目一致；按具体原版遭遇归并质量排查范围，算法首因尚未定位。",
+      "unresolved": "先验证模拟、部署与资源政策，再从 combat_start 对照同根同政策同预算路线，定位展开、保路、去重或排序中的通用机制。",
+      "evidenceLevel": "shared_mechanism",
+      "verification": "static_only",
+      "rootCauseVerifiedByExecution": false,
+      "hpLoss": {
+        "kind": "manual_projection",
+        "before": 19,
+        "after": 8,
+        "reduction": 11
+      },
+      "comparisonTurns": [
+        2,
+        2
+      ],
+      "comparisonCheckpointIds": {
+        "original": null,
+        "current": "57fa55a4dcd546529b38a832168a7556:4"
+      },
+      "limitations": [
+        "originalCheckpointId 缺失或对应快照未保留；用搜索结果条目定位旧预测，从 combat_start 重建比较。",
+        "比较期间累计用药数量改变，收益评价必须核对药水政策与消耗。"
+      ],
+      "logEvidence": [
+        {
+          "file": "diagnostics/logs/combat/002.jsonl",
+          "line": 59,
+          "message": "[CombatSolver/Test] MANUAL_ROUTE_IMPROVED original_turn=2 current_turn=2 previous_projected_battle_hp_lost=19 current_projected_battle_hp_lost=8 difference=-11 field=live_combat_stamp expected={solver_result} actual={manual_state_change}"
+        }
+      ],
+      "archive": "Q005.zip",
+      "requiresSourceSymbolForMatch": false,
+      "acceptance": [
+        "combat_start 恢复与状态对账",
+        "语义和原生部署正确",
+        "同根同政策同预算比较并单列额外用药",
+        "定位通用策略缺口并验证回归哨兵"
+      ],
+      "issueNumber": 185,
+      "issueUrl": "https://github.com/Torch1230/CombatSolver/issues/185#o016",
+      "assetId": 605225174,
+      "assetUrl": "https://github.com/Torch1230/CombatSolver/releases/download/community-tasks-2026-10-02/Q005.zip",
+      "assetSizeBytes": 1474486,
+      "status": "withdrawn",
+      "withdrawnAt": "2026-10-03T17:13:15.958761+00:00",
+      "withdrawalReason": "maintainer_withdrawal",
+      "issueState": "closed",
+      "issueStateReason": "not_planned",
+      "archiveAvailable": false
+    },
+    {
+      "themeId": "O017",
+      "batchId": "Q005",
+      "title": "灵魂异鱼战斗的路线搜索质量",
+      "kind": "optimization",
+      "mechanismKey": "encounter-route-quality:SOUL_FYSH_BOSS",
+      "encounterId": "SOUL_FYSH_BOSS",
+      "representativeIds": [
+        "604d7330bac9443caa3d89fd5a06b42c"
+      ],
+      "groupIds": [],
+      "legacyTaskIds": [],
+      "signaturePatterns": [],
+      "sourcePaths": [
+        "src/Runtime/SolverController.cs",
+        "src/Search/CombatBeamSolver.Expansion.cs",
+        "src/Search/CombatBeamSolver.BeamRetentionPolicy.cs",
+        "src/Search/CombatBeamSolver.StateEvaluation.cs",
+        "src/Search/CombatBeamSolver.FinalPlanOrdering.cs"
+      ],
+      "sourceSymbols": [
+        "RecordManualProjectionComparison",
+        "ApplyProjectionBaselines",
+        "BeamRetentionPolicy",
+        "FinalPlanOrdering"
+      ],
+      "staticCause": "MANUAL_ROUTE_IMPROVED 记录手操改变状态后的重新预测，比较值与报告和搜索结果条目一致；按具体原版遭遇归并质量排查范围，算法首因尚未定位。",
+      "unresolved": "先验证模拟、部署与资源政策，再从 combat_start 对照同根同政策同预算路线，定位展开、保路、去重或排序中的通用机制。",
+      "evidenceLevel": "shared_mechanism",
+      "verification": "static_only",
+      "rootCauseVerifiedByExecution": false,
+      "hpLoss": {
+        "kind": "manual_projection",
+        "before": 28,
+        "after": 17,
+        "reduction": 11
+      },
+      "comparisonTurns": [
+        1,
+        1
+      ],
+      "comparisonCheckpointIds": {
+        "original": "6a8b9882f39943ea925510aeb988811b:1",
+        "current": "6a8b9882f39943ea925510aeb988811b:3"
+      },
+      "limitations": [
+        "比较期间累计用药数量改变，收益评价必须核对药水政策与消耗。"
+      ],
+      "logEvidence": [
+        {
+          "file": "diagnostics/logs/combat/001.jsonl",
+          "line": 250,
+          "message": "[CombatSolver/Test] MANUAL_ROUTE_IMPROVED original_turn=1 current_turn=1 previous_projected_battle_hp_lost=28 current_projected_battle_hp_lost=17 difference=-11 field=live_combat_stamp expected={solver_result} actual={manual_state_change}"
+        }
+      ],
+      "archive": "Q005.zip",
+      "requiresSourceSymbolForMatch": false,
+      "acceptance": [
+        "combat_start 恢复与状态对账",
+        "语义和原生部署正确",
+        "同根同政策同预算比较并单列额外用药",
+        "定位通用策略缺口并验证回归哨兵"
+      ],
+      "issueNumber": 185,
+      "issueUrl": "https://github.com/Torch1230/CombatSolver/issues/185#o017",
+      "assetId": 605225174,
+      "assetUrl": "https://github.com/Torch1230/CombatSolver/releases/download/community-tasks-2026-10-02/Q005.zip",
+      "assetSizeBytes": 1474486,
+      "status": "withdrawn",
+      "withdrawnAt": "2026-10-03T17:13:15.958761+00:00",
+      "withdrawalReason": "maintainer_withdrawal",
+      "issueState": "closed",
+      "issueStateReason": "not_planned",
+      "archiveAvailable": false
+    },
+    {
+      "themeId": "O018",
+      "batchId": "Q005",
+      "title": "墨影幻灵战斗的路线搜索质量",
+      "kind": "optimization",
+      "mechanismKey": "encounter-route-quality:VANTOM_BOSS",
+      "encounterId": "VANTOM_BOSS",
+      "representativeIds": [
+        "a4201ea911ae41389ec8333f14081f76"
+      ],
+      "groupIds": [],
+      "legacyTaskIds": [],
+      "signaturePatterns": [],
+      "sourcePaths": [
+        "src/Runtime/SolverController.cs",
+        "src/Search/CombatBeamSolver.Expansion.cs",
+        "src/Search/CombatBeamSolver.BeamRetentionPolicy.cs",
+        "src/Search/CombatBeamSolver.StateEvaluation.cs",
+        "src/Search/CombatBeamSolver.FinalPlanOrdering.cs"
+      ],
+      "sourceSymbols": [
+        "RecordManualProjectionComparison",
+        "ApplyProjectionBaselines",
+        "BeamRetentionPolicy",
+        "FinalPlanOrdering"
+      ],
+      "staticCause": "MANUAL_ROUTE_IMPROVED 记录手操改变状态后的重新预测，比较值与报告和搜索结果条目一致；按具体原版遭遇归并质量排查范围，算法首因尚未定位。",
+      "unresolved": "先验证模拟、部署与资源政策，再从 combat_start 对照同根同政策同预算路线，定位展开、保路、去重或排序中的通用机制。",
+      "evidenceLevel": "shared_mechanism",
+      "verification": "static_only",
+      "rootCauseVerifiedByExecution": false,
+      "hpLoss": {
+        "kind": "manual_projection",
+        "before": 37,
+        "after": 26,
+        "reduction": 11
+      },
+      "comparisonTurns": [
+        1,
+        2
+      ],
+      "comparisonCheckpointIds": {
+        "original": "975745a6a1aa49088ea53e3e91430034:1",
+        "current": "975745a6a1aa49088ea53e3e91430034:3"
+      },
+      "limitations": [
+        "currentCheckpointId 对应快照未保留；录制事件与搜索结果条目保留，从 combat_start 重建比较。",
+        "比较跨回合发生，属于手操后重新预测。"
+      ],
+      "logEvidence": [
+        {
+          "file": "diagnostics/logs/combat/001.jsonl",
+          "line": 81,
+          "message": "[CombatSolver/Test] MANUAL_ROUTE_IMPROVED original_turn=1 current_turn=2 previous_projected_battle_hp_lost=37 current_projected_battle_hp_lost=26 difference=-11 field=C[0] expected={STRIKE_IRONCLAD+0/False:1/False:-1/0/False/False/False/True/False/-:0:0/-:0[Damage=6,]/private=-/keywords=[]/baselib=-} actual={BASH+0/False:2/False:-1/0/False/False/False/True/False/-:0:0/-:0[Damage=8,VulnerablePower=2,]/private=-/keywords=[]/baselib=-} expected_count=5 actual_count=5"
+        }
+      ],
+      "archive": "Q005.zip",
+      "requiresSourceSymbolForMatch": false,
+      "acceptance": [
+        "combat_start 恢复与状态对账",
+        "语义和原生部署正确",
+        "同根同政策同预算比较并单列额外用药",
+        "定位通用策略缺口并验证回归哨兵"
+      ],
+      "issueNumber": 185,
+      "issueUrl": "https://github.com/Torch1230/CombatSolver/issues/185#o018",
+      "assetId": 605225174,
+      "assetUrl": "https://github.com/Torch1230/CombatSolver/releases/download/community-tasks-2026-10-02/Q005.zip",
+      "assetSizeBytes": 1474486,
+      "status": "withdrawn",
+      "withdrawnAt": "2026-10-03T17:13:15.958761+00:00",
+      "withdrawalReason": "maintainer_withdrawal",
+      "issueState": "closed",
+      "issueStateReason": "not_planned",
+      "archiveAvailable": false
+    },
+    {
+      "themeId": "O019",
+      "batchId": "Q005",
+      "title": "花园幽灵鳗战斗的路线搜索质量",
+      "kind": "optimization",
+      "mechanismKey": "encounter-route-quality:PHANTASMAL_GARDENERS_ELITE",
+      "encounterId": "PHANTASMAL_GARDENERS_ELITE",
+      "representativeIds": [
+        "1e40d2a74f8c40b983370884dd0c4255"
+      ],
+      "groupIds": [],
+      "legacyTaskIds": [],
+      "signaturePatterns": [],
+      "sourcePaths": [
+        "src/Runtime/SolverController.cs",
+        "src/Search/CombatBeamSolver.Expansion.cs",
+        "src/Search/CombatBeamSolver.BeamRetentionPolicy.cs",
+        "src/Search/CombatBeamSolver.StateEvaluation.cs",
+        "src/Search/CombatBeamSolver.FinalPlanOrdering.cs"
+      ],
+      "sourceSymbols": [
+        "RecordManualProjectionComparison",
+        "ApplyProjectionBaselines",
+        "BeamRetentionPolicy",
+        "FinalPlanOrdering"
+      ],
+      "staticCause": "MANUAL_ROUTE_IMPROVED 记录手操改变状态后的重新预测，比较值与报告和搜索结果条目一致；按具体原版遭遇归并质量排查范围，算法首因尚未定位。",
+      "unresolved": "先验证模拟、部署与资源政策，再从 combat_start 对照同根同政策同预算路线，定位展开、保路、去重或排序中的通用机制。",
+      "evidenceLevel": "shared_mechanism",
+      "verification": "static_only",
+      "rootCauseVerifiedByExecution": false,
+      "hpLoss": {
+        "kind": "manual_projection",
+        "before": 77,
+        "after": 67,
+        "reduction": 10
+      },
+      "comparisonTurns": [
+        4,
+        5
+      ],
+      "comparisonCheckpointIds": {
+        "original": "d2320cbc9c78427fa75b917a3d3b0425:6",
+        "current": "d2320cbc9c78427fa75b917a3d3b0425:8"
+      },
+      "limitations": [
+        "比较跨回合发生，属于手操后重新预测。"
+      ],
+      "logEvidence": [
+        {
+          "file": "diagnostics/logs/combat/005.jsonl",
+          "line": 523,
+          "message": "[CombatSolver/Test] MANUAL_ROUTE_IMPROVED original_turn=4 current_turn=5 previous_projected_battle_hp_lost=77 current_projected_battle_hp_lost=67 difference=-10 field=hp expected={25} actual={30}"
+        }
+      ],
+      "archive": "Q005.zip",
+      "requiresSourceSymbolForMatch": false,
+      "acceptance": [
+        "combat_start 恢复与状态对账",
+        "语义和原生部署正确",
+        "同根同政策同预算比较并单列额外用药",
+        "定位通用策略缺口并验证回归哨兵"
+      ],
+      "issueNumber": 185,
+      "issueUrl": "https://github.com/Torch1230/CombatSolver/issues/185#o019",
+      "assetId": 605225174,
+      "assetUrl": "https://github.com/Torch1230/CombatSolver/releases/download/community-tasks-2026-10-02/Q005.zip",
+      "assetSizeBytes": 1474486,
+      "status": "withdrawn",
+      "withdrawnAt": "2026-10-03T17:13:15.958761+00:00",
+      "withdrawalReason": "maintainer_withdrawal",
+      "issueState": "closed",
+      "issueStateReason": "not_planned",
+      "archiveAvailable": false
+    },
+    {
+      "themeId": "O020",
+      "batchId": "Q005",
+      "title": "拳击构装体战斗的路线搜索质量",
+      "kind": "optimization",
+      "mechanismKey": "encounter-route-quality:PUNCH_OFF_EVENT_ENCOUNTER",
+      "encounterId": "PUNCH_OFF_EVENT_ENCOUNTER",
+      "representativeIds": [
+        "97495b8bffcf401bb7995f8034b4bc13"
+      ],
+      "groupIds": [],
+      "legacyTaskIds": [],
+      "signaturePatterns": [],
+      "sourcePaths": [
+        "src/Runtime/SolverController.cs",
+        "src/Search/CombatBeamSolver.Expansion.cs",
+        "src/Search/CombatBeamSolver.BeamRetentionPolicy.cs",
+        "src/Search/CombatBeamSolver.StateEvaluation.cs",
+        "src/Search/CombatBeamSolver.FinalPlanOrdering.cs"
+      ],
+      "sourceSymbols": [
+        "RecordManualProjectionComparison",
+        "ApplyProjectionBaselines",
+        "BeamRetentionPolicy",
+        "FinalPlanOrdering"
+      ],
+      "staticCause": "MANUAL_ROUTE_IMPROVED 记录手操改变状态后的重新预测，比较值与报告和搜索结果条目一致；按具体原版遭遇归并质量排查范围，算法首因尚未定位。",
+      "unresolved": "先验证模拟、部署与资源政策，再从 combat_start 对照同根同政策同预算路线，定位展开、保路、去重或排序中的通用机制。",
+      "evidenceLevel": "shared_mechanism",
+      "verification": "static_only",
+      "rootCauseVerifiedByExecution": false,
+      "hpLoss": {
+        "kind": "manual_projection",
+        "before": 14,
+        "after": 4,
+        "reduction": 10
+      },
+      "comparisonTurns": [
+        2,
+        2
+      ],
+      "comparisonCheckpointIds": {
+        "original": "b32d24322be544cb8f9e391b06bf6a44:1",
+        "current": "b32d24322be544cb8f9e391b06bf6a44:5"
+      },
+      "limitations": [
+        "比较期间累计用药数量改变，收益评价必须核对药水政策与消耗。"
+      ],
+      "logEvidence": [
+        {
+          "file": "diagnostics/logs/combat/001.jsonl",
+          "line": 133,
+          "message": "[CombatSolver/Test] MANUAL_ROUTE_IMPROVED original_turn=2 current_turn=2 previous_projected_battle_hp_lost=14 current_projected_battle_hp_lost=4 difference=-10 field=live_combat_stamp expected={solver_result} actual={manual_state_change}"
+        }
+      ],
+      "archive": "Q005.zip",
+      "requiresSourceSymbolForMatch": false,
+      "acceptance": [
+        "combat_start 恢复与状态对账",
+        "语义和原生部署正确",
+        "同根同政策同预算比较并单列额外用药",
+        "定位通用策略缺口并验证回归哨兵"
+      ],
+      "issueNumber": 185,
+      "issueUrl": "https://github.com/Torch1230/CombatSolver/issues/185#o020",
+      "assetId": 605225174,
+      "assetUrl": "https://github.com/Torch1230/CombatSolver/releases/download/community-tasks-2026-10-02/Q005.zip",
+      "assetSizeBytes": 1474486,
+      "status": "withdrawn",
+      "withdrawnAt": "2026-10-03T17:13:15.958761+00:00",
+      "withdrawalReason": "maintainer_withdrawal",
+      "issueState": "closed",
+      "issueStateReason": "not_planned",
+      "archiveAvailable": false
+    }
   ]
 }

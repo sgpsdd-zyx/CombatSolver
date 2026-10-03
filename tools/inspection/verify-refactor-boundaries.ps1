@@ -1379,6 +1379,11 @@ if (-not (Select-String -LiteralPath $beamRetentionFacadePath -SimpleMatch "root
 if (-not (Select-String -LiteralPath (Join-Path $repositoryRoot "src/Runtime/CombatRootSnapshot.cs") -SimpleMatch "CanUseKnownNativeHealingPolicy(" -Quiet)) {
     $violations.Add("CombatRootSnapshot.cs: native healing policy eligibility must be frozen at the root")
 }
+foreach ($gcBoundary in @('"default_gc_indivisible_commit",', 'keepDefaultGcLimit: false),', 'keepDefaultGcLimit: true),')) {
+    if (-not (Select-String -LiteralPath (Join-Path $repositoryRoot 'src/Runtime/SearchGcPolicy.cs') -SimpleMatch $gcBoundary -Quiet)) {
+        $violations.Add("Missing regular/explicit default-GC allocation ownership boundary: $gcBoundary")
+    }
+}
 foreach ($goldBoundary in @(
     @('src/Search/SimulatedCombatState.cs', '_goldRunHookSnapshot = GoldRunHookSnapshot.Capture('),
     @('src/Search/SimulatedCombatState.cs', '_goldRunHookSnapshot = source._goldRunHookSnapshot;'),

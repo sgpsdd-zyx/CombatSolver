@@ -1,6 +1,6 @@
 # CombatSolver 测试入口
 
-本 fork 当前基于官方 `acc05d85 / 0.49.0`，准备发布 0.49.1。测试分层与命令见 [无人测试](HEADLESS_TESTING.md)，源码职责见 [Testing](../src/Testing/README.md)。历史结果不替代本轮验证。
+本 fork 当前基于官方 `4b5537d0 / 0.49.1`，准备发布 0.49.2。测试分层与命令见 [无人测试](HEADLESS_TESTING.md)，源码职责见 [Testing](../src/Testing/README.md)。历史结果不替代本轮验证。
 
 ## 2026-10-03 本轮结果
 
@@ -14,6 +14,14 @@
 | GC 轻量合同 | default-entry 2 项与 scopes 8 项通过。diagnostic-failure 未建立实际区域，前提断言失败，区域释放驻留行为仍未验证。 |
 
 完整输入、首次失败与最终断言见 [合并记录](archive/strategy/upstream-0490-merge-20261003.md)、[结构化证据](archive/strategy/upstream-0490-merge-20261003-evidence.json)和[复跑输入](archive/strategy/upstream-0490-merge-20261003-inputs.json)。两批无头实例均由启动器成功删除。虚空形态首次停在隔离档的首次洗牌教程；仅修测试前置条件后通过，其余已通过请求没有重跑。
+
+## 0.49.1 紧急修复的增量验证
+
+相对前述 0.49.0 结果，新增生产改动仅为 Runtime 普通 GC 显式退出的分配所有权；卡牌与多人政策没有变化。新增 `default-commit` 验证真实 CLR 回收、不可分割提交续行、下一请求限额与取消；相邻 `default-entry` 验证入口诊断失败后的释放。本轮 `default-commit` 2 项与 `default-entry` 2 项均通过，结果见合并归档的紧急修复节。未重跑已通过的 25 项无头场景或官方固定根对照；它们明确属于本轮前一阶段。
+
+```bash
+dotnet run --project tools/testing/checks/CombatSolver.GcPolicyChecks/CombatSolver.GcPolicyChecks.csproj -c Release -- default-commit
+```
 
 ## 可重跑入口
 

@@ -2,9 +2,7 @@
   "schemaVersion": 1,
   "date": "2026-10-03",
   "forkBefore": "1d7115c71bc0c7b152a3efba874388c9d1398214",
-  "upstream": "acc05d8511d8bce01aa37dea3869cfb96af67790",
-  "upstreamVersion": "0.49.0",
-  "forkVersion": "0.49.1",
+  "forkVersion": "0.49.2",
   "environment": {
     "os": "macOS arm64",
     "game": "0.111.0",
@@ -656,5 +654,54 @@
         "action": "retain pending post-report cleanup confirmation"
       }
     ]
+  },
+  "initialOfficial": "acc05d8511d8bce01aa37dea3869cfb96af67790",
+  "initialOfficialVersion": "0.49.0",
+  "upstream": "4b5537d00bfcbc822b2fbf78fc6da0c3e45ad161",
+  "upstreamVersion": "0.49.1",
+  "firstStageVersion": "0.49.1 unpublished fork candidate; official 0.49.0 baseline",
+  "emergencyUpdate": {
+    "previousOfficial": "acc05d8511d8bce01aa37dea3869cfb96af67790",
+    "latestOfficial": "4b5537d00bfcbc822b2fbf78fc6da0c3e45ad161",
+    "latestOfficialVersion": "0.49.1",
+    "forkBefore": "fc9fb02214fb4413b45a258afd0f6c2b6703a483",
+    "requestedForkVersion": "0.49.2",
+    "authorization": "继续合入官方 0.49.1 紧急修复，我们改发 0.49.2（推荐）",
+    "remoteTagPreflight": "origin v0.49.2 absent; local v0.49.2 absent",
+    "localExistingTag": "v0.49.1 -> 337aa9d08530eac1f1e8c81d8418dd95194754ce; not modified",
+    "runtimeTests": [
+      {
+        "mode": "default-commit",
+        "exitCode": 0,
+        "wallSeconds": 3.57
+      },
+      {
+        "mode": "default-entry",
+        "exitCode": 0,
+        "wallSeconds": 0.56
+      }
+    ],
+    "productionScope": "SearchGcPolicy explicit default-GC indivisible commit callback only",
+    "previousBehaviorTestsReused": true,
+    "inventory": {
+      "files": 2425,
+      "markdown": 565,
+      "rules": [
+        "AGENTS.md"
+      ],
+      "ruleBytes": 25302
+    },
+    "layout": {
+      "documentation": "Passed",
+      "markdown": 565,
+      "links": 2911,
+      "coverage": "Passed",
+      "coverageData": 559,
+      "fixtures": 509,
+      "groups": 37,
+      "structure": "Passed",
+      "searchFiles": 259
+    },
+    "coverageCatalog": "Reuses the 0.49.1 prepared-candidate snapshot; urgent change affects only Runtime GC ownership, not coverage inventory."
   }
 }

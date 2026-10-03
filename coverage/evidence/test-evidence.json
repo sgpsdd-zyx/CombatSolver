@@ -3014,5 +3014,13 @@
     "expected": "Official solo paths retained; multiplayer manually requests advice using full-party branch state, local contribution goals and fourteen enemy cycles. Gold callbacks preserve owner scope and branch hook activation after death/revival; Joss Paper deferred state belongs to each relic.",
     "observed": "2026-10-03: 56 compatibility and 32 contribution checks passed, including full-party ContinuationStamp/Fork/native gold and Joss Paper settlement. Dead teammate native lifecycle and repeated manual requests passed. Four official/fork comparisons: 344 non-timing fields identical, including complete route/root/continuations. Twenty-five final headless requests passed across two isolated instances, both removed by the launcher. Void Form initial failure was a fresh-profile shuffle tutorial; only fixture setup changed before its successful rerun. GC diagnostic-failure did not create an actual region and remains unverified. No live multiplayer, visible performance or cross-platform execution claim.",
     "evidence": "docs/archive/strategy/upstream-0490-merge-20261003.md; docs/archive/strategy/upstream-0490-merge-20261003-evidence.json; docs/archive/strategy/upstream-0490-merge-20261003-inputs.json"
+  },
+  "UPSTREAM-0491-DEFAULT-GC-COMMIT": {
+    "status": "Passed",
+    "level": "L1ManagedNativeClrRuntimeContract",
+    "procedure": "Run CombatSolver.GcPolicyChecks default-commit and default-entry against production Runtime after merging official 4b5537d0 / 0.49.1.",
+    "expected": "Regular checkpoints retain a bounded allocation window; explicit indivisible commit fallback releases that window to CLR after actual collection. A later search creates a new bound; cancellation preserves the existing scope.",
+    "observed": "2026-10-03: default-commit 2 and default-entry 2 passed. No production search policies changed. Prior card/multiplayer tests reused because their inputs and sources are unchanged. Actual NoGC-region diagnostics remain unverified on this host.",
+    "evidence": "docs/archive/strategy/upstream-0490-merge-20261003.md; docs/archive/strategy/upstream-0490-merge-20261003-evidence.json; tools/testing/checks/CombatSolver.GcPolicyChecks/GcRecoveryChecks.cs"
   }
 }
