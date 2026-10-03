@@ -57,6 +57,12 @@ internal sealed class CombatRootSnapshot
     /// <summary>Conservative recovery metadata for portfolio stopping, not a bound on all future healing.</summary>
     public bool HasVisibleHealingSource { get; }
     public bool HasOnlyPostCombatHealing { get; }
+    public string HealingBoundCertificationReason { get; }
+    public string? HealingBoundCertificationSourceId { get; }
+    public bool CanCertifyRemainingHealing { get; }
+    public bool UsesKnownNativeHealingPolicy { get; }
+    /// <summary>Root card/power/potion healing bound, excluding fixed post-combat healing.</summary>
+    public int InitialRemainingHealingUpperBound { get; }
     public CombatHistoryDependencies HistoryDependencies { get; }
     public int CapturedPowerCount { get; }
     public int CapturedHookListenerCount { get; }
@@ -95,7 +101,7 @@ internal sealed class CombatRootSnapshot
         int capturedCardCount,
         IReadOnlySet<string> playerCardIds,
         bool hasVisibleHealingSource,
-        bool hasOnlyPostCombatHealing,
+        StrategicHpRecoveryBoundAssessment healingBoundAssessment,
         CombatHistoryDependencies historyDependencies,
         int capturedPowerCount,
         int capturedHookListenerCount,
@@ -138,7 +144,16 @@ internal sealed class CombatRootSnapshot
         CapturedCardCount = capturedCardCount;
         PlayerCardIds = playerCardIds;
         HasVisibleHealingSource = hasVisibleHealingSource;
-        HasOnlyPostCombatHealing = hasOnlyPostCombatHealing;
+        HasOnlyPostCombatHealing = healingBoundAssessment.IsCertified;
+        HealingBoundCertificationReason = healingBoundAssessment.Reason;
+        HealingBoundCertificationSourceId = healingBoundAssessment.BlockingSourceId;
+        CanCertifyRemainingHealing = !IsMultiplayerAdvisor && StrategicHpRecoveryBound.CanCertifyRemainingHealingEnvironment(
+            rootSimulator, playerIdentity);
+        UsesKnownNativeHealingPolicy = !IsMultiplayerAdvisor && StrategicHpRecoveryBound.CanUseKnownNativeHealingPolicy(
+            rootSimulator, playerIdentity);
+        InitialRemainingHealingUpperBound = CanCertifyRemainingHealing
+            ? StrategicHpRecoveryBound.RemainingHealingUpperBound(rootSimulator, playerIdentity, postCombatHeal: 0)
+            : int.MaxValue;
         HistoryDependencies = historyDependencies;
         CapturedPowerCount = capturedPowerCount;
         CapturedHookListenerCount = capturedHookListenerCount;
@@ -233,8 +248,9 @@ internal sealed class CombatRootSnapshot
                 || HasHealingVariables(power.DynamicVars))
             || player.PotionSlots.Any(potion => potion != null && PotionOnUseSupport.CanSearch(potion)
                 && HasHealingVariables(potion.DynamicVars));
-        bool hasOnlyPostCombatHealing = !advisor
-            && StrategicHpRecoveryBound.HasOnlyPostCombatHealing(simulator, player);
+        StrategicHpRecoveryBoundAssessment healingBoundAssessment = advisor
+            ? new(false, "multiplayer_advisor")
+            : StrategicHpRecoveryBound.Assess(simulator, player);
         if (!string.Equals(
                 continuationBefore.StateText,
                 projected.StateText,
@@ -303,7 +319,7 @@ internal sealed class CombatRootSnapshot
             cardCount,
             playerCardIds,
             hasVisibleHealingSource,
-            hasOnlyPostCombatHealing,
+            healingBoundAssessment,
             historyDependencies,
             powerCount,
             simulatedCombat.RootHookListenerCount,

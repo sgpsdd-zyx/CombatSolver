@@ -16,9 +16,17 @@ internal sealed partial class UnattendedTestRunner
         SearchPolicySnapshot policy = SolverController.CaptureSearchPolicy(
             SolverSettings.Capture(), combat, includeTurnSetup: false,
             theftPolicy: SolverController.ResolveTheftPolicy(combat));
-        await Task.Run(() => new CombatBeamSolver(root, SolverDisplayNames.Capture(combat),
-            BattleDamageTracker.Observe(combat), policy, CancellationToken.None)
-            .VerifyAdjustedRouteInvalidSuffixForTesting());
+        bool targetsOnly = _request.ScenarioId == "B015-FIXED-PREFIX-TARGETS";
+        string nativeBefore = ContinuationStamp.CaptureLive(combat).StateText;
+        await Task.Run(() =>
+        {
+            CombatBeamSolver driver = new(root, SolverDisplayNames.Capture(combat),
+                BattleDamageTracker.Observe(combat), policy, CancellationToken.None);
+            if (targetsOnly) driver.VerifyB015FixedPrefixTargetsForTesting();
+            else driver.VerifyAdjustedRouteInvalidSuffixForTesting();
+        });
+        if (targetsOnly && nativeBefore != ContinuationStamp.CaptureLive(combat).StateText)
+            throw new InvalidOperationException("B015 fixed prefix modified native state.");
     }
 
     private static async Task AssertEndTurnChoiceReplayAsync(MegaCrit.Sts2.Core.Combat.CombatState combat,

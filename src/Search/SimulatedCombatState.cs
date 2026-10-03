@@ -68,6 +68,8 @@ internal sealed partial class SimulatedCombatState
     private readonly PredictionModHookSubscriberCapture _modHookSubscribers;
     internal AdaptedOnPlaySnapshot? AdaptedOnPlay => _modHookSubscribers.AdaptedOnPlay;
     internal bool HasInactiveLoadoutSummonPowers => _modHookSubscribers.HasInactiveLoadoutSummonPowers;
+    internal bool RootHasOnlyNonHealingLoadoutSubscribers
+        => _modHookSubscribers.HasOnlyNonHealingLoadoutSubscribers;
     private readonly IReadOnlyDictionary<Player, int> _rootMaxHandSizes;
     private readonly RootCombatCardGenerationPoolSnapshot _rootCardGenerationPools;
     private readonly RootCombatTransformationPoolSnapshot _rootTransformationPools;
@@ -251,6 +253,11 @@ internal sealed partial class SimulatedCombatState
         _cardMultiplayerConstraint = inner.RunState.CardMultiplayerConstraint;
         _playerCreatures = inner.PlayerCreatures.ToArray();
         _players = inner.Players.ToArray();
+        // 实机卡牌集合在根捕获窗口内必须保持不动：#182/T021 的裸 Collection was modified
+        // 来自写者在枚举 _allCards 期间改写该列表，导致搜索初始化无法归因地失败。
+        List<CardModel> liveCombatCards = (List<CardModel>)AllCombatCardsField.GetValue(inner)!;
+        LiveCollectionGuard.Window rootLiveCollectionWindow = LiveCollectionGuard.BeginWindow(
+            ("CombatState._allCards", liveCombatCards));
         _madScienceUpgradeCapacity = _players.Count > 1 ? 0 : MadScienceGrowth.CaptureRemainingCapacity(inner);
         _rootCardGenerationPools = RootCombatCardGenerationPoolSnapshot.Capture(
             _players,
@@ -336,7 +343,8 @@ internal sealed partial class SimulatedCombatState
             .Where(player => player.PlayerCombatState != null)
             .SelectMany(player => player.PlayerCombatState!.AllCards)
             .ToHashSet();
-        _rootFloatingCards = ((List<CardModel>)AllCombatCardsField.GetValue(inner)!)
+        _rootFloatingCards = LiveCollectionGuard
+            .SnapshotStable(liveCombatCards, "CombatState._allCards")
             .Where(card => !piledCards.Contains(card))
             .ToHashSet();
         _potionSlots = [];
@@ -432,6 +440,7 @@ internal sealed partial class SimulatedCombatState
             _playerTurnNumbers.Add(player, playerState.TurnNumber);
             _simulatedPlayerGold.Add(player, player.Gold);
         }
+        rootLiveCollectionWindow.Verify();
     }
 
     private SimulatedCombatState(
@@ -1113,19 +1122,41 @@ internal sealed partial class SimulatedCombatState
         Apply<DexterityPower>(creature, applied, applier);
     }
 
+    /// <summary>
+    /// 原版 <c>TemporaryStrengthPower</c> / <c>TemporaryDexterityPower</c> / <c>TemporaryFocusPower</c> 的
+    /// AfterSideTurnEnd：移除该能力，并按 <c>-Sign * Amount</c> 反向回收对应的永久属性。
+    /// 原版在 <c>Hook.AfterSideTurnEnd</c> 里逐个监听器分发，回收必须发生在该能力自己的监听位置，
+    /// 而不是集中提前执行——否则排在它后面的监听器（例如 ConsumingShadowPower 的末球激发）会读到
+    /// 已经被回收的 Focus。
+    /// </summary>
+    public void RetireTemporaryStat(PowerModel power)
+    {
+        int delta = power.TypeForCurrentAmount == PowerType.Buff ? -power.Amount : power.Amount;
+        SetPowerAmount(power, 0);
+        if (delta == 0)
+            return;
+        switch (power)
+        {
+            case TemporaryFocusPower:
+                Apply<FocusPower>(power.Owner, delta, power.Owner);
+                break;
+            case TemporaryDexterityPower:
+                Apply<DexterityPower>(power.Owner, delta, power.Owner);
+                break;
+            default:
+                Apply<StrengthPower>(power.Owner, delta, power.Owner);
+                break;
+        }
+    }
+
     public void RestoreTemporaryDexterity()
     {
-        foreach (IGrouping<Creature, TemporaryDexterityPower> group in PowersForHooks()
+        foreach (TemporaryDexterityPower power in PowersForHooks()
                      .OfType<TemporaryDexterityPower>()
                      .Where(static power => power.Amount > 0)
-                     .GroupBy(static power => power.Owner)
                      .ToArray())
         {
-            Creature creature = group.Key;
-            int amount = group.Sum(static power => power.Amount);
-            Apply<DexterityPower>(creature, -amount);
-            foreach (TemporaryDexterityPower power in group)
-                SetPowerAmount(power, 0);
+            RetireTemporaryStat(power);
         }
     }
 
@@ -1137,36 +1168,18 @@ internal sealed partial class SimulatedCombatState
                      .Where(power => participantSet.Contains(power.Owner) && power.Amount > 0)
                      .ToArray())
         {
-            int strengthDelta = power.TypeForCurrentAmount == PowerType.Buff
-                ? -power.Amount
-                : power.Amount;
-            SetPowerAmount(power, 0);
-            Apply<StrengthPower>(power.Owner, strengthDelta, power.Owner);
+            RetireTemporaryStat(power);
         }
     }
 
     public void RestoreTemporaryFocus()
     {
-        foreach (Creature creature in Creatures)
+        foreach (TemporaryFocusPower power in PowersForHooks()
+                     .OfType<TemporaryFocusPower>()
+                     .Where(static power => power.Amount > 0)
+                     .ToArray())
         {
-            if (creature.Player is { } player && !IsPlayerActiveForHooks(player))
-                continue;
-            int amount = GetAmount<HotfixPower>(creature)
-                + GetAmount<SynchronizePower>(creature)
-                + GetAmount<FocusedStrikePower>(creature);
-            if (amount > 0)
-            {
-                Apply<FocusPower>(creature, -amount);
-                SetAmount<HotfixPower>(creature, 0);
-                SetAmount<SynchronizePower>(creature, 0);
-                SetAmount<FocusedStrikePower>(creature, 0);
-            }
-            int focusLoss = GetAmount<HyperbeamFocusDownPower>(creature);
-            if (focusLoss > 0)
-            {
-                Apply<FocusPower>(creature, focusLoss);
-                SetAmount<HyperbeamFocusDownPower>(creature, 0);
-            }
+            RetireTemporaryStat(power);
         }
     }
 
@@ -1804,7 +1817,7 @@ internal sealed partial class SimulatedCombatState
                 if (power.Amount != 0
                     && !ContainsPowerReference(listeners, power))
                 {
-                    int insertionIndex = FindPowerInsertionIndex(listeners, power);
+                    int insertionIndex = FindPowerInsertionIndex(listeners, power, requirePrefixAnchor);
                     // With no prefix anchor the original may insert at a card or at the
                     // end of the full sequence. Keep that original complete-list path.
                     if (insertionIndex < 0 && requirePrefixAnchor)
@@ -1828,7 +1841,8 @@ internal sealed partial class SimulatedCombatState
         return false;
     }
 
-    private int FindPowerInsertionIndex(IReadOnlyList<AbstractModel> listeners, PowerModel power)
+    private int FindPowerInsertionIndex(
+        IReadOnlyList<AbstractModel> listeners, PowerModel power, bool requirePrefixAnchor)
     {
         int insertionIndex = -1;
         for (int index = 0; index < listeners.Count; index++)
@@ -1845,7 +1859,36 @@ internal sealed partial class SimulatedCombatState
                 break;
             }
         }
+        if (requirePrefixAnchor)
+            return insertionIndex;
+
+        // Native listeners visit each creature's powers before moving to the next
+        // creature. An empty player bucket has no relic/potion/card anchor, but its
+        // newly acquired power must still precede Osty and enemy listeners.
+        int ownerIndex = CreatureListenerIndex(power.Owner);
+        if (ownerIndex < 0)
+            return insertionIndex;
+        for (int index = 0; index < listeners.Count; index++)
+        {
+            Creature? listenerOwner = listeners[index] switch
+            {
+                PowerModel existing => existing.Owner,
+                MonsterModel monster => monster.Creature,
+                _ => null,
+            };
+            if (listenerOwner is not null && CreatureListenerIndex(listenerOwner) > ownerIndex)
+                return insertionIndex < 0 ? index : Math.Min(insertionIndex, index);
+        }
         return insertionIndex;
+    }
+
+    private int CreatureListenerIndex(Creature owner)
+    {
+        IReadOnlyList<Creature> roster = Creatures;
+        for (int index = 0; index < roster.Count; index++)
+            if (ReferenceEquals(roster[index], owner))
+                return index;
+        return -1;
     }
 
     private bool IsOwnerHookAnchor(AbstractModel listener, Creature owner)
@@ -1854,6 +1897,7 @@ internal sealed partial class SimulatedCombatState
         {
             return listener is RelicModel relic && RelicsOf(player).Contains(relic)
                 || listener is PotionModel potion && ReferenceEquals(potion.Owner, player)
+                || listener is OrbModel orb && ReferenceEquals(orb.Owner, player)
                 || listener is CardModel card && ReferenceEquals(card.Owner, player);
         }
         return listener is MonsterModel monster && ReferenceEquals(monster.Creature, owner);
@@ -2366,8 +2410,8 @@ internal sealed partial class SimulatedCombatState
         ulong dynamicFirst = 0;
         ulong dynamicSecond = 0;
         int dynamicCount = 0;
-        // DynamicVarSet.GetEnumerator 会装箱内部字典的枚举器；直接枚举已 publicize 的 _vars。
-        foreach (var dynamicVar in power.DynamicVars._vars)
+        // DynamicVarSet 的公开 GetEnumerator 会装箱内部字典枚举器；经访问桥读取 _vars。
+        foreach (var dynamicVar in new DynamicVarSetAccess.EntryEnumerable(power.DynamicVars))
         {
             if (!SemanticStateFieldPolicy.IsSemantic(power, dynamicVar.Key, dynamicVar.Value))
                 continue;
@@ -2791,7 +2835,10 @@ internal sealed partial class SimulatedCombatState
             MonsterMaxHpBeforeModificationProperty.SetValue(creature, baseHp);
             creature.SetMaxHpInternal(baseHp);
             creature.SetCurrentHpInternal(baseHp);
-            creature.ScaleMonsterHpForMultiplayer(Encounter, Players.Count, _currentActIndex);
+            // 单人下原版多人生命缩放是空操作，但搜索 worker 上调用它仍会执行第三方
+            // Harmony postfix（报告中的本地化格式池并发）；单人不进入这条路径。
+            if (Players.Count != 1)
+                creature.ScaleMonsterHpForMultiplayer(Encounter, Players.Count, _currentActIndex);
         }
         _ = simulator.State.GetCreature(creature);
         return creature;

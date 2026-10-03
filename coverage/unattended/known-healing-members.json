@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "scenarioId": "KNOWN-HEALING-MEMBERS",
+  "characterId": "SILENT",
+  "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+  "enemyCurrentHp": 999,
+  "timeoutSeconds": 120
+}

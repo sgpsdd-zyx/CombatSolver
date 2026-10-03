@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "scenarioId": "DISPLAY-NAME-SUMMON",
+  "characterId": "IRONCLAD",
+  "encounterId": "GREMLIN_MERC_NORMAL",
+  "seed": "DISPLAY-NAME-SUMMON-20261002",
+  "enemyCurrentHp": 200,
+  "cards": [],
+  "fixedSearchBudget": true,
+  "searchBudgetOverrideMilliseconds": 1000,
+  "headlessFastModeForTest": "Instant",
+  "stopAfterInitialSolverResultAssertion": true,
+  "timeoutSeconds": 120,
+  "enableNoGcRegionForTest": false
+}

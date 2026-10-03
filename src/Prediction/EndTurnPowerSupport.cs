@@ -33,6 +33,17 @@ internal static partial class EndTurnPowerSupport
             bool ownerParticipates = participantSet.Contains(owner);
             switch (power)
             {
+                // 原版按监听器顺序分发 AfterSideTurnEnd，临时属性回收排在该能力自己的位置：
+                // TemporaryFocusPower 的回收可能晚于同侧其它 Power（例如 ConsumingShadowPower 的末球激发）。
+                case TemporaryFocusPower temporaryFocus when ownerParticipates:
+                    combat.RetireTemporaryStat(temporaryFocus);
+                    break;
+                case TemporaryDexterityPower temporaryDexterity when ownerParticipates:
+                    combat.RetireTemporaryStat(temporaryDexterity);
+                    break;
+                case TemporaryStrengthPower temporaryStrength when ownerParticipates:
+                    combat.RetireTemporaryStat(temporaryStrength);
+                    break;
                 case ColossusPower when side == CombatSide.Enemy:
                     combat.SetAmount<ColossusPower>(owner, power.Amount - 1);
                     break;

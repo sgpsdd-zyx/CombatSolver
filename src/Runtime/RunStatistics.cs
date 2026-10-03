@@ -24,11 +24,16 @@ internal sealed partial class RunStatistics : Node
     private readonly object _transportGate = new();
     private readonly HashSet<string> _activities = new();
     private Task? _worker;
+    private volatile bool _recordingStopped;
+    private volatile RunStatisticsFailure? _failure;
+    private volatile RunStatisticsRecord? _incompleteRun;
+    private bool _workerCompletionObserved;
+    internal static RunStatisticsFailure? Failure => _instance?._failure;
     private double _elapsed;
     private bool _disabled;
     private volatile bool _uploadEnabled;
     private CancellationTokenSource? _uploadCancellation;
-    internal static RunStatisticsSnapshot? Snapshot => _instance?._run is { } run && _instance._snapshot?.ProfileId != run.ProfileId ? null : _instance?._snapshot;
+    internal static RunStatisticsSnapshot? Snapshot => _instance?._recordingStopped == true ? null : _instance?._run is { } run && _instance._snapshot?.ProfileId != run.ProfileId ? null : _instance?._snapshot;
     internal static void Start(NGame host)
     {
         if (_instance != null || OnlinePresence.IsHeadless() || UnattendedTestRunner.IsActive) return;
@@ -40,7 +45,45 @@ internal sealed partial class RunStatistics : Node
     }
     private void Enqueue(Signal signal)
     {
-        if (!_signals.Writer.TryWrite(signal)) throw new InvalidOperationException("Run statistics queue capacity exceeded.");
+        if (!CanRecord()) return;
+        if (_signals.Writer.TryWrite(signal)) return;
+        // Sync is a periodic notification: the next tick retries pending uploads.
+        if (signal.Kind == "sync") return;
+        StopRecording(new("queue_capacity", signal.Run?.RunId, signal.Kind,
+            _signals.Reader.Count, false, "Run statistics queue capacity exceeded."));
+        _incompleteRun = signal.Run;
+        // The healthy consumer owns its store and drains accepted events before finishing.
+        _signals.Writer.TryComplete();
+    }
+    private bool CanRecord()
+    {
+        if (_worker?.IsCompleted == true && !_workerCompletionObserved)
+        {
+            _workerCompletionObserved = true;
+            string error = _worker.Exception?.ToString() ?? _worker.Status.ToString();
+            if (!_recordingStopped)
+                StopRecording(new("consumer_completed", _run?.RunId, null, _signals.Reader.Count, false, error));
+            else if (!_worker.IsCompletedSuccessfully)
+            {
+                _failure = _failure! with { Error = _failure.Error + "\nDrain failed: " + error };
+                Entry.Logger.Error($"Run statistics drain failed; incomplete marker saved={_failure.IncompleteMarkerSaved}: {error}");
+            }
+            _signals.Writer.TryComplete();
+            // Only a completed consumer can be drained from the main thread.
+            while (_signals.Reader.TryRead(out _)) { }
+            SetProcess(false);
+        }
+        return !_recordingStopped;
+    }
+    private void StopRecording(RunStatisticsFailure failure)
+    {
+        _failure = failure;
+        _recordingStopped = true;
+        _run = null;
+        _snapshot = null;
+        _activities.Clear();
+        SetUploading(false);
+        Entry.Logger.Error($"Run statistics unavailable; tracking stopped, source files retained; reason={failure.Reason} run={failure.RunId} rejected={failure.RejectedSignal} queued={failure.QueuedSignals} incompleteMarkerSaved={failure.IncompleteMarkerSaved}: {failure.Error}");
     }
     private static string Key(string value) => Convert.ToHexStringLower(SHA256.HashData(Encoding.UTF8.GetBytes(value)))[..32];
     internal static void Launched(RunManager manager)
@@ -53,6 +96,7 @@ internal sealed partial class RunStatistics : Node
             || manager.State.Players.Count != 1 || manager.State.GameMode != GameMode.Standard) return;
         Start(NGame.Instance!);
         var instance = _instance!;
+        if (!instance.CanRecord()) return;
         string profile = Key(OS.GetUserDataDir() + ":" + SaveManager.Instance.CurrentProfileId);
         string character = LocalContext.GetMe(manager.State)!.Character.Id.Entry;
         string id = Key(profile + ":" + manager._startTime + ":" + manager.State.Rng.StringSeed);
@@ -107,13 +151,14 @@ internal sealed partial class RunStatistics : Node
     }
     private void SetUploading(bool enabled)
     {
+        enabled &= !_recordingStopped;
         if (_uploadEnabled == enabled) return;
         _uploadEnabled = enabled;
         if (!enabled) lock (_transportGate) _uploadCancellation?.Cancel();
     }
     public override void _Process(double delta)
     {
-        if (_worker?.IsFaulted == true) { SetProcess(false); Entry.Logger.Error($"Run statistics stopped: {_worker.Exception}"); return; }
+        if (!CanRecord()) return;
         ObserveSetting();
         SetUploading(SolverSettings.Current.OnlineStatisticsEnabled && !SolverController.IsMultiplayerSession && !UnattendedTestRunner.IsActive);
         _elapsed += delta;
@@ -127,8 +172,17 @@ internal sealed partial class RunStatistics : Node
         using var client = OnlinePresence.CreateStatisticsClient();
         string? identity = null;
         string? profile = null;
+        string? markedRun = null;
+        void MarkIncomplete()
+        {
+            if (_incompleteRun is not { } incomplete || markedRun == incomplete.RunId) return;
+            store.MarkIncomplete(incomplete);
+            markedRun = incomplete.RunId;
+            _failure = _failure! with { IncompleteMarkerSaved = true };
+        }
         await foreach (var signal in _signals.Reader.ReadAllAsync())
         {
+            MarkIncomplete();
             if (signal.Kind == "sync")
             {
                 if (!_uploadEnabled || client == null) continue;
@@ -180,8 +234,10 @@ internal sealed partial class RunStatistics : Node
                 record = record with { Participation = !record.EverEnabled ? "none" : record.ObservedFromStart && !record.DisabledInCombat ? "full" : "partial" };
                 if (record != previous) store.Save(record);
             }
-            _snapshot = store.Snapshot(profile);
+            if (!_recordingStopped) _snapshot = store.Snapshot(profile);
         }
+        MarkIncomplete();
+        if (_recordingStopped) _snapshot = null;
     }
     public override void _ExitTree() { _uploadEnabled = false; lock (_transportGate) _uploadCancellation?.Cancel(); _signals.Writer.TryComplete(); _instance = null; }
 }

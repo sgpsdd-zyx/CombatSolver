@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "scenarioId": "CARD-CLONE-IDENTITY-CONTRACT",
+  "characterId": "IRONCLAD",
+  "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+  "seed": "CARD-CLONE-IDENTITY-CONTRACT-20261002",
+  "enemyCurrentHp": 200,
+  "cards": [
+    {
+      "cardId": "STRIKE_IRONCLAD",
+      "pile": "Draw",
+      "treatAsDeckCard": true
+    },
+    {
+      "cardId": "STRIKE_IRONCLAD",
+      "pile": "Draw"
+    }
+  ],
+  "clearRunDeck": true,
+  "clearPlayerPiles": true,
+  "fixedSearchBudget": true,
+  "searchBudgetOverrideMilliseconds": 1000,
+  "headlessFastModeForTest": "Instant",
+  "stopAfterInitialSolverResultAssertion": true,
+  "timeoutSeconds": 120,
+  "enableNoGcRegionForTest": false
+}

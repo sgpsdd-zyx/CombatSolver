@@ -9,6 +9,10 @@ description: 重构 CombatSolver 的 Search、Runtime 会话、UI snapshot、无
 
 官方 0.47.2 的候选生成统一到 `ExpansionPlan`；首动作的 live 目标检查仅用于单人，多人仍消费冻结根的目标。`AdmittedParent`、`AdmittedJobScheduler` 和两种执行器共用候选语义，保留各自消费顺序。单人 `PlanCommitment`、计划保路与延长无进展窗口不得进入多人，构造时清空承诺；多人协调器在请求账本和计划发现之前返回。
 
+官方 0.48.0 的剩余治疗证书、已知原版来源政策与 Smart 药水资格界只归单人，Runtime 根冻结资格，Search 只读消费；多人根不捕获这些资格。`DynamicVarSetAccess` 独占原版内部字典访问，其他消费者使用该桥；字段缺失走公开枚举，调用失败不能吞掉。`LiveCollectionGuard` 只在主线程根捕获窗口拒绝实机集合写入，不为 worker 提供 live 读取通道。
+
+原生无人测试的包枚举预热属于 `ProtocolHost`，首次接受请求、建局之前一次完成；多人实验只准备本场配方，不再拥有跨请求的全局缓存初始化。普通游戏没有请求时不执行该准备，不改原版枚举值、包内容或失败语义。
+
 ## 适用边界
 
 本 skill 处理结构和所有权：拆分大类、迁移 run/session state、建立策略对象、隔离 renderer、整理测试编排、为工具提供稳定元数据。

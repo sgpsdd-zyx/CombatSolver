@@ -69,11 +69,80 @@ internal sealed partial class UnattendedTestRunner
                 await runner.AssertMultiplayerRelicExtraTurnSourceAsync(combatState);
                 return Observation(combatEnded: false);
             }
+            if (request.ScenarioId == "KNOWN-HEALING-POLICY")
+            {
+                runner.SetStage("known_healing_policy");
+                await runner.AssertKnownHealingPolicyAsync(combatState, player);
+                return Observation(combatEnded: false);
+            }
+            if (request.ScenarioId is "KNOWN-HEALING-MEMBERS" or "NATIVE-HEALING-ALL-ENCOUNTERS")
+            {
+                runner.SetStage("known_healing_members");
+                await runner.AssertRefinementIncumbentAsync(combatState, player);
+                if (request.ScenarioId == "NATIVE-HEALING-ALL-ENCOUNTERS")
+                    await runner.AssertKnownHealingPolicyAsync(combatState, player);
+                return Observation(combatEnded: false);
+            }
+            if (request.ScenarioId == "KNOWN-HEALING-OPENING")
+            {
+                runner.SetStage("known_healing_opening");
+                await runner.AssertOpeningPlanIncumbentAsync(combatState, player);
+                return Observation(combatEnded: false);
+            }
+            if (request.ScenarioId is "B015-T016-ORIGINAL-PREFIX" or "B015-T016-AFTERIMAGE-ROUTE")
+            {
+                await runner.AssertB015OriginalPrefixAsync(combatState, player);
+                return Observation(combatEnded: !CombatManager.Instance.IsInProgress);
+            }
+            if (request.ScenarioId == "B015-MAD-SCIENCE")
+            {
+                runner.SetStage("b015_mad_science");
+                await runner.AssertB015MadScienceAsync(combatState, player);
+                return Observation(combatEnded: false);
+            }
+            if (request.ScenarioId == "B015-BOUNDARIES")
+            {
+                _ = await runner.AssertB015BoundariesAsync(combatState, player);
+                return Observation(combatEnded: !CombatManager.Instance.IsInProgress);
+            }
+            if (request.ScenarioId == "RUN-STATISTICS-SATURATION")
+            {
+                await RunStatistics.AssertHealthySaturationIsolationAsync(request.EvidenceDirectory
+                    ?? throw new InvalidOperationException("Statistics checks require an evidence directory."));
+                return Observation(combatEnded: false);
+            }
+            if (request.ScenarioId == "RUN-STATISTICS-WORKER-FAILURE")
+            {
+                await RunStatistics.AssertWorkerFailureIsolationAsync(request.EvidenceDirectory
+                    ?? throw new InvalidOperationException("Statistics fixture requires an evidence directory."));
+                return Observation(combatEnded: false);
+            }
+            if (request.ScenarioId == "REMAINING-HEALING-DEFECT-PLAYER-PRISM")
+            {
+                runner.SetStage("remaining_healing_defect_player_prism");
+                await runner.RunDefectPrismHealingProbeAsync(combatState, player);
+                return Observation(combatEnded: false);
+            }
             if (request.ScenarioId == "GENERATED-NOVELTY-SEARCH")
             {
                 _ = ApplySettingsOverrides();
                 await runner.RunNoveltySearchBenchmarkAsync(combatState, player);
                 return Observation(combatEnded: !CombatManager.Instance.IsInProgress);
+            }
+            if (request.ScenarioId == "DISPLAY-NAME-SUMMON")
+            {
+                await runner.AssertDisplayNameSummonAsync(combatState, player);
+                return Observation(combatEnded: false);
+            }
+            if (request.ScenarioId == "PREDICTED-MONSTER-SCALING")
+            {
+                runner.AssertPredictedMonsterScalingBoundary(combatState);
+                return Observation(combatEnded: false);
+            }
+            if (request.ScenarioId == "DYNAMIC-VAR-BRIDGE")
+            {
+                runner.AssertDynamicVarBridge(combatState, player);
+                return Observation(combatEnded: false);
             }
             if (request.ScenarioId == "LOOP-REPLAY-REQUEST-BUDGET")
             {
@@ -159,6 +228,22 @@ internal sealed partial class UnattendedTestRunner
             if (request.ScenarioId == "LAMP-INKY-SHIV")
             {
                 await runner.AssertLampInkyShivAsync(combatState, player);
+                return Observation(combatEnded: false);
+            }
+            if (request.ScenarioId == "LAMP-INKY-SHIV-ROUTE-CONTINUATION")
+            {
+                runner.SetStage("lamp_inky_shiv_route_continuation");
+                await runner.AssertLampInkyShivRouteContinuationAsync(combatState, player);
+                return Observation(combatEnded: false);
+            }
+            if (request.ScenarioId == "CARD-CLONE-IDENTITY-CONTRACT")
+            {
+                await runner.AssertCardCloneIdentityContractAsync(combatState, player);
+                return Observation(combatEnded: false);
+            }
+            if (request.ScenarioId == "ORB-VALUE-NATIVE-HOOK-ESCAPE")
+            {
+                await runner.AssertOrbValueStaysOffNativeHookAsync(combatState, player);
                 return Observation(combatEnded: false);
             }
             if (request.ScenarioId == "FIXED-PREFIX-TURN-LOSS")
@@ -657,6 +742,13 @@ internal sealed partial class UnattendedTestRunner
                 runner._completedChecks.Add("EnergyResetPowerOrder");
                 return Observation(combatEnded: false);
             }
+            if (request.ScenarioId is "TURN-END-FOCUS-EVOKE-ORDER" or "TURN-END-FOCUS-EVOKE-ORDER-REVERSE"
+                or "TURN-END-ORB-EVOKE-SENTINEL")
+            {
+                runner.SetStage("turn_end_focus_evoke_order");
+                await runner.AssertTurnEndFocusEvokeOrderAsync(combatState, player);
+                return Observation(combatEnded: false);
+            }
             if (request.ScenarioId is "REPLAY-START-HISTORY" or "REPLAY-START-HISTORY-ECHO")
             {
                 runner.SetStage("replay_start_history");
@@ -698,6 +790,13 @@ internal sealed partial class UnattendedTestRunner
             {
                 await runner.AssertTestSubjectReportAsync(combatState, player);
                 runner._completedChecks.Add("TestSubjectOriginalReportTurn2");
+                return Observation(combatEnded: false);
+            }
+            if (request.ScenarioId == "SMART-AUDIT-POTION-BASELINE")
+            {
+                await runner.AssertSmartAuditPotionBaselineAsync(combatState, player);
+                await runner.AssertReplayBoundaryContractAsync(player);
+                runner._completedChecks.Add("SmartAuditPotionBaselineAndStrictReplayCosts");
                 return Observation(combatEnded: false);
             }
             if (request.ScenarioId == "REPLAY-BOUNDARY-CONTRACT")
@@ -772,6 +871,34 @@ internal sealed partial class UnattendedTestRunner
             {
                 runner.SetStage("opening_discard_choice_value");
                 await runner.AssertOpeningDiscardChoiceValueAsync(combatState, player);
+                return Observation(combatEnded: false);
+            }
+
+            if (request.ScenarioId == "IRON-GENERATION-HEALING")
+            {
+                runner.SetStage("iron_generation_healing");
+                await runner.AssertIronRemainingHealingAsync(combatState, player);
+                return Observation(combatEnded: false);
+            }
+
+            if (request.ScenarioId == "REGENT-POTION-CAP-BOUND")
+            {
+                runner.SetStage("regent_potion_cap_bound");
+                await runner.AssertRegentPotionCapBoundAsync(combatState, player);
+                return Observation(combatEnded: false);
+            }
+
+            if (request.ScenarioId == "REGENT-REMAINING-HEALING")
+            {
+                runner.SetStage("regent_remaining_healing");
+                await runner.AssertRegentRemainingHealingAsync(combatState, player);
+                return Observation(combatEnded: false);
+            }
+
+            if (request.ScenarioId == "OPENING-POWER-BOUNDARY")
+            {
+                runner.SetStage("opening_power_boundary");
+                await runner.AssertOpeningPowerBoundaryAsync(combatState, player);
                 return Observation(combatEnded: false);
             }
 
@@ -1127,6 +1254,9 @@ internal sealed partial class UnattendedTestRunner
                 return Observation(combatEnded: false);
             }
 
+            if (request.ScenarioId is "REGENT-FROZEN-POTION-CAP-DEPLOY" or "IRON-FROZEN-GENERATION-DEPLOY")
+                await runner.PrepareFrozenHealingBoundDeploymentAsync(combatState, player);
+
             runner.SetStage("full_auto");
             FastModeType? fastModeBeforeDeployment = ApplySettingsOverrides();
             if (SolverController.LastTurnSetupResultForTesting == null
@@ -1145,17 +1275,23 @@ internal sealed partial class UnattendedTestRunner
                     || request.ExpectedFullAutoPausedAtLiveRisk,
                 persist: false);
             runner._protocolHost.EnableAutomaticTurnSearch();
+            bool manualMemoryReleaseContract = request.ScenarioId == "MANUAL-MEMORY-RELEASE-AUTO-CONTRACT";
             if (request.HoldAfterInitialSearch
                 || request.ManualEndTurnAfterInitialSearch
                 || request.SingleStepAfterInitialSearch
-                || request.StopAfterInitialSolverResultAssertion)
+                || request.StopAfterInitialSolverResultAssertion
+                || manualMemoryReleaseContract)
                 SolverController.RequestSearch(runner._host, combatState, SearchReason.Manual);
             else
                 SolverController.SetFullAuto(runner._host, combatState, enabled: true);
 
             if (runner.HasInitialSolverExpectation()
-                || request.StopAfterInitialSolverResultAssertion)
+                || request.StopAfterInitialSolverResultAssertion
+                || manualMemoryReleaseContract)
                 await runner.AssertInitialSolverResultAsync(startedTurn);
+
+            if (manualMemoryReleaseContract)
+                await runner.RunManualMemoryReleaseAutoContractAsync(combatState);
 
             if (request.StopAfterInitialSolverResultAssertion)
             {

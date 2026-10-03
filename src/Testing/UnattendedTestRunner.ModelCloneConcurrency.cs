@@ -14,20 +14,20 @@ internal sealed partial class UnattendedTestRunner
     {
         string liveBefore = ContinuationStamp.CaptureLive(combat).StateText;
         CardModel source = ModelDb.Card<StrikeRegent>().ToMutable();
-        _ = source.DynamicVars;
+        DynamicVarSet variables = source.DynamicVars;
         if (NativeModelCloneConcurrency.CanCloneIndependently(source))
             throw new InvalidOperationException("Non-isolated clone bypassed the framework gate.");
         using (SimulationNotificationIsolation.Enter())
         {
             if (!NativeModelCloneConcurrency.CanCloneIndependently(source))
                 throw new InvalidOperationException("Fixture did not reach eligible native card cloning.");
-            source._dynamicVars!._vars.Add("ConcurrencyFixture", new CloneConcurrencyVariable());
+            DynamicVarSetAccess.RequireVars(variables).Add("ConcurrencyFixture", new CloneConcurrencyVariable());
             try
             {
                 if (NativeModelCloneConcurrency.CanCloneIndependently(source))
                     throw new InvalidOperationException("Third-party dynamic variable bypassed the gate.");
             }
-            finally { source._dynamicVars._vars.Remove("ConcurrencyFixture"); }
+            finally { DynamicVarSetAccess.RequireVars(variables).Remove("ConcurrencyFixture"); }
         }
 
         // Holding the real framework gate must not prevent two independent native
@@ -74,7 +74,7 @@ internal sealed partial class UnattendedTestRunner
             if (ReferenceEquals(clone, source) || !identities.Add(clone)
                 || clone.Id != source.Id || !clone.IsMutable)
                 throw new InvalidOperationException("Concurrent clone identity changed.");
-            foreach (var (key, value) in source.DynamicVars._vars)
+            foreach (var (key, value) in new DynamicVarSetAccess.EntryEnumerable(source.DynamicVars))
             {
                 DynamicVar copy = clone.DynamicVars[key];
                 if (ReferenceEquals(copy, value) || !identities.Add(copy)

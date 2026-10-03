@@ -32,7 +32,7 @@ internal sealed partial class CombatBeamSolver
             candidate.Preview.Type == CardType.Attack);
         bool HasBlockSkill() => liveCards.Any(candidate =>
             candidate.Preview.Type == CardType.Skill
-            && candidate.Preview.DynamicVars._vars.Keys.Any(key =>
+            && DynamicVarSetAccess.Keys(candidate.Preview.DynamicVars).Any(key =>
                 key.Contains("Block", StringComparison.OrdinalIgnoreCase)));
         bool HasShiv() => liveCards.Any(candidate =>
             candidate.Preview.Tags.Contains(CardTag.Shiv)
@@ -196,7 +196,7 @@ internal sealed partial class CombatBeamSolver
     }
 
     private static bool HasDynamicVar(PredictedCard card, string fragment)
-        => card.Preview.DynamicVars._vars.Keys.Any(key =>
+        => DynamicVarSetAccess.Keys(card.Preview.DynamicVars).Any(key =>
             key.Contains(fragment, StringComparison.OrdinalIgnoreCase));
 
     private static int DynamicVarValue(PredictedCard card, string key)

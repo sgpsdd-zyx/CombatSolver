@@ -110,6 +110,7 @@ internal sealed class MirroredHookListenerFilter(bool enabled)
         [nameof(AbstractModel.ModifyHpLostBeforeOsty)] = MirroredHookMask.ModifyHpLostBeforeOsty,
         [nameof(AbstractModel.ModifyHpLostBeforeOstyLate)] = MirroredHookMask.ModifyHpLostBeforeOstyLate,
         [nameof(AbstractModel.ModifyOrbPassiveTriggerCounts)] = MirroredHookMask.ModifyOrbPassiveTriggerCounts,
+        [nameof(AbstractModel.ModifyOrbValue)] = MirroredHookMask.ModifyOrbValue,
         [nameof(AbstractModel.ModifyShuffleOrder)] = MirroredHookMask.ModifyShuffleOrder,
         [nameof(AbstractModel.ShouldDie)] = MirroredHookMask.ShouldDie,
         [nameof(AbstractModel.ShouldDieLate)] = MirroredHookMask.ShouldDieLate,
@@ -295,6 +296,7 @@ internal enum MirroredHookMask : ulong
     AfterPlayerTurnStartEarly = 1UL << 58,
     AfterPlayerTurnStart = 1UL << 59,
     AfterPlayerTurnStartLate = 1UL << 60,
+    ModifyOrbValue = 1UL << 61,
     All = ulong.MaxValue,
 }
 

@@ -41,7 +41,7 @@ internal sealed partial class CombatBeamSolver
     }
 
     private bool PowerHasDynamicVar(SearchNode node, string fragment)
-        => PowerLiveCards(node).Any(card => card.Preview.DynamicVars._vars.Keys.Any(key =>
+        => PowerLiveCards(node).Any(card => DynamicVarSetAccess.Keys(card.Preview.DynamicVars).Any(key =>
             key.Contains(fragment, StringComparison.OrdinalIgnoreCase)));
 
     private bool PowerHasEnergyCostAtLeast(SearchNode node, int minimum)
@@ -66,7 +66,7 @@ internal sealed partial class CombatBeamSolver
 
     private bool PowerHasDebuffSource(SearchNode node)
         => PowerLiveCards(node).Any(card =>
-            card.Preview.DynamicVars._vars.Keys.Any(key =>
+            DynamicVarSetAccess.Keys(card.Preview.DynamicVars).Any(key =>
                 key.Contains("Vulnerable", StringComparison.OrdinalIgnoreCase)
                 || key.Contains("Weak", StringComparison.OrdinalIgnoreCase)
                 || key.Contains("Doom", StringComparison.OrdinalIgnoreCase)
@@ -264,7 +264,7 @@ internal sealed partial class CombatBeamSolver
 
     private int PowerCountWithBlockVar(SearchNode node)
         => PowerLiveCards(node).Count(card =>
-            card.Preview.DynamicVars._vars.Keys.Any(key =>
+            DynamicVarSetAccess.Keys(card.Preview.DynamicVars).Any(key =>
                 key.Contains("Block", StringComparison.OrdinalIgnoreCase)));
 
     private int PowerMaxAttackDamage(SearchNode node)
@@ -296,23 +296,23 @@ internal sealed partial class CombatBeamSolver
         CombatPredictionSimulator simulator = node.Snapshot.Simulator;
         return PowerLiveCards(node).Count(card =>
             card.HasKeyword(simulator.State, CardKeyword.Exhaust)
-            || card.Preview.DynamicVars._vars.Keys.Any(key =>
+            || DynamicVarSetAccess.Keys(card.Preview.DynamicVars).Any(key =>
                 key.Contains("Exhaust", StringComparison.OrdinalIgnoreCase)));
     }
 
     private int PowerCountWithVulnerable(SearchNode node)
         => PowerLiveCards(node).Count(card =>
-            card.Preview.DynamicVars._vars.Keys.Any(key =>
+            DynamicVarSetAccess.Keys(card.Preview.DynamicVars).Any(key =>
                 key.Contains("Vulnerable", StringComparison.OrdinalIgnoreCase)));
 
     private int PowerCountWithWeak(SearchNode node)
         => PowerLiveCards(node).Count(card =>
-            card.Preview.DynamicVars._vars.Keys.Any(key =>
+            DynamicVarSetAccess.Keys(card.Preview.DynamicVars).Any(key =>
                 key.Contains("Weak", StringComparison.OrdinalIgnoreCase)));
 
     private int PowerCountWithDoom(SearchNode node)
         => PowerLiveCards(node).Count(card =>
-            card.Preview.DynamicVars._vars.Keys.Any(key =>
+            DynamicVarSetAccess.Keys(card.Preview.DynamicVars).Any(key =>
                 key.Contains("Doom", StringComparison.OrdinalIgnoreCase)));
 
     private int PowerCountWithEthereal(SearchNode node)
@@ -340,22 +340,22 @@ internal sealed partial class CombatBeamSolver
 
     private int PowerCountWithSelfDamage(SearchNode node)
         => PowerLiveCards(node).Count(card =>
-            card.Preview.DynamicVars._vars.Keys.Any(key =>
+            DynamicVarSetAccess.Keys(card.Preview.DynamicVars).Any(key =>
                 key.Contains("SelfDamage", StringComparison.OrdinalIgnoreCase)
                 || key.Contains("HpLoss", StringComparison.OrdinalIgnoreCase)
                 || key.Contains("LoseHp", StringComparison.OrdinalIgnoreCase)));
 
     private int PowerCountWithStatusVar(SearchNode node)
         => PowerLiveCards(node).Count(card =>
-            card.Preview.DynamicVars._vars.Keys.Any(key =>
+            DynamicVarSetAccess.Keys(card.Preview.DynamicVars).Any(key =>
                 key.Contains("Status", StringComparison.OrdinalIgnoreCase))
             || card.Preview.CanonicalKeywords.Contains(CardKeyword.Ethereal)
-                && card.Preview.DynamicVars._vars.Keys.Any(key =>
+                && DynamicVarSetAccess.Keys(card.Preview.DynamicVars).Any(key =>
                     key.Contains("Card", StringComparison.OrdinalIgnoreCase)));
 
     private int PowerCountOrbChannel(SearchNode node)
         => PowerLiveCards(node).Count(card =>
-            card.Preview.DynamicVars._vars.Keys.Any(key =>
+            DynamicVarSetAccess.Keys(card.Preview.DynamicVars).Any(key =>
                 key.Contains("Orb", StringComparison.OrdinalIgnoreCase)
                 || key.Contains("Lightning", StringComparison.OrdinalIgnoreCase)
                 || key.Contains("Frost", StringComparison.OrdinalIgnoreCase)
@@ -372,37 +372,37 @@ internal sealed partial class CombatBeamSolver
     private int PowerCountCardGeneration(SearchNode node)
         => PowerLiveCards(node).Count(card =>
             card.Preview.Type != CardType.Attack
-            && card.Preview.DynamicVars._vars.Keys.Any(key =>
+            && DynamicVarSetAccess.Keys(card.Preview.DynamicVars).Any(key =>
                 key.Contains("Cards", StringComparison.OrdinalIgnoreCase)
                 || key.Contains("Generated", StringComparison.OrdinalIgnoreCase)));
 
     private bool PowerHasForgeSource(SearchNode node)
         => PowerLiveCards(node).Any(card =>
             card.Preview.Id.Entry is "FURNACE" or "SEEKING_EDGE"
-            || card.Preview.DynamicVars._vars.Keys.Any(key =>
+            || DynamicVarSetAccess.Keys(card.Preview.DynamicVars).Any(key =>
                 key.Contains("Forge", StringComparison.OrdinalIgnoreCase)));
 
     private bool PowerHasSovereignBladeSource(SearchNode node)
         => PowerLiveCards(node).Any(card =>
             card.Preview.Id.Entry is "FURNACE" or "SEEKING_EDGE" or "SWORD_SAGE" or "PARRY"
-            || card.Preview.DynamicVars._vars.Keys.Any(key =>
+            || DynamicVarSetAccess.Keys(card.Preview.DynamicVars).Any(key =>
                 key.Contains("Sovereign", StringComparison.OrdinalIgnoreCase)));
 
     private bool PowerHasStarGainSource(SearchNode node)
         => PowerLiveCards(node).Any(card =>
-            card.Preview.DynamicVars._vars.Keys.Any(key =>
+            DynamicVarSetAccess.Keys(card.Preview.DynamicVars).Any(key =>
                 key.Contains("Star", StringComparison.OrdinalIgnoreCase)));
 
     private int PowerCountSouls(SearchNode node)
         => PowerLiveCards(node).Count(card =>
             card.Preview.Id.Entry.Contains("SOUL", StringComparison.OrdinalIgnoreCase)
-            || card.Preview.DynamicVars._vars.Keys.Any(key =>
+            || DynamicVarSetAccess.Keys(card.Preview.DynamicVars).Any(key =>
                 key.Contains("Soul", StringComparison.OrdinalIgnoreCase)));
 
     private bool PowerHasOstyOrSummonSource(SearchNode node)
         => PowerHasOsty(node)
         || PowerLiveCards(node).Any(card =>
-            card.Preview.DynamicVars._vars.Keys.Any(key =>
+            DynamicVarSetAccess.Keys(card.Preview.DynamicVars).Any(key =>
                 key.Contains("Summon", StringComparison.OrdinalIgnoreCase))
             || card.Preview.Id.Entry.Contains("OSTY", StringComparison.OrdinalIgnoreCase));
 }

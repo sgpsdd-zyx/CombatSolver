@@ -116,6 +116,8 @@ default = interactive / 'default/1/settings.save'
 source = default if default.is_file() else next(iter(candidates), None)
 settings = json.loads(source.read_text()) if source else {}
 settings['mod_settings'] = {'mods_enabled': True, 'mod_list': []}
+for key in ('volume_master', 'volume_bgm', 'volume_sfx', 'volume_ambience'):
+    settings[key] = 0
 settings_path.write_text(json.dumps(settings))
 verify_gc_startup = sys.argv[4] == '1'
 requests = sys.argv[5:]

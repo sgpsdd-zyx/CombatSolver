@@ -54,13 +54,13 @@ internal sealed partial class UnattendedTestRunner
                     throw new InvalidOperationException("Power eligibility materialized missing source variables.");
             }
             finally { source._dynamicVars = variables; }
-            variables._vars.Add("ConcurrencyFixture", new CloneConcurrencyVariable());
+            DynamicVarSetAccess.RequireVars(variables).Add("ConcurrencyFixture", new CloneConcurrencyVariable());
             try
             {
                 if (NativeModelCloneConcurrency.CanCloneIndependently(source))
                     throw new InvalidOperationException("Third-party Power variable bypassed the gate.");
             }
-            finally { variables._vars.Remove("ConcurrencyFixture"); }
+            finally { DynamicVarSetAccess.RequireVars(variables).Remove("ConcurrencyFixture"); }
         }
 
         List<PowerModel>[] clones = [[], []];

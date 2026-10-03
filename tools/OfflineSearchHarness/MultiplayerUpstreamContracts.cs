@@ -67,6 +67,10 @@ internal static class MultiplayerUpstreamContracts
             && !policy.UseBeamWidthPortfolio && !policy.UseNoveltyPortfolio,
             "multiplayer_discards_solo_exploration_and_script_policy");
         var root = CombatRootSnapshot.Capture(state, multiplayerAdvisor: true);
+        Check(!root.HasOnlyPostCombatHealing && !root.CanCertifyRemainingHealing
+            && !root.UsesKnownNativeHealingPolicy && root.InitialRemainingHealingUpperBound == int.MaxValue
+            && root.HealingBoundCertificationReason == "multiplayer_advisor",
+            "multiplayer_root_excludes_all_solo_healing_bounds");
         var names = SolverDisplayNames.Capture(state);
         var damage = BattleDamageTracker.Observe(state);
         var soloPlan = new PlanCommitment(PlanCommitmentKind.CopyPower, [], root.StartTurnNumber,

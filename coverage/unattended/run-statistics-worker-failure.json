@@ -1,0 +1,9 @@
+{
+  "scenarioId": "RUN-STATISTICS-WORKER-FAILURE",
+  "characterId": "IRONCLAD",
+  "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+  "enemyCurrentHp": 50,
+  "cards": [],
+  "timeoutSeconds": 120,
+  "exitOnComplete": true
+}

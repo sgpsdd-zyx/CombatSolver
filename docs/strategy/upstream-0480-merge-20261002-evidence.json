@@ -1,0 +1,550 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-02",
+  "forkVersion": "0.48.1",
+  "request": "继续合并官方的最新版本，并发布release，按照 neat-freak 归档",
+  "forkBefore": "154e62830f84c7e124427d7a0d6c452305a2d349",
+  "officialBefore": "72363308c83d7543ddb139ad62ec2161d013d469",
+  "officialMerged": "a789aad2613683438803b11ecddd32aa083e1752",
+  "officialVersion": "0.48.0",
+  "environment": {
+    "os": "macOS arm64",
+    "dotnetSdk": "9.0.318",
+    "game": "0.111.0",
+    "ritsuLib": "0.6.5",
+    "mode": "isolated headless with RitsuLib; no visible Steam or real network"
+  },
+  "nativeScenarios": [
+    {
+      "scenario": "HEAL-BOUND-SAFE-ROOT",
+      "runId": "macos-a6621f58c3a14b10815385f17c5124dd",
+      "status": "Passed",
+      "elapsedMilliseconds": 20778.9054,
+      "checks": [
+        "CombatRootSnapshot",
+        "NativeOutcome:combatEnded=False:turn=1:hp=40:maxHp=80"
+      ],
+      "resultPath": ".local/upstream-update-20261002/native/01-result.json",
+      "inputPath": ".local/upstream-update-20261002/native/01-request.json"
+    },
+    {
+      "scenario": "CARD-COST-IDENTITY-CONTRACT",
+      "runId": "macos-92a92cf2702f4528a335023e45e792a4",
+      "status": "Passed",
+      "elapsedMilliseconds": 2887.6111,
+      "checks": [
+        "CardCostIdentity:comparisons=11:nativeTurnAndPlayCleanup:stars:fork:choice:continuation",
+        "NoGcConfigurationApplied:Configured=False/16000000000:Established=0:Actual=False/0:ExpectedFallback=False:AllowedFallback=False:Latency=Interactive",
+        "PotionOutcomeNamesAndRewardGate",
+        "InitialWorldlineSummary",
+        "InitialPolicy:SoldHp=0;Potion=0,Saved=0/0,Rejected=0;Theft=-,Outstanding=0;Turns=1;Shuffles=0;Unmirrored=0;HpLost=0;ProjectedBattleHpLost=0;Block=0/0;Pruned=0;Total=129.0ms/2221544B;Gc=0.0ms/0.0msMax;Frame=120.3msMax/1Over50;CacheHits=0;ChoiceBranches=0;Actions=1;OnlyDeath=False;CombatEndedTurn=1;DeathTurn=-;ActEndingBoss=False;BossHpRelief=None",
+        "NativeOutcome:combatEnded=False:turn=1:hp=80:maxHp=80"
+      ],
+      "resultPath": ".local/upstream-update-20261002/native/02-result.json",
+      "inputPath": ".local/upstream-update-20261002/native/02-request.json"
+    },
+    {
+      "scenario": "CHOICE-COMBINATION-CONTRACT",
+      "runId": "macos-5ef921ab6eeb4425a54c8b55c371f1f7",
+      "status": "Passed",
+      "elapsedMilliseconds": 3059.3439,
+      "checks": [
+        "ChoiceCombinations:{\"comparisons\":1200,\"choiceCount\":5069,\"probes\":[{\"minimum\":1,\"maximum\":1,\"candidate\":false,\"iterations\":300,\"generated\":3000,\"allocatedBytes\":4022400,\"elapsedMs\":6.6874},{\"minimum\":1,\"maximum\":1,\"candidate\":true,\"iterations\":300,\"generated\":3000,\"allocatedBytes\":3283200,\"elapsedMs\":5.655},{\"minimum\":1,\"maximum\":1,\"candidate\":true,\"iterations\":300,\"generated\":3000,\"allocatedBytes\":3283200,\"elapsedMs\":6.0413},{\"minimum\":1,\"maximum\":1,\"candidate\":false,\"iterations\":300,\"generated\":3000,\"allocatedBytes\":4022400,\"elapsedMs\":6.6492},{\"minimum\":2,\"maximum\":2,\"candidate\":false,\"iterations\":300,\"generated\":11700,\"allocatedBytes\":13320000,\"elapsedMs\":42.9564},{\"minimum\":2,\"maximum\":2,\"candidate\":true,\"iterations\":300,\"generated\":11700,\"allocatedBytes\":9460800,\"elapsedMs\":27.3135},{\"minimum\":2,\"maximum\":2,\"candidate\":true,\"iterations\":300,\"generated\":11700,\"allocatedBytes\":9460800,\"elapsedMs\":26.6163},{\"minimum\":2,\"maximum\":2,\"candidate\":false,\"iterations\":300,\"generated\":11700,\"allocatedBytes\":13320000,\"elapsedMs\":42.5353},{\"minimum\":0,\"maximum\":5,\"candidate\":false,\"iterations\":300,\"generated\":16800,\"allocatedBytes\":39460800,\"elapsedMs\":46.9764},{\"minimum\":0,\"maximum\":5,\"candidate\":true,\"iterations\":300,\"generated\":16800,\"allocatedBytes\":29623200,\"elapsedMs\":30.4637},{\"minimum\":0,\"maximum\":5,\"candidate\":true,\"iterations\":300,\"generated\":16800,\"allocatedBytes\":29623200,\"elapsedMs\":30.8015},{\"minimum\":0,\"maximum\":5,\"candidate\":false,\"iterations\":300,\"generated\":16800,\"allocatedBytes\":39460800,\"elapsedMs\":47.6069}]}",
+        "NoGcConfigurationApplied:Configured=False/16000000000:Established=0:Actual=False/0:ExpectedFallback=False:AllowedFallback=False:Latency=Interactive",
+        "PotionOutcomeNamesAndRewardGate",
+        "InitialWorldlineSummary",
+        "InitialPolicy:SoldHp=0;Potion=0,Saved=0/0,Rejected=0;Theft=-,Outstanding=0;Turns=1;Shuffles=0;Unmirrored=0;HpLost=0;ProjectedBattleHpLost=0;Block=0/0;Pruned=0;Total=1.8ms/317768B;Gc=0.0ms/0.0msMax;Frame=517.0msMax/1Over50;CacheHits=0;ChoiceBranches=0;Actions=1;OnlyDeath=False;CombatEndedTurn=1;DeathTurn=-;ActEndingBoss=False;BossHpRelief=None",
+        "NativeOutcome:combatEnded=False:turn=1:hp=80:maxHp=80"
+      ],
+      "resultPath": ".local/upstream-update-20261002/native/03-result.json",
+      "inputPath": ".local/upstream-update-20261002/native/03-request.json"
+    },
+    {
+      "scenario": "MIRRORED-HOOK-FILTER",
+      "runId": "macos-b19085111b1b4f83a9ac8378e3965250",
+      "status": "Passed",
+      "elapsedMilliseconds": 5025.0445,
+      "checks": [
+        "MirroredHookFilter:Methods=62:Models=1671:OrderDuplicatesExternalForkInvalidationPatchRefreshSharedLayoutsSegmentsNoAnchorEffectivePrefixReuse",
+        "NoGcConfigurationApplied:Configured=False/16000000000:Established=0:Actual=False/0:ExpectedFallback=False:AllowedFallback=False:Latency=Interactive",
+        "PotionOutcomeNamesAndRewardGate",
+        "InitialWorldlineSummary",
+        "InitialPolicy:SoldHp=0;Potion=0,Saved=0/0,Rejected=0;Theft=-,Outstanding=0;Turns=1;Shuffles=0;Unmirrored=0;HpLost=0;ProjectedBattleHpLost=0;Block=0/0;Pruned=0;Total=7.4ms/561424B;Gc=0.0ms/0.0msMax;Frame=2400.5msMax/1Over50;CacheHits=0;ChoiceBranches=0;Actions=1;OnlyDeath=False;CombatEndedTurn=1;DeathTurn=-;ActEndingBoss=False;BossHpRelief=None",
+        "NativeOutcome:combatEnded=False:turn=1:hp=80:maxHp=80"
+      ],
+      "resultPath": ".local/upstream-update-20261002/native/04-result.json",
+      "inputPath": ".local/upstream-update-20261002/native/04-request.json"
+    },
+    {
+      "scenario": "CARD-CLONE-IDENTITY-CONTRACT",
+      "runId": "macos-136de3d1aa3c4a948e20273301fb397e",
+      "status": "Passed",
+      "elapsedMilliseconds": 17269.1896,
+      "checks": [
+        "CardCloneIdentity:DeckVersionContractSurvivesPileTransfers",
+        "CardCloneIdentity:InCombatTransformReplacementHasNoDeckVersion",
+        "CardCloneIdentity:DeckIdentitySurvivesPileCycle",
+        "CardCloneIdentity:SameNameTokenOccurrencePicksTheOtherInstance",
+        "CardCloneIdentity:StampReportsEveryDifferingSameNameIndex",
+        "CardCloneIdentity:RolloutOwnership=one-to-one:deckcard=deck=true/STRIKE_IRONCLAD#63636497:copy=deck=false/null",
+        "CardCloneIdentity:RolloutTrace=start Draw/deckcard/deck=True/ver=STRIKE_IRONCLAD#63636497,Draw/copy/deck=False/ver=null || round=3 Hand/copy/deck=False/ver=null,Hand/deckcard/deck=True/ver=STRIKE_IRONCLAD#63636497 || round=6 Hand/copy/deck=False/ver=null,Hand/deckcard/deck=True/ver=STRIKE_IRONCLAD#63636497 || drawpile Draw/copy/deck=False/ver=null,Draw/deckcard/deck=True/ver=STRIKE_IRONCLAD#63636497",
+        "NativeOutcome:combatEnded=False:turn=1:hp=80:maxHp=80"
+      ],
+      "resultPath": ".local/upstream-update-20261002/native-final/01-result.json",
+      "inputPath": ".local/upstream-update-20261002/native-final/01-request.json"
+    },
+    {
+      "scenario": "TURN-END-FOCUS-EVOKE-ORDER",
+      "runId": "macos-687d3854ef13496bb59ae7cca1c3f06a",
+      "status": "Passed",
+      "elapsedMilliseconds": 2284.2784,
+      "checks": [
+        "TurnEndFocusOrder:ConsumingShadowFirst:ListenerOrder:StagedFocus:OrbQueue:EnemyHp:Rng:ForkIsolation:NativeAfterSideTurnEnd",
+        "NativeOutcome:combatEnded=False:turn=1:hp=75:maxHp=75"
+      ],
+      "resultPath": ".local/upstream-update-20261002/native-final/02-result.json",
+      "inputPath": ".local/upstream-update-20261002/native-final/02-request.json"
+    },
+    {
+      "scenario": "TURN-END-FOCUS-EVOKE-ORDER-REVERSE",
+      "runId": "macos-f9f729273c944b21a6af94021fa6828f",
+      "status": "Passed",
+      "elapsedMilliseconds": 2183.9433,
+      "checks": [
+        "TurnEndFocusOrder:HotfixFirst:ListenerOrder:StagedFocus:OrbQueue:EnemyHp:Rng:ForkIsolation:NativeAfterSideTurnEnd",
+        "NativeOutcome:combatEnded=False:turn=1:hp=75:maxHp=75"
+      ],
+      "resultPath": ".local/upstream-update-20261002/native-final/03-result.json",
+      "inputPath": ".local/upstream-update-20261002/native-final/03-request.json"
+    },
+    {
+      "scenario": "TURN-END-ORB-EVOKE-SENTINEL",
+      "runId": "macos-049ace10e6a94cd5aff7776f66a2a645",
+      "status": "Passed",
+      "elapsedMilliseconds": 2182.7033,
+      "checks": [
+        "TurnEndFocusOrder:PlainOrbSentinel:ListenerOrder:StagedFocus:OrbQueue:EnemyHp:Rng:ForkIsolation:NativeAfterSideTurnEnd",
+        "NativeOutcome:combatEnded=False:turn=1:hp=75:maxHp=75"
+      ],
+      "resultPath": ".local/upstream-update-20261002/native-final/04-result.json",
+      "inputPath": ".local/upstream-update-20261002/native-final/04-request.json"
+    },
+    {
+      "scenario": "ORB-VALUE-NATIVE-HOOK-ESCAPE",
+      "runId": "macos-c27d642514df450d91bcfbc0a782ca62",
+      "status": "Passed",
+      "elapsedMilliseconds": 2243.8843,
+      "checks": [
+        "OrbValueNativeHook:NoNativeEntries:MirrorsNative=6:Retention=6",
+        "NativeOutcome:combatEnded=False:turn=1:hp=75:maxHp=75"
+      ],
+      "resultPath": ".local/upstream-update-20261002/native-final/05-result.json",
+      "inputPath": ".local/upstream-update-20261002/native-final/05-request.json"
+    },
+    {
+      "scenario": "DISPLAY-NAME-SUMMON",
+      "runId": "macos-317e1f93b98841568d1adad5b9952fdc",
+      "status": "Passed",
+      "elapsedMilliseconds": 2563.0556,
+      "checks": [
+        "DisplayNameSummon:sneaky1=卑鄙地精（左起1）:sneaky2=卑鄙地精（左起2）:fat=胖地精（左起1）",
+        "NativeOutcome:combatEnded=False:turn=1:hp=80:maxHp=80"
+      ],
+      "resultPath": ".local/upstream-update-20261002/native-final/06-result.json",
+      "inputPath": ".local/upstream-update-20261002/native-final/06-request.json"
+    },
+    {
+      "scenario": "PREDICTED-MONSTER-SCALING",
+      "runId": "macos-610a72ec418845a2a37eb6d01a1bb9b7",
+      "status": "Passed",
+      "elapsedMilliseconds": 2563.0142,
+      "checks": [
+        "PredictedMonsterScaling:hp=14:range=14..18:calls=0",
+        "NativeOutcome:combatEnded=False:turn=1:hp=80:maxHp=80"
+      ],
+      "resultPath": ".local/upstream-update-20261002/native-final/07-result.json",
+      "inputPath": ".local/upstream-update-20261002/native-final/07-request.json"
+    },
+    {
+      "scenario": "DYNAMIC-VAR-BRIDGE",
+      "runId": "macos-3e4391cbdbee4a149619fc3a0b14b280",
+      "status": "Passed",
+      "elapsedMilliseconds": 2574.7612,
+      "checks": [
+        "DynamicVarBridge:card=keys:Damage:power=keys:DamageDecrease",
+        "NativeOutcome:combatEnded=False:turn=1:hp=80:maxHp=80"
+      ],
+      "resultPath": ".local/upstream-update-20261002/native-final/08-result.json",
+      "inputPath": ".local/upstream-update-20261002/native-final/08-request.json"
+    },
+    {
+      "scenario": "KNOWN-HEALING-POLICY",
+      "runId": "macos-b77a3c402df84d409cd2e66dadb33de9",
+      "status": "Passed",
+      "elapsedMilliseconds": 7109.8912,
+      "checks": [
+        "KnownHealingPolicy:AlchemizeExcluded:NotYetAndFeedProtected:HeldBloodAndRegen:StackedTicks:PotionCap:PostcombatHeal:DoomKillRelicProtected:AbsentRelicZeroAllowance:WorseHpPruned:ActualHealingRetained:EqualHpLaterTurnsRetained:FrozenRoot:ForkLiveRngIsolation",
+        "NativeOutcome:combatEnded=False:turn=1:hp=70:maxHp=70"
+      ],
+      "resultPath": ".local/upstream-update-20261002/native-final/09-result.json",
+      "inputPath": ".local/upstream-update-20261002/native-final/09-request.json"
+    },
+    {
+      "scenario": "KNOWN-HEALING-MEMBERS",
+      "runId": "macos-92bf6482f7fd4994b2276fbbc2bcc586",
+      "status": "Passed",
+      "elapsedMilliseconds": 7605.2513,
+      "checks": [
+        "RefinementIncumbent:NativeRoot:Dop2:StrictIncremental:ControlQuality:Inherited:GrowthGuard:KnownExhaustCard:LiveIsolation",
+        "NativeOutcome:combatEnded=False:turn=1:hp=70:maxHp=70"
+      ],
+      "resultPath": ".local/upstream-update-20261002/native-final/10-result.json",
+      "inputPath": ".local/upstream-update-20261002/native-final/10-request.json"
+    },
+    {
+      "scenario": "SMART-AUDIT-POTION-BASELINE",
+      "runId": "macos-babeeb705c2d4297bd801a2b1405edcc",
+      "status": "Passed",
+      "elapsedMilliseconds": 7160.6753,
+      "checks": [
+        "SmartCarriedPotionResults:1",
+        "SmartAuditQuality:hp=50/potions=1/turn=2",
+        "SmartAuditPotionBaselineAndStrictReplayCosts",
+        "NativeOutcome:combatEnded=False:turn=1:hp=30:maxHp=80"
+      ],
+      "resultPath": ".local/upstream-update-20261002/native-final/11-result.json",
+      "inputPath": ".local/upstream-update-20261002/native-final/11-request.json"
+    },
+    {
+      "scenario": "B015-BOUNDARIES",
+      "runId": "macos-50601c893d7b40129cd3d2554882956e",
+      "status": "Passed",
+      "elapsedMilliseconds": 13084.6841,
+      "checks": [
+        "B015T016:StockReplacement:CombatId:Fork:DirectIncrementalReplay:TwoNativeShivs:FullState",
+        "B015T019:NativePreTeardownSnapshot",
+        "B015T019:OneHp:NativeCrimsonMantle:EndTurn:DefeatTPlusOne:Fork:FullState",
+        "NativeOutcome:combatEnded=True:turn=2:hp=0:maxHp=80"
+      ],
+      "resultPath": ".local/upstream-update-20261002/native-final/12-result.json",
+      "inputPath": ".local/upstream-update-20261002/native-final/12-request.json"
+    },
+    {
+      "scenario": "RUN-STATISTICS-SATURATION",
+      "runId": "macos-e3d807e0877445e1a7b051cb4a3f7457",
+      "status": "Passed",
+      "elapsedMilliseconds": 6858.1003,
+      "checks": [
+        "NativeOutcome:combatEnded=False:turn=1:hp=80:maxHp=80"
+      ],
+      "resultPath": ".local/upstream-update-20261002/native-final/13-result.json",
+      "inputPath": ".local/upstream-update-20261002/native-final/13-request.json"
+    },
+    {
+      "scenario": "RUN-STATISTICS-WORKER-FAILURE",
+      "runId": "macos-ecaeb8d91d024268a4a9ce844fabf9c3",
+      "status": "Passed",
+      "elapsedMilliseconds": 6784.0005,
+      "checks": [
+        "NativeOutcome:combatEnded=False:turn=1:hp=80:maxHp=80"
+      ],
+      "resultPath": ".local/upstream-update-20261002/native-final/14-result.json",
+      "inputPath": ".local/upstream-update-20261002/native-final/14-request.json"
+    },
+    {
+      "scenario": "MULTIPLAYER-TOASTY-CHOICE",
+      "runId": "macos-6c2066da2bad4c0a841dbad844416e63",
+      "status": "Passed",
+      "elapsedMilliseconds": 4688.0346,
+      "checks": [
+        "PreCombatPlayerHp:60",
+        "MultiplayerTurnSetup:ManualRequest:NativeChoiceRemainsOpen:FrozenFullPartyRoot",
+        "MultiplayerTurnSetup:ManualNativeSelection:FullStateEquivalent:NoAutomaticRecalculation",
+        "NativeOutcome:combatEnded=False:turn=1:hp=62:maxHp=80"
+      ],
+      "resultPath": ".local/upstream-update-20261002/native-final/15-result.json",
+      "inputPath": ".local/upstream-update-20261002/native-final/15-request.json"
+    },
+    {
+      "scenario": "MULTIPLAYER-TOASTY-CONTROLS",
+      "runId": "macos-0a15928b1bec40b2a1ada261eda7cf6b",
+      "status": "Passed",
+      "elapsedMilliseconds": 7622.1392,
+      "checks": [
+        "MultiplayerTurnSetup:StopDrainsWorker:NativeInputPreserved",
+        "MultiplayerTurnSetup:ChoiceDisplayed:NativePeerActionClearsCurrent:AdviceStale:ManualFreshRoot",
+        "MultiplayerTurnSetup:ManualDifferentChoiceDuringWorker:ResultStale:NoAutomation",
+        "NativeOutcome:combatEnded=False:turn=1:hp=80:maxHp=80"
+      ],
+      "resultPath": ".local/upstream-update-20261002/native-final/16-result.json",
+      "inputPath": ".local/upstream-update-20261002/native-final/16-request.json"
+    },
+    {
+      "scenario": "MULTIPLAYER-EXPERIMENT-INACTIVE",
+      "runId": "macos-114b4c063ca541a284428610544c16aa",
+      "status": "Passed",
+      "elapsedMilliseconds": 2622.2552,
+      "checks": [
+        "MultiplayerExperimentReset:NoHooks:SinglePlayerRoot",
+        "PotionOutcomeNamesAndRewardGate",
+        "InitialWorldlineSummary",
+        "InitialFirstAction:STRIKE_IRONCLAD",
+        "InitialPolicy:SoldHp=0;Potion=0,Saved=0/0,Rejected=0;Theft=-,Outstanding=0;Turns=1;Shuffles=0;Unmirrored=0;HpLost=0;ProjectedBattleHpLost=0;Block=0/0;Pruned=0;Total=1.2ms/279592B;Gc=0.0ms/0.0msMax;Frame=57.1msMax/1Over50;CacheHits=0;ChoiceBranches=0;Actions=1;OnlyDeath=False;CombatEndedTurn=1;DeathTurn=-;ActEndingBoss=False;BossHpRelief=None",
+        "NativeOutcome:combatEnded=False:turn=1:hp=80:maxHp=80"
+      ],
+      "resultPath": ".local/upstream-update-20261002/native-final/17-result.json",
+      "inputPath": ".local/upstream-update-20261002/native-final/17-request.json"
+    },
+    {
+      "scenario": "UI-LOCALIZATION",
+      "runId": "macos-785e6c44b309462890d652c039944ba6",
+      "status": "Passed",
+      "elapsedMilliseconds": 5684.2277,
+      "checks": [
+        "CardLocaleRoundTrip:EnglishSnapshot:ChineseEnglishChinese:Upgrade:Choice:RelicOwner:SerializedPlan:LivePill:SubscriptionCleanup:NoReplan",
+        "SpawnedEntityIdentity:eng:FourWrigglers:LeftToRight:NativeSlots=True:ForkStable:DeathStable",
+        "EntityIdentity:eng:DistinctEnemies=1:PlainAndInkyShiv",
+        "StrategyOutcome:eng:AlignedAndUnmet:GrowthCounts:PartialRoute:EmptyHidden",
+        "RelicOwnership:eng:Self:PeerNumber:SameRelic:Json:Tooltip:Identity",
+        "ActionAnnotations:eng:CapturedDamageSources:21RelicFormats:NestedChoices:Tooltip",
+        "LiveTurnStartChoicePreview:eng:Power:Relic",
+        "LoopDisplay:eng:41Actions:2OuterControls:CompactInlineCount:EnclosedPeriod:WideNarrowWide:ReplayCount:KillSuffix:Deployment:Reuse",
+        "StrategyPanels:eng:Potion:Growth:Relic:Collapse",
+        "UiLocalization:eng:Catalog486:Settings:UploadTransitions:DynamicStatus:FailureInstructions",
+        "SpawnedEntityIdentity:zhs:FourWrigglers:LeftToRight:NativeSlots=True:ForkStable:DeathStable",
+        "EntityIdentity:zhs:DistinctEnemies=1:PlainAndInkyShiv",
+        "StrategyOutcome:zhs:AlignedAndUnmet:GrowthCounts:PartialRoute:EmptyHidden",
+        "RelicOwnership:zhs:Self:PeerNumber:SameRelic:Json:Tooltip:Identity",
+        "ActionAnnotations:zhs:CapturedDamageSources:21RelicFormats:NestedChoices:Tooltip",
+        "LiveTurnStartChoicePreview:zhs/zht:Power:Relic",
+        "LoopDisplay:zh:41Actions:2OuterControls:CompactInlineCount:EnclosedPeriod:WideNarrowWide:ReplayCount:KillSuffix:Deployment:Reuse",
+        "StrategyPanels:zhs:Potion:Growth:Relic:Collapse",
+        "UiLocalization:zhs:Catalog486:Settings:UploadTransitions:DynamicStatus:FailureInstructions",
+        "SpawnedEntityIdentity:zht:FourWrigglers:LeftToRight:NativeSlots=True:ForkStable:DeathStable",
+        "EntityIdentity:zht:DistinctEnemies=1:PlainAndInkyShiv",
+        "StrategyOutcome:zht:AlignedAndUnmet:GrowthCounts:PartialRoute:EmptyHidden",
+        "RelicOwnership:zht:Self:PeerNumber:SameRelic:Json:Tooltip:Identity",
+        "ActionAnnotations:zht:CapturedDamageSources:21RelicFormats:NestedChoices:Tooltip",
+        "LiveTurnStartChoicePreview:zhs/zht:Power:Relic",
+        "LoopDisplay:zh:41Actions:2OuterControls:CompactInlineCount:EnclosedPeriod:WideNarrowWide:ReplayCount:KillSuffix:Deployment:Reuse",
+        "StrategyPanels:zht:Potion:Growth:Relic:Collapse",
+        "UiLocalization:zht:Catalog486:Settings:UploadTransitions:DynamicStatus:FailureInstructions",
+        "NativeOutcome:combatEnded=False:turn=1:hp=80:maxHp=80"
+      ],
+      "resultPath": ".local/upstream-update-20261002/native-final/18-result.json",
+      "inputPath": ".local/upstream-update-20261002/native-final/18-request.json"
+    },
+    {
+      "scenario": "ADJUSTED-ROUTE-INVALID-SUFFIX",
+      "runId": "macos-d7167a0da25c418cbe68c67ecf91d3d7",
+      "status": "Passed",
+      "elapsedMilliseconds": 17770.5908,
+      "checks": [
+        "AdjustedRouteInvalidSuffix",
+        "NoGcConfigurationApplied:Configured=False/16000000000:Established=0:Actual=False/0:ExpectedFallback=False:AllowedFallback=False:Latency=Interactive",
+        "PotionOutcomeNamesAndRewardGate",
+        "InitialWorldlineSummary",
+        "InitialPolicy:SoldHp=0;Potion=0,Saved=0/0,Rejected=0;Theft=-,Outstanding=0;Turns=1;Shuffles=0;Unmirrored=0;HpLost=0;ProjectedBattleHpLost=0;Block=0/0;Pruned=0;Total=125.3ms/2236912B;Gc=0.0ms/0.0msMax;Frame=65.1msMax/1Over50;CacheHits=0;ChoiceBranches=0;Actions=1;OnlyDeath=False;CombatEndedTurn=1;DeathTurn=-;ActEndingBoss=False;BossHpRelief=None",
+        "NativeOutcome:combatEnded=False:turn=1:hp=80:maxHp=80"
+      ],
+      "resultPath": ".local/upstream-update-20261002/native-protocol-final/01-result.json",
+      "inputPath": ".local/upstream-update-20261002/native-protocol-final/01-request.json"
+    },
+    {
+      "scenario": "B015-FIXED-PREFIX-TARGETS",
+      "runId": "macos-2542f2967cf642f183ea5ead50e3157b",
+      "status": "Passed",
+      "elapsedMilliseconds": 2588.1804,
+      "checks": [
+        "B015FixedPrefixTargets:LegalGeneratedTarget:AbsentTargetRejected:NativeUnchanged",
+        "NoGcConfigurationApplied:Configured=False/16000000000:Established=0:Actual=False/0:ExpectedFallback=False:AllowedFallback=False:Latency=Interactive",
+        "PotionOutcomeNamesAndRewardGate",
+        "InitialWorldlineSummary",
+        "InitialPolicy:SoldHp=0;Potion=0,Saved=0/0,Rejected=0;Theft=-,Outstanding=0;Turns=1;Shuffles=0;Unmirrored=0;HpLost=0;ProjectedBattleHpLost=0;Block=0/0;Pruned=0;Total=1.7ms/378088B;Gc=0.0ms/0.0msMax;Frame=17.1msMax/0Over50;CacheHits=0;ChoiceBranches=0;Actions=1;OnlyDeath=False;CombatEndedTurn=1;DeathTurn=-;ActEndingBoss=False;BossHpRelief=None",
+        "NativeOutcome:combatEnded=False:turn=1:hp=80:maxHp=80"
+      ],
+      "resultPath": ".local/upstream-update-20261002/native-protocol-final/02-result.json",
+      "inputPath": ".local/upstream-update-20261002/native-protocol-final/02-request.json"
+    }
+  ],
+  "nativeFailures": [
+    {
+      "scenario": "CARD-CLONE-IDENTITY-CONTRACT",
+      "runId": "macos-c00eca6b5ab243c299b7afe8f3233711",
+      "status": "Failed",
+      "elapsedMilliseconds": 2539.3301,
+      "checks": [],
+      "resultPath": ".local/upstream-update-20261002/native/05-result.json",
+      "inputPath": ".local/upstream-update-20261002/native/05-request.json",
+      "error": "System.InvalidOperationException: 同名牌选牌回放没有复现错位：token 指向牌组克隆（StateKey=STRIKE_IRONCLAD+0|energy=False:1|stars=False:-1|replay=0|exhaust=False|sly=False|retain=False|deck=True|keywords=|vars=Damage=6|-|:0|baselib=-，occurrence=1），回放却没有移动任何一张。\n   at CombatSolver.UnattendedTestRunner.AssertCardCloneIdentityContractAsync(CombatState combat, Player player)\n   at CombatSolver.UnattendedTestRunner.Executor.ExecuteAsync(ScenarioContext scenario)\n   at CombatSolver.UnattendedTestRunner.RunAsync()"
+    },
+    {
+      "scenario": "CARD-CLONE-IDENTITY-CONTRACT",
+      "runId": "macos-aa1c038225594795bc9ec944fb956054",
+      "status": "Failed",
+      "elapsedMilliseconds": 17242.5782,
+      "checks": [
+        "CardCloneIdentity:DeckVersionContractSurvivesPileTransfers",
+        "CardCloneIdentity:InCombatTransformReplacementHasNoDeckVersion",
+        "CardCloneIdentity:DeckIdentitySurvivesPileCycle",
+        "CardCloneIdentity:SameNameTokenOccurrencePicksTheOtherInstance",
+        "CardCloneIdentity:StampReportsEveryDifferingSameNameIndex",
+        "CardCloneIdentity:RolloutOwnership=one-to-one:deckcard=deck=true/STRIKE_IRONCLAD#40098116:copy=deck=false/null",
+        "CardCloneIdentity:RolloutTrace=start Draw/deckcard/deck=True/ver=STRIKE_IRONCLAD#40098116,Draw/copy/deck=False/ver=null || round=3 Hand/copy/deck=False/ver=null,Hand/deckcard/deck=True/ver=STRIKE_IRONCLAD#40098116 || round=6 Hand/copy/deck=False/ver=null,Hand/deckcard/deck=True/ver=STRIKE_IRONCLAD#40098116 || drawpile Draw/copy/deck=False/ver=null,Draw/deckcard/deck=True/ver=STRIKE_IRONCLAD#40098116",
+        "NativeOutcome:combatEnded=False:turn=1:hp=80:maxHp=80"
+      ],
+      "resultPath": ".local/upstream-update-20261002/native-continuation/01-result.json",
+      "inputPath": ".local/upstream-update-20261002/native-continuation/01-request.json",
+      "error": "System.InvalidOperationException: Operations that change non-concurrent collections must have exclusive access. A concurrent update was performed on this collection and corrupted its state. The collection's state is no longer correct.\n   at System.Collections.Generic.Dictionary`2.FindValue(TKey key)\n   at System.Collections.Generic.Dictionary`2.TryGetValue(TKey key, TValue& value)\n   at MegaCrit.Sts2.Core.Multiplayer.Serialization.MaxEnumValueCache.Get[T]()\n   at MegaCrit.Sts2.Core.Multiplayer.Serialization.PacketWriter.WriteEnum[T](T val)\n   at MegaCrit.Sts2.Core.Saves.SerializableRun.Serialize(PacketWriter writer)\n   at MegaCrit.Sts2.Core.Multiplayer.Replay.CombatReplay.Serialize_Patch1(CombatReplay this, PacketWriter writer)\n   at MegaCrit.Sts2.Core.Multiplayer.Serialization.PacketWriter.Write[T](T val)\n   at MegaCrit.Sts2.Core.Multiplayer.Replay.CombatReplayWriter.WriteReplay(String filePath, Boolean stopRecording)\n   at MegaCrit.Sts2.Core.Runs.RunManager.CleanUp_Patch1(RunManager this, Boolean graceful)\n   at MegaCrit.Sts2.Core.Nodes.NGame.ReturnToMainMenu()\n   at CombatSolver.UnattendedTestRunner.RunAsync()"
+    }
+  ],
+  "managedChecks": [
+    {
+      "name": "upstream-compatibility",
+      "status": "Passed",
+      "checks": 32,
+      "evidence": ".local/upstream-update-20261002/contracts-upstream/harness-result.json"
+    },
+    {
+      "name": "quota-contracts",
+      "status": "Passed",
+      "checks": 32,
+      "evidence": ".local/upstream-update-20261002/contracts-quota-contracts/harness-result.json"
+    },
+    {
+      "name": "dead-teammate",
+      "status": "Passed",
+      "boundary": "Native death, revival, turn, full-state and manual control; rendering and network bypassed",
+      "evidence": ".local/upstream-update-20261002/contracts-dead-teammate/harness-result.json"
+    },
+    {
+      "name": "early-turn-continuation-bound",
+      "status": "Passed",
+      "checks": 143,
+      "evidence": ".local/upstream-update-20261002/early-turn-bound.log"
+    },
+    {
+      "name": "run-statistics-store",
+      "status": "Passed",
+      "evidence": ".local/upstream-update-20261002/run-statistics-store.log"
+    }
+  ],
+  "officialComparison": {
+    "status": "Passed",
+    "roots": 4,
+    "comparedFields": 344,
+    "details": [
+      {
+        "root": "SOLO-POTION-DOP1",
+        "comparedFields": 81,
+        "mismatches": [],
+        "timeBoundaryObserved": false,
+        "projectedBattleHpLost": 4,
+        "potionCount": 1,
+        "combatEndedTurn": 2
+      },
+      {
+        "root": "SOLO-POTION-DOP2",
+        "comparedFields": 81,
+        "mismatches": [],
+        "timeBoundaryObserved": false,
+        "projectedBattleHpLost": 4,
+        "potionCount": 1,
+        "combatEndedTurn": 2
+      },
+      {
+        "root": "SOLO-POWER-DOP1",
+        "comparedFields": 91,
+        "mismatches": [],
+        "timeBoundaryObserved": false,
+        "projectedBattleHpLost": 1,
+        "potionCount": 0,
+        "combatEndedTurn": 4
+      },
+      {
+        "root": "SOLO-POWER-DOP2",
+        "comparedFields": 91,
+        "mismatches": [],
+        "timeBoundaryObserved": false,
+        "projectedBattleHpLost": 1,
+        "potionCount": 0,
+        "combatEndedTurn": 4
+      }
+    ],
+    "fullEvidence": ".local/upstream-update-20261002/official-comparison.json",
+    "commands": ".local/upstream-update-20261002/comparison-runs.json",
+    "boundary": "Two distinct roots at DOP1 and DOP2, not four independent fights; no time boundary. Timing and allocations excluded."
+  },
+  "staticChecks": [
+    {
+      "name": "behavior-release-build",
+      "status": "Passed",
+      "warnings": 0,
+      "errors": 0,
+      "evidence": ".local/upstream-update-20261002/build-behavior.log"
+    },
+    {
+      "name": "native-protocol-build",
+      "status": "Passed",
+      "warnings": 0,
+      "errors": 0,
+      "evidence": ".local/upstream-update-20261002/build-protocol-final.log"
+    },
+    {
+      "name": "bash-boundaries",
+      "status": "Passed",
+      "searchFiles": 258,
+      "evidence": ".local/upstream-update-20261002/boundaries-protocol.log"
+    },
+    {
+      "name": "coverage-catalog",
+      "status": "Passed",
+      "entries": 3035,
+      "arguments": [
+        "--verify",
+        "--verify-state-fields",
+        "--verify-branch-state-reads"
+      ],
+      "evidence": ".local/upstream-update-20261002/coverage.log",
+      "boundary": "Current source classification checks; inherited runtime records are historical, not rerun."
+    }
+  ],
+  "gcManualRelease": {
+    "status": "NotVerified",
+    "attempt": "Failed",
+    "reason": "Fixture could not establish its required actual 1 GiB NoGC allocation reservation on this machine. No timeout or budget increase, no relaxed assertion.",
+    "evidence": ".local/upstream-update-20261002/gc-manual-release.log"
+  },
+  "headlessCleanup": [
+    {
+      "instance": ".local/headless-instances/macos.4LjObz",
+      "status": "removed",
+      "receipt": ".local/upstream-update-20261002/native-launch.log"
+    },
+    {
+      "instance": ".local/headless-instances/macos.hre0cR",
+      "status": "removed",
+      "receipt": ".local/upstream-update-20261002/native-continuation-launch.log"
+    },
+    {
+      "instance": ".local/headless-instances/macos.kTypzk",
+      "status": "removed",
+      "receipt": ".local/upstream-update-20261002/native-final-launch.log"
+    },
+    {
+      "instance": ".local/headless-instances/macos.V0imyj",
+      "status": "removed",
+      "receipt": ".local/upstream-update-20261002/native-protocol-final-launch.log"
+    }
+  ],
+  "notRun": [
+    "Visible Steam or UI layout/performance",
+    "Actual multiplayer network session",
+    "Windows/Linux runtime and Windows MemoryCleaner",
+    "Complete third-party mod stack",
+    "Original B015/T016 report replay (matching archive unavailable); only synthetic invalid-target and native replacement controls",
+    "Full 40-minute early-turn search quality",
+    "Full release gate or clean installation"
+  ],
+  "publication": "See docs/releases/0.48.1-PUBLISH.md after publication; stage commands are the only completion evidence."
+}

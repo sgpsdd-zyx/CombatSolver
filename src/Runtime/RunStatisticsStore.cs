@@ -8,6 +8,8 @@ internal sealed record RunStatisticsRecord(
     int Ascension, string Version, string Participation, string Outcome,
     bool ObservedFromStart, bool EverEnabled, bool DisabledInCombat,
     string[] Battles, string[] SolvedBattles, string[] ExecutedBattles, string[] AutoBattles);
+internal sealed record RunStatisticsFailure(string Reason, string? RunId, string? RejectedSignal,
+    int QueuedSignals, bool IncompleteMarkerSaved, string Error);
 internal sealed record HistoricalCharacterStatistics(string CharacterId, int Wins, int Losses, long CurrentStreak, long BestStreak);
 internal sealed record HistoricalStatistics(string ProfileId, long CapturedAt, HistoricalCharacterStatistics[] Characters);
 internal sealed record RunStatisticsSummary(int Wins, int Losses, int Abandoned, int CurrentStreak, int BestStreak,
@@ -43,15 +45,22 @@ internal sealed class RunStatisticsStore
     private readonly Dictionary<string, RunStatisticsRecord> _runs = new();
     private readonly Dictionary<string, HistoricalStatistics> _history = new();
     private readonly HashSet<string> _pending = new();
+    private readonly HashSet<string> _incomplete = new();
     internal RunStatisticsStore(string directory)
     {
         _directory = directory;
         Directory.CreateDirectory(directory);
+        foreach (string path in Directory.EnumerateFiles(directory, "*.incomplete.json"))
+            _incomplete.Add(JsonSerializer.Deserialize<string>(File.ReadAllText(path), Json)
+                ?? throw new InvalidDataException("Empty incomplete run identity."));
         foreach (string path in Directory.EnumerateFiles(directory, "*.run.json"))
         {
             var record = JsonSerializer.Deserialize<RunStatisticsRecord>(File.ReadAllText(path), Json)!;
-            _runs.Add(record.RunId, record);
-            if (!File.Exists(path + ".sent")) _pending.Add(record.RunId);
+            var complete = ApplyCompleteness(record);
+            _runs.Add(record.RunId, complete);
+            // An old receipt covers the old full record, not the repaired partial one.
+            if (complete != record) Save(complete);
+            else if (!File.Exists(path + ".sent")) _pending.Add(record.RunId);
         }
         foreach (string path in Directory.EnumerateFiles(directory, "*.history.json"))
         {
@@ -81,8 +90,18 @@ internal sealed class RunStatisticsStore
         Write(history.ProfileId + ".history.json", history);
         _history.Add(history.ProfileId, history);
     }
+    internal void MarkIncomplete(RunStatisticsRecord rejectedRun)
+    {
+        // Persist the marker first: restart/reconciliation must not promote a lost-event run.
+        Write(rejectedRun.RunId + ".incomplete.json", rejectedRun.RunId);
+        _incomplete.Add(rejectedRun.RunId);
+        Save(Find(rejectedRun.RunId) ?? rejectedRun with { Outcome = "pending", EndedAt = null });
+    }
+    private RunStatisticsRecord ApplyCompleteness(RunStatisticsRecord record) => _incomplete.Contains(record.RunId)
+        ? record with { ObservedFromStart = false, Participation = "partial" } : record;
     internal void Save(RunStatisticsRecord record)
     {
+        record = ApplyCompleteness(record);
         // Invalidate receipt before replacing the event, so an interrupted save is retried.
         File.Delete(Path.Combine(_directory, record.RunId + ".run.json.sent"));
         Write(record.RunId + ".run.json", record);

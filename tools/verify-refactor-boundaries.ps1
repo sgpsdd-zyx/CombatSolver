@@ -1120,6 +1120,7 @@ $expectedBeamFiles = @(
     "CombatBeamSolver.PrimaryChoiceReplay.cs",
     "CombatBeamSolver.Retention.cs",
     "CombatBeamSolver.RetentionJobs.cs",
+    "CombatBeamSolver.SmartPotionBound.cs",
     "CombatBeamSolver.StateEvaluation.cs",
     "CombatBeamSolver.StandPatJobs.cs",
     "CombatBeamSolver.Terminal.cs"
@@ -1373,7 +1374,33 @@ $beamRetentionFacadePath = Join-Path $searchRoot "CombatBeamSolver.Retention.cs"
 if (Select-String -LiteralPath $beamRetentionFacadePath -SimpleMatch "private List<SearchNode> RankBest(" -Quiet) {
     $violations.Add("${beamRetentionFacadePath}: RankBest returned outside BeamRetentionPolicy")
 }
+$remainingHealingBoundPath = Join-Path $searchRoot "StrategicHpRecoveryBound.Remaining.cs"
+foreach ($closureComponent in @("PendingReturningCards", "AllCards", "EffectivePowers()", "GetPotionSlotCount(player)", "HasCertifiedRemainingAttachments", "typeof(InfestedPrism)", "typeof(FuzzyWurmCrawler)")) {
+    if (-not (Select-String -LiteralPath $remainingHealingBoundPath -SimpleMatch $closureComponent -Quiet)) {
+        $violations.Add("${remainingHealingBoundPath}: remaining-healing proof lost a closure component: $closureComponent")
+    }
+}
+if (-not (Select-String -LiteralPath (Join-Path $repositoryRoot "src/Runtime/CombatRootSnapshot.cs") -SimpleMatch "CanCertifyRemainingHealingEnvironment(" -Quiet)) {
+    $violations.Add("CombatRootSnapshot.cs: remaining-healing environment proof is not frozen at the root")
+}
+if (-not (Select-String -LiteralPath $beamRetentionFacadePath -SimpleMatch "root.CanCertifyRemainingHealing || root.UsesKnownNativeHealingPolicy" -Quiet)) {
+    $violations.Add("${beamRetentionFacadePath}: healing pruning requires a frozen certificate or native-source policy")
+}
+if (-not (Select-String -LiteralPath (Join-Path $repositoryRoot "src/Runtime/CombatRootSnapshot.cs") -SimpleMatch "CanUseKnownNativeHealingPolicy(" -Quiet)) {
+    $violations.Add("CombatRootSnapshot.cs: native healing policy eligibility must be frozen at the root")
+}
 $beamPhasesPath = Join-Path $searchRoot "CombatBeamSolver.Phases.cs"
+foreach ($healingBoundary in @(
+    @('src/Search/CombatBeamSolver.Retention.cs', '_strictHpBoundWithRelicTargets = CanUseStrictHpRelicBound(root, policy)'),
+    @('src/Search/CombatBeamSolver.Retention.cs', 'targets.All(target => target.HpAllowance == 0)'),
+    @('src/Search/CombatBeamSolver.Retention.cs', 'allowTurnTieBound: !_strictHpBoundWithRelicTargets'),
+    @('src/Search/CombatSearchCoordinator.cs', '!CombatBeamSolver.CanUseStrictHpRelicBound(root, policy)'),
+    @('src/Search/CombatSearchCoordinator.PlanSearch.cs', 'context.Root.CanCertifyRemainingHealing || context.Root.UsesKnownNativeHealingPolicy')
+)) {
+    if (-not (Select-String -LiteralPath (Join-Path $repositoryRoot $healingBoundary[0]) -SimpleMatch $healingBoundary[1] -Quiet)) {
+        $violations.Add("Missing common healing-bound policy: $($healingBoundary[0])")
+    }
+}
 if (-not (Select-String -LiteralPath $beamPhasesPath -SimpleMatch "TightenPrimarySearchIncumbentAtTurnLayer(" -Quiet)) {
     $violations.Add("${beamPhasesPath}: turn-layer incumbent is no longer tightened before coordinator pruning")
 }
@@ -1756,6 +1783,8 @@ foreach ($check in @(
     @{ Path = $unattendedEntryPath; Text = "private static readonly ProtocolHost Host = new();" },
     @{ Path = $unattendedProtocolHostPath; Text = "private sealed partial class ProtocolHost" },
     @{ Path = $unattendedProtocolHostPath; Text = "private async Task RunRequestLoopAsync(NGame host)" },
+    @{ Path = $unattendedProtocolHostPath; Text = "private static void WarmNativePacketEnums()" },
+    @{ Path = $unattendedProtocolHostPath; Text = "WarmNativePacketEnums();" },
     @{ Path = $unattendedProtocolHostPath; Text = "private void Activate(UnattendedTestRequest request)" },
     @{ Path = $unattendedProtocolHostPath; Text = "private void Reset()" },
     @{ Path = $unattendedWriterPath; Text = "private sealed partial class Writer(" },
@@ -2128,7 +2157,11 @@ $multiplayerAdviceRules = @(
     @{ Path = 'src/Search/CombatBeamSolver.Expansion.Replay.cs'; Text = 'bool capturingExecution = policy.Multiplayer?.TurnSetup == null' }
     @{ Path = 'src/Search/CombatBeamSolver.MultiplayerTurnSetup.cs'; Text = 'HookMirrors.ResumeMultiplayerToastyMittens' }
     @{ Path = 'src/Engine/InCombat/Mirrors/HookMirrors.MultiplayerTurnSetup.cs'; Text = 'AfterPlayerTurnStartMirrors.Invoke(relics[index], context, phase: 1);' }
-    @{ Path = 'src/Runtime/CombatRootSnapshot.cs'; Text = 'bool hasOnlyPostCombatHealing = !advisor' }
+    @{ Path = 'src/Runtime/CombatRootSnapshot.cs'; Text = 'StrategicHpRecoveryBoundAssessment healingBoundAssessment = advisor' }
+    @{ Path = 'src/Runtime/CombatRootSnapshot.cs'; Text = 'CanCertifyRemainingHealing = !IsMultiplayerAdvisor' }
+    @{ Path = 'src/Runtime/CombatRootSnapshot.cs'; Text = 'UsesKnownNativeHealingPolicy = !IsMultiplayerAdvisor' }
+    @{ Path = 'src/Search/CombatBeamSolver.SmartPotionBound.cs'; Text = 'policy.Multiplayer == null' }
+    @{ Path = 'src/Search/CombatBeamSolver.SmartPotionBound.cs'; Text = 'if (IsMultiplayerAdvice || _smartPotionEligibilityHpCeiling' }
     @{ Path = 'src/Search/CombatBeamSolver.Retention.cs'; Text = 'if (IsMultiplayerAdvice || _hasGrowthTargets' }
     @{ Path = 'src/Search/CombatBeamSolver.MultiplayerRound.cs'; Text = 'CombatSolver.Engine.InCombat.Mirrors.HookMirrors.BeforeSideTurnStart(' }
     @{ Path = 'src/Search/CombatBeamSolver.Multiplayer.cs'; Text = '!CanReplayMultiplayerAction(node, action)' }
@@ -2284,6 +2317,14 @@ foreach ($file in @('CombatBeamSolver.FinalPlanOrdering.cs', 'CombatBeamSolver.T
             $violations.Add("Intermediate estimate must not become final policy or exact dominance: $file")
         }
     }
+}
+
+$dynamicVarDirectAccess = & rg -l -F '._vars' (Join-Path $repositoryRoot 'src') --glob '!**/DynamicVarSetAccess.cs'
+if ($LASTEXITCODE -gt 1) {
+    throw 'DynamicVarSet field access scan failed.'
+}
+if ($dynamicVarDirectAccess) {
+    $violations.Add('DynamicVarSet._vars direct field access must go through DynamicVarSetAccess')
 }
 
 if ($violations.Count -gt 0) {

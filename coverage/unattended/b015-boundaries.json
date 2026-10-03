@@ -1,0 +1,8 @@
+{
+  "scenarioId": "B015-BOUNDARIES",
+  "characterId": "IRONCLAD",
+  "encounterId": "AXEBOTS_NORMAL",
+  "cards": [],
+  "timeoutSeconds": 120,
+  "exitOnComplete": true
+}

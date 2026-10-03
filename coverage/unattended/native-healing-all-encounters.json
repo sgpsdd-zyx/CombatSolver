@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "scenarioId": "NATIVE-HEALING-ALL-ENCOUNTERS",
+  "characterId": "SILENT",
+  "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+  "enemyCurrentHp": 999,
+  "timeoutSeconds": 120,
+  "characterVariants": ["IRONCLAD", "SILENT", "DEFECT", "REGENT", "NECROBINDER"]
+}

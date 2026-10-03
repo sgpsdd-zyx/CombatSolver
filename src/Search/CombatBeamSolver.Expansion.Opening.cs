@@ -147,28 +147,17 @@ internal sealed partial class CombatBeamSolver
         SimulationSnapshot prefixSnapshot = Replay(prefix);
         try
         {
+            // A prefix may stop at a choice or another replay boundary. Only
+            // settled, live states can be parents of an incremental power probe.
+            if (prefixSnapshot.BoundaryReason != SearchBoundaryReason.None
+                || prefixSnapshot.PlayerDead || prefixSnapshot.AllEnemiesDead)
+                return [];
             CombatPredictionSimulator simulator = (CombatPredictionSimulator)prefixSnapshot.Simulator;
             SimulatedCombatState combat = (SimulatedCombatState)simulator.State.CombatState;
             SimPlayerCombatState playerState = simulator.State.GetPlayerCombatState(_player);
             IReadOnlyList<PredictedCard> hand = playerState.Hand.Cards;
             List<PlanAction> actions = [];
             HashSet<string> seenCardStates = [];
-            SearchNode seed = new(
-                null,
-                0,
-                prefixSnapshot.PotionUseCount,
-                prefixSnapshot.PotionStrategicCost,
-                prefixSnapshot.Turn,
-                SearchRouteTraits.None,
-                0,
-                prefixSnapshot.Score,
-                prefixSnapshot.StateKey,
-                prefixSnapshot.HasRisk,
-                prefixSnapshot.BoundaryReason,
-                false,
-                null,
-                prefixSnapshot,
-                CombatProgressState.Capture(prefixSnapshot));
 
             for (int handIndex = 0; handIndex < hand.Count; handIndex++)
             {
@@ -206,7 +195,7 @@ internal sealed partial class CombatBeamSolver
                         CardStateKey: cardStateKey,
                         CardStateOccurrence: cardStateOccurrence,
                         CardEnchantmentId: card.Preview.Enchantment?.Id.Entry ?? "", CardUpgradeLevel: card.Preview.CurrentUpgradeLevel);
-                    SimulationSnapshot probe = ReplayAction(seed, action);
+                    SimulationSnapshot probe = ReplayOpeningPowerProbe(prefixSnapshot, prefix, action);
                     try
                     {
                         if (probe.BoundaryReason == SearchBoundaryReason.None
@@ -231,6 +220,36 @@ internal sealed partial class CombatBeamSolver
             prefixSnapshot.ReleaseSimulator();
         }
     }
+
+    private SimulationSnapshot ReplayOpeningPowerProbe(
+        SimulationSnapshot prefixSnapshot, IReadOnlyList<PlanAction> prefix, PlanAction action)
+        => SearchTransitionGuard.Execute(action, prefixSnapshot.StateKey, prefix.Count, () =>
+        {
+            SimulationSnapshot incremental = Replay(
+                [action], prefixSnapshot, prefixSnapshot.Turn, prefix.Count);
+            try
+            {
+                if (policy.VerifyIncrementalSearch)
+                {
+                    PlanAction[] fullActions = [.. prefix, action];
+                    SimulationSnapshot replayed = Replay(fullActions, allowExecutionCapture: false);
+                    try
+                    {
+                        AssertIncrementalEquivalent(action, fullActions, incremental, replayed);
+                    }
+                    finally
+                    {
+                        replayed.ReleaseSimulator();
+                    }
+                }
+                return incremental;
+            }
+            catch
+            {
+                incremental.ReleaseSimulator();
+                throw;
+            }
+        });
 
     internal IReadOnlyList<PlanAction> BuildOpeningPotionActions()
         => BuildPotionActionsAfterPrefix([]);

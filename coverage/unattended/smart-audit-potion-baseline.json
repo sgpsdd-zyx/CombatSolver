@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "scenarioId": "SMART-AUDIT-POTION-BASELINE",
+  "characterId": "IRONCLAD",
+  "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+  "seed": "SMARTAUDITBASELINE",
+  "enemyCurrentHp": 12,
+  "initialEnemyMoveIds": ["FIRST_ACID_GOOP"],
+  "initialPlayerHp": 30,
+  "initialPlayerMaxHp": 80,
+  "initialPlayerEnergy": 1,
+  "clearPlayerPiles": true,
+  "clearAllPowers": true,
+  "powers": [
+    { "powerId": "STRENGTH_POWER", "target": "Enemy", "amount": 5 }
+  ],
+  "cards": [
+    { "cardId": "STRIKE_IRONCLAD", "pile": "Hand", "count": 1 },
+    { "cardId": "STRIKE_IRONCLAD", "pile": "Draw", "count": 1 }
+  ],
+  "potions": [{ "potionId": "BLOCK_POTION" }],
+  "timeoutSeconds": 120
+}

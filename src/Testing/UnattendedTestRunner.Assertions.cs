@@ -18,6 +18,31 @@ internal sealed partial class UnattendedTestRunner
         public async Task RunBeforeExecutionAsync(ScenarioContext scenario)
         {
             UnattendedTestRequest request = runner._request;
+            if (request.ScenarioId == "REMAINING-HEALING-LOUSE")
+            {
+                runner.SetStage("remaining_healing_louse");
+                await runner.AssertRemainingHealingLouseAsync(scenario.CombatState, scenario.Player);
+            }
+            if (request.ScenarioId == "REMAINING-HEALING-POISON")
+            {
+                runner.SetStage("remaining_healing_poison");
+                await runner.AssertRemainingHealingPoisonAsync(scenario.CombatState, scenario.Player);
+            }
+            if (request.ScenarioId == "REMAINING-HEALING-TAINTED")
+            {
+                runner.SetStage("remaining_healing_tainted");
+                await runner.AssertRemainingHealingTaintedAsync(scenario.CombatState, scenario.Player);
+            }
+            if (request.ScenarioId == "REMAINING-HEALING-BOUND")
+            {
+                runner.SetStage("remaining_healing_bound");
+                await runner.AssertRemainingHealingBoundAsync(scenario.CombatState, scenario.Player);
+            }
+            if (request.ScenarioId == "REMAINING-HEALING-SILENT")
+            {
+                runner.SetStage("remaining_healing_silent");
+                await runner.AssertRemainingHealingSilentAsync(scenario.CombatState, scenario.Player);
+            }
             if (request.ScenarioId == "MEMORY-DISPLAY-CONTRACT")
             {
                 runner.SetStage("memory_display_contract");
@@ -93,6 +118,15 @@ internal sealed partial class UnattendedTestRunner
                 runner._completedChecks.Add(AssertSnapshotCoverageContract(scenario.CombatState));
                 if (ContinuationStamp.CaptureLive(scenario.CombatState).StateText != before)
                     throw new InvalidOperationException("Snapshot coverage contract changed live combat.");
+            }
+            if (request.ScenarioId == "CARD-COST-IDENTITY-CONTRACT")
+            {
+                runner.SetStage("card_cost_identity_contract");
+                string before = ContinuationStamp.CaptureLive(scenario.CombatState).StateText;
+                runner._completedChecks.Add(AssertCardCostIdentityContract(scenario.Player,
+                    SolverDisplayNames.Capture(scenario.CombatState)));
+                if (ContinuationStamp.CaptureLive(scenario.CombatState).StateText != before)
+                    throw new InvalidOperationException("Card cost identity contract changed live combat.");
             }
             if (request.ScenarioId == "CHOICE-COMBINATION-CONTRACT")
             {
@@ -218,17 +252,24 @@ internal sealed partial class UnattendedTestRunner
                     arsenal: request.ScenarioId == "ARSENAL-HAND-DRAW-SHUFFLE-CHOICE-REPLAY");
                 runner._completedChecks.Add("EndTurnChoiceReplay");
             }
-            if (request.ScenarioId == "ADJUSTED-ROUTE-INVALID-SUFFIX")
+            if (request.ScenarioId is "ADJUSTED-ROUTE-INVALID-SUFFIX" or "B015-FIXED-PREFIX-TARGETS")
             {
                 runner.SetStage("adjusted_route_invalid_suffix");
                 await runner.AssertAdjustedRouteInvalidSuffixAsync(scenario.CombatState, scenario.Player);
-                runner._completedChecks.Add("AdjustedRouteInvalidSuffix");
+                runner._completedChecks.Add(request.ScenarioId == "B015-FIXED-PREFIX-TARGETS"
+                    ? "B015FixedPrefixTargets:LegalGeneratedTarget:AbsentTargetRejected:NativeUnchanged"
+                    : "AdjustedRouteInvalidSuffix");
             }
             if (request.ScenarioId == "EARLY-END-TURN")
             {
                 runner.SetStage("early_end_turn");
                 await AssertEarlyEndTurnAsync(scenario.CombatState);
                 runner._completedChecks.Add("EarlyEndTurn");
+            }
+            if (request.ScenarioId == "SURVIVABLE-SEARCH-BOUNDARY")
+            {
+                runner.SetStage("survivable_search_boundary");
+                await runner.AssertSurvivableBoundaryAsync(scenario.CombatState);
             }
             if (request.ScenarioId == "STAND-PAT-MEMORY-BOUNDARY")
             {
@@ -322,6 +363,10 @@ internal sealed partial class UnattendedTestRunner
 
         public void AssertAfterExecution(ScenarioContext scenario, ExecutionOutcome outcome)
         {
+            // Keep actual terminal health alongside projected search metrics, so full-battle
+            // comparisons cannot accidentally report a solver estimate as native outcome.
+            runner._completedChecks.Add($"NativeOutcome:combatEnded={outcome.CombatEnded}:turn={outcome.FinishedTurn}"
+                + $":hp={scenario.Player.Creature.CurrentHp}:maxHp={scenario.Player.Creature.MaxHp}");
             UnattendedTestRequest request = runner._request;
             if (request.ExpectedFinishedTurn is { } expectedFinishedTurn
                 && outcome.FinishedTurn != expectedFinishedTurn)

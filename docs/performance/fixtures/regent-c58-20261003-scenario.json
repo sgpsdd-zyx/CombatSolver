@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "seed": "NOVELTY-DEV-20260915-03",
+  "characterId": "REGENT",
+  "ascension": 10,
+  "actIndex": 1,
+  "encounterId": "DECIMILLIPEDE_ELITE",
+  "encounterKind": "Elite",
+  "includeStartingDeck": true,
+  "includeStartingRelics": true,
+  "includeAscendersBane": true,
+  "applyRelicObtainEffects": false,
+  "characterCards": {
+    "count": 12,
+    "ids": [
+      "HEGEMONY",
+      "SOLAR_STRIKE",
+      "I_AM_INVINCIBLE",
+      "NEUTRON_AEGIS",
+      "VOID_FORM",
+      "I_AM_INVINCIBLE",
+      "CRASH_LANDING",
+      "BUNDLE_OF_JOY",
+      "GLOW",
+      "BEGONE",
+      "SEVEN_STARS",
+      "MAKE_IT_SO"
+    ],
+    "upgradeLevels": 1
+  },
+  "colorlessCards": {
+    "count": 2,
+    "ids": [
+      "THINKING_AHEAD",
+      "ENTROPY"
+    ],
+    "upgradeLevels": 0
+  },
+  "relics": {
+    "count": 3,
+    "ids": [
+      "GIRYA",
+      "OLD_COIN",
+      "VITRUVIAN_MINION"
+    ],
+    "upgradeLevels": 0
+  },
+  "potions": {
+    "count": 2,
+    "ids": [
+      "HEART_OF_IRON",
+      "REGEN_POTION"
+    ],
+    "upgradeLevels": 0
+  },
+  "setupChoices": [],
+  "playerCurrentHp": null,
+  "potionSlotCount": null,
+  "mode": "Deploy",
+  "fixedSearchBudget": false
+}

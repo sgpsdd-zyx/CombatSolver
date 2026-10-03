@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "scenarioId": "B015-FIXED-PREFIX-TARGETS",
+  "characterId": "IRONCLAD",
+  "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+  "seed": "B015-ADJUSTED-SUFFIX",
+  "enemyCurrentHp": 1,
+  "cards": [],
+  "enableNoGcRegionForTest": false,
+  "headlessFastModeForTest": "Instant",
+  "timeoutSeconds": 120,
+  "exitOnComplete": true
+}

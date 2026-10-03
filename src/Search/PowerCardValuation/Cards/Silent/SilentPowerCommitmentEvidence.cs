@@ -136,7 +136,7 @@ internal sealed partial class CombatBeamSolver
             .Concat(state.ExhaustPile.Cards)
             .FirstOrDefault(candidate => candidate.Preview.Id.Entry == cardId);
         return card?.Preview.Type == CardType.Skill
-            && card.Preview.DynamicVars._vars.Keys.Any(key =>
+            && DynamicVarSetAccess.Keys(card.Preview.DynamicVars).Any(key =>
                 key.Contains("Block", StringComparison.OrdinalIgnoreCase));
     }
 }

@@ -1,0 +1,280 @@
+{
+  "prototype": "C59",
+  "gameDllSha256": "2b40d2df538db1ceb5fa48d958c80ab730ada1e07db88a870aff01a661768b9f",
+  "sharedAudit": "regent-potion-cap-bound-semantic-audit-20261003.json",
+  "tableMigration": {
+    "Cards": {
+      "count": 545,
+      "entriesAndOrderUnchanged": true
+    },
+    "Powers": {
+      "count": 178,
+      "entriesAndOrderUnchanged": true
+    }
+  },
+  "additionalIronNativeSourceProvenance": [
+    {
+      "name": "native-review-provenance.json",
+      "types": [
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Cards.StrikeIronclad",
+          "exitCode": 0
+        },
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Cards.DefendIronclad",
+          "exitCode": 0
+        },
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Cards.Bash",
+          "exitCode": 0
+        },
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Cards.AscendersBane",
+          "exitCode": 0
+        },
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Cards.Headbutt",
+          "exitCode": 0
+        },
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Cards.Bully",
+          "exitCode": 0
+        },
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Cards.StoneArmor",
+          "exitCode": 0
+        },
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Cards.Taunt",
+          "exitCode": 0
+        },
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Cards.BurningPact",
+          "exitCode": 0
+        },
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Cards.InfernalBlade",
+          "exitCode": 0
+        },
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Cards.Mangle",
+          "exitCode": 0
+        },
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Cards.Barricade",
+          "exitCode": 0
+        },
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Cards.PerfectedStrike",
+          "exitCode": 0
+        },
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Cards.TwinStrike",
+          "exitCode": 0
+        },
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Cards.Rampage",
+          "exitCode": 0
+        },
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Cards.Thunderclap",
+          "exitCode": 0
+        },
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Cards.Jackpot",
+          "exitCode": 0
+        },
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Cards.JackOfAllTrades",
+          "exitCode": 0
+        },
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Cards.Anger",
+          "exitCode": 0
+        },
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Cards.DramaticEntrance",
+          "exitCode": 0
+        },
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Cards.HowlFromBeyond",
+          "exitCode": 0
+        },
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Cards.Offering",
+          "exitCode": 0
+        },
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Cards.Rage",
+          "exitCode": 0
+        },
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Relics.BurningBlood",
+          "exitCode": 0
+        },
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Relics.IceCream",
+          "exitCode": 0
+        },
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Relics.TungstenRod",
+          "exitCode": 0
+        },
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Relics.Kunai",
+          "exitCode": 0
+        },
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Potions.BeetleJuice",
+          "exitCode": 0
+        },
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Potions.GamblersBrew",
+          "exitCode": 0
+        },
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Powers.BarricadePower",
+          "exitCode": 0
+        },
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Powers.RagePower",
+          "exitCode": 0
+        },
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Powers.ShrinkPower",
+          "exitCode": 0
+        },
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Powers.ReattachPower",
+          "exitCode": 0
+        },
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Monsters.DecimillipedeSegment",
+          "exitCode": 0
+        },
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Monsters.DecimillipedeSegmentFront",
+          "exitCode": 0
+        },
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Monsters.DecimillipedeSegmentMiddle",
+          "exitCode": 0
+        },
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Monsters.DecimillipedeSegmentBack",
+          "exitCode": 0
+        }
+      ]
+    },
+    {
+      "name": "additional-native-review.json",
+      "types": [
+        {
+          "name": "BattleTrance",
+          "exitCode": 0
+        },
+        {
+          "name": "Brand",
+          "exitCode": 0
+        },
+        {
+          "name": "PactsEnd",
+          "exitCode": 0
+        },
+        {
+          "name": "PrimalForce",
+          "exitCode": 0
+        },
+        {
+          "name": "Spite",
+          "exitCode": 0
+        },
+        {
+          "name": "ManglePower",
+          "exitCode": 0
+        }
+      ]
+    }
+  ],
+  "nativeMinimalRun": "b793021c330843918cf511dc63efd77e",
+  "fullNativeRun": "ac76c56b30c14ad486b8da55f56d3c03",
+  "proofRules": [
+    "Initial reviewed cards and all eight immutable native generation pools must pass; unknown initial Exhaust cards permanently reject.",
+    "Generated combat cards and powers use the unchanged audited closure; GrowthValues.HasTarget rejects permanent growth.",
+    "Active Regen and BurningBlood post-combat healing counted; unknown potions, attachments, powers, allies, orbs rejected.",
+    "One player; only native Decimillipede segments and four reviewed Ironclad relic types; external subscribers/modifiers reject."
+  ],
+  "pairedPending": false,
+  "sentinelsPending": false,
+  "productionIntegrated": true,
+  "targetPairedPassed": true,
+  "fullNative": {
+    "runId": "ac76c56b30c14ad486b8da55f56d3c03",
+    "status": "Passed",
+    "completeFrozenRootEqual": true,
+    "finishedTurn": 5,
+    "nativeOutcome": [
+      "NativeOutcome:combatEnded=True:turn=5:hp=49:maxHp=80"
+    ],
+    "initialWorldline": [
+      "InitialPolicy:SoldHp=0;Potion=0,Saved=0/0,Rejected=0;Theft=-,Outstanding=0;Turns=5;Shuffles=1;Unmirrored=0;HpLost=19;ProjectedBattleHpLost=37;Block=5/6;Pruned=0;Total=45765.4ms/58265482536B;Gc=2309.9ms/1149.7msMax;Frame=1159.8msMax/11Over50;CacheHits=0;ChoiceBranches=939;Actions=4;OnlyDeath=False;CombatEndedTurn=5;DeathTurn=-;ActEndingBoss=False;BossHpRelief=None"
+    ],
+    "unexpectedReplans": [
+      "UnexpectedReplans:0"
+    ],
+    "configuredNoGcBytes": 16000000000,
+    "nativeActualNoGcSetup": [
+      "NoGcConfigurationApplied:Configured=True/16000000000:Established=12261215323:Actual=True/12261215323:ExpectedFallback=False:AllowedFallback=True:Latency=NoGCRegion"
+    ],
+    "searchElapsedSeconds": 45.7653878,
+    "pairedRssMeasuredInOfflineHarness": true
+  },
+  "additionalIronNativeSourceHashes": {
+    "Anger.cs": "dbf7761900c449421a38105902cea7ecd44e454eaf5330c529af9b1771416ce7",
+    "AscendersBane.cs": "456bccb82921d49d8e2358713ff25e2db13e33a68bf70289391375a613f88161",
+    "Barricade.cs": "d02ed7954a7c2b5b8294fca13381cec2f4bc6463037e043fc1bf6f898d39626c",
+    "BarricadePower.cs": "41af2f6eab1eec97723baf352743e66d3a026ea894bd7a87a3c6fd633ebe45d7",
+    "Bash.cs": "ec77fd22c3b82ca57e55fee6b57bdac7e7d5567da0e59a6fdadb97e01095d79a",
+    "BattleTrance.cs": "f73f8a517b88204a36d5ed31460749a58547e4b3f318da45427756d2bd8b945f",
+    "BeetleJuice.cs": "b191ed26dbf7c2b8639b8e0780f99fce624dc843ebe738f5b6dd81f59204a0e5",
+    "Brand.cs": "97fbde0ca47083b0541c1bce6b360747db5902efdb53b19fd420d6a7d1a73460",
+    "Bully.cs": "e96e4207ceaf19e23779010fe11c30dce2a456da2145e91bc713687f2e8acf60",
+    "BurningBlood.cs": "3141680a2a5a359691662db2cd3d097fb7b032186410f4d63b9a8b7aa8cfbe47",
+    "BurningPact.cs": "5e69c83273af3d7243eddc02e1ba7127667ced7a185466d5dcbe81f03fa65d10",
+    "DecimillipedeSegment.cs": "6959c3047e0e82961b27e4a5e66089fd64bf19c8171f3a313148d6462be65a75",
+    "DecimillipedeSegmentBack.cs": "48f7a09731fca68a11c7516b495cc27810517cb11a802e39db83f4498fbdeab2",
+    "DecimillipedeSegmentFront.cs": "6e34db0309d9c6e91f17caf3fa45107c5b9b095bfa9503c99ccded9eb704f305",
+    "DecimillipedeSegmentMiddle.cs": "dd0e92f458706e2f7b4e06ca272cd0d2b95a8915e2ede22e1bb2898ccdd15671",
+    "DefendIronclad.cs": "c9d222bd51c2d7baacf0b287605faa6a819ccff4c6cfe70a5aa262dff9aebc78",
+    "DramaticEntrance.cs": "903db827282d09fee425485bae48131c7cda335d2086100fc17b75547baf5c72",
+    "GamblersBrew.cs": "e3bf40294ceaa1867ea808628ca90fc104e4ab4fa0d5b010ffb3116732bd6970",
+    "GiantRock.cs": "34491a3b6faa58504c4a20008f8d29471d9cc95728f75c366b386fa9bea5b3da",
+    "Headbutt.cs": "bea4a5675beb5ec79c9e6c432fb93f9fe9f406fce20c099d6bf073419c7d7d69",
+    "HowlFromBeyond.cs": "3c31d069348c0b5ac38e1bea79712755656471febd4e73108e827b622937b5db",
+    "IceCream.cs": "6e6f1c7983365a91dd6568ea685e900a4d9ae6b8f53caa97ea67cf9c0770dbad",
+    "InfernalBlade.cs": "e874a42e84ddcb0d6ee9993b286cae00cfd478ab3abf45754384584b97c6ce32",
+    "JackOfAllTrades.cs": "b418189bccfa0aee33a8bf2a3b4f5056cfe760c7b1306999afe63ab2208dbd9a",
+    "Jackpot.cs": "38a999ceaef7070e52a0e3615b10b630fb7d0a132e2fd58153c9fbf9898859aa",
+    "Kunai.cs": "60578d9f5813163c5ee51310df620267ba6d9c8d4846362c9c6da8f71c9abade",
+    "Mangle.cs": "d9029cc023fe409d504237d42a534a30d9ecc6f4825e09e676bca7da69534f26",
+    "ManglePower.cs": "a28045c7a4e4cb23cd900e5b67140cf049368de5a58dbea50b33d0d81213dbcb",
+    "Offering.cs": "1d242d7755db29019feed1513bc30a276e4cdeeaec5a339d6e9a1e1bc58a2ca3",
+    "PactsEnd.cs": "b464e2d9507ce43eaf07ec43164dc347e74d2f13e8a34a9e567a715944f5f2e2",
+    "PerfectedStrike.cs": "aa0665f1602580d2a98212609669eb032b049a90fbc7562a89e556ad69736cf5",
+    "PrimalForce.cs": "6d3733806f5b15beadb83eb110a29739041d1aa8b625e50aa2a6b8d7d35b7a5a",
+    "Rage.cs": "24aaf26a65db195e4d332a7098b5c17e7053acea416e3e85b7c76f076e6ca74f",
+    "RagePower.cs": "dcdc75d2da4fb7c1d7077ae485f565431bb871ad048b40225e7cf446db5d036e",
+    "Rampage.cs": "0d251b523f10c9787232d5908e11f6cd843270142558fc465b8d9963cab09dd3",
+    "ReattachPower.cs": "52de07daeac9c81418836bf1f703c81a87225ab4cafbbdb6a6320aa4b08c62df",
+    "ShrinkPower.cs": "8b0b030d5407d5fe59e0ae41bf683d4f554c64ab72cf744669280fba2b7540ef",
+    "Spite.cs": "9ac83bf7ee5574788ab3597a8a05b998fd263f5dca125b698fd297c19153cd57",
+    "StoneArmor.cs": "37643b247baf9ea7811d16704a31671928cd3390f91c92810126a9ffa5481182",
+    "StrikeIronclad.cs": "5ab7339433062c3177d16d0f060785a040d2387e51b5e6bbc9b84d67e3d3b445",
+    "Taunt.cs": "e933245eb19c598d3c5467ae97d2ef58708c8f08210cb920b05045cd59a422c6",
+    "TemporaryStrengthPower.cs": "d68cad9ac0348edbe0ec2595e62978d43b7c0045b82c3f0680188c6d5e0839fe",
+    "Thunderclap.cs": "85ea12c8db23be54479784500329159582c59ed67e033e818c913686f416802e",
+    "TungstenRod.cs": "a07ca58da365feb8beefd552f36663a2505eb1e3f13b0b965cb17985ade47508",
+    "TwinStrike.cs": "8d0b87642d4d8f858481633e408d4c5962af31ff6c8dae46519cc1ed9fbb8950"
+  },
+  "deliveryPullRequest": 200
+}

@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "scenarioId": "CARD-COST-IDENTITY-CONTRACT",
+  "characterId": "IRONCLAD",
+  "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+  "seed": "CARD-COST-IDENTITY-CONTRACT-20261002",
+  "enemyCurrentHp": 1,
+  "cards": [
+    {
+      "cardId": "STRIKE_IRONCLAD",
+      "pile": "Hand",
+      "count": 1
+    }
+  ],
+  "fixedSearchBudget": true,
+  "searchBudgetOverrideMilliseconds": 1000,
+  "headlessFastModeForTest": "Instant",
+  "stopAfterInitialSolverResultAssertion": true,
+  "timeoutSeconds": 120,
+  "enableNoGcRegionForTest": false
+}

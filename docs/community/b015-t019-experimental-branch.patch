@@ -1,0 +1,22 @@
+--- a/src/Prediction/PersistentPowerSupport.cs
++++ b/src/Prediction/PersistentPowerSupport.cs
+@@ -154,10 +154,15 @@
+ 
+         // The simulator prepares player turns one at a time; vanilla dispatches this
+         // side-wide Rampart hook once after the last living player's setup.
+-        if (side == CombatSide.Player && !isExtraTurn
+-            && participants.Contains(combat.Players.Last(member =>
+-                simulator.State.GetCreature(member.Creature).IsAlive).Creature))
+-            return TriggerRampart(simulator, combat);
++        if (side == CombatSide.Player && !isExtraTurn)
++        {
++            Player? lastLivingPlayer = combat.Players.LastOrDefault(member =>
++                simulator.State.GetCreature(member.Creature).IsAlive);
++            // A player-start effect may have killed the last survivor. There is
++            // then no living participant to dispatch the side-wide Rampart hook.
++            if (lastLivingPlayer != null && participants.Contains(lastLivingPlayer.Creature))
++                return TriggerRampart(simulator, combat);
++        }
+         return !simulator.HasPendingChoice;
+     }
+ 

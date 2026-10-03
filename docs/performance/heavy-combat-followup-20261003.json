@@ -1,0 +1,433 @@
+{
+  "scope": "follow-up source omitted from merged PR188, integrated onto upstream1a3d1a37; full29 single-root quality screening complete, paired performance acceptance incomplete",
+  "baseCommit": "1a3d1a3747953b5145b2f38809d49f882c7271c1",
+  "mergedPR188": {
+    "mergeCommit": "fbe469b77e55f1269a563725df001023597cd9a0",
+    "headCommit": "e3cd33d2539d216180bf2648058e52a9ce88b838",
+    "mergedAt": "2026-10-02T10:29:18Z"
+  },
+  "retainedSource": {
+    "sourceReference": "21497698, C40 af626245 search+Powerordering fix",
+    "paths": [
+      "src/Prediction/PredictionModHookSubscriberCapture.cs",
+      "src/Search/CombatBeamSolver.Phases.cs",
+      "src/Search/CombatBeamSolver.Retention.cs",
+      "src/Search/CombatBeamSolver.SmartPotionBound.cs",
+      "src/Search/SimulatedCombatState.cs",
+      "src/Search/StrategicHpRecoveryBound.DefectPrism.cs",
+      "src/Search/StrategicHpRecoveryBound.Remaining.cs",
+      "src/Testing/UnattendedTestRunner.DefectPrismHealing.cs",
+      "src/Testing/UnattendedTestRunner.Executor.cs",
+      "src/Testing/UnattendedTestRunner.MirroredHookFilter.cs"
+    ],
+    "snapshotCommit": "2812a100",
+    "comparisonScope": "exact retained transplantation at2812a100; later ef17 opening guard adds separate source/testing changes",
+    "allChangedSourceContentsExact": true,
+    "candidateDllSha256": "1d215125ab8e036e5713aa1dd333d4af20222c8d39a1f7147781bdb299894779",
+    "build": "Release0warnings0errors28.35s CopyModOnBuild=false"
+  },
+  "playerPrismEvidence": {
+    "baselineCommit": "88298ae54fd626e52e87efd568dd19ffd507aafd",
+    "baselineSeconds": 313.0166646,
+    "candidateSeconds": 158.1704336,
+    "speedup": 1.9789834,
+    "baselinePeakRssBytes": 26283286528,
+    "candidatePeakRssBytes": 28094922752,
+    "peakRssIncreasePercent": 6.8927,
+    "quality": "victory,28HP loss,nohealing/noPotion,T3",
+    "userException": "user accepts this scene at about1.98x; original2x requirement remains for others",
+    "nativeCompleteDeployment": "632aac0c34dc4f56b8c75edb9628d965 Passed,actual87to59HP,T3,noUnexpectedReplan",
+    "reuseLimit": "same retained source/input; no claim of a new paired measurement, new native run or equality of unrecorded legacy native binary fields"
+  },
+  "qualityGaps": {
+    "queen": "Two C52 full samples won67HP/T12 at324.1425034 and315.7432298s. Latest upstream A1 timed out without victory at299.9777376s,enemy552HP. Observed quality/RSS pass; candidate full request takes5.26% longer than latest sample, unresolved time/speed gate; no2x claim.",
+    "necrobinderBoss": "C52 full sample won with4HP loss/one potion versus original17HP/one potion; not2x speed acceptance.",
+    "broadFinalRegression": "29/29 valid, all route quality comparisons pass;27 original single RSS comparisons pass,2 exceed10%;8 fresh ABBA processes for these2 roots pass observed quality/memory gates. Full paired speed acceptance remains incomplete."
+  },
+  "rejectedCandidates": [
+    "C36",
+    "C41",
+    "C42",
+    "C43",
+    "C44",
+    "C45",
+    "C46",
+    "C47",
+    "C49 projected actual death ranking",
+    "C50/C51 ready free defence ranking",
+    "C53 free debuff ranking",
+    "C54 Ironclad remaining healing certificate"
+  ],
+  "delivery": "Stage follow-up PR199 has current-upstream target/sentinel observations and29-root quality screening. Validated C52 source deployed locally in five owned files. Broad2x goal remains active, not merged or released. No version bump, visible game or workshop action.",
+  "openingPowerBoundaryFix": {
+    "sourceCommit": "ef17f75b",
+    "behavior": "Skip incremental power probes when the replayed prefix has a non-None boundary, dead player or completed victory; release prefix snapshot in the existing finally",
+    "nativeRegression": {
+      "runId": "6a381b31bb8f4c3a86ee05aaec7da8e5",
+      "status": "Passed",
+      "checks": [
+        "normal power remains playable",
+        "native Prepared prefix PendingChoice returns no probes",
+        "terminal victory returns no probes",
+        "root and live unchanged"
+      ]
+    },
+    "integratedBuild": "Release0warnings0errors13.69s CopyModOnBuild=false",
+    "dllSha256": "5799436a6ed1bef1b44fef7791d0dfd181c52c3307adf5588d5b076f4a646b14",
+    "boundary": "Passed search_files241",
+    "deployment": "validated C52 build reused for exact five-file local deployment after corpus/memory/current-upstream observations; later commits docs only"
+  },
+  "rejectedFreeDefenceRanking": {
+    "initialFrozenQueen": "one full sample won with61HP loss at302.9172305s",
+    "repeatFrozenQueen": "one full C51 sample won with77HP loss at322.0813522s versus original67; rejected for quality instability",
+    "nativeOperational": "C51 native root won with18HP loss and zero unexpected replans; different initial state, not proof of the frozen61HP route",
+    "threeRepresentatives": "C51 single samples passed quality/memory, insufficient to override Queen failure",
+    "sourceIncluded": false
+  },
+  "fullCorpusRegression": {
+    "sourceCommit": "ef17f75b",
+    "baselineCommit": "88298ae54fd626e52e87efd568dd19ffd507aafd",
+    "configuration": "VeryHigh135Beam/500000nodes/72,42,54branches/DOP16/Smart/width on/novelty off/300000ms/16GB NoGC",
+    "completedRoots": 29,
+    "validRoots": 29,
+    "allQualityPassed": true,
+    "singleRssFailedScenes": [
+      "dev-04-necrobinder-elite",
+      "dev-05-ironclad-boss"
+    ],
+    "performanceAcceptance": "single screening only;17 original roots>20s,4 single samples>=2x;13 remain below2x. Prism separately accepted at1.98x.",
+    "processWallCaveat": "Necrobinder holdout supervisor paused after search process completion for isolated source collection; use reported solver/search wall, not held supervisor processWall, for this root.",
+    "comparisonColumns": "paired arrays are [original A1,C52]; allQualityPassed checks victory/survival, HP/strategic deficit, potion use/cost, death-save and stolen resources",
+    "comparisonRows": [
+      {"scene":"dev-00-ironclad-elite","seconds":[168.3637777,171.318114],"speedup":0.9827552601939105,"peakRssBytes":[21647806464,21157068800],"peakRssRatio":0.9773308365068725,"quality":{"won":[true,true],"survives":[true,true],"projectedBattleHpLost":[43,43],"strategicHpDeficit":[37,37],"projectedBattlePotionCount":[0,0],"potionStrategicCost":[0,0],"deathSaveUseCount":[0,0],"outstandingStolenResource":[0,0],"enemyHp":[0,0],"combatEndedTurn":[5,5],"growthHpCredit":[0,0],"growthRewardCount":[0,0]},"singleQualityMemoryPass":true,"reasons":[]},
+      {"scene":"dev-01-silent-elite","seconds":[37.1302198,22.3368806],"speedup":1.6622831300803926,"peakRssBytes":[24652840960,12487553024],"peakRssRatio":0.5065360639068512,"quality":{"won":[true,true],"survives":[true,true],"projectedBattleHpLost":[40,40],"strategicHpDeficit":[40,40],"projectedBattlePotionCount":[0,0],"potionStrategicCost":[0,0],"deathSaveUseCount":[0,0],"outstandingStolenResource":[0,0],"enemyHp":[0,0],"combatEndedTurn":[4,4],"growthHpCredit":[0,0],"growthRewardCount":[0,0]},"singleQualityMemoryPass":true,"reasons":[]},
+      {"scene":"dev-02-defect-elite","seconds":[18.9851434,18.8261378],"speedup":1.0084460021322057,"peakRssBytes":[10963017728,10926043136],"peakRssRatio":0.9966273344696356,"quality":{"won":[true,true],"survives":[true,true],"projectedBattleHpLost":[10,10],"strategicHpDeficit":[10,10],"projectedBattlePotionCount":[0,0],"potionStrategicCost":[0,0],"deathSaveUseCount":[0,0],"outstandingStolenResource":[0,0],"enemyHp":[0,0],"combatEndedTurn":[6,6],"growthHpCredit":[0,0],"growthRewardCount":[0,0]},"singleQualityMemoryPass":true,"reasons":[]},
+      {"scene":"dev-03-regent-elite","seconds":[302.0212986,302.5437618],"speedup":0.9982730987514283,"peakRssBytes":[21871898624,20246089728],"peakRssRatio":0.9256667688548994,"quality":{"won":[true,true],"survives":[true,true],"projectedBattleHpLost":[28,28],"strategicHpDeficit":[28,28],"projectedBattlePotionCount":[0,0],"potionStrategicCost":[0,0],"deathSaveUseCount":[0,0],"outstandingStolenResource":[0,0],"enemyHp":[0,0],"combatEndedTurn":[5,5],"growthHpCredit":[0,0],"growthRewardCount":[0,0]},"singleQualityMemoryPass":true,"reasons":[]},
+      {"scene":"dev-04-necrobinder-elite","seconds":[17.9339311,19.4385688],"speedup":0.9225952427114902,"peakRssBytes":[10965913600,16142979072],"peakRssRatio":1.4721052582431435,"quality":{"won":[true,true],"survives":[true,true],"projectedBattleHpLost":[35,35],"strategicHpDeficit":[35,35],"projectedBattlePotionCount":[1,1],"potionStrategicCost":[9,9],"deathSaveUseCount":[0,0],"outstandingStolenResource":[0,0],"enemyHp":[0,0],"combatEndedTurn":[6,6],"growthHpCredit":[0,0],"growthRewardCount":[1,1]},"singleQualityMemoryPass":false,"reasons":["peak RSS > +10%"]},
+      {"scene":"dev-05-ironclad-boss","seconds":[18.8282542,20.574776],"speedup":0.9151134476506573,"peakRssBytes":[10970521600,17029885952],"peakRssRatio":1.5523314727350794,"quality":{"won":[true,true],"survives":[true,true],"projectedBattleHpLost":[11,11],"strategicHpDeficit":[9,9],"projectedBattlePotionCount":[0,0],"potionStrategicCost":[0,0],"deathSaveUseCount":[0,0],"outstandingStolenResource":[0,0],"enemyHp":[0,0],"combatEndedTurn":[6,6],"growthHpCredit":[0,0],"growthRewardCount":[0,0]},"singleQualityMemoryPass":false,"reasons":["peak RSS > +10%"]},
+      {"scene":"dev-06-silent-boss","seconds":[50.1786779,46.5309874],"speedup":1.0783927164201978,"peakRssBytes":[23370452992,23748145152],"peakRssRatio":1.0161610970968038,"quality":{"won":[true,true],"survives":[true,true],"projectedBattleHpLost":[62,62],"strategicHpDeficit":[62,62],"projectedBattlePotionCount":[1,1],"potionStrategicCost":[45,45],"deathSaveUseCount":[0,0],"outstandingStolenResource":[0,0],"enemyHp":[0,0],"combatEndedTurn":[11,11],"growthHpCredit":[0,0],"growthRewardCount":[0,0]},"singleQualityMemoryPass":true,"reasons":[]},
+      {"scene":"dev-07-defect-boss","seconds":[15.5198911,15.3754907],"speedup":1.0093915961979671,"peakRssBytes":[9522286592,9481236480],"peakRssRatio":0.9956890488851189,"quality":{"won":[true,true],"survives":[true,true],"projectedBattleHpLost":[36,36],"strategicHpDeficit":[36,36],"projectedBattlePotionCount":[2,2],"potionStrategicCost":[160,160],"deathSaveUseCount":[0,0],"outstandingStolenResource":[0,0],"enemyHp":[0,0],"combatEndedTurn":[6,6],"growthHpCredit":[0,0],"growthRewardCount":[0,0]},"singleQualityMemoryPass":true,"reasons":[]},
+      {"scene":"dev-08-regent-boss","seconds":[20.0782254,20.2310452],"speedup":0.9924462726226325,"peakRssBytes":[10964307968,10932146176],"peakRssRatio":0.997066682904761,"quality":{"won":[true,true],"survives":[true,true],"projectedBattleHpLost":[40,40],"strategicHpDeficit":[40,40],"projectedBattlePotionCount":[0,0],"potionStrategicCost":[0,0],"deathSaveUseCount":[0,0],"outstandingStolenResource":[0,0],"enemyHp":[0,0],"combatEndedTurn":[7,7],"growthHpCredit":[0,0],"growthRewardCount":[0,0]},"singleQualityMemoryPass":true,"reasons":[]},
+      {"scene":"dev-09-necrobinder-boss","seconds":[45.5501007,43.026243],"speedup":1.0586585656572431,"peakRssBytes":[24163340288,23793401856],"peakRssRatio":0.9846900955087026,"quality":{"won":[true,true],"survives":[true,true],"projectedBattleHpLost":[17,4],"strategicHpDeficit":[17,4],"projectedBattlePotionCount":[1,1],"potionStrategicCost":[70,70],"deathSaveUseCount":[0,0],"outstandingStolenResource":[0,0],"enemyHp":[0,0],"combatEndedTurn":[14,12],"growthHpCredit":[0,0],"growthRewardCount":[0,0]},"singleQualityMemoryPass":true,"reasons":[]},
+      {"scene":"dev-10-ironclad-monster","seconds":[300.2486468,300.2631653],"speedup":0.9999516474157412,"peakRssBytes":[22680133632,24549486592],"peakRssRatio":1.0824224843791255,"quality":{"won":[true,true],"survives":[true,true],"projectedBattleHpLost":[14,14],"strategicHpDeficit":[8,8],"projectedBattlePotionCount":[0,0],"potionStrategicCost":[0,0],"deathSaveUseCount":[0,0],"outstandingStolenResource":[0,0],"enemyHp":[0,0],"combatEndedTurn":[2,2],"growthHpCredit":[0,0],"growthRewardCount":[0,0]},"singleQualityMemoryPass":true,"reasons":[]},
+      {"scene":"dev-11-silent-monster","seconds":[11.6508289,11.409386],"speedup":1.0211617785567078,"peakRssBytes":[9630908416,9583550464],"peakRssRatio":0.995082711832113,"quality":{"won":[true,true],"survives":[true,true],"projectedBattleHpLost":[3,3],"strategicHpDeficit":[3,3],"projectedBattlePotionCount":[0,0],"potionStrategicCost":[0,0],"deathSaveUseCount":[0,0],"outstandingStolenResource":[0,0],"enemyHp":[0,0],"combatEndedTurn":[5,5],"growthHpCredit":[0,0],"growthRewardCount":[0,0]},"singleQualityMemoryPass":true,"reasons":[]},
+      {"scene":"holdout-00-ironclad","seconds":[4.0626427,4.0209063],"speedup":1.010379848941021,"peakRssBytes":[1933582336,1895415808],"peakRssRatio":0.9802612346578656,"quality":{"won":[true,true],"survives":[true,true],"projectedBattleHpLost":[2,2],"strategicHpDeficit":[0,0],"projectedBattlePotionCount":[0,0],"potionStrategicCost":[0,0],"deathSaveUseCount":[0,0],"outstandingStolenResource":[0,0],"enemyHp":[0,0],"combatEndedTurn":[3,3],"growthHpCredit":[0,0],"growthRewardCount":[0,0]},"singleQualityMemoryPass":true,"reasons":[]},
+      {"scene":"holdout-01-silent","seconds":[2.0981429,2.1315825],"speedup":0.9843123125658989,"peakRssBytes":[1030430720,996253696],"peakRssRatio":0.9668322931987121,"quality":{"won":[true,true],"survives":[true,true],"projectedBattleHpLost":[0,0],"strategicHpDeficit":[0,0],"projectedBattlePotionCount":[0,0],"potionStrategicCost":[0,0],"deathSaveUseCount":[0,0],"outstandingStolenResource":[0,0],"enemyHp":[0,0],"combatEndedTurn":[5,5],"growthHpCredit":[0,0],"growthRewardCount":[0,0]},"singleQualityMemoryPass":true,"reasons":[]},
+      {"scene":"holdout-02-defect","seconds":[14.8664169,14.494118],"speedup":1.0256862059491996,"peakRssBytes":[10959663104,11014569984],"peakRssRatio":1.0050099058227402,"quality":{"won":[true,true],"survives":[true,true],"projectedBattleHpLost":[21,21],"strategicHpDeficit":[21,21],"projectedBattlePotionCount":[0,0],"potionStrategicCost":[0,0],"deathSaveUseCount":[0,0],"outstandingStolenResource":[0,0],"enemyHp":[0,0],"combatEndedTurn":[9,9],"growthHpCredit":[0,0],"growthRewardCount":[0,0]},"singleQualityMemoryPass":true,"reasons":[]},
+      {"scene":"holdout-03-regent","seconds":[40.7849988,12.4273213],"speedup":3.281881735849221,"peakRssBytes":[23167311872,10621505536],"peakRssRatio":0.4584694847069049,"quality":{"won":[true,true],"survives":[true,true],"projectedBattleHpLost":[3,0],"strategicHpDeficit":[3,0],"projectedBattlePotionCount":[0,0],"potionStrategicCost":[0,0],"deathSaveUseCount":[0,0],"outstandingStolenResource":[0,0],"enemyHp":[0,0],"combatEndedTurn":[5,5],"growthHpCredit":[0,0],"growthRewardCount":[0,0]},"singleQualityMemoryPass":true,"reasons":[]},
+      {"scene":"holdout-04-necrobinder","seconds":[481.4171628,511.1889455],"speedup":0.9417597290354551,"peakRssBytes":[24514129920,23186542592],"peakRssRatio":0.9458439955922368,"quality":{"won":[true,true],"survives":[true,true],"projectedBattleHpLost":[20,20],"strategicHpDeficit":[20,20],"projectedBattlePotionCount":[0,0],"potionStrategicCost":[0,0],"deathSaveUseCount":[0,0],"outstandingStolenResource":[0,0],"enemyHp":[0,0],"combatEndedTurn":[7,7],"growthHpCredit":[0,0],"growthRewardCount":[3,3]},"singleQualityMemoryPass":true,"reasons":[]},
+      {"scene":"native-exoskeletons","seconds":[14.807493,14.3361244],"speedup":1.032879778861294,"peakRssBytes":[10961133568,10928562176],"peakRssRatio":0.9970284650033744,"quality":{"won":[true,true],"survives":[true,true],"projectedBattleHpLost":[0,0],"strategicHpDeficit":[0,0],"projectedBattlePotionCount":[0,0],"potionStrategicCost":[0,0],"deathSaveUseCount":[0,0],"outstandingStolenResource":[0,0],"enemyHp":[0,0],"combatEndedTurn":[4,4],"growthHpCredit":[0,0],"growthRewardCount":[0,0]},"singleQualityMemoryPass":true,"reasons":[]},
+      {"scene":"native-infested","seconds":[51.2211321,10.9769107],"speedup":4.666261163990338,"peakRssBytes":[22968832000,8945332224],"peakRssRatio":0.38945525066315956,"quality":{"won":[true,true],"survives":[true,true],"projectedBattleHpLost":[3,1],"strategicHpDeficit":[3,1],"projectedBattlePotionCount":[0,0],"potionStrategicCost":[0,0],"deathSaveUseCount":[0,0],"outstandingStolenResource":[0,0],"enemyHp":[0,0],"combatEndedTurn":[5,5],"growthHpCredit":[0,0],"growthRewardCount":[0,0]},"singleQualityMemoryPass":true,"reasons":[]},
+      {"scene":"native-phantasmal","seconds":[1.7082669,1.7159495],"speedup":0.9955228286147115,"peakRssBytes":[736280576,703057920],"peakRssRatio":0.9548777231358063,"quality":{"won":[true,true],"survives":[true,true],"projectedBattleHpLost":[0,0],"strategicHpDeficit":[0,0],"projectedBattlePotionCount":[0,0],"potionStrategicCost":[0,0],"deathSaveUseCount":[0,0],"outstandingStolenResource":[0,0],"enemyHp":[0,0],"combatEndedTurn":[2,2],"growthHpCredit":[0,0],"growthRewardCount":[0,0]},"singleQualityMemoryPass":true,"reasons":[]},
+      {"scene":"native-soul-nexus","seconds":[74.7909318,22.085879],"speedup":3.3863688105870726,"peakRssBytes":[24650170368,13234946048],"peakRssRatio":0.5369109361280987,"quality":{"won":[true,true],"survives":[true,true],"projectedBattleHpLost":[6,6],"strategicHpDeficit":[6,6],"projectedBattlePotionCount":[0,0],"potionStrategicCost":[0,0],"deathSaveUseCount":[0,0],"outstandingStolenResource":[0,0],"enemyHp":[0,0],"combatEndedTurn":[8,8],"growthHpCredit":[0,0],"growthRewardCount":[0,0]},"singleQualityMemoryPass":true,"reasons":[]},
+      {"scene":"pressure-queen","seconds":[31.1028704,31.2913421],"speedup":0.9939768738778385,"peakRssBytes":[20675657728,20726267904],"peakRssRatio":1.0024478145588307,"quality":{"won":[true,true],"survives":[true,true],"projectedBattleHpLost":[63,63],"strategicHpDeficit":[63,63],"projectedBattlePotionCount":[2,2],"potionStrategicCost":[536870911,536870911],"deathSaveUseCount":[0,0],"outstandingStolenResource":[0,0],"enemyHp":[0,0],"combatEndedTurn":[5,5],"growthHpCredit":[0,0],"growthRewardCount":[0,0]},"singleQualityMemoryPass":true,"reasons":[]},
+      {"scene":"screen-aeonglass-random","seconds":[16.8558981,16.5653575],"speedup":1.0175390479800994,"peakRssBytes":[10979680256,10945810432],"peakRssRatio":0.9969152267451967,"quality":{"won":[false,false],"survives":[false,false],"projectedBattleHpLost":[80,80],"strategicHpDeficit":[80,80],"projectedBattlePotionCount":[0,0],"potionStrategicCost":[0,0],"deathSaveUseCount":[0,0],"outstandingStolenResource":[0,0],"enemyHp":[493,493],"combatEndedTurn":[null,null],"growthHpCredit":[0,0],"growthRewardCount":[0,0]},"singleQualityMemoryPass":true,"reasons":[]},
+      {"scene":"screen-huge-deck","seconds":[487.2686185,205.5439261],"speedup":2.370630102019833,"peakRssBytes":[23371706368,24465928192],"peakRssRatio":1.046818225711503,"quality":{"won":[true,true],"survives":[true,true],"projectedBattleHpLost":[15,15],"strategicHpDeficit":[9,9],"projectedBattlePotionCount":[0,0],"potionStrategicCost":[0,0],"deathSaveUseCount":[0,0],"outstandingStolenResource":[0,0],"enemyHp":[0,0],"combatEndedTurn":[3,3],"growthHpCredit":[0,0],"growthRewardCount":[0,0]},"singleQualityMemoryPass":true,"reasons":[]},
+      {"scene":"screen-knights","seconds":[8.9551201,9.1529237],"speedup":0.9783890255744183,"peakRssBytes":[6763704320,6750035968],"peakRssRatio":0.9979791618093679,"quality":{"won":[false,false],"survives":[false,false],"projectedBattleHpLost":[80,80],"strategicHpDeficit":[80,80],"projectedBattlePotionCount":[0,0],"potionStrategicCost":[0,0],"deathSaveUseCount":[0,0],"outstandingStolenResource":[0,0],"enemyHp":[87,87],"combatEndedTurn":[null,null],"growthHpCredit":[0,0],"growthRewardCount":[0,0]},"singleQualityMemoryPass":true,"reasons":[]},
+      {"scene":"screen-necro-projected","seconds":[52.767082,52.8078204],"speedup":0.9992285536556628,"peakRssBytes":[20835999744,22212808704],"peakRssRatio":1.066078372860245,"quality":{"won":[true,true],"survives":[true,true],"projectedBattleHpLost":[10,10],"strategicHpDeficit":[10,10],"projectedBattlePotionCount":[2,2],"potionStrategicCost":[27,27],"deathSaveUseCount":[0,0],"outstandingStolenResource":[0,0],"enemyHp":[0,0],"combatEndedTurn":[12,12],"growthHpCredit":[0,0],"growthRewardCount":[0,0]},"singleQualityMemoryPass":true,"reasons":[]},
+      {"scene":"screen-queen","seconds":[311.1683613,324.1425034],"speedup":0.9599739560103614,"peakRssBytes":[25583038464,24223436800],"peakRssRatio":0.9468553484796887,"quality":{"won":[true,true],"survives":[true,true],"projectedBattleHpLost":[67,67],"strategicHpDeficit":[67,67],"projectedBattlePotionCount":[0,0],"potionStrategicCost":[0,0],"deathSaveUseCount":[0,0],"outstandingStolenResource":[0,0],"enemyHp":[0,0],"combatEndedTurn":[13,12],"growthHpCredit":[0,0],"growthRewardCount":[0,0]},"singleQualityMemoryPass":true,"reasons":[]},
+      {"scene":"screen-test-subject","seconds":[137.1397603,136.0258549],"speedup":1.008188924089607,"peakRssBytes":[22702952448,23820996608],"peakRssRatio":1.0492466414912698,"quality":{"won":[true,true],"survives":[true,true],"projectedBattleHpLost":[26,26],"strategicHpDeficit":[26,26],"projectedBattlePotionCount":[0,0],"potionStrategicCost":[0,0],"deathSaveUseCount":[0,0],"outstandingStolenResource":[0,0],"enemyHp":[0,0],"combatEndedTurn":[11,11],"growthHpCredit":[0,0],"growthRewardCount":[0,0]},"singleQualityMemoryPass":true,"reasons":[]},
+      {"scene":"silent-large-deck","seconds":[63.6328084,62.8279936],"speedup":1.012809812217209,"peakRssBytes":[25410138112,26069569536],"peakRssRatio":1.0259515088463287,"quality":{"won":[false,false],"survives":[false,false],"projectedBattleHpLost":[65,65],"strategicHpDeficit":[65,65],"projectedBattlePotionCount":[0,0],"potionStrategicCost":[0,0],"deathSaveUseCount":[0,0],"outstandingStolenResource":[0,0],"enemyHp":[464,464],"combatEndedTurn":[null,null],"growthHpCredit":[0,0],"growthRewardCount":[0,0]},"singleQualityMemoryPass":true,"reasons":[]}
+    ]
+  },
+  "pairedMemoryFollowup": {
+    "scope": "8 independent fresh processes, serial ABBA per root, same fixed VeryHigh DOP16 Smart 300s and 16GB NoGC; original88298 versus C52 ef17 integrated source",
+    "allQualityMemoryPassed": true,
+    "interpretation": "Earlier single RSS excesses did not reproduce in these candidate samples. Both baseline roots also show large collection-timing variation; no assertion that every future peak is bounded or that GC behavior is identical.",
+    "rows": [
+      {"scene":"dev-04-necrobinder-elite","runs":{"A1":{"wallSeconds":18.0459988,"peakProcessWorkingSetBytes":10931875840,"peakManagedHeapBytes":3716805672,"comparisonQuality":{"won":true,"outstandingStolenResource":0,"projectedBattleHpLost":35,"strategicHpDeficit":35,"potionStrategicCost":9,"projectedBattlePotionCount":1,"enemyHp":0,"score":9999764975,"combatEndedTurn":6,"theftPolicy":null,"survives":true,"deathSaveUseCount":0,"growthHpCredit":0,"growthRewardCount":1},"totalAllocatedBytes":20348459296,"totalExpanded":53070,"totalTransitions":570063,"totalGen2Collections":4,"totalGcPauseMilliseconds":1323.03,"configuredNoGcRegionBudgetBytes":16000000000,"noGcRegionActive":true},"B1":{"wallSeconds":18.1741436,"peakProcessWorkingSetBytes":10936332288,"peakManagedHeapBytes":4019440352,"comparisonQuality":{"won":true,"outstandingStolenResource":0,"projectedBattleHpLost":35,"strategicHpDeficit":35,"potionStrategicCost":9,"projectedBattlePotionCount":1,"enemyHp":0,"score":9999764975,"combatEndedTurn":6,"theftPolicy":null,"survives":true,"deathSaveUseCount":0,"growthHpCredit":0,"growthRewardCount":1},"totalAllocatedBytes":20618438736,"totalExpanded":50258,"totalTransitions":580709,"totalGen2Collections":4,"totalGcPauseMilliseconds":1360.355,"configuredNoGcRegionBudgetBytes":16000000000,"noGcRegionActive":true},"B2":{"wallSeconds":18.6788434,"peakProcessWorkingSetBytes":10935275520,"peakManagedHeapBytes":569997720,"comparisonQuality":{"won":true,"outstandingStolenResource":0,"projectedBattleHpLost":35,"strategicHpDeficit":35,"potionStrategicCost":9,"projectedBattlePotionCount":1,"enemyHp":0,"score":9999764975,"combatEndedTurn":6,"theftPolicy":null,"survives":true,"deathSaveUseCount":0,"growthHpCredit":0,"growthRewardCount":1},"totalAllocatedBytes":20331305296,"totalExpanded":53070,"totalTransitions":570063,"totalGen2Collections":4,"totalGcPauseMilliseconds":1755.048,"configuredNoGcRegionBudgetBytes":16000000000,"noGcRegionActive":true},"A2":{"wallSeconds":19.0109896,"peakProcessWorkingSetBytes":16071520256,"peakManagedHeapBytes":11596899448,"comparisonQuality":{"won":true,"outstandingStolenResource":0,"projectedBattleHpLost":35,"strategicHpDeficit":35,"potionStrategicCost":9,"projectedBattlePotionCount":1,"enemyHp":0,"score":9999764975,"combatEndedTurn":6,"theftPolicy":null,"survives":true,"deathSaveUseCount":0,"growthHpCredit":0,"growthRewardCount":1},"totalAllocatedBytes":20338765056,"totalExpanded":53070,"totalTransitions":570063,"totalGen2Collections":4,"totalGcPauseMilliseconds":8.201,"configuredNoGcRegionBudgetBytes":16000000000,"noGcRegionActive":true}},"qualityEqual":true,"meanRssRatio":0.8099576708886566,"candidateMaxOverBaselineMax":0.6804790159112126,"candidateMaxOverBaselineMin":1.0004076562947866,"observedMemoryPassed":true,"meanSpeedup":1.0055355458704065},
+      {"scene":"dev-05-ironclad-boss","runs":{"A1":{"wallSeconds":20.769949,"peakProcessWorkingSetBytes":17086980096,"peakManagedHeapBytes":10676896704,"comparisonQuality":{"won":true,"outstandingStolenResource":0,"projectedBattleHpLost":11,"strategicHpDeficit":9,"potionStrategicCost":0,"projectedBattlePotionCount":0,"enemyHp":0,"score":10001751965,"combatEndedTurn":6,"theftPolicy":null,"survives":true,"deathSaveUseCount":0,"growthHpCredit":0,"growthRewardCount":0},"totalAllocatedBytes":18415500120,"totalExpanded":105505,"totalTransitions":523694,"totalGen2Collections":2,"totalGcPauseMilliseconds":4.897,"configuredNoGcRegionBudgetBytes":16000000000,"noGcRegionActive":true},"B1":{"wallSeconds":19.0893522,"peakProcessWorkingSetBytes":10932408320,"peakManagedHeapBytes":266204272,"comparisonQuality":{"won":true,"outstandingStolenResource":0,"projectedBattleHpLost":11,"strategicHpDeficit":9,"potionStrategicCost":0,"projectedBattlePotionCount":0,"enemyHp":0,"score":10001751965,"combatEndedTurn":6,"theftPolicy":null,"survives":true,"deathSaveUseCount":0,"growthHpCredit":0,"growthRewardCount":0},"totalAllocatedBytes":18396844032,"totalExpanded":105505,"totalTransitions":523694,"totalGen2Collections":2,"totalGcPauseMilliseconds":1211.587,"configuredNoGcRegionBudgetBytes":16000000000,"noGcRegionActive":true},"B2":{"wallSeconds":18.8383146,"peakProcessWorkingSetBytes":10931462144,"peakManagedHeapBytes":266218968,"comparisonQuality":{"won":true,"outstandingStolenResource":0,"projectedBattleHpLost":11,"strategicHpDeficit":9,"potionStrategicCost":0,"projectedBattlePotionCount":0,"enemyHp":0,"score":10001751965,"combatEndedTurn":6,"theftPolicy":null,"survives":true,"deathSaveUseCount":0,"growthHpCredit":0,"growthRewardCount":0},"totalAllocatedBytes":18396410696,"totalExpanded":105505,"totalTransitions":523694,"totalGen2Collections":2,"totalGcPauseMilliseconds":1161.58,"configuredNoGcRegionBudgetBytes":16000000000,"noGcRegionActive":true},"A2":{"wallSeconds":18.8204255,"peakProcessWorkingSetBytes":10930966528,"peakManagedHeapBytes":275581152,"comparisonQuality":{"won":true,"outstandingStolenResource":0,"projectedBattleHpLost":11,"strategicHpDeficit":9,"potionStrategicCost":0,"projectedBattlePotionCount":0,"enemyHp":0,"score":10001751965,"combatEndedTurn":6,"theftPolicy":null,"survives":true,"deathSaveUseCount":0,"growthHpCredit":0,"growthRewardCount":0},"totalAllocatedBytes":18342017128,"totalExpanded":105505,"totalTransitions":523694,"totalGen2Collections":2,"totalGcPauseMilliseconds":1172.454,"configuredNoGcRegionBudgetBytes":16000000000,"noGcRegionActive":true}},"qualityEqual":true,"meanRssRatio":0.7803523490644223,"candidateMaxOverBaselineMax":0.6398092734104159,"candidateMaxOverBaselineMin":1.0001318997726603,"observedMemoryPassed":true,"meanSpeedup":1.0438389133918462}
+    ]
+  },
+  "rejectedIronRemainingHealing": {
+    "sourceIncluded": false,
+    "candidate": "C54",
+    "nativeRun": "083d9003b3494dfe856337c6a7906516 Passed",
+    "fullSeconds": 300.261291,
+    "retainedControlSeconds": 171.318114,
+    "originalBaselineSeconds": 168.3637777,
+    "hpLost": 41,
+    "baselineHpLost": 43,
+    "rssRatioVsOriginal": 1.1340918418144261,
+    "decision": "reject complete request time/RSS; primary alone becomes faster but subsequent coordinator work grows"
+  },
+  "queenRepeat": {
+    "scope": "two full retained-source samples plus original baseline repeat; original is time-bound and its repeat did not win",
+    "samples": {
+      "originalA1": {
+        "wallSeconds": 311.1683613,
+        "peakProcessWorkingSetBytes": 25583038464,
+        "comparisonQuality": {
+          "won": true,
+          "outstandingStolenResource": 0,
+          "projectedBattleHpLost": 67,
+          "strategicHpDeficit": 67,
+          "potionStrategicCost": 0,
+          "projectedBattlePotionCount": 0,
+          "enemyHp": 0,
+          "score": 9997739915,
+          "combatEndedTurn": 13,
+          "theftPolicy": null,
+          "survives": true,
+          "deathSaveUseCount": 0,
+          "growthHpCredit": 0,
+          "growthRewardCount": 0
+        },
+        "expanded": 107744,
+        "transitions": 3754118
+      },
+      "candidateB1": {
+        "wallSeconds": 324.1425034,
+        "peakProcessWorkingSetBytes": 24223436800,
+        "comparisonQuality": {
+          "won": true,
+          "outstandingStolenResource": 0,
+          "projectedBattleHpLost": 67,
+          "strategicHpDeficit": 67,
+          "potionStrategicCost": 0,
+          "projectedBattlePotionCount": 0,
+          "enemyHp": 0,
+          "score": 9997619913,
+          "combatEndedTurn": 12,
+          "theftPolicy": null,
+          "survives": true,
+          "deathSaveUseCount": 0,
+          "growthHpCredit": 0,
+          "growthRewardCount": 0
+        },
+        "expanded": 122723,
+        "transitions": 4094883
+      },
+      "candidateB2": {
+        "wallSeconds": 315.7432298,
+        "peakProcessWorkingSetBytes": 22858600448,
+        "comparisonQuality": {
+          "won": true,
+          "outstandingStolenResource": 0,
+          "projectedBattleHpLost": 67,
+          "strategicHpDeficit": 67,
+          "potionStrategicCost": 0,
+          "projectedBattlePotionCount": 0,
+          "enemyHp": 0,
+          "score": 9997619913,
+          "combatEndedTurn": 12,
+          "theftPolicy": null,
+          "survives": true,
+          "deathSaveUseCount": 0,
+          "growthHpCredit": 0,
+          "growthRewardCount": 0
+        },
+        "expanded": 119130,
+        "transitions": 4142951
+      },
+      "originalA2": {
+        "wallSeconds": 299.2995757,
+        "peakProcessWorkingSetBytes": 22075998208,
+        "comparisonQuality": {
+          "won": false,
+          "outstandingStolenResource": 0,
+          "projectedBattleHpLost": 31,
+          "strategicHpDeficit": 31,
+          "potionStrategicCost": 0,
+          "projectedBattlePotionCount": 0,
+          "enemyHp": 539,
+          "score": -5920021,
+          "combatEndedTurn": null,
+          "theftPolicy": null,
+          "survives": true,
+          "deathSaveUseCount": 0,
+          "growthHpCredit": 0,
+          "growthRewardCount": 0
+        },
+        "expanded": 132085,
+        "transitions": 4458122
+      }
+    },
+    "candidateBothMatchOriginalWinningHp": true,
+    "memoryGateBothPassed": true,
+    "performanceGatePassed": false
+  },
+  "latestUpstreamPairing": {
+    "scope": "current-upstream target pair and fixed sentinels; separate from original88298 corpus acceptance",
+    "baselineCommit": "1a3d1a3747953b5145b2f38809d49f882c7271c1",
+    "candidateBehaviorCommit": "ef17f75b",
+    "configuration": "VeryHigh/DOP16/Smart/width on/novelty off/300s/16GB configured NoGC",
+    "nativePrism": {
+      "baseline": {
+        "runId": "ecdffd45326b47c3b0fe824a9688185e",
+        "seconds": 304.26782380000003,
+        "peakRssBytes": 26231697408,
+        "totalExpanded": 286903,
+        "totalTransitions": 1798962,
+        "quality": {
+          "projectedBattleHpLost": 28,
+          "potionCount": 0,
+          "finalHp": 59,
+          "finalEnemyHp": 0,
+          "combatEndedTurn": 3,
+          "onlyDeathRoutes": false
+        },
+        "configuredNoGcBytes": 16000000000,
+        "reportedFinalNoGcBytes": 3929876689,
+        "gcLifecycle": {
+          "forcedCollections": 38,
+          "noGcStartAttempts": 40,
+          "noGcStarts": 40,
+          "noGcEndAttempts": 39,
+          "noGcEnds": 39,
+          "noGcRestarts": 39,
+          "noGcLosses": 0
+        }
+      },
+      "candidate": {
+        "runId": "a9c503fa8f564768b1c0ef8fcdf14325",
+        "seconds": 158.10816269999998,
+        "peakRssBytes": 26653032448,
+        "totalExpanded": 92097,
+        "totalTransitions": 630441,
+        "quality": {
+          "projectedBattleHpLost": 28,
+          "potionCount": 0,
+          "finalHp": 59,
+          "finalEnemyHp": 0,
+          "combatEndedTurn": 3,
+          "onlyDeathRoutes": false
+        },
+        "configuredNoGcBytes": 16000000000,
+        "reportedFinalNoGcBytes": 3929876689,
+        "gcLifecycle": {
+          "forcedCollections": 11,
+          "noGcStartAttempts": 13,
+          "noGcStarts": 13,
+          "noGcEndAttempts": 12,
+          "noGcEnds": 12,
+          "noGcRestarts": 12,
+          "noGcLosses": 0
+        }
+      },
+      "speedup": 1.9244283065721823,
+      "peakRssRatio": 1.0160620578015476,
+      "qualityEqual": true,
+      "observedMemoryPassed": true,
+      "nativeScope": "SearchOnly after original recorded continuation restoration; legacy native binary lacks identity mapping and is not comparable. Full actual deployment evidence remains the existing retained-source run632aac."
+    },
+    "offlineSentinels": {
+      "dev-01-silent-elite": {
+        "baseline": {
+          "wallSeconds": 21.9470512,
+          "peakProcessWorkingSetBytes": 12497469440,
+          "comparisonQuality": {
+            "won": true,
+            "outstandingStolenResource": 0,
+            "projectedBattleHpLost": 40,
+            "strategicHpDeficit": 40,
+            "potionStrategicCost": 0,
+            "projectedBattlePotionCount": 0,
+            "enemyHp": 0,
+            "score": 9999619974,
+            "combatEndedTurn": 4,
+            "theftPolicy": null,
+            "survives": true,
+            "deathSaveUseCount": 0,
+            "growthHpCredit": 0,
+            "growthRewardCount": 0
+          },
+          "totalExpanded": 109550,
+          "totalTransitions": 627681
+        },
+        "candidate": {
+          "wallSeconds": 21.9649959,
+          "peakProcessWorkingSetBytes": 12504731648,
+          "comparisonQuality": {
+            "won": true,
+            "outstandingStolenResource": 0,
+            "projectedBattleHpLost": 40,
+            "strategicHpDeficit": 40,
+            "potionStrategicCost": 0,
+            "projectedBattlePotionCount": 0,
+            "enemyHp": 0,
+            "score": 9999619974,
+            "combatEndedTurn": 4,
+            "theftPolicy": null,
+            "survives": true,
+            "deathSaveUseCount": 0,
+            "growthHpCredit": 0,
+            "growthRewardCount": 0
+          },
+          "totalExpanded": 109550,
+          "totalTransitions": 627681
+        },
+        "qualityNoRegression": true,
+        "peakRssRatio": 1.0005810942795152,
+        "observedMemoryPassed": true,
+        "speedup": 0.9991830319440214,
+        "reuse": "fresh serial A/B"
+      },
+      "screen-queen": {
+        "baseline": {
+          "wallSeconds": 299.9777376,
+          "peakProcessWorkingSetBytes": 22950658048,
+          "comparisonQuality": {
+            "won": false,
+            "outstandingStolenResource": 0,
+            "projectedBattleHpLost": 31,
+            "strategicHpDeficit": 31,
+            "potionStrategicCost": 0,
+            "projectedBattlePotionCount": 0,
+            "enemyHp": 552,
+            "score": -6050018,
+            "combatEndedTurn": null,
+            "theftPolicy": null,
+            "survives": true,
+            "deathSaveUseCount": 0,
+            "growthHpCredit": 0,
+            "growthRewardCount": 0
+          },
+          "totalExpanded": 128668,
+          "totalTransitions": 4357904
+        },
+        "candidate": {
+          "wallSeconds": 315.7432298,
+          "peakProcessWorkingSetBytes": 22858600448,
+          "comparisonQuality": {
+            "won": true,
+            "outstandingStolenResource": 0,
+            "projectedBattleHpLost": 67,
+            "strategicHpDeficit": 67,
+            "potionStrategicCost": 0,
+            "projectedBattlePotionCount": 0,
+            "enemyHp": 0,
+            "score": 9997619913,
+            "combatEndedTurn": 12,
+            "theftPolicy": null,
+            "survives": true,
+            "deathSaveUseCount": 0,
+            "growthHpCredit": 0,
+            "growthRewardCount": 0
+          },
+          "totalExpanded": 119130,
+          "totalTransitions": 4142951
+        },
+        "qualityNoRegression": true,
+        "peakRssRatio": 0.9959888906101312,
+        "observedMemoryPassed": true,
+        "speedup": 0.9500686294683618,
+        "reuse": "unchanged fresh C52 B2; B1 also won67HP"
+      }
+    },
+    "allObservedQualityMemoryPassed": true
+  },
+  "localDeployment": {
+    "behaviorCommit": "ef17f75b",
+    "dllSha256": "5799436a6ed1bef1b44fef7791d0dfd181c52c3307adf5588d5b076f4a646b14",
+    "status": "copied successfully",
+    "files": [
+      "CombatSolver.dll",
+      "CombatSolver.json",
+      "CombatSolver.MemoryCleaner.exe",
+      "LICENSE",
+      "THIRD_PARTY_NOTICES.md"
+    ],
+    "scope": "only five owned files; no version/launch/publication"
+  }
+}

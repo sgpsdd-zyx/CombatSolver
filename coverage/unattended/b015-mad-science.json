@@ -1,0 +1,9 @@
+{
+  "scenarioId": "B015-MAD-SCIENCE",
+  "characterId": "IRONCLAD",
+  "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+  "enemyCurrentHp": 50,
+  "cards": [],
+  "timeoutSeconds": 120,
+  "exitOnComplete": true
+}

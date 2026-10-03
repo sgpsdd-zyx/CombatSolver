@@ -13,7 +13,7 @@ description: 新增或修改 CombatSolver 玩家可见 UI 文案、胶囊附加�
 
 ## 当前入口
 
-- `src/UI/SolverText.cs` 与内嵌 `src/UI/English.json`：`zhs` / `zht` 使用现有中文，其他语言使用英文。当前没有独立语言开关；切换游戏语言后重启统一刷新既有窗口和路线快照。
+- `src/UI/SolverText.cs` 与内嵌 `src/UI/English.json`：`zhs` / `zht` 使用现有中文，其他语言使用英文。当前没有独立语言开关；卡牌胶囊及选牌等登记控件支持运行中刷新，其他既有窗口可通过重启统一刷新。
 - 静态文案用 `SolverText.Get`，插值用 `SolverText.Format`。先翻译完整模板，再插入名称、数字和玩家输入；保留占位符及格式，不对最终拼接文本全局替换中文。
 - `SolverOverlaySnapshot.CaptureAction` 同时生成胶囊和悬停说明。显示新信息时检查标题、目标、击杀括号来源、遗物效果、药水类型、选牌及嵌套/空选择，避免只翻译一级标签。
 - 卡牌名称以 snapshot 的 `SolverActionTextIdentity` 中稳定 ID/升级为依据，由主线程 `SolverUiModelNames` 解析当前语言；不要重新直接显示 PlanAction.CardTitle 或从已翻译标题推断升级。已有胶囊通过 `SolverLocaleRefresh` 合并语言通知原位刷新，退出树后解除登记；新增显示字段同时考虑新投影和已存活控件。

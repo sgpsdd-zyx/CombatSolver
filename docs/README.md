@@ -1,14 +1,40 @@
 # CombatSolver 文档导航
 
-多人 fork **[0.47.3 已发布](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.47.3)**，基于官方 **0.47.2**（`72363308`，含后续PR #144），同步单人跨回合路线、共享选牌语义、兼容性与内存显示；多人保持独立贡献目标和手动操作。见[玩家说明](releases/0.47.3-RELEASE_NOTES.md)、[合并验证](strategy/upstream-0472-merge-20260928.md)、[发布凭证](releases/0.47.3-PUBLISH.md)及[多人指南](multiplayer-advisor.md)。当前状态统一见[版本索引](releases/README.md)。
+当前代码已合入官方 **0.48.0**（`a789aad2`），多人 fork **0.48.1 准备发布**。当前版本状态统一见[版本索引](releases/README.md)；本次[玩家说明](releases/0.48.1-RELEASE_NOTES.md)、[合并验证与归档](strategy/upstream-0480-merge-20261002.md)和[多人指南](multiplayer-advisor.md)分别维护变化、证据与现役行为。
 
 [多人原生实验](strategy/multiplayer-experiments-20260923/implementation.md)按“只有本机使用军师、队友独立决策”记录原生差分与受控脚本表现；收益、恶化和未知结果分开，真实联机仍未验收。现役操作与限制见[多人指南](multiplayer-advisor.md)。
 
-前一公开 fork 为0.47.2，来源 `41e73efa`。本轮九类原生场景、托管合同与四对官方单人对照通过；GC实测和平台边界保留在合并记录中。
+上一公开 fork 为0.47.3，来源 `06018378`。本轮验证单列于合并记录；下方上游历史不作为本机通过证据。
 
 - [ServerGC 自动启动与显式配置](performance/server-gc-launch-profile-20260924.md)：下次启动的准备／恢复、实际运行模式、跨平台入口和证据边界。
 - [官方新鲜资源探测上限](performance/fresh-resource-standpat-probe-cap-20260924.md)：单人搜索的工作削减、路线变化与已知取舍。
 - [官方策略重构与 PR 合并审计](refactoring/merge-audit-20260928.md)：上游审查及历史验证边界，本 fork 的本轮证据见合并验证。
+
+## 上游专题与历史证据
+
+以下文档保留官方的实施和验证记录，不等于本 fork 本轮验证或新的操作授权。
+
+- [五角色、所有原版遭遇的已知回血剪枝](performance/native-healing-bound-generalization-20261003.md)：千足虫 PR 的加速机制、通用政策、遗物目标保路与跨成员复用。
+
+- [社区 PR 合并与已知回血策略审计](refactoring/merge-audit-20261003.md)：六个正式 PR 完整分支的审查、最小验证、多成员胜利界复用和未验证边界。
+
+- [B015后续证据](community/b015-follow-up.md)：T016余像前移失效目标回退、T018队列故障隔离，以及其余主题来源/原生对照边界。
+- [B015阶段一证据](community/b015-stage-one.md)：五主题分诊、T018统计消费者失败隔离及未验收边界。
+- [静默猎手基础根的生命界认证](performance/silent-recovery-bound-20261001.md)：窄范围来源证明、原生治疗旁路及两个固定根的工作量和评分尾键取舍。
+
+- [早期回合探索实机复核与后续候选](performance/early-turn-log-review-20261001.md)：19 场日志保留、外部生命界命中、达标停止与候选预算研究切口。
+- [铁甲巨型千足虫阶段优化 C59](performance/iron-generation-closure-research-20261003.md)：A/B/B/A中位数4.02倍、37战损/0瓶；完整原生部署及三个哨兵通过，原始波动保留。
+
+- [储君巨型千足虫搜索阶段优化 C58](performance/regent-potion-cap-bound-research-20261003.md)：完整请求保守提速32.91倍、原生0战损；29根回归及峰值复核完成，全部原始波动样本保留。
+
+- [社区贡献指南](../CONTRIBUTING.md)：整批自动认领、环境与 PR 验收。
+- [夹具与开发脚手架](community/testing-guide.md)：最小差分、问题包回放、生成场景、策略脚本与离线宿主。
+- [社区任务资料](community/task-data.md)：报告范围、分类去重、公开材料与后续批次。
+- [社区任务发布 skill](../.agents/skills/combatsolver-community-tasks/SKILL.md)：0.47.x 静态根因归并、五主题组批与重复主题包清理；[主题登记](community/theme-registry.json)与[发布账本](community/publication-ledger.json)记录匹配规则和去向。
+
+- [手动释放后自动执行内存回涨](performance/manual-memory-release-20261001.md)：PR #147 本轮审计证据、页面回载根因及释放后生成路线部署验证。
+
+- [策略重构与 PR 合并审计](refactoring/merge-audit-20260928.md)：本轮源码审查、修复、合并及验证边界。
 - [固定并行度优化试验](performance/fixed-dop-20260927.md)：当前采样、撤回的列表复制原型、长路线单次收尾回放及验证限制。
 
 - [更优世界线逐包策略记录](strategy/strategy-optimization-20260923.md)：逐包同根基线、人工对照和优化结果。
@@ -31,6 +57,9 @@
 
 | 要查什么 | 入口 |
 |---|---|
+| 官方 0.48.0：复杂战斗提速、全角色回血剪枝、日志保留与社区修复 | [0.48.0 更新日志](releases/0.48.0-RELEASE_NOTES.md) |
+| 官方多人规划（参考，fork 现役合同见多人军师） | [多人适配实施规划](MULTIPLAYER_PLAN.md) |
+| 官方 0.47.3：手动内存释放、重复选牌与内存紧张后的策略恢复 | [0.47.3 更新日志](releases/upstream/0.47.3-RELEASE_NOTES.md) |
 | fork 0.47.3 跨回合路线、选牌、兼容与内存显示 | [发布凭证](releases/0.47.3-PUBLISH.md)、[玩家说明](releases/0.47.3-RELEASE_NOTES.md) |
 | 官方0.47.2原始发布说明 | [官方原文](releases/upstream/0.47.2-RELEASE_NOTES.md) |
 | fork 0.47.2 单人搜索、药水与墨刃修正及发布 | [发布凭证](releases/0.47.2-PUBLISH.md)、[玩家说明](releases/0.47.2-RELEASE_NOTES.md) |

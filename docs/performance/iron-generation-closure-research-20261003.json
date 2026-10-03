@@ -1,0 +1,498 @@
+{
+  "prototype": "C59",
+  "base": "319a48ed",
+  "status": "TargetPairedNativeAndSelectedSentinelsPassed",
+  "factor": "Audited native generated-card healing closure for reviewed Ironclad Decimillipede roots",
+  "build": {
+    "prototype": "C59",
+    "base": "319a48ed",
+    "buildSeconds": 12.75,
+    "warnings": 0,
+    "errors": 0,
+    "dllSha256": "2ca1da6a8cafd6ad91086aea70efda298cc8d1043c6860986fe15229d00fb60c",
+    "sourceHashes": {
+      "src/Search/StrategicHpRecoveryBound.IronDecimillipede.cs": "c08a703ee04e9de09755d7e36d050309328a2747bf8aa2254462c32d3b747d5e",
+      "src/Search/StrategicHpRecoveryBound.NativeGenerationClosure.cs": "6ffdaefe8e141fadc57a95705ddd2f2af598c52039adadba51519192b431e8fe",
+      "src/Search/StrategicHpRecoveryBound.NativeGenerationPools.cs": "ca024dae71cfa0dcd89379cd75eefadf408b1364ec1986403dcadf917ed75ad0",
+      "src/Search/StrategicHpRecoveryBound.RegentDecimillipede.cs": "db1ae9785ab6095c0723eab5105647b4230c111fe9d8127597b5899498db5654",
+      "src/Search/StrategicHpRecoveryBound.Remaining.cs": "f30440082322226c197af34168322b923d97fc6a99f84f82a24e9158ae921799",
+      "src/Testing/UnattendedTestRunner.IronRemainingHealing.cs": "c40c9cf0c9f0326d6d2ecb666c234a8f0213299a754f86022519affe3c82ef6c",
+      "src/Testing/UnattendedTestRunner.RegentRemainingHealing.cs": "564ccdfb4f721afe553b1abe6569cab62d9974581546e280eec7df274db4f66a",
+      "src/Testing/UnattendedTestRunner.Executor.cs": "87880bba2a3bf5a0f13c602c9a73861f2df5126f27f89fc55c91f308d39c8b4f",
+      "src/Testing/UnattendedTestRunner.FrozenHealingBoundDeployment.cs": "910905c779af2b213698a7606414b5b59b304cb569f7d9e3d5771debb2dedda9",
+      "src/Testing/UnattendedTestRunner.RegentPotionCapBound.cs": "4e49e43ae8bd7e0aceebc5a127cda275b565d034b60b92c97177faded4e9da58"
+    },
+    "auditedClosureReusedFrom": "C58 545cards 178powers eightpools",
+    "productionIntegrated": false,
+    "earlierFixtureFailure": "93b7f012b5554c7eb651f5067c7ef8c7: Jackpot fixture omitted native enemy target; corrected fixture only",
+    "fixtureVersion": "SharedFrozenRootNativePreparation"
+  },
+  "pilot": {
+    "factor": "C59 initial target",
+    "rootEqual": true,
+    "budgetEqual": true,
+    "policyEqual": true,
+    "originalSeconds": 168.3637777,
+    "candidateSeconds": 47.8535265,
+    "speedup": 3.5183149501009088,
+    "rssRatio": 1.0592033201207391,
+    "qualityOriginal": {
+      "won": true,
+      "outstandingStolenResource": 0,
+      "projectedBattleHpLost": 43,
+      "strategicHpDeficit": 37,
+      "potionStrategicCost": 0,
+      "projectedBattlePotionCount": 0,
+      "enemyHp": 0,
+      "score": 9999804974,
+      "combatEndedTurn": 5,
+      "theftPolicy": null,
+      "survives": true,
+      "deathSaveUseCount": 0,
+      "growthHpCredit": 0,
+      "growthRewardCount": 0
+    },
+    "qualityCandidate": {
+      "won": true,
+      "outstandingStolenResource": 0,
+      "projectedBattleHpLost": 37,
+      "strategicHpDeficit": 31,
+      "potionStrategicCost": 0,
+      "projectedBattlePotionCount": 0,
+      "enemyHp": 0,
+      "score": 10000164976,
+      "combatEndedTurn": 5,
+      "theftPolicy": null,
+      "survives": true,
+      "deathSaveUseCount": 0,
+      "growthHpCredit": 0,
+      "growthRewardCount": 0
+    },
+    "nativeMinimalRun": "b793021c330843918cf511dc63efd77e",
+    "fullNativePending": true,
+    "pairedPending": true
+  },
+  "paired": {
+    "scope": "Final C59 v3 DLL; four fresh serial independent processes A/B/B/A",
+    "rows": [
+      {
+        "tag": "A1",
+        "path": "/home/ltlly/Code/nmslmod/CombatSolver-iron-generation-closure-20261003/.local/c59/paired-and-sentinel/runs/dev-00-ironclad-elite-C59-pair-A1",
+        "seconds": 184.4840285,
+        "rss": 21760634880,
+        "quality": {
+          "won": true,
+          "outstandingStolenResource": 0,
+          "projectedBattleHpLost": 43,
+          "strategicHpDeficit": 37,
+          "potionStrategicCost": 0,
+          "projectedBattlePotionCount": 0,
+          "enemyHp": 0,
+          "score": 9999804974,
+          "combatEndedTurn": 5,
+          "theftPolicy": null,
+          "survives": true,
+          "deathSaveUseCount": 0,
+          "growthHpCredit": 0,
+          "growthRewardCount": 0
+        },
+        "budget": {
+          "profile": "VeryHigh",
+          "beamWidth": 135,
+          "maxExpandedNodes": 500000,
+          "maxCardBranchesPerNode": 72,
+          "maxPileChoiceBranchesPerAction": 42,
+          "maxHandChoiceBranchesPerAction": 54,
+          "maxDegreeOfParallelism": 16,
+          "budgetMilliseconds": 300000,
+          "potionPolicy": "Smart",
+          "searchMode": "Coordinator",
+          "usePortfolio": true,
+          "fixedSearchBudget": false,
+          "enableNoGcRegion": true,
+          "noGcRegionBudgetGigabytes": 16
+        },
+        "work": {
+          "expanded": 846369,
+          "transitions": 4515076
+        }
+      },
+      {
+        "tag": "B1",
+        "path": "/home/ltlly/Code/nmslmod/CombatSolver-iron-generation-closure-20261003/.local/c59/paired-and-sentinel/runs/dev-00-ironclad-elite-C59-pair-B1",
+        "seconds": 44.5408398,
+        "rss": 16561356800,
+        "quality": {
+          "won": true,
+          "outstandingStolenResource": 0,
+          "projectedBattleHpLost": 37,
+          "strategicHpDeficit": 31,
+          "potionStrategicCost": 0,
+          "projectedBattlePotionCount": 0,
+          "enemyHp": 0,
+          "score": 10000164976,
+          "combatEndedTurn": 5,
+          "theftPolicy": null,
+          "survives": true,
+          "deathSaveUseCount": 0,
+          "growthHpCredit": 0,
+          "growthRewardCount": 0
+        },
+        "budget": {
+          "profile": "VeryHigh",
+          "beamWidth": 135,
+          "maxExpandedNodes": 500000,
+          "maxCardBranchesPerNode": 72,
+          "maxPileChoiceBranchesPerAction": 42,
+          "maxHandChoiceBranchesPerAction": 54,
+          "maxDegreeOfParallelism": 16,
+          "budgetMilliseconds": 300000,
+          "potionPolicy": "Smart",
+          "searchMode": "Coordinator",
+          "usePortfolio": true,
+          "fixedSearchBudget": false,
+          "enableNoGcRegion": true,
+          "noGcRegionBudgetGigabytes": 16
+        },
+        "work": {
+          "expanded": 204223,
+          "transitions": 1228138
+        }
+      },
+      {
+        "tag": "B2",
+        "path": "/home/ltlly/Code/nmslmod/CombatSolver-iron-generation-closure-20261003/.local/c59/paired-and-sentinel/runs/dev-00-ironclad-elite-C59-pair-B2",
+        "seconds": 45.5681152,
+        "rss": 19460714496,
+        "quality": {
+          "won": true,
+          "outstandingStolenResource": 0,
+          "projectedBattleHpLost": 37,
+          "strategicHpDeficit": 31,
+          "potionStrategicCost": 0,
+          "projectedBattlePotionCount": 0,
+          "enemyHp": 0,
+          "score": 10000164976,
+          "combatEndedTurn": 5,
+          "theftPolicy": null,
+          "survives": true,
+          "deathSaveUseCount": 0,
+          "growthHpCredit": 0,
+          "growthRewardCount": 0
+        },
+        "budget": {
+          "profile": "VeryHigh",
+          "beamWidth": 135,
+          "maxExpandedNodes": 500000,
+          "maxCardBranchesPerNode": 72,
+          "maxPileChoiceBranchesPerAction": 42,
+          "maxHandChoiceBranchesPerAction": 54,
+          "maxDegreeOfParallelism": 16,
+          "budgetMilliseconds": 300000,
+          "potionPolicy": "Smart",
+          "searchMode": "Coordinator",
+          "usePortfolio": true,
+          "fixedSearchBudget": false,
+          "enableNoGcRegion": true,
+          "noGcRegionBudgetGigabytes": 16
+        },
+        "work": {
+          "expanded": 204223,
+          "transitions": 1228138
+        }
+      },
+      {
+        "tag": "A2",
+        "path": "/home/ltlly/Code/nmslmod/CombatSolver-iron-generation-closure-20261003/.local/c59/paired-and-sentinel/runs/dev-00-ironclad-elite-C59-pair-A2",
+        "seconds": 177.8832902,
+        "rss": 24902963200,
+        "quality": {
+          "won": true,
+          "outstandingStolenResource": 0,
+          "projectedBattleHpLost": 43,
+          "strategicHpDeficit": 37,
+          "potionStrategicCost": 0,
+          "projectedBattlePotionCount": 0,
+          "enemyHp": 0,
+          "score": 9999804974,
+          "combatEndedTurn": 5,
+          "theftPolicy": null,
+          "survives": true,
+          "deathSaveUseCount": 0,
+          "growthHpCredit": 0,
+          "growthRewardCount": 0
+        },
+        "budget": {
+          "profile": "VeryHigh",
+          "beamWidth": 135,
+          "maxExpandedNodes": 500000,
+          "maxCardBranchesPerNode": 72,
+          "maxPileChoiceBranchesPerAction": 42,
+          "maxHandChoiceBranchesPerAction": 54,
+          "maxDegreeOfParallelism": 16,
+          "budgetMilliseconds": 300000,
+          "potionPolicy": "Smart",
+          "searchMode": "Coordinator",
+          "usePortfolio": true,
+          "fixedSearchBudget": false,
+          "enableNoGcRegion": true,
+          "noGcRegionBudgetGigabytes": 16
+        },
+        "work": {
+          "expanded": 821328,
+          "transitions": 4212002
+        }
+      }
+    ],
+    "allComparable": true,
+    "medianSpeedup": 4.021435147039492,
+    "conservativeSpeedup": 3.903678908360906,
+    "conservativeRssRatio": 0.8943082131250759,
+    "hpNoIncrease": true,
+    "sentinelsPending": false
+  },
+  "sentinels": {
+    "scope": "Three final C59 frozen-root sentinels, compare original and final C58 same-source controls",
+    "rows": [
+      {
+        "scene": "dev-03-regent-elite",
+        "valid": true,
+        "rootEqualsC58": true,
+        "budgetEqualsC58": true,
+        "policyEqualsC58": true,
+        "secondsC58": 9.1548386,
+        "secondsC59": 9.0783574,
+        "rssC58": 5594025984,
+        "rssC59": 5586595840,
+        "rssRatioC58": 0.9986717716325859,
+        "rssRatioOriginal": 0.25542345161886576,
+        "speedupOriginal": 33.26827588876376,
+        "qualityC58": {
+          "won": true,
+          "outstandingStolenResource": 0,
+          "projectedBattleHpLost": 0,
+          "strategicHpDeficit": 0,
+          "potionStrategicCost": 9,
+          "projectedBattlePotionCount": 1,
+          "enemyHp": 0,
+          "score": 10002217963,
+          "combatEndedTurn": 7,
+          "theftPolicy": null,
+          "survives": true,
+          "deathSaveUseCount": 0,
+          "growthHpCredit": 0,
+          "growthRewardCount": 0
+        },
+        "qualityC59": {
+          "won": true,
+          "outstandingStolenResource": 0,
+          "projectedBattleHpLost": 0,
+          "strategicHpDeficit": 0,
+          "potionStrategicCost": 9,
+          "projectedBattlePotionCount": 1,
+          "enemyHp": 0,
+          "score": 10002217963,
+          "combatEndedTurn": 7,
+          "theftPolicy": null,
+          "survives": true,
+          "deathSaveUseCount": 0,
+          "growthHpCredit": 0,
+          "growthRewardCount": 0
+        },
+        "qualityEqual": true,
+        "candidateEvidencePath": "/home/ltlly/Code/nmslmod/CombatSolver-iron-generation-closure-20261003/.local/c59/paired-and-sentinel/runs/dev-03-regent-elite-C59-sentinel",
+        "controlEvidencePath": "/home/ltlly/Code/nmslmod/CombatSolver-regent-potion-cap-bound-20261003/.local/c58/regent-paired/runs/dev-03-regent-elite-C58-pair-B2",
+        "nodeTransitionWorkC58": [
+          21352,
+          127985
+        ],
+        "nodeTransitionWorkC59": [
+          21352,
+          127985
+        ],
+        "secondsC52": 302.5437618,
+        "rssC52": 20246089728,
+        "rssRatioC52": 0.275934558971841,
+        "elapsedRatioC52": 0.030006757852113146
+      },
+      {
+        "scene": "dev-05-ironclad-boss",
+        "valid": true,
+        "rootEqualsC58": true,
+        "budgetEqualsC58": true,
+        "policyEqualsC58": true,
+        "secondsC58": 20.6914122,
+        "secondsC59": 18.9410972,
+        "rssC58": 17116069888,
+        "rssC59": 10930819072,
+        "rssRatioC58": 0.6386290277807026,
+        "rssRatioOriginal": 0.9963809808277484,
+        "speedupOriginal": 0.994042425377554,
+        "qualityC58": {
+          "won": true,
+          "outstandingStolenResource": 0,
+          "projectedBattleHpLost": 11,
+          "strategicHpDeficit": 9,
+          "potionStrategicCost": 0,
+          "projectedBattlePotionCount": 0,
+          "enemyHp": 0,
+          "score": 10001751965,
+          "combatEndedTurn": 6,
+          "theftPolicy": null,
+          "survives": true,
+          "deathSaveUseCount": 0,
+          "growthHpCredit": 0,
+          "growthRewardCount": 0
+        },
+        "qualityC59": {
+          "won": true,
+          "outstandingStolenResource": 0,
+          "projectedBattleHpLost": 11,
+          "strategicHpDeficit": 9,
+          "potionStrategicCost": 0,
+          "projectedBattlePotionCount": 0,
+          "enemyHp": 0,
+          "score": 10001751965,
+          "combatEndedTurn": 6,
+          "theftPolicy": null,
+          "survives": true,
+          "deathSaveUseCount": 0,
+          "growthHpCredit": 0,
+          "growthRewardCount": 0
+        },
+        "qualityEqual": true,
+        "candidateEvidencePath": "/home/ltlly/Code/nmslmod/CombatSolver-iron-generation-closure-20261003/.local/c59/paired-and-sentinel/runs/dev-05-ironclad-boss-C59-sentinel",
+        "controlEvidencePath": "/home/ltlly/Code/nmslmod/CombatSolver-regent-potion-cap-bound-20261003/.local/c58/full-regression/runs/dev-05-ironclad-boss-C58-1",
+        "nodeTransitionWorkC58": [
+          105505,
+          523694
+        ],
+        "nodeTransitionWorkC59": [
+          105505,
+          523694
+        ],
+        "secondsC52": 20.574776,
+        "rssC52": 17029885952,
+        "rssRatioC52": 0.6418609674080805,
+        "elapsedRatioC52": 0.9205979788066709
+      },
+      {
+        "scene": "screen-huge-deck",
+        "valid": true,
+        "rootEqualsC58": true,
+        "budgetEqualsC58": true,
+        "policyEqualsC58": true,
+        "secondsC58": 189.8588822,
+        "secondsC59": 208.2503276,
+        "rssC58": 19428257792,
+        "rssC59": 23029211136,
+        "rssRatioC58": 1.1853461788777977,
+        "rssRatioOriginal": 0.985345732715993,
+        "speedupOriginal": 2.3398216181245517,
+        "qualityC58": {
+          "won": true,
+          "outstandingStolenResource": 0,
+          "projectedBattleHpLost": 15,
+          "strategicHpDeficit": 9,
+          "potionStrategicCost": 0,
+          "projectedBattlePotionCount": 0,
+          "enemyHp": 0,
+          "score": 10001363991,
+          "combatEndedTurn": 3,
+          "theftPolicy": null,
+          "survives": true,
+          "deathSaveUseCount": 0,
+          "growthHpCredit": 0,
+          "growthRewardCount": 0
+        },
+        "qualityC59": {
+          "won": true,
+          "outstandingStolenResource": 0,
+          "projectedBattleHpLost": 15,
+          "strategicHpDeficit": 9,
+          "potionStrategicCost": 0,
+          "projectedBattlePotionCount": 0,
+          "enemyHp": 0,
+          "score": 10001363991,
+          "combatEndedTurn": 3,
+          "theftPolicy": null,
+          "survives": true,
+          "deathSaveUseCount": 0,
+          "growthHpCredit": 0,
+          "growthRewardCount": 0
+        },
+        "qualityEqual": true,
+        "candidateEvidencePath": "/home/ltlly/Code/nmslmod/CombatSolver-iron-generation-closure-20261003/.local/c59/paired-and-sentinel/runs/screen-huge-deck-C59-sentinel",
+        "controlEvidencePath": "/home/ltlly/Code/nmslmod/CombatSolver-regent-potion-cap-bound-20261003/.local/c58/full-regression/runs/screen-huge-deck-C58-1",
+        "nodeTransitionWorkC58": [
+          55308,
+          358057
+        ],
+        "nodeTransitionWorkC59": [
+          55282,
+          357909
+        ],
+        "secondsC52": 205.5439261,
+        "rssC52": 24465928192,
+        "rssRatioC52": 0.9412768220062958,
+        "elapsedRatioC52": 1.013167022501474
+      }
+    ],
+    "allComparable": true,
+    "allQualityEqual": true,
+    "rawRssFailuresC58": [
+      "screen-huge-deck"
+    ],
+    "rawRssFailuresOriginal": [],
+    "allRssWithin10Original": true,
+    "allRssWithin10PullRequestBaseC52": true,
+    "rawC58MemoryDifferenceRetained": true
+  },
+  "native": {
+    "runId": "ac76c56b30c14ad486b8da55f56d3c03",
+    "status": "Passed",
+    "completeFrozenRootEqual": true,
+    "finishedTurn": 5,
+    "nativeOutcome": [
+      "NativeOutcome:combatEnded=True:turn=5:hp=49:maxHp=80"
+    ],
+    "initialWorldline": [
+      "InitialPolicy:SoldHp=0;Potion=0,Saved=0/0,Rejected=0;Theft=-,Outstanding=0;Turns=5;Shuffles=1;Unmirrored=0;HpLost=19;ProjectedBattleHpLost=37;Block=5/6;Pruned=0;Total=45765.4ms/58265482536B;Gc=2309.9ms/1149.7msMax;Frame=1159.8msMax/11Over50;CacheHits=0;ChoiceBranches=939;Actions=4;OnlyDeath=False;CombatEndedTurn=5;DeathTurn=-;ActEndingBoss=False;BossHpRelief=None"
+    ],
+    "unexpectedReplans": [
+      "UnexpectedReplans:0"
+    ],
+    "configuredNoGcBytes": 16000000000,
+    "nativeActualNoGcSetup": [
+      "NoGcConfigurationApplied:Configured=True/16000000000:Established=12261215323:Actual=True/12261215323:ExpectedFallback=False:AllowedFallback=True:Latency=NoGCRegion"
+    ],
+    "searchElapsedSeconds": 45.7653878,
+    "pairedRssMeasuredInOfflineHarness": true
+  },
+  "semanticAudit": "iron-generation-closure-research-20261003-semantic-audit.json",
+  "limitations": [
+    "C58 full29-root screen retained as evidence for its exact version; final C59 has seven fresh offline runs and one complete native target deployment, not a new29-root screen.",
+    "Huge-deck raw RSS is18.5% above the single C58 control, below original and PR199 C52; raw sample retained and no guarantee relative to every possible low-memory control.",
+    "Native full deployment configuredNoGC16GB, actual initial reservation12.261GB. Paired RSS acceptance is offline, not a native RSS pair.",
+    "Original17 slow roots: six currently at least2x, eleven still below; uploaded Prism accepted~1.98x exception remains separate."
+  ],
+  "acceptance": {
+    "targetPairedSpeedAtLeast2x": true,
+    "targetPairedMemoryWithin10": true,
+    "targetPairedHpNoIncrease": true,
+    "sentinelQualityEqual": true,
+    "sentinelMemoryVsOriginalWithin10": true,
+    "sentinelMemoryVsPullRequestBaseWithin10": true,
+    "allSlowRootsGoalComplete": false
+  },
+  "productionIntegrated": true,
+  "delivery": {
+    "pullRequest": 200,
+    "base": "PR19906cb60ca",
+    "finalBranch": "perf/regent-decimillipede-20261003",
+    "runtimeSourceEqualToFinalValidatedBuild": true,
+    "fiveFileLocalDeployment": "CopiedSuccessfully",
+    "version": "0.47.3",
+    "searchBoundaryGate": "REFACTOR_BOUNDARIES_OK search_files=245"
+  }
+}

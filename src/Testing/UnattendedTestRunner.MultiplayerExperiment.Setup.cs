@@ -3,7 +3,6 @@ using System.Text.Json.Nodes;
 using MegaCrit.Sts2.Core.Context;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Models;
-using MegaCrit.Sts2.Core.Multiplayer.Serialization;
 using MegaCrit.Sts2.Core.Runs;
 
 namespace CombatSolver;
@@ -15,17 +14,6 @@ internal sealed partial class UnattendedTestRunner
         private void PrepareMultiplayerExperiment()
         {
             if (runner._protocolHost.MultiplayerExperiment is not { } spec) return;
-            // Native packet writers share a plain Dictionary across replay/export workers.
-            // Materialize its immutable game-enum entries before this test starts a run.
-            var enumGetter = typeof(MaxEnumValueCache).GetMethod(nameof(MaxEnumValueCache.Get))!;
-            int warmedEnums = 0;
-            foreach (Type type in typeof(Player).Assembly.GetTypes().Where(type => type.IsEnum
-                && Enum.GetUnderlyingType(type) == typeof(int) && Enum.GetValues(type).Length > 0))
-            {
-                _ = enumGetter.MakeGenericMethod(type).Invoke(null, null);
-                warmedEnums++;
-            }
-            runner._completedChecks.Add("NativePacketEnumWarmup:" + warmedEnums);
             JsonObject json = JsonSerializer.SerializeToNode(runner._request, UnattendedTestFiles.JsonOptions)!.AsObject();
             json["characterId"] = spec.Root.Local.CharacterId;
             json["encounterId"] = spec.Root.EncounterId;

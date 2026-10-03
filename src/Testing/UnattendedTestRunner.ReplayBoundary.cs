@@ -55,6 +55,15 @@ internal sealed partial class UnattendedTestRunner
             throw new InvalidOperationException("Legacy card keyword migration did not preserve exact saved keywords and card state.");
         }
 
+        const string unmodifiedCard = "H=A/private=-/keywords=[]/baselib=-,;Y=0/0/0/0;R=9";
+        const string modifiedCard = "H=A/private=-|cost-state=1:1[0:0:0:False,]/stars=0:0[]/keywords=[]/baselib=-,;Y=0/0/0/0;R=9";
+        if (ReplayContinuationMatches(unmodifiedCard, modifiedCard)
+            || ReplayContinuationMatches(modifiedCard,
+                modifiedCard.Replace("cost-state=1:", "cost-state=2:", StringComparison.Ordinal))
+            || ReplayContinuationMatches(modifiedCard,
+                modifiedCard.Replace("/stars=0:", "/stars=1:", StringComparison.Ordinal)))
+            throw new InvalidOperationException("Replay must preserve actual energy and star cost differences.");
+
         using NativeReplayDriver driver = new(this, [], 0, player);
         InvalidDataException failure = new("replay_boundary_original_failure");
         driver.ObserveBoundary(() => throw failure);

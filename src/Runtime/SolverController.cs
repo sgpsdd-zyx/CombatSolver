@@ -1250,6 +1250,11 @@ internal static partial class SolverController
                 $"run_mod_subscribers={rootSnapshot.CapturedRunModSubscriberCount} " +
                 $"combat_mod_subscribers={rootSnapshot.CapturedCombatModSubscriberCount} " +
                 $"base_lib_card_modifiers={rootSnapshot.CapturedBaseLibCardModifiers} " +
+                $"strategic_hp_recovery_bound={(rootSnapshot.HasOnlyPostCombatHealing ? "certified" : "bypassed")} " +
+                $"known_native_healing_policy={rootSnapshot.UsesKnownNativeHealingPolicy} " +
+                $"strategic_hp_recovery_bound_reason={rootSnapshot.HealingBoundCertificationReason} " +
+                $"strategic_hp_recovery_bound_source={Uri.EscapeDataString(rootSnapshot.HealingBoundCertificationSourceId ?? "-")} " +
+                $"strategic_hp_recovery_bound_postcombat_heal_hp={(rootSnapshot.HasOnlyPostCombatHealing ? Math.Max(0, rootSnapshot.PostCombatRelicHeal.UnconditionalHeal).ToString() : "unbounded")} " +
                 $"potion_reward={rootSnapshot.PotionRewardOutlook.Forecast}" +
                 $"/{rootSnapshot.PotionRewardOutlook.ForecastPotionId ?? "-"}" +
                 $"/credit={rootSnapshot.PotionRewardOutlook.ReplacementHpCredit}");

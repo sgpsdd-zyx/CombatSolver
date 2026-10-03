@@ -631,6 +631,7 @@ internal static partial class CombatSearchCoordinator
                 || gradient.ResultScope != SolverResultScope.SearchCompletion
                 || policy.PotionStrategy.HasForcedDirectives
                 || battleDamage.PotionsUsedSoFar != 0
+                || CanFinishNativeLouseZeroDamageRoute(root, policy, gradient)
                 || (gradient.ExplicitPotionCount <= 1
                     && HasReachedProvablePrimaryQualityLowerBound(root, policy, gradient)))
                 return gradient;
@@ -992,6 +993,7 @@ internal static partial class CombatSearchCoordinator
                 $"incumbent_deficit={primaryIncumbent?.StrategicHpDeficit.ToString() ?? "-"} " +
                 $"incumbent_turn={primaryIncumbent?.CombatEndedTurn.ToString() ?? "-"} " +
                 $"incumbent_pruned={candidate.PrimaryIncumbentBranchesPruned} " +
+                $"incumbent_certified_healing_bound_pruned={candidate.PrimaryIncumbentCertifiedHealingBoundBranchesPruned} " +
                 $"incumbent_updates={candidate.PrimaryIncumbentUpdates}");
             if (HasReachedAcceptableBattleHpLoss(policy, selected)
                 && TheftEncounterStrategy.RecoverySatisfied(

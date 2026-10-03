@@ -27,5 +27,18 @@ try {
     File.WriteAllText(Path.Combine(native,"2.run"),JsonSerializer.Serialize(new {start_time=2,was_abandoned=true,win=false,run_time=1}));
     reopened.Reconcile(history.ProfileId,native);
     Check(reopened.Find(Run(2).RunId)!.Outcome=="abandoned","recover native settlement after interrupted shutdown");
-    Console.WriteLine("Run statistics contracts passed: streaks, gaps, abandonment, dedup, persistence, historical separation, recovery.");
+    reopened.Save(Run(3, "pending"));
+    reopened.MarkIncomplete(Run(3, "win"));
+    // Simulate a crash after durable marker but before replacing an older full record.
+    File.WriteAllText(Path.Combine(dir, Run(3).RunId + ".run.json"), JsonSerializer.Serialize(Run(3, "pending"), RunStatisticsStore.Json));
+    File.WriteAllText(Path.Combine(dir, Run(3).RunId + ".run.json.sent"), "1");
+    var incompleteRestart = new RunStatisticsStore(dir);
+    Check(incompleteRestart.Pending(20).Any(record => record.RunId == Run(3).RunId), "old full receipt does not acknowledge repaired partial record");
+    incompleteRestart.Acknowledge(incompleteRestart.Find(Run(3).RunId)!);
+    Check(!new RunStatisticsStore(dir).Pending(20).Any(record => record.RunId == Run(3).RunId), "corrected receipt persists without repeated upload");
+    Check(incompleteRestart.Find(Run(3).RunId)!.Participation == "partial", "marker overrides an older full record after restart");
+    File.WriteAllText(Path.Combine(native, "3.run"), JsonSerializer.Serialize(new { start_time = 3, was_abandoned = false, win = true, run_time = 1 }));
+    incompleteRestart.Reconcile(history.ProfileId, native);
+    Check(incompleteRestart.Find(Run(3).RunId) is { Participation: "partial", Outcome: "win", ObservedFromStart: false }, "native settlement preserves incomplete tracking");
+    Console.WriteLine("Run statistics contracts passed: streaks, gaps, abandonment, dedup, persistence, historical separation, recovery, incomplete marker restart.");
 } finally {Directory.Delete(dir,true);}

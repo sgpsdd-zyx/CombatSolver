@@ -994,6 +994,7 @@ expected_beam_files=(
     CombatBeamSolver.PrimaryChoiceReplay.cs
     CombatBeamSolver.Retention.cs
     CombatBeamSolver.RetentionJobs.cs
+    CombatBeamSolver.SmartPotionBound.cs
     CombatBeamSolver.StateEvaluation.cs
     CombatBeamSolver.StandPatJobs.cs
     CombatBeamSolver.Terminal.cs
@@ -1233,7 +1234,19 @@ beam_entry_path="$search_root/CombatBeamSolver.cs"
 forbid_fixed "$beam_entry_path" 'public SolverResult Solve()' 'Solve returned to the entry/field declaration file:'
 beam_retention_facade_path="$search_root/CombatBeamSolver.Retention.cs"
 forbid_fixed "$beam_retention_facade_path" 'private List<SearchNode> RankBest(' 'RankBest returned outside BeamRetentionPolicy:'
+remaining_healing_bound_path="$search_root/StrategicHpRecoveryBound.Remaining.cs"
+require_fixed "$repository_root/src/Runtime/CombatRootSnapshot.cs" 'CanCertifyRemainingHealingEnvironment(' 'remaining-healing environment proof is not frozen at the root:'
+require_fixed "$beam_retention_facade_path" 'root.CanCertifyRemainingHealing || root.UsesKnownNativeHealingPolicy' 'healing pruning requires a frozen certificate or native-source policy:'
+require_fixed "$repository_root/src/Runtime/CombatRootSnapshot.cs" 'CanUseKnownNativeHealingPolicy(' 'native healing policy eligibility must be frozen at the root:'
+for closure_component in 'PendingReturningCards' 'AllCards' 'EffectivePowers()' 'GetPotionSlotCount(player)' 'HasCertifiedRemainingAttachments' 'typeof(InfestedPrism)' 'typeof(FuzzyWurmCrawler)'; do
+    require_fixed "$remaining_healing_bound_path" "$closure_component" 'remaining-healing proof lost a closure component:'
+done
 beam_phases_path="$search_root/CombatBeamSolver.Phases.cs"
+require_fixed "$beam_retention_facade_path" '_strictHpBoundWithRelicTargets = CanUseStrictHpRelicBound(root, policy)' 'missing common relic healing bound:'
+require_fixed "$beam_retention_facade_path" 'targets.All(target => target.HpAllowance == 0)' 'missing zero-allowance objective gate:'
+require_fixed "$beam_retention_facade_path" 'allowTurnTieBound: !_strictHpBoundWithRelicTargets' 'equal-HP counter routes must keep later turns:'
+require_fixed "$search_root/CombatSearchCoordinator.cs" '!CombatBeamSolver.CanUseStrictHpRelicBound(root, policy)' 'shared incumbent must retain objective eligibility:'
+require_fixed "$search_root/CombatSearchCoordinator.PlanSearch.cs" 'context.Root.CanCertifyRemainingHealing || context.Root.UsesKnownNativeHealingPolicy' 'opening incumbent must consume the common healing policy:'
 require_fixed \
     "$beam_phases_path" \
     'TightenPrimarySearchIncumbentAtTurnLayer(' \
@@ -1403,6 +1416,8 @@ done <<'EOF'
 src/Testing/UnattendedTestRunner.cs	private static readonly ProtocolHost Host = new();
 src/Testing/UnattendedTestRunner.ProtocolHost.cs	private sealed partial class ProtocolHost
 src/Testing/UnattendedTestRunner.ProtocolHost.cs	private async Task RunRequestLoopAsync(NGame host)
+src/Testing/UnattendedTestRunner.ProtocolHost.cs	private static void WarmNativePacketEnums()
+src/Testing/UnattendedTestRunner.ProtocolHost.cs	WarmNativePacketEnums();
 src/Testing/UnattendedTestRunner.ProtocolHost.cs	private void Activate(UnattendedTestRequest request)
 src/Testing/UnattendedTestRunner.ProtocolHost.cs	private void Reset()
 src/Testing/UnattendedTestRunner.Writer.cs	private sealed partial class Writer(
@@ -1712,7 +1727,11 @@ src/Search/MultiplayerSearchPolicy.cs|IncludeTurnSetup = TurnSetup != null
 src/Search/CombatBeamSolver.Expansion.Replay.cs|bool capturingExecution = policy.Multiplayer?.TurnSetup == null
 src/Search/CombatBeamSolver.MultiplayerTurnSetup.cs|HookMirrors.ResumeMultiplayerToastyMittens
 src/Engine/InCombat/Mirrors/HookMirrors.MultiplayerTurnSetup.cs|AfterPlayerTurnStartMirrors.Invoke(relics[index], context, phase: 1);
-src/Runtime/CombatRootSnapshot.cs|bool hasOnlyPostCombatHealing = !advisor
+src/Runtime/CombatRootSnapshot.cs|StrategicHpRecoveryBoundAssessment healingBoundAssessment = advisor
+src/Runtime/CombatRootSnapshot.cs|CanCertifyRemainingHealing = !IsMultiplayerAdvisor
+src/Runtime/CombatRootSnapshot.cs|UsesKnownNativeHealingPolicy = !IsMultiplayerAdvisor
+src/Search/CombatBeamSolver.SmartPotionBound.cs|policy.Multiplayer == null
+src/Search/CombatBeamSolver.SmartPotionBound.cs|if (IsMultiplayerAdvice || _smartPotionEligibilityHpCeiling
 src/Search/CombatBeamSolver.Retention.cs|if (IsMultiplayerAdvice || _hasGrowthTargets
 src/Search/CombatBeamSolver.MultiplayerRound.cs|CombatSolver.Engine.InCombat.Mirrors.HookMirrors.BeforeSideTurnStart(
 src/Search/CombatBeamSolver.Multiplayer.cs|!CanReplayMultiplayerAction(node, action)
@@ -1814,6 +1833,10 @@ for file in CombatBeamSolver.FinalPlanOrdering.cs CombatBeamSolver.Transposition
         forbid_fixed "$search_root/$file" "$token" 'intermediate estimate must not become final policy or exact dominance:'
     done
 done
+
+if rg -q -F '._vars' "$repository_root/src" --glob '!**/DynamicVarSetAccess.cs'; then
+    violations+=("DynamicVarSet._vars direct field access must go through DynamicVarSetAccess")
+fi
 
 if ((${#violations[@]} > 0)); then
     printf '%s\n' "${violations[@]}" >&2

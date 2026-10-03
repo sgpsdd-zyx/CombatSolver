@@ -80,9 +80,16 @@ internal sealed class SolverDisplayNames
         Control? slots = room == null ? null : (Control?)EncounterSlotsProperty.GetValue(room);
         Dictionary<string, int> slotOrder = [];
         IReadOnlyList<string> encounterSlots = state.Encounter?.Slots ?? [];
+        // 只声明在原生场景里的槽位（如 GremlinMercNormal 的 merc/sneaky/fat）不在模型
+        // Encounter.Slots 中；没有模型槽位时按场景 Marker 的横坐标冻结顺序。
         IEnumerable<string> orderedSlots = slots == null ? encounterSlots
-            : encounterSlots.OrderBy(slot => slots.GetNode<Marker2D>(slot).GlobalPosition.X);
-        foreach (string slot in orderedSlots) slotOrder.Add(slot, slotOrder.Count);
+            : encounterSlots.Count > 0
+                ? encounterSlots.OrderBy(slot => slots.GetNode<Marker2D>(slot).GlobalPosition.X)
+                : slots.FindChildren("*", nameof(Marker2D), recursive: true, owned: false)
+                    .OfType<Marker2D>()
+                    .OrderBy(marker => marker.GlobalPosition.X)
+                    .Select(marker => marker.Name.ToString());
+        foreach (string slot in orderedSlots) slotOrder.TryAdd(slot, slotOrder.Count);
         Dictionary<string, int> enemyTypeCounts = state.Enemies
             .GroupBy(creature => CaptureCreatureBaseName(creature, monsterNames), StringComparer.Ordinal)
             .ToDictionary(group => group.Key, group => group.Count(), StringComparer.Ordinal);
@@ -242,9 +249,13 @@ internal sealed class SolverDisplayNames
             return fallback;
         // Slot ranks are frozen from the native scene. Unslotted encounters use
         // insertion order, as native PositionEnemies does. KnownEnemies retains
-        // dead participants so the labels stay stable through the route.
+        // dead participants so the labels stay stable through the route. A predicted
+        // summon may carry a scene-only slot beyond the frozen ranks; it keeps the
+        // roster insertion order after known slots instead of failing the name read.
         var peers = knownEnemies.Where(enemy => CaptureCreatureBaseName(enemy, _monsters) == fallback)
-            .OrderBy(enemy => enemy.SlotName is { } slot ? _slotOrder[slot] : 0).ToArray();
+            .OrderBy(enemy => enemy.SlotName is { } slot
+                ? _slotOrder.GetValueOrDefault(slot, int.MaxValue)
+                : 0).ToArray();
         int index = Array.FindIndex(peers, enemy => enemy.CombatId == creature.CombatId);
         if (index < 0) throw new InvalidOperationException("生成敌人缺少所属预测阵容，无法确定显示位置。");
         string position = _positioned

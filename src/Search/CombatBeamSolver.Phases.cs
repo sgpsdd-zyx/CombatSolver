@@ -18,6 +18,8 @@ namespace CombatSolver;
 
 internal sealed partial class CombatBeamSolver
 {
+    internal bool DisableSurvivableBoundaryFallbackForTesting { get; init; }
+
     public SolverResult Solve()
     {
         SearchRequestWorkTotals? requestWorkTotals = policy.RequestWorkTotals;
@@ -37,6 +39,7 @@ internal sealed partial class CombatBeamSolver
         }
         finally
         {
+            EmitSmartPotionEligibilityBoundDiagnostics();
             // 最后才扫描标签，避免诊断在候选热路径上枚举整张表。
             var transpositions = _run.TranspositionDiagnostics.Capture(
                 policy.TranspositionEntryLimit, _run.Expanded, _run.TranspositionLimitBypasses,
@@ -801,6 +804,8 @@ internal sealed partial class CombatBeamSolver
                 CrossTurnCandidatesProtected = _run.CrossTurnCandidatesProtected,
                 CrossTurnContinuationsStopped = _run.CrossTurnContinuationsStopped,
                 PrimaryIncumbentBranchesPruned = _run.PrimaryIncumbentBranchesPruned,
+                PrimaryIncumbentCertifiedHealingBoundBranchesPruned =
+                    _run.PrimaryIncumbentCertifiedHealingBoundBranchesPruned,
                 PrimaryIncumbentUpdates = _run.PrimaryIncumbentUpdates,
                 StandPatProbes = _run.StandPatProbes,
                 ParallelExpansionWaves = _run.ParallelExpansionWaves,
@@ -1177,6 +1182,7 @@ internal sealed partial class CombatBeamSolver
         double potionFreeBoundaryFallbackScore = double.NegativeInfinity;
         SearchNode? potionBoundaryFallback = null;
         double potionBoundaryFallbackScore = double.NegativeInfinity;
+        SearchNode? survivableBoundaryFallback = null;
         // A cheap first parent is not a safe predictor for the rest of a later play depth.
         // Retain the largest observed parent for the whole search so a new depth cannot
         // immediately rematerialize a wide wave that exceeds the No-GC allocation budget.
@@ -1710,6 +1716,13 @@ internal sealed partial class CombatBeamSolver
                         fallback = child;
                     if (child.IsTerminal || child.Turn > node.Turn)
                     {
+                        // Publish an eligible victory before an unbounded play
+                        // layer finishes. Counter ties remain eligible at all turns.
+                        if (_strictHpBoundWithRelicTargets && child.IsTerminal
+                            && !child.Snapshot.HasRisk
+                            && child.BoundaryReason == SearchBoundaryReason.None)
+                            _ = TightenPrimarySearchIncumbentAtTurnLayer(
+                                [child], searchedTurnLayers + 1);
                         int explicitPotionUses = ExplicitPotionUseCount(child);
                         if (explicitPotionUses == 0 && child.Score > potionFreeBoundaryFallbackScore)
                         {
@@ -2121,6 +2134,25 @@ internal sealed partial class CombatBeamSolver
             // 续用戳只供最终选中路线，淘汰候选无需提前拼接字符串。
             List<SearchNode> retainedAfterRound = [.. completed, .. frontier];
             ReleaseDroppedSnapshots(ended, retainedAfterRound);
+            // Save only a genuinely retained, annotated safe boundary: raw EndTurn
+            // children have not yet received sold-HP accounting or hard-policy pruning.
+            // A later interrupted layer may replace all live candidates with deaths.
+            // Keep metadata while historical simulators still release normally.
+            foreach (SearchNode candidate in frontier)
+            {
+                if (!DisableSurvivableBoundaryFallbackForTesting
+                    && candidate.Turn > _startTurnNumber
+                    && !candidate.IsTerminal && !candidate.Snapshot.HasRisk
+                    && !candidate.Snapshot.PlayerDead && candidate.Snapshot.ProjectedPlayerHp > 0
+                    && (survivableBoundaryFallback == null
+                        || candidate.Score > survivableBoundaryFallback.Score)
+                    && ExplicitPotionUseCount(candidate) >= _minimumPotionUses
+                    && (_potionPolicy != SolverPotionPolicy.RequireAtLeastOne
+                        || ExplicitPotionUseCount(candidate) > 0)
+                    && (!_enforcePotionDirectives
+                        || _potionStrategy.EvaluateForcedUses(candidate).AllForcedUsesSatisfied))
+                    survivableBoundaryFallback = candidate;
+            }
             foreach (SearchNode candidate in retainedAfterRound)
             {
                 ConsiderCompleteVictory(candidate);
@@ -2244,6 +2276,23 @@ internal sealed partial class CombatBeamSolver
             && potionBoundaryFallback != null)
         {
             finalPool.Add(RefreshReleasedFallback(potionBoundaryFallback));
+        }
+        if (!adoptionReached && !acceptableBattleHpLossReached
+            && (timeBudgetReached
+                || _run.Expanded >= _profile.MaxExpandedNodes
+                    && (_run.NodeLimitSnapshotsReleased > 0 || _run.TurnLayerBudgetStops > 0)
+                || memoryNoProgressTruncated)
+            && survivableBoundaryFallback != null
+            && finalPool.All(node => node.Snapshot.PlayerDead
+                || node.Snapshot.ProjectedPlayerHp <= 0))
+        {
+            SearchNode restored = RefreshReleasedFallback(survivableBoundaryFallback);
+            finalPool.Add(restored);
+            policy.Diagnostics.Info(
+                $"[CombatSolver/Test] SEARCH_SURVIVAL_BOUNDARY_RESTORED " +
+                $"turn={restored.Turn} hp={restored.Snapshot.PlayerHp} " +
+                $"projected_hp={restored.Snapshot.ProjectedPlayerHp} " +
+                $"enemy_hp={restored.Snapshot.EnemyHp} score={restored.Score}");
         }
         if (acceptableBattleHpLossReached)
         {
@@ -2403,7 +2452,11 @@ internal sealed partial class CombatBeamSolver
 
         SimPlayerCombatState player = simulator.State.GetPlayerCombatState(_player);
         PredictedCard? card = FindCardForReplay(player.Hand.Cards, action);
-        return card != null && combat.CanPlayCard(simulator, card);
+        // Reordering or inserting earlier actions can change the active roster.
+        // Keep the planned identity: an invalid suffix rejects the adjusted route
+        // rather than replaying it against a missing target or choosing another one.
+        return card != null && combat.CanPlayCard(simulator, card)
+            && TargetsFor(card, simulator).Any(target => target.Target?.CombatId == action.TargetCombatId);
     }
 
     private PlanAction WithDisplayNames(PlanAction action)

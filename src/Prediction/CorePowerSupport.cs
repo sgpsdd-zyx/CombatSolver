@@ -484,9 +484,8 @@ internal static class CorePowerSupport
         IReadOnlyList<Creature> players,
         int etherealExhaustCount = 0)
     {
-        combat.RestoreTemporaryStrength(players);
-        combat.RestoreTemporaryDexterity();
-        combat.RestoreTemporaryFocus();
+        // 临时 Strength/Dexterity/Focus 的回收跟随 EndTurnPowerSupport.TriggerRegular 的监听器顺序执行，
+        // 与其它 Power 的 AfterSideTurnEnd 保持原版的逐监听器分发。
         foreach (Creature player in players)
         {
             if (player.Player is { } owner && !combat.IsPlayerActiveForHooks(owner))
@@ -567,7 +566,6 @@ internal static class CorePowerSupport
         if (simulator.HasPendingChoice)
             return false;
         TriggerTransientSideTurnEndPowers(simulator, combat, CombatSide.Enemy, enemies);
-        combat.RestoreTemporaryStrength(enemies);
         TickDurations(combat);
         return HookMirrors.AfterSideTurnEndLate(simulator, CombatSide.Enemy, enemies);
     }

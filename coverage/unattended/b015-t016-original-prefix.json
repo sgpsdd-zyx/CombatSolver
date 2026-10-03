@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "scenarioId": "B015-T016-ORIGINAL-PREFIX",
+  "characterId": "SILENT",
+  "encounterId": "AXEBOTS_NORMAL",
+  "cards": [],
+  "checkpointArchivePath": ".local/issue-bundles/174/raw/B015/T016/reports/e63cd12543994bb08b9497e45839005c.zip",
+  "checkpointSelector": "start",
+  "replayMode": "RestoreOnly",
+  "timeoutSeconds": 120,
+  "exitOnComplete": true
+}

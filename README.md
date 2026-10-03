@@ -4,7 +4,9 @@ Combat Solver 是《杀戮尖塔 2》的战斗路线求解器，本 fork 支持�
 
 单人模式下，玩家可以只查看建议，也可以让求解器执行当前回合，或连续接管整场战斗。多人模式只提供手动请求的建议。搜索不会修改游戏 RNG，也不会在后台操作真实战斗状态。
 
-多人 fork **[0.47.3 已发布](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.47.3)**，基于官方 **0.47.2** 最新源码（含后续 PR #144）。本次同步跨回合路线、开局选牌、第三方兼容与内存显示更新；多人保持手动军师、烘焙手套选牌计算和十四敌方周期。见[中英更新日志](docs/releases/0.47.3-RELEASE_NOTES.md)、[发布凭证](docs/releases/0.47.3-PUBLISH.md)和[合并验证](docs/strategy/upstream-0472-merge-20260928.md)。前一公开版为[0.47.2](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.47.2)。
+多人 fork **0.48.1 准备发布**，已合入官方 **0.48.0**。本次同步单人复杂战斗搜索、卡牌费用身份、充能球与回合末结算、召唤目标和日志设置更新；多人保持手动军师、烘焙手套选牌计算和十四敌方周期。见[中英更新日志](docs/releases/0.48.1-RELEASE_NOTES.md)、[发布状态](docs/releases/README.md)和[合并验证](docs/strategy/upstream-0480-merge-20261002.md)。上一公开版为[0.47.3](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.47.3)。
+
+**参与开发：** [社区任务入口](https://github.com/Torch1230/CombatSolver/issues/171)按每批五个主题发布故障修复与路线优化任务，每主题一至两个 0.47.x 代表包。[贡献指南](CONTRIBUTING.md)说明整批认领与 PR 流程，[夹具与脚手架指南](docs/community/testing-guide.md)说明差分、包回放与策略实验入口。
 
 本版的单人“前两回合深入探索（实验）”默认关闭，开启后最多计算 40 分钟，可随时停止；多人不启用此项探索。
 
@@ -12,7 +14,7 @@ Combat Solver 是《杀戮尖塔 2》的战斗路线求解器，本 fork 支持�
 
 [多人军师](docs/multiplayer-advisor.md) 推荐本人的出牌和用药路线，最多推演十四个敌方回合。队友行动后自行决定何时重算；推演假设队友后续不主动出牌或用药，但仍结算其被动效果。多人功能目前供试用，尚未完成真实联机验收。
 
-**English UI:** Set the game language to English and restart the game. In single-player, use **Play turn** or **Auto: On**. Multiplayer fork **0.47.2 is released**, based on upstream **0.47.1**. [Download the latest published release](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.47.2). You can calculate advice while Toasty Mittens awaits your exhaust choice, then confirm the choice yourself. Multiplayer uses a local contribution objective, balancing health, potions and observed longer-term returns. It retains manual advice for up to fourteen enemy cycles and doubled ordinary time and node limits. Teammates' future active actions are not modeled; live multiplayer is not yet verified. See the [release notes](docs/releases/0.47.2-RELEASE_NOTES.md). Configure potions, growth and search budgets in the overlay. **Settings > Reports > Upload report** submits a bug report. Logs, raw errors and some detailed diagnostics retain their original text.
+**English UI:** Set the game language to English. Card pills and choices refresh during play; restart to refresh other existing windows. In single-player, use **Play turn** or **Auto: On**. Multiplayer fork **0.48.1 is being prepared**, based on upstream **0.48.0**; see the [release status](docs/releases/README.md) and [release notes](docs/releases/0.48.1-RELEASE_NOTES.md). You can calculate advice while Toasty Mittens awaits your exhaust choice, then confirm the choice yourself. Multiplayer retains manual advice, local contribution goals, up to fourteen enemy cycles, and doubled ordinary time and node limits. Teammates' future active actions are not modeled; live multiplayer is not yet verified. **Settings > Reports > Upload report** submits a bug report. Logs, raw errors, and some detailed diagnostics retain their original text.
 
 界面跟随游戏语言：简体/繁体中文使用现有中文文案，其他语言使用英文。简化版不提供独立语言开关；卡牌胶囊、选牌和相关悬停说明支持运行中切换语言，其他既有窗口可通过重启统一刷新。
 
@@ -72,6 +74,8 @@ if (PreCombatForecastApi.IsAvailable)
 确定预测的 `ForceRefresh=true` 同时绕过已完成结果缓存与正在运行的同参数任务；是否取消 worker 仍由 `CancelWorkerWhenCallerCancels` 独立控制。正在运行的请求仅在关闭标志与空闲期限一致时共享任务。已完成结果仍可跨生命周期选项复用，但缓存命中也会落实本次关闭/空闲设置；需要等待其他请求释放 worker 时，在安全空闲边界处理，不取消其他调用方的搜索。
 
 ## 第三方角色适配
+
+主项目开发与社区任务面向原版游戏内容，不主动实现修改游戏内容的第三方 Mod 适配。已有登记入口供第三方作者维护自己的适配层。
 
 `0.31.3` 合入 PR #50–#55，提供第三方 Power 战略估值、药水玩家选择与牌堆可选弃牌入口，并补充未镜像可打出条件的覆盖提示。使用这些入口的适配 Mod 应将 CombatSolver 最低依赖设为 `0.31.3`。
 

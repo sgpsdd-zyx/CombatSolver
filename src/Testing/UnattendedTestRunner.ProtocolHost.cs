@@ -8,6 +8,7 @@ using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Nodes;
 using MegaCrit.Sts2.Core.Nodes.Screens.MainMenu;
 using MegaCrit.Sts2.Core.Runs;
+using MegaCrit.Sts2.Core.Multiplayer.Serialization;
 
 namespace CombatSolver;
 
@@ -146,6 +147,8 @@ internal sealed partial class UnattendedTestRunner
                     }
 
                     File.Move(requestPath, runningPath, true);
+                    if (_acceptedRequestCount == 0)
+                        WarmNativePacketEnums();
                     Activate(request);
                     int requestSequence = ++_acceptedRequestCount;
                     Entry.Logger.Info(
@@ -208,6 +211,21 @@ internal sealed partial class UnattendedTestRunner
                     $"[CombatSolver/Unattended] PROCESS_NOT_REUSABLE exit=true exception={ex}");
                 host.GetTree().Quit(1);
             }
+        }
+
+        private static void WarmNativePacketEnums()
+        {
+            // Replay and report workers share the native cache's non-concurrent dictionary.
+            // Freeze its game-enum entries before any unattended run starts those workers.
+            var getter = typeof(MaxEnumValueCache).GetMethod(nameof(MaxEnumValueCache.Get))!;
+            int count = 0;
+            foreach (Type type in typeof(Player).Assembly.GetTypes().Where(type => type.IsEnum
+                && Enum.GetUnderlyingType(type) == typeof(int) && Enum.GetValues(type).Length > 0))
+            {
+                _ = getter.MakeGenericMethod(type).Invoke(null, null);
+                count++;
+            }
+            Entry.Logger.Info($"[CombatSolver/Unattended] NATIVE_PACKET_ENUMS_WARMED count={count}");
         }
 
         private static async Task WaitUntilReusableAsync(NGame host)
@@ -360,20 +378,37 @@ internal sealed partial class UnattendedTestRunner
             ConfigureSearchOverrides(request);
         }
 
-        public void ConfigureSearchOverrides(UnattendedTestRequest request)
+        public void ConfigureSearchOverrides(
+            UnattendedTestRequest request,
+            bool allowDirectOfflineEarlyTurnExploration = false,
+            int? earlyTurnExplorationBudgetMilliseconds = null)
         {
             ConfigureMultiplayerExperiment(request);
             int earlyTurnDepth = request.EarlyTurnExplorationDepthForTest ?? 0;
             if (earlyTurnDepth is < 0 or > 2)
                 throw new InvalidOperationException("早期回合探索深度必须在 0..2 之间。");
-            if (earlyTurnDepth > 0
-                && (request.ReplayMode != "SearchOnly"
-                    || request.TimeoutSeconds is < 15 or > 2400))
+            if (allowDirectOfflineEarlyTurnExploration)
+            {
+                if (earlyTurnDepth == 0 && earlyTurnExplorationBudgetMilliseconds.HasValue)
+                    throw new InvalidOperationException("关闭早期回合探索时不能指定探索时限。");
+                if (earlyTurnDepth > 0
+                    && earlyTurnExplorationBudgetMilliseconds is not (>= 5_000 and <= 2_390_000))
+                    throw new InvalidOperationException(
+                        "离线早期回合探索时限必须在 5,000..2,390,000 毫秒之间。");
+            }
+            else if (earlyTurnExplorationBudgetMilliseconds.HasValue
+                || earlyTurnDepth > 0
+                    && (request.ReplayMode != "SearchOnly"
+                        || request.TimeoutSeconds is < 15 or > 2400))
+            {
                 throw new InvalidOperationException(
                     "早期回合探索只支持 15..2400 秒的 SearchOnly 问题包请求。");
+            }
             EarlyTurnExplorationDepth = earlyTurnDepth;
             EarlyTurnExplorationBudgetMilliseconds = earlyTurnDepth == 0
-                ? 0 : (int)(request.TimeoutSeconds * 1000) - 10_000;
+                ? 0
+                : earlyTurnExplorationBudgetMilliseconds
+                    ?? (int)(request.TimeoutSeconds * 1000) - 10_000;
             VerifyIncrementalSearch = request.VerifyIncrementalSearch;
             FixedSearchBudget = request.FixedSearchBudget;
             MeasureSearchPhases = request.MeasureSearchPhases;

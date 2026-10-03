@@ -2590,5 +2590,53 @@
     "expected": "不改变测量根的最终路线与质量；逐张真实模拟；不隐藏替代出牌；无非预期重算；实际动作索引保持",
     "observed": "1200动作同路线，1200→6展开，2400→1206转移；wall -42.4%, Search allocation -64.8%, sampled managed live peak -35.0%。卖血675/1820和成长10555/22248逐字段路线/工作量一致。defense-final=50cfafd5acc642508e18840ab459f69a; native-blood-no-heal=41f101db99fa4f8fb9a55bd6494cc456; native-loop-deploy=d4867a3cb9154340a85fe848d1139a56; UI-LOCALIZATION=275d2dcafd214c62b675f5832a11993d; row-reuse-final=5ec0d3f0b90c450b8c43a87b0cdaee25。纯显示122505断言；两端结构门禁206；Release零警告零错误。无可见Steam验收，不能证明所有未测根的质量。",
     "evidence": "docs/performance/loop-optimization-20260921.md; docs/performance/loop-optimization-20260921-evidence.json; coverage/unattended/generic-loop-bloodletting-no-postcombat-heal-quality.json"
+  },
+  "B015-T016-AFTERIMAGE-ROUTE-20261002": {
+    "status": "PassedWithDocumentedBoundaries",
+    "level": "OriginalRootNativeDifferentialAndProductionPostprocessing",
+    "procedure": "同原ZIP原根、日志指定紧勒先于余像顺序，逐步生产PrepareCardActions取动作；0.111.0/Ritsu0.6.3/同MVID BaseLib3.4.7，120秒。",
+    "expected": "原六步完整/增量/原生状态和RNG一致；余像前移后缺失目标拒绝调整、保留原路线；合法前移继续成功。",
+    "observed": "t016-afterimage-red-063在生产ReplayAdjustedRoute精确Failed target2缺失；相同输入t016-afterimage-green-063 Passed。六步合法生产目标1→2、无重排原生全状态、安全短前移、非法前移返回null、共享路径缺失目标及原路线/native不变均通过。不同于此前强制非法动作；没有验收完整Solve胜利路线发布或整场部署。 既有失效后缀合同Passed；宽固定前缀回合合同起初120秒无result，查明为全新档案洗牌引导阻塞，关闭引导后上游与本分支均Passed；缩小直接ApplyFixedPrefix目标合同Passed（合法致胜/缺失拒绝/native不变）。变基到c4e0b47d后t016-afterimage-rebase-c4e0-063 Passed；STAMPEDE与SHIV部署哨兵交替对照路线、续用戳和工作量一致。",
+    "evidence": "docs/community/b015-follow-up.md; coverage/unattended/b015-t016-afterimage-route.json; src/Testing/B015AdjustedRouteChecks.cs"
+  },
+  "B015-T016-ORIGINAL-PREFIX-20261002": {
+    "status": "Pending",
+    "level": "OriginalRootNativeDifferentialAndBoundedProductionWorkers",
+    "procedure": "真实0.111.0/Ritsu0.6.3/原报告同MVID BaseLib3.4.7；原ZIP原生根与失败日志选牌/动作前缀，120秒；生产准备、串行兄弟及DOP2两父节点2准备/4动作。",
+    "expected": "区别强制历史无效动作与当前生成器自然生成；严格状态/RNG及原生/父节点不变，正确目标/派发/结果归属。",
+    "observed": "t016-parallel-baselib-063总Failed：开战双状态、选牌、前五步完整/增量/原生、生产兄弟及并发归属分项通过，maximumActiveActionReplayWorkers=2。currentGeneratorProducedInvalidTarget=false。强制历史第六步SHIV→ID2精确报目标不存在，实际父节点ID1仍4HP。非生产RED或已修复；未验原DOP16全前沿、原历史Solver及完整Mod环境。",
+    "evidence": "docs/community/b015-follow-up.md; coverage/unattended/b015-t016-original-prefix.json; src/Testing/B015OriginalPrefixChecks.cs; src/Testing/B015ParallelOwnershipChecks.cs"
+  },
+  "B015-T018-STATISTICS-20261002": {
+    "status": "PassedWithDocumentedBoundaries",
+    "level": "HeadlessRuntimeFaultInjectionAndStoreContracts",
+    "procedure": "真实0.111.0；120秒最小请求：消费者构造NUL JSON故障、屏障暂停健康消费者并填满256事件；纯.NET持久化/原生结算合同。",
+    "expected": "统计故障不再积满死队列或中断战斗；明确诊断，快照/上传停止，已接受事件持久化且丢失事件跑局不能恢复为full。",
+    "observed": "Ritsu0.6.5两条路径均同输入修前capacity exceeded、修后Passed；补验排空再发生I/O错误、失败详情及上传门禁通过；纯Store旧full+sent+marker重开修正与纠正收据保留通过。最终两请求在Ritsu0.6.2复核通过。原NUL损坏文件种类/写坏来源未定，非真实部署/上传验收。",
+    "evidence": "docs/community/b015-follow-up.md; coverage/unattended/run-statistics-worker-failure.json; coverage/unattended/run-statistics-saturation.json; tools/RunStatisticsTests/Program.cs"
+  },
+  "B015-T016-T019-BOUNDARIES-20261002": {
+    "status": "Pending",
+    "level": "HeadlessNativeDifferential",
+    "procedure": "真实0.111.0/Ritsu0.6.2和0.6.3，B015-BOUNDARIES，120秒。",
+    "expected": "Stock替补目标ID/Fork/增量完整回放及两步原生SHIV状态一致；1HP CrimsonMantle下一回合死亡，原生败局安全点与预测完整状态一致。",
+    "observed": "b015-boundaries-loss-062和b015-boundaries-063 Passed。T016原包开战ContinuationStamp/native-state均匹配，RestoreOnly在cursor0后自动Hook触发recorded_action_mismatch，另缺选牌录制；后续原日志前五步及生产候选专项见B015-T016-ORIGINAL-PREFIX-20261002，当前生产非法目标未复现。更正：构建身份已在checkpoint.json.build；T019来自f1461c7多人分支的Last(predicate)无人存活异常，非官方0.47.2，冻结main没有此逻辑。 仅重建历史Last守卫的同输入负对照精确复现异常；并非实际历史DLL或完整T5链回放，实验分支补丁未验收。",
+    "evidence": "docs/community/b015-follow-up.md; src/Testing/B015BoundaryChecks.cs; coverage/unattended/b015-boundaries.json"
+  },
+  "B015-T020-MADSCIENCE-20261002": {
+    "status": "Pending",
+    "level": "HeadlessNativeDifferentialAndPacketForensics",
+    "procedure": "真实0.111.0/Ritsu0.6.2，B015-MAD-SCIENCE，120秒；原包战前存档与原版源码核对。",
+    "expected": "合法Skill/Chaos升级、保存、root/Fork及原生出牌全状态/RNG一致；无效None仍明确拒绝。",
+    "observed": "b015-madscience-062-retry Passed。原包TinkerTime事件后的战前牌已为None/None+1，无证据为求解器克隆丢字段；具体替换调用者仍未确定。 最早origin.save已有坏牌；战中永久牌组删除后战斗实例仍在。原包含FreeLoadout/Rewind的MVID，但未取得匹配实现或战前替换操作记录。 独立核实FreeLoadout108分支目录CreateCard→入Deck前Upgrade→Add可产生同形坏牌，且原包另一牌fl_edit=1；仅为机制可行，未匹配历史DLL或证明本局调用，不排除同进程恢复。",
+    "evidence": "docs/community/b015-follow-up.md; src/Testing/B015MadScienceChecks.cs; coverage/unattended/b015-mad-science.json"
+  },
+  "FORK-UPSTREAM-0480-MERGE-20261002": {
+    "status": "PassedWithDocumentedBoundaries",
+    "level": "HeadlessNativeDifferentialAndSearchContracts",
+    "procedure": "24 final native requests at <=120 seconds; multiplayer managed contracts; two independent-official roots at DOP1/DOP2; selected static checks.",
+    "expected": "Single-player target-upstream behavior, native shared semantics, and manual multiplayer ownership remain isolated.",
+    "observed": "24 native Passed; 32 compatibility + 32 contribution contracts; dead teammate/revival; 143 early-turn checks; four comparisons / 344 non-timing fields equal. Two failed clone-fixture attempts retained. Actual NoGC reservation and live network/performance unverified.",
+    "evidence": "docs/strategy/upstream-0480-merge-20261002.md; docs/strategy/upstream-0480-merge-20261002-evidence.json"
   }
 }
