@@ -1,6 +1,6 @@
 # 官方 0.48.0 合并与 fork 0.48.1
 
-[策略索引](README.md) · [逐项证据](upstream-0480-merge-20261002-evidence.json) · [中英玩家说明](../releases/0.48.1-RELEASE_NOTES.md) · [版本状态](../releases/README.md)
+[策略索引](README.md) · [逐项证据](upstream-0480-merge-20261002-evidence.json) · [中英玩家说明](../releases/0.48.1-RELEASE_NOTES.md) · [发布凭证](../releases/0.48.1-PUBLISH.md)
 
 2026-10-02，按用户「继续合并官方的最新版本，并发布release，按照 neat-freak 归档」请求，在 `codex/multiplayer-advisor` 从 `154e6283` 合入官方 `a789aad2613683438803b11ecddd32aa083e1752 / 0.48.0`。上一个官方基线为 `72363308 / 0.47.2`，上一个公开 fork 为0.47.3，来源 `06018378`。本次只取一次官方最新分支证据；上游提交的中国时区日期可能为10月3日，本记录使用本机10月2日。
 
@@ -55,7 +55,7 @@
 | 当前文档与规则 | changed-and-verified | README中英文、多人指南、架构、外部适配手册、两端结构门禁与相关skill同步。过期英文0.47.2入口纠正，规则顶部移除重复发布流水。 |
 | 上游历史 | changed-and-verified | 新官方开发／测试结果标为上游历史；官方多人规划增加醒目参考边界，不覆盖本fork现役手动行为。社区自动认领工作流已有官方仓库身份门，未执行社区外部操作。 |
 | Agent记忆 | out-of-scope / generated-read-only | 本机存在宿主生成的Codex记忆；无可写纠正入口授权，未直接编辑。项目现役事实归文档与AGENTS。其他平台／其他项目不在本轮范围。 |
-| 部署与渠道 | pending | 按release-gate从定版提交构建、四文件部署、一次最小ZIP、annotated tag和GitHub Release；成功后在发布凭证补记，禁止重复远端核对。 |
+| 部署与渠道 | changed-and-verified | 来源 `d543bea8` 正式构建、四文件部署、2,464,773字节最小ZIP、annotated tag与GitHub最新正式版均完成；直接凭证见[发布记录](../releases/0.48.1-PUBLISH.md)，没有发布后重复核对。 |
 | 工作区残留 | verified-current | 构建、发布和原始证据均忽略；四个临时游戏实例已按启动器合同清理。独立官方源码、失败证据和旧发行包保留用于复核。 |
 
 上游社区实验补丁中的空白上下文按原文保留，Git空白检查的三条提示来自该归档补丁；不把它改成不可应用的历史差异。生产源码末尾多余空行已移除，未改变行为。
@@ -82,4 +82,4 @@ tools/run-unattended-test-macos.sh \
   --timeout-seconds 120 --cleanup-instance-on-exit
 ```
 
-全部24个请求的精确输入由结构化证据给出；不要求每次维护重跑整批。正式构建、部署、最小包与发布从版本索引进入对应凭证。
+全部24个请求的精确输入由结构化证据给出；不要求每次维护重跑整批。正式构建、部署、最小包与发布均已完成，见[渠道凭证](../releases/0.48.1-PUBLISH.md)。可见游戏和真实联机验收为out-of-scope，复核材料保留不影响此次发布完成。

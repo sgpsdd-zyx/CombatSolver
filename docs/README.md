@@ -1,6 +1,6 @@
 # CombatSolver 文档导航
 
-当前代码已合入官方 **0.48.0**（`a789aad2`），多人 fork **0.48.1 准备发布**。当前版本状态统一见[版本索引](releases/README.md)；本次[玩家说明](releases/0.48.1-RELEASE_NOTES.md)、[合并验证与归档](strategy/upstream-0480-merge-20261002.md)和[多人指南](multiplayer-advisor.md)分别维护变化、证据与现役行为。
+当前代码已合入官方 **0.48.0**（`a789aad2`），多人 fork **[0.48.1 已发布](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.48.1)**。本地部署、正式包及渠道结果见[发布凭证](releases/0.48.1-PUBLISH.md)，当前版本状态统一见[版本索引](releases/README.md)；本次[玩家说明](releases/0.48.1-RELEASE_NOTES.md)、[合并验证与归档](strategy/upstream-0480-merge-20261002.md)和[多人指南](multiplayer-advisor.md)分别维护变化、证据与现役行为。
 
 [多人原生实验](strategy/multiplayer-experiments-20260923/implementation.md)按“只有本机使用军师、队友独立决策”记录原生差分与受控脚本表现；收益、恶化和未知结果分开，真实联机仍未验收。现役操作与限制见[多人指南](multiplayer-advisor.md)。
 

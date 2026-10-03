@@ -546,5 +546,14 @@
     "Full 40-minute early-turn search quality",
     "Full release gate or clean installation"
   ],
-  "publication": "See docs/releases/0.48.1-PUBLISH.md after publication; stage commands are the only completion evidence."
+  "publication": {
+    "status": "published",
+    "sourceCommit": "d543bea88a3561abded963b0fb26fae098101fda",
+    "annotatedTag": "v0.48.1",
+    "url": "https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.48.1",
+    "zipBytes": 2464773,
+    "localDeployment": "success",
+    "receipt": "docs/releases/0.48.1-PUBLISH.md",
+    "rawEvidence": ".local/release-0.48.1/publish-state.json"
+  }
 }
