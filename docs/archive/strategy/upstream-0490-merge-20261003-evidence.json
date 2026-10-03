@@ -618,8 +618,31 @@
     }
   },
   "publication": {
-    "status": "pending",
-    "scope": "origin task branch, own annotated tag, GitHub latest release, local mod deployment"
+    "version": "0.49.2",
+    "sourceCommit": "980f388fa9f5a7dbf1571a51ce85fa8b6465c70e",
+    "exitCode": 0,
+    "url": "https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.49.2",
+    "latest": true,
+    "draft": false,
+    "prerelease": false,
+    "asset": "releases/CombatSolver-0.49.2.zip",
+    "notes": "docs/releases/0.49.2-RELEASE_NOTES.md",
+    "utc": "2026-10-03T17:34:09.400374+00:00",
+    "upstream": "4b5537d00bfcbc822b2fbf78fc6da0c3e45ad161",
+    "build": {
+      "sourceCommit": "980f388fa9f5a7dbf1571a51ce85fa8b6465c70e",
+      "startedUtc": "2026-10-03T17:33:05.471160+00:00",
+      "finishedUtc": "2026-10-03T17:33:17.114492+00:00",
+      "exitCode": 0,
+      "wallSeconds": 11.22,
+      "privateValuesPrinted": false
+    },
+    "zipBytes": 2487324,
+    "localDeployment": "success; exact manifest/DLL/LICENSE/THIRD_PARTY_NOTICES copies",
+    "branchAndTagPush": "atomic push successful",
+    "officialV0491Tag": "preserved",
+    "preparedV0491": "unpublished, superseded by 0.49.2",
+    "postPublicationVerification": "no repeated package/build/deploy or remote reads"
   },
   "notVerified": [
     "actual No-GC region diagnostic-failure prerequisite",
@@ -703,5 +726,20 @@
       "searchFiles": 259
     },
     "coverageCatalog": "Reuses the 0.49.1 prepared-candidate snapshot; urgent change affects only Runtime GC ownership, not coverage inventory."
+  },
+  "closeout": {
+    "code": "changed-and-verified",
+    "runtime": "changed-and-verified; local files deployed and GitHub release command succeeded; visible/live network unverified",
+    "documentation": "changed-and-verified",
+    "rules": "changed-and-verified; PowerShell execution unverified",
+    "memory": "out-of-scope; generated-read-only",
+    "workspace": "pending only for post-report review-material deletion; code/docs integrated",
+    "sourceCommit": "980f388fa9f5a7dbf1571a51ce85fa8b6465c70e",
+    "documentationCounts": {
+      "files": 566,
+      "links": 2919,
+      "errors": 0
+    },
+    "inventoryFiles": 2426
   }
 }

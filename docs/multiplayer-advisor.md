@@ -1,6 +1,6 @@
 # 多人军师（基于官方 0.49.1）
 
-当前代码基于官方 **0.49.1**（`4b5537d0`），fork **0.49.2 正在准备发布**。当前交付状态统一见[版本索引](releases/README.md)，本轮证据见[合并记录](archive/strategy/upstream-0490-merge-20261003.md)。多人继续使用本机贡献目标、无来源伤害折算与手动重算，支持烘焙手套原生选牌期间计算。
+当前代码基于官方 **0.49.1**（`4b5537d0`），fork **[0.49.2 已发布](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.49.2)**。当前交付状态统一见[版本索引](releases/README.md)，本轮证据见[合并记录](archive/strategy/upstream-0490-merge-20261003.md)。多人继续使用本机贡献目标、无来源伤害折算与手动重算，支持烘焙手套原生选牌期间计算。
 
 多人使用三敌方周期的本机贡献目标、伤害/代价前沿与最长十四周期的条件续行。无来源实际伤害按阶段人数折算参与选路，个人贡献仍按真实归属。阶段目标的[实施依据](archive/strategy/multiplayer-cooperative-planning-20260922/implementation.md)与[伤害归属实验](archive/strategy/multiplayer-shared-damage-20260923/implementation.md)保留原始版本和结论范围。
 

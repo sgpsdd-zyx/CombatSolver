@@ -1,6 +1,6 @@
 # CombatSolver 测试入口
 
-本 fork 当前基于官方 `4b5537d0 / 0.49.1`，准备发布 0.49.2。测试分层与命令见 [无人测试](HEADLESS_TESTING.md)，源码职责见 [Testing](../src/Testing/README.md)。历史结果不替代本轮验证。
+本 fork 当前基于官方 `4b5537d0 / 0.49.1`，已发布 0.49.2。测试分层与命令见 [无人测试](HEADLESS_TESTING.md)，源码职责见 [Testing](../src/Testing/README.md)。历史结果不替代本轮验证。
 
 ## 2026-10-03 本轮结果
 
