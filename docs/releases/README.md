@@ -4,7 +4,7 @@
 
 按版本倒序列出已有玩家更新日志，包括历史草案。是否正式发布以对应 Git 标签和发布记录为准；未发布改动见 [开发笔记](../DEVELOPMENT_NOTES.md)。发布 ZIP 存放在仓库根目录的 `releases/`，此处只保存文档。
 
-**多人 fork 0.50.1 正在定版**，基于官方 `0d290fbe / 0.50.0`。合入单人搜索与智能药水优化、回合结算和兼容性修复，多人继续保持手动军师与贡献政策。见[完整中英正文](0.50.1-RELEASE_NOTES.md)和[合并验证与归档](../archive/strategy/upstream-0500-merge-20261005.md)。当前已发布版本仍为 [0.49.2](0.49.2-PUBLISH.md)，正式渠道状态在发布成功后更新。
+**[多人 fork 0.50.1 已发布](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.50.1)**，基于官方 `0d290fbe / 0.50.0`，来源 `9976da28`。合入单人搜索与智能药水优化、回合结算和兼容性修复，多人继续保持手动军师与贡献政策。见[完整中英正文](0.50.1-RELEASE_NOTES.md)、[发布凭证](0.50.1-PUBLISH.md)和[合并验证与归档](../archive/strategy/upstream-0500-merge-20261005.md)。上一公开 fork 为 [0.49.2](0.49.2-PUBLISH.md)。
 
 再前一公开 fork 为 **[0.48.1](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.48.1)**，基于官方 `a789aad2 / 0.48.0`，来源 `d543bea8`，见[发布凭证](0.48.1-PUBLISH.md)。此前为 **[0.47.3](0.47.3-PUBLISH.md)**、[0.47.2](0.47.2-PUBLISH.md)和[0.46.6](0.46.6-PUBLISH.md)。
 
@@ -14,7 +14,7 @@
 
 | 版本系列 | 更新日志 |
 |---|---|
-| 0.50 | [0.50.1（fork，定版中）](0.50.1-RELEASE_NOTES.md) · [0.50.0 官方原文](0.50.0-RELEASE_NOTES.md) |
+| 0.50 | [0.50.1（fork，已发布）](0.50.1-RELEASE_NOTES.md) · [0.50.0 官方原文](0.50.0-RELEASE_NOTES.md) |
 | 0.49 | [0.49.4 官方原文](0.49.4-RELEASE_NOTES.md) · [0.49.3 官方原文](0.49.3-RELEASE_NOTES.md) · [0.49.2 官方原文](upstream/0.49.2-RELEASE_NOTES.md) · [0.49.1 官方原文](upstream/0.49.1-RELEASE_NOTES.md) · [0.49.1（fork，历史准备版）](0.49.1-PUBLISH.md) · [0.49.2（fork，已发布）](0.49.2-RELEASE_NOTES.md) · [0.49.0 官方原文](0.49.0-RELEASE_NOTES.md) |
 | 0.48 | [0.48.1（fork，已发布）](0.48.1-RELEASE_NOTES.md) · [0.48.1 官方原文](upstream/0.48.1-RELEASE_NOTES.md) · [0.48.0 官方原文](0.48.0-RELEASE_NOTES.md) |
 | 0.47 | [0.47.3 官方原文](upstream/0.47.3-RELEASE_NOTES.md) · [0.47.3（fork，已发布）](0.47.3-RELEASE_NOTES.md) · [0.47.2 官方原文](upstream/0.47.2-RELEASE_NOTES.md) · [0.47.2（fork，已发布）](0.47.2-RELEASE_NOTES.md) · [0.47.1 官方原文](0.47.1-RELEASE_NOTES.md) · [0.47.0 官方原文](0.47.0-RELEASE_NOTES.md) |

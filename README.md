@@ -4,7 +4,7 @@ Combat Solver 是《杀戮尖塔 2》的战斗路线求解器，本 fork 支持�
 
 单人模式下，玩家可以只查看建议，也可以让求解器执行当前回合，或连续接管整场战斗。多人模式只提供手动请求的建议。搜索不会修改游戏 RNG，也不会在后台操作真实战斗状态。
 
-多人 fork 已合入官方 **0.50.0**，正在定版 **0.50.1**。包含单人搜索与智能药水优化、回合结算和兼容性修复；多人保持手动军师、烘焙手套选牌计算和十四敌方周期。见[中英更新日志](docs/releases/0.50.1-RELEASE_NOTES.md)、[发布状态](docs/releases/README.md)和[合并验证](docs/archive/strategy/upstream-0500-merge-20261005.md)。当前公开版为[0.49.2](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.49.2)。
+多人 fork **[0.50.1 已发布](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.50.1)**，合入官方 **0.50.0**。包含单人搜索与智能药水优化、回合结算和兼容性修复；多人保持手动军师、烘焙手套选牌计算和十四敌方周期。见[中英更新日志](docs/releases/0.50.1-RELEASE_NOTES.md)、[发布凭证](docs/releases/0.50.1-PUBLISH.md)和[合并验证](docs/archive/strategy/upstream-0500-merge-20261005.md)。
 
 **参与开发：** [社区任务入口](https://github.com/Torch1230/CombatSolver/issues/171)按每批五个主题发布故障修复与路线优化任务，每主题一至两个 0.47.x 代表包。[贡献指南](CONTRIBUTING.md)说明整批认领与 PR 流程，[夹具与脚手架指南](docs/community/testing-guide.md)说明差分、包回放与策略实验入口。
 
@@ -14,7 +14,7 @@ Combat Solver 是《杀戮尖塔 2》的战斗路线求解器，本 fork 支持�
 
 [多人军师](docs/multiplayer-advisor.md) 推荐本人的出牌和用药路线，最多推演十四个敌方回合。队友行动后自行决定何时重算；推演假设队友后续不主动出牌或用药，但仍结算其被动效果。多人功能目前供试用，尚未完成真实联机验收。
 
-**English UI:** Set the game language to English. Card pills and choices refresh during play; restart to refresh other existing windows. In single-player, use **Play turn** or **Auto: On**. Multiplayer fork **0.50.1 is being prepared**, based on upstream **0.50.0**; see the [release status](docs/releases/README.md) and [release notes](docs/releases/0.50.1-RELEASE_NOTES.md). You can calculate advice while Toasty Mittens awaits your exhaust choice, then confirm the choice yourself. Multiplayer retains manual advice, local contribution goals, up to fourteen enemy cycles, and doubled ordinary time and node limits. Teammates' future active actions are not modeled; live multiplayer is not yet verified. **Settings > Reports > Upload report** submits a bug report. Logs, raw errors, and some detailed diagnostics retain their original text.
+**English UI:** Set the game language to English. Card pills and choices refresh during play; restart to refresh other existing windows. In single-player, use **Play turn** or **Auto: On**. Multiplayer fork **0.50.1 is released**, based on upstream **0.50.0**; see the [release record](docs/releases/0.50.1-PUBLISH.md) and [release notes](docs/releases/0.50.1-RELEASE_NOTES.md). You can calculate advice while Toasty Mittens awaits your exhaust choice, then confirm the choice yourself. Multiplayer retains manual advice, local contribution goals, up to fourteen enemy cycles, and doubled ordinary time and node limits. Teammates' future active actions are not modeled; live multiplayer is not yet verified. **Settings > Reports > Upload report** submits a bug report. Logs, raw errors, and some detailed diagnostics retain their original text.
 
 界面跟随游戏语言：简体/繁体中文使用现有中文文案，其他语言使用英文。简化版不提供独立语言开关；卡牌胶囊、选牌和相关悬停说明支持运行中切换语言，其他既有窗口可通过重启统一刷新。
 

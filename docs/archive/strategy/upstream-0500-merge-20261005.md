@@ -1,6 +1,6 @@
 # 官方 0.50.0 合并与多人 fork 0.50.1
 
-日期：2026-10-05。[当前发布状态](../../releases/README.md) · [玩家中英正文](../../releases/0.50.1-RELEASE_NOTES.md) · [逐项结果](upstream-0500-merge-20261005-evidence.json) · [复跑输入](upstream-0500-merge-20261005-inputs.json)
+日期：2026-10-05。[0.50.1 发布凭证](../../releases/0.50.1-PUBLISH.md) · [玩家中英正文](../../releases/0.50.1-RELEASE_NOTES.md) · [逐项结果](upstream-0500-merge-20261005-evidence.json) · [复跑输入](upstream-0500-merge-20261005-inputs.json)
 
 ## 来源与范围
 
@@ -62,4 +62,4 @@ AGENTS为25,367字节/194行，约占默认32KiB预算的77.4%，保留体量提
 
 **复核现场仍保留，等待用户确认后清场。** neat-freak明确要求“只有用户看完汇报后明确确认可以清场，才执行删除并补充汇报清场结果”。本轮文档归档没有删除测试证据；清场确认不影响已授权的发布工作。
 
-原始回执目录：`.local/upstream-update-20261005/`；正式发布阶段将单独记录在 `.local/release-0.50.1/`。每阶段直接成功证据只取一次，纯文档/版本元数据不重跑行为测试。
+原始回执目录：`.local/upstream-update-20261005/`；正式发布阶段记录在 `.local/release-0.50.1/`。`9976da28` 完成一次正式构建、本机部署与最小 ZIP，分支和 `v0.50.1` 原子推送后创建 GitHub 最新正式版；完整中英各 17 项正文随 Release 发布。每阶段直接成功证据只取一次，纯文档/版本元数据不重跑行为测试。

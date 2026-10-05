@@ -1,6 +1,6 @@
 # CombatSolver 测试入口
 
-当前源码基于官方 `0d290fbe / 0.50.0`，fork 0.50.1 定版中。发布状态见 [版本索引](releases/README.md)，测试分层见 [无人测试](HEADLESS_TESTING.md)，职责见 [Testing](../src/Testing/README.md)。历史结果不替代本轮验证。
+当前源码基于官方 `0d290fbe / 0.50.0`，fork [0.50.1 已发布](releases/0.50.1-PUBLISH.md)。发布状态见 [版本索引](releases/README.md)，测试分层见 [无人测试](HEADLESS_TESTING.md)，职责见 [Testing](../src/Testing/README.md)。历史结果不替代本轮验证。
 
 ## 2026-10-05 本轮结果
 

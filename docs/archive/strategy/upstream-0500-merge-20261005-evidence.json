@@ -626,13 +626,56 @@
   ],
   "rawEvidenceRoot": ".local/upstream-update-20261005",
   "stageEvidencePolicy": "Do not rerun passed tests for unchanged behavior and inputs.",
-  "release": "Pending source commit, final build, local deployment, ZIP and GitHub release.",
+  "release": {
+    "status": "Published",
+    "date": "2026-10-05",
+    "version": "0.50.1",
+    "sourceCommit": "9976da283dc4d8bb675a924d3dd52ccfed4617e6",
+    "tag": "v0.50.1",
+    "tagType": "annotated",
+    "build": {
+      "status": "Passed",
+      "warnings": 0,
+      "errors": 0,
+      "reportedSeconds": 9.17,
+      "wallSeconds": 9.376,
+      "connectionMetadataFields": 5
+    },
+    "localDeployment": {
+      "status": "Passed",
+      "platform": "macOS arm64",
+      "files": [
+        "CombatSolver.json",
+        "CombatSolver.dll",
+        "LICENSE",
+        "THIRD_PARTY_NOTICES.md"
+      ]
+    },
+    "zip": {
+      "path": "releases/CombatSolver-0.50.1.zip",
+      "bytes": 2542229,
+      "status": "CreatedOnce"
+    },
+    "branchAndTagPush": "PassedAtomic",
+    "github": {
+      "url": "https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.50.1",
+      "latest": true,
+      "draft": false,
+      "prerelease": false,
+      "utc": "2026-10-05T14:04:54.178267+00:00",
+      "chineseEntries": 17,
+      "englishEntries": 17
+    },
+    "receiptRoot": ".local/release-0.50.1",
+    "postPublishRevalidation": false
+  },
   "knowledgeChecks": {
     "documentation": {
       "status": "Passed",
       "files": 600,
-      "links": 3114,
-      "errors": 0
+      "links": 3116,
+      "errors": 0,
+      "phase": "BeforeReleaseSourceCommit"
     },
     "coverageLayout": {
       "status": "Passed",
@@ -654,6 +697,12 @@
       "percent": 77.4
     },
     "performanceArchiveFiles": 34,
-    "cleanup": "Review materials retained; no cleanup approval requested before final report."
+    "cleanup": "Review materials retained; no cleanup approval requested before final report.",
+    "postPublicationDocumentation": {
+      "status": "Passed",
+      "files": 602,
+      "links": 3129,
+      "errors": 0
+    }
   }
 }
