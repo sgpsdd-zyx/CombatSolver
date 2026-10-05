@@ -2063,5 +2063,15 @@
       "Strict differential for positive/zero/negative gold, BowlerHat and Ectoplasm, held/melted/wrong owner, HandOfGreed fatal route, Fork/RNG/parent/live",
       "Re-run relevant final regression if production semantics change"
     ]
+  },
+  "afterCombatEndReviewProgress": {
+    "overridesReviewed": 45,
+    "newModelsExtracted": 36,
+    "newDependenciesExtracted": 11,
+    "reusedBodies": 9,
+    "source": "docs/archive/performance/upstream-0500/native-healing-component-audit-20261003.json:afterCombatEndBodyReview",
+    "runtimeCertificateAdded": false,
+    "completeHealingAudit": false,
+    "scope": "native body/helper and end ordering review; notifications/OnUpgrade/enchantment/CombatStateChanged/extensions/source composition pending"
   }
 }

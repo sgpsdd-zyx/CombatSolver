@@ -1,6 +1,6 @@
 # CombatSolver 战斗钩子覆盖目录
 
-生成来源：CombatSolver `0.49.1`，游戏 `0.111.0`，模拟核心 `embedded`。本文件由 `tools/inspection/CoverageCatalog` 生成，不手工编辑。
+生成来源：CombatSolver `0.50.1`，游戏 `0.111.0`，模拟核心 `embedded`。本文件由 `tools/inspection/CoverageCatalog` 生成，不手工编辑。
 
 ## 汇总
 
@@ -13,8 +13,8 @@
 | Monster | 352 | 0 | 0 | 15 | 0 | 0 |
 | Orb | 18 | 0 | 0 | 14 | 0 | 3 |
 | Potion | 67 | 0 | 0 | 17 | 0 | 50 |
-| Power | 520 | 0 | 0 | 189 | 0 | 58 |
-| Relic | 508 | 0 | 0 | 121 | 0 | 9 |
+| Power | 520 | 0 | 0 | 191 | 0 | 60 |
+| Relic | 508 | 0 | 0 | 123 | 0 | 9 |
 
 ## 有效支持状态
 
@@ -40,7 +40,7 @@
 | Orb | 15 | 15 | 0 |
 | Potion | 66 | 66 | 0 |
 | Power | 370 | 370 | 0 |
-| Relic | 197 | 197 | 0 |
+| Relic | 198 | 198 | 0 |
 
 ## 分支内计算变量
 

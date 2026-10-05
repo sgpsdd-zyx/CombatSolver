@@ -16,13 +16,6 @@ internal sealed partial class CombatBeamSolver
         IReadOnlyList<Player> players = combat.AdvisorExtraTurnPlayers.Count > 0
             ? combat.AdvisorExtraTurnPlayers : combat.Players;
         Creature[] participants = players.Select(player => player.Creature).ToArray();
-        List<Player> extra = [];
-        foreach (Player player in players)
-        {
-            if (!combat.TryPrepareExtraPlayerTurn(simulator, player, out bool takingExtra, out _))
-                return false;
-            if (takingExtra) extra.Add(player);
-        }
         if (!PlayerTurnEndLifecycle.RunPhaseOne(simulator, combat, _player, participants)) return false;
         foreach (Player player in players) combat.CommitHistoryCourseTurn(player);
         combat.NormalizeAeonglassWithers(simulator);
@@ -37,9 +30,14 @@ internal sealed partial class CombatBeamSolver
         }
         if (!PlayerTurnEndLifecycle.RunPhaseTwo(simulator, combat, participants)) return false;
         if (!CorePowerSupport.ApplyEnemyDeathPowers(simulator, combat, combat.KnownEnemies, deaths)) return false;
+        // Native extra-turn queries run after both turn-end phases have settled.
+        Player[] extra = players.Where(player => combat.IsPlayerActiveForHooks(player)
+            && CombatSolver.Engine.InCombat.Mirrors.HookMirrors.ShouldTakeExtraTurn(simulator, combat, player)).ToArray();
         combat.AdvisorExtraTurnPlayers = extra.ToArray();
-        foreach (Player player in extra) combat.ConsumeExtraTurnSources(player);
-        extraTurn = extra.Count > 0;
+        foreach (Player player in extra)
+            if (!CombatSolver.Engine.InCombat.Mirrors.HookMirrors.AfterTakingExtraTurn(simulator, combat, player))
+                return false;
+        extraTurn = extra.Length > 0;
         return true;
     }
 
@@ -145,8 +143,6 @@ internal sealed partial class CombatBeamSolver
         shufflesCrossed += simulator.ShuffleEventCount - beforeShuffles;
         combat.NormalizeAeonglassWithers(simulator);
         combat.NormalizeCardAfflictions(simulator);
-        combat.SetPredictedEnemyIntents(combat.CurrentMonsterMoves()
-            .Where(move => move.AttackHits.Count > 0).Select(move => move.Owner));
         simulator.CheckWinCondition(combat.GetPlayerTurnNumber(_player));
         return SearchBoundaryReason.None;
     }

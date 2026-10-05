@@ -1,0 +1,659 @@
+{
+  "date": "2026-10-05",
+  "officialCommit": "0d290fbee7e2779d2cebd8b8f652d82d00b6e8fc",
+  "forkBefore": "1bca5f3f0de3edf94bcadbb2c4bb5bd4e661fe79",
+  "forkVersion": "0.50.1",
+  "level": "TargetedNativeFullStateAndManagedContracts",
+  "native": [
+    {
+      "runId": "macos-b0e468bff0954eab96f3921e3ef8184b",
+      "scenarioId": "EXTRA-TURN-MIRROR-ORDER",
+      "status": "Passed",
+      "characterId": "CHARACTER.IRONCLAD",
+      "encounterId": "ENCOUNTER.CHOMPERS_NORMAL",
+      "seed": "EXTRA-TURN-MIRROR-ORDER",
+      "elapsedMilliseconds": 17702.1284,
+      "completedChecks": [
+        "ExtraTurnMirrors:NativeOrder:ThreePositions:ShortCircuit:FullState:Fork:LiveIsolation:Sealed",
+        "NativeOutcome:combatEnded=False:turn=1:hp=80:maxHp=80"
+      ],
+      "error": null,
+      "evidencePath": ".local/upstream-update-20261005/native-batch/01-result.json",
+      "batch": "native-batch"
+    },
+    {
+      "runId": "macos-ff83c5750f1048b1868bea76133ce958",
+      "scenarioId": "VOID-FORM-TURN-CHOICES",
+      "status": "Passed",
+      "characterId": "CHARACTER.REGENT",
+      "encounterId": "ENCOUNTER.CHOMPERS_NORMAL",
+      "seed": "VOID-FORM-TURN-CHOICES",
+      "elapsedMilliseconds": 3564.575,
+      "completedChecks": [
+        "VoidForm:ForcedTurn:Tyranny:Stratagem:FullReplay:ExecutionContinuation:Native",
+        "NativeOutcome:combatEnded=False:turn=2:hp=59:maxHp=75"
+      ],
+      "error": null,
+      "evidencePath": ".local/upstream-update-20261005/native-batch/02-result.json",
+      "batch": "native-batch"
+    },
+    {
+      "runId": "macos-335f07d2857646dd8ea7760a34ca97cd",
+      "scenarioId": "VOID-FORM-DEPLOY-CHOICES",
+      "status": "Passed",
+      "characterId": "CHARACTER.REGENT",
+      "encounterId": "ENCOUNTER.KNOWLEDGE_DEMON_BOSS",
+      "seed": "VOID-FORM-DEPLOY-CHOICES",
+      "elapsedMilliseconds": 4552.6156,
+      "completedChecks": [
+        "VoidForm:ForcedTurn:Tyranny:Stratagem:FullReplay:ExecutionContinuation:Native",
+        "NativeOutcome:combatEnded=False:turn=2:hp=75:maxHp=75"
+      ],
+      "error": null,
+      "evidencePath": ".local/upstream-update-20261005/native-batch/03-result.json",
+      "batch": "native-batch"
+    },
+    {
+      "runId": "macos-5c56b3a53005416083e8802bf9cd2b14",
+      "scenarioId": "GROUP-DEBUFF-ROSTER-CHANGE",
+      "status": "Failed",
+      "characterId": "NECROBINDER",
+      "encounterId": "CHOMPERS_NORMAL",
+      "seed": "GROUP-DEBUFF-ROSTER-CHANGE",
+      "elapsedMilliseconds": 3399.4258,
+      "completedChecks": [],
+      "error": "System.InvalidOperationException: 群体效果夹具未在逐敌结算期间杀死第一个目标。\n   at CombatSolver.UnattendedTestRunner.AssertGroupDebuffRosterChangeAsync(CombatState combat, Player player)\n   at CombatSolver.UnattendedTestRunner.Executor.ExecuteAsync(ScenarioContext scenario)\n   at CombatSolver.UnattendedTestRunner.RunAsync()",
+      "evidencePath": ".local/upstream-update-20261005/native-batch/04-result.json",
+      "batch": "native-batch"
+    },
+    {
+      "runId": "macos-48a6371d1b2e4e8b9351144d6f23b1aa",
+      "scenarioId": "GOLD-INACTIVE-LIFECYCLE",
+      "status": "Passed",
+      "characterId": "CHARACTER.IRONCLAD",
+      "encounterId": "ENCOUNTER.CHOMPERS_NORMAL",
+      "seed": "GOLD-INACTIVE-LIFECYCLE",
+      "elapsedMilliseconds": 17422.6935,
+      "completedChecks": [
+        "GoldHooks:PlayerDeath:NativeDeactivation:OrderedRunListeners:GainGold:RelicInactive:ForkIsolation",
+        "NativeOutcome:combatEnded=False:turn=1:hp=80:maxHp=80"
+      ],
+      "error": null,
+      "evidencePath": ".local/upstream-update-20261005/native-remaining/01-result.json",
+      "batch": "native-remaining"
+    },
+    {
+      "runId": "macos-404c7a79ef6c4867b7e4935838542d9b",
+      "scenarioId": "PLASMA-TURN-START-PASSIVES",
+      "status": "Passed",
+      "characterId": "CHARACTER.DEFECT",
+      "encounterId": "ENCOUNTER.CHOMPERS_NORMAL",
+      "seed": "PLASMA-TURN-START-PASSIVES",
+      "elapsedMilliseconds": 2287.0634,
+      "completedChecks": [
+        "PlasmaTurnStart:FirstAndLaterOrbs:CablesAndBase:NativeFullState:Fork",
+        "NativeOutcome:combatEnded=False:turn=1:hp=75:maxHp=75"
+      ],
+      "error": null,
+      "evidencePath": ".local/upstream-update-20261005/native-remaining/02-result.json",
+      "batch": "native-remaining"
+    },
+    {
+      "runId": "macos-2a5c03e8180c48cbad199ff89c2e8037",
+      "scenarioId": "TURN-SETUP-DELAYED-ENERGY",
+      "status": "Passed",
+      "characterId": "CHARACTER.IRONCLAD",
+      "encounterId": "ENCOUNTER.CHOMPERS_NORMAL",
+      "seed": "TURN-SETUP-DELAYED-ENERGY",
+      "elapsedMilliseconds": 2690.7498,
+      "completedChecks": [
+        "TURN-SETUP-DELAYED-ENERGY:FullState:Native:Fork",
+        "NativeOutcome:combatEnded=False:turn=5:hp=80:maxHp=80"
+      ],
+      "error": null,
+      "evidencePath": ".local/upstream-update-20261005/native-remaining/03-result.json",
+      "batch": "native-remaining"
+    },
+    {
+      "runId": "macos-bb14d1b168e5454bb37b1246ef223d5a",
+      "scenarioId": "NINJA-SCROLL-ENTRY",
+      "status": "Passed",
+      "characterId": "CHARACTER.SILENT",
+      "encounterId": "ENCOUNTER.CHOMPERS_NORMAL",
+      "seed": "NINJA-SCROLL-ENTRY",
+      "elapsedMilliseconds": 2394.7674,
+      "completedChecks": [
+        "NINJA_SCROLL:FirstTurnBeforeHandDraw:GeneratedHistory:OrderedHand:Fork:Native",
+        "NativeOutcome:combatEnded=False:turn=1:hp=70:maxHp=70"
+      ],
+      "error": null,
+      "evidencePath": ".local/upstream-update-20261005/native-remaining/04-result.json",
+      "batch": "native-remaining"
+    },
+    {
+      "runId": "macos-3c145d25bd5e40af99827021fdde3ff6",
+      "scenarioId": "PAELS-EYE-AUTOPOST-ORDER",
+      "status": "Passed",
+      "characterId": "CHARACTER.IRONCLAD",
+      "encounterId": "ENCOUNTER.CHOMPERS_NORMAL",
+      "seed": "PAELS-EYE-AUTOPOST-ORDER",
+      "elapsedMilliseconds": 2725.8951,
+      "completedChecks": [
+        "PAELS-EYE-AUTOPOST-ORDER:FullState:Native:Fork",
+        "NativeOutcome:combatEnded=False:turn=2:hp=80:maxHp=80"
+      ],
+      "error": null,
+      "evidencePath": ".local/upstream-update-20261005/native-remaining/05-result.json",
+      "batch": "native-remaining"
+    },
+    {
+      "runId": "macos-8bcca85f12b040c4a569ed0d61826ef8",
+      "scenarioId": "WATERFALL-ATTACK-INTENT-CHANGE",
+      "status": "Passed",
+      "characterId": "CHARACTER.DEFECT",
+      "encounterId": "ENCOUNTER.WATERFALL_GIANT_BOSS",
+      "seed": "WATERFALL-ATTACK-INTENT-CHANGE",
+      "elapsedMilliseconds": 2499.2489,
+      "completedChecks": [
+        "Lifecycle:GO_FOR_THE_EYES:EnemyHp=999999999/999999999:NativePlayPile=",
+        "Lifecycle:GO_FOR_THE_EYES:EnemyHp=999999996/999999996:NativePlayPile=",
+        "WaterfallIntent:AttackToAboutToBlow:DamageBeforeWeak:NativeFullState:Fork",
+        "NativeOutcome:combatEnded=False:turn=1:hp=75:maxHp=75"
+      ],
+      "error": null,
+      "evidencePath": ".local/upstream-update-20261005/native-remaining/06-result.json",
+      "batch": "native-remaining"
+    },
+    {
+      "runId": "macos-ab6171a808f24072a09446992af90adc",
+      "scenarioId": "BLOCK-CARD-REACTIVE-DAMAGE",
+      "status": "Passed",
+      "characterId": "CHARACTER.IRONCLAD",
+      "encounterId": "ENCOUNTER.CHOMPERS_NORMAL",
+      "seed": "BLOCK-CARD-REACTIVE-DAMAGE",
+      "elapsedMilliseconds": 2834.4412,
+      "completedChecks": [
+        "Lifecycle:IRON_WAVE:EnemyHp=58/58:NativePlayPile=",
+        "Lifecycle:IRON_WAVE:EnemyHp=51/51:NativePlayPile=",
+        "Lifecycle:ARMAMENTS:EnemyHp=51/51:NativePlayPile=",
+        "Lifecycle:TAUNT:EnemyHp=51/51:NativePlayPile=",
+        "BlockCards:IronWaveThorns:ArmamentsUpgrade:Taunt:NativeFullState:Fork",
+        "NativeOutcome:combatEnded=False:turn=1:hp=80:maxHp=80"
+      ],
+      "error": null,
+      "evidencePath": ".local/upstream-update-20261005/native-remaining/07-result.json",
+      "batch": "native-remaining"
+    },
+    {
+      "runId": "macos-363f264c49c144bdae774d106e1766a3",
+      "scenarioId": "TURN-RESOURCE-HOOK-ISOLATION",
+      "status": "Passed",
+      "characterId": "CHARACTER.IRONCLAD",
+      "encounterId": "ENCOUNTER.CHOMPERS_NORMAL",
+      "seed": "TURN-RESOURCE-HOOK-ISOLATION",
+      "elapsedMilliseconds": 2565.5113,
+      "completedChecks": [
+        "TurnResources:NativeValues:LiveCombatCompletion:LiveMaxEnergy:LiveTurnAdvance:FutureTurn:ForkIsolation",
+        "NativeOutcome:combatEnded=False:turn=1:hp=80:maxHp=80"
+      ],
+      "error": null,
+      "evidencePath": ".local/upstream-update-20261005/native-remaining/08-result.json",
+      "batch": "native-remaining"
+    },
+    {
+      "runId": "macos-b1f81299def14c5192c79e600baa6faf",
+      "scenarioId": "COMPONENT-HEALING-BOUND",
+      "status": "Failed",
+      "characterId": "IRONCLAD",
+      "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+      "seed": "COMPONENT-HEALING-BOUND",
+      "elapsedMilliseconds": 2576.5469,
+      "completedChecks": [],
+      "error": "System.InvalidOperationException: Component root rejected: native-version\n   at CombatSolver.UnattendedTestRunner.AssertComponentHealingAsync(CombatState live, Player player)\n   at CombatSolver.UnattendedTestRunner.Executor.ExecuteAsync(ScenarioContext scenario)\n   at CombatSolver.UnattendedTestRunner.RunAsync()",
+      "evidencePath": ".local/upstream-update-20261005/native-remaining/09-result.json",
+      "batch": "native-remaining"
+    },
+    {
+      "runId": "macos-99eb4f4970974f19a284e45309dda584",
+      "scenarioId": "GROUP-DEBUFF-ROSTER-CHANGE",
+      "status": "Passed",
+      "characterId": "CHARACTER.NECROBINDER",
+      "encounterId": "ENCOUNTER.CHOMPERS_NORMAL",
+      "seed": "COMBATSOLVER",
+      "elapsedMilliseconds": 18474.7183,
+      "completedChecks": [
+        "GroupDebuff:RosterChange:ReactiveDraw:AutoPlayDeath:RemainingTarget:NativeFullState:Fork",
+        "NativeOutcome:combatEnded=False:turn=1:hp=66:maxHp=66"
+      ],
+      "error": null,
+      "evidencePath": ".local/upstream-update-20261005/native-final/01-result.json",
+      "batch": "native-final"
+    },
+    {
+      "runId": "macos-515d186da5d34bdfa843c41832108443",
+      "scenarioId": "SMART-OPENING-POTION-ADMISSION",
+      "status": "Passed",
+      "characterId": "CHARACTER.SILENT",
+      "encounterId": "ENCOUNTER.FUZZY_WURM_CRAWLER_WEAK",
+      "seed": "SMART-OPENING-POTION-ADMISSION",
+      "elapsedMilliseconds": 2730.4217,
+      "completedChecks": [
+        "SmartOpeningAdmission:NoDrop:loss3:potions0:nodes=2",
+        "SmartOpeningAdmission:Drop:loss0:potions1:saved3:required1:nodes=3",
+        "SmartOpeningAdmission:NoDrop:loss0:potions1:saved12:required9:nodes=3",
+        "NativeOutcome:combatEnded=False:turn=1:hp=70:maxHp=70"
+      ],
+      "error": null,
+      "evidencePath": ".local/upstream-update-20261005/native-final/02-result.json",
+      "batch": "native-final"
+    },
+    {
+      "runId": "macos-725b7e2400f044b1b43592514d741308",
+      "scenarioId": "SMART-OPENING-POTION-VALUE",
+      "status": "Passed",
+      "characterId": "CHARACTER.SILENT",
+      "encounterId": "ENCOUNTER.FUZZY_WURM_CRAWLER_WEAK",
+      "seed": "SMART-OPENING-POTION-VALUE",
+      "elapsedMilliseconds": 2429.7792,
+      "completedChecks": [
+        "SmartOpeningAdmission:NoDrop:loss0:potions1:saved12:required9:nodes=3",
+        "NativeOutcome:combatEnded=False:turn=1:hp=70:maxHp=70"
+      ],
+      "error": null,
+      "evidencePath": ".local/upstream-update-20261005/native-final/03-result.json",
+      "batch": "native-final"
+    },
+    {
+      "runId": "macos-0014e9408f9d472a9c473bf4f79b42c0",
+      "scenarioId": "MULTIPLAYER-RELIC-EXTRA-TURN-SOURCE",
+      "status": "Passed",
+      "characterId": "CHARACTER.IRONCLAD",
+      "encounterId": "ENCOUNTER.FOGMOG_NORMAL",
+      "seed": "MPRELICSOURCE20260920",
+      "elapsedMilliseconds": 2554.581,
+      "completedChecks": [
+        "MultiplayerRelicExtraTurnSource:NativeFullState:OwnConsumed:PeerUntouched:FrozenRoot",
+        "NativeOutcome:combatEnded=False:turn=1:hp=80:maxHp=80"
+      ],
+      "error": null,
+      "evidencePath": ".local/upstream-update-20261005/native-final/04-result.json",
+      "batch": "native-final"
+    },
+    {
+      "runId": "macos-0f6269ef134c45b2aca93ab94d1976c1",
+      "scenarioId": "MULTIPLAYER-RELIC-OWNERSHIP",
+      "status": "Passed",
+      "characterId": "CHARACTER.IRONCLAD",
+      "encounterId": "ENCOUNTER.FOGMOG_NORMAL",
+      "seed": "MPRELICOWNER20260920",
+      "elapsedMilliseconds": 3085.0985,
+      "completedChecks": [
+        "MultiplayerRelicOwnership:PeerOnly:LocalExtra:BothExtra:NativeFullState:Fork:DisplayOwner",
+        "NativeOutcome:combatEnded=False:turn=5:hp=500:maxHp=500"
+      ],
+      "error": null,
+      "evidencePath": ".local/upstream-update-20261005/native-final/05-result.json",
+      "batch": "native-final"
+    },
+    {
+      "runId": "macos-d60aded5e2e344498c9ccf91a26a0225",
+      "scenarioId": "MULTIPLAYER-TOASTY-CHOICE",
+      "status": "Passed",
+      "characterId": "CHARACTER.IRONCLAD",
+      "encounterId": "ENCOUNTER.FUZZY_WURM_CRAWLER_WEAK",
+      "seed": "MULTIPLAYER-TOASTY-CHOICE",
+      "elapsedMilliseconds": 4388.8967,
+      "completedChecks": [
+        "PreCombatPlayerHp:60",
+        "MultiplayerTurnSetup:ManualRequest:NativeChoiceRemainsOpen:FrozenFullPartyRoot",
+        "MultiplayerTurnSetup:ManualNativeSelection:FullStateEquivalent:NoAutomaticRecalculation",
+        "NativeOutcome:combatEnded=False:turn=1:hp=62:maxHp=80"
+      ],
+      "error": null,
+      "evidencePath": ".local/upstream-update-20261005/native-final/06-result.json",
+      "batch": "native-final"
+    },
+    {
+      "runId": "macos-7ab2e17ce7da42af8d4c36938f264397",
+      "scenarioId": "MULTIPLAYER-TOASTY-CONTROLS",
+      "status": "Passed",
+      "characterId": "CHARACTER.IRONCLAD",
+      "encounterId": "ENCOUNTER.FUZZY_WURM_CRAWLER_WEAK",
+      "seed": "MULTIPLAYER-TOASTY-CONTROLS",
+      "elapsedMilliseconds": 7629.6168,
+      "completedChecks": [
+        "MultiplayerTurnSetup:StopDrainsWorker:NativeInputPreserved",
+        "MultiplayerTurnSetup:ChoiceDisplayed:NativePeerActionClearsCurrent:AdviceStale:ManualFreshRoot",
+        "MultiplayerTurnSetup:ManualDifferentChoiceDuringWorker:ResultStale:NoAutomation",
+        "NativeOutcome:combatEnded=False:turn=1:hp=80:maxHp=80"
+      ],
+      "error": null,
+      "evidencePath": ".local/upstream-update-20261005/native-final/07-result.json",
+      "batch": "native-final"
+    },
+    {
+      "runId": "macos-af6ccce423ac424aa1f5667877b3ae86",
+      "scenarioId": "ROOT-CONTENT-SOURCES",
+      "status": "Passed",
+      "characterId": "CHARACTER.IRONCLAD",
+      "encounterId": "ENCOUNTER.SHRINKER_BEETLE_WEAK",
+      "seed": "ROOT-CONTENT-SOURCES",
+      "elapsedMilliseconds": 3458.7441,
+      "completedChecks": [
+        "RootContent:ShopMod:Monster:MissingAttackDamage:CallbackOverlap:OwnerBoundPower:Source:UploadClassification",
+        "NativeOutcome:combatEnded=False:turn=1:hp=80:maxHp=80"
+      ],
+      "error": null,
+      "evidencePath": ".local/upstream-update-20261005/native-final/08-result.json",
+      "batch": "native-final"
+    },
+    {
+      "runId": "macos-0b30bcdfa9a14a7095c2baf0f47dafeb",
+      "scenarioId": "CONTENT-MOD-FAILURES",
+      "status": "Passed",
+      "characterId": "CHARACTER.IRONCLAD",
+      "encounterId": "ENCOUNTER.FUZZY_WURM_CRAWLER_WEAK",
+      "seed": "COMBATSOLVER",
+      "elapsedMilliseconds": 19520.0276,
+      "completedChecks": [
+        "ThirdPartyCalculatedFailure:SourceClassified:WrappedUi:NoUploadPrompt",
+        "ContentModFailures:EightHooks:ComputedVar:Source:WrappedFailure:eng-zhs-zht:UploadClassification",
+        "UploadGuidance:ManualSearchInput:RecordingIncomplete:PerSearch:NativeStale:ExistingIssue:Character:Card:Relic:Monster:FourFailures:Feedback:LiveRisk:eng-zhs-zht",
+        "NativeOutcome:combatEnded=False:turn=1:hp=80:maxHp=80"
+      ],
+      "error": null,
+      "evidencePath": ".local/upstream-update-20261005/native-integration-final/01-result.json",
+      "batch": "native-integration-final"
+    },
+    {
+      "runId": "macos-17a13857d0274cafb2b4e2d421ff6b2b",
+      "scenarioId": "DEPLOYMENT-PRESENTATION-TURN",
+      "status": "Passed",
+      "characterId": "CHARACTER.IRONCLAD",
+      "encounterId": "ENCOUNTER.FUZZY_WURM_CRAWLER_WEAK",
+      "seed": "COMBATSOLVER",
+      "elapsedMilliseconds": 2587.8942,
+      "completedChecks": [
+        "DeploymentPresentation:FourActionsToOne:NewReadyRoute:NewDeployment:MatchingCompletion",
+        "NativeOutcome:combatEnded=False:turn=1:hp=80:maxHp=80"
+      ],
+      "error": null,
+      "evidencePath": ".local/upstream-update-20261005/native-integration-final/02-result.json",
+      "batch": "native-integration-final"
+    },
+    {
+      "runId": "macos-f07e0ced852e461993cd400b7d3877f1",
+      "scenarioId": "MULTIPLAYER-MANUAL-LOOP",
+      "status": "Passed",
+      "characterId": "CHARACTER.IRONCLAD",
+      "encounterId": "ENCOUNTER.FUZZY_WURM_CRAWLER_WEAK",
+      "seed": "MANUAL-LOOP-DEFENSE-SETUP-20260923",
+      "elapsedMilliseconds": 5249.7763,
+      "completedChecks": [
+        "MultiplayerManualLoop:contract_complete:queries=4:local_actions=3:peer_actions=3",
+        "NativeOutcome:combatEnded=False:turn=2:hp=60:maxHp=80"
+      ],
+      "error": null,
+      "evidencePath": ".local/upstream-update-20261005/native-integration-final/03-result.json",
+      "batch": "native-integration-final"
+    },
+    {
+      "runId": "macos-142873b5173c495ebb7d8c9832bc8893",
+      "scenarioId": "MULTIPLAYER-EXPERIMENT-INACTIVE",
+      "status": "Passed",
+      "characterId": "CHARACTER.IRONCLAD",
+      "encounterId": "ENCOUNTER.FUZZY_WURM_CRAWLER_WEAK",
+      "seed": "MULTIPLAYER-EXPERIMENT-INACTIVE-20260923",
+      "elapsedMilliseconds": 2675.1009,
+      "completedChecks": [
+        "MultiplayerExperimentReset:NoHooks:SinglePlayerRoot",
+        "PotionOutcomeNamesAndRewardGate",
+        "InitialWorldlineSummary",
+        "InitialFirstAction:STRIKE_IRONCLAD",
+        "InitialPolicy:SoldHp=0;Potion=0,Saved=0/0,Rejected=0;Theft=-,Outstanding=0;Turns=1;Shuffles=0;Unmirrored=0;HpLost=0;ProjectedBattleHpLost=0;Block=0/0;Pruned=0;Total=16.8ms/397096B;Gc=0.0ms/0.0msMax;Frame=56.9msMax/1Over50;CacheHits=0;ChoiceBranches=0;Actions=1;OnlyDeath=False;CombatEndedTurn=1;DeathTurn=-;ActEndingBoss=False;BossHpRelief=None",
+        "NativeOutcome:combatEnded=False:turn=1:hp=80:maxHp=80"
+      ],
+      "error": null,
+      "evidencePath": ".local/upstream-update-20261005/native-integration-final/04-result.json",
+      "batch": "native-integration-final"
+    }
+  ],
+  "nativePassed": 23,
+  "nativeFailed": 2,
+  "nativeAborted": {
+    "scenarioId": "UPLOAD-GUIDANCE",
+    "reason": "No executor entry under this name; agent terminated the owned batch before accepting any result. Correct entry CONTENT-MOD-FAILURES subsequently passed.",
+    "exitCode": 143,
+    "launcherRemovedInstance": true
+  },
+  "managed": {
+    "compatibilityChecks": [
+      "multiplayer_skips_single_player_growth_targets",
+      "multiplayer_discards_solo_exploration_and_script_policy",
+      "multiplayer_discards_solo_incumbent_table",
+      "multiplayer_root_excludes_all_solo_healing_bounds",
+      "multiplayer_root_rejects_component_and_growth_certificates",
+      "solo_retains_official_plan_commitment",
+      "multiplayer_rejects_solo_plan_commitment",
+      "multiplayer_solver_rejects_injected_solo_victory_bound",
+      "multiplayer_solver_disables_component_smart_potion_pruning",
+      "multiplayer_has_no_upgrade_credit_capacity",
+      "history_keeps_per_effect_owner_scope",
+      "multiplayer_history_key_matches_scan_0",
+      "multiplayer_history_key_matches_scan_1",
+      "history_key_changes_only_in_child",
+      "history_key_survives_fork",
+      "gold_axe_observes_both_finished_plays",
+      "production_snapshot_distinguishes_history_and_preserves_forks",
+      "improvement_applies_to_owner_without_advisor_growth_credit",
+      "fork_cannot_create_multiplayer_upgrade_credit",
+      "mad_science_native_full_party_state_equal",
+      "root_unchanged_after_native_play",
+      "entropic_source_procured_1",
+      "entropic_generated_without_pending_choice_1",
+      "entropic_source_keeps_own_cost_1",
+      "entropic_recipient_inventory_filled_1",
+      "entropic_free_cost_and_inventory_are_fork_local_1",
+      "ordinary_replacement_procured_1",
+      "ordinary_replacement_does_not_inherit_free_cost_1",
+      "entropic_source_procured_0",
+      "entropic_generated_without_pending_choice_0",
+      "entropic_source_keeps_own_cost_0",
+      "entropic_recipient_inventory_filled_0",
+      "entropic_free_cost_and_inventory_are_fork_local_0",
+      "ordinary_replacement_procured_0",
+      "ordinary_replacement_does_not_inherit_free_cost_0",
+      "entropic_branches_preserve_root_and_live",
+      "gold_alive_owner_does_not_mutate_live",
+      "gold_alive_owner_native_full_party_state",
+      "gold_alive_owner_parent_and_fork_isolation",
+      "gold_peer_death_settles",
+      "gold_peer_death_native_full_party_state",
+      "gold_peer_death_parent_and_fork_isolation",
+      "gold_with_dead_peer_does_not_mutate_live",
+      "gold_with_dead_peer_native_full_party_state",
+      "gold_with_dead_peer_parent_and_fork_isolation",
+      "gold_peer_revived_native_full_party_state",
+      "gold_peer_revived_parent_and_fork_isolation",
+      "gold_revived_owner_does_not_mutate_live",
+      "gold_revived_owner_native_full_party_state",
+      "gold_revived_owner_parent_and_fork_isolation",
+      "joss_deferred_settles",
+      "joss_participants_1_native_full_party_state",
+      "joss_participants_1_parent_and_fork_isolation",
+      "joss_deferred_settles",
+      "joss_participants_2_native_full_party_state",
+      "joss_participants_2_parent_and_fork_isolation",
+      "joss_deferred_settles",
+      "joss_participants_1_2_native_full_party_state",
+      "joss_participants_1_2_parent_and_fork_isolation",
+      "joss_owner_deferred_consumed_once"
+    ],
+    "quotaChecks": [
+      "stage_share_and_absolute_deadline",
+      "same_round_recalculation_does_not_renew",
+      "healing_and_continued_progress_share_stage_origin",
+      "roster_change_preserves_deadline_and_previous_result",
+      "elapsed_stage_renews_explicitly",
+      "recalculation_does_not_add_nonadditive_capped_progress",
+      "no_last_damage_point_health_cliff",
+      "local_index_one",
+      "native_overkill_counts_only_actual_hp",
+      "local_damage_credited",
+      "damage_ledger_fork_and_root_isolation",
+      "child_foreign_and_unknown_damage_stays_in_child",
+      "native_local_play_accepted",
+      "local_play_full_party_native_equal",
+      "native_recalculation_keeps_paid_damage",
+      "native_peer_play_accepted",
+      "native_peer_damage_does_not_pay_or_postpone_local_quota",
+      "enemy_healing_reopens_progress",
+      "native_changes_do_not_mutate_frozen_prediction",
+      "quota_does_not_skip_real_retaliation_incremental_equal",
+      "fixed_node_budget_respected",
+      "risk_cannot_dominate_reliable_witness",
+      "real_victory_overrides_stale_cycle",
+      "victory_after_deadline_does_not_backdate_stage",
+      "fixed_batch_ordering_125_triples",
+      "unassessed_budget_fallback_remains_unknown",
+      "quota_and_unknown_ui_eng",
+      "quota_and_unknown_ui_zhs",
+      "quota_and_unknown_ui_zht",
+      "native_retaliation_play_STRIKE_IRONCLAD",
+      "native_retaliation_play_DEFEND_IRONCLAD",
+      "retaliation_full_party_native_cycle_equal"
+    ],
+    "deadTeammate": {
+      "status": "Passed",
+      "ExpandedNodes": 100,
+      "SearchedTurns": 3,
+      "PlayerCount": 2,
+      "localIndex": 1,
+      "deathPrevention": "equal",
+      "deathAndRevival": "equal",
+      "nextPlayerTurn": "equal",
+      "frozenRoots": true,
+      "activationFingerprint": true
+    }
+  },
+  "runs": [
+    {
+      "stage": "upstream-compatibility",
+      "exitCode": 0,
+      "wallSeconds": 13.839
+    },
+    {
+      "stage": "dead-teammate",
+      "exitCode": 0,
+      "wallSeconds": 1.96
+    },
+    {
+      "stage": "quota-contracts",
+      "exitCode": 0,
+      "wallSeconds": 1.749
+    },
+    {
+      "stage": "gc-portable-runtime",
+      "exitCode": 0,
+      "wallSeconds": 3.012
+    },
+    {
+      "stage": "primary-incumbents",
+      "exitCode": 0,
+      "wallSeconds": 0.082
+    },
+    {
+      "stage": "boundaries-final",
+      "exitCode": 0,
+      "wallSeconds": 20.038
+    },
+    {
+      "stage": "portfolio-checks",
+      "exitCode": 0,
+      "wallSeconds": 2.932
+    },
+    {
+      "stage": "onplay-checks",
+      "exitCode": 0,
+      "wallSeconds": 1.653
+    },
+    {
+      "stage": "onplay-empty",
+      "exitCode": 0,
+      "wallSeconds": 0.31
+    },
+    {
+      "stage": "official-build",
+      "exitCode": 0,
+      "wallSeconds": 14.812
+    },
+    {
+      "stage": "official-harness-build",
+      "exitCode": 0,
+      "wallSeconds": 5.959
+    }
+  ],
+  "officialSoloComparison": {
+    "roots": 4,
+    "comparedFields": 346,
+    "mismatchedRoots": [],
+    "leftOnly": [],
+    "rightOnly": []
+  },
+  "singlePlayerMultiplayerEntries": {
+    "SOLO-POTION-DOP2": 0,
+    "SOLO-POWER-DOP1": 0,
+    "SOLO-POTION-DOP1": 0,
+    "SOLO-POWER-DOP2": 0
+  },
+  "staticContracts": {
+    "gcPortableRuntime": 5,
+    "primaryIncumbents": 20,
+    "beamWidthPortfolio": 105,
+    "adaptedOnPlay": 41,
+    "adaptedOnPlayEmpty": 5,
+    "searchFiles": 263,
+    "coverageEntries": 3035,
+    "combatChoiceSites": 85,
+    "autoplaySites": 19,
+    "rosterSites": 51
+  },
+  "scopeLimits": [
+    "Component certificate native-version gate does not admit this macOS native assembly; active certificate native tests unavailable.",
+    "GC portable-runtime tests inject capability behavior in CLR; no mobile or Mono deployment performed.",
+    "Managed host bypasses Godot rendering and network; native tests are isolated headless with RitsuLib.",
+    "No live multiplayer, visible Steam performance/layout, Windows/Linux run, full third-party stack, all report ZIPs, clean install or full release gate."
+  ],
+  "rawEvidenceRoot": ".local/upstream-update-20261005",
+  "stageEvidencePolicy": "Do not rerun passed tests for unchanged behavior and inputs.",
+  "release": "Pending source commit, final build, local deployment, ZIP and GitHub release.",
+  "knowledgeChecks": {
+    "documentation": {
+      "status": "Passed",
+      "files": 600,
+      "links": 3114,
+      "errors": 0
+    },
+    "coverageLayout": {
+      "status": "Passed",
+      "data": 565,
+      "fixtures": 515,
+      "groups": 37
+    },
+    "tools": {
+      "status": "BlockedPlatformDependency",
+      "files": 320,
+      "projects": 38,
+      "missing": "PowerShell 7; all other reported checks clear"
+    },
+    "rulesBudget": {
+      "file": "AGENTS.md",
+      "bytes": 25367,
+      "lines": 194,
+      "defaultBudgetBytes": 32768,
+      "percent": 77.4
+    },
+    "performanceArchiveFiles": 34,
+    "cleanup": "Review materials retained; no cleanup approval requested before final report."
+  }
+}

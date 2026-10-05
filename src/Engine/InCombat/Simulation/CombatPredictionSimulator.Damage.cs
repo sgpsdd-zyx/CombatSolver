@@ -483,6 +483,8 @@ internal sealed partial class CombatPredictionSimulator
 
         if (State.CombatState is SimulatedCombatState multiplayer && multiplayer.AdvisorPlayer != null)
             multiplayer.SetPlayerActiveForHooks(player, active: false);
+        else
+            playerState.HooksActive = false;
 
         // Mirrors CombatManager.HandlePlayerDeath, which is only called when not all players are dead.
         if (!State.Players.All(p => State.GetCreature(p.Creature).IsDead))

@@ -167,20 +167,25 @@ internal sealed partial class UnattendedTestRunner
             try
             {
                 IList generatedModifiers = GetDirectModifiers(directModifiers, generatedClone.Preview);
-                if (generatedModifiers.Count != 1
-                    || generatedModifiers[0] is not AbstractModel generatedModifier
-                    || ReferenceEquals(generatedModifier, childClone)
-                    || !ReferenceEquals(ownerProperty.GetValue(generatedModifier), generatedClone.Preview)
-                    || (int?)amountField.GetValue(generatedModifier) != 7
-                    || generatedClone.Preview.DeckVersion != null
-                    || generatedClone.Preview.HasBeenRemovedFromState
-                    || !((ICombatPredictionHookListenerSource)childCombat).HookListeners.Contains(
-                        generatedModifier))
-                {
+                if (generatedModifiers.Count != 1)
                     throw new InvalidOperationException(
-                        "游戏玩法生成的卡牌克隆没有独立复制 BaseLib CardModifier 状态、Owner、" +
-                        "listener 或官方生成卡字段。");
-                }
+                        $"生成牌 BaseLib modifier 数量：expected=1 actual={generatedModifiers.Count}。");
+                if (generatedModifiers[0] is not AbstractModel generatedModifier)
+                    throw new InvalidOperationException("生成牌 BaseLib modifier 类型应为 AbstractModel。");
+                if (ReferenceEquals(generatedModifier, childClone))
+                    throw new InvalidOperationException("生成牌 BaseLib modifier 应有独立对象身份。");
+                if (!ReferenceEquals(ownerProperty.GetValue(generatedModifier), generatedClone.Preview))
+                    throw new InvalidOperationException("生成牌 BaseLib modifier Owner 应指向新牌。");
+                if ((int?)amountField.GetValue(generatedModifier) != 7)
+                    throw new InvalidOperationException(
+                        $"生成牌 BaseLib modifier Amount：expected=7 actual={amountField.GetValue(generatedModifier)}。");
+                if (generatedClone.Preview.DeckVersion != null)
+                    throw new InvalidOperationException("生成牌 DeckVersion 应为 null。");
+                if (generatedClone.Preview.HasBeenRemovedFromState)
+                    throw new InvalidOperationException("生成牌 HasBeenRemovedFromState 应为 false。");
+                AssertBaseLibGeneratedCloneLifecycle(
+                    combat, playerState, childCombat, childPlayer, owner,
+                    generatedClone, generatedModifier, directModifiers, ownerProperty, amountField);
 
                 CardModel unregisteredLiveLike = PredictionUtils.CloneModelForSimulation(owner);
                 unregisteredLiveLike.DeckVersion = null;
@@ -472,6 +477,84 @@ internal sealed partial class UnattendedTestRunner
             liveModifiers.Remove(liveModifier);
             ownerProperty.SetValue(liveModifier, null);
         }
+    }
+
+    private static void AssertBaseLibGeneratedCloneLifecycle(
+        CombatState liveCombat,
+        PlayerCombatState livePlayer,
+        SimulatedCombatState predictedCombat,
+        SimPlayerCombatState predictedPlayer,
+        CardModel liveSource,
+        PredictedCard predictedClone,
+        AbstractModel predictedModifier,
+        MethodInfo directModifiers,
+        PropertyInfo ownerProperty,
+        FieldInfo amountField)
+    {
+        LiveCombatStamp liveBefore = LiveCombatStamp.Capture(liveCombat);
+        CardModel liveClone = liveSource.CreateClone();
+        try
+        {
+            IList liveModifiers = GetDirectModifiers(directModifiers, liveClone);
+            if (liveModifiers.Count != 1
+                || liveModifiers[0] is not AbstractModel liveModifier
+                || ReferenceEquals(liveModifier, GetDirectModifiers(directModifiers, liveSource)[0])
+                || !ReferenceEquals(ownerProperty.GetValue(liveModifier), liveClone)
+                || (int?)amountField.GetValue(liveModifier) != 7
+                || liveClone.DeckVersion != null
+                || liveClone.HasBeenRemovedFromState)
+            {
+                throw new InvalidOperationException("原生生成牌应独立复制 BaseLib modifier 并重置生成卡字段。");
+            }
+            if (!string.Equals(
+                    CardChoiceSupport.ChoiceCardKey(predictedClone),
+                    CardChoiceSupport.ChoiceCardKey(liveClone),
+                    StringComparison.Ordinal))
+            {
+                throw new InvalidOperationException("预测与原生生成牌应具有相同的 BaseLib 状态键。");
+            }
+
+            AssertListeners(expectedCount: 0, "created");
+            // BaseLib's native subscriber enumerates AllPiles. Scope registration owns
+            // the card; pile membership determines when its modifier receives hooks.
+            for (int index = 0; index < livePlayer.AllPiles.Count; index++)
+            {
+                CardPile livePile = livePlayer.AllPiles[index];
+                SimCardPile predictedPile = predictedPlayer.AllPiles[index];
+                if (livePile.Type != predictedPile.Type)
+                    throw new InvalidOperationException("原生与预测战斗牌堆应按相同顺序排列。");
+                predictedClone.OwnerPile?.Remove(predictedClone);
+                liveClone.Pile?.RemoveInternal(liveClone, silent: true);
+                predictedPile.Add(predictedClone);
+                livePile.AddInternal(liveClone, silent: true);
+                AssertListeners(expectedCount: 1, $"pile={livePile.Type}");
+            }
+            predictedClone.OwnerPile!.Remove(predictedClone);
+            liveClone.Pile!.RemoveInternal(liveClone, silent: true);
+            AssertListeners(expectedCount: 0, "removed_from_piles");
+
+            void AssertListeners(int expectedCount, string stage)
+            {
+                int liveCount = liveCombat.IterateHookListeners()
+                    .Count(listener => ReferenceEquals(listener, liveModifier));
+                int predictedCount = ((ICombatPredictionHookListenerSource)predictedCombat).HookListeners
+                    .Count(listener => ReferenceEquals(listener, predictedModifier));
+                if (liveCount != expectedCount || predictedCount != liveCount)
+                {
+                    throw new InvalidOperationException(
+                        $"BaseLib 生成牌 listener 生命周期：stage={stage} " +
+                        $"expected={expectedCount} live={liveCount} predicted={predictedCount}。");
+                }
+            }
+        }
+        finally
+        {
+            predictedClone.OwnerPile?.Remove(predictedClone);
+            liveClone.Pile?.RemoveInternal(liveClone, silent: true);
+            liveCombat.RemoveCard(liveClone);
+        }
+        if (LiveCombatStamp.Capture(liveCombat) != liveBefore)
+            throw new InvalidOperationException("BaseLib 生成牌生命周期合同结束后实机状态应恢复。");
     }
 
     private static AbstractModel AssertModifierClone(

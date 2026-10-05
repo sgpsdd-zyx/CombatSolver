@@ -1,0 +1,1616 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-05",
+  "baseCommit": "09b98957",
+  "purpose": "Complement pending PR215 with positive recovery proofs; no duplicate shared-table implementation; research records only",
+  "dependency": {
+    "url": "https://github.com/Torch1230/CombatSolver/pull/215",
+    "reviewedHead": "02cf2283ab0a4c86e0981e22acbfaa42f5ade47e",
+    "independentCostFixes": [
+      "https://github.com/ltlly/CombatSolver/commit/75583c62",
+      "https://github.com/ltlly/CombatSolver/commit/57218124"
+    ],
+    "statusReuse": "last verified Open; no merge or new release inferred"
+  },
+  "game": {
+    "sha256": "2b40d2df538db1ceb5fa48d958c80ab730ada1e07db88a870aff01a661768b9f",
+    "mvid": "8a76776c-0ce1-4d4f-90bd-8cce653dad8e",
+    "sourceAssembly": "/home/ltlly/.local/share/Steam/steamapps/common/Slay the Spire 2/data_sts2_linuxbsd_x86_64/sts2.dll",
+    "reusePinnedVersion": true
+  },
+  "configuration": {
+    "profile": "VeryHigh",
+    "maxDegreeOfParallelism": 16,
+    "searchMode": "Coordinator",
+    "searchBudgetMilliseconds": 300000,
+    "potionPolicy": "Smart",
+    "productionBudget": true,
+    "noGcRegionGigabytes": 16,
+    "sameQualifiedHost": "main .local/tool-build/OfflineSearchHarness/bin/Release/net9.0/OfflineSearchHarness.dll",
+    "samplingExcluded": true,
+    "nativeTimeoutSeconds": 120
+  },
+  "formalRuntime": {
+    "unchanged": true,
+    "commit": "c422a036",
+    "dllSha256": "79cc2e691e2484b0194370137f3dff6c0121836140cc213d6974b4780e34aa7b",
+    "pullRequest": "https://github.com/Torch1230/CombatSolver/pull/207",
+    "samePreviouslyQualifiedDeploymentReused": true
+  },
+  "finiteSmart": {
+    "productionDelta": "existing CanUseComponentSmartPotionEligibility permits finite positive root bound; branch still subtracts complete certified recovery and refuses unknown infinity",
+    "policyGuardsUnchanged": [
+      "Smart/Disabled/Required/forced",
+      "growth",
+      "relic",
+      "theft",
+      "exact potion tier",
+      "complete policy-compliant potion-free winner",
+      "existing active Regen and all legally held doses"
+    ],
+    "baselineExpectedFailure": {
+      "status": "Failed",
+      "runId": "3f3afd5a5980453d9521c64a07eaab90",
+      "error": "System.InvalidOperationException: Certified Smart exact layer did not enable bound.\n   at CombatSolver.UnattendedTestRunner.AssertComponentSmartBoundAsync(CombatState live, Player player, Boolean finiteRegen)\n   at CombatSolver.UnattendedTestRunner.Executor.ExecuteAsync(ScenarioContext scenario)\n   at CombatSolver.UnattendedTestRunner.RunAsync()",
+      "mainAssemblyHash": "16CDA096EAEBD637660093D038C3A0A9ADB83048E286E6D5250988F7C036713B",
+      "expectedFailure": true,
+      "scope": "actual complete no-potion victory; active Regen3 finite6; old zero-only eligibility refuses"
+    },
+    "nativeFinite": {
+      "runId": "2e84b06abef4487e8c1a074ce4063774",
+      "status": "Passed",
+      "scenarioId": "COMPONENT-SMART-FINITE-REGEN",
+      "mainAssemblyHash": "3209D2DAF2984FE1EAAC0D75B6553A20C5EF0C834A5CA95B64557DC3500B27B0",
+      "elapsedMilliseconds": 27041.8185,
+      "completedChecks": [
+        "ComponentSmartBound:FiniteRegen=True:CompletePotionFreeWitness:ExactLayerPrunes=7:PosteriorPrefixPrunes=2:SmartDisabledRequiredForcedGrowthRelicTheftGuards:Dop2:StrictIncremental:WholeCoordinator:LiveIsolation",
+        "NativeOutcome:combatEnded=False:turn=1:hp=50:maxHp=70"
+      ],
+      "error": null
+    },
+    "nativePossibleAndUnknown": {
+      "runId": "5bf5eec3dce44b949bf0b6065f79c73a",
+      "status": "Passed",
+      "scenarioId": "COMPONENT-SMART-FINITE-REGEN-RETENTION",
+      "mainAssemblyHash": "705C6A23CBEF6B533ABF09733ADF3C6BEA8C9B6BF21CFFCC6B2B0F52C02AB766",
+      "elapsedMilliseconds": 27065.4868,
+      "completedChecks": [
+        "ComponentSmartBound:Regen20:Bound210:CompletePotionFreeWitness:PossibleRecoveryKept:UnknownFeedExhaustKept:ParentRngLiveIsolation",
+        "NativeOutcome:combatEnded=False:turn=1:hp=50:maxHp=70"
+      ],
+      "error": null
+    },
+    "supplementalRootScope": "Generated Ironclad Elite same resolved deck/seed/native setup, one held potion replaced with Regen; not an original goal root",
+    "screen": {
+      "acceptance": false,
+      "scope": "supplemental fixed held-Regen root, no original-goal claim; serial CA screening only",
+      "runs": [
+        {
+          "label": "C1",
+          "wallSeconds": 44.6306511,
+          "peakWorkingSetBytes": 18293661696,
+          "quality": {
+            "won": true,
+            "outstandingStolenResource": 0,
+            "projectedBattleHpLost": 33,
+            "strategicHpDeficit": 12,
+            "potionStrategicCost": 18,
+            "projectedBattlePotionCount": 2,
+            "enemyHp": 0,
+            "score": 10000739965,
+            "combatEndedTurn": 7,
+            "theftPolicy": null,
+            "survives": true,
+            "deathSaveUseCount": 0,
+            "growthHpCredit": 0,
+            "growthRewardCount": 0
+          },
+          "nodes": 202607,
+          "transitions": 1029231,
+          "path": "/home/ltlly/Code/nmslmod/CombatSolver-healing-bound-general-20261003/.local/tool-tasks/finite-smart-recovery/held-regen-screen/runs/supplemental-iron-held-regen-C1/result.json"
+        },
+        {
+          "label": "A1",
+          "wallSeconds": 47.5336484,
+          "peakWorkingSetBytes": 23234076672,
+          "quality": {
+            "won": true,
+            "outstandingStolenResource": 0,
+            "projectedBattleHpLost": 47,
+            "strategicHpDeficit": 26,
+            "potionStrategicCost": 18,
+            "projectedBattlePotionCount": 2,
+            "enemyHp": 0,
+            "score": 9999999965,
+            "combatEndedTurn": 7,
+            "theftPolicy": null,
+            "survives": true,
+            "deathSaveUseCount": 0,
+            "growthHpCredit": 0,
+            "growthRewardCount": 0
+          },
+          "nodes": 203208,
+          "transitions": 1030662,
+          "path": "/home/ltlly/Code/nmslmod/CombatSolver-healing-bound-general-20261003/.local/tool-tasks/finite-smart-recovery/held-regen-baseline-screen/runs/supplemental-iron-held-regen-A1/result.json"
+        }
+      ],
+      "screenSpeedup": 1.0650449238012571,
+      "screenPeakRatio": 0.787363403945644,
+      "sameRoot": true,
+      "sameBudget": true,
+      "samePolicy": true
+    },
+    "rootDiagnostic": {
+      "source": "/home/ltlly/Code/nmslmod/CombatSolver-healing-bound-general-20261003/.local/tool-tasks/finite-smart-recovery/held-regen-root-only/runs/supplemental-iron-held-regen-C1/root-healing-sources.json",
+      "component": true,
+      "rejection": null,
+      "initialBound": 15,
+      "samples": 100,
+      "medianMilliseconds": 0.06025,
+      "maxMilliseconds": 0.08,
+      "bytesPerQuery": 1008.0,
+      "liveUnchanged": true,
+      "performanceAcceptanceExcluded": true
+    },
+    "failedPreparation": {
+      "builds": [
+        {
+          "seconds": 25.67,
+          "errors": 1,
+          "reason": "missing native multiplayer choice-context namespace in new fixture; production unchanged",
+          "log": "finite-smart-baseline-build.log"
+        }
+      ],
+      "retentionInitial": {
+        "runId": "d5df8856b8034a10841fece596a91d44",
+        "reason": "fixture demanded unchanged cumulative HP loss; Regen20 search legally waits, loses8 but recovers20; assertion narrowed, immediate complete legal baseline used for possible branch proof",
+        "productionFailure": false
+      }
+    },
+    "accepted": false,
+    "notValidated": [
+      "final ABBA",
+      "full fixed regression",
+      "native final deployment"
+    ],
+    "rawDirectory": "/home/ltlly/Code/nmslmod/CombatSolver-healing-bound-general-20261003/.local/tool-tasks/finite-smart-recovery",
+    "supplementalFrozenRequest": "fixtures/iron-held-regen-20261005-request.json"
+  },
+  "silentSourceExpansion": {
+    "namedInitialSources": [
+      "BadLuck",
+      "Clumsy",
+      "Exterminate",
+      "FlashOfSteel",
+      "Greed",
+      "HiddenDaggers",
+      "Pounce",
+      "PrepTime",
+      "Shockwave",
+      "Tactician",
+      "Volley",
+      "WellLaidPlans",
+      "Wither"
+    ],
+    "namedEnemy": "Aeonglass",
+    "namedPower": "WitheringPresencePower",
+    "sourceRole": "initial/permanent/piles separately reviewed; no blanket initial allowance for generated set",
+    "newExtraction": [
+      "Aeonglass",
+      "WitheringPresencePower",
+      "Exterminate"
+    ],
+    "reusedSourceHashesVerified": 12,
+    "native": {
+      "runId": "10c7a7e109954966914f532d560e372d",
+      "status": "Passed",
+      "scenarioId": "SILENT-RECOVERY-EXPANSION",
+      "mainAssemblyHash": "3C0AFA3B42A301A1453D91322EEC924B29F75B167B64E5FABB68A93A38FEF43D",
+      "elapsedMilliseconds": 29726.1309,
+      "completedChecks": [
+        "SilentRecoveryExpansion:13InitialTypes:WitheringPresenceSixCards:AllThreeAeonglassMoves:WitherFakeUpgrade:9FullNativeStates:16Forks:AllFourPilesUnknownFeedRefused:StrictReplay:ParentLiveRngIsolation",
+        "NativeOutcome:combatEnded=False:turn=4:hp=433:maxHp=1000"
+      ],
+      "error": null
+    },
+    "scope": "six real cards; all3 native Aeonglass moves; six-play Withering generation, fake upgrades, nine complete state comparisons and16 Forks; remaining7 initial types reuse pinned native bodies; not all card choices or whole search",
+    "mechanisms": [
+      {
+        "type": "BadLuck",
+        "recoveryTarget": null,
+        "effectTarget": "player",
+        "timingAndCondition": "turn end while in hand",
+        "effect": "13 unblocked unpowered HP loss; no recovery",
+        "countAndRepeatability": "each turn",
+        "recoveryUpperBound": 0,
+        "sourceRole": "initial/all four piles/permanent deck, separately reviewed; native generation only under existing actual pool/player/unlock/filter premises",
+        "evidence": {
+          "type": "BadLuck",
+          "existingSource": "/home/ltlly/Code/nmslmod/CombatSolver-regent-healing-bound-20261003/.local/c56/native-src/BadLuck.cs",
+          "lines": 39,
+          "source": "/home/ltlly/Code/nmslmod/CombatSolver-regent-healing-bound-20261003/.local/c56/native-src/BadLuck.cs",
+          "sourceSha256": "59abf9020fb3be5502ffffc8448aff2f45b58424c68e4d0f621230a50e4a0b8f",
+          "reviewedAsInitial": true,
+          "pinnedAuditMatch": true,
+          "pinnedHashSections": [
+            "additionalStatusCurseSourceHashes:BadLuck"
+          ]
+        },
+        "statefulDependenciesChecked": "native command and complete callback dispatch; source role does not depend on temporary pile removal"
+      },
+      {
+        "type": "Clumsy",
+        "recoveryTarget": null,
+        "effectTarget": "own card",
+        "timingAndCondition": "turn-end hand handling",
+        "effect": "unplayable/Ethereal; Exhaust only",
+        "countAndRepeatability": "once per hand entry",
+        "recoveryUpperBound": 0,
+        "sourceRole": "initial/all four piles/permanent deck, separately reviewed; native generation only under existing actual pool/player/unlock/filter premises",
+        "evidence": {
+          "type": "Clumsy",
+          "existingSource": "/home/ltlly/Code/nmslmod/CombatSolver-regent-healing-bound-20261003/.local/c56/native-src/Clumsy.cs",
+          "lines": 22,
+          "source": "/home/ltlly/Code/nmslmod/CombatSolver-regent-healing-bound-20261003/.local/c56/native-src/Clumsy.cs",
+          "sourceSha256": "a13e3aa1469163ccad0c7c1430430f0fa7ea55d267a5ef0e410048c0c4ea6011",
+          "reviewedAsInitial": true,
+          "pinnedAuditMatch": true,
+          "pinnedHashSections": [
+            "additionalStatusCurseSourceHashes:Clumsy"
+          ]
+        },
+        "statefulDependenciesChecked": "native command and complete callback dispatch; source role does not depend on temporary pile removal"
+      },
+      {
+        "type": "Exterminate",
+        "recoveryTarget": null,
+        "effectTarget": "opponents",
+        "timingAndCondition": "OnPlay",
+        "effect": "multi-hit damage; upgrade raises damage",
+        "countAndRepeatability": "each play",
+        "recoveryUpperBound": 0,
+        "sourceRole": "initial/all four piles/permanent deck, separately reviewed; native generation only under existing actual pool/player/unlock/filter premises",
+        "evidence": {
+          "type": "Exterminate",
+          "missing": true,
+          "source": "/home/ltlly/Code/nmslmod/CombatSolver-healing-bound-general-20261003/.local/tool-tasks/silent-large-recovery-audit/Exterminate.cs",
+          "sourceSha256": "91d4e720a17471316c007101d6f4f06813f0e876e9e0c8b9e09f0f483f5cf683",
+          "reviewedAsInitial": true,
+          "pinnedAuditMatch": "new pinned decompile"
+        },
+        "statefulDependenciesChecked": "native command and complete callback dispatch; source role does not depend on temporary pile removal"
+      },
+      {
+        "type": "FlashOfSteel",
+        "recoveryTarget": null,
+        "effectTarget": "enemy and own pile",
+        "timingAndCondition": "OnPlay",
+        "effect": "damage followed by native draw",
+        "countAndRepeatability": "each play",
+        "recoveryUpperBound": 0,
+        "sourceRole": "initial/all four piles/permanent deck, separately reviewed; native generation only under existing actual pool/player/unlock/filter premises",
+        "evidence": {
+          "type": "FlashOfSteel",
+          "existingSource": "/home/ltlly/Code/nmslmod/CombatSolver-regent-healing-bound-20261003/.local/c56/native-src/FlashOfSteel.cs",
+          "lines": 51,
+          "source": "/home/ltlly/Code/nmslmod/CombatSolver-regent-healing-bound-20261003/.local/c56/native-src/FlashOfSteel.cs",
+          "sourceSha256": "7eaf076faf480a065b049013d790e6d33881d1dcad90d252f351450ab5d48f0e",
+          "reviewedAsInitial": true,
+          "pinnedAuditMatch": true,
+          "pinnedHashSections": [
+            "sourceHashes:FlashOfSteel.cs"
+          ]
+        },
+        "statefulDependenciesChecked": "native command and complete callback dispatch; source role does not depend on temporary pile removal"
+      },
+      {
+        "type": "Greed",
+        "recoveryTarget": null,
+        "effectTarget": "own card",
+        "timingAndCondition": "hand/action legality",
+        "effect": "unplayable Eternal curse; no gameplay callback",
+        "countAndRepeatability": "constant",
+        "recoveryUpperBound": 0,
+        "sourceRole": "initial/all four piles/permanent deck, separately reviewed; native generation only under existing actual pool/player/unlock/filter premises",
+        "evidence": {
+          "type": "Greed",
+          "existingSource": "/home/ltlly/Code/nmslmod/CombatSolver-regent-healing-bound-20261003/.local/c56/native-src/Greed.cs",
+          "lines": 24,
+          "source": "/home/ltlly/Code/nmslmod/CombatSolver-regent-healing-bound-20261003/.local/c56/native-src/Greed.cs",
+          "sourceSha256": "e2a872ae8d8da7e583975abf4623612717e2ca4563273b5d79336c3b7029b913",
+          "reviewedAsInitial": true,
+          "pinnedAuditMatch": true,
+          "pinnedHashSections": [
+            "additionalStatusCurseSourceHashes:Greed"
+          ]
+        },
+        "statefulDependenciesChecked": "native command and complete callback dispatch; source role does not depend on temporary pile removal"
+      },
+      {
+        "type": "HiddenDaggers",
+        "recoveryTarget": null,
+        "effectTarget": "own hand",
+        "timingAndCondition": "OnPlay",
+        "effect": "discard selected cards; fixed Shiv generation and optional upgrade",
+        "countAndRepeatability": "each play",
+        "recoveryUpperBound": 0,
+        "sourceRole": "initial/all four piles/permanent deck, separately reviewed; native generation only under existing actual pool/player/unlock/filter premises",
+        "evidence": {
+          "type": "HiddenDaggers",
+          "existingSource": "/home/ltlly/Code/nmslmod/CombatSolver-regent-healing-bound-20261003/.local/c56/native-src/HiddenDaggers.cs",
+          "lines": 44,
+          "source": "/home/ltlly/Code/nmslmod/CombatSolver-regent-healing-bound-20261003/.local/c56/native-src/HiddenDaggers.cs",
+          "sourceSha256": "e309cc13c69da7e36d54bd20f66fb5f60502da75a943bd14b22e4a54b991b894",
+          "reviewedAsInitial": true,
+          "pinnedAuditMatch": true,
+          "pinnedHashSections": [
+            "sourceHashes:HiddenDaggers.cs"
+          ]
+        },
+        "statefulDependenciesChecked": "native command and complete callback dispatch; source role does not depend on temporary pile removal"
+      },
+      {
+        "type": "Pounce",
+        "recoveryTarget": null,
+        "effectTarget": "enemy and player power",
+        "timingAndCondition": "OnPlay",
+        "effect": "damage; FreeSkillPower changes energy cost and decrements before skill play",
+        "countAndRepeatability": "each play",
+        "recoveryUpperBound": 0,
+        "sourceRole": "initial/all four piles/permanent deck, separately reviewed; native generation only under existing actual pool/player/unlock/filter premises",
+        "evidence": {
+          "type": "Pounce",
+          "existingSource": "/home/ltlly/Code/nmslmod/CombatSolver-regent-healing-bound-20261003/.local/c56/native-src/Pounce.cs",
+          "lines": 37,
+          "source": "/home/ltlly/Code/nmslmod/CombatSolver-regent-healing-bound-20261003/.local/c56/native-src/Pounce.cs",
+          "sourceSha256": "4381dc45b62e60f7a9ea8bbff0738c5fcd97e6030750778d66cd5307ab85d7d5",
+          "reviewedAsInitial": true,
+          "pinnedAuditMatch": true,
+          "pinnedHashSections": [
+            "sourceHashes:Pounce.cs"
+          ]
+        },
+        "statefulDependenciesChecked": "native command and complete callback dispatch; source role does not depend on temporary pile removal"
+      },
+      {
+        "type": "PrepTime",
+        "recoveryTarget": null,
+        "effectTarget": "player power",
+        "timingAndCondition": "OnPlay and own side turn start",
+        "effect": "PrepTimePower applies Vigor; no HP write",
+        "countAndRepeatability": "each own side start",
+        "recoveryUpperBound": 0,
+        "sourceRole": "initial/all four piles/permanent deck, separately reviewed; native generation only under existing actual pool/player/unlock/filter premises",
+        "evidence": {
+          "type": "PrepTime",
+          "existingSource": "/home/ltlly/Code/nmslmod/CombatSolver-regent-healing-bound-20261003/.local/c56/native-src/PrepTime.cs",
+          "lines": 34,
+          "source": "/home/ltlly/Code/nmslmod/CombatSolver-regent-healing-bound-20261003/.local/c56/native-src/PrepTime.cs",
+          "sourceSha256": "890a5005c8be355013fc6e35fe6adb60827fe981ea73b5e5a6a3550ed8536c08",
+          "reviewedAsInitial": true,
+          "pinnedAuditMatch": true,
+          "pinnedHashSections": [
+            "sourceHashes:PrepTime.cs"
+          ]
+        },
+        "statefulDependenciesChecked": "native command and complete callback dispatch; source role does not depend on temporary pile removal"
+      },
+      {
+        "type": "Shockwave",
+        "recoveryTarget": null,
+        "effectTarget": "all enemies",
+        "timingAndCondition": "OnPlay",
+        "effect": "Weak/Vulnerable; Exhaust card",
+        "countAndRepeatability": "each play",
+        "recoveryUpperBound": 0,
+        "sourceRole": "initial/all four piles/permanent deck, separately reviewed; native generation only under existing actual pool/player/unlock/filter premises",
+        "evidence": {
+          "type": "Shockwave",
+          "existingSource": "/home/ltlly/Code/nmslmod/CombatSolver-regent-healing-bound-20261003/.local/c56/native-src/Shockwave.cs",
+          "lines": 50,
+          "source": "/home/ltlly/Code/nmslmod/CombatSolver-regent-healing-bound-20261003/.local/c56/native-src/Shockwave.cs",
+          "sourceSha256": "c7ace5748bc247843014821974ab9bebd997ede13b18fa7fff3289120d1e31d9",
+          "reviewedAsInitial": true,
+          "pinnedAuditMatch": true,
+          "pinnedHashSections": [
+            "sourceHashes:Shockwave.cs"
+          ]
+        },
+        "statefulDependenciesChecked": "native command and complete callback dispatch; source role does not depend on temporary pile removal"
+      },
+      {
+        "type": "Tactician",
+        "recoveryTarget": null,
+        "effectTarget": "player energy",
+        "timingAndCondition": "OnPlay including Sly auto-play on discard",
+        "effect": "gain energy only; normal card callbacks remain active",
+        "countAndRepeatability": "each play",
+        "recoveryUpperBound": 0,
+        "sourceRole": "initial/all four piles/permanent deck, separately reviewed; native generation only under existing actual pool/player/unlock/filter premises",
+        "evidence": {
+          "type": "Tactician",
+          "existingSource": "/home/ltlly/Code/nmslmod/CombatSolver-regent-healing-bound-20261003/.local/c56/native-src/Tactician.cs",
+          "lines": 35,
+          "source": "/home/ltlly/Code/nmslmod/CombatSolver-regent-healing-bound-20261003/.local/c56/native-src/Tactician.cs",
+          "sourceSha256": "27d9ec92f78723dd84651b8926a490ece49b4936ffb25173da704dc753e80c11",
+          "reviewedAsInitial": true,
+          "pinnedAuditMatch": true,
+          "pinnedHashSections": [
+            "sourceHashes:Tactician.cs"
+          ]
+        },
+        "statefulDependenciesChecked": "native command and complete callback dispatch; source role does not depend on temporary pile removal"
+      },
+      {
+        "type": "Volley",
+        "recoveryTarget": null,
+        "effectTarget": "random opponents",
+        "timingAndCondition": "OnPlay",
+        "effect": "X-cost multi-hit damage using native target RNG",
+        "countAndRepeatability": "each play",
+        "recoveryUpperBound": 0,
+        "sourceRole": "initial/all four piles/permanent deck, separately reviewed; native generation only under existing actual pool/player/unlock/filter premises",
+        "evidence": {
+          "type": "Volley",
+          "existingSource": "/home/ltlly/Code/nmslmod/CombatSolver-regent-healing-bound-20261003/.local/c56/native-src/Volley.cs",
+          "lines": 36,
+          "source": "/home/ltlly/Code/nmslmod/CombatSolver-regent-healing-bound-20261003/.local/c56/native-src/Volley.cs",
+          "sourceSha256": "9442883dfaa07f391fd4a5f8c3b6c24152f2bb97f340baa4eed91d03dae6c918",
+          "reviewedAsInitial": true,
+          "pinnedAuditMatch": true,
+          "pinnedHashSections": [
+            "sourceHashes:Volley.cs"
+          ]
+        },
+        "statefulDependenciesChecked": "native command and complete callback dispatch; source role does not depend on temporary pile removal"
+      },
+      {
+        "type": "WellLaidPlans",
+        "recoveryTarget": null,
+        "effectTarget": "own hand",
+        "timingAndCondition": "OnPlay and ShouldFlush",
+        "effect": "retain hand; no HP write",
+        "countAndRepeatability": "each turn while power active",
+        "recoveryUpperBound": 0,
+        "sourceRole": "initial/all four piles/permanent deck, separately reviewed; native generation only under existing actual pool/player/unlock/filter premises",
+        "evidence": {
+          "type": "WellLaidPlans",
+          "existingSource": "/home/ltlly/Code/nmslmod/CombatSolver-regent-healing-bound-20261003/.local/c56/native-src/WellLaidPlans.cs",
+          "lines": 28,
+          "source": "/home/ltlly/Code/nmslmod/CombatSolver-regent-healing-bound-20261003/.local/c56/native-src/WellLaidPlans.cs",
+          "sourceSha256": "4e815fa90e223975031d591655e740b1421e418d38063863c80479031dded92b",
+          "reviewedAsInitial": true,
+          "pinnedAuditMatch": true,
+          "pinnedHashSections": [
+            "sourceHashes:WellLaidPlans.cs"
+          ]
+        },
+        "statefulDependenciesChecked": "native command and complete callback dispatch; source role does not depend on temporary pile removal"
+      },
+      {
+        "type": "Wither",
+        "recoveryTarget": null,
+        "effectTarget": "player",
+        "timingAndCondition": "turn end while in hand; monster generation callback",
+        "effect": "HP damage; FakeUpgrade raises damage3, does not increase life or max life",
+        "countAndRepeatability": "each turn; repeat fake upgrades",
+        "recoveryUpperBound": 0,
+        "sourceRole": "initial/all four piles/permanent deck, separately reviewed; native generation only under existing actual pool/player/unlock/filter premises",
+        "evidence": {
+          "type": "Wither",
+          "existingSource": "/home/ltlly/Code/nmslmod/CombatSolver-regent-healing-bound-20261003/.local/c56/native-src/Wither.cs",
+          "lines": 104,
+          "source": "/home/ltlly/Code/nmslmod/CombatSolver-regent-healing-bound-20261003/.local/c56/native-src/Wither.cs",
+          "sourceSha256": "bafd2a544a09bb9ac8c183ef87a3a018f543f58a0d5f3333ed6179e619b23e92",
+          "reviewedAsInitial": true,
+          "pinnedAuditMatch": true,
+          "pinnedHashSections": [
+            "additionalStatusCurseSourceHashes:Wither"
+          ]
+        },
+        "statefulDependenciesChecked": "native command and complete callback dispatch; source role does not depend on temporary pile removal"
+      },
+      {
+        "type": "Aeonglass",
+        "recoveryTarget": null,
+        "effectTarget": "player damage, self block/Strength, fixed player Wither",
+        "timingAndCondition": "AfterAddedToRoom; all3 moves; AfterCardGeneratedForCombat; AfterDeath",
+        "countAndRepeatability": "repeating3-move cycle, every sixth played card under Withering; wither upgrades repeat",
+        "recoveryUpperBound": 0,
+        "evidence": "Aeonglass.cs; native10c7a7e109954966914f532d560e372d",
+        "unknownBroaderEnemies": false
+      },
+      {
+        "type": "WitheringPresencePower",
+        "recoveryTarget": null,
+        "effectTarget": "target player hand",
+        "timingAndCondition": "only card owner equals Target.Player; after each6 card plays",
+        "countAndRepeatability": "counter resets6; indefinitely repeatable generation of fixed Wither",
+        "recoveryUpperBound": 0,
+        "evidence": "WitheringPresencePower.cs; native six-play trigger and full state match"
+      }
+    ],
+    "rootDiagnostic": {
+      "source": "/home/ltlly/Code/nmslmod/CombatSolver-healing-bound-general-20261003/.local/tool-tasks/silent-large-recovery-audit/root-only/runs/silent-large-component-C1/root-healing-sources.json",
+      "component": true,
+      "rejection": null,
+      "initialBound": 0,
+      "samples": 100,
+      "medianMilliseconds": 0.39044999999999996,
+      "maxMilliseconds": 0.4364,
+      "bytesPerQuery": 768.0,
+      "liveUnchanged": true,
+      "performanceAcceptanceExcluded": true
+    },
+    "screen": {
+      "result": "/home/ltlly/Code/nmslmod/CombatSolver-healing-bound-general-20261003/.local/tool-tasks/silent-large-recovery-audit/screen/runs/silent-large-component-C1/result.json",
+      "wallSeconds": 96.2948164,
+      "peakWorkingSetBytes": 27444269056,
+      "quality": {
+        "won": false,
+        "outstandingStolenResource": 0,
+        "projectedBattleHpLost": 65,
+        "strategicHpDeficit": 65,
+        "potionStrategicCost": 0,
+        "projectedBattlePotionCount": 0,
+        "enemyHp": 464,
+        "score": -1000006862052,
+        "combatEndedTurn": null,
+        "theftPolicy": null,
+        "survives": false,
+        "deathSaveUseCount": 0,
+        "growthHpCredit": 0,
+        "growthRewardCount": 0
+      },
+      "prunes": 0,
+      "scope": "new strict root0 certificate passed; same original NoWin; no incumbent produced, added certification not a performance improvement"
+    },
+    "originalGoalSeconds": 63.6328084,
+    "acceptance": false,
+    "reason": "No completed victory and zero incumbent updates/prunes; unchanged NoWin; strict certification admits this root to optional opening-plan scheduling, but no phase ablation was performed and no single bottleneck is asserted",
+    "coverage": "target refused before, now accepted; original C4223/27 reused; full new coverage not measured",
+    "rawDirectory": "/home/ltlly/Code/nmslmod/CombatSolver-healing-bound-general-20261003/.local/tool-tasks/silent-large-recovery-audit"
+  },
+  "regentPr215Composition": {
+    "dependencyCopiedPaths": [
+      "src/Runtime/CombatRootSnapshot.cs",
+      "src/Runtime/SolverController.cs",
+      "src/Runtime/SolverControllerSessions.cs",
+      "src/Search/CombatBeamSolver.Phases.cs",
+      "src/Search/CombatBeamSolver.Retention.cs",
+      "src/Search/CombatBeamSolver.cs",
+      "src/Search/CombatSearchCoordinator.cs",
+      "src/Search/PrimaryIncumbentTable.cs",
+      "src/Search/ResourceIncumbentPolicy.cs",
+      "src/Search/SearchPolicySnapshot.cs",
+      "src/Search/SimulatedCombatState.Theft.cs",
+      "src/Search/StrategicHpRecoveryBound.Components.cs",
+      "src/Search/StrategicHpRecoveryBound.KnownSources.cs",
+      "src/Testing/Contracts/Search/UnattendedTestRunner.PotionCostIncumbent.cs",
+      "src/Testing/Host/UnattendedTestRunner.Executor.cs",
+      "src/Testing/README.md"
+    ],
+    "ourDelta": [
+      "explicitly reviewed Regent initial sources19 (including fixed enemy-generated FranticEscape)",
+      "TheInsatiable, Sandpit owner/target, three individually audited relics",
+      "new sharing and same-turn equal-HP pruning require CanCertifyRemainingHealing; legacy heuristic alone is insufficient",
+      "new local equal-HP path uses the finite branch proof itself; unknown branch keeps original search, never restored by heuristic minimum"
+    ],
+    "ourPatch": "fixtures/pr215-proof-component-delta-20261005.patch",
+    "candidateDllSha256": "0fa5b354cc0b82e8d63aa4b35bdf78f6469c1ef767f9a57cfe7743f6216aeaef",
+    "build": {
+      "seconds": 13.82,
+      "warnings": 0,
+      "errors": 0,
+      "copyModOnBuild": false
+    },
+    "failedBuilds": [
+      {
+        "seconds": 18.47,
+        "warnings": 0,
+        "errors": 1,
+        "reason": "copied native fixture requires its existing test-only narrow-pilot wrapper; copied just that method, excluding unrelated old memo fixture",
+        "log": "combined-build.log",
+        "copyModOnBuild": false
+      }
+    ],
+    "nativeCost": {
+      "runId": "8faef194b2e449a0bea99e724f76a65e",
+      "status": "Passed",
+      "scenarioId": "POTION-COST-INCUMBENT",
+      "mainAssemblyHash": "0FA5B354CC0B82E8D63AA4B35BDF78F6469C1EF767F9A57CFE7743F6216AEAEF",
+      "elapsedMilliseconds": 27568.1057,
+      "completedChecks": [
+        "PotionCostIncumbent:RealCompleteVictories:SameHpTurnPotionCount:Costs=14/9:SharedKept=True:LocalKept=True:SharedAblationKept=True:SameCostPruned=True:MissingCostKept=True:ZeroCostPruned=True:LateCheapSharedKept=True:LateCheapLocalKept=True:UnknownRootTableRefused=True:NewExhaustFeedUnknownRecoveryKept=True:NativeLateEndTurnAndPotionFullStates:ParentLiveRngIsolation",
+        "NativeOutcome:combatEnded=False:turn=2:hp=75:maxHp=75"
+      ],
+      "error": null
+    },
+    "nativeCombination": {
+      "runId": "0875367f0ce8467f9d33658b4ba1430e",
+      "status": "Passed",
+      "scenarioId": "COMPONENT-REGENT-INCUMBENT-COMBO",
+      "mainAssemblyHash": "0FA5B354CC0B82E8D63AA4B35BDF78F6469C1EF767F9A57CFE7743F6216AEAEF",
+      "elapsedMilliseconds": 27197.1876,
+      "completedChecks": [
+        "RecoveryIncumbentCombination:StrictRootZero:OldNativeEffectsReused:NewUnionAndOwnerGuards:CompleteNoPotionPilot:RequestLedger:Dop2StrictIncremental:ParentLiveRngIsolation",
+        "NativeOutcome:combatEnded=False:turn=1:hp=75:maxHp=75"
+      ],
+      "error": null
+    },
+    "reusedNativeEffects": "pinned current game Regent642030... full commands/callback/card/relic/monster states unchanged; new runtime interfaces validated separately",
+    "screen": [
+      {
+        "label": "regent-shared-proof-C1",
+        "result": "/home/ltlly/Code/nmslmod/CombatSolver-healing-bound-general-20261003/.local/tool-tasks/regent-shared-proof/serial-screen/runs/regent-shared-proof-C1/result.json",
+        "wallSeconds": 16.291533,
+        "peakWorkingSetBytes": 12588892160,
+        "quality": {
+          "won": true,
+          "outstandingStolenResource": 0,
+          "projectedBattleHpLost": 40,
+          "strategicHpDeficit": 40,
+          "potionStrategicCost": 0,
+          "projectedBattlePotionCount": 0,
+          "enemyHp": 0,
+          "score": 9999753969,
+          "combatEndedTurn": 6,
+          "theftPolicy": null,
+          "survives": true,
+          "deathSaveUseCount": 0,
+          "growthHpCredit": 0,
+          "growthRewardCount": 0
+        },
+        "nodes": 79490,
+        "transitions": 311838,
+        "selectedPrimaryPrunes": 350,
+        "selectedPrimaryUpdates": 1
+      },
+      {
+        "label": "necro-resource-sentinel-C1",
+        "result": "/home/ltlly/Code/nmslmod/CombatSolver-healing-bound-general-20261003/.local/tool-tasks/regent-shared-proof/serial-screen/runs/necro-resource-sentinel-C1/result.json",
+        "wallSeconds": 43.4621461,
+        "peakWorkingSetBytes": 23752892416,
+        "quality": {
+          "won": true,
+          "outstandingStolenResource": 0,
+          "projectedBattleHpLost": 0,
+          "strategicHpDeficit": 0,
+          "potionStrategicCost": 115,
+          "projectedBattlePotionCount": 2,
+          "enemyHp": 0,
+          "score": 10001931924,
+          "combatEndedTurn": 11,
+          "theftPolicy": null,
+          "survives": true,
+          "deathSaveUseCount": 0,
+          "growthHpCredit": 0,
+          "growthRewardCount": 0
+        },
+        "nodes": 185694,
+        "transitions": 1475562,
+        "selectedPrimaryPrunes": 659,
+        "selectedPrimaryUpdates": 1
+      }
+    ],
+    "originalRegentSeconds": 20.0782254,
+    "originalRegentSpeedup": 1.2324331540807116,
+    "acceptance": false,
+    "reason": "Regent misses2x; same-loss Necro sentinel spends2potions/cost115 instead of previously qualified1/cost70; proof gate alone does not resolve observed quality difference",
+    "causality": "no claimed isolated PR215 bug beyond the two separately native-proven potion-cost bugs",
+    "rawDirectory": "/home/ltlly/Code/nmslmod/CombatSolver-healing-bound-general-20261003/.local/tool-tasks/regent-shared-proof"
+  },
+  "delivery": {
+    "runtimePromoted": false,
+    "newDeployment": false,
+    "versionsTagsReleasesChanged": false,
+    "newFormalPullRequestCreated": false,
+    "researchDocumentationOnly": true,
+    "goalComplete": false,
+    "queenInvestigationStillPaused": true,
+    "nextWork": "combine another general cost reduction with retained candidates; keep original slow-root thresholds and quality/memory gates"
+  },
+  "staticValidation": {
+    "documentation": {
+      "files": 440,
+      "links": 1730,
+      "errors": 0
+    },
+    "reviewPatchDryRun": "git apply --check passed against retained PR215 composition foundation; no mutation",
+    "patchWhitespacePreparation": "staged text check flagged blank unified-diff context lines; normalized empty context lines without changing hunks, apply dry run passed"
+  },
+  "costAwareWitnessFrontier": {
+    "baseSource": "/home/ltlly/Code/nmslmod/CombatSolver-healing-bound-general-20261003/.local/tool-tasks/regent-shared-proof/source",
+    "baseDllSha256": "0fa5b354cc0b82e8d63aa4b35bdf78f6469c1ef767f9a57cfe7743f6216aeaef",
+    "scope": "retain cost/turn-incomparable complete witnesses inside existing PR215 table; branch queries choose cost-qualified earliest witness; no score, policy, budget or healing certificate changes",
+    "productionIntegrated": false,
+    "copyModOnBuild": false,
+    "nativePending": false,
+    "performancePending": false,
+    "noDuplicateSharedTable": true,
+    "beforeImplementation": "new native assertion first shows cheap later complete victory rejected by existing singleton; rejection only costs pruning strength, not established quality bug",
+    "beforeDllSha256": "0f894af3025d4226d74642b70bb5c31ffa288459e5eb7fcbb95e353458e64d97",
+    "beforeBuildLog": "/home/ltlly/Code/nmslmod/CombatSolver-healing-bound-general-20261003/.local/tool-tasks/cost-aware-witness-frontier-20261005/before-build.log",
+    "initialBeforeContract": {
+      "runId": "c39edeff09714f6f9ba1d852a368622b",
+      "status": "Passed",
+      "elapsedMilliseconds": 27388.3538,
+      "completedChecks": [
+        "PotionCostIncumbent:RealCompleteVictories:SameHpTurnPotionCount:Costs=14/9:SharedKept=True:LocalKept=True:SharedAblationKept=True:SameCostPruned=True:MissingCostKept=True:ZeroCostPruned=True:LateCheapSharedKept=True:LateCheapLocalKept=True:UnknownRootTableRefused=True:NewExhaustFeedUnknownRecoveryKept=True:NativeLateEndTurnAndPotionFullStates:ParentLiveRngIsolation",
+        "NativeOutcome:combatEnded=False:turn=2:hp=75:maxHp=75"
+      ],
+      "error": null
+    },
+    "initialBeforeContractInterpretation": "Passed original semantic checks; assertion used member-return bool which also reports member-local incumbent update, so it did not test shared-table retention. Not counted as missed-bound proof.",
+    "beforeTableDllSha256": "02374af8a540cd0c63693bd56ac126203b82d6bb9227d0c8a2b0eadf5d9150fa",
+    "beforeTableBuildLog": "/home/ltlly/Code/nmslmod/CombatSolver-healing-bound-general-20261003/.local/tool-tasks/cost-aware-witness-frontier-20261005/before-table-build.log",
+    "dllSha256": "9b7135026abe624168be5774f5829330c19186dd678d61ba788b78c7d55eb36d",
+    "build": {
+      "elapsed": "00:00:09.34",
+      "warnings": 0,
+      "errors": 0,
+      "copyModOnBuild": false
+    },
+    "beforeTableRecord": {
+      "runId": "a9a36690814e41d293344fab440ff537",
+      "status": "Failed",
+      "elapsedMilliseconds": 26528.346,
+      "completedChecks": [],
+      "error": "System.InvalidOperationException: COST_FRONTIER_TABLE_ONLY: existing singleton rejected actual cheaper later equal-HP complete victory; early_cost=14 late_cost=9 early_turn=1 late_turn=2\n   at CombatSolver.CombatBeamSolver.PotionCostIncumbentProbeForTesting(CombatRootSnapshot root, SolverDisplayNames names, BattleDamageSnapshot damage, SearchPolicySnapshot policy)\n   at CombatSolver.UnattendedTestRunner.<>c__DisplayClass425_0.<AssertPotionCostIncumbentAsync>b__1()\n   at System.Threading.Tasks.Task`1.InnerInvoke()\n   at System.Threading.ExecutionContext.RunFromThreadPoolDispatchLoop(Thread threadPoolThread, ExecutionContext executionContext, ContextCallback callback, Object state)\n--- End of stack trace from previous location ---\n   at System.Threading.ExecutionContext.RunFromThreadPoolDispatchLoop(Thread threadPoolThread, ExecutionContext executionContext, ContextCallback callback, Object state)\n   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)\n--- End of stack trace from previous location ---\n   at CombatSolver.UnattendedTestRunner.AssertPotionCostIncumbentAsync(CombatState live, Player player)\n   at CombatSolver.UnattendedTestRunner.Executor.ExecuteAsync(ScenarioContext scenario)\n   at CombatSolver.UnattendedTestRunner.RunAsync()"
+    },
+    "beforeTableExpectedFailure": true,
+    "nativeRecord": {
+      "runId": "7de37864b1904feab4c8eb4699e224e9",
+      "status": "Passed",
+      "elapsedMilliseconds": 27176.1764,
+      "completedChecks": [
+        "PotionCostIncumbent:RealCompleteVictories:SameHpTurnPotionCount:Costs=14/9:SharedKept=True:LocalKept=True:SharedAblationKept=True:SameCostPruned=True:MissingCostKept=True:ZeroCostPruned=True:LateCheapSharedKept=True:LateCheapLocalKept=True:UnknownRootTableRefused=True:NewExhaustFeedUnknownRecoveryKept=True:NativeLateEndTurnAndPotionFullStates:ParentLiveRngIsolation",
+        "NativeOutcome:combatEnded=False:turn=2:hp=75:maxHp=75"
+      ],
+      "error": null
+    },
+    "nativeFrontierLogs": [],
+    "sourceHashes": {
+      "src/Search/PrimaryIncumbentTable.cs": "00f6fc27781a111d82a07d7adf611842263558786e2b7bc3674eef0548285267",
+      "src/Search/CombatBeamSolver.Retention.cs": "8a80630ba4e8c0393aee332f3b7497ae6a1c83d96e9fb0592f8450797aefb2eb",
+      "src/Search/CombatSearchCoordinator.cs": "c8ec6f1d724ee2a17eaba881c0bd0411c06cf3c7abecba8300ad5b030e241e85",
+      "src/Testing/Contracts/Search/UnattendedTestRunner.PotionCostIncumbent.cs": "7bcf998198ff27d0c80161023fcc71b808aa435ac51b49ae6a787e144a8bcb80"
+    },
+    "nativeOracleCases": 144,
+    "oracleCaseCountEvidence": "Passed fixture loops3HP x3turns x16spentCost at actual14cost; diagnostic sink silent so no extra log",
+    "hypothesis": "same-bucket cheaper later witness can give a usable equalHP bound where singleton expensive earlier cost guard correctly keeps branch",
+    "unknownMetadata": "no synthetic witness; unknown cost keeps nullable guard; all eligibility and unknown-root fences unchanged",
+    "screenSummary": "/home/ltlly/Code/nmslmod/CombatSolver-healing-bound-general-20261003/.local/tool-tasks/cost-aware-witness-frontier-20261005/screen-summary.json",
+    "screen": {
+      "scope": "serial A-C initial screen; same root and VeryHigh/DOP16 original budget/policy/host; no profiler or strict diagnostics; not final acceptance",
+      "baseline": {
+        "wallSeconds": 36.1442761,
+        "peakProcessWorkingSetBytes": 16018042880,
+        "comparisonQuality": {
+          "Won": true,
+          "OutstandingStolenResource": 0,
+          "ProjectedBattleHpLost": 37,
+          "StrategicHpDeficit": 31,
+          "PotionStrategicCost": 0,
+          "ProjectedBattlePotionCount": 0,
+          "EnemyHp": 0,
+          "Score": 10000164976,
+          "CombatEndedTurn": 5,
+          "Survives": true,
+          "DeathSaveUseCount": 0,
+          "GrowthHpCredit": 0,
+          "GrowthRewardCount": 0
+        },
+        "budget": {
+          "Profile": "VeryHigh",
+          "BeamWidth": 135,
+          "MaxExpandedNodes": 500000,
+          "MaxCardBranchesPerNode": 72,
+          "MaxPileChoiceBranchesPerAction": 42,
+          "MaxHandChoiceBranchesPerAction": 54,
+          "MaxDegreeOfParallelism": 16,
+          "BudgetMilliseconds": 300000,
+          "EarlyTurnExplorationDepth": 0,
+          "EarlyTurnExplorationBudgetMilliseconds": 0,
+          "PotionPolicy": "Smart",
+          "SearchMode": "Coordinator",
+          "UsePortfolio": true,
+          "fixedSearchBudget": false,
+          "enableNoGcRegion": true,
+          "noGcRegionBudgetGigabytes": 16
+        },
+        "root": "turn=1 round=1 phase=Play side=Player energy=3 hp=80/80 hand=[BULLY,PERFECTED_STRIKE,RAMPAGE,HEADBUTT,DEFEND_IRONCLAD] draw=20 discard=0 relics=[BURNING_BLOOD,ICE_CREAM,TUNGSTEN_ROD,KUNAI] enemies=[DECIMILLIPEDE_SEGMENT_FRONT#1:46/46@WRITHE_MOVE,DECIMILLIPEDE_SEGMENT_MIDDLE#2:52/52@BULK_MOVE,DECIMILLIPEDE_SEGMENT_BACK#3:48/48@CONSTRICT_MOVE] total_floor=1 act_floor=0",
+        "pruneCounters": {
+          "boundary": "None",
+          "selectedExpanded": 2225,
+          "selectedTransitions": 10994,
+          "selectedChoiceBranches": 776,
+          "totalExpanded": 145009,
+          "totalTransitions": 913542,
+          "totalChoiceBranches": 189454,
+          "choiceReplayAttempts": 776,
+          "choiceReplayBudgetExhaustions": 0,
+          "choiceBranchesDroppedByBudget": 0,
+          "roundReplayPrefixCaptures": 0,
+          "dominatedActionsPruned": 814,
+          "topQueueActionsDropped": 0,
+          "actionAdmissionRepresentativesProtected": 0,
+          "duplicateCardBranchesPruned": 445,
+          "shuffleBranchesPruned": 0,
+          "soldHpBranchesPruned": 0,
+          "primaryIncumbentBranchesPruned": 307,
+          "primaryIncumbentUpdates": 1,
+          "replayCount": 2,
+          "forkCount": 10994,
+          "reusedNodeSnapshots": 2237,
+          "transpositionBranchesPruned": 422,
+          "repeatableNoProgressBranchesPruned": 0,
+          "standPatProbes": 262,
+          "transitionCacheHits": 0,
+          "roundReplayPrefixReuses": 0,
+          "cycleRegionsDetected": 0,
+          "cycleRegionCandidatesConsidered": 0,
+          "cycleRegionCandidatesAdmitted": 0,
+          "cycleRegionCandidatesDropped": 0,
+          "cycleRegionProgressEpochs": 0,
+          "cycleRegionProbeCandidatesAdmitted": 0,
+          "cycleRegionProgressCandidatesAdmitted": 0,
+          "cycleRegionMaxActionFamilies": 0,
+          "orderedMutationCandidatesAdmitted": 218,
+          "orderedMutationLeaseExpiredBudget": 47,
+          "orderedMutationOrdinaryFallbacks": 30,
+          "orderedMutationColdAtomicCommitted": 9,
+          "orderedMutationColdAtomicRejected": 10,
+          "deferredRoundChoiceActions": 186,
+          "deferredRoundChoiceLayerWidthTotal": 776,
+          "maxDeferredRoundChoiceLayerWidth": 9,
+          "deferredRoundChoiceFiniteQuotaFallbacks": 0,
+          "deferredRoundChoiceFinitePrimaryLayers": 186,
+          "deferredRoundChoiceFinitePendingFallbacks": 0,
+          "parallelActionReplayWaves": 63,
+          "parallelActionReplayWorkItems": 7731,
+          "maxParallelActionReplayConcurrency": 16,
+          "parallelRoundChoiceReplayWaves": 17,
+          "parallelRoundChoiceReplayWorkItems": 1040,
+          "maxParallelRoundChoiceReplayConcurrency": 16,
+          "maxParallelConcurrency": 16,
+          "searchedTurns": 5,
+          "shufflesCrossed": 1,
+          "score": 10000164976,
+          "projectedBattleHpLost": 37,
+          "potionCount": 0,
+          "onlyDeathRoutes": false,
+          "finalHp": 43,
+          "finalEnemyHp": 0,
+          "combatEndedTurn": 5,
+          "transpositionCount": 9474,
+          "expandedTranspositionCount": 2064,
+          "transpositionLimitBypasses": 0,
+          "standPatCacheCount": 262,
+          "threatProjectionCacheCount": 10,
+          "coverageCacheCount": 10
+        }
+      },
+      "candidate": {
+        "wallSeconds": 36.7837196,
+        "peakProcessWorkingSetBytes": 16115089408,
+        "comparisonQuality": {
+          "Won": true,
+          "OutstandingStolenResource": 0,
+          "ProjectedBattleHpLost": 37,
+          "StrategicHpDeficit": 31,
+          "PotionStrategicCost": 0,
+          "ProjectedBattlePotionCount": 0,
+          "EnemyHp": 0,
+          "Score": 10000164976,
+          "CombatEndedTurn": 5,
+          "Survives": true,
+          "DeathSaveUseCount": 0,
+          "GrowthHpCredit": 0,
+          "GrowthRewardCount": 0
+        },
+        "budget": {
+          "Profile": "VeryHigh",
+          "BeamWidth": 135,
+          "MaxExpandedNodes": 500000,
+          "MaxCardBranchesPerNode": 72,
+          "MaxPileChoiceBranchesPerAction": 42,
+          "MaxHandChoiceBranchesPerAction": 54,
+          "MaxDegreeOfParallelism": 16,
+          "BudgetMilliseconds": 300000,
+          "EarlyTurnExplorationDepth": 0,
+          "EarlyTurnExplorationBudgetMilliseconds": 0,
+          "PotionPolicy": "Smart",
+          "SearchMode": "Coordinator",
+          "UsePortfolio": true,
+          "fixedSearchBudget": false,
+          "enableNoGcRegion": true,
+          "noGcRegionBudgetGigabytes": 16
+        },
+        "root": "turn=1 round=1 phase=Play side=Player energy=3 hp=80/80 hand=[BULLY,PERFECTED_STRIKE,RAMPAGE,HEADBUTT,DEFEND_IRONCLAD] draw=20 discard=0 relics=[BURNING_BLOOD,ICE_CREAM,TUNGSTEN_ROD,KUNAI] enemies=[DECIMILLIPEDE_SEGMENT_FRONT#1:46/46@WRITHE_MOVE,DECIMILLIPEDE_SEGMENT_MIDDLE#2:52/52@BULK_MOVE,DECIMILLIPEDE_SEGMENT_BACK#3:48/48@CONSTRICT_MOVE] total_floor=1 act_floor=0",
+        "pruneCounters": {
+          "boundary": "None",
+          "selectedExpanded": 2225,
+          "selectedTransitions": 10994,
+          "selectedChoiceBranches": 776,
+          "totalExpanded": 145009,
+          "totalTransitions": 913542,
+          "totalChoiceBranches": 189454,
+          "choiceReplayAttempts": 776,
+          "choiceReplayBudgetExhaustions": 0,
+          "choiceBranchesDroppedByBudget": 0,
+          "roundReplayPrefixCaptures": 0,
+          "dominatedActionsPruned": 814,
+          "topQueueActionsDropped": 0,
+          "actionAdmissionRepresentativesProtected": 0,
+          "duplicateCardBranchesPruned": 445,
+          "shuffleBranchesPruned": 0,
+          "soldHpBranchesPruned": 0,
+          "primaryIncumbentBranchesPruned": 307,
+          "primaryIncumbentUpdates": 1,
+          "replayCount": 2,
+          "forkCount": 10994,
+          "reusedNodeSnapshots": 2237,
+          "transpositionBranchesPruned": 422,
+          "repeatableNoProgressBranchesPruned": 0,
+          "standPatProbes": 262,
+          "transitionCacheHits": 0,
+          "roundReplayPrefixReuses": 0,
+          "cycleRegionsDetected": 0,
+          "cycleRegionCandidatesConsidered": 0,
+          "cycleRegionCandidatesAdmitted": 0,
+          "cycleRegionCandidatesDropped": 0,
+          "cycleRegionProgressEpochs": 0,
+          "cycleRegionProbeCandidatesAdmitted": 0,
+          "cycleRegionProgressCandidatesAdmitted": 0,
+          "cycleRegionMaxActionFamilies": 0,
+          "orderedMutationCandidatesAdmitted": 218,
+          "orderedMutationLeaseExpiredBudget": 47,
+          "orderedMutationOrdinaryFallbacks": 30,
+          "orderedMutationColdAtomicCommitted": 9,
+          "orderedMutationColdAtomicRejected": 10,
+          "deferredRoundChoiceActions": 186,
+          "deferredRoundChoiceLayerWidthTotal": 776,
+          "maxDeferredRoundChoiceLayerWidth": 9,
+          "deferredRoundChoiceFiniteQuotaFallbacks": 0,
+          "deferredRoundChoiceFinitePrimaryLayers": 186,
+          "deferredRoundChoiceFinitePendingFallbacks": 0,
+          "parallelActionReplayWaves": 63,
+          "parallelActionReplayWorkItems": 7731,
+          "maxParallelActionReplayConcurrency": 16,
+          "parallelRoundChoiceReplayWaves": 17,
+          "parallelRoundChoiceReplayWorkItems": 1040,
+          "maxParallelRoundChoiceReplayConcurrency": 16,
+          "maxParallelConcurrency": 16,
+          "searchedTurns": 5,
+          "shufflesCrossed": 1,
+          "score": 10000164976,
+          "projectedBattleHpLost": 37,
+          "potionCount": 0,
+          "onlyDeathRoutes": false,
+          "finalHp": 43,
+          "finalEnemyHp": 0,
+          "combatEndedTurn": 5,
+          "transpositionCount": 9474,
+          "expandedTranspositionCount": 2064,
+          "transpositionLimitBypasses": 0,
+          "standPatCacheCount": 262,
+          "threatProjectionCacheCount": 10,
+          "coverageCacheCount": 10
+        }
+      },
+      "sameRoot": true,
+      "sameBudget": true,
+      "samePolicy": true,
+      "sameQuality": true,
+      "sameWork": true,
+      "workerAllocBaseline": 44680644520,
+      "workerAllocCandidate": 44640682808,
+      "originalSeconds": 195.4952142,
+      "originalRootEqual": true,
+      "speedupVsFoundation": 0.9826161272716966,
+      "speedupVsOriginal": 5.314721195297498,
+      "rssRatioVsFoundation": 1.0060585758651683,
+      "finalAcceptance": false,
+      "frontierCumulativeLogs": [
+        "[CombatSolver/Test] COST_FRONTIER_CACHE scope=request_cumulative buckets=2 witnesses=2 max_frontier=1 queries=19179 alternative_selections=0 accepted_cost_tradeoffs=0"
+      ],
+      "cumulativeSnapshotsCannotBeSummed": true
+    },
+    "runtimePatch": "fixtures/pr215-cost-aware-frontier-research-20261005.patch",
+    "beforeTableFixturePatch": "fixtures/pr215-cost-frontier-before-table-research-20261005.patch",
+    "decision": "Not promoted: same work/quality; singleton frontiers only, no usable alternative; serial0.982616x not improvement",
+    "historicalOriginalComparisonNotNewOptimizationCredit": true
+  },
+  "necroPr215Composition": {
+    "baseSource": "/home/ltlly/Code/nmslmod/CombatSolver-healing-bound-general-20261003/.local/tool-tasks/regent-shared-proof/source",
+    "baseDllSha256": "0fa5b354cc0b82e8d63aa4b35bdf78f6469c1ef767f9a57cfe7743f6216aeaef",
+    "scope": "reuse successful c8a5... Necro card/pet/relic audit in current PR215/Regent component union; stricter Osty owner and Shackling owner guards; existing table/cost repairs only",
+    "noCostFrontierPrototypeIncluded": true,
+    "noSharedTableChange": true,
+    "noScorePolicyBudgetChange": true,
+    "gameDllSha256": "2b40d2df538db1ceb5fa48d958c80ab730ada1e07db88a870aff01a661768b9f",
+    "gameMvid": "8a76776c-0ce1-4d4f-90bd-8cce653dad8e",
+    "reusedNativeRunId": "c8a5cb87dfca4d52ab527d77f496a877",
+    "reusedNativeScope": "2actual potions,8plays,summon maxHP/HP,Transfigurecost/repeat,LetterOpener,Bowler,WhiteStar,bossFrantic/Sandpit,fullRNG/parent/live; no repeat unchanged body checks",
+    "sourceProvenance": ".local/general-healing-audit/necro-boss-source-audit/provenance.json",
+    "petOwnerEvidence": "Creature.PetOwner setter refuses reassignment once nonnull; stable identity after ownership; restrict root/allies to owned Osty",
+    "productionIntegrated": false,
+    "copyModOnBuild": false,
+    "nativePending": false,
+    "performancePending": false,
+    "target": "dev09 original45.5501007 ->22.77505035; equalHP0 baselineP1cost70 must be preserved",
+    "buildSeconds": 14.21,
+    "buildWarnings": 0,
+    "buildErrors": 0,
+    "initialCompileFixtureStaticCallCorrected": true,
+    "artifacts": {
+      "CombatSolver.dll": "413dbe8b30517b55b92f570395eb6f312cf7dda6eca5fc12d99fff56e67effb1",
+      "CombatSolver.json": "3ffaf12f8d23f58fe17d3f51e8b929071a56e1f2aecf79debd867f771286bb6f",
+      "CombatSolver.MemoryCleaner.exe": "5474c2d6e59df76430484d2ed4230231b5026a32e0796986520bc2ac41569415",
+      "LICENSE": "e6e86edc9dac3448c67240d4b3b588b7354299c5c4488ffa1e920715e53fca96",
+      "THIRD_PARTY_NOTICES.md": "309dcd321323622bc8bb1f906556aabfc9806b3661f2ac824bad950fc5a6bbc0"
+    },
+    "nativePassed": true,
+    "nativeRecord": {
+      "runId": "acef5a7cebcf4ddaa7da39defe7944fa",
+      "status": "Passed",
+      "elapsedMilliseconds": 27616.4909,
+      "completedChecks": [
+        "NecroSharedUnion:ReusedPinnedNativeEffects:OwnedPetAnd16Forks:WrongPowerOwnerRefused:CompleteP0CoordinatorWitness:StrictDop2SameBudgetControl:ExistingTablePublicationAndConsumer:UnknownInitialAndBranchExhaustRefused:ParentLiveRngIsolation",
+        "NativeOutcome:combatEnded=False:turn=1:hp=66:maxHp=66"
+      ],
+      "error": null
+    },
+    "screenSummary": "/home/ltlly/Code/nmslmod/CombatSolver-healing-bound-general-20261003/.local/tool-tasks/necro-shared-proof-20261005/screen-summary.json",
+    "decision": "research-only, whole request HP quality failed",
+    "screen": {
+      "wallSeconds": 45.4080187,
+      "peakProcessWorkingSetBytes": 21652951040,
+      "comparisonQuality": {
+        "Won": true,
+        "OutstandingStolenResource": 0,
+        "ProjectedBattleHpLost": 4,
+        "StrategicHpDeficit": 4,
+        "PotionStrategicCost": 70,
+        "ProjectedBattlePotionCount": 1,
+        "EnemyHp": 0,
+        "Score": 10001691919,
+        "CombatEndedTurn": 12,
+        "Survives": true,
+        "DeathSaveUseCount": 0,
+        "GrowthHpCredit": 0,
+        "GrowthRewardCount": 0
+      },
+      "budget": {
+        "Profile": "VeryHigh",
+        "BeamWidth": 135,
+        "MaxExpandedNodes": 500000,
+        "MaxCardBranchesPerNode": 72,
+        "MaxPileChoiceBranchesPerAction": 42,
+        "MaxHandChoiceBranchesPerAction": 54,
+        "MaxDegreeOfParallelism": 16,
+        "BudgetMilliseconds": 300000,
+        "EarlyTurnExplorationDepth": 0,
+        "EarlyTurnExplorationBudgetMilliseconds": 0,
+        "PotionPolicy": "Smart",
+        "SearchMode": "Coordinator",
+        "UsePortfolio": true,
+        "fixedSearchBudget": false,
+        "enableNoGcRegion": true,
+        "noGcRegionBudgetGigabytes": 16
+      },
+      "root": "turn=1 round=1 phase=Play side=Player energy=3 hp=66/66 hand=[DEFEND_NECROBINDER,DEFEND_NECROBINDER,DELAY,DIRGE,DEFEND_NECROBINDER] draw=20 discard=0 relics=[BOUND_PHYLACTERY,LETTER_OPENER,BOWLER_HAT,WHITE_STAR] enemies=[THE_INSATIABLE#1:341/341@LIQUIFY_GROUND_MOVE] total_floor=1 act_floor=0",
+      "searchPolicy": {
+        "Profile": {
+          "BeamWidth": 135,
+          "MaxExpandedNodes": 500000,
+          "MaxCardBranchesPerNode": 72,
+          "MaxPileChoiceBranchesPerAction": 42,
+          "MaxHandChoiceBranchesPerAction": 54,
+          "SoftTimeBudgetMilliseconds": 600000,
+          "SecondRankBand": false,
+          "ContinuousThreatRanking": false,
+          "BaseScoreTacticalTies": false,
+          "AdaptiveNoveltyRefinement": false,
+          "OffensiveRefinementPortfolio": false,
+          "BoundedOffensiveRefinementPortfolio": false,
+          "ReallocatedRefinementPortfolio": true,
+          "StopPortfolioAtHpTarget": true,
+          "BaseScoreOnly": false,
+          "AggressivePowerCommitment": false
+        },
+        "PotionPolicy": 1,
+        "PotionStrategy": {
+          "DefaultPolicy": 1,
+          "Directives": [],
+          "HasForcedDirectives": false,
+          "ForcedDirectiveCount": 0
+        },
+        "FixedBudget": false,
+        "MaxDegreeOfParallelism": 16,
+        "IncludeTurnSetup": false,
+        "ActTransitionBossHpStrategy": 0,
+        "FinalBossHpStrategy": 0,
+        "AcceptableBattleHpLoss": 0,
+        "StopAtAcceptableBattleHpLoss": false,
+        "Act3BossStrategy": false,
+        "GrowthBudgets": {
+          "HandOfGreed": 0,
+          "TheHunt": 0,
+          "Feed": 0,
+          "Royalties": 0,
+          "Alchemize": 0,
+          "GeneticAlgorithm": 0,
+          "TheScythe": 0,
+          "Goopy": 0,
+          "ForbiddenGrimoire": 0,
+          "MadScience": 0
+        },
+        "RelicTargets": [],
+        "HasGrowthTargets": false,
+        "IgnoreLongTermRewards": false,
+        "VerifyIncrementalSearch": false,
+        "DetailedDiagnostics": false,
+        "MeasurePhasePerformance": false,
+        "UseBeamWidthPortfolio": true,
+        "BeamWidthPortfolioPlainBaselineMember": true,
+        "UseNoveltyPortfolio": false,
+        "observePortfolio": false
+      },
+      "pruneCounters": {
+        "boundary": "None",
+        "selectedExpanded": 31216,
+        "selectedTransitions": 296978,
+        "selectedChoiceBranches": 174266,
+        "totalExpanded": 201354,
+        "totalTransitions": 1543479,
+        "totalChoiceBranches": 774865,
+        "choiceReplayAttempts": 174266,
+        "choiceReplayBudgetExhaustions": 0,
+        "choiceBranchesDroppedByBudget": 0,
+        "roundReplayPrefixCaptures": 0,
+        "dominatedActionsPruned": 66,
+        "topQueueActionsDropped": 0,
+        "actionAdmissionRepresentativesProtected": 0,
+        "duplicateCardBranchesPruned": 12323,
+        "shuffleBranchesPruned": 0,
+        "soldHpBranchesPruned": 0,
+        "primaryIncumbentBranchesPruned": 363,
+        "primaryIncumbentUpdates": 2,
+        "replayCount": 2,
+        "forkCount": 296978,
+        "reusedNodeSnapshots": 32297,
+        "transpositionBranchesPruned": 35088,
+        "repeatableNoProgressBranchesPruned": 0,
+        "standPatProbes": 3788,
+        "transitionCacheHits": 0,
+        "roundReplayPrefixReuses": 0,
+        "cycleRegionsDetected": 0,
+        "cycleRegionCandidatesConsidered": 0,
+        "cycleRegionCandidatesAdmitted": 0,
+        "cycleRegionCandidatesDropped": 0,
+        "cycleRegionProgressEpochs": 0,
+        "cycleRegionProbeCandidatesAdmitted": 0,
+        "cycleRegionProgressCandidatesAdmitted": 0,
+        "cycleRegionMaxActionFamilies": 0,
+        "orderedMutationCandidatesAdmitted": 2048,
+        "orderedMutationLeaseExpiredBudget": 1074,
+        "orderedMutationOrdinaryFallbacks": 447,
+        "orderedMutationColdAtomicCommitted": 115,
+        "orderedMutationColdAtomicRejected": 349,
+        "deferredRoundChoiceActions": 4228,
+        "deferredRoundChoiceLayerWidthTotal": 165334,
+        "maxDeferredRoundChoiceLayerWidth": 84,
+        "deferredRoundChoiceFiniteQuotaFallbacks": 0,
+        "deferredRoundChoiceFinitePrimaryLayers": 4228,
+        "deferredRoundChoiceFinitePendingFallbacks": 0,
+        "parallelActionReplayWaves": 1554,
+        "parallelActionReplayWorkItems": 75858,
+        "maxParallelActionReplayConcurrency": 16,
+        "parallelRoundChoiceReplayWaves": 587,
+        "parallelRoundChoiceReplayWorkItems": 61976,
+        "maxParallelRoundChoiceReplayConcurrency": 16,
+        "maxParallelConcurrency": 16,
+        "searchedTurns": 12,
+        "shufflesCrossed": 2,
+        "score": 10001691919,
+        "projectedBattleHpLost": 4,
+        "potionCount": 1,
+        "onlyDeathRoutes": false,
+        "finalHp": 62,
+        "finalEnemyHp": 0,
+        "combatEndedTurn": 12,
+        "transpositionCount": 244572,
+        "expandedTranspositionCount": 29168,
+        "transpositionLimitBypasses": 0,
+        "standPatCacheCount": 1037,
+        "threatProjectionCacheCount": 11,
+        "coverageCacheCount": 11
+      },
+      "originalSeconds": 45.5501007,
+      "targetSeconds": 22.77505035,
+      "speedupVsOriginal": 1.003129006815706,
+      "qualityAccepted": false,
+      "formalHpLossBaseline": 0,
+      "reason": "HP0 ->4; no performance benefit; no lost-route investigation or final acceptance",
+      "workerAllocatedBytes": 52789787728,
+      "finalAcceptance": false,
+      "sameRootAsQualifiedC422": true,
+      "sameBudgetAsQualifiedC422": true,
+      "samePolicyAsQualifiedC422": true
+    },
+    "reusedNativeModelAudit": {
+      "gameDllSha256": "2b40d2df538db1ceb5fa48d958c80ab730ada1e07db88a870aff01a661768b9f",
+      "sources": [
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Relics.LetterOpener",
+          "rawSource": "/home/ltlly/Code/nmslmod/CombatSolver-healing-bound-general-20261003/.local/general-healing-audit/necro-boss-source-audit/Relics.LetterOpener.cs",
+          "sha256": "b726fa101287c0ac0671046bd4ee2c6977a56f9dafb3748e9d52cea36de72ba1"
+        },
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Relics.WhiteStar",
+          "rawSource": "/home/ltlly/Code/nmslmod/CombatSolver-healing-bound-general-20261003/.local/general-healing-audit/necro-boss-source-audit/Relics.WhiteStar.cs",
+          "sha256": "2dda332887015b5f767f4fab970c96f6d453f6f9934616a18a4497e6105e4f0d"
+        },
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Potions.ShacklingPotion",
+          "rawSource": "/home/ltlly/Code/nmslmod/CombatSolver-healing-bound-general-20261003/.local/general-healing-audit/necro-boss-source-audit/Potions.ShacklingPotion.cs",
+          "sha256": "bfb225d3d62b5c8840a0a2469792357b8d236f7f86932055ce739c7cf641b991"
+        },
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Potions.CureAll",
+          "rawSource": "/home/ltlly/Code/nmslmod/CombatSolver-healing-bound-general-20261003/.local/general-healing-audit/necro-boss-source-audit/Potions.CureAll.cs",
+          "sha256": "f2370fdd27cada18a7c3576c6b0c3bf3cfff2e1f3b7e8cc54657ef973f9e84e8"
+        },
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Powers.ShacklingPotionPower",
+          "rawSource": "/home/ltlly/Code/nmslmod/CombatSolver-healing-bound-general-20261003/.local/general-healing-audit/necro-boss-source-audit/Powers.ShacklingPotionPower.cs",
+          "sha256": "2ecca3d6527b1be8a8b94b1ed4a42c1719869fbe5673f6f99450453d3a410ab1"
+        },
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Cards.Transfigure",
+          "rawSource": "/home/ltlly/Code/nmslmod/CombatSolver-healing-bound-general-20261003/.local/general-healing-audit/necro-boss-source-audit/Cards.Transfigure.cs",
+          "sha256": "dc2d175bdbbe0652ce5e616cadd1b7c0cc5cd6543cfb050786114056b6c24030",
+          "scope": "fresh pinned extraction validates older excluded-generation source for explicit initial/replay proof"
+        },
+        {
+          "rawSource": "/home/ltlly/Code/nmslmod/CombatSolver-regent-healing-bound-20261003/.local/c56/native-src/Osty.cs",
+          "sha256": "45ef70c5026af6a23848c92ee1c6c28603d9246216b88eff9746ee22857fd5e6",
+          "reusedPinnedC58": true
+        },
+        {
+          "rawSource": "/home/ltlly/Code/nmslmod/CombatSolver-regent-healing-bound-20261003/.local/c56/native-src/OstyCmd.cs",
+          "sha256": "1081fa0d011976838544830068e3dc0607a54859a9e846dfae3604d29bba5468",
+          "reusedPinnedC58": true
+        },
+        {
+          "rawSource": "/home/ltlly/Code/nmslmod/CombatSolver-regent-healing-bound-20261003/.local/c56/native-src/powers/TemporaryStrengthPower.cs",
+          "sha256": "d68cad9ac0348edbe0ec2595e62978d43b7c0045b82c3f0680188c6d5e0839fe",
+          "reusedPinnedC58": true
+        },
+        {
+          "rawSource": "/home/ltlly/Code/nmslmod/CombatSolver-regent-healing-bound-20261003/.local/c56/native-src/powers/DieForYouPower.cs",
+          "sha256": "fad3fa8cb2adcef548f0748a7d21ac8b9d59b45907df9f029ddc8a09a56e534b",
+          "reusedPinnedC58": true
+        },
+        {
+          "rawSource": "/home/ltlly/Code/nmslmod/CombatSolver-regent-healing-bound-20261003/.local/c56/native-src/powers/NecroMasteryPower.cs",
+          "sha256": "799b91c3eddf54cff8e6845934952bced8c9dc898a7e5a0ecba066f1862b10e9",
+          "reusedPinnedC58": true
+        },
+        {
+          "rawSource": "/home/ltlly/Code/nmslmod/CombatSolver-regent-healing-bound-20261003/.local/c56/native-src/powers/DevourLifePower.cs",
+          "sha256": "4353cb1ef8b6926993244dd85d6d040e08faf2197bad2db61db89c56b2340fb8",
+          "reusedPinnedC58": true
+        },
+        {
+          "rawSource": "/home/ltlly/Code/nmslmod/CombatSolver-regent-healing-bound-20261003/.local/c56/native-src/powers/SicEmPower.cs",
+          "sha256": "bc2c2bb065ec6dafc001bd3695154eda9fb277f1b8c8339f0dbdec1326b87e3b",
+          "reusedPinnedC58": true
+        },
+        {
+          "rawSource": "/home/ltlly/Code/nmslmod/CombatSolver-healing-bound-general-20261003/.local/general-healing-audit/native-src/Models.Relics.BoundPhylactery.cs",
+          "sha256": "215e6b14b04e7e07e795f768619aab583a4738ae9210dcfcd7124d5d75a978a0",
+          "reusedPinnedScope": "prior installed-game source proof; reviewed full class above in this composition"
+        },
+        {
+          "rawSource": "/home/ltlly/Code/nmslmod/CombatSolver-healing-bound-general-20261003/.local/general-healing-audit/gold-source-audit/BowlerHat.cs",
+          "sha256": "6d9c86f3f2591f5711142ac32dd262d66c52d9aad71cb30bbb38f5ee87349e8c",
+          "reusedPinnedScope": "prior installed-game source proof; reviewed full class above in this composition"
+        },
+        {
+          "rawSource": "/home/ltlly/Code/nmslmod/CombatSolver-healing-bound-general-20261003/.local/general-healing-audit/regent-boss-source-audit/Monsters.TheInsatiable.cs",
+          "sha256": "e2afd78d123696b1c51eede33ea2126c1f3860f5e4f514a884958d95a1501ab7",
+          "reusedPinnedScope": "prior installed-game source proof; reviewed full class above in this composition"
+        },
+        {
+          "rawSource": "/home/ltlly/Code/nmslmod/CombatSolver-healing-bound-general-20261003/.local/general-healing-audit/callback-closure/Powers.SandpitPower.cs",
+          "sha256": "c196f68b0c76b4b03d8f8b16b32e71df90cca3595dea5e32d8b2c69d5d2759d0",
+          "reusedPinnedScope": "prior installed-game source proof; reviewed full class above in this composition"
+        },
+        {
+          "rawSource": "/home/ltlly/Code/nmslmod/CombatSolver-regent-healing-bound-20261003/.local/c56/native-src/FranticEscape.cs",
+          "sha256": "86890ea3ea43d5d602da6082bc26b8d9cc0692087a55561c8ed0709d0dc101db",
+          "reusedPinnedScope": "prior installed-game source proof; reviewed full class above in this composition"
+        }
+      ],
+      "explicitInitialSources": [
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Cards.AscendersBane",
+          "rawSource": "/home/ltlly/Code/nmslmod/CombatSolver-regent-healing-bound-20261003/.local/c56/native-src/AscendersBane.cs",
+          "sha256": "456bccb82921d49d8e2358713ff25e2db13e33a68bf70289391375a613f88161",
+          "review": "complete declared gameplay methods and permanent lifecycle read for this explicit initial-source proof; not qualified by generated pool membership",
+          "directPlayerHealingUpperBound": 0
+        },
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Cards.Bodyguard",
+          "rawSource": "/home/ltlly/Code/nmslmod/CombatSolver-regent-healing-bound-20261003/.local/c56/native-src/Bodyguard.cs",
+          "sha256": "77a11b2d51f5f8bf44401dc03bbdfbd3b7f05ea2c1a8aff4ae1780462c28dec6",
+          "review": "complete declared gameplay methods and permanent lifecycle read for this explicit initial-source proof; not qualified by generated pool membership",
+          "directPlayerHealingUpperBound": 0
+        },
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Cards.DefendNecrobinder",
+          "rawSource": "/home/ltlly/Code/nmslmod/CombatSolver-regent-healing-bound-20261003/.local/c56/native-src/DefendNecrobinder.cs",
+          "sha256": "afdf2b0d9de12039561ba8bd374958c15cc509e9f398deb4da48b6808a666c7a",
+          "review": "complete declared gameplay methods and permanent lifecycle read for this explicit initial-source proof; not qualified by generated pool membership",
+          "directPlayerHealingUpperBound": 0
+        },
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Cards.Defy",
+          "rawSource": "/home/ltlly/Code/nmslmod/CombatSolver-regent-healing-bound-20261003/.local/c56/native-src/Defy.cs",
+          "sha256": "f3e9039e443f934cb0979358dae1206504d4aeff011332a4344baf3fcbf0ee20",
+          "review": "complete declared gameplay methods and permanent lifecycle read for this explicit initial-source proof; not qualified by generated pool membership",
+          "directPlayerHealingUpperBound": 0
+        },
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Cards.Delay",
+          "rawSource": "/home/ltlly/Code/nmslmod/CombatSolver-regent-healing-bound-20261003/.local/c56/native-src/Delay.cs",
+          "sha256": "6f6b5c44f8dd9b0ec949530f7782078a164b004a1019855c58f9dd2be10dfbb6",
+          "review": "complete declared gameplay methods and permanent lifecycle read for this explicit initial-source proof; not qualified by generated pool membership",
+          "directPlayerHealingUpperBound": 0
+        },
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Cards.DevourLife",
+          "rawSource": "/home/ltlly/Code/nmslmod/CombatSolver-regent-healing-bound-20261003/.local/c56/native-src/DevourLife.cs",
+          "sha256": "85931992c70013bce646f810ed6bcc68e3718ae59750742916870efc2c75efac",
+          "review": "complete declared gameplay methods and permanent lifecycle read for this explicit initial-source proof; not qualified by generated pool membership",
+          "directPlayerHealingUpperBound": 0
+        },
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Cards.Dirge",
+          "rawSource": "/home/ltlly/Code/nmslmod/CombatSolver-regent-healing-bound-20261003/.local/c56/native-src/Dirge.cs",
+          "sha256": "f6ce3a8ef730ba81620c5ffef9d7217e21ecaa5a27a9aecb56f2df9a1f92df48",
+          "review": "complete declared gameplay methods and permanent lifecycle read for this explicit initial-source proof; not qualified by generated pool membership",
+          "directPlayerHealingUpperBound": 0
+        },
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Cards.Dredge",
+          "rawSource": "/home/ltlly/Code/nmslmod/CombatSolver-regent-healing-bound-20261003/.local/c56/native-src/Dredge.cs",
+          "sha256": "6e0a20b14a71ec218bc58e1237df15fff3a98681c15462ecc9e3fb38b50610c7",
+          "review": "complete declared gameplay methods and permanent lifecycle read for this explicit initial-source proof; not qualified by generated pool membership",
+          "directPlayerHealingUpperBound": 0
+        },
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Cards.JackOfAllTrades",
+          "rawSource": "/home/ltlly/Code/nmslmod/CombatSolver-regent-healing-bound-20261003/.local/c56/native-src/JackOfAllTrades.cs",
+          "sha256": "b418189bccfa0aee33a8bf2a3b4f5056cfe760c7b1306999afe63ab2208dbd9a",
+          "review": "complete declared gameplay methods and permanent lifecycle read for this explicit initial-source proof; not qualified by generated pool membership",
+          "directPlayerHealingUpperBound": 0
+        },
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Cards.Jackpot",
+          "rawSource": "/home/ltlly/Code/nmslmod/CombatSolver-regent-healing-bound-20261003/.local/c56/native-src/Jackpot.cs",
+          "sha256": "38a999ceaef7070e52a0e3615b10b630fb7d0a132e2fd58153c9fbf9898859aa",
+          "review": "complete declared gameplay methods and permanent lifecycle read for this explicit initial-source proof; not qualified by generated pool membership",
+          "directPlayerHealingUpperBound": 0
+        },
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Cards.NecroMastery",
+          "rawSource": "/home/ltlly/Code/nmslmod/CombatSolver-regent-healing-bound-20261003/.local/c56/native-src/NecroMastery.cs",
+          "sha256": "49cc965ea8a92d24797a44706eb21c6fc32307b7bed5e84ccef0716c26ac7eac",
+          "review": "complete declared gameplay methods and permanent lifecycle read for this explicit initial-source proof; not qualified by generated pool membership",
+          "directPlayerHealingUpperBound": 0
+        },
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Cards.NoEscape",
+          "rawSource": "/home/ltlly/Code/nmslmod/CombatSolver-regent-healing-bound-20261003/.local/c56/native-src/NoEscape.cs",
+          "sha256": "20913a563bd6888be46f4c6475d44e3bfbf677297649a49d342482d1db5eb083",
+          "review": "complete declared gameplay methods and permanent lifecycle read for this explicit initial-source proof; not qualified by generated pool membership",
+          "directPlayerHealingUpperBound": 0
+        },
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Cards.Severance",
+          "rawSource": "/home/ltlly/Code/nmslmod/CombatSolver-regent-healing-bound-20261003/.local/c56/native-src/Severance.cs",
+          "sha256": "2c34082fbc32987e4b852682309d936c1d9aebaae5c6e7fdb9bf4cfafbcf06a9",
+          "review": "complete declared gameplay methods and permanent lifecycle read for this explicit initial-source proof; not qualified by generated pool membership",
+          "directPlayerHealingUpperBound": 0
+        },
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Cards.SharedFate",
+          "rawSource": "/home/ltlly/Code/nmslmod/CombatSolver-regent-healing-bound-20261003/.local/c56/native-src/SharedFate.cs",
+          "sha256": "306017b36de613ecb8e600d8ffe024f5d93604c5a1219a8b9df649105df67583",
+          "review": "complete declared gameplay methods and permanent lifecycle read for this explicit initial-source proof; not qualified by generated pool membership",
+          "directPlayerHealingUpperBound": 0
+        },
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Cards.SicEm",
+          "rawSource": "/home/ltlly/Code/nmslmod/CombatSolver-regent-healing-bound-20261003/.local/c56/native-src/SicEm.cs",
+          "sha256": "7dc593cbbfadeb1e7fa3c5852c9a22cf5767f176fb3d230bd7bd2ad017a198dc",
+          "review": "complete declared gameplay methods and permanent lifecycle read for this explicit initial-source proof; not qualified by generated pool membership",
+          "directPlayerHealingUpperBound": 0
+        },
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Cards.StrikeNecrobinder",
+          "rawSource": "/home/ltlly/Code/nmslmod/CombatSolver-regent-healing-bound-20261003/.local/c56/native-src/StrikeNecrobinder.cs",
+          "sha256": "d125618f8bb444f5bf125b0657fd4237bd387cfb45b51713549a6eb626291301",
+          "review": "complete declared gameplay methods and permanent lifecycle read for this explicit initial-source proof; not qualified by generated pool membership",
+          "directPlayerHealingUpperBound": 0
+        },
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Cards.Transfigure",
+          "rawSource": "/home/ltlly/Code/nmslmod/CombatSolver-regent-healing-bound-20261003/.local/c56/native-src/Transfigure.cs",
+          "sha256": "dc2d175bdbbe0652ce5e616cadd1b7c0cc5cd6543cfb050786114056b6c24030",
+          "review": "complete declared gameplay methods and permanent lifecycle read for this explicit initial-source proof; not qualified by generated pool membership",
+          "directPlayerHealingUpperBound": 0
+        },
+        {
+          "type": "MegaCrit.Sts2.Core.Models.Cards.Unleash",
+          "rawSource": "/home/ltlly/Code/nmslmod/CombatSolver-regent-healing-bound-20261003/.local/c56/native-src/Unleash.cs",
+          "sha256": "764aa9b6bd80343ab1760694c33c970b7a54942e309bded7dba61ed8599c7ee3",
+          "review": "complete declared gameplay methods and permanent lifecycle read for this explicit initial-source proof; not qualified by generated pool membership",
+          "directPlayerHealingUpperBound": 0
+        }
+      ],
+      "scene": "dev-09-necrobinder-boss",
+      "status": "isolated source composition passed native contract; full-request speed below 2x; production unchanged",
+      "mechanisms": [
+        {
+          "source": "18 explicit initial cards and FranticEscape",
+          "target": "player block/energy/card piles, enemy damage/Doom/Strength, Osty HP; Transfigure targets one existing hand card cost and BaseReplayCount",
+          "timing": "plays/upgrades; no additional passive permanent-deck lifecycle overrides",
+          "repeatability": "native play/replay/selection rules; upgraded Transfigure repeatable; zero player recovery remains closed under repeated effects",
+          "upperBound": 0,
+          "dependencies": "C58 filtered recursive generators, Soul creation, every initial/returned/exhaust source and callbacks; Feed/NotYet/Alchemize ordinary random generation disabled"
+        },
+        {
+          "source": "BoundPhylactery/OstyCmd/Osty/DieForYou",
+          "target": "owning player Osty only",
+          "timing": "combat start and AfterEnergyResetLate excluding first turn; card summons; pet death/revive",
+          "repeatability": "each allowed summon may add max/current HP or revive only Osty",
+          "upperBound": 0,
+          "dependencies": "GainMaxHp/SetMaxHp/Heal target audited; AfterOstyRevived/AfterSummon/ModifySummonAmount and HP/damage/kill callbacks reused under C58 root guard"
+        },
+        {
+          "source": "LetterOpener",
+          "target": "hittable enemies",
+          "timing": "every third owner skill played; counter reset on later owner side starts",
+          "repeatability": "replays count under native CardPlay callbacks; 5 unpowered damage",
+          "upperBound": 0,
+          "dependencies": "damage/kill listener closure, per-branch counters"
+        },
+        {
+          "source": "BowlerHat/WhiteStar",
+          "target": "gold amount / elite room reward list",
+          "timing": "ModifyGoldGained/AfterModifyingGoldGained / TryModifyRewards",
+          "repeatability": "gold multiplier1.25; boss-type card reward added to elite rewards",
+          "upperBound": 0,
+          "dependencies": "gold callback closure; actual reward generation/claim remains outside combat search"
+        },
+        {
+          "source": "CureAll",
+          "target": "targeted player energy/card piles",
+          "timing": "OnUse GainEnergy1 then Draw2",
+          "repeatability": "actually held legal doses; no heal or cleanse",
+          "upperBound": 0,
+          "dependencies": "energy/draw/card-entry callbacks and branch RNG"
+        },
+        {
+          "source": "ShacklingPotion/TemporaryStrengthPower",
+          "target": "hittable enemies Strength",
+          "timing": "before apply, amount changes, enemy side end restores offset",
+          "repeatability": "7 temporary loss per dose; exact native parent callback order",
+          "upperBound": 0,
+          "dependencies": "enemy-only owner gate; Power add/remove/amount callbacks"
+        },
+        {
+          "source": "TheInsatiable/Sandpit/FranticEscape",
+          "target": "enemy Sandpit owner and player/Osty targets",
+          "timing": "explicit six status cards plus Sandpit, decrement, native forced death",
+          "repeatability": "Frantic adds layer/cost; death/resource policy retained",
+          "upperBound": 0,
+          "dependencies": "prior Regent native component contract reused; pet forced-death extension newly required"
+        }
+      ]
+    },
+    "reusedNativeEffectsContract": {
+      "result": ".local/general-healing-audit/necro-boss-component-native-v3/result.json",
+      "runId": "c8a5cb87dfca4d52ab527d77f496a877",
+      "status": "Passed",
+      "elapsedMilliseconds": 29178.0283,
+      "dllSha256": "BA224D39C5D2F6EF789300550A877C06192D5B16C815CB895D5F3AF1256BA2CF",
+      "completedChecks": [
+        "ComponentNecroBoss:18ExplicitInitialSources:PetRoot:PreviousSchedule:ZeroBoundFork:UnknownExhaust:WrongPowerOwner:ParentLiveRngIsolation",
+        "ComponentNecroBoss:ShacklingNativeBeforeApply:CureAllNativeEnergyDraw:CompleteStateForkRng",
+        "ComponentNecroBoss:ShacklingNativeRestoreRemove:CompleteStateForkRng",
+        "ComponentNecroBoss:NativeSummonsMaxHp:OstyMastery:DevourLife:Delay:SeveranceSouls:TransfigureCostReplay:LetterOpenerReplayCounter:DirgeX:CompleteStateForkRng",
+        "ComponentNecroBoss:NativeLiquifySixExplicitFrantic:SandpitPlayerOstyForcedDeath:CompleteStateForkParentRng",
+        "NativeOutcome:combatEnded=False:turn=1:hp=0:maxHp=66"
+      ],
+      "instanceRemoved": true
+    },
+    "runtimePatch": "fixtures/pr215-necro-component-union-research-20261005.patch",
+    "qualifiedSameRootQualityReference": {
+      "scene": "dev-09-necrobinder-boss",
+      "rootEqual": true,
+      "budgetEqual": true,
+      "policyEqual": true,
+      "bothValid": true,
+      "qualityUpstream": {
+        "won": true,
+        "outstandingStolenResource": 0,
+        "projectedBattleHpLost": 0,
+        "strategicHpDeficit": 0,
+        "potionStrategicCost": 70,
+        "projectedBattlePotionCount": 1,
+        "enemyHp": 0,
+        "score": 10001931919,
+        "combatEndedTurn": 12,
+        "theftPolicy": null,
+        "survives": true,
+        "deathSaveUseCount": 0,
+        "growthHpCredit": 0,
+        "growthRewardCount": 0
+      },
+      "qualityCandidate": {
+        "won": true,
+        "outstandingStolenResource": 0,
+        "projectedBattleHpLost": 0,
+        "strategicHpDeficit": 0,
+        "potionStrategicCost": 70,
+        "projectedBattlePotionCount": 1,
+        "enemyHp": 0,
+        "score": 10001931919,
+        "combatEndedTurn": 12,
+        "theftPolicy": null,
+        "survives": true,
+        "deathSaveUseCount": 0,
+        "growthHpCredit": 0,
+        "growthRewardCount": 0
+      },
+      "hpAndSurvivalPassed": true,
+      "resourceRecoveryPassed": true,
+      "equalHpSecondaryGoalsPassed": true,
+      "secondsUpstream": 45.4384214,
+      "secondsCandidate": 46.8368718,
+      "rssUpstream": 20701216768,
+      "rssCandidate": 20692791296,
+      "rssRatio": 0.9995929962912603,
+      "memoryPassed": true,
+      "upstreamEvidence": "soul-nexus-final-upstream-regression/runs/dev-09-necrobinder-boss-soul-final-upstream",
+      "candidateEvidence": "soul-nexus-final-regression/runs/dev-09-necrobinder-boss-soul-final-candidate"
+    },
+    "sourceHashes": {
+      "src/Search/StrategicHpRecoveryBound.Components.cs": "d8c27798d5acc570b95dfc0adc131b4e934a5ab615060c31019cf503d0d6881b",
+      "src/Testing/Contracts/Search/UnattendedTestRunner.ComponentNecroSharedProof.cs": "e7fb776ce46f2e388d2c76871555e56f33800a4b6318ba3cd53467c6361ad265",
+      "src/Testing/Host/UnattendedTestRunner.Executor.cs": "7bdd37dbbf4aad3de21320ce8e5d02110e4a73286e0fc2ed1eb2d55be922ee8d"
+    }
+  },
+  "followUpValidation20261005": {
+    "documentation": {
+      "files": 442,
+      "links": 1753,
+      "errors": 0
+    },
+    "reviewPatchesDryRun": "GNU patch --dry-run -p1 passed against retained regent-shared-proof/source; no mutation",
+    "patches": [
+      "fixtures/pr215-cost-aware-frontier-research-20261005.patch",
+      "fixtures/pr215-cost-frontier-before-table-research-20261005.patch",
+      "fixtures/pr215-necro-component-union-research-20261005.patch",
+      "fixtures/fork-container-owner-flag-research-20261005.patch"
+    ],
+    "mainRuntimeAndDeploymentReused": "C422 behavior/source/dependencies unchanged; previously qualified build/deployment reused, no repeat build/deploy",
+    "fixtureWhitespacePreparation": "Staged check flagged final blank context of Necro patch; regenerated with two context lines, same source change, matching dry run required"
+  }
+}

@@ -83,7 +83,8 @@ internal static partial class StrategicHpRecoveryBound
     // Neither generates cards or restores HP; other attachments stay unknown.
     private static bool HasCertifiedRemainingAttachments(CardModel card)
         => (card.Enchantment is null || card.Enchantment.GetType() == typeof(Slither)
-                || card.Enchantment.GetType() == typeof(Inky))
+                || card.Enchantment.GetType() == typeof(Inky)
+                || card.Enchantment.GetType() == typeof(global::MegaCrit.Sts2.Core.Models.Enchantments.Instinct))
             && (card.Affliction is null || card.Affliction.GetType() == typeof(Tainted));
 
     internal static bool CanCertifyRemainingHealingEnvironment(

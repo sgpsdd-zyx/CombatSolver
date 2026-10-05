@@ -2,7 +2,7 @@
 
 本阶段接续现有回复审计，合并上游 `56b6d6ee` 后修复金币回调及实际最大生命增量，并恢复金纸零待结算状态的搜索指纹。版本保持 0.48.0。原生机制及金纸分支合同已通过；性能范围和未验证项见下节。
 
-完整逐项结果和源码哈希见[结构化证据](gold-max-hp-healing-20261003.json)。前期[来源审计](native-health-source-audit-20261003.md)与[0.48.0 回归](upstream-0480-merge-check-20261003.md)保留取得证据时的版本、失败和限制。
+完整逐项结果和源码哈希见[结构化证据](gold-max-hp-healing-20261003.json)。前期[来源审计](../archive/performance/upstream-0500/native-health-source-audit-20261003.md)与[0.48.0 回归](upstream-0480-merge-check-20261003.md)保留取得证据时的版本、失败和限制。
 
 ## 当前版本原生语义
 

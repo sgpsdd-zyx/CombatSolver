@@ -1,0 +1,180 @@
+--- a/src/Engine/Common/MirroredHookListenerFilter.cs
++++ b/src/Engine/Common/MirroredHookListenerFilter.cs
+@@ -149,22 +149,30 @@
+             Interlocked.Increment(ref _sharedBypasses);
+             return source;
+         }
+-        // Only runtime types determine participation. The layout has no model references
+-        // and can survive model remapping, value changes and Fork without copying.
+-        if (layout is null || !layout.Matches(source))
++        // Only immutable dispatch participation determines this layout. Distinct native
++        // card types may have identical masks; model identity and order still come
++        // from the branch-owned source. Compute masks once, and compare every mask
++        // after hashing: collisions never establish equivalence.
++        Span<MirroredHookListenerLayout.Entry> entries = source.Count <= MaxSharedLayoutLength
++            ? stackalloc MirroredHookListenerLayout.Entry[source.Count]
++            : new MirroredHookListenerLayout.Entry[source.Count];
++        MirroredHookMask combined = 0;
++        uint hash = unchecked((uint)source.Count);
++        for (int index = 0; index < source.Count; index++)
++        {
++            MirroredHookMask mask = MaskFor(source[index].GetType());
++            entries[index] = new(mask);
++            combined |= mask;
++            hash = unchecked(hash * 16777619u ^ (uint)(ulong)mask ^ (uint)((ulong)mask >> 32));
++        }
++        if (layout is null || !layout.Matches(entries))
+         {
+             int slot = -1;
+             if (source.Count <= MaxSharedLayoutLength)
+             {
+-                uint hash = unchecked((uint)source.Count);
+-                for (int index = 0; index < source.Count; index++)
+-                    hash = unchecked(hash * 16777619u
+-                        ^ (uint)RuntimeHelpers.GetHashCode(source[index].GetType()));
+                 slot = (int)(hash & (SharedLayoutSlots - 1));
+                 MirroredHookListenerLayout? shared = Volatile.Read(ref _sharedLayouts[slot]);
+-                // Hashes select a slot only. Exact type order establishes reuse, so
+-                // collisions and racing replacement can only cause a cache miss.
+-                if (shared is not null && shared.Matches(source))
++                if (shared is not null && shared.Matches(entries))
+                 {
+                     Interlocked.Increment(ref _sharedHits);
+                     layout = shared;
+@@ -184,16 +192,7 @@
+             }
+             if (layout is null)
+             {
+-                var entries = new MirroredHookListenerLayout.Entry[source.Count];
+-                MirroredHookMask combined = 0;
+-                for (int index = 0; index < source.Count; index++)
+-                {
+-                    Type type = source[index].GetType();
+-                    MirroredHookMask mask = MaskFor(type);
+-                    entries[index] = new(type, mask);
+-                    combined |= mask;
+-                }
+-                layout = new(entries, combined);
++                layout = new(entries.ToArray(), combined);
+                 if (slot >= 0)
+                     Volatile.Write(ref _sharedLayouts[slot], layout);
+             }
+@@ -209,8 +208,26 @@
+         return Filter(source, ref layout);
+     }
+
+-    private static MirroredHookMask MaskFor(Type type)
+-        => TypeParticipation.GetValue(type, static value => new Participation(Participates(value))).Mask;
++    // Native runtime types and their reflection-only participation are immutable.
++    // A bounded per-thread front cache avoids repeated weak-table probes. External
++    // and dynamic models always dispatch all hooks and are never retained here.
++    [ThreadStatic] private static NativeParticipationEntry[]? _nativeParticipation;
++    private readonly record struct NativeParticipationEntry(Type? Type, MirroredHookMask Mask);
++
++    internal static MirroredHookMask MaskFor(Type type)
++    {
++        if (type.Assembly != typeof(AbstractModel).Assembly || type.Assembly.IsDynamic)
++            return MirroredHookMask.All;
++        NativeParticipationEntry[] cache = _nativeParticipation ??= new NativeParticipationEntry[64];
++        int slot = RuntimeHelpers.GetHashCode(type) & (cache.Length - 1);
++        NativeParticipationEntry entry = cache[slot];
++        if (entry.Type == type)
++            return entry.Mask;
++        MirroredHookMask mask = TypeParticipation.GetValue(type,
++            static value => new Participation(Participates(value))).Mask;
++        cache[slot] = new(type, mask);
++        return mask;
++    }
+
+     private static MirroredHookMask Participates(Type type)
+     {
+@@ -311,15 +328,16 @@
+     MirroredHookListenerLayout.Entry[] entries,
+     MirroredHookMask combined)
+ {
+-    internal readonly record struct Entry(Type Type, MirroredHookMask Mask);
++    internal readonly record struct Entry(MirroredHookMask Mask);
+     internal Entry[] Entries { get; } = entries;
+     internal bool HasAny(MirroredHookMask mask) => (combined & mask) != 0;
++    internal bool Matches(ReadOnlySpan<Entry> entries) => entries.SequenceEqual(Entries);
+     internal bool Matches(IReadOnlyList<AbstractModel> source)
+     {
+         if (source.Count != Entries.Length)
+             return false;
+         for (int index = 0; index < source.Count; index++)
+-            if (source[index].GetType() != Entries[index].Type)
++            if (MirroredHookListenerFilter.MaskFor(source[index].GetType()) != Entries[index].Mask)
+                 return false;
+         return true;
+     }
+--- a/src/Testing/Contracts/Combat/UnattendedTestRunner.MirroredHookFilter.cs
++++ b/src/Testing/Contracts/Combat/UnattendedTestRunner.MirroredHookFilter.cs
+@@ -120,7 +120,7 @@
+         if (MirroredHookListenerFilter.Capture().Filter([noOp]).Count != 0)
+             throw new InvalidOperationException("Removing the test patch did not restore root filtering.");
+         AssertKeywordModifierNoOpGuard(combat, player);
+-        _completedChecks.Add($"MirroredHookFilter:Methods={checkedMethods}:Models={models.Length}:OrderDuplicatesExternalForkInvalidationPatchRefreshSharedLayoutsSegmentsNoAnchorEffectivePrefixReuse");
++        _completedChecks.Add($"MirroredHookFilter:Methods={checkedMethods}:Models={models.Length}:OrderDuplicatesExternalForkInvalidationPatchRefreshSharedLayoutsSegmentsNoAnchorEffectivePrefixReuseEquivalentMasks");
+     }
+
+     private static void AssertListenerSegmentFork(
+@@ -206,15 +206,25 @@
+             || !ReferenceEquals(second[0], childPower))
+             throw new InvalidOperationException("Shared hook layouts retained branch receivers or were not reused.");
+
+-        // Distinct two-type sequences provide more keys than slots. A collision
+-        // must retain the exact type sequence on both replacements.
++        // Equal participation can share metadata even for different model types.
++        // Every receiver remains in its exact branch-owned input position.
++        AbstractModel[] equivalentA = [ModelDb.Card<StrikeIronclad>(), external];
++        AbstractModel[] equivalentB = [ModelDb.Card<DefendIronclad>(), external];
++        var maskA = (MirroredHookListenerSnapshot)filter.Filter(equivalentA);
++        var maskB = (MirroredHookListenerSnapshot)filter.Filter(equivalentB);
++        if (!ReferenceEquals(maskA.Layout, maskB.Layout)
++            || !ReferenceEquals(maskA[0], equivalentA[0])
++            || !ReferenceEquals(maskB[0], equivalentB[0]))
++            throw new InvalidOperationException("Equivalent hook participation did not reuse metadata with owned receivers.");
++
++        // Distinct mask sequences may collide; compare the complete sequence.
+         AbstractModel[][] collision = FindHookLayoutCollision(models);
+         foreach (AbstractModel[] source in collision.Concat(collision))
+         {
+             MirroredHookListenerLayout? layout = null;
+             filter.Filter(source, ref layout);
+             if (layout is null || !layout.Matches(source))
+-                throw new InvalidOperationException("A shared hook-layout hash collision aliased runtime types.");
++                throw new InvalidOperationException("A shared hook-layout hash collision aliased dispatch participation.");
+         }
+
+         Parallel.For(0, 64, index =>
+@@ -230,16 +240,16 @@
+
+     private static AbstractModel[][] FindHookLayoutCollision(AbstractModel[] models)
+     {
+-        AbstractModel[] distinct = models.DistinctBy(model => model.GetType()).ToArray();
++        AbstractModel[] distinct = models.DistinctBy(model => MirroredHookListenerFilter.MaskFor(model.GetType())).ToArray();
+         Dictionary<int, AbstractModel[]> slots = [];
+         foreach (AbstractModel first in distinct)
+         {
+             foreach (AbstractModel second in distinct)
+             {
+-                uint hash = unchecked(2u * 16777619u
+-                    ^ (uint)RuntimeHelpers.GetHashCode(first.GetType()));
+-                hash = unchecked(hash * 16777619u
+-                    ^ (uint)RuntimeHelpers.GetHashCode(second.GetType()));
++                ulong firstMask = (ulong)MirroredHookListenerFilter.MaskFor(first.GetType());
++                ulong secondMask = (ulong)MirroredHookListenerFilter.MaskFor(second.GetType());
++                uint hash = unchecked(2u * 16777619u ^ (uint)firstMask ^ (uint)(firstMask >> 32));
++                hash = unchecked(hash * 16777619u ^ (uint)secondMask ^ (uint)(secondMask >> 32));
+                 int slot = (int)(hash & (MirroredHookListenerFilter.SharedLayoutSlots - 1));
+                 AbstractModel[] source = [first, second];
+                 if (slots.TryGetValue(slot, out AbstractModel[]? previous))
+@@ -247,7 +257,7 @@
+                 slots.Add(slot, source);
+             }
+         }
+-        throw new InvalidOperationException("Hook-layout collision fixture requires more type pairs than slots.");
++        throw new InvalidOperationException("Hook-layout collision fixture requires more mask pairs than slots.");
+     }
+
+     private static void HookFilterBasePrefix() { }

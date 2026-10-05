@@ -184,6 +184,7 @@ internal sealed class UnattendedTestRequest
     public int? ExpectedInitialNodeLimitSnapshotsReleasedAtLeast { get; init; }
     public int? ExpectedInitialChoiceBranchesEvaluatedAtLeast { get; init; }
     public int? ExpectedInitialExecutableActionCountAtLeast { get; init; }
+    public int? ExpectedInitialUnavoidableHpLost { get; init; }
     public int? ExpectedInitialSoldHp { get; init; }
     public int? ExpectedInitialSoldHpAtMost { get; init; }
     public int? ExpectedInitialSoldHpBranchesPrunedAtLeast { get; init; }
@@ -635,6 +636,9 @@ internal sealed class UnattendedSolverMetrics
     public int ShufflesCrossed { get; init; }
     public double Score { get; init; }
     public int ProjectedBattleHpLost { get; init; }
+
+    /// <summary>整场必然受击（扣除主动卖血后的被迫掉血），与 <c>RESULT</c> 诊断行同一口径。</summary>
+    public int UnavoidableHpLost { get; init; }
     public int PotionCount { get; init; }
     public UnattendedPotionUse[] PotionUses { get; init; } = [];
     public bool OnlyDeathRoutes { get; init; }

@@ -138,6 +138,7 @@ internal sealed partial class UnattendedTestRunner
                 ShufflesCrossed = result.Snapshot.ShufflesCrossed,
                 Score = result.BestNode.Score,
                 ProjectedBattleHpLost = result.ProjectedBattleHpLost,
+                UnavoidableHpLost = result.UnavoidableHpLost,
                 PotionCount = result.PotionCount,
                 PotionUses = result.BestNode.Actions
                     .Where(static action => action.Kind == PlanActionKind.UsePotion)

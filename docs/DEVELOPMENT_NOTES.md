@@ -1,11 +1,17 @@
 # CombatSolver 开发笔记
 
-这里只记录本 fork 当前未发布的行为变化，历史内容保持原始来源与验证范围。
+这里只记录本 fork 当前未发布的行为变化。当前公开版为 [0.49.2](releases/0.49.2-PUBLISH.md)，旧批次见 [开发归档](archive/development/README.md)。
 
-当前公开版为 [0.49.2](releases/0.49.2-PUBLISH.md)，基于官方 `4b5537d0 / 0.49.1`。本轮变化已冻结到 [开发批次归档](archive/development/multiplayer-0492-20261003.md)，合并、验证与失败边界见 [合并记录](archive/strategy/upstream-0490-merge-20261003.md)。
+## 0.50.1（定版中，2026-10-05）
 
-旧 fork 记录见 [截至 0.48.1 的快照](archive/development/multiplayer-through-0481.md)，官方历史见 [分卷索引](archive/development/README.md)。
+合入官方 `0d290fbee7e2779d2cebd8b8f652d82d00b6e8fc / 0.50.0`，从官方 `4b5537d0 / 0.49.1` 前进；玩家变化相对 fork 0.49.2。官方 0.49.2 与本 fork 同号，原文独立归档，官方标签不移动。
 
-## 下一版本（开发中）
+单人保持官方路径，包括组件回复证书、资源桶胜利界、Smart 用药与组合续搜，以及内容 Mod 识别、反馈引导和移动运行库回退。组件证书固定官方已审计程序集 MVID，本机 macOS 返回 `native-version`，保留官方回退，不拓宽证明范围。性能数字不从官方历史外推。
 
-暂无新增行为变化。
+多人根禁用单人回复/成长证书，Runtime 不获取单人胜利表，政策清空 `PrimaryIncumbents`，共享 solver 显式拒绝局部/共享胜利界与 Smart 用药剪枝。三周期本机贡献、十四敌方周期、普通预算乘二与手动操作保持。
+
+公共战斗语义独立处理：玩家 Hook 活动资格统一进入引擎 `SimPlayerCombatState.HooksActive`，多人死亡/复活过滤与缓存失效读取同一字段；金币派发仍固定全队分支成员。额外回合在全队阶段二完成后共用 `ExtraTurnMirrors`，逐参与者消耗一次；佩尔之眼手牌消耗归官方阶段镜像。多人独立停用集合和旧额外回合消费路径退出。
+
+归档同步架构、规则、第三方手册和双平台结构门禁。上一轮测试入口、上游测试入口与 Q010 研究保留来源、失败和限制；历史稿只留导航。多人原生连续请求 fixture 修正迁移后的相对路径。
+
+本轮最小测试、固定根官方对照、首次失败及平台边界见 [测试矩阵](TEST_MATRIX.md)与[合并记录](archive/strategy/upstream-0500-merge-20261005.md)。玩家正文见 [0.50.1 中英更新日志](releases/0.50.1-RELEASE_NOTES.md)。

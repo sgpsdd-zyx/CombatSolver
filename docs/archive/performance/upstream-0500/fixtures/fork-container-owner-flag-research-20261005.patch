@@ -1,0 +1,519 @@
+--- a/src/Search/ForkableCollections.cs
++++ b/src/Search/ForkableCollections.cs
+@@ -4,13 +4,10 @@
+
+ internal sealed class ForkableList<T> : IReadOnlyList<T>
+ {
+-    private sealed class Storage(List<T> values)
+-    {
+-        public List<T> Values { get; } = values;
+-        public volatile bool Shared;
+-    }
+-
+-    private Storage _storage;
++    private List<T> _values;
++    // Both owners are marked before exposing a fork. Each later writer detaches
++    // its own collection; simultaneous writes to one owner remain unsupported.
++    private volatile bool _shared;
+
+     public ForkableList()
+         : this(new List<T>())
+@@ -22,84 +19,82 @@
+     {
+     }
+
+-    private ForkableList(List<T> values)
+-        => _storage = new Storage(values);
+-
+-    private ForkableList(Storage storage)
+-        => _storage = storage;
+-
+-    public int Count => _storage.Values.Count;
++    private ForkableList(List<T> values, bool shared = false)
++    {
++        _values = values;
++        _shared = shared;
++    }
++
++    public int Count => _values.Count;
+     public T this[int index]
+     {
+-        get => _storage.Values[index];
++        get => _values[index];
+         set
+         {
+             EnsureWritable();
+-            _storage.Values[index] = value;
++            _values[index] = value;
+         }
+     }
+
+     public ForkableList<T> Fork()
+     {
+-        _storage.Shared = true;
+-        return new ForkableList<T>(_storage);
++        _shared = true;
++        return new ForkableList<T>(_values, shared: true);
+     }
+
+     public void Add(T value)
+     {
+         EnsureWritable();
+-        _storage.Values.Add(value);
++        _values.Add(value);
+     }
+
+     public void Insert(int index, T value)
+     {
+         EnsureWritable();
+-        _storage.Values.Insert(index, value);
++        _values.Insert(index, value);
+     }
+
+     public bool Remove(T value)
+     {
+         // 未命中的 Remove 不得触发写时复制，所以只有共享存储才需要先探测一次。
+         // 独占存储直接删，省掉 Contains + Remove 的双次线性查找。
+-        if (_storage.Shared)
+-        {
+-            if (!_storage.Values.Contains(value))
+-                return false;
+-            EnsureWritable();
+-        }
+-        return _storage.Values.Remove(value);
++        if (_shared)
++        {
++            if (!_values.Contains(value))
++                return false;
++            EnsureWritable();
++        }
++        return _values.Remove(value);
+     }
+
+     public void RemoveAt(int index)
+     {
+         EnsureWritable();
+-        _storage.Values.RemoveAt(index);
+-    }
+-
+-    public int IndexOf(T value) => _storage.Values.IndexOf(value);
+-    public bool Contains(T value) => _storage.Values.Contains(value);
+-    public List<T>.Enumerator GetEnumerator() => _storage.Values.GetEnumerator();
++        _values.RemoveAt(index);
++    }
++
++    public int IndexOf(T value) => _values.IndexOf(value);
++    public bool Contains(T value) => _values.Contains(value);
++    public List<T>.Enumerator GetEnumerator() => _values.GetEnumerator();
+     IEnumerator<T> IEnumerable<T>.GetEnumerator() => GetEnumerator();
+     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+     private void EnsureWritable()
+     {
+-        if (!_storage.Shared)
+-            return;
+-        _storage = new Storage(new List<T>(_storage.Values));
++        if (!_shared)
++            return;
++        _values = new List<T>(_values);
++        _shared = false;
+     }
+ }
+
+ internal sealed class ForkableDictionary<TKey, TValue> : IReadOnlyDictionary<TKey, TValue>
+     where TKey : notnull
+ {
+-    private sealed class Storage(Dictionary<TKey, TValue> values)
+-    {
+-        public Dictionary<TKey, TValue> Values { get; } = values;
+-        public volatile bool Shared;
+-    }
+-
+-    private Storage _storage;
++    private Dictionary<TKey, TValue> _values;
++    // Both owners are marked before exposing a fork. Each later writer detaches
++    // its own collection; simultaneous writes to one owner remain unsupported.
++    private volatile bool _shared;
+
+     public ForkableDictionary()
+         : this(new Dictionary<TKey, TValue>())
+@@ -111,73 +106,69 @@
+     {
+     }
+
+-    private ForkableDictionary(Dictionary<TKey, TValue> values)
+-    {
+-        _storage = new Storage(values);
+-    }
+-
+-    private ForkableDictionary(Storage storage)
+-    {
+-        _storage = storage;
+-    }
+-
+-    public int Count => _storage.Values.Count;
+-    public IEnumerable<TKey> Keys => _storage.Values.Keys;
+-    public IEnumerable<TValue> Values => _storage.Values.Values;
+-    public IEqualityComparer<TKey> Comparer => _storage.Values.Comparer;
++    private ForkableDictionary(Dictionary<TKey, TValue> values, bool shared = false)
++    {
++        _values = values;
++        _shared = shared;
++    }
++
++    public int Count => _values.Count;
++    public IEnumerable<TKey> Keys => _values.Keys;
++    public IEnumerable<TValue> Values => _values.Values;
++    public IEqualityComparer<TKey> Comparer => _values.Comparer;
+
+     public TValue this[TKey key]
+     {
+-        get => _storage.Values[key];
++        get => _values[key];
+         set
+         {
+             EnsureWritable();
+-            _storage.Values[key] = value;
++            _values[key] = value;
+         }
+     }
+
+     public ForkableDictionary<TKey, TValue> Fork()
+     {
+-        _storage.Shared = true;
+-        return new ForkableDictionary<TKey, TValue>(_storage);
++        _shared = true;
++        return new ForkableDictionary<TKey, TValue>(_values, shared: true);
+     }
+
+     public void Add(TKey key, TValue value)
+     {
+         EnsureWritable();
+-        _storage.Values.Add(key, value);
++        _values.Add(key, value);
+     }
+
+     public bool Remove(TKey key)
+     {
+         // 未命中的 Remove 不得触发写时复制，所以只有共享存储才需要先探测一次。
+-        if (_storage.Shared)
+-        {
+-            if (!_storage.Values.ContainsKey(key))
+-                return false;
+-            EnsureWritable();
+-        }
+-        return _storage.Values.Remove(key);
++        if (_shared)
++        {
++            if (!_values.ContainsKey(key))
++                return false;
++            EnsureWritable();
++        }
++        return _values.Remove(key);
+     }
+
+     public void Clear()
+     {
+-        if (_storage.Values.Count == 0)
+-            return;
+-        EnsureWritable();
+-        _storage.Values.Clear();
+-    }
+-
+-    public bool ContainsKey(TKey key) => _storage.Values.ContainsKey(key);
+-
+-    public bool TryGetValue(TKey key, out TValue value) => _storage.Values.TryGetValue(key, out value!);
+-
+-    public TValue GetValueOrDefault(TKey key) => _storage.Values.GetValueOrDefault(key)!;
++        if (_values.Count == 0)
++            return;
++        EnsureWritable();
++        _values.Clear();
++    }
++
++    public bool ContainsKey(TKey key) => _values.ContainsKey(key);
++
++    public bool TryGetValue(TKey key, out TValue value) => _values.TryGetValue(key, out value!);
++
++    public TValue GetValueOrDefault(TKey key) => _values.GetValueOrDefault(key)!;
+
+     public TValue GetValueOrDefault(TKey key, TValue defaultValue)
+-        => _storage.Values.GetValueOrDefault(key, defaultValue);
+-
+-    public Dictionary<TKey, TValue>.Enumerator GetEnumerator() => _storage.Values.GetEnumerator();
++        => _values.GetValueOrDefault(key, defaultValue);
++
++    public Dictionary<TKey, TValue>.Enumerator GetEnumerator() => _values.GetEnumerator();
+
+     IEnumerator<KeyValuePair<TKey, TValue>> IEnumerable<KeyValuePair<TKey, TValue>>.GetEnumerator()
+         => GetEnumerator();
+@@ -185,21 +176,19 @@
+
+     private void EnsureWritable()
+     {
+-        if (!_storage.Shared)
+-            return;
+-        _storage = new Storage(new Dictionary<TKey, TValue>(_storage.Values, _storage.Values.Comparer));
++        if (!_shared)
++            return;
++        _values = new Dictionary<TKey, TValue>(_values, _values.Comparer);
++        _shared = false;
+     }
+ }
+
+ internal sealed class ForkableSet<T> : ISet<T>, IReadOnlySet<T>
+ {
+-    private sealed class Storage(HashSet<T> values)
+-    {
+-        public HashSet<T> Values { get; } = values;
+-        public volatile bool Shared;
+-    }
+-
+-    private Storage _storage;
++    private HashSet<T> _values;
++    // Both owners are marked before exposing a fork. Each later writer detaches
++    // its own collection; simultaneous writes to one owner remain unsupported.
++    private volatile bool _shared;
+
+     public ForkableSet()
+         : this(new HashSet<T>())
+@@ -216,37 +205,33 @@
+     {
+     }
+
+-    private ForkableSet(HashSet<T> values)
+-    {
+-        _storage = new Storage(values);
+-    }
+-
+-    private ForkableSet(Storage storage)
+-    {
+-        _storage = storage;
+-    }
+-
+-    public int Count => _storage.Values.Count;
++    private ForkableSet(HashSet<T> values, bool shared = false)
++    {
++        _values = values;
++        _shared = shared;
++    }
++
++    public int Count => _values.Count;
+     public bool IsReadOnly => false;
+-    public IEqualityComparer<T> Comparer => _storage.Values.Comparer;
++    public IEqualityComparer<T> Comparer => _values.Comparer;
+
+     public ForkableSet<T> Fork()
+     {
+-        _storage.Shared = true;
+-        return new ForkableSet<T>(_storage);
++        _shared = true;
++        return new ForkableSet<T>(_values, shared: true);
+     }
+
+     public bool Add(T value)
+     {
+         // 重复的 Add 不得触发写时复制，所以只有共享存储才需要先探测一次。
+         // 独占存储直接加，省掉 Contains + Add 的双次哈希查找。
+-        if (_storage.Shared)
+-        {
+-            if (_storage.Values.Contains(value))
+-                return false;
+-            EnsureWritable();
+-        }
+-        return _storage.Values.Add(value);
++        if (_shared)
++        {
++            if (_values.Contains(value))
++                return false;
++            EnsureWritable();
++        }
++        return _values.Add(value);
+     }
+
+     void ICollection<T>.Add(T item) => Add(item);
+@@ -254,59 +239,60 @@
+     public bool Remove(T value)
+     {
+         // 未命中的 Remove 不得触发写时复制，所以只有共享存储才需要先探测一次。
+-        if (_storage.Shared)
+-        {
+-            if (!_storage.Values.Contains(value))
+-                return false;
+-            EnsureWritable();
+-        }
+-        return _storage.Values.Remove(value);
++        if (_shared)
++        {
++            if (!_values.Contains(value))
++                return false;
++            EnsureWritable();
++        }
++        return _values.Remove(value);
+     }
+
+     public void Clear()
+     {
+-        if (_storage.Values.Count == 0)
+-            return;
+-        EnsureWritable();
+-        _storage.Values.Clear();
+-    }
+-
+-    public bool Contains(T item) => _storage.Values.Contains(item);
+-    public void CopyTo(T[] array, int arrayIndex) => _storage.Values.CopyTo(array, arrayIndex);
++        if (_values.Count == 0)
++            return;
++        EnsureWritable();
++        _values.Clear();
++    }
++
++    public bool Contains(T item) => _values.Contains(item);
++    public void CopyTo(T[] array, int arrayIndex) => _values.CopyTo(array, arrayIndex);
+     public void ExceptWith(IEnumerable<T> other)
+     {
+         EnsureWritable();
+-        _storage.Values.ExceptWith(other);
++        _values.ExceptWith(other);
+     }
+     public void IntersectWith(IEnumerable<T> other)
+     {
+         EnsureWritable();
+-        _storage.Values.IntersectWith(other);
+-    }
+-    public bool IsProperSubsetOf(IEnumerable<T> other) => _storage.Values.IsProperSubsetOf(other);
+-    public bool IsProperSupersetOf(IEnumerable<T> other) => _storage.Values.IsProperSupersetOf(other);
+-    public bool IsSubsetOf(IEnumerable<T> other) => _storage.Values.IsSubsetOf(other);
+-    public bool IsSupersetOf(IEnumerable<T> other) => _storage.Values.IsSupersetOf(other);
+-    public bool Overlaps(IEnumerable<T> other) => _storage.Values.Overlaps(other);
+-    public bool SetEquals(IEnumerable<T> other) => _storage.Values.SetEquals(other);
++        _values.IntersectWith(other);
++    }
++    public bool IsProperSubsetOf(IEnumerable<T> other) => _values.IsProperSubsetOf(other);
++    public bool IsProperSupersetOf(IEnumerable<T> other) => _values.IsProperSupersetOf(other);
++    public bool IsSubsetOf(IEnumerable<T> other) => _values.IsSubsetOf(other);
++    public bool IsSupersetOf(IEnumerable<T> other) => _values.IsSupersetOf(other);
++    public bool Overlaps(IEnumerable<T> other) => _values.Overlaps(other);
++    public bool SetEquals(IEnumerable<T> other) => _values.SetEquals(other);
+     public void SymmetricExceptWith(IEnumerable<T> other)
+     {
+         EnsureWritable();
+-        _storage.Values.SymmetricExceptWith(other);
++        _values.SymmetricExceptWith(other);
+     }
+     public void UnionWith(IEnumerable<T> other)
+     {
+         EnsureWritable();
+-        _storage.Values.UnionWith(other);
+-    }
+-    public HashSet<T>.Enumerator GetEnumerator() => _storage.Values.GetEnumerator();
++        _values.UnionWith(other);
++    }
++    public HashSet<T>.Enumerator GetEnumerator() => _values.GetEnumerator();
+     IEnumerator<T> IEnumerable<T>.GetEnumerator() => GetEnumerator();
+     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+     private void EnsureWritable()
+     {
+-        if (!_storage.Shared)
+-            return;
+-        _storage = new Storage(new HashSet<T>(_storage.Values, _storage.Values.Comparer));
++        if (!_shared)
++            return;
++        _values = new HashSet<T>(_values, _values.Comparer);
++        _shared = false;
+     }
+ }
+--- /dev/null
++++ b/src/Testing/Contracts/Runtime/UnattendedTestRunner.ForkContainerOwners.cs
+@@ -0,0 +1,79 @@
++namespace CombatSolver;
++
++internal sealed partial class UnattendedTestRunner
++{
++    private static async Task AssertForkContainerOwnersAsync()
++    {
++        var map = new ForkableDictionary<string, int>(StringComparer.OrdinalIgnoreCase);
++        map.Add("First", 1); map.Add("Second", 2);
++        var list = new ForkableList<int>([1, 2, 3]);
++        var set = new ForkableSet<string>(StringComparer.OrdinalIgnoreCase);
++        set.Add("First"); set.Add("Second");
++        var mapEnumerator = map.GetEnumerator();
++        var listEnumerator = list.GetEnumerator();
++        var setEnumerator = set.GetEnumerator();
++        var mapFork = map.Fork(); var listFork = list.Fork(); var setFork = set.Fork();
++        var mapGrandchild = mapFork.Fork(); var listGrandchild = listFork.Fork();
++        var setGrandchild = setFork.Fork();
++        map["FIRST"] = 10; map.Add("Third", 3);
++        list[0] = 10; list.Add(4);
++        set.Add("Third"); set.Remove("First");
++        mapFork["second"] = 20; mapFork.Remove("first");
++        listFork.Insert(1, 9); listFork.RemoveAt(0);
++        setFork.ExceptWith(["FIRST"]); setFork.UnionWith(["Fourth"]);
++        if (!mapGrandchild.SequenceEqual(new[] { new KeyValuePair<string, int>("First", 1),
++                new KeyValuePair<string, int>("Second", 2) })
++            || !listGrandchild.SequenceEqual([1, 2, 3])
++            || !setGrandchild.SetEquals(["first", "SECOND"])
++            || !ReferenceEquals(mapGrandchild.Comparer, StringComparer.OrdinalIgnoreCase)
++            || !ReferenceEquals(setGrandchild.Comparer, StringComparer.OrdinalIgnoreCase))
++            throw new InvalidOperationException("Nested collection Fork lost order/comparer/isolation.");
++        var observedMap = new List<KeyValuePair<string, int>>();
++        while (mapEnumerator.MoveNext()) observedMap.Add(mapEnumerator.Current);
++        var observedList = new List<int>();
++        while (listEnumerator.MoveNext()) observedList.Add(listEnumerator.Current);
++        var observedSet = new List<string>();
++        while (setEnumerator.MoveNext()) observedSet.Add(setEnumerator.Current);
++        if (!observedMap.SequenceEqual(mapGrandchild)
++            || !observedList.SequenceEqual(listGrandchild)
++            || !observedSet.SequenceEqual(setGrandchild))
++            throw new InvalidOperationException("Fork detachment changed an existing collection enumerator.");
++        var rootMap = new ForkableDictionary<string, int>(StringComparer.OrdinalIgnoreCase);
++        rootMap.Add("seed", 1);
++        var rootList = new ForkableList<int>([1]);
++        var rootSet = new ForkableSet<string>(StringComparer.OrdinalIgnoreCase); rootSet.Add("seed");
++        var children = Enumerable.Range(0, 16).Select(_ =>
++            (Map: rootMap.Fork(), List: rootList.Fork(), Set: rootSet.Fork())).ToArray();
++        // All children exist before parallel branch mutation, matching the engine ownership boundary.
++        await Task.WhenAll(children.Select((child, index) => Task.Run(() =>
++        {
++            child.Map["SEED"] = index + 10; child.Map.Add("child", index);
++            child.List[0] = index + 10; child.List.Add(index);
++            child.Set.Remove("SEED"); child.Set.Add(index.ToString());
++            var descendantMap = child.Map.Fork(); var descendantList = child.List.Fork();
++            var descendantSet = child.Set.Fork();
++            child.Map.Clear(); child.List.RemoveAt(0); child.Set.Clear();
++            if (descendantMap["seed"] != index + 10 || descendantMap["child"] != index
++                || !descendantList.SequenceEqual([index + 10, index])
++                || !descendantSet.SetEquals([index.ToString()]))
++                throw new InvalidOperationException("Parallel owned branch detach crossed a generation.");
++        })));
++        if (rootMap.Count != 1 || rootMap["seed"] != 1 || !rootList.SequenceEqual([1])
++            || !rootSet.SetEquals(["seed"]))
++            throw new InvalidOperationException("Parallel children mutated their parent.");
++        var emptyMap = new ForkableDictionary<string, int>();
++        var emptyList = new ForkableList<int>(); var emptySet = new ForkableSet<string>();
++        var emptyMapFork = emptyMap.Fork(); var emptyListFork = emptyList.Fork();
++        var emptySetFork = emptySet.Fork();
++        if (emptyMapFork.Remove("missing") || emptyListFork.Remove(1) || emptySetFork.Remove("missing"))
++            throw new InvalidOperationException("Missing removal changed empty collection semantics.");
++        emptyMapFork.Add("x", 1); emptyListFork.Add(1); emptySetFork.Add("x");
++        if (emptyMap.Count != 0 || emptyList.Count != 0 || emptySet.Count != 0)
++            throw new InvalidOperationException("Empty collection ownership was shared after first write.");
++        var own = new ForkableDictionary<string, int>(); own.Add("x", 1);
++        var ownEnumerator = own.GetEnumerator(); own.Add("y", 2);
++        bool invalidated = false;
++        try { ownEnumerator.MoveNext(); } catch (InvalidOperationException) { invalidated = true; }
++        if (!invalidated) throw new InvalidOperationException("Owned dictionary mutation stopped invalidating enumeration.");
++    }
++}
+--- a/src/Testing/Contracts/Search/UnattendedTestRunner.ComponentRegentBossCombination.cs
++++ b/src/Testing/Contracts/Search/UnattendedTestRunner.ComponentRegentBossCombination.cs
+@@ -18,6 +18,8 @@
+ {
+     private async Task AssertComponentRegentBossAsync(CombatState live, Player player)
+     {
++        await AssertForkContainerOwnersAsync();
++        _completedChecks.Add("ForkContainerOwners:ListDictionarySet:NestedOwners:EmptyMutation:ComparerAndOrderedEnumerators:16OwnedParallelBranches:ParentIsolation");
+         foreach (var relic in player.Relics.ToArray())
+             if (relic is not DivineRight) await RelicCmd.Remove(relic);
+         foreach (var power in live.Creatures.SelectMany(creature => creature.Powers).ToArray())

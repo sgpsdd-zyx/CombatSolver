@@ -41,7 +41,8 @@ internal sealed partial class UnattendedTestRunner
         CombatRootSnapshot root = CombatRootSnapshot.Capture(combat, multiplayerAdvisor: true);
         CombatPredictionSimulator predicted = root.ForkSimulator();
         SimulatedCombatState shadow = (SimulatedCombatState)predicted.State.CombatState;
-        shadow.ConsumeExtraTurnSources(local);
+        if (!Engine.InCombat.Mirrors.HookMirrors.AfterTakingExtraTurn(predicted, shadow, local))
+            throw new InvalidOperationException("The native extra-turn source unexpectedly requested a choice.");
         ContinuationStamp expected = ContinuationStamp.CapturePredicted(local, predicted, root.StartTurnNumber,
             root.Forecast, root.StartTurnNumber);
         await Hook.AfterTakingExtraTurn(combat, local);

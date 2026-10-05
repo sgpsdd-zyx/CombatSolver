@@ -4,8 +4,8 @@
 
 主项目开发与社区任务面向原版游戏内容，不主动实现修改游戏内容的第三方 Mod 适配。本文记录已有扩展入口，供第三方作者自主实现和验证；适配请求单独留档。
 
-求解器不认识任何第三方内容。它靠一套**镜像**（mirror）在自己的模拟里重现游戏行为，而镜像是
-按类型登记的。你的牌、Power、遗物、药水没有登记，求解器就只能退化处理，路线会算错。
+求解器通过按类型登记的**镜像**（mirror）重现游戏行为。第三方牌、Power、遗物、药水需要
+为相关效果提供预测实现；触发未适配的强制门禁时，求解器会停止并说明来源。
 
 这份文档讲：默认会发生什么、有哪些登记点、登记的纪律、怎么验证自己做对了。
 
@@ -22,13 +22,15 @@ HeavenlyDrill 的 OnPlay 使用精确镜像，先解析分支 X 值及修正，�
 | 你的 Mod | 要做什么 |
 |---|---|
 | 清单里 `affects_gameplay: false`（纯美术、UI、音效） | **什么都不用做**，自动放行 |
-| 只改地图、进幕、事件、休息处、商店这类战斗外内容 | **什么都不用做**，求解器会判定它对战斗惰性 |
+| 只改地图、进幕、事件、休息处、商店这类战斗外内容，包括商店删牌价格 | **什么都不用做**，求解器会判定它对战斗惰性 |
 | 加了牌、Power、遗物、药水、敌人，或改了战斗数值 | 往下读 |
 
-前两条是自动的。第三条不做适配的话，装上你的 Mod 之后求解器会直接停在
-「检测到不兼容的第三方 Mod」，玩家用不了。
+前两条是自动的。第三条涉及的未适配战斗内容被实际使用时，求解器会停在
+「求解器暂未适配此内容性 Mod：名称，无法求解。」
 
-项目明确拒绝的玩法 Mod 优先于上述通用放行条件。当前 `WheelchairSpire`、`PengoTarot`、`BetterCharacterRelics` 按 Mod ID 或已加载程序集名识别，在根捕获时直接报告名称和不兼容原因；不依据 `affects_gameplay: false` 放行。本批不为这些 Mod 提供战斗适配。搜索、部署和回合准备捕获此异常时均使用专用提示，报告账本只记录不兼容类别，不引导玩家上传日志。包内仅出现其他 Mod 的名字或恢复环境不匹配，均不足以认定该 Mod 是某个偏差的原因。
+Mod ID 和程序集名用于标明来源。BetterVanillaSTS2 仅修改商店删牌价格时，按战斗外内容放行。BaseLib、RitsuLib 与声明为非 gameplay 的扩展沿既有框架、订阅器及镜像合同处理；原版模型的已捕获数值继续由镜像消费。实际参与战斗的未适配模型、gameplay subscriber、OnPlay 替换和怪物 AI 使用各自的语义门禁。搜索、部署和回合准备捕获已确认的第三方不兼容时均使用专用提示，报告账本只记录 `IncompatibleGameplayMod`，显示为“内容性 Mod 暂未适配”，不引导玩家上传日志。包内仅出现其他 Mod 的名字或恢复环境不匹配，均不足以认定该 Mod 是某个偏差的原因。
+
+怪物门禁检查当前敌方模型及其行动状态机补丁；仅新增怪物且本场战斗没有该怪物的 Mod，按当前战斗继续求解。卡牌出牌补丁审计使用根可达卡牌，包括战斗牌堆和玩家牌组。玩法订阅器与 Harmony 补丁按当前挂载的入口检查；配置关闭后若仍保留未知战斗入口，需要对应的配置状态合同才能证明它处于空配置。当前门禁并不通用推断任意 Mod 的功能开关。
 
 Power 的原版克隆会重置 `_internalData`。跨根保留的数据必须从原生来源捕获：例如本批苍蓝星球的已触发标记，以及 DarkEmbrace 的虚无消耗延迟计数。DarkEmbrace 后续按实际事件累计并在回合末清零，不能用结束回合前的牌数代替此状态。
 
@@ -36,7 +38,17 @@ Power 的原版克隆会重置 `_internalData`。跨根保留的数据必须从�
 
 格挡清空被阻止后的上限结算目前只显式识别原版 `SturdyClamp`；其他已准入的 preventer 在 `PersistentRelicSupport.BlockAfterPreventingClear` 中按全额保留计算。搜索的保留格挡估值与实际影子清空共用此规则，二者一致不等于已支持第三方的额外上限。新增“保留至多 N 点”等语义时，必须同时适配清空后的结算和估值，并验证原生状态与分支状态；仅登记 `ShouldClearBlock=false` 不足以实现该上限。这是既有适配边界，不表示未知第三方会自动通过兼容门禁。
 
-计算型动态变量必须有分支规则。第三方卡牌进入 `CalculatedVar` 求值且没有 `CalculatedVarSpecRegistry` 支持时，按卡牌所属 Mod 报不兼容，日志包含卡牌 ID；界面和报告账本不引导玩家上传。不能回退调用会读取 live 状态的原生计算器。20260911 的 `LIFEMASTERMOD-TENTACLES` 属于该情况，本次没有为该 Mod 提供适配。
+计算型动态变量必须有分支规则。第三方卡牌进入 `CalculatedVar` 求值且没有 `CalculatedVarSpecRegistry` 支持时，按卡牌所属 Mod 报暂未适配，日志包含卡牌 ID。`IComputedDynamicVar` 先核对卡牌来源，再核对自定义变量类型的来源；共享的 `ComputedDynamicVar` 包装器由卡牌提供内容来源，框架程序集不能代替内容作者。已确认第三方来源的失败使用专用提示，界面和报告账本不引导玩家上传。原版内容场景的普通失败保留诊断上传提示；不能回退调用会读取 live 状态的原生计算器。
+
+未登记的回合阶段、金币回调以及搜索支持表外的药水在拒绝执行时，同样按实际模型所属 Mod 分类。识别依据是失败入口的类型及游戏已加载程序集映射；已登记的处理器继续执行，不依据已安装 Mod 列表猜测失败来源。运行库的 `PlatformNotSupportedException` 记入实际失败类别。
+
+上传引导独立于内容准入：本场实际角色、牌组/战斗牌堆、遗物、怪物、Power、药水、附魔、灾厄或球来自第三方时，本场所有错误和路线反馈均省去上传引导。普通异常保留原错误类别，不把它自动归因为 Mod 未适配。原版内容场景继续提示反馈，单纯安装框架、局外修改或本场未出现的新怪物不改变该判断；设置里的主动上传入口继续可用。判断使用游戏类型来源映射，不使用角色显示名或 Mod 安装列表。
+
+规范 Power 的动态变量预热默认只访问原版来源。第三方 CanonicalVars 可以依赖附着后的 Owner；实际战斗实例仍在主线程物化，后台消费捕获值。规范实例和战斗实例的生命周期必须分别处理。第三方 Power 只要可能在搜索中第一次被施加，克隆规范实例时就会撞上后台禁止惰性创建显示变量的守卫；适配层确认其规范实例能在主线程物化后，用 `PowerDynamicVarWarmup.RegisterAdaptedCanonicalPower(Type)`（或泛型重载）登记，建根时随原版一起物化，失败照常抛出。
+
+第三方怪物当前没有完整 AI／行动登记合同，根捕获按 MonsterModel 的实际来源拒绝。修改原版 GenerateMoveStateMachine 的玩法补丁默认同样拒绝；出招表是模拟直接读取的活状态机，换顺序、条件或招式集合会自动跟随，适配层补齐招式效果与写死的条件分支后，用 `PredictionModPatchAudit.RegisterAdaptedMonsterMachine(Type monsterType, string modId)` 逐个声明「该 mod 对该原版怪物出招表的补丁已适配」，审计只放行登记的（出招表声明类型，mod id）组合，声明类型可以是被多个怪物继承的抽象基类，其他 mod 的补丁及意图构造器、GetSingleDamage 等审计不受影响。AttackIntent 必须提供可捕获的 DamageCalc；缺失时审计意图类型、构造器及原生意图计算补丁，不生成零伤害。确认来源时使用暂未适配提示，来源未知时保留明确的类型与行动诊断。BetterVanillaSTS2 的 TargetedStrengthPower 已由原包证明替换原版语义，属于已确认的玩法边界。
+
+原版卡牌异步 OnPlay 的 MoveNext 和 OnPlay 方法本体分别审计；现有 OnPlay 登记不覆盖 MoveNext 补丁。外部回调在已有 pending choice 时只能恢复同一选择；请求另一来源的选择会在写入前失败并保留原 pending。预见、伤害后抽牌和洗牌选择相互嵌套时，适配器必须停止当前派发并保存剩余程序阶段。基础卡牌／框架不能替代活动内容模型的来源。
 
 Power 来源也是语义的一部分：精确镜像可通过 `ICombatPredictionEffectSink.ApplyPowerFromSource` 显式提供 `CardModel? cardSource`，原版传 null 时必须保持 null，避免能力附带效果被误判成外层卡牌直接效果。普通 `ApplyPower` 仍沿用当前卡牌作用域；两者不能按调用栈有无卡牌随意替代。官方 0.47.1 的 Inky 附魔明确传入其卡牌来源，使不安油灯按原版触发；自定义附魔也须按原生调用提供来源，不能只核对虚弱层数。
 
@@ -58,6 +70,7 @@ CrabRagePower 的同伴死亡结算由 `AfterDeathMirrors` 独占：力量、格
    胜负判定之后才分发，求解器搜到战斗结束就停）；
 3. 在 `PredictionModHookSubscriberCapture.KnownPreRootSubscriberTypeNames` 白名单里。
 4. Loadout 的 `PowerGiverSummonHook`：主线程检查实际加载的公开计数快照接口及怪物能力配置，把空配置写入续用状态戳。版本号变化不会阻止搜索；接口变化或配置非空时明确失败。这不放行 Loadout 的其他战斗效果。
+5. BaseLib `CardModifier`：侧表状态随预测卡牌独立复制并重绑 Owner，Hook 仍由对应镜像处理。修饰器的战斗监听成员与原生 BaseLib 一致，按玩家五种战斗牌堆枚举；生成牌完成战斗域登记后，在入堆时参与监听，离开所有牌堆后退出监听。复跑使用 `-VerifyBaseLibCardModifierBoundary`，合同直接对照原生生成牌及各牌堆的生命周期。
 
 条件都不满足就抛 `IncompatibleGameplayModException`，整个求解器停摆。
 
@@ -189,13 +202,26 @@ StrategicEffectMirrors.Register<TYourPower>(requirements, evaluate, host);
 底层沿用 `MethodMirrorRegistry` 和覆盖描述元数据，外部仍需 publicizer。
 
 登记必须在首次 `CombatRootSnapshot.Capture` 或本阶段分发之前完成，此后明确拒绝登记。
-与多数旧镜像不同，这些阶段遇到未登记且非纯表现的重写会记录风险并抛出
-`NotSupportedException`，不会只标记风险后继续生成路线。
+这些阶段遇到未登记且非纯表现的重写会记录风险并停止搜索。来源属于已加载第三方
+内容模型时抛出 `IncompatibleGameplayModException`，向玩家说明该 Mod 暂未适配；
+原版或来源未知时抛出 `PredictionUnsupportedException` 并保留诊断上传提示。
 **只拿得到 `Type` 的适配器（不引用目标 Mod 程序集、运行期反射找类型）用同一张表的按 `Type`
 重载**：`Register(Type, handler)`／`RegisterEarly`／`RegisterLate` 与 `RegisterIgnored(Type)`，
 判据与泛型入口相同；`RegisterIgnored` 用于已复核的纯表现层覆写。
 按 `Type` 的处理器或忽略登记同样计入外部回合开始扩展，仍会拒绝多人烘焙手套暂停根；不能借纯表现忽略登记绕过该暂停边界。
 完整签名、暂停和状态约束见[回合阶段镜像](turn-phase-mirrors.md)。
+
+`ExtraTurnMirrors.RegisterShouldTakeExtraTurn<TModel>(handler)` 与
+`RegisterAfterTakingExtraTurn<TModel>(handler)` 登记 `AbstractModel.ShouldTakeExtraTurn` /
+`AfterTakingExtraTurn`，接收者为 AbstractModel，上下文包含 `Player` 和分支 `Combat`。龙涎香、佩尔之眼与
+第三方来源共用镜像登记表，按原生监听顺序判断，第一个 true 结束判断。后置回调先固定全部监听成员，
+再按原顺序逐项结算；第三方可以读取此前来源已经结算的分支状态。选牌暂停交回既有动作重放。
+搜索回放与实机回合末风险评估共用同一入口。
+多人在全队结束阶段完成后逐活动玩家判断资格，并对每个额外回合参与者执行一次后置回调；
+处理器应按 `context.Player` 与实际持有者判断归属，不假设本机就是列表第一位或唯一玩家。
+登记时机和冻结门与上面三张表相同；重写了却没登记的第三方类型同样停止搜索，只做表现的重写登记一个
+返回 false / 什么都不做的处理即可。按 `Type` 的重载为 `RegisterShouldTakeExtraTurn(Type, handler)` /
+`RegisterAfterTakingExtraTurn(Type, handler)`。
 
 ### 2.11 已适配 OnPlay 补丁组合
 
@@ -334,6 +360,7 @@ StrategicEffectMirrors.Register<TYourPower>(requirements, evaluate, host);
 | `MultiplayerTurnSetupCoordinator` / `HookMirrors.MultiplayerTurnSetup` | 多人烘焙手套的原生耗尽前暂停根，只继续本机剩余回合准备；第三方回合开始登记/覆写明确拒绝，不能登记任意原生异步进度 | 原版暂停点；无外部登记 |
 | `StrategicHpRecoveryBound.CanUseKnownNativeHealingPolicy` / `KnownSources` | 单人五个原版角色及原版遭遇的已知来源搜索政策；已有再生、实际持有的药水与明确回血来源保留，未生成的随机回血不提前计入。它不是随机生成下的严格上界，不是第三方治疗认证入口；第三方类型、扩展来源和多人根不据此获得资格。`CanUseStrictHpRelicBound` 与 `SmartPotionBound` 同样显式排除多人。语义支持与性能政策独立 | 封闭搜索政策 |
 | `StrategicHpRecoveryBound.CanCertifyRemainingHealingEnvironment` / `RemainingHealingUpperBound` | 只在已审计的原版角色、敌人、卡牌、持续效果、遗物和药水闭包内收紧剩余治疗上界；包括固定Shiv来源、Slither费用随机化及Inky虚弱；敌人集合包含逐项审计的精确SoulNexus，其三个行动与生命周期不授予玩家治疗；另含精确Regent／LouseProgenitor闭包，BurningSticks复制消耗技能的例外仍保守处理。未知来源、附魔／苦难、消耗牌被动与取回来源保守回退无限余量；再生及战后治疗继续计入。第三方语义登记不等于治疗上界证明，没有外部证书注册入口；原战斗模拟支持范围不因此扩大 | 封闭性能证明 |
+| `StrategicHpRecoveryBound.ComponentHealingRejection` / `ComponentHealingUpperBound` | 按审计版本和精确组件表组合严格回复证明，根捕获全部初始牌堆、永久牌组与全局监听来源，分支保留有效再生并检查剩余合法剂量。未知来源、附件、获取链和目标拒绝；未知分支的无限界不再与已知来源估计取最小值。该证书没有第三方注册入口；模拟镜像登记不会自动获得资格。Smart 的精确用药层与开局后续搜索仅在现有成长、遗物、强制用药、资源追回和保命资源门禁通过后消费完整无药胜利基线 | 封闭组件证明 |
 | `CombatSearchCoordinator.CanFinishNativeLouseZeroDamageRoute` / `CombatRootSnapshot.InitialRemainingHealingUpperBound` | 精确原生Regent／Louse闭包的初始治疗上界为零，且无风险满血零损无药完整胜利才停止可选药水后验；固定预算、强制药水、死亡保护、成长／遗物目标与未追回资源阻止退出。未知初始Power／药水／生成牌和剩余再生保守拒绝；没有外部证书登记入口。BurningSticks存在时拒绝消耗BundleOfJoy快捷证书；新增7牌／5Power／3遗物／2药水只在此闭包，其他环境的原表不变 | 封闭性能证明 |
 | `CombatHistoryCounterKey.ForCard` / `OpenGenerationSources` | 原版历史读者按所读计数入键，随机生成、变牌及间接生成药水来源保守全量入键；新增原版入口必须同步该表。根包含消耗堆。第三方模型、已捕获 Mod 订阅者、BaseLib 修饰器或存在 AdaptedOnPlay 快照时自动回退六项全量，不能据此支持六项之外的新历史语义；新计数仍须显式扩展历史、Fork 和指纹合同。 | 封闭语义依赖表 |
 | `CombatPredictionSimulator.SupportsManualCardChoiceContinuation` / `PredictionStateStore.SupportsManualCardChoiceContinuation` | 自身选牌续执行覆盖清单中的41张原版单人卡，要求无附魔/污染、手动单次执行；已生成的请求、候选、历史与活动格挡计数有显式复制合同，不能据此接纳第三方选牌委托；拒绝不透明外部状态以及所有 `IPredictionForkBoundary` 状态（包括模型状态适配器包装）。不符合时保留原完整回放，已有第三方战斗支持范围不因此扩大；无注册入口 | 封闭性能特化 |
@@ -345,14 +372,14 @@ StrategicEffectMirrors.Register<TYourPower>(requirements, evaluate, host);
 | `CombatBeamSolver.CaptureEnergyRefundWindow` / `StrategicEffectContext.RecurringEnergyGain` | 原版环绕轨道按花费余数、自动化按剩余抽牌数估计未来返能，包含自然抽牌；与可消费能量缺口共用上限。第三方仍通过 §2.2 登记，详见[估值上下文](strategic-effects.md) | 原版特化；第三方估值已有入口 |
 | `RelicCounterCatalog` / `SimulatedCombatState.ReadRelicCounter` | 战斗末卡数仅覆盖已核对的十种原版计数；第三方显示计数只列出“尚未适配”，不会被自动当作跨战斗目标。见[计数策略说明](../relic-counters.md) | 精确原版适配 |
 | `SearchPolicySnapshot.IsAct3BossEncounter` / `CombatBeamSolver.CaptureAct3BossInteractionPotential` | 首领范围只含第三幕实验体、永世沙漏、女王；联动上下文只适配原版 Pagestorm、DanseMacabre、Demesne；StrategicEffectModel 对 PrepTimePower 按未来攻击与回合视野估计重复精力收益。这些不是通用第三方触发次数分析。第三方 Power 仍使用 §2.2 登记 | 原版特化；第三方估值已有入口 |
-| `GoldGainedMirrors` / `GoldGainSupport` | 三个标准 descriptor 描述金币 Modify、AfterModify、AfterGain；当前只有原版 BowlerHat、Ectoplasm、DragonFruit 的精确登记，registry 未开放外部注册。仅明确审计的展示通知可 Ignored；未知 override 即使非 gameplay manifest 也拒绝。修改用 combat child，获得后使用 null-child 跑局序列。单人保留官方冻结成员与失活拒绝；多人在派发前按分支 Hook 资格固定全队监听顺序，死亡停用、复活恢复，派发途中不重新筛选。全局来源由根捕获，金币/遗物/药水/HP 属当前分支。 | 原版封闭派发 |
-| `PredictionModHookSubscriberCapture.KnownPreRootSubscriberTypeNames` | 私有静态白名单，没有公开登记入口 | 待做 |
+| `GoldGainedMirrors` / `GoldGainSupport` | 三个标准 descriptor 描述金币 Modify、AfterModify、AfterGain；当前只有原版 BowlerHat、Ectoplasm、DragonFruit 的精确登记，registry 未开放外部注册。仅明确审计的展示通知可 Ignored；未知 override 即使非 gameplay manifest 也拒绝。修改用 combat child，获得后使用 null-child 跑局序列。单人保留官方根活动成员与分支 `HooksActive` 过滤；多人在派发前按同一分支资格固定全队监听顺序，死亡停用、复活恢复，派发途中不重新筛选。全局来源由根捕获，金币/遗物/药水/HP 属当前分支。 | 原版封闭派发 |
+| `PredictionModHookSubscriberCapture.KnownPreRootSubscriberTypeNames` / `HasCertifiedNonHealingSubscribers` | 私有静态白名单，没有公开登记入口。严格回复证书只额外审计Loadout指定MVID下五个确切回调来源，召唤配置须为空且无BaseLib卡牌修饰器；只消费根捕获投影，不新增后台Mod回调执行。其他来源拒绝，不能把已支持捕获或属于该程序集当作无回复证明 | 封闭版本证明 |
+| `PersistentPowerSupport.GetModifiedHandDraw` | 八种已审计原版回合／计数抽牌遗物使用分支状态，在原生正常／后置监听顺序中结算；没有额外第三方贡献注册入口。其他监听者仍走已有派发，第三方语义不得借此获得回复证书 | 封闭分支查询 |
 | `PredictionModPatchAudit.ValidateLoadedMods` | 明确拒绝 `WheelchairSpire`，没有外部放行入口 | 项目不兼容策略 |
 | `NativeModelCloneConcurrency` | 预测克隆只放行已核对原版阶段、原版变量及 BaseLib/Ritsu 稀疏元数据复制补丁组合的普通原版卡牌；附魔/灾厄、第三方模型/变量和未知补丁保留原锁。Power 只放行已物化原版变量、继承默认克隆及 InitInternalData 的原版类型，同时核对基阶段与变量 getter 补丁；自定义初始化保持原锁。每个线程最外层模拟隔离域重新核对，不支持求解中安装补丁；原版 MutableClone 保护不变。没有新增外部注册入口 | 精确框架适配 |
 | `RitsuEmptyCapabilityFastPathPatches` | 模拟隔离域的空 capability 集可直接保留原卡牌标签序列；不枚举/复制标签，不缓存分支值。非空贡献者与精确类型默认来源继续框架入口；晚注册刷新来源代次，已物化的空集合仍按框架语义处理。live 不旁路，无新增登记入口 | 精确框架适配 |
 | `DynamicVarCloneMetadataPatches` | 模拟克隆只优化已核对为空默认值的 BaseLib 提示/升级字段与 Ritsu 提示工厂；非空值照常复制，live 调用保持原框架行为。其他附加字段继续原有克隆逻辑，不属于此优化入口 | 精确框架适配 |
 | `CorePowerSupport.TriggerPlayerRegularSideTurnEndEffects`、`FlushPlayerHandAtTurnEnd`、BeforeHandDraw、AfterSideTurnStart | 常规回合末及这些抽牌/阵营时点仍无通用登记；注能核心的首回合产球由 `TriggerRelicsAfterSideTurnStart` 显式结算，准备选牌根可能早于产球，不能认为所有开局效果已在根内。其闪电伤害加成仍走只读 `ModifyOrbValue`，只读数值支持不代表产球生命周期已适配。BeforeSideTurnStart、AfterPlayerTurnStart（Early/普通/Late）及 AfterSideTurnEndLate 已开放，见 §2.10，不能互相替代 | 部分开放 |
-| `SimulatedCombatState.TryPrepareExtraPlayerTurn` / `TryPrepareLiveExtraPlayerTurn` / `ConsumeExtraTurnSources` | 额外回合的来源硬编码，只认龙涎香和帕尔之眼 | 待做 |
 | `CombatPredictionSimulator.OnPlayWrapper` | 出牌后补抽没有挂载点 | 待做 |
 | `CardChoiceSupport.RemovalPriority` 的排序口径 | 移除类选择按**单卡**估值排，不看牌库其余部分；弃牌那一侧已经是「源牌堆平均值减本牌估值」的相对口径，消耗与转变没有。表现为求解器不会为了压出无限而主动烧牌。起手牌那一层已由 §2.7 打开，相对口径这一层仍然封闭 | 待做 |
 | `ContinuationStamp.AppendCard` 的 `private=` 段与 `CombatBeamSolver.CaptureCardStateFingerprintForTesting` 的 `switch (preview)` | **卡牌**的隐藏字段按原版类型写死（利爪、基因算法、巨锤、狂暴、镰刀、疯狂科学），第三方卡牌的私有计数进不了指纹。Power 那一侧已有 `PowerHiddenStateMirrors`，见 §2.6 | 待做 |

@@ -14,40 +14,31 @@ namespace CombatSolver;
 
 internal sealed partial class UnattendedTestRunner
 {
-    private static void AssertKnownGameplayModBoundary()
+    private static void AssertCombatModBoundary(CombatState combat)
     {
-        foreach (string modId in new[] { "WheelchairSpire", "PengoTarot", "BetterCharacterRelics" })
-            AssertKnownGameplayModBoundary(modId);
-        PredictionModPatchAudit.ValidateLoadedMods([]);
-    }
-
-    private static void AssertKnownGameplayModBoundary(string modId)
-    {
-        ModManifest manifest = new() { id = modId, name = modId, affectsGameplay = false };
-        Mod byId = new() { path = "unattended-incompatible-mod", manifest = manifest };
-        Mod byAssembly = new()
+        var previousMocks = AssemblyInfo.MockTypes;
+        AssemblyInfo.MockTypes = previousMocks == null ? [] : new(previousMocks);
+        Harmony harmony = new("CombatSolver.Testing.ShopModBoundary");
+        var prefix = AccessTools.Method(typeof(ForeignCardPatch), nameof(ForeignCardPatch.Prefix));
+        var price = AccessTools.Method(typeof(MegaCrit.Sts2.Core.Entities.Merchant.MerchantCardRemovalEntry), "CalcCost");
+        ContinuationStamp before = ContinuationStamp.CaptureLive(combat);
+        try
         {
-            path = "unattended-incompatible-assembly",
-            manifest = new ModManifest { id = "renamed-mod", name = "Renamed Mod", affectsGameplay = true },
-        };
-        byAssembly.assemblies.Add(System.Reflection.Emit.AssemblyBuilder.DefineDynamicAssembly(
-            new System.Reflection.AssemblyName(modId),
-            System.Reflection.Emit.AssemblyBuilderAccess.RunAndCollect));
-        foreach (Mod mod in new[] { byId, byAssembly })
-        {
-            try
+            foreach (string modId in new[] { "BetterVanillaSTS2", "WheelchairSpire", "PengoTarot", "BetterCharacterRelics" })
+            foreach (bool affectsGameplay in new[] { true, false })
             {
-                PredictionModPatchAudit.ValidateLoadedMods([mod]);
-                throw new InvalidOperationException("Known incompatible gameplay mod was admitted.");
+                Mod mod = new() { path = "test-shop-mod", manifest = new ModManifest
+                    { id = modId, name = modId, affectsGameplay = affectsGameplay } };
+                AssemblyInfo.MockTypes[typeof(ForeignCardPatch)] = (mod, false);
+                harmony.Patch(price, prefix: new HarmonyMethod(prefix));
+                _ = CombatRootSnapshot.Capture(combat);
+                harmony.Unpatch(price, prefix);
+                _ = CombatRootSnapshot.Capture(combat);
             }
-            catch (IncompatibleGameplayModException exception)
-            {
-                if (exception.ModId != mod.manifest!.id
-                    || !exception.Subject.Contains(modId, StringComparison.Ordinal))
-                    throw new InvalidOperationException("Incompatible mod rejection lost source context.");
-            }
+            if (ContinuationStamp.CaptureLive(combat) != before)
+                throw new InvalidOperationException("Shop compatibility audit changed live combat state.");
         }
-        PredictionModPatchAudit.ValidateLoadedMods([]);
+        finally { harmony.UnpatchAll(harmony.Id); AssemblyInfo.MockTypes = previousMocks; }
     }
 
     private static class ForeignCardPatch
@@ -101,9 +92,29 @@ internal sealed partial class UnattendedTestRunner
             AssemblyInfo.MockTypes[typeof(ForeignCardPatch)] = (mod, false);
             harmony.Unpatch(method, prefix);
             _ = CombatRootSnapshot.Capture(combat);
+            var stateMachine = method.GetCustomAttributes(typeof(System.Runtime.CompilerServices.AsyncStateMachineAttribute), false)
+                .Cast<System.Runtime.CompilerServices.AsyncStateMachineAttribute>().Single().StateMachineType;
+            var moveNext = AccessTools.Method(stateMachine, "MoveNext");
+            harmony.Patch(moveNext, prefix: new HarmonyMethod(prefix));
+            try
+            {
+                try
+                {
+                    _ = CombatRootSnapshot.Capture(combat);
+                    throw new InvalidOperationException("异步 OnPlay 玩法补丁没有被拒绝。");
+                }
+                catch (IncompatibleGameplayModException ex)
+                {
+                    if (ex.ModId != manifest.id || !ex.Subject.Contains("MoveNext", StringComparison.Ordinal))
+                        throw new InvalidOperationException("异步补丁失败缺少来源上下文。", ex);
+                }
+                manifest.affectsGameplay = false;
+                _ = CombatRootSnapshot.Capture(combat);
+            }
+            finally { harmony.Unpatch(moveNext, prefix); manifest.affectsGameplay = true; }
             if (ContinuationStamp.CaptureLive(combat) != before)
                 throw new InvalidOperationException("补丁审计修改了真实战斗状态。");
-            _completedChecks.Add("ForeignOnPlay:LatePatch:Neutral:Unknown:Unpatch:RootUnchanged");
+            _completedChecks.Add("ForeignOnPlay:LatePatch:AsyncMoveNext:Neutral:Unknown:Unpatch:RootUnchanged");
         }
         finally
         {

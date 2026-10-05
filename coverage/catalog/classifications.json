@@ -5754,16 +5754,16 @@
     "testId": "POWER-DEATH-BATCH-050"
   },
   "Power|MegaCrit.Sts2.Core.Models.Powers.AmbergrisPower|MegaCrit.Sts2.Core.Models.AbstractModel.AfterTakingExtraTurn(MegaCrit.Sts2.Core.Entities.Players.Player)": {
-    "status": "SolverCompensation",
-    "source": "src/Prediction/EndTurnPowerSupport.cs + src/Prediction/PowerLifecycleSupport.cs",
-    "notes": "该行为现由分支内状态完整结算，不再触发原生重扫；精确语义与跨回合一致性见关联测试证据。",
-    "testId": "NO-NATIVE-RESCAN-244"
+    "status": "EngineExact",
+    "source": "src/Engine/InCombat/Mirrors/Hooks/TurnEnd/ExtraTurnMirrors.cs",
+    "notes": "原版与第三方来源按原生监听顺序派发；判断短路、后置回调、完整状态和 Fork 隔离由原生差分验证。",
+    "testId": "EXTRA-TURN-MIRROR-ORDER"
   },
   "Power|MegaCrit.Sts2.Core.Models.Powers.AmbergrisPower|MegaCrit.Sts2.Core.Models.AbstractModel.ShouldTakeExtraTurn(MegaCrit.Sts2.Core.Entities.Players.Player)": {
-    "status": "SolverCompensation",
-    "source": "src/Prediction/EndTurnPowerSupport.cs + src/Prediction/PowerLifecycleSupport.cs",
-    "notes": "该行为现由分支内状态完整结算，不再触发原生重扫；精确语义与跨回合一致性见关联测试证据。",
-    "testId": "NO-NATIVE-RESCAN-244"
+    "status": "EngineExact",
+    "source": "src/Engine/InCombat/Mirrors/Hooks/TurnEnd/ExtraTurnMirrors.cs",
+    "notes": "原版与第三方来源按原生监听顺序派发；判断短路、后置回调、完整状态和 Fork 隔离由原生差分验证。",
+    "testId": "EXTRA-TURN-MIRROR-ORDER"
   },
   "Power|MegaCrit.Sts2.Core.Models.Powers.AsleepPower|MegaCrit.Sts2.Core.Models.AbstractModel.AfterDamageReceived(MegaCrit.Sts2.Core.GameActions.Multiplayer.PlayerChoiceContext,MegaCrit.Sts2.Core.Entities.Creatures.Creature,MegaCrit.Sts2.Core.Entities.Creatures.DamageResult,MegaCrit.Sts2.Core.ValueProps.ValueProp,MegaCrit.Sts2.Core.Entities.Creatures.Creature,MegaCrit.Sts2.Core.Models.CardModel)": {
     "status": "EngineExact",
@@ -6234,10 +6234,16 @@
     "testId": "RELIC-DRAW-STATE-BATCH-053"
   },
   "Relic|MegaCrit.Sts2.Core.Models.Relics.NinjaScroll|MegaCrit.Sts2.Core.Models.AbstractModel.BeforeHandDraw(MegaCrit.Sts2.Core.Entities.Players.Player,MegaCrit.Sts2.Core.GameActions.Multiplayer.PlayerChoiceContext,MegaCrit.Sts2.Core.Combat.ICombatState)": {
-    "status": "NativeRuntimeState",
-    "source": "Game 0.111.0 NinjaScroll; combat-start snapshot boundary",
-    "notes": "The three native first-turn Shivs are already present in the captured hand and the turn guard prevents future regeneration.",
-    "testId": "RELIC-DRAW-STATE-BATCH-053"
+    "status": "SolverCompensation",
+    "source": "src/Search/SimulatedCombatState.Relics.cs",
+    "notes": "BeforeHandDraw roots generate the native first-turn Shivs in ordered hand and combat history; later turns preserve the native turn guard.",
+    "testId": "NINJA-SCROLL-ENTRY"
+  },
+  "Relic|MegaCrit.Sts2.Core.Models.Relics.PaelsEye|MegaCrit.Sts2.Core.Models.AbstractModel.BeforeSideTurnEndEarly(MegaCrit.Sts2.Core.GameActions.Multiplayer.PlayerChoiceContext,MegaCrit.Sts2.Core.Combat.CombatSide,System.Collections.Generic.IEnumerable<MegaCrit.Sts2.Core.Entities.Creatures.Creature>)": {
+    "status": "EngineExact",
+    "source": "src/Engine/InCombat/Mirrors/Hooks/TurnEnd/BeforeSideTurnEndMirrors.cs",
+    "notes": "Native early end-of-turn hand exhaustion follows AutoPostPlay; extra-turn eligibility is evaluated after end-of-turn phases.",
+    "testId": "PAELS-EYE-AUTOPOST-ORDER"
   },
   "Relic|MegaCrit.Sts2.Core.Models.Relics.RadiantPearl|MegaCrit.Sts2.Core.Models.AbstractModel.BeforeHandDraw(MegaCrit.Sts2.Core.Entities.Players.Player,MegaCrit.Sts2.Core.GameActions.Multiplayer.PlayerChoiceContext,MegaCrit.Sts2.Core.Combat.ICombatState)": {
     "status": "NativeRuntimeState",
@@ -6846,16 +6852,16 @@
     "testId": "NO-NATIVE-RESCAN-244"
   },
   "Relic|MegaCrit.Sts2.Core.Models.Relics.PaelsEye|MegaCrit.Sts2.Core.Models.AbstractModel.AfterTakingExtraTurn(MegaCrit.Sts2.Core.Entities.Players.Player)": {
-    "status": "SolverCompensation",
-    "source": "src/Search/SimulatedCombatState.ReactiveRelics.cs; src/Search/CombatBeamSolver.cs",
-    "notes": "该行为现由分支内状态完整结算，不再触发原生重扫；精确语义与跨回合一致性见关联测试证据。",
-    "testId": "NO-NATIVE-RESCAN-244"
+    "status": "EngineExact",
+    "source": "src/Engine/InCombat/Mirrors/Hooks/TurnEnd/ExtraTurnMirrors.cs",
+    "notes": "原版与第三方来源按原生监听顺序派发；判断短路、后置回调、完整状态和 Fork 隔离由原生差分验证。",
+    "testId": "EXTRA-TURN-MIRROR-ORDER"
   },
   "Relic|MegaCrit.Sts2.Core.Models.Relics.PaelsEye|MegaCrit.Sts2.Core.Models.AbstractModel.ShouldTakeExtraTurn(MegaCrit.Sts2.Core.Entities.Players.Player)": {
-    "status": "SolverCompensation",
-    "source": "src/Search/SimulatedCombatState.ReactiveRelics.cs; src/Search/CombatBeamSolver.cs",
-    "notes": "该行为现由分支内状态完整结算，不再触发原生重扫；精确语义与跨回合一致性见关联测试证据。",
-    "testId": "NO-NATIVE-RESCAN-244"
+    "status": "EngineExact",
+    "source": "src/Engine/InCombat/Mirrors/Hooks/TurnEnd/ExtraTurnMirrors.cs",
+    "notes": "原版与第三方来源按原生监听顺序派发；判断短路、后置回调、完整状态和 Fork 隔离由原生差分验证。",
+    "testId": "EXTRA-TURN-MIRROR-ORDER"
   },
   "Relic|MegaCrit.Sts2.Core.Models.Relics.ParryingShield|MegaCrit.Sts2.Core.Models.AbstractModel.AfterSideTurnEnd(MegaCrit.Sts2.Core.GameActions.Multiplayer.PlayerChoiceContext,MegaCrit.Sts2.Core.Combat.CombatSide,System.Collections.Generic.IEnumerable<MegaCrit.Sts2.Core.Entities.Creatures.Creature>)": {
     "status": "SolverCompensation",

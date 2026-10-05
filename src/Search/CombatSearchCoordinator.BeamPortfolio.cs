@@ -11,15 +11,22 @@ internal static partial class CombatSearchCoordinator
         SolverPotionPolicy? memberPotionPolicyOverride, SolverResult incumbent)
         => !policy.DisableRefinementIncumbentForTesting
             && (root.CanCertifyRemainingHealing || root.UsesKnownNativeHealingPolicy)
-            && (memberPotionPolicyOverride ?? policy.PotionPolicy)
-                is SolverPotionPolicy.Disabled or SolverPotionPolicy.Smart
-            && !policy.PotionStrategy.HasForcedDirectives
-            && incumbent.ResultScope == SolverResultScope.SearchCompletion
-            && incumbent.BoundaryReason == SearchBoundaryReason.None
-            && incumbent.ExplicitPotionCount == 0
-            && !incumbent.Snapshot.HasRisk
+            && IsReusablePotionFreeVictory(policy, memberPotionPolicyOverride, incumbent)
                 ? BuildPrimarySearchIncumbent(root, policy, incumbent)
                 : null;
+
+    private static bool IsReusablePotionFreeVictory(
+        SearchPolicySnapshot policy, SolverPotionPolicy? memberPotionPolicyOverride, SolverResult result)
+        => (memberPotionPolicyOverride ?? policy.PotionPolicy)
+                is SolverPotionPolicy.Disabled or SolverPotionPolicy.Smart
+            && !policy.PotionStrategy.HasForcedDirectives
+            && result.ResultScope == SolverResultScope.SearchCompletion
+            && result.BoundaryReason == SearchBoundaryReason.None
+            && result.ExplicitPotionCount == 0
+            && !result.Snapshot.HasRisk
+            && result.Snapshot.ProjectedDeathSaveUseCount == 0
+            && result.CombatEndedTurn.HasValue
+            && IsCompleteVictory(result);
 
     /// <summary>
     /// 主搜索的宽度组合接线，开关开关两种情况都走这里，所以逐成员诊断和
@@ -39,8 +46,8 @@ internal static partial class CombatSearchCoordinator
     /// </para>
     /// <para>
     /// 精炼成员的准入全部交给 <see cref="BeamWidthPortfolioGate" />：基线必须已经把这一宽度搜干净、
-    /// 自己没吃掉超过四分之一的时间预算，剩余节点、剩余时间、现有内存压力信号报告的余量都够按宽度
-    /// 外推的估算，才会启动。成员顺序执行，不并行。
+    /// 自己没吃掉超过四分之一的时间预算，剩余节点和剩余时间满足原有门槛，才会启动。
+    /// 内存由每个成员执行期间的逐批预约和 Runtime 回收检查点处理。成员顺序执行。
     /// </para>
     /// </remarks>
     private static SolverResult RunBeamWidthPortfolioPass(
@@ -174,7 +181,6 @@ internal static partial class CombatSearchCoordinator
                     IsProvenZeroDamageRoute(root, policy, memberResult),
                     memberElapsed,
                     expanded,
-                    memberAllocated,
                     effectiveProfile.BeamWidth);
                 baselineObserved = true;
                 telemetry.RecordFirstRoutePublished(passClock.Elapsed.TotalMilliseconds);
@@ -206,8 +212,7 @@ internal static partial class CombatSearchCoordinator
                 ? PowerCommitmentPortfolioGate.Reject(hasReachablePower)
                 : BeamWidthPortfolioGate.RejectRefinement(
                     baseline, member.BeamWidth, profile.MaxExpandedNodes - expandedByMembers,
-                    RemainingMilliseconds(), profile.SoftTimeBudgetMilliseconds,
-                    policy.MemoryPressureSignal.RemainingBytes);
+                    RemainingMilliseconds(), profile.SoftTimeBudgetMilliseconds);
             // 学习型跳过器未见过能力承诺或进攻精炼成员，不由它裁决这些新策略。
             if (rejection != null || experiment == null || member.AggressivePowerCommitment
                 || member.OffensiveRefinement)

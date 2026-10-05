@@ -23,6 +23,7 @@ internal sealed record SearchPassContext(
 
 internal sealed class SearchPlanDiscoveryState
 {
+    internal bool NarrowOpeningIncumbentAttempted { get; set; }
     internal int? OpeningPlanCount { get; set; }
     internal SolverSearchProfile? EarlyOpeningPlanProfile { get; set; }
 }

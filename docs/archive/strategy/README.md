@@ -3,6 +3,7 @@
 [返回归档](../README.md)。以下文件保持各自的源码基线、失败和未验证项；归档不表示已修复。
 
 - [本 fork 截至 0.48.1 的策略索引](multiplayer-index-through-0481.md)
+- [官方 0.50.0 合并、验证与发布](upstream-0500-merge-20261005.md)
 - [官方 0.49.0 / 0.49.1 合并、验证与发布](upstream-0490-merge-20261003.md)
 - [0.17.0-optimization-plan](0.17.0-optimization-plan.md)
 - [0.17.0-raw-requirements](0.17.0-raw-requirements.md)

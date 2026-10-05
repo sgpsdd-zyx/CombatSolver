@@ -23,6 +23,12 @@ void Reject<T>(Action action, string message) where T : Exception
 }
 if (args.Contains("--empty"))
 {
+    foreach (string modId in new[] { "BetterVanillaSTS2", "BaseLib", "STS2-RitsuLib" })
+    {
+        ModManager.Mods.Add(new() { manifest = new() { id = modId } });
+        Check(PredictionModPatchAudit.CaptureCardOnPlay([new TestCard()]) is null,
+            "Loaded mod identity changed compatible card admission.");
+    }
     Check(AdaptedCardOnPlayMirrors.CaptureLiveStamp() is null, "Empty registration added configuration state.");
     Check(PredictionModPatchAudit.CaptureCardOnPlay([new TestCard()]) is null, "Empty registration created a root selection table.");
     Console.WriteLine($"ADAPTED_ONPLAY_EMPTY_OK checks={checks}");
@@ -95,7 +101,7 @@ try
     Reject<PredictionUnsupportedException>(() => PredictionModPatchAudit.CaptureCardOnPlay(cards), "Registered unknown source accepted.");
     AssemblyInfo.Unknown = false;
     ModManager.Mods.Add(new() { manifest = new() { id = "WheelchairSpire" } });
-    Reject<IncompatibleGameplayModException>(() => PredictionModPatchAudit.CaptureCardOnPlay(cards), "Denied mod bypassed audit.");
+    Check(PredictionModPatchAudit.CaptureCardOnPlay(cards) is not null, "Loaded mod identity changed compatible card admission.");
     ModManager.Mods.Clear();
     harmony.Patch(target, prefix: new HarmonyMethod(extra));
     Reject<PredictionUnsupportedException>(() => PredictionModPatchAudit.CaptureCardOnPlay(cards), "Additional same-owner patch accepted.");
@@ -124,6 +130,10 @@ try
     MethodInfo otherTarget = AdaptedCardOnPlayMirrors.ResolveOnPlay(typeof(OtherCard))!;
     harmony.Patch(otherTarget, prefix: new HarmonyMethod(extra));
     Reject<IncompatibleGameplayModException>(() => PredictionModPatchAudit.CaptureCardOnPlay([new OtherCard()]), "Unregistered foreign target accepted.");
+    AssemblyInfo.Neutral = true;
+    Check(PredictionModPatchAudit.CaptureCardOnPlay([new OtherCard()]) is not null,
+        "Gameplay-neutral framework patch did not follow its established admission policy.");
+    AssemblyInfo.Neutral = false;
     Check(!snapshot.TryInvoke(new(), new(new OtherCard()), new(), out _),
         "Old root read a newly installed generated-type patch.");
     AdaptedOnPlaySnapshot generatedPatchRoot = PredictionModPatchAudit.CaptureCardOnPlay(cards)!;
@@ -159,6 +169,7 @@ finally
     harmony.UnpatchAll(owner);
     ModManager.Mods.Clear();
     AssemblyInfo.Unknown = false;
+    AssemblyInfo.Neutral = false;
 }
 
 internal class TestCard : CardModel

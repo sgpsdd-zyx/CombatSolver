@@ -51,6 +51,19 @@ internal sealed class PredictionModHookSubscriberCapture
                 || name == LoadoutPowerGiverSummonHookTypeName && HasInactiveLoadoutSummonPowers);
     }
     public AdaptedOnPlaySnapshot? AdaptedOnPlay { get; private init; }
+
+    private static readonly Guid AuditedLoadoutMvid = new("3f51fce1-7ec3-4116-b440-2c31eb754731");
+    internal bool HasCertifiedNonHealingSubscribers { get; }
+    internal bool IsCertifiedNonHealingSubscriberSource(AbstractModel source)
+        => HasCertifiedNonHealingSubscribers && IsAuditedNonHealingSubscriberType(source.GetType());
+    private bool IsAuditedNonHealingSubscriberType(Type type)
+        => type.Module.ModuleVersionId == AuditedLoadoutMvid
+            && type.FullName is { } name
+            && (name is "Loadout.Services.Morphing.BottledMonsterMorphCombatSnapshotHook"
+                or "Loadout.Services.PowerGiver.PowerGiverCombatStartHook"
+                or "Loadout.Services.TildeKey.LoadoutKillAllMonstersCombatHook"
+                or "Loadout.Services.TildeKey.LoadoutEveryCardFreeCombatHook"
+                || name == LoadoutPowerGiverSummonHookTypeName && HasInactiveLoadoutSummonPowers);
     public MirroredHookListenerFilter MirroredHookFilter { get; } = MirroredHookListenerFilter.Capture();
 
     private PredictionModHookSubscriberCapture(
@@ -67,6 +80,9 @@ internal sealed class PredictionModHookSubscriberCapture
         EveryCardFreePlayers = everyCardFreePlayers;
         HasBaseLibCardModifiers = hasBaseLibCardModifiers;
         HasInactiveLoadoutSummonPowers = hasInactiveLoadoutSummonPowers;
+        HasCertifiedNonHealingSubscribers = !hasBaseLibCardModifiers
+            && runSubscribers.Concat(combatSubscribers).All(source =>
+                IsAuditedNonHealingSubscriberType(source.GetType()));
     }
 
     public static PredictionModHookSubscriberCapture Capture(

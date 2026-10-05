@@ -1365,6 +1365,20 @@ if (Select-String -LiteralPath $beamRetentionFacadePath -SimpleMatch "private Li
     $violations.Add("${beamRetentionFacadePath}: RankBest returned outside BeamRetentionPolicy")
 }
 $remainingHealingBoundPath = Join-Path $searchRoot "StrategicHpRecoveryBound.Remaining.cs"
+foreach ($componentBoundary in @(
+    @('src/Runtime/CombatRootSnapshot.cs', 'ComponentHealingRejection(rootSimulator, playerIdentity)'),
+    @('src/Search/StrategicHpRecoveryBound.Components.cs', 'Module.ModuleVersionId != ComponentAuditMvid'),
+    @('src/Search/StrategicHpRecoveryBound.Components.cs', 'state.AllCards.Concat(combat.PendingReturningCards)'),
+    @('src/Search/StrategicHpRecoveryBound.Components.cs', '!use.Automatic'),
+    @('src/Search/SimulatedCombatState.cs', 'FirstRejectedHealingRootSource('),
+    @('src/Search/CombatBeamSolver.Retention.cs', 'if (root.UsesComponentHealingCertificate)'),
+    @('src/Search/CombatBeamSolver.SmartPotionBound.cs', 'healing == int.MaxValue'),
+    @('src/Search/CombatSearchCoordinator.Audits.cs', 'PotionFreePolicyBaseline = CombatBeamSolver.CanUseComponentSmartPotionEligibility(root, policy)')
+)) {
+    if (-not (Select-String -LiteralPath (Join-Path $repositoryRoot $componentBoundary[0]) -SimpleMatch $componentBoundary[1] -Quiet)) {
+        $violations.Add("Missing component healing certificate ownership: $($componentBoundary[0])")
+    }
+}
 foreach ($closureComponent in @("PendingReturningCards", "AllCards", "EffectivePowers()", "GetPotionSlotCount(player)", "HasCertifiedRemainingAttachments", "typeof(InfestedPrism)", "typeof(FuzzyWurmCrawler)")) {
     if (-not (Select-String -LiteralPath $remainingHealingBoundPath -SimpleMatch $closureComponent -Quiet)) {
         $violations.Add("${remainingHealingBoundPath}: remaining-healing proof lost a closure component: $closureComponent")
@@ -1408,7 +1422,7 @@ foreach ($healingBoundary in @(
     @('src/Search/CombatBeamSolver.Retention.cs', 'targets.All(target => target.HpAllowance == 0)'),
     @('src/Search/CombatBeamSolver.Retention.cs', 'allowTurnTieBound: !_strictHpBoundWithRelicTargets'),
     @('src/Search/CombatSearchCoordinator.cs', '!CombatBeamSolver.CanUseStrictHpRelicBound(root, policy)'),
-    @('src/Search/CombatSearchCoordinator.PlanSearch.cs', 'if (!context.Root.CanCertifyRemainingHealing')
+    @('src/Search/CombatSearchCoordinator.PlanSearch.cs', 'if (!root.CanCertifyRemainingHealing')
 )) {
     if (-not (Select-String -LiteralPath (Join-Path $repositoryRoot $healingBoundary[0]) -SimpleMatch $healingBoundary[1] -Quiet)) {
         $violations.Add("Missing common healing-bound policy: $($healingBoundary[0])")
@@ -1594,7 +1608,7 @@ $rootModelBoundaryChecks = @(
     },
     @{
         Path = Join-Path $repositoryRoot "src\Search\SimulatedCombatState.cs"
-        Text = "Root intent state was not captured"
+        Text = "GetMonsterAiState(enemy).Current.Intents"
     },
     @{
         Path = Join-Path $repositoryRoot "src\Prediction\MonsterMoveEffects.StaticValues.cs"
@@ -2188,7 +2202,7 @@ $multiplayerAdviceRules = @(
     @{ Path = 'src/Runtime/CombatRootSnapshot.cs'; Text = 'UsesKnownNativeHealingPolicy = !IsMultiplayerAdvisor' }
     @{ Path = 'src/Search/CombatBeamSolver.SmartPotionBound.cs'; Text = 'policy.Multiplayer == null' }
     @{ Path = 'src/Search/CombatBeamSolver.SmartPotionBound.cs'; Text = 'if (IsMultiplayerAdvice || _smartPotionEligibilityHpCeiling' }
-    @{ Path = 'src/Search/CombatBeamSolver.Retention.cs'; Text = 'if (IsMultiplayerAdvice || _hasGrowthTargets' }
+    @{ Path = 'src/Search/CombatBeamSolver.Retention.cs'; Text = 'if (IsMultiplayerAdvice)' }
     @{ Path = 'src/Search/CombatBeamSolver.MultiplayerRound.cs'; Text = 'CombatSolver.Engine.InCombat.Mirrors.HookMirrors.BeforeSideTurnStart(' }
     @{ Path = 'src/Search/CombatBeamSolver.Multiplayer.cs'; Text = '!CanReplayMultiplayerAction(node, action)' }
     @{ Path = 'src/Search/CombatBeamSolver.Models.cs'; Text = 'public int ReplayedAdviceActions;' }
@@ -2197,10 +2211,10 @@ $multiplayerAdviceRules = @(
     @{ Path = 'src/Search/CombatBeamSolver.CycleReplay.cs'; Text = 'if (IsMultiplayerAdvice || !policy.CanStopAtHpTarget' }
     @{ Path = 'src/Search/CombatBeamSolver.StateEvaluation.cs'; Text = 'DefensiveBlockValue = IsMultiplayerAdvice' }
     @{ Path = 'src/Search/SimulatedCombatState.Multiplayer.cs'; Text = 'throw new ExternalPlayerChoiceException' }
-    @{ Path = 'src/Search/SimulatedCombatState.Multiplayer.cs'; Text = 'private ForkableSet<Player>? _inactiveMultiplayerPlayers;' }
+    @{ Path = 'src/Search/SimulatedCombatState.Multiplayer.cs'; Text = '=> AdvisorPlayer == null || PlayerHookState(player).HooksActive;' }
     @{ Path = 'src/Search/SimulatedCombatState.Multiplayer.cs'; Text = 'internal IReadOnlyList<PowerModel> PowersForHooks()' }
     @{ Path = 'src/Search/SimulatedCombatState.cs'; Text = 'CaptureMultiplayerRootListeners(rootHookListeners, inner.Creatures)' }
-    @{ Path = 'src/Search/SimulatedCombatState.Fork.cs'; Text = '_inactiveMultiplayerPlayers = _inactiveMultiplayerPlayers?.Fork(),' }
+    @{ Path = 'src/Engine/InCombat/Simulation/SimPlayerCombatState.cs'; Text = 'HooksActive = HooksActive,' }
     @{ Path = 'src/Search/CombatBeamSolver.StateEvaluation.cs'; Text = 'key.Add(simulatedCombat.IsPlayerActiveForHooks(peer));' }
     @{ Path = 'src/Runtime/ContinuationStamp.Multiplayer.cs'; Text = '.Append('':'').Append(combat.IsPlayerActiveForHooks(player));' }
     @{ Path = 'src/Engine/InCombat/Simulation/CombatPredictionSimulator.Damage.cs'; Text = 'multiplayer.SetPlayerActiveForHooks(player, active: false);' }
@@ -2209,6 +2223,14 @@ $multiplayerAdviceRules = @(
     @{ Path = 'src/Search/MultiplayerSearchPolicy.cs'; Text = 'EarlyTurnExplorationDepth = 0' }
     @{ Path = 'src/Search/MultiplayerSearchPolicy.cs'; Text = 'EarlyTurnExplorationBudgetMilliseconds = 0' }
     @{ Path = 'src/Search/MultiplayerSearchPolicy.cs'; Text = 'DevelopmentStrategy = null' }
+    @{ Path = 'src/Runtime/CombatRootSnapshot.cs'; Text = 'ComponentHealingRejection = IsMultiplayerAdvisor ? "multiplayer"' }
+    @{ Path = 'src/Runtime/CombatRootSnapshot.cs'; Text = 'ExhaustingGrowthUpperBound = IsMultiplayerAdvisor ? null' }
+    @{ Path = 'src/Search/CombatBeamSolver.cs'; Text = '_useSharedPrimaryIncumbents = policy.Multiplayer == null' }
+    @{ Path = 'src/Search/CombatBeamSolver.cs'; Text = '_primaryIncumbents = policy.Multiplayer != null' }
+    @{ Path = 'src/Search/CombatBeamSolver.Retention.cs'; Text = '=> !IsMultiplayerAdvice && (!_hasGrowthTargets || _strictHpBoundWithRelicTargets)' }
+    @{ Path = 'src/Search/MultiplayerSearchPolicy.cs'; Text = 'PrimaryIncumbents = null' }
+    @{ Path = 'src/Search/CombatBeamSolver.MultiplayerRound.cs'; Text = 'HookMirrors.ShouldTakeExtraTurn(simulator, combat, player)' }
+    @{ Path = 'src/Search/CombatBeamSolver.MultiplayerRound.cs'; Text = 'HookMirrors.AfterTakingExtraTurn(simulator, combat, player)' }
     @{ Path = 'src/Search/CombatBeamSolver.cs'; Text = '_developmentStrategy = policy.Multiplayer == null' }
     @{ Path = 'src/Search/CombatBeamSolver.cs'; Text = '_planCommitment = policy.Multiplayer == null ? planCommitment : null' }
     @{ Path = 'src/Search/CombatBeamSolver.ExpansionPlan.cs'; Text = 'if (!IsMultiplayerAdvice && node.ActionCount == 0 && !card.Original.CanPlayTargeting(target))' }
@@ -2353,6 +2375,19 @@ if ($dynamicVarDirectAccess) {
     $violations.Add('DynamicVarSet._vars direct field access must go through DynamicVarSetAccess')
 }
 
+$extraTurnRegistry = [IO.File]::ReadAllText((Join-Path $repositoryRoot 'src/Engine/InCombat/Mirrors/Hooks/TurnEnd/ExtraTurnMirrors.cs'))
+foreach ($registration in @('ShouldRegistry.Register<AmbergrisPower>', 'ShouldRegistry.Register<PaelsEye>', 'AfterRegistry.Register<AmbergrisPower>', 'AfterRegistry.Register<PaelsEye>')) {
+    if (-not $extraTurnRegistry.Contains($registration)) {
+        $violations.Add("Extra-turn native effects must use the shared registry: $registration")
+    }
+}
+$extraTurnFacade = [IO.File]::ReadAllText((Join-Path $repositoryRoot 'src/Engine/InCombat/Mirrors/HookMirrors.ExtraTurn.cs'))
+$extraTurnState = [IO.File]::ReadAllText((Join-Path $repositoryRoot 'src/Search/SimulatedCombatState.ReactiveRelics.cs'))
+foreach ($legacy in @('ShouldTakeExtraPlayerTurn(', 'ConsumeExtraTurnSources(')) {
+    if ($extraTurnFacade.Contains($legacy) -or $extraTurnState.Contains($legacy)) {
+        $violations.Add("Extra-turn effects must dispatch in listener order: $legacy")
+    }
+}
 if ($violations.Count -gt 0) {
     $violations | ForEach-Object { Write-Error $_ }
     throw "Refactor boundary verification failed with $($violations.Count) violation(s)."
@@ -2367,6 +2402,7 @@ if ($nativeReplay.Contains('ApplyReplayStateAsync(')) {
     throw 'Native recorded replay must reconstruct state through native actions.'
 }
 $maintainedTestingRoot = Join-Path $repositoryRoot 'src/Testing'
+# Component healing and Smart eligibility contracts also belong in Contracts/Search.
 if (Get-ChildItem -LiteralPath $maintainedTestingRoot -File -Filter '*.cs') {
     throw 'Testing source belongs in its responsibility directory; keep the root for navigation.'
 }

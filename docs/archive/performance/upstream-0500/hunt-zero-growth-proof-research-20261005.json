@@ -1,0 +1,942 @@
+{
+  "schemaVersion": 1,
+  "productionIntegrated": false,
+  "activeGoalIncomplete": true,
+  "prDependency": {
+    "url": "https://github.com/Torch1230/CombatSolver/pull/215",
+    "reviewedHead": "02cf2283",
+    "mechanism": "Reuse table, complete win publisher, frozen root/policy and potion tier closure; no duplicate store/equal-HP implementation",
+    "costRepairBranch": "https://github.com/ltlly/CombatSolver/tree/fix/pr215-potion-cost-20261005",
+    "costRepairs": [
+      "75583c62",
+      "57218124"
+    ],
+    "stateAtReview": "Open; not merged into task branch"
+  },
+  "foundation": {
+    "source": "/home/ltlly/Code/nmslmod/CombatSolver-healing-bound-general-20261003/.local/tool-tasks/regent-shared-proof/source",
+    "dllSha256": "0fa5b354cc0b82e8d63aa4b35bdf78f6469c1ef767f9a57cfe7743f6216aeaef",
+    "productionRuntime": "c422a036"
+  },
+  "target": {
+    "scene": "dev-06-silent-boss",
+    "originalWholeSeconds": 50.1786779,
+    "requiredWholeSecondsAtMost": 25.08933895,
+    "profile": "VeryHigh",
+    "dop": 16,
+    "budgetMilliseconds": 300000,
+    "memoryIncreaseLimit": 0.1
+  },
+  "audit": {
+    "sources": {
+      "TheHunt": {
+        "path": "/home/ltlly/Code/nmslmod/CombatSolver-regent-healing-bound-20261003/.local/c56/native-src/TheHunt.cs",
+        "sourceSha256": "03a56c1bd6ffa3abe439415cf3ac74723678ccca10175693430fdd95b269fb42"
+      },
+      "TheHuntPower": {
+        "path": "/home/ltlly/Code/nmslmod/CombatSolver-healing-bound-general-20261003/.local/general-healing-audit/silent-boss-component-audit/TheHuntPower.cs",
+        "sourceSha256": "61658a53b6cf5112ce8104f60c3ba1653edc63919cb7e77a24c2b11cec8d2135"
+      },
+      "BowlerHat": {
+        "path": "/home/ltlly/Code/nmslmod/CombatSolver-healing-bound-general-20261003/.local/general-healing-audit/silent-boss-component-audit/BowlerHat.cs",
+        "sourceSha256": "6d9c86f3f2591f5711142ac32dd262d66c52d9aad71cb30bbb38f5ee87349e8c"
+      },
+      "SparklingRouge": {
+        "path": "/home/ltlly/Code/nmslmod/CombatSolver-healing-bound-general-20261003/.local/general-healing-audit/silent-boss-component-audit/SparklingRouge.cs",
+        "sourceSha256": "747b1ccc6b971bf686d2c3db7d30c1d662c0f42dba7899af0033b092a007b629"
+      },
+      "CombatRoom": {
+        "path": "/home/ltlly/Code/nmslmod/CombatSolver-healing-bound-general-20261003/.local/general-healing-audit/combat-end-audit/Rooms.CombatRoom.cs",
+        "sourceSha256": "547d59482459977fd4b182f9ba373c9de660f170994e727a4c8f013bbd5178e6"
+      },
+      "CardReward": {
+        "path": "/home/ltlly/Code/nmslmod/CombatSolver-healing-bound-general-20261003/.local/tool-tasks/hunt-zero-credit-20261005/native-audit/type-0.cs",
+        "sourceSha256": "c7cbc4c218cd144d55d9c61a89ea1bed4f9e48eaa303d290ac1a4d40e79f1b66"
+      },
+      "Reward": {
+        "path": "/home/ltlly/Code/nmslmod/CombatSolver-healing-bound-general-20261003/.local/tool-tasks/hunt-zero-credit-20261005/native-audit/type-2.cs",
+        "sourceSha256": "a06ded15fa21f4b70c98ace91e524d3160faad5b8c570866c71bb1782672d02f"
+      },
+      "CardCreationOptions": {
+        "path": "/home/ltlly/Code/nmslmod/CombatSolver-healing-bound-general-20261003/.local/tool-tasks/hunt-zero-credit-20261005/native-audit/extra-1.cs",
+        "sourceSha256": "6b05ea44d96f7ba12e793665041fc92419ce9359a0ead3889d92d94f71c928fd"
+      },
+      "RewardsSet": {
+        "path": "/home/ltlly/Code/nmslmod/CombatSolver-healing-bound-general-20261003/.local/tool-tasks/hunt-zero-credit-20261005/native-audit/extra-2.cs",
+        "sourceSha256": "926811136d8c4b880e915e7e51e120f164f1d234f0ac306900d578f56582c6ee"
+      },
+      "NibbitsNormal": {
+        "path": "/home/ltlly/Code/nmslmod/CombatSolver-healing-bound-general-20261003/.local/tool-tasks/hunt-zero-credit-20261005/native-audit/extra-0.cs",
+        "sourceSha256": "688b10941f1fc568e936448c7fd0aec13b678cc5950b9fe46e4e8b1a08e11c82"
+      }
+    },
+    "nativeVersion": {
+      "sha256": "2b40d2df538db1ceb5fa48d958c80ab730ada1e07db88a870aff01a661768b9f",
+      "mvid": "8a76776c-0ce1-4d4f-90bd-8cce653dad8e"
+    },
+    "review": {
+      "TheHunt": "Native attack and fatal check; CardCreationOptions.ForRoom ctor collects metadata only; CardReward ctor sets metadata and subscribes RelicObtained, without Populate/Obtain/HP/RNG. CombatRoom.AddExtraReward appends only. TheHuntPower is a counter indicator. Actual HP bound0 requires all other root/branch callback and generation certificates; growth remains policy-owned.",
+      "CardReward": "Populate/OnSelect generate/obtain reward cards only when RewardsSet is generated/offered after combat; not reachable from TheHunt constructor/AddExtraReward. RelicObtained callback reviewed; allowed certified combat sources do not obtain relics; unknown generated/growth sources keep infinity.",
+      "BowlerHat": "Only gold multiplier for owner and flash callback. Other gold callbacks remain fully certified; any unknown maxHP/gold subscriber still rejects root.",
+      "SparklingRouge": "After owner block clear on branch turn3 applies Strength/Dexterity; no HP commands. Existing mirrors use branch turn, audited powers/callback closure retained."
+    },
+    "preparationFailures": [
+      "Requested incomplete Nibbits and incorrect Rewards.CardCreationOptions namespace; ILSpy refused types (exit70); corrected from pinned metadata to NibbitsNormal and Runs.CardCreationOptions. No runtime launched."
+    ],
+    "nativeProofPending": false,
+    "nativeModelRelicObtainDirectRefs": [],
+    "nativeRunId": "88f095e8686344f797bef57f7e9d9048",
+    "items": [
+      {
+        "id": "TheHunt",
+        "recoveryTarget": "none",
+        "timing": "during attack fatal check; reward content after combat",
+        "condition": "native fatal qualifies actual target; no Populate or Obtain in combat",
+        "count": "one reward per qualifying execution",
+        "repeatability": "Exhaust normally; copy/recovery may repeat but no combat HP",
+        "reachable": "initial-held/copy/recovery; native random-combat generation excluded",
+        "proof": "type-0 CardReward constructor; type-2 Reward constructor; extra-1 ForRoom; CombatRoom.AddExtraReward; extra-2 RewardsSet.Generate; native-v3 fatal/nonfatal/unpopulated reward full-state"
+      },
+      {
+        "id": "TheHuntPower",
+        "recoveryTarget": "none",
+        "timing": "counter indicator creation/removal",
+        "condition": "native TheHunt fatal reward",
+        "count": "counter amount",
+        "repeatability": "counter stacks but no healing callbacks",
+        "reachable": "TheHunt OnPlay; no indirect player recovery source",
+        "proof": "pinned TheHuntPower exact source; native-v3 active branch bound/full-state"
+      },
+      {
+        "id": "BowlerHat",
+        "recoveryTarget": "none directly",
+        "timing": "ModifyGoldGained and AfterModifyGoldGained",
+        "condition": "owner Player only, 1.25 gold multiplier; other gold/HP callbacks independently certified",
+        "count": "per gold gain",
+        "repeatability": "unlimited gold events but no direct HP; unknown gold subscriber rejects root",
+        "reachable": "initial held relic only, no newly obtained combat relic allowed",
+        "proof": "pinned BowlerHat source; native-v3 PlayerCmd.GainGold(8) full-state/RNG"
+      },
+      {
+        "id": "SparklingRouge",
+        "recoveryTarget": "none",
+        "timing": "AfterBlockCleared on owner player turn3",
+        "condition": "branch-owned turn==3; apply Strength/Dexterity1",
+        "count": "per native eligible block-clear event",
+        "repeatability": "no player healing command or recovery source",
+        "reachable": "initial held relic; applied powers already individually audited",
+        "proof": "pinned SparklingRouge source and branch mirror; native-v3 two native endturns through turn3 full-state"
+      }
+    ],
+    "limitations": [
+      "Direct RelicCmd.Obtain inventory empty is supporting evidence only, not standalone virtual/callback reachability closure.",
+      "All preexisting component attachment/generation/enemy/power/subscriber predicates retained. Unknown source is infinity.",
+      "Native contract does not certify every game mechanism or prove target whole-request performance."
+    ],
+    "zeroPriceQualityProof": {
+      "scope": "strictly worse strategic HP only; no scoring or budgets modified",
+      "precedenceEvidence": "src/Search/RouteQualityPolicy.cs ComparePrimary: victory, deathsave, strategicHP, growthHPcredit, growthcount, turn",
+      "growthTargetEvidence": "SearchPolicySnapshot.GrowthTargetSatisfied and CombatSearchCoordinator.HasReachedAcceptableBattleHpLoss gate early stop; no new stop rule",
+      "potionCostGuard": "same explicit-use bucket, closed tier retained; branch already spent actual cost >= complete witness cost; missing cost keeps route",
+      "unknown": "root and branch component certificates still required, unknown infinity",
+      "status": "Native 5712177f46554f3bb26229f0de3413d2 Passed; whole-request performance pending",
+      "nativeCosts": {
+        "expensive": 14,
+        "cheap": 9
+      },
+      "sameBudgetQuality": {
+        "control": {
+          "hp": 10,
+          "growth": 2,
+          "pots": 1,
+          "cost": 9,
+          "expanded": 5112,
+          "transitions": 16755
+        },
+        "candidate": {
+          "hp": 10,
+          "growth": 2,
+          "pots": 1,
+          "cost": 9,
+          "expanded": 2838,
+          "transitions": 12086
+        }
+      },
+      "unverified": [
+        "Updated P0 full-search quality comparison not repeated after v3 runtime extension; P1 proof passed; no final fixed regression or performance acceptance."
+      ]
+    }
+  },
+  "native": {
+    "initial-failed": {
+      "processReusable": false,
+      "processId": 205452,
+      "reusedProcess": false,
+      "developmentStrategyScriptHash": null,
+      "developmentStrategyParametersHash": null,
+      "mainAssemblyHash": "C0A1AA84455E18D5BB4622F02D6DCFEA644E822CC41EF8A6315A1A9BA1284CB0",
+      "schemaVersion": 1,
+      "runId": "b7953a387ce34e86963d191e7ca715c6",
+      "scenarioId": "HUNT-RECOVERY-ZERO-GROWTH-BOUND",
+      "status": "Failed",
+      "stage": "hunt_recovery_zero_growth",
+      "characterId": "SILENT",
+      "encounterId": "NIBBITS_NORMAL",
+      "seed": "HUNT_RECOVERY_ZERO_20261005",
+      "startedAtUtc": "2026-10-05T00:21:26.1769178+00:00",
+      "elapsedMilliseconds": 27329.8234,
+      "mainThread": true,
+      "combatEnded": false,
+      "startedTurn": 1,
+      "finishedTurn": 1,
+      "managedHeapBytes": 92967216,
+      "managedFragmentedBytes": 10900368,
+      "workingSetBytes": 1430622208,
+      "privateMemoryBytes": 1559306240,
+      "solverMetrics": null,
+      "replayVerification": null,
+      "generatedScenario": null,
+      "stageTimings": [
+        {
+          "stage": "created",
+          "startedMilliseconds": 0,
+          "durationMilliseconds": 1.5765
+        },
+        {
+          "stage": "strategy_load",
+          "startedMilliseconds": 1.5765,
+          "durationMilliseconds": 5.1486
+        },
+        {
+          "stage": "game_startup",
+          "startedMilliseconds": 6.7251,
+          "durationMilliseconds": 13107.9727
+        },
+        {
+          "stage": "start_run",
+          "startedMilliseconds": 13114.6978,
+          "durationMilliseconds": 11057.487
+        },
+        {
+          "stage": "inject_run_relics",
+          "startedMilliseconds": 24172.1848,
+          "durationMilliseconds": 1.6909000000014203
+        },
+        {
+          "stage": "enter_encounter",
+          "startedMilliseconds": 24173.8757,
+          "durationMilliseconds": 2002.2641000000003
+        },
+        {
+          "stage": "wait_player_turn",
+          "startedMilliseconds": 26176.1398,
+          "durationMilliseconds": 2.601699999999255
+        },
+        {
+          "stage": "inject_state",
+          "startedMilliseconds": 26178.7415,
+          "durationMilliseconds": 102.93669999999838
+        },
+        {
+          "stage": "hunt_recovery_zero_growth",
+          "startedMilliseconds": 26281.6782,
+          "durationMilliseconds": 1048.3299000000006
+        }
+      ],
+      "completedChecks": [],
+      "error": "System.InvalidOperationException: DOP2 strict full search changed complete Hunt quality.\n   at CombatSolver.CombatBeamSolver.HuntRecoveryProbeForTesting(CombatRootSnapshot root, SolverDisplayNames names, BattleDamageSnapshot damage, SearchPolicySnapshot policy)\n   at CombatSolver.UnattendedTestRunner.<>c__DisplayClass411_0.<AssertHuntRecoveryBoundAsync>b__4()\n   at System.Threading.Tasks.Task`1.InnerInvoke()\n   at System.Threading.ExecutionContext.RunFromThreadPoolDispatchLoop(Thread threadPoolThread, ExecutionContext executionContext, ContextCallback callback, Object state)\n--- End of stack trace from previous location ---\n   at System.Threading.ExecutionContext.RunFromThreadPoolDispatchLoop(Thread threadPoolThread, ExecutionContext executionContext, ContextCallback callback, Object state)\n   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)\n--- End of stack trace from previous location ---\n   at CombatSolver.UnattendedTestRunner.AssertHuntRecoveryBoundAsync(CombatState live, Player player)\n   at CombatSolver.UnattendedTestRunner.Executor.ExecuteAsync(ScenarioContext scenario)\n   at CombatSolver.UnattendedTestRunner.RunAsync()",
+      "finishedAtUtc": "2026-10-05T00:21:53.5065423+00:00"
+    },
+    "quality-v2": {
+      "processReusable": false,
+      "processId": 210303,
+      "reusedProcess": false,
+      "developmentStrategyScriptHash": null,
+      "developmentStrategyParametersHash": null,
+      "mainAssemblyHash": "8A7C55A0FEECB2195A45B127205F3A39D8C6D60FAE4DC131DF8E18AD69D49918",
+      "schemaVersion": 1,
+      "runId": "11669f62524c46279c9872e2f3ea8269",
+      "scenarioId": "HUNT-RECOVERY-ZERO-GROWTH-BOUND",
+      "status": "Failed",
+      "stage": "hunt_recovery_zero_growth",
+      "characterId": "SILENT",
+      "encounterId": "NIBBITS_NORMAL",
+      "seed": "HUNT_RECOVERY_ZERO_20261005",
+      "startedAtUtc": "2026-10-05T00:32:20.0382852+00:00",
+      "elapsedMilliseconds": 38545.8621,
+      "mainThread": true,
+      "combatEnded": false,
+      "startedTurn": 1,
+      "finishedTurn": 1,
+      "managedHeapBytes": 184723552,
+      "managedFragmentedBytes": 63346016,
+      "workingSetBytes": 1540513792,
+      "privateMemoryBytes": 1672310784,
+      "solverMetrics": null,
+      "replayVerification": null,
+      "generatedScenario": null,
+      "stageTimings": [
+        {
+          "stage": "created",
+          "startedMilliseconds": 0,
+          "durationMilliseconds": 1.5472
+        },
+        {
+          "stage": "strategy_load",
+          "startedMilliseconds": 1.5472,
+          "durationMilliseconds": 5.2966
+        },
+        {
+          "stage": "game_startup",
+          "startedMilliseconds": 6.8438,
+          "durationMilliseconds": 13026.6256
+        },
+        {
+          "stage": "start_run",
+          "startedMilliseconds": 13033.4694,
+          "durationMilliseconds": 11117.933900000002
+        },
+        {
+          "stage": "inject_run_relics",
+          "startedMilliseconds": 24151.4033,
+          "durationMilliseconds": 2.1358000000000175
+        },
+        {
+          "stage": "enter_encounter",
+          "startedMilliseconds": 24153.5391,
+          "durationMilliseconds": 1962.1477999999988
+        },
+        {
+          "stage": "wait_player_turn",
+          "startedMilliseconds": 26115.6869,
+          "durationMilliseconds": 2.6437999999980093
+        },
+        {
+          "stage": "inject_state",
+          "startedMilliseconds": 26118.3307,
+          "durationMilliseconds": 98.69369999999981
+        },
+        {
+          "stage": "hunt_recovery_zero_growth",
+          "startedMilliseconds": 26217.0244,
+          "durationMilliseconds": 12329.035200000002
+        }
+      ],
+      "completedChecks": [],
+      "error": "System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection. (Parameter 'index')\n   at System.Collections.Generic.List`1.get_Item(Int32 index)\n   at CombatSolver.UnattendedTestRunner.AssertHuntRecoveryBoundAsync(CombatState live, Player player)\n   at CombatSolver.UnattendedTestRunner.Executor.ExecuteAsync(ScenarioContext scenario)\n   at CombatSolver.UnattendedTestRunner.RunAsync()",
+      "finishedAtUtc": "2026-10-05T00:32:58.5839535+00:00"
+    },
+    "native-v3": {
+      "processReusable": false,
+      "processId": 214309,
+      "reusedProcess": false,
+      "developmentStrategyScriptHash": null,
+      "developmentStrategyParametersHash": null,
+      "mainAssemblyHash": "1A3C94F4D72C46D6ECC4DAA7B75B1D860A38812CE4A529540EC7BC808EBD6914",
+      "schemaVersion": 1,
+      "runId": "88f095e8686344f797bef57f7e9d9048",
+      "scenarioId": "HUNT-RECOVERY-ZERO-GROWTH-BOUND",
+      "status": "Passed",
+      "stage": "passed",
+      "characterId": "CHARACTER.SILENT",
+      "encounterId": "ENCOUNTER.NIBBITS_NORMAL",
+      "seed": "HUNT_RECOVERY_ZERO_20261005",
+      "startedAtUtc": "2026-10-05T00:35:16.6353354+00:00",
+      "elapsedMilliseconds": 39189.3177,
+      "mainThread": true,
+      "combatEnded": false,
+      "startedTurn": 1,
+      "finishedTurn": 3,
+      "managedHeapBytes": 182599256,
+      "managedFragmentedBytes": 60507448,
+      "workingSetBytes": 1595740160,
+      "privateMemoryBytes": 1738039296,
+      "solverMetrics": null,
+      "replayVerification": null,
+      "generatedScenario": null,
+      "stageTimings": [
+        {
+          "stage": "created",
+          "startedMilliseconds": 0,
+          "durationMilliseconds": 1.5738
+        },
+        {
+          "stage": "strategy_load",
+          "startedMilliseconds": 1.5738,
+          "durationMilliseconds": 5.5293
+        },
+        {
+          "stage": "game_startup",
+          "startedMilliseconds": 7.1031,
+          "durationMilliseconds": 13157.9409
+        },
+        {
+          "stage": "start_run",
+          "startedMilliseconds": 13165.044,
+          "durationMilliseconds": 11059.7859
+        },
+        {
+          "stage": "inject_run_relics",
+          "startedMilliseconds": 24224.8299,
+          "durationMilliseconds": 1.7023000000008324
+        },
+        {
+          "stage": "enter_encounter",
+          "startedMilliseconds": 24226.5322,
+          "durationMilliseconds": 1963.1094999999987
+        },
+        {
+          "stage": "wait_player_turn",
+          "startedMilliseconds": 26189.6417,
+          "durationMilliseconds": 2.7340000000003783
+        },
+        {
+          "stage": "inject_state",
+          "startedMilliseconds": 26192.3757,
+          "durationMilliseconds": 101.17109999999957
+        },
+        {
+          "stage": "hunt_recovery_zero_growth",
+          "startedMilliseconds": 26293.5468,
+          "durationMilliseconds": 12766.725699999999
+        },
+        {
+          "stage": "cleanup",
+          "startedMilliseconds": 39060.2725,
+          "durationMilliseconds": 123.55389999999898
+        },
+        {
+          "stage": "passed",
+          "startedMilliseconds": 39183.8264,
+          "durationMilliseconds": 5.680000000000291
+        }
+      ],
+      "completedChecks": [
+        "HuntSameBudgetDop2Strict:control=[won=True dead=False risk=False boundary=None hp=10 hunt=2 pots=0 deathsave=0 expanded=4532 transitions=11900]:candidate=[won=True dead=False risk=False boundary=None hp=10 hunt=2 pots=0 deathsave=0 expanded=120 transitions=352]",
+        "HuntRecovery:NativeFatalAndNonfatal:UnpopulatedPostCombatRewardOnly:NativeGenerationFilter:OwnedClone:AllFourPileUnknownRefusal:ActualCompleteP0Growth2Witness:UnsatisfiedGrowth1Refused:EqualHpKept:PositiveGrowthPriceRelicTheftForcedPotionRefused:StrictHigherHpActualPrune:TwoNativeTurnBoundariesTurn3Rouge:NativeBowlerGold:16Forks:FullStateRngParentLiveIsolation",
+        "NativeOutcome:combatEnded=False:turn=3:hp=46:maxHp=70"
+      ],
+      "error": null,
+      "finishedAtUtc": "2026-10-05T00:35:55.8244854+00:00"
+    },
+    "closed-tier-v4": {
+      "processReusable": false,
+      "processId": 220165,
+      "reusedProcess": false,
+      "developmentStrategyScriptHash": null,
+      "developmentStrategyParametersHash": null,
+      "mainAssemblyHash": "9268384EC6951C75169926294FF3D287A779211107F1416028CEFC55A68C2541",
+      "schemaVersion": 1,
+      "runId": "aeae74a4d716436f856268974ddc2996",
+      "scenarioId": "HUNT-ZERO-GROWTH-CLOSED-TIER",
+      "status": "Failed",
+      "stage": "hunt_zero_growth_closed_tier",
+      "characterId": "SILENT",
+      "encounterId": "NIBBITS_NORMAL",
+      "seed": "HUNT_RECOVERY_ZERO_20261005",
+      "startedAtUtc": "2026-10-05T00:47:28.025656+00:00",
+      "elapsedMilliseconds": 27014.4145,
+      "mainThread": true,
+      "combatEnded": false,
+      "startedTurn": 1,
+      "finishedTurn": 1,
+      "managedHeapBytes": 91955008,
+      "managedFragmentedBytes": 13539576,
+      "workingSetBytes": 1448960000,
+      "privateMemoryBytes": 1571336192,
+      "solverMetrics": null,
+      "replayVerification": null,
+      "generatedScenario": null,
+      "stageTimings": [
+        {
+          "stage": "created",
+          "startedMilliseconds": 0,
+          "durationMilliseconds": 1.9463
+        },
+        {
+          "stage": "strategy_load",
+          "startedMilliseconds": 1.9463,
+          "durationMilliseconds": 5.6027000000000005
+        },
+        {
+          "stage": "game_startup",
+          "startedMilliseconds": 7.549,
+          "durationMilliseconds": 13247.657099999999
+        },
+        {
+          "stage": "start_run",
+          "startedMilliseconds": 13255.2061,
+          "durationMilliseconds": 11004.856200000002
+        },
+        {
+          "stage": "inject_run_relics",
+          "startedMilliseconds": 24260.0623,
+          "durationMilliseconds": 1.9503999999978987
+        },
+        {
+          "stage": "enter_encounter",
+          "startedMilliseconds": 24262.0127,
+          "durationMilliseconds": 1969.8273000000008
+        },
+        {
+          "stage": "wait_player_turn",
+          "startedMilliseconds": 26231.84,
+          "durationMilliseconds": 2.6208999999980733
+        },
+        {
+          "stage": "inject_state",
+          "startedMilliseconds": 26234.4609,
+          "durationMilliseconds": 102.63420000000042
+        },
+        {
+          "stage": "hunt_zero_growth_closed_tier",
+          "startedMilliseconds": 26337.0951,
+          "durationMilliseconds": 677.5621000000028
+        }
+      ],
+      "completedChecks": [],
+      "error": "System.InvalidOperationException: Actual closed/open tier or cheaper/equal HP route differs.\n   at CombatSolver.CombatBeamSolver.HuntClosedTierProbeForTesting(CombatRootSnapshot root, SolverDisplayNames names, BattleDamageSnapshot damage, SearchPolicySnapshot policy)\n   at CombatSolver.UnattendedTestRunner.<>c__DisplayClass412_0.<AssertHuntClosedTierAsync>b__1()\n   at System.Threading.Tasks.Task`1.InnerInvoke()\n   at System.Threading.ExecutionContext.RunFromThreadPoolDispatchLoop(Thread threadPoolThread, ExecutionContext executionContext, ContextCallback callback, Object state)\n--- End of stack trace from previous location ---\n   at System.Threading.ExecutionContext.RunFromThreadPoolDispatchLoop(Thread threadPoolThread, ExecutionContext executionContext, ContextCallback callback, Object state)\n   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)\n--- End of stack trace from previous location ---\n   at CombatSolver.UnattendedTestRunner.AssertHuntClosedTierAsync(CombatState live, Player player)\n   at CombatSolver.UnattendedTestRunner.Executor.ExecuteAsync(ScenarioContext scenario)\n   at CombatSolver.UnattendedTestRunner.RunAsync()",
+      "finishedAtUtc": "2026-10-05T00:47:55.0398395+00:00"
+    },
+    "closed-tier-v5": {
+      "processReusable": false,
+      "processId": 223684,
+      "reusedProcess": false,
+      "developmentStrategyScriptHash": null,
+      "developmentStrategyParametersHash": null,
+      "mainAssemblyHash": "2DE55EF26F391F1BE02CCA9A9E2ADFA30FE5BF5415464AFA71E12B6029154239",
+      "schemaVersion": 1,
+      "runId": "5712177f46554f3bb26229f0de3413d2",
+      "scenarioId": "HUNT-ZERO-GROWTH-CLOSED-TIER",
+      "status": "Passed",
+      "stage": "passed",
+      "characterId": "CHARACTER.SILENT",
+      "encounterId": "ENCOUNTER.NIBBITS_NORMAL",
+      "seed": "HUNT_RECOVERY_ZERO_20261005",
+      "startedAtUtc": "2026-10-05T00:50:24.4802918+00:00",
+      "elapsedMilliseconds": 47671.6974,
+      "mainThread": true,
+      "combatEnded": false,
+      "startedTurn": 1,
+      "finishedTurn": 1,
+      "managedHeapBytes": 184496128,
+      "managedFragmentedBytes": 83736888,
+      "workingSetBytes": 1587970048,
+      "privateMemoryBytes": 1712664576,
+      "solverMetrics": null,
+      "replayVerification": null,
+      "generatedScenario": null,
+      "stageTimings": [
+        {
+          "stage": "created",
+          "startedMilliseconds": 0,
+          "durationMilliseconds": 1.587
+        },
+        {
+          "stage": "strategy_load",
+          "startedMilliseconds": 1.587,
+          "durationMilliseconds": 5.1827000000000005
+        },
+        {
+          "stage": "game_startup",
+          "startedMilliseconds": 6.7697,
+          "durationMilliseconds": 13270.1001
+        },
+        {
+          "stage": "start_run",
+          "startedMilliseconds": 13276.8698,
+          "durationMilliseconds": 11010.6835
+        },
+        {
+          "stage": "inject_run_relics",
+          "startedMilliseconds": 24287.5533,
+          "durationMilliseconds": 1.49120000000039
+        },
+        {
+          "stage": "enter_encounter",
+          "startedMilliseconds": 24289.0445,
+          "durationMilliseconds": 2004.7852999999996
+        },
+        {
+          "stage": "wait_player_turn",
+          "startedMilliseconds": 26293.8298,
+          "durationMilliseconds": 2.476699999999255
+        },
+        {
+          "stage": "inject_state",
+          "startedMilliseconds": 26296.3065,
+          "durationMilliseconds": 102.72920000000158
+        },
+        {
+          "stage": "hunt_zero_growth_closed_tier",
+          "startedMilliseconds": 26399.0357,
+          "durationMilliseconds": 21157.170899999997
+        },
+        {
+          "stage": "cleanup",
+          "startedMilliseconds": 47556.2066,
+          "durationMilliseconds": 109.92380000000412
+        },
+        {
+          "stage": "passed",
+          "startedMilliseconds": 47666.1304,
+          "durationMilliseconds": 5.764699999999721
+        }
+      ],
+      "completedChecks": [
+        "ClosedTierHunt:costs=14/9:strictPrunes=1:control=[won=True,hp=10,growth=2,pots=1,cost=9,expanded=5112,transitions=16755]:candidate=[won=True,hp=10,growth=2,pots=1,cost=9,expanded=2838,transitions=12086]",
+        "ClosedTierHunt:ActualCompleteGrowth1Witness:StrictHpOnly:EqualHpKept:CheaperPotionKept:MissingCostKept:OpenTierKept:DifferentCountKept:UnknownFeedKept:PositivePriceRelicTheftForcedPotionRefused:Dop2StrictSameBudgetQuality:NativePotionFullStateRng:ParentLiveIsolation",
+        "NativeOutcome:combatEnded=False:turn=1:hp=60:maxHp=70"
+      ],
+      "error": null,
+      "finishedAtUtc": "2026-10-05T00:51:12.1518099+00:00"
+    }
+  },
+  "builds": {
+    "build": {
+      "seconds": 14.11,
+      "warnings": 0,
+      "errors": 0,
+      "copyModOnBuild": false
+    },
+    "dllSha256": "c0a1aa84455e18d5bb4622f02d6dcfea644e822cc41ef8a6315a1a9ba1284cb0",
+    "qualityAblationV2DllSha256": "8a7c55a0feecb2195a45b127205f3a39d8c6d60fae4dc131df8e18ad69d49918",
+    "qualityAblationV2Build": {
+      "seconds": 13.49,
+      "warnings": 0,
+      "errors": 0,
+      "copyModOnBuild": false
+    },
+    "nativeV3DllSha256": "1a3c94f4d72c46d6ecc4daa7b75b1d860a38812ce4a529540ec7bc808ebd6914",
+    "nativeV3Build": {
+      "elapsed": "00:00:13.72",
+      "warnings": 0,
+      "errors": 0,
+      "copyModOnBuild": false
+    },
+    "closedTierV4DllSha256": "9268384ec6951c75169926294ff3d287a779211107f1416028cefc55a68c2541",
+    "closedTierV4Build": {
+      "elapsed": "00:00:13.92",
+      "warnings": 0,
+      "errors": 0,
+      "copyModOnBuild": false
+    },
+    "closedTierV5DllSha256": "2de55ef26f391f1be02cca9a9e2adfa30fe5bf5415464afa71e12b6029154239",
+    "closedTierV5Build": {
+      "elapsed": "00:00:14.21",
+      "warnings": 0,
+      "errors": 0,
+      "copyModOnBuild": false
+    }
+  },
+  "preparationFailures": [
+    "Initial test compile failed on guessed helper signatures/enum and missing Rewards namespace; corrected to existing ManualPlay, AdvanceRound and static opening seed APIs; no runtime launched.",
+    "Post-build redundant MemoryCleaner copy used nonexistent base source/build path; previously qualified MemoryCleaner remained in isolated build and launcher validated it. No Steam deployment.",
+    "Closed-tier test initial compile used SolverSnapshot.PotionStrategicCost, which is a SimulationSnapshot member. Corrected selected result cost to existing per-turn cost sum; no native launch."
+  ],
+  "firstScreen": {
+    "scope": "first conservative P0/satisfied-growth variant",
+    "wallSeconds": 50.9309547,
+    "peakProcessWorkingSetBytes": 23548190720,
+    "comparisonQuality": {
+      "Won": true,
+      "OutstandingStolenResource": 0,
+      "ProjectedBattleHpLost": 47,
+      "StrategicHpDeficit": 47,
+      "PotionStrategicCost": 45,
+      "ProjectedBattlePotionCount": 1,
+      "EnemyHp": 0,
+      "Score": 9999231938,
+      "CombatEndedTurn": 10,
+      "Survives": true,
+      "DeathSaveUseCount": 0,
+      "GrowthHpCredit": 0,
+      "GrowthRewardCount": 0
+    },
+    "pruneCounters": {
+      "totalExpanded": 417067,
+      "totalTransitions": 1586122,
+      "primaryIncumbentBranchesPruned": 0,
+      "primaryIncumbentUpdates": 1
+    },
+    "nativeRun": "88f095e8686344f797bef57f7e9d9048",
+    "passedNative": true,
+    "failedSpeed": true,
+    "originalSeconds": 50.1786779,
+    "speedup": 0.9852294777423443,
+    "finalAcceptance": false
+  },
+  "rootDiagnostic": {
+    "path": "/home/ltlly/Code/nmslmod/CombatSolver-healing-bound-general-20261003/.local/tool-tasks/hunt-zero-credit-20261005/root-diagnostic/root-healing-sources.json",
+    "certified": true,
+    "componentRejection": null,
+    "bound": 0,
+    "warmSamples": 100,
+    "medianMs": 0.0921,
+    "averageAllocationBytes": 704,
+    "captureMs": 94.6754,
+    "liveUnchanged": true,
+    "coverage": "This changed target root only; no new all-corpus/global coverage rate"
+  },
+  "secondScreen": {
+    "label": "dev06-hunt-closed-tier-C2",
+    "dllSha256": "2de55ef26f391f1be02cca9a9e2adfa30fe5bf5415464afa71e12b6029154239",
+    "status": "Failed",
+    "processWallSeconds": 100.12,
+    "wholeRequestSeconds": null,
+    "quality": null,
+    "peakProcessWorkingSetBytes": null,
+    "performanceAccepted": false,
+    "reason": "Historical failed run retained; cause was unproved at time of initial record. Later diagnostic full CLR dump proves experimental Godot.GD.Print call from Search materialization caused native string conversion crash in offline host. This failed run supplies no acceptance metrics.",
+    "crashEvidence": {
+      "pid": 226253,
+      "signal": 11,
+      "signalName": "SEGV",
+      "timestamp": "2026-10-05 08:52:39 Asia/Shanghai",
+      "faultIp": "0x0",
+      "coredumpPath": "/var/lib/systemd/coredump/core.dotnet.1000.789f6b5fd9994e01b1582ee63ef46d3d.226253.1791161559000000.zst",
+      "coredumpSizeReported": "1.8G",
+      "partialFinalLogLineIndex": 1494,
+      "lastCompletedRouteActionIndex": 15,
+      "lastCompletedRouteCard": "BLADE_OF_INK",
+      "causalAttribution": "Original system-core evidence alone unproved; see crashDiagnosis for separate full CLR dump with managed stack.",
+      "unchangedFailureNotRerun": true
+    },
+    "processLog": "/home/ltlly/Code/nmslmod/CombatSolver-healing-bound-general-20261003/.local/tool-tasks/hunt-zero-credit-20261005/closed-tier-screen/runs/dev06-hunt-closed-tier-C2/logs/226253-bbe9eeac947b4a42932a86f3717f4b44/process.jsonl",
+    "unprovedCause": false
+  },
+  "unverified": [
+    "Final serial interleaved acceptance",
+    "Final fixed regression",
+    "Updated P0 full search after second-variant runtime change",
+    "Whole-request certificate overhead; selected-member173prunes does not cover all members",
+    "Cause of HP47 to62 change in empty-table prototype; no lost-route investigation resumed"
+  ],
+  "deployment": "Unchanged C422 production uses prior exact successful deployment; research prototypes not deployed",
+  "nextHypotheses": [
+    {
+      "candidate": "earlier complete compliant witnessed victory or lower simulation cost",
+      "status": "research only; no schedule change implemented",
+      "constraints": "reuse existing table and policy; complete root/policy/budget/quality comparison required; no scoring or budget reductions",
+      "productionIntegrated": false
+    }
+  ],
+  "localResearchRoot": "/home/ltlly/Code/nmslmod/CombatSolver-healing-bound-general-20261003/.local/tool-tasks/hunt-zero-credit-20261005",
+  "fixtures": {
+    "initial": "fixtures/hunt-zero-growth-initial-research-20261005.patch",
+    "closedTier": "fixtures/hunt-zero-growth-closed-tier-research-20261005.patch",
+    "injectedLog": "fixtures/hunt-zero-growth-injected-log-research-20261005.patch",
+    "witnessPresence": "fixtures/hunt-witness-presence-research-20261005.patch"
+  },
+  "crashDiagnosis": {
+    "causeProved": true,
+    "historicalFailureRetained": true,
+    "diagnosticOnly": true,
+    "outerTimeoutSeconds": 120,
+    "originalSystemCoreSosError": "E_NOINTERFACE even with matching DAC; no causal stack claimed",
+    "fullDump": "/home/ltlly/Code/nmslmod/CombatSolver-healing-bound-general-20261003/.local/tool-tasks/hunt-crash-analysis-20261005/full.core.234319",
+    "report": "/home/ltlly/Code/nmslmod/CombatSolver-healing-bound-general-20261003/.local/tool-tasks/hunt-crash-analysis-20261005/full.core.234319.crashreport.json",
+    "summary": {
+      "pid": 234319,
+      "diagnosticProcess": {
+        "pid": 234319,
+        "exitCode": -11,
+        "outerTimeoutSeconds": 120,
+        "diagnosticOnly": true
+      },
+      "crashedThreadId": "0x3934f",
+      "managedFrames": [
+        {
+          "method": "Godot.NativeInterop.Marshaling.ConvertStringToNative(System.String)",
+          "file": "GodotSharp.dll",
+          "ilOffset": "0x26",
+          "token": "0x6009226"
+        },
+        {
+          "method": "Godot.GD.Print(System.String)",
+          "file": "GodotSharp.dll",
+          "ilOffset": "0x0",
+          "token": "0x6000327"
+        },
+        {
+          "method": "CombatSolver.CombatBeamSolver+<>c__DisplayClass631_0.<SolveCore>g__MaterializeSelectedRoute|9(FinalPlanSelection, Boolean, CombatSolver.SolverResultScope, Int32, Boolean, Boolean, System.Collections.Generic.IReadOnlyList`1<CombatSolver.PlanAction>)",
+          "file": "CombatSolver.dll",
+          "ilOffset": "0x58",
+          "token": "0x6005821"
+        },
+        {
+          "method": "CombatSolver.CombatBeamSolver.SolveCore()",
+          "file": "CombatSolver.dll",
+          "ilOffset": "0x33a8",
+          "token": "0x60017a3"
+        },
+        {
+          "method": "CombatSolver.CombatBeamSolver.Solve()",
+          "file": "CombatSolver.dll",
+          "ilOffset": "0x60",
+          "token": "0x60017a1"
+        },
+        {
+          "method": "CombatSolver.CombatSearchCoordinator.SearchSmartPotionGradient(CombatSolver.SearchPassContext, System.Threading.CancellationToken, CombatSolver.SolverResult, CombatSolver.SmartLayerMemoryForecast)",
+          "file": "CombatSolver.dll",
+          "ilOffset": "0x245",
+          "token": "0x6001ee3"
+        },
+        {
+          "method": "CombatSolver.CombatSearchCoordinator.AuditSmartPotionUse(CombatSolver.SearchPassContext, System.Threading.CancellationToken, CombatSolver.SolverResult, CombatSolver.SmartLayerMemoryForecast)",
+          "file": "CombatSolver.dll",
+          "ilOffset": "0x59",
+          "token": "0x6001ee1"
+        },
+        {
+          "method": "CombatSolver.CombatSearchCoordinator.RunSupplementalAudits(CombatSolver.SearchPassContext, CombatSolver.SolverResult, CombatSolver.SmartLayerMemoryForecast)",
+          "file": "CombatSolver.dll",
+          "ilOffset": "0x11f",
+          "token": "0x6001ede"
+        },
+        {
+          "method": "CombatSolver.CombatSearchCoordinator+<>c__DisplayClass16_0.<SolveCore>g__RunSearchPass|0(CombatSolver.SearchPassContext)",
+          "file": "CombatSolver.dll",
+          "ilOffset": "0x14ec",
+          "token": "0x6005a15"
+        },
+        {
+          "method": "CombatSolver.CombatSearchCoordinator.EscalateSearchWhenNoVictory(CombatSolver.SearchPassContext, CombatSolver.SearchPassResult, System.Func`2<CombatSolver.SearchPassContext,CombatSolver.SearchPassResult>, System.Func`1<Boolean>)",
+          "file": "CombatSolver.dll",
+          "ilOffset": "0x21b",
+          "token": "0x6001f0e"
+        },
+        {
+          "method": "CombatSolver.SearchRequestPipeline.Run()",
+          "file": "CombatSolver.dll",
+          "ilOffset": "0x7d",
+          "token": "0x60028a0"
+        },
+        {
+          "method": "CombatSolver.CombatSearchCoordinator.SolveCore(CombatSolver.CombatRootSnapshot, CombatSolver.SolverDisplayNames, CombatSolver.BattleDamageSnapshot, CombatSolver.SearchPolicySnapshot, CombatSolver.SearchBudgetLedger, CombatSolver.SearchPlanDiscoveryState, System.Threading.CancellationToken, System.Action`1<CombatSolver.SolverProgress>, System.Action`1<CombatSolver.SolverResult>, System.Collections.Generic.List`1<CombatSolver.PlanAction[]>, System.Func`2<CombatSolver.SolverResult,CombatSolver.SolverResult>)",
+          "file": "CombatSolver.dll",
+          "ilOffset": "0xfffffffd",
+          "token": "0x6001eee"
+        }
+      ],
+      "sosStackPath": "/home/ltlly/Code/nmslmod/CombatSolver-healing-bound-general-20261003/.local/tool-tasks/hunt-crash-analysis-20261005/managed-stack-full.log",
+      "sourceFirstFrame": "CombatBeamSolver.Phases.cs467 direct Godot.GD.Print",
+      "conclusion": "Prototype instrumentation called Godot native string conversion in offline host; replace with injected Diagnostics.Info. Root, scoring, budgets and pruning logic untouched. Not a PR215/shared-witness semantic cause.",
+      "performanceEvidenceInvalid": true,
+      "noQueenLostRouteWork": true
+    },
+    "fix": "replace experimental Search-layer Godot.GD.Print with frozen policy.Diagnostics.Info; no pruning/scoring/budget/root changes",
+    "noRepeatedUnchangedSuccessfulNativeContract": true
+  },
+  "correctedClosedTierScreen": {
+    "label": "dev06-hunt-injected-log-C3",
+    "build": {
+      "seconds": 14.54,
+      "warnings": 0,
+      "errors": 0,
+      "copyModOnBuild": false
+    },
+    "dllSha256": "031ca0813c549536a6aeb41a3d713ad9b3e72fa507732a092f5b35609bda02ad",
+    "nativeSemanticsReusedRunId": "5712177f46554f3bb26229f0de3413d2",
+    "fixture": "fixtures/hunt-zero-growth-injected-log-research-20261005.patch",
+    "screen": {
+      "wallSeconds": 51.8829462,
+      "peakProcessWorkingSetBytes": 25200508928,
+      "comparisonQuality": {
+        "Won": true,
+        "OutstandingStolenResource": 0,
+        "ProjectedBattleHpLost": 47,
+        "StrategicHpDeficit": 47,
+        "PotionStrategicCost": 45,
+        "ProjectedBattlePotionCount": 1,
+        "EnemyHp": 0,
+        "Score": 9999231938,
+        "CombatEndedTurn": 10,
+        "Survives": true,
+        "DeathSaveUseCount": 0,
+        "GrowthHpCredit": 0,
+        "GrowthRewardCount": 0
+      },
+      "sameQualityAsFirst": true,
+      "sameRoot": true,
+      "sameBudget": true,
+      "samePolicy": true,
+      "strictPrunesLog": [
+        "[CombatSolver] ZERO_GROWTH_STRICT_PRIMARY pruned=173"
+      ],
+      "totalExpanded": 413946,
+      "totalTransitions": 1579355,
+      "originalSeconds": 50.1786779,
+      "speedupVsOriginal": 0.9671516668804748,
+      "peakRatioVsFirst": 1.0701675227471574,
+      "finalAcceptance": false,
+      "speedFailed": true
+    },
+    "processLogRoot": "/home/ltlly/Code/nmslmod/CombatSolver-healing-bound-general-20261003/.local/tool-tasks/hunt-zero-credit-20261005/injected-log-screen",
+    "promoted": false,
+    "reason": "Complete request and unchanged quality; only0.96715x original speed; no final regression/interleaved acceptance/deployment."
+  },
+  "witnessPresencePrototype": {
+    "scope": "existing shared table presence via its own lock; skip shared branch certificates only while empty; retain first Hunt conservative P0/satisfied growth rule",
+    "base": "Qualified Regent component source + frozen first Hunt variant",
+    "build": {
+      "elapsed": "00:00:27.05",
+      "warnings": 0,
+      "errors": 0,
+      "copyModOnBuild": false
+    },
+    "dllSha256": "f22efbe367a797661561f5e051199302232a76d06dff3586303acabcd5e5fb04",
+    "native": {
+      "runId": "0ce1537149d1477b8e78b1777225211f",
+      "status": "Passed",
+      "elapsedMilliseconds": 39333.2663,
+      "completedChecks": [
+        "HuntSameBudgetDop2Strict:control=[won=True dead=False risk=False boundary=None hp=10 hunt=2 pots=0 deathsave=0 expanded=4532 transitions=11900]:candidate=[won=True dead=False risk=False boundary=None hp=10 hunt=2 pots=0 deathsave=0 expanded=120 transitions=352]",
+        "HuntRecovery:NativeFatalAndNonfatal:UnpopulatedPostCombatRewardOnly:NativeGenerationFilter:OwnedClone:AllFourPileUnknownRefusal:ActualCompleteP0Growth2Witness:UnsatisfiedGrowth1Refused:EqualHpKept:PositiveGrowthPriceRelicTheftForcedPotionRefused:StrictHigherHpActualPrune:TwoNativeTurnBoundariesTurn3Rouge:NativeBowlerGold:16Forks:FullStateRngParentLiveIsolation",
+        "NativeOutcome:combatEnded=False:turn=3:hp=46:maxHp=70"
+      ],
+      "error": null
+    },
+    "screen": {
+      "wallSeconds": 48.6656202,
+      "peakProcessWorkingSetBytes": 23493812224,
+      "comparisonQuality": {
+        "Won": true,
+        "OutstandingStolenResource": 0,
+        "ProjectedBattleHpLost": 62,
+        "StrategicHpDeficit": 62,
+        "PotionStrategicCost": 45,
+        "ProjectedBattlePotionCount": 1,
+        "EnemyHp": 0,
+        "Score": 9998331940,
+        "CombatEndedTurn": 11,
+        "Survives": true,
+        "DeathSaveUseCount": 0,
+        "GrowthHpCredit": 0,
+        "GrowthRewardCount": 0
+      },
+      "pruneCounters": {
+        "totalExpanded": 417970,
+        "totalTransitions": 1591778,
+        "primaryIncumbentBranchesPruned": 0,
+        "primaryIncumbentUpdates": 2
+      },
+      "workEqualToPrevious": false,
+      "qualityEqualToPrevious": false,
+      "rootEqualToPrevious": true,
+      "policyEqualToPrevious": true,
+      "budgetEqualToPrevious": true,
+      "originalSeconds": 50.1786779,
+      "originalSpeedup": 1.0310908952517572,
+      "previousScreenSeconds": 50.9309547,
+      "previousScreenSpeedup": 1.046548970108471,
+      "rssRatioToPrevious": 0.9976907569398181,
+      "finalAcceptance": false
+    },
+    "fixture": "fixtures/hunt-witness-presence-research-20261005.patch",
+    "promoted": false,
+    "qualityFailed": true,
+    "causeOfFullRequestQualityChange": "unproved; fixed root/policy/budget same, work differs",
+    "noSharedTableDuplication": true
+  }
+}

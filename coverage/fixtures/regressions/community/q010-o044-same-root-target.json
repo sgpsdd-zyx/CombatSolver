@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "scenarioId": "Q010-O044-SAME-ROOT-TARGET",
+  "description": "O044 熟睡派对：A 类回归夹具，断言锁质量界而非单机快照值（政策与批准见 docs/TEST_MATRIX.md「夹具锁定质量界」段、captain 对 t14 的裁决①）。战损轴为上界 expectedInitialProjectedBattleHpLostAtMost=5；用药轴保持等值 expectedInitialPotionCount=0；胜负轴用 expectedInitialFinalEnemyHpAtMost=0 + expectedInitialOnlyDeathRoutesFound=false 两条组合。原录制值是等值 proj=5、combatEndedTurn=6、boundaryReason=None、score 10001829972，现只作观测记录不入断言：同机 head 与无修复的 prefix 四次运行都稳定给 proj=3、endTurn=7、score=10001949972（runId d38f5b2b、9ff2a14f、7b096c5b、6b6c21bf），即那组快照在本机对任何二进制都不可复现，属录制机内存档形态的函数；endTurn 是路线形状差异而非质量轴，proj 才是。包内改善记录（:3，第 2 回合、已损 5）不是同根基准，本夹具不依赖它；只断言终值，不断言路线同构。界集实测四样本（命令行同参数，两二进制各一次）：59848228（head，limit 1748974148 字节 = 1668 MiB，proj=3）与 c395dfb1（prefix，1725673368 字节 = 1646 MiB，proj=3）均 Passed；落盘后以夹具本体复认也已通过：4e17b33a1367462c906cca1a83fc4aae Passed（limit 1232616004 字节 = 1176 MiB、弃区 23%、proj=3、0 瓶、score=10001949972、mainAssemblyHash BD84AE5C69DFC45E…105C24）。全部档间数字与口径存档于 .local/tool-tasks/q010/verification-round2.md 表一、第三节。",
+  "characterId": "REGENT",
+  "encounterId": "SLUMBERING_BEETLE_NORMAL",
+  "seed": "4KZ3X1LMFMCB",
+  "ascension": 1,
+  "actIndexForTest": 1,
+  "checkpointArchivePath": ".local/issue-bundles/Q010/O044/raw/4dc0ba71acec4d1499eaeea48cd29458.zip",
+  "checkpointSelector": "start",
+  "replayMode": "SearchOnly",
+  "enemyCurrentHp": 1,
+  "expectedInitialProjectedBattleHpLostAtMost": 5,
+  "expectedInitialPotionCount": 0,
+  "expectedInitialFinalEnemyHpAtMost": 0,
+  "expectedInitialOnlyDeathRoutesFound": false,
+  "stopAfterInitialSolverResultAssertion": true,
+  "headlessFastModeForTest": "Instant",
+  "timeoutSeconds": 300,
+  "exitOnComplete": true
+}

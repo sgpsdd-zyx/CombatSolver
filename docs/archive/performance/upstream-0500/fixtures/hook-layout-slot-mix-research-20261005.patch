@@ -1,0 +1,44 @@
+--- a/src/Engine/Common/MirroredHookListenerFilter.cs
++++ b/src/Engine/Common/MirroredHookListenerFilter.cs
+@@ -170,7 +170,7 @@
+             int slot = -1;
+             if (source.Count <= MaxSharedLayoutLength)
+             {
+-                slot = (int)(hash & (SharedLayoutSlots - 1));
++                slot = SharedLayoutSlot(hash);
+                 MirroredHookListenerLayout? shared = Volatile.Read(ref _sharedLayouts[slot]);
+                 if (shared is not null && shared.Matches(entries))
+                 {
+@@ -213,6 +213,21 @@
+     // and dynamic models always dispatch all hooks and are never retained here.
+     [ThreadStatic] private static NativeParticipationEntry[]? _nativeParticipation;
+     private readonly record struct NativeParticipationEntry(Type? Type, MirroredHookMask Mask);
++
++    // FNV preserves high-bit differences in its high bits. Mix all bits before
++    // choosing a bounded slot; the full ordered mask sequence is still checked.
++    internal static int SharedLayoutSlot(uint hash)
++    {
++        unchecked
++        {
++            hash ^= hash >> 16;
++            hash *= 0x7feb352d;
++            hash ^= hash >> 15;
++            hash *= 0x846ca68b;
++            hash ^= hash >> 16;
++        }
++        return (int)(hash & (SharedLayoutSlots - 1));
++    }
+
+     internal static MirroredHookMask MaskFor(Type type)
+     {
+--- a/src/Testing/Contracts/Combat/UnattendedTestRunner.MirroredHookFilter.cs
++++ b/src/Testing/Contracts/Combat/UnattendedTestRunner.MirroredHookFilter.cs
+@@ -250,7 +250,7 @@
+                 ulong secondMask = (ulong)MirroredHookListenerFilter.MaskFor(second.GetType());
+                 uint hash = unchecked(2u * 16777619u ^ (uint)firstMask ^ (uint)(firstMask >> 32));
+                 hash = unchecked(hash * 16777619u ^ (uint)secondMask ^ (uint)(secondMask >> 32));
+-                int slot = (int)(hash & (MirroredHookListenerFilter.SharedLayoutSlots - 1));
++                int slot = MirroredHookListenerFilter.SharedLayoutSlot(hash);
+                 AbstractModel[] source = [first, second];
+                 if (slots.TryGetValue(slot, out AbstractModel[]? previous))
+                     return [previous, source];

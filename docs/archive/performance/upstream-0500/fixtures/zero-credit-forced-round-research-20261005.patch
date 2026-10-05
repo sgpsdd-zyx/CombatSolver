@@ -1,0 +1,741 @@
+--- a/src/Search/CombatBeamSolver.Expansion.Replay.cs
++++ b/src/Search/CombatBeamSolver.Expansion.Replay.cs
+@@ -744,8 +744,14 @@
+             ? _cardChoiceReplayCheckpoint : null;
+         RoundReplayCheckpoint? roundCheckpoint = !policy.VerifyIncrementalSearch
+             && _roundReplayCheckpoint?.Matches(parent, action) == true ? _roundReplayCheckpoint : null;
++        SimulationSnapshot? ownedPrecomputed = null;
+         try
+         {
++            if (executionCheckpoint is null && cardCheckpoint is null && potionCheckpoint is null
++                && roundCheckpoint is null && cardChoiceCapture is null
++                && action.Kind == PlanActionKind.EndTurn && action.TurnStartChoices is not { Count: > 0 })
++                ownedPrecomputed = parent.Snapshot.TakePrecomputedEndTurn(_forcedRoundOwner, parent.Turn, parent.ActionCount,
++                    requireComplete: roundCheckpointCapture is not null);
+             if (executionCheckpoint != null)
+             {
+                 if (replayForkSeed != null || cardChoiceCapture != null)
+@@ -773,7 +779,7 @@
+                 gatedSeed = roundCheckpoint.Fork(this, _parallelActionReplayForkGate, ReplayCancellationToken);
+                 replayForkSeed = gatedSeed;
+             }
+-            else if (replayForkSeed == null && _parallelActionReplayForkGate != null)
++            else if (ownedPrecomputed is null && replayForkSeed == null && _parallelActionReplayForkGate != null)
+             {
+                 gatedSeed = PrepareReplayForkSeed(
+                     parent.Snapshot,
+@@ -789,7 +795,14 @@
+                 SimulationSnapshot incremental;
+                 try
+                 {
+-                    incremental = executionCheckpoint != null
++                    if (ownedPrecomputed is not null)
++                    {
++                        _run.TransitionCount++;
++                        _forcedRoundHpReuses++;
++                        incremental = ownedPrecomputed;
++                        ownedPrecomputed = null;
++                    }
++                    else incremental = executionCheckpoint != null
+                     ? ResumeExecutionChoice(executionCheckpoint, parent, action)
+                     : Replay(
+                     [action],
+@@ -853,6 +866,7 @@
+         }
+         finally
+         {
++            ownedPrecomputed?.ReleaseSimulator();
+             gatedSeed?.Dispose();
+         }
+     }
+@@ -968,7 +982,9 @@
+         ISet<uint> processedEnemyDeaths,
+         ref int shufflesCrossed,
+         IReadOnlyList<PlanCardChoice>? turnStartChoices,
+-        RoundReplayCheckpointCapture? roundCheckpointCapture = null)
++        RoundReplayCheckpointCapture? roundCheckpointCapture = null,
++        bool stopBeforePlayerStartForBound = false,
++        ForcedRoundPrefixCapture? forcedPrefixCapture = null)
+     {
+         if (!simulator.IsInProgress)
+             return SearchBoundaryReason.None;
+@@ -1235,6 +1251,12 @@
+             simulatedCombat.ConsumeExtraTurnSources(_player);
+         }
+
++        if (stopBeforePlayerStartForBound)
++        {
++            if (forcedPrefixCapture is not null) forcedPrefixCapture.TakingExtraTurn = takingExtraTurn;
++            return SearchBoundaryReason.None;
++        }
++
+         return AdvanceRoundPlayerStart(simulator, simulatedCombat, playerState, simulatedPlayer,
+             roundIndex, processedEnemyDeaths, ref shufflesCrossed, roundChoices, takingExtraTurn,
+             turnStartChoices is not { Count: > 0 } ? roundCheckpointCapture : null);
+--- a/src/Search/CombatPlan.cs
++++ b/src/Search/CombatPlan.cs
+@@ -1345,10 +1345,39 @@
+
+     public bool HasSimulator => _simulator != null;
+
++    private PrecomputedEndTurn? _precomputedEndTurn;
++    private sealed class PrecomputedEndTurn(object owner, int turn, int actionCount, SimulationSnapshot result)
++    {
++        public object Owner { get; } = owner;
++        public int Turn { get; } = turn;
++        public int ActionCount { get; } = actionCount;
++        public SimulationSnapshot Result { get; } = result;
++    }
++    internal bool HasPrecomputedEndTurnForTesting => _precomputedEndTurn is not null;
++    internal void SavePrecomputedEndTurn(object owner, int turn, int actionCount, SimulationSnapshot result)
++    {
++        var previous = Interlocked.Exchange(ref _precomputedEndTurn, new(owner, turn, actionCount, result));
++        previous?.Result.ReleaseSimulator();
++    }
++    internal SimulationSnapshot? TakePrecomputedEndTurn(object owner, int turn, int actionCount, bool requireComplete = false)
++    {
++        var saved = Volatile.Read(ref _precomputedEndTurn);
++        if (saved is null || !ReferenceEquals(saved.Owner, owner) || saved.Turn != turn
++            || saved.ActionCount != actionCount || !HasSimulator) return null;
++        // A caller collecting adaptive choice checkpoints may use only a complete,
++        // reliable result. Pending choices retain the original discovery/capture path.
++        if (requireComplete && (saved.Result.BoundaryReason != SearchBoundaryReason.None
++            || saved.Result.HasRisk)) return null;
++        return ReferenceEquals(Interlocked.CompareExchange(ref _precomputedEndTurn, null, saved), saved)
++            ? saved.Result : null;
++    }
++
++
+     public void ReleaseSimulator(
+         [CallerMemberName] string caller = "",
+         [CallerLineNumber] int line = 0)
+     {
++        Interlocked.Exchange(ref _precomputedEndTurn, null)?.Result.ReleaseSimulator();
+         _simulator = null;
+         _releasedBy = caller;
+         _releasedAtLine = line;
+--- a/src/Search/CombatBeamSolver.ParallelExpansion.cs
++++ b/src/Search/CombatBeamSolver.ParallelExpansion.cs
+@@ -406,6 +406,7 @@
+             maximumPotionUses: _maximumPotionUses,
+             earliestPotionTurn: _earliestPotionTurn,
+             planCommitment: _planCommitment);
++        worker._forcedRoundOwner = _forcedRoundOwner;
+         worker._run.InitialPersistentBuffValue = _run.InitialPersistentBuffValue;
+         worker._run.InitialEnemyStrengthSuppression = _run.InitialEnemyStrengthSuppression;
+         worker._run.InitialEnemyWeakTurns = _run.InitialEnemyWeakTurns;
+@@ -819,6 +820,16 @@
+         if (worker == null)
+             return;
+         _run.OffThreadAllocatedBytes += allocatedBytes;
++        _forcedRoundHpReuses += Interlocked.Exchange(ref worker._forcedRoundHpReuses, 0);
++        _forcedRoundHpProbes += Interlocked.Exchange(ref worker._forcedRoundHpProbes, 0);
++        _forcedRoundHpPruned += Interlocked.Exchange(ref worker._forcedRoundHpPruned, 0);
++        _forcedRoundHpSaved += Interlocked.Exchange(ref worker._forcedRoundHpSaved, 0);
++        _forcedRejectedBoundary += Interlocked.Exchange(ref worker._forcedRejectedBoundary, 0);
++        _forcedRejectedRisk += Interlocked.Exchange(ref worker._forcedRejectedRisk, 0);
++        _forcedRejectedChoice += Interlocked.Exchange(ref worker._forcedRejectedChoice, 0);
++        _forcedEnded += Interlocked.Exchange(ref worker._forcedEnded, 0);
++        _forcedUnknownHealing += Interlocked.Exchange(ref worker._forcedUnknownHealing, 0);
++        _forcedNotWorse += Interlocked.Exchange(ref worker._forcedNotWorse, 0);
+         SearchRunContext source = worker._run;
+         _run.DuplicateCardBranchesPruned += source.DuplicateCardBranchesPruned;
+         _run.ActionAdmissionRepresentativesProtected +=
+--- a/src/Search/ParallelExpansionWorkProfile.cs
++++ b/src/Search/ParallelExpansionWorkProfile.cs
+@@ -11,7 +11,7 @@
+     {
+         Parent, Prepare, Action, Choice, PrimaryReplay, Tail, Potion, EndTurn, Wave, Wait, Commit,
+         StandPat, StandPatWave, RoutingSignature, RoutingSummary, RoutingPareto,
+-        ContinuationPacket, RetentionWave,
++        ContinuationPacket, RetentionWave, ForcedRoundHp, ForcedRoundHpWave,
+     }
+
+     private sealed class Distribution
+--- a/src/Search/CombatBeamSolver.Retention.cs
++++ b/src/Search/CombatBeamSolver.Retention.cs
+@@ -370,7 +370,7 @@
+         bounded = sharedBounded ?? bounded;
+         _run.PrimaryIncumbentBranchesPruned += pruned;
+         _run.PrimaryIncumbentCertifiedHealingBoundBranchesPruned += certifiedHealingBoundPruned;
+-        return bounded;
++        return ApplyZeroCreditForcedRoundHpBound(bounded);
+     }
+
+     internal static bool CanUseSharedPotionTier(int uses, int? maximum,
+--- /dev/null
++++ b/src/Search/CombatBeamSolver.ForcedRoundHpBound.cs
+@@ -0,0 +1,151 @@
++using CombatSolver.Engine.Common;
++using CombatSolver.Engine.InCombat.Simulation;
++using MegaCrit.Sts2.Core.Models.Cards;
++using MegaCrit.Sts2.Core.Models.Powers;
++using MegaCrit.Sts2.Core.Models.Relics;
++using MegaCrit.Sts2.Core.Models.Enchantments;
++using MegaCrit.Sts2.Core.Entities.Cards;
++using System.Collections.Frozen;
++using MegaCrit.Sts2.Core.Combat;
++namespace CombatSolver;
++internal sealed partial class CombatBeamSolver
++{
++    internal bool DisableForcedRoundHpBoundForTesting { get; init; }
++    internal bool DisableParallelForcedRoundHpForTesting { get; init; }
++    private int _forcedRoundParallelWaves, _forcedRoundParallelNodes;
++    // A worker inherits this token once before publication; separate solves keep separate tokens.
++    private object _forcedRoundOwner = new();
++    private int _forcedRoundHpProbes, _forcedRoundHpPruned, _forcedRoundHpSaved, _forcedRoundHpReuses;
++    internal int ForcedRoundHpSavedForTesting => _forcedRoundHpSaved;
++    internal int ForcedRoundHpReusesForTesting => _forcedRoundHpReuses;
++    private sealed class ForcedRoundPrefixCapture { public bool TakingExtraTurn { get; set; } }
++    private int _forcedRejectedBoundary, _forcedRejectedRisk, _forcedRejectedChoice, _forcedEnded, _forcedUnknownHealing, _forcedNotWorse;
++    internal int ForcedRoundHpProbesForTesting => _forcedRoundHpProbes;
++    internal int ForcedRoundHpPrunedForTesting => _forcedRoundHpPruned;
++    private bool CanProbeForcedRoundHp(SearchNode node, out CombatPredictionSimulator source,
++        out SimulatedCombatState combat)
++    {
++        source = null!; combat = null!;
++        if (DisableForcedRoundHpBoundForTesting || !CanUseZeroCreditForcedRoundPolicy()
++            || node.IsTerminal || node.Snapshot.HasRisk || !node.Snapshot.HasSimulator
++            || node.BoundaryReason != SearchBoundaryReason.None
++            || !(_forceAllPotionsDisabled || _potionPolicy == SolverPotionPolicy.Disabled
++                || _maximumPotionUses is { } maximum && ExplicitPotionUseCount(node) >= maximum)) return false;
++        source = (CombatPredictionSimulator)node.Snapshot.Simulator;
++        combat = (SimulatedCombatState)source.State.CombatState;
++        var playerState = source.State.GetPlayerCombatState(_player);
++        if (source.HasPendingChoice || !source.IsInProgress || playerState.OrbQueue.Orbs.Count != 0
++            || combat.Allies.Any(ally => ally.Player is null)) return false;
++        if (playerState.Phase != PlayerTurnPhase.Play) return false;
++        foreach (var card in playerState.Hand.Cards)
++            if (combat.CanPlayCard(source, card)) return false;
++        return true;
++    }
++    private bool CanUseZeroCreditForcedRoundPolicy()
++        => root.CanCertifyRemainingHealing && policy.EffectiveGrowthBudgets == default
++            && !policy.EffectiveHasGrowthTargets && policy.RelicTargets.Count == 0
++            && _theftPolicy != SolverTheftPolicy.PreserveResources
++            && !_potionStrategy.HasForcedDirectives && _minimumPotionUses == 0
++            && _potionPolicy is SolverPotionPolicy.Disabled or SolverPotionPolicy.Smart;
++
++    private List<SearchNode> ApplyZeroCreditForcedRoundHpBound(List<SearchNode> retained)
++    {
++        if (DisableForcedRoundHpBoundForTesting || !CanUseZeroCreditForcedRoundPolicy()
++            || !_primaryIncumbents.TryGet(new PrimaryIncumbentBucket(0, 0), out var witness))
++            return retained;
++        if (!DisableParallelForcedRoundHpForTesting && _run.ActiveParallelExpansion is { } executor
++            && retained.Count >= 2)
++            return ApplyParallelForcedRoundHpBound(retained, witness.StrategicHpDeficit, executor);
++        List<SearchNode>? bounded = null;
++        for (int index = 0; index < retained.Count; index++)
++        {
++            SearchNode node = retained[index];
++            if (!ShouldPruneForcedRoundHp(node, witness.StrategicHpDeficit))
++            { bounded?.Add(node); continue; }
++            bounded ??= retained.GetRange(0, index);
++            _run.PrimaryIncumbentBranchesPruned++;
++        }
++        return bounded ?? retained;
++    }
++
++    private bool ShouldPruneForcedRoundHp(SearchNode node, int maximumStrategicHpDeficit)
++    {
++        if (!CanProbeForcedRoundHp(node, out var source, out var combat)) return false;
++        cancellationToken.ThrowIfCancellationRequested();
++        _forcedRoundHpProbes++;
++        _run.ForkCount++;
++        var probe = source.Fork();
++        var prefix = new ForcedRoundPrefixCapture();
++        var probeCombat = (SimulatedCombatState)probe.State.CombatState;
++        var processed = ((ForkableSet<uint>)node.Snapshot.ProcessedEnemyDeaths).Fork();
++        int shuffles = node.Snapshot.ShufflesCrossed;
++        SearchBoundaryReason boundary;
++        using (probe.BeginExecutionDispatch())
++            boundary = AdvanceRound(probe, probeCombat, node.Turn - _startTurnNumber,
++                processed, ref shuffles, null, stopBeforePlayerStartForBound: true, forcedPrefixCapture: prefix);
++        if (boundary != SearchBoundaryReason.None) { _forcedRejectedBoundary++; return false; }
++        if (GetCoverageSummary(probe).HasUncompensatedRisk) { _forcedRejectedRisk++; return false; }
++        if (probe.HasPendingChoice) { _forcedRejectedChoice++; return false; }
++        if (!probe.IsInProgress || probeCombat.DeathSaveUseCount != 0) { _forcedEnded++; return false; }
++        var player = probe.State.GetCreature(_player.Creature);
++        int healing = StrategicHpRecoveryBound.ComponentHealingUpperBound(probe, _player,
++            root.PostCombatRelicHeal.UnconditionalHeal + root.PostCombatRelicHeal.WoundedHeal,
++            includePotionHealing: !_forceAllPotionsDisabled, maximumExplicitPotionUses: _maximumPotionUses,
++            potionStrategy: _potionStrategy, effectivePotionPolicy: _potionPolicy);
++        if (healing == int.MaxValue) { _forcedUnknownHealing++; return false; }
++        int lower = ActEndingBossPolicy.StrategicHpDeficit(
++            probeCombat.GetCumulativeHpLost(_player.Creature), maxHpDeficit: 0,
++            StrategicHpRecoveryBound.OptimisticRecoveredHp(probeCombat.GetRecoveredHp(_player.Creature),
++                player.CurrentHp, player.MaxHp, healing), _strategicBossHpRelief,
++            probeCombat.DeathSaveRelicHpRestored + probeCombat.DeathSavePotionHpRestored);
++        if (lower <= maximumStrategicHpDeficit)
++        {
++            _forcedNotWorse++;
++            CompleteAndSaveForcedRound(node, probe, probeCombat, processed, shuffles, prefix.TakingExtraTurn);
++            return false;
++        }
++        _forcedRoundHpPruned++;
++        return true;
++    }
++    private void CompleteAndSaveForcedRound(SearchNode node, CombatPredictionSimulator probe,
++        SimulatedCombatState combat, ForkableSet<uint> deaths, int shuffles, bool takingExtraTurn)
++    {
++        cancellationToken.ThrowIfCancellationRequested();
++        var cursor = new TurnStartChoiceCursor(null);
++        combat.BeginActionChoices(cursor);
++        SearchBoundaryReason boundary;
++        try
++        {
++            using var dispatch = probe.BeginExecutionDispatch();
++            boundary = AdvanceRoundPlayerStart(probe, combat, probe.State.GetPlayerCombatState(_player),
++                probe.State.GetCreature(_player.Creature), node.Turn - _startTurnNumber, deaths,
++                ref shuffles, cursor, takingExtraTurn);
++        }
++        finally { combat.EndActionChoices(); }
++        _ = combat.ConsumePlayerTurnEndRequest();
++        if (boundary == SearchBoundaryReason.None && !SettleReplayActionBoundary(probe, combat))
++            boundary = SearchBoundaryReason.PendingChoice;
++        var completed = Snapshot(probe, combat.GetPlayerTurnNumber(_player), node.ActionCount + 1,
++            shuffles, boundary, deaths);
++        node.Snapshot.SavePrecomputedEndTurn(_forcedRoundOwner, node.Turn, node.ActionCount, completed);
++        _forcedRoundHpSaved++;
++    }
++
++    internal bool CanProbeForcedRoundForTesting(SearchNode node) => CanProbeForcedRoundHp(node, out _, out _);
++    internal SearchNode ForcedRoundRootForTesting() => CreateOpeningSearchSeed(Replay([]));
++    internal PlanAction ForcedRoundCardForTesting(SearchNode node, string id)
++        => PrepareCardActions(node).First(prepared => prepared.Action.CardId == id).Action;
++    internal SimulationSnapshot ForcedRoundReplayForTesting(SearchNode node, PlanAction action) => ReplayAction(node, action);
++    internal SimulationSnapshot ForcedRoundWorkerReplayForTesting(SearchNode node, PlanAction action)
++    {
++        var worker = CreateExpansionWorker();
++        worker._parallelActionReplayForkGate = new object();
++        using RoundReplayCheckpointCapture capture = new(node);
++        var result = worker.ReplayAction(node, action, roundCheckpointCapture: capture);
++        if (capture.HasCheckpoint || result.BoundaryReason != SearchBoundaryReason.None)
++            throw new InvalidOperationException("Completed owned EndTurn invalidated adaptive capture fallback.");
++        MergeExpansionWorker(worker, 0);
++        return result;
++    }
++    internal bool ForcedRoundKeptForTesting(SearchNode node) => ApplyZeroCreditForcedRoundHpBound([node]).Count != 0;
++}
+--- /dev/null
++++ b/src/Search/CombatBeamSolver.ForcedRoundHpJobs.cs
+@@ -0,0 +1,233 @@
++using System.Diagnostics;
++using CombatSolver.Engine.Common;
++using System.Runtime.ExceptionServices;
++
++namespace CombatSolver;
++
++internal sealed partial class CombatBeamSolver
++{
++    private List<SearchNode> ApplyParallelForcedRoundHpBound(List<SearchNode> retained,
++        int maximumStrategicHpDeficit, ParallelExpansionExecutor executor, bool smartEligibility = false)
++    {
++        bool[] prune = new bool[retained.Count];
++        List<SearchNode> pending = [];
++        List<int> indices = [];
++        HashSet<CombatSolver.Engine.InCombat.Simulation.CombatPredictionSimulator> seen = new(ReferenceEqualityComparer.Instance);
++        bool unique = true;
++        for (int index = 0; index < retained.Count; index++)
++        {
++            SearchNode node = retained[index];
++            if (CanProbeForcedRoundHp(node, out _, out _))
++            {
++                pending.Add(node); indices.Add(index);
++                unique &= seen.Add((CombatSolver.Engine.InCombat.Simulation.CombatPredictionSimulator)node.Snapshot.Simulator);
++            }
++        }
++        if (pending.Count >= 2 && unique)
++        {
++            _forcedRoundParallelWaves++; _forcedRoundParallelNodes += pending.Count;
++            bool[] results = executor.EvaluateForcedRoundHpProbes(pending, maximumStrategicHpDeficit);
++            for (int index = 0; index < pending.Count; index++) prune[indices[index]] = results[index];
++        }
++        else
++            for (int index = 0; index < pending.Count; index++)
++                prune[indices[index]] = ShouldPruneForcedRoundHp(pending[index], maximumStrategicHpDeficit);
++        List<SearchNode>? bounded = null;
++        for (int index = 0; index < retained.Count; index++)
++        {
++            if (!prune[index]) { bounded?.Add(retained[index]); continue; }
++            if (bounded is null)
++            {
++                bounded = new(retained.Count);
++                if (index > 0) bounded.AddRange(retained.GetRange(0, index));
++            }
++            if (smartEligibility) _smartPotionEligibilityBranchesPruned++;
++            else _run.PrimaryIncumbentBranchesPruned++;
++        }
++        return bounded ?? retained;
++    }
++
++    internal void VerifyForcedRoundParallelForTesting(SearchNode template, bool shouldKeep)
++    {
++        List<SearchNode> nodes = [];
++        using var executor = new ParallelExpansionExecutor(this, 16);
++        try
++        {
++            for (int index = 0; index < 16; index++)
++            {
++                var child = template.Snapshot.Simulator.Fork();
++                var snapshot = Snapshot(child, template.Turn, template.ActionCount,
++                    template.Snapshot.ShufflesCrossed, template.BoundaryReason,
++                    ((ForkableSet<uint>)template.Snapshot.ProcessedEnemyDeaths).Fork());
++                nodes.Add(new SearchNode(template.Action, template.ActionCount, template.PotionCount,
++                    template.PotionStrategicCost, template.Turn, template.Traits, template.FutureSoldHp,
++                    snapshot.Score, snapshot.StateKey, snapshot.HasRisk, snapshot.BoundaryReason,
++                    template.IsTerminal, template.Parent, snapshot, template.CombatProgress));
++            }
++            _run.ActiveParallelExpansion = executor;
++            var retained = ApplyZeroCreditForcedRoundHpBound(nodes);
++            if (retained.Count != (shouldKeep ? 16 : 0) || _forcedRoundParallelWaves != 1
++                || _forcedRoundParallelNodes != 16 || _forcedRoundHpProbes != 16
++                || _forcedRoundHpPruned != (shouldKeep ? 0 : 16)
++                || _forcedRoundHpSaved != (shouldKeep ? 16 : 0))
++                throw new InvalidOperationException("Actual independent sixteen-lane forced round proof differs.");
++            if (shouldKeep && nodes.Any(node => !node.Snapshot.HasPrecomputedEndTurnForTesting))
++                throw new InvalidOperationException("Parallel surviving branches did not retain their own single-use result.");
++        }
++        finally
++        {
++            _run.ActiveParallelExpansion = null;
++            foreach (var node in nodes) node.Snapshot.ReleaseSimulator();
++        }
++        if (nodes.Any(node => node.Snapshot.HasPrecomputedEndTurnForTesting))
++            throw new InvalidOperationException("Untaken parallel forward result survived parent release.");
++    }
++
++    private sealed partial class ParallelExpansionExecutor
++    {
++        private int _activeForcedRoundHpWorkers;
++
++        public bool[] EvaluateForcedRoundHpProbes(
++            IReadOnlyList<SearchNode> nodes, int maximumStrategicHpDeficit)
++        {
++            ObjectDisposedException.ThrowIf(_disposed, this);
++            ExpansionLane[] lanes = EnsureBackgroundLanes();
++            using ForcedRoundHpJobWave wave = new(DegreeOfParallelism);
++            bool[] evaluations = new bool[nodes.Count];
++            long startedAt = Stopwatch.GetTimestamp();
++            int next = 0;
++            int active = 0;
++            ExceptionDispatchInfo? firstError = null;
++
++            void Dispatch(int lane)
++            {
++                _coordinator.SearchCancellationToken.ThrowIfCancellationRequested();
++                ForcedRoundHpJob job = new(nodes[next], next, lane, wave, maximumStrategicHpDeficit);
++                wave.Completed.AddCount();
++                try { lanes[lane].Dispatch(job); }
++                catch
++                {
++                    wave.Completed.Signal();
++                    throw;
++                }
++                next++;
++                active++;
++            }
++
++            try
++            {
++                for (int lane = 0; lane < DegreeOfParallelism && next < nodes.Count; lane++)
++                    Dispatch(lane);
++                while (active > 0)
++                {
++                    ForcedRoundHpJobOutcome outcome = wave.Take();
++                    active--;
++                    _workProfile.Record(ParallelExpansionWorkProfile.Kind.ForcedRoundHp,
++                        outcome.ElapsedTicks, outcome.Concurrency);
++                    firstError ??= outcome.Error;
++                    if (firstError != null)
++                        continue;
++                    _coordinator.MergeExpansionWorker(outcome.Worker, outcome.AllocatedBytes);
++                    evaluations[outcome.Job.Index] = outcome.Evaluation;
++                    if (next < nodes.Count)
++                        Dispatch(outcome.Job.Lane);
++                }
++                firstError?.Throw();
++                return evaluations;
++            }
++            finally
++            {
++                // Prune already owns these live candidate roots. No new expansion is admitted,
++                // and no checkpoint may release them until all probe lanes have completed.
++                wave.Completed.Signal();
++                wave.Completed.Wait();
++                while (wave.TryTake(out ForcedRoundHpJobOutcome? pending))
++                {
++                    if (pending!.Error != null)
++                        continue;
++                    _coordinator.MergeExpansionWorker(pending.Worker, pending.AllocatedBytes);
++                }
++                _workProfile.Record(ParallelExpansionWorkProfile.Kind.ForcedRoundHpWave,
++                    Stopwatch.GetTimestamp() - startedAt);
++            }
++        }
++
++        private sealed class ForcedRoundHpJobWave(int capacity) : IDisposable
++        {
++            private readonly object _gate = new();
++            private readonly Queue<ForcedRoundHpJobOutcome> _outcomes = new(capacity);
++            public CountdownEvent Completed { get; } = new(1);
++
++            public void Publish(ForcedRoundHpJobOutcome outcome)
++            {
++                lock (_gate)
++                {
++                    _outcomes.Enqueue(outcome);
++                    Monitor.Pulse(_gate);
++                }
++            }
++
++            public ForcedRoundHpJobOutcome Take()
++            {
++                lock (_gate)
++                {
++                    while (_outcomes.Count == 0)
++                        Monitor.Wait(_gate);
++                    return _outcomes.Dequeue();
++                }
++            }
++
++            public bool TryTake(out ForcedRoundHpJobOutcome? outcome)
++            {
++                lock (_gate)
++                    return _outcomes.TryDequeue(out outcome);
++            }
++
++            public void Dispose() => Completed.Dispose();
++        }
++
++        private sealed class ForcedRoundHpJobOutcome(ForcedRoundHpJob job, CombatBeamSolver worker)
++        {
++            public ForcedRoundHpJob Job { get; } = job;
++            public CombatBeamSolver Worker { get; } = worker;
++            public bool Evaluation;
++            public ExceptionDispatchInfo? Error;
++            public long AllocatedBytes;
++            public long ElapsedTicks;
++            public int Concurrency;
++        }
++
++        private sealed record ForcedRoundHpJob(SearchNode Node, int Index, int Lane, ForcedRoundHpJobWave Wave, int MaximumStrategicHpDeficit)
++            : IExpansionLaneWorkItem
++        {
++            public void Execute(ParallelExpansionExecutor owner, CombatBeamSolver worker)
++            {
++                ForcedRoundHpJobOutcome outcome = new(this, worker);
++                long allocatedAtStart = GC.GetAllocatedBytesForCurrentThread();
++                long startedAt = Stopwatch.GetTimestamp();
++                outcome.Concurrency = Interlocked.Increment(ref owner._activeForcedRoundHpWorkers);
++                try
++                {
++                    worker.SearchCancellationToken.ThrowIfCancellationRequested();
++                    // First representatives have distinct immutable state keys and snapshots.
++                    // No other expansion/probe job can fork this same candidate simultaneously.
++                    outcome.Evaluation = worker.ShouldPruneForcedRoundHp(Node, MaximumStrategicHpDeficit);
++                }
++                catch (System.Exception error)
++                {
++                    outcome.Error = ExceptionDispatchInfo.Capture(error);
++                }
++                finally
++                {
++                    Interlocked.Decrement(ref owner._activeForcedRoundHpWorkers);
++                    outcome.AllocatedBytes = Math.Max(
++                        0, GC.GetAllocatedBytesForCurrentThread() - allocatedAtStart);
++                    outcome.ElapsedTicks = Stopwatch.GetTimestamp() - startedAt;
++                    Wave.Publish(outcome);
++                }
++            }
++
++            public void Signal() => Wave.Completed.Signal();
++        }
++    }
++}
+--- a/src/Search/CombatBeamSolver.Phases.cs
++++ b/src/Search/CombatBeamSolver.Phases.cs
+@@ -669,6 +669,8 @@
+                 UnrecoveredCards = finalSnapshot.UnrecoveredCards,
+             };
+             ValidateOrderedMutationAdmissionLedger(_run);
++            if (_forcedRoundHpProbes != 0)
++                policy.Diagnostics.Info($"[CombatSolver] ZERO_CREDIT_FORCED_ROUND probes={_forcedRoundHpProbes} pruned={_forcedRoundHpPruned} saved={_forcedRoundHpSaved} reused={_forcedRoundHpReuses} waves={_forcedRoundParallelWaves} parallel_nodes={_forcedRoundParallelNodes} unknown_healing={_forcedUnknownHealing} pending_boundary={_forcedRejectedBoundary} pending_choice={_forcedRejectedChoice} risk={_forcedRejectedRisk} ended={_forcedEnded}");
+             SolverResult result = new()
+             {
+                 ResultScope = resultScope,
+--- /dev/null
++++ b/src/Testing/Contracts/Search/UnattendedTestRunner.ZeroCreditForcedRound.cs
+@@ -0,0 +1,156 @@
++using CombatSolver.Engine.Common;
++using CombatSolver.Engine.InCombat.Simulation;
++using MegaCrit.Sts2.Core.Combat;
++using MegaCrit.Sts2.Core.Commands;
++using MegaCrit.Sts2.Core.Entities.Players;
++using MegaCrit.Sts2.Core.GameActions;
++using MegaCrit.Sts2.Core.GameActions.Multiplayer;
++using MegaCrit.Sts2.Core.Models;
++using MegaCrit.Sts2.Core.Runs;
++namespace CombatSolver;
++internal sealed partial class UnattendedTestRunner
++{
++    private async Task AssertZeroCreditForcedRoundNativeAsync(CombatState live, Player player, bool exerciseReuse = false)
++    {
++        foreach (var relic in player.Relics.ToArray()) await RelicCmd.Remove(relic);
++        foreach (var power in live.Creatures.SelectMany(c => c.Powers).ToArray()) await PowerCmd.Remove(power);
++        foreach (PotionModel? potion in player.PotionSlots.ToArray()) potion?.Discard();
++        await PowerCmd.Apply<MegaCrit.Sts2.Core.Models.Powers.VitalSparkPower>(new ThrowingPlayerChoiceContext(),
++            live.Enemies.Single(), 3, live.Enemies.Single(), null);
++        await ClearPlayerPilesAsync(player);
++        bool regent = _request.CharacterId == "REGENT";
++        string strikeId = regent ? "STRIKE_REGENT" : "STRIKE_SILENT";
++        string defendId = regent ? "DEFEND_REGENT" : "DEFEND_SILENT";
++        string powerId = regent ? "CALAMITY" : "MAYHEM";
++        foreach (var (id, pile) in new[] { (strikeId, "Hand"), (defendId, "Hand"), (powerId, "Hand"),
++            (strikeId, "Draw"), (defendId, "Draw") })
++            await InjectCardAsync(live, player, new() { CardId = id, Pile = pile });
++        await CreatureCmd.SetCurrentHp(live.Enemies.Single(), 6);
++        await CreatureCmd.SetCurrentHp(player.Creature, 60);
++        await SetBlockAsync(player.Creature, exerciseReuse ? 100 : 0);
++        SetEnergy(player, 1);
++        var root = CombatRootSnapshot.Capture(live);
++        var names = SolverDisplayNames.Capture(live);
++        var damage = BattleDamageTracker.Observe(live);
++        var policy = SolverController.CaptureSearchPolicy(SolverSettings.Capture(), live, false, null) with
++        {
++            FixedBudget = true, VerifyIncrementalSearch = true, MaxDegreeOfParallelism = 1,
++            PotionPolicy = SolverPotionPolicy.Disabled, PotionStrategy = new(SolverPotionPolicy.Disabled, []),
++            RelicTargets = [], GrowthBudgets = default,
++            PrimaryIncumbents = new(), DetailedDiagnostics = false, MeasurePhasePerformance = false,
++        };
++        policy = policy with { Profile = policy.Profile with
++            { BeamWidth = 24, MaxExpandedNodes = 1200, SoftTimeBudgetMilliseconds = 10_000 } };
++        using var deadline = new CancellationTokenSource(TimeSpan.FromSeconds(20));
++        var referenceSolver = new CombatBeamSolver(root, names, damage, policy, deadline.Token,
++            maximumPotionUses: 0) { DisableForcedRoundHpBoundForTesting = true };
++        var winner = await Task.Run(referenceSolver.Solve, deadline.Token);
++        var witness = CombatSearchCoordinator.BuildRefinementPrimarySearchIncumbent(
++            root, policy, SolverPotionPolicy.Disabled, winner)
++            ?? throw new InvalidOperationException("Native quality-turn winner rejected.");
++        if (!root.CanCertifyRemainingHealing || winner.ProjectedBattleHpLost != damage.HpLostSoFar)
++            throw new InvalidOperationException("Forced round winner lacked a complete no-loss proof.");
++        policy.PrimaryIncumbents!.Tighten(new PrimaryIncumbentBucket(0, 0), witness);
++        var candidateSolver = new CombatBeamSolver(root, names, damage, policy, deadline.Token,
++            maximumPotionUses: 0, primaryIncumbent: witness);
++        var strictSolver = new CombatBeamSolver(root, names, damage, policy, deadline.Token,
++            maximumPotionUses: 0, primaryIncumbent: witness)
++            { DisableForcedRoundHpBoundForTesting = true };
++        SearchNode initial; SearchNode defendedNode; SimulationSnapshot defended; SimulationSnapshot later;
++        var parent = root.ForkSimulator();
++        string parentBefore = DescribeContinuationContractState(parent, root, player);
++        string liveBefore = ContinuationStamp.CaptureLive(live).StateText;
++        using (SimulationNotificationIsolation.Enter())
++        {
++            initial = referenceSolver.ForcedRoundRootForTesting();
++            PlanAction defend = referenceSolver.ForcedRoundCardForTesting(initial, defendId);
++            defended = referenceSolver.ForcedRoundReplayForTesting(initial, defend);
++            defendedNode = new SearchNode(defend, 1, 0, 0, defended.Turn, initial.Traits,
++                initial.FutureSoldHp, defended.Score, defended.StateKey, defended.HasRisk,
++                defended.BoundaryReason, false, initial, defended, initial.CombatProgress);
++            if (!strictSolver.ForcedRoundKeptForTesting(defendedNode)
++                || candidateSolver.ForcedRoundKeptForTesting(defendedNode) != exerciseReuse
++                || candidateSolver.ForcedRoundHpPrunedForTesting != (exerciseReuse ? 0 : 1))
++                throw new InvalidOperationException("Actual mandatory round branch did not exercise its HP proof.");
++            if (exerciseReuse && (!defended.HasPrecomputedEndTurnForTesting
++                || candidateSolver.ForcedRoundHpSavedForTesting != 1))
++                throw new InvalidOperationException("Surviving branch did not save its owned completed EndTurn.");
++            var parallelProof = new CombatBeamSolver(root, names, damage, policy, deadline.Token,
++                maximumPotionUses: 0, primaryIncumbent: witness);
++            parallelProof.VerifyForcedRoundParallelForTesting(defendedNode, exerciseReuse);
++            var playable = new SearchNode(null, 0, 0, 0, initial.Turn, initial.Traits,
++                initial.FutureSoldHp, initial.Score, initial.StateKey, initial.HasPredictionRisk,
++                initial.BoundaryReason, false, null, initial.Snapshot, initial.CombatProgress);
++            if (!candidateSolver.ForcedRoundKeptForTesting(playable)
++                || candidateSolver.ForcedRoundHpPrunedForTesting != (exerciseReuse ? 0 : 1))
++                throw new InvalidOperationException("A legal Strike received an invalid mandatory-EndTurn bound.");
++            later = exerciseReuse
++                ? candidateSolver.ForcedRoundWorkerReplayForTesting(defendedNode, new(PlanActionKind.EndTurn, defendedNode.Turn))
++                : referenceSolver.ForcedRoundReplayForTesting(defendedNode, new(PlanActionKind.EndTurn, defendedNode.Turn));
++            if (later.BoundaryReason != SearchBoundaryReason.None || later.HasRisk
++                || (exerciseReuse ? later.CumulativePlayerHpLost != winner.Snapshot.CumulativePlayerHpLost
++                    : later.CumulativePlayerHpLost <= winner.Snapshot.CumulativePlayerHpLost))
++                throw new InvalidOperationException("Actual full EndTurn did not incur mandatory damage.");
++
++        }
++        if (exerciseReuse && (candidateSolver.ForcedRoundHpReusesForTesting != 1
++            || defended.HasPrecomputedEndTurnForTesting))
++            throw new InvalidOperationException("Owned precomputed EndTurn was not consumed exactly once.");
++        var growthPolicy = policy with { GrowthBudgets = new(Feed: 1) };
++        var growthGuard = new CombatBeamSolver(root, names, damage, growthPolicy, deadline.Token,
++            maximumPotionUses: 0);
++        if (growthGuard.CanProbeForcedRoundForTesting(defendedNode)
++            || !growthGuard.ForcedRoundKeptForTesting(defendedNode))
++            throw new InvalidOperationException("Positive growth HP credit entered the mandatory-round proof.");
++        var requiredPolicy = policy with
++        {
++            PotionPolicy = SolverPotionPolicy.RequireAtLeastOne,
++            PotionStrategy = new(SolverPotionPolicy.RequireAtLeastOne, []),
++        };
++        var requiredGuard = new CombatBeamSolver(root, names, damage, requiredPolicy, deadline.Token,
++            maximumPotionUses: 0);
++        if (requiredGuard.CanProbeForcedRoundForTesting(defendedNode))
++            throw new InvalidOperationException("Required potion policy entered the mandatory-round proof.");
++        string predicted = ContinuationStamp.CapturePredicted(player, later.Simulator, later.Turn,
++            root.Forecast, root.StartTurnNumber).StateText;
++        CombatPredictionSimulator[] owned;
++        using (SimulationNotificationIsolation.Enter())
++            owned = Enumerable.Range(0, 16).Select(_ => later.Simulator.Fork()).ToArray();
++        await Task.WhenAll(owned.Select(child => Task.Run(() =>
++        {
++            using var isolation = SimulationNotificationIsolation.Enter();
++            if (ContinuationStamp.CapturePredicted(player, child, later.Turn,
++                root.Forecast, root.StartTurnNumber).StateText != predicted)
++                throw new InvalidOperationException("Parallel later branch Fork differs.");
++            child.State.GetCreature(player.Creature).CurrentHp--;
++        }, deadline.Token)));
++        if (ContinuationStamp.CapturePredicted(player, later.Simulator, later.Turn,
++            root.Forecast, root.StartTurnNumber).StateText != predicted
++            || DescribeContinuationContractState(parent, root, player) != parentBefore
++            || ContinuationStamp.CaptureLive(live).StateText != liveBefore)
++            throw new InvalidOperationException("Quality bound/Fork altered parent, live or RNG.");
++        CardModel nativeDefend = player.PlayerCombatState!.Hand.Cards.Single(card => card.Id.Entry == defendId);
++        var nativePlay = await SolverController.EnqueueAndCaptureActionAsync(
++            queued => queued is PlayCardAction play && ReferenceEquals(play.NetCombatCard.ToCardModelOrNull(), nativeDefend),
++            () => { if (!nativeDefend.TryManualPlay(null)) throw new InvalidOperationException("Native defend refused."); }, deadline.Token);
++        await nativePlay.CompletionTask.WaitAsync(deadline.Token);
++        if (ContinuationStamp.CaptureLive(live).StateText != ContinuationStamp.CapturePredicted(player,
++            defended.Simulator, defended.Turn, root.Forecast, root.StartTurnNumber).StateText)
++            throw new InvalidOperationException("Earliest quality bound actual native Defend differs.");
++        int previous = player.PlayerCombatState!.TurnNumber;
++        CombatManager.Instance.OnEndedTurnLocally();
++        var action = new EndPlayerTurnAction(player, previous);
++        RunManager.Instance.ActionQueueSynchronizer.RequestEnqueue(action);
++        await action.CompletionTask.WaitAsync(deadline.Token);
++        while (player.PlayerCombatState is not { Phase: PlayerTurnPhase.Play } current || current.TurnNumber <= previous)
++        {
++            deadline.Token.ThrowIfCancellationRequested(); EnsureWithinDeadline(); await NextFrameAsync();
++        }
++        if (ContinuationStamp.CaptureLive(live).StateText != predicted
++            || DescribeContinuationContractState(parent, root, player) != parentBefore)
++            throw new InvalidOperationException("Quality-turn actual native EndTurn full state differs.");
++        _completedChecks.Add((exerciseReuse ? "ZeroCreditForcedRoundReuse:ActualExpansionWorkerInheritedToken:ActualPreparedRoundCapturePath:OneOwnedResultSingleConsumptionStrictFullReplay:" : "ZeroCreditForcedRound:") + "ActualSixteenIndependentSimulationWorkerProofs:ReleaseUnusedForwardResults:ActualNativeUnplayablePowerHand:ActualNoPlayableCardMandatoryDamage:OriginalStrictKept:NewBoundPrunedOne:PlayableStrikeRejected:ActualNativeVitalSparkTaintedCompensatedCoverage:"
++            + "ExistingSharedTableActualCompleteWinWitness:PositiveGrowthCreditRefused:16OwnedForks:OneFullNativeDefendAndEndTurn:ParentLiveRngIsolation");
++        later.ReleaseSimulator(); defended.ReleaseSimulator(); initial.Snapshot.ReleaseSimulator();
++    }
++}
+--- a/src/Testing/Host/UnattendedTestRunner.Executor.cs
++++ b/src/Testing/Host/UnattendedTestRunner.Executor.cs
+@@ -1348,6 +1348,13 @@
+                 }
+                 return Observation(combatEnded: false);
+             }
++            if (request.ScenarioId is "ZERO-CREDIT-FORCED-ROUND" or "ZERO-CREDIT-FORCED-ROUND-REUSE")
++            {
++                await runner.AssertZeroCreditForcedRoundNativeAsync(combatState, player,
++                    exerciseReuse: request.ScenarioId == "ZERO-CREDIT-FORCED-ROUND-REUSE");
++                return Observation(combatEnded: false);
++            }
++
+             if (request.StopAfterCombatRootSnapshotAssertion)
+                 return Observation(combatEnded: runner.HasNativeRecording && !CombatManager.Instance.IsInProgress);
+             if (request.VerifyTurnSetupManualRecalculate)

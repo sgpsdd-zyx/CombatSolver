@@ -1,59 +1,51 @@
 # CombatSolver 测试入口
 
-本 fork 当前基于官方 `4b5537d0 / 0.49.1`，已发布 0.49.2。测试分层与命令见 [无人测试](HEADLESS_TESTING.md)，源码职责见 [Testing](../src/Testing/README.md)。历史结果不替代本轮验证。
+当前源码基于官方 `0d290fbe / 0.50.0`，fork 0.50.1 定版中。发布状态见 [版本索引](releases/README.md)，测试分层见 [无人测试](HEADLESS_TESTING.md)，职责见 [Testing](../src/Testing/README.md)。历史结果不替代本轮验证。
 
-## 2026-10-03 本轮结果
+## 2026-10-05 本轮结果
 
-| 范围 | 实际验证与边界 |
+| 范围 | 实际结果与边界 |
 | --- | --- |
-| 官方单人对照 | 独立官方与 fork 各两根、DOP1/DOP2，共四对 344 项非时序字段一致，含完整路线、根、续用和工作计数；不是可见性能结论。 |
-| 多人兼容 | 56 项：单人目标/计划/治疗政策隔离，持有者历史、药水生成、金币、死亡与复活、金纸分别结算、完整原生全队状态与 Fork 隔离。 |
-| 多人贡献与死亡 | 32 项阶段/预算/增量合同通过；死亡、救命、复活、下一回合与连续手动重算通过。托管宿主旁路渲染和网络。 |
-| 原生无头 | 25 个最终请求通过：金币与最大生命、金纸、固定前缀、常规 GC 限额、历史冻结、仪式、路线采用、探寻打击、虚空形态、选牌页面、佩尔的士兵、倾泻与嵌套作用域；含五项多人边界。 |
-| 多人原生输入 | 烘焙手套暂停中手动计算、选牌后全队状态；DOP2 停止排空、队友行动/异选导致建议过期；无来源伤害、遗物归属与同进程单人恢复。 |
-| GC 轻量合同 | default-entry 2 项与 scopes 8 项通过。diagnostic-failure 未建立实际区域，前提断言失败，区域释放驻留行为仍未验证。 |
+| 官方单人对照 | 两根各DOP1/DOP2，四对346项非时序字段一致，含路线、根/续用和工作计数；多人入口均零调用。不是可见性能结论。 |
+| 多人兼容 | 60项通过，新增单人组件回复/成长证书、共享胜利表和Smart剪枝隔离；含历史、金币死亡复活、金纸归属、完整原生全队状态和Fork。 |
+| 多人贡献与死亡 | 32项阶段/归属/预算/增量合同；救命、死亡、复活、下一回合和手动重算通过。托管宿主旁路渲染与网络。 |
+| 原生无头 | 23个最终请求通过，覆盖回合末/额外回合、虚空形态选择/短搜部署、群体杀敌、金币/能量/手牌、反伤格挡、Smart开局、内容来源和中英反馈。 |
+| 多人输入与生命周期 | 额外回合来源/归属、烘焙手套选择/DOP2取消/队友行动、4次手动重算和同进程单人恢复通过。原生队友脚本属于测试，不进入产品搜索。 |
+| 轻量合同 | GC能力降级5项，胜利界20项，组合成员105项，OnPlay41+5项通过。GC注入检查不代表移动运行库验收。 |
+| 结构与覆盖 | Bash263个Search文件，CoverageCatalog3035项，选牌85/自动出牌19/阵容51个来源；coverage布局565数据/515fixture通过。 |
 
-完整输入、首次失败与最终断言见 [合并记录](archive/strategy/upstream-0490-merge-20261003.md)、[结构化证据](archive/strategy/upstream-0490-merge-20261003-evidence.json)和[复跑输入](archive/strategy/upstream-0490-merge-20261003-inputs.json)。两批无头实例均由启动器成功删除。虚空形态首次停在隔离档的首次洗牌教程；仅修测试前置条件后通过，其余已通过请求没有重跑。
+[合并记录](archive/strategy/upstream-0500-merge-20261005.md)、[逐项证据](archive/strategy/upstream-0500-merge-20261005-evidence.json)和[复跑输入](archive/strategy/upstream-0500-merge-20261005-inputs.json)保留runId、检查细项、首次失败、预算与输入。五个owned headless实例由启动器清理成功，没有启动可见Steam。
 
-## 0.49.1 紧急修复的增量验证
+## 失败与平台条件
 
-相对前述 0.49.0 结果，新增生产改动仅为 Runtime 普通 GC 显式退出的分配所有权；卡牌与多人政策没有变化。新增 `default-commit` 验证真实 CLR 回收、不可分割提交续行、下一请求限额与取消；相邻 `default-entry` 验证入口诊断失败后的释放。本轮 `default-commit` 2 项与 `default-entry` 2 项均通过，结果见合并归档的紧急修复节。未重跑已通过的 25 项无头场景或官方固定根对照；它们明确属于本轮前一阶段。
-
-```bash
-dotnet run --project tools/testing/checks/CombatSolver.GcPolicyChecks/CombatSolver.GcPolicyChecks.csproj -c Release -- default-commit
-```
+- 群体减益首次种子未触发要求的首敌死亡；使用官方默认 `COMBATSOLVER` 种子后通过。生产源码与断言未改。
+- `COMPONENT-HEALING-BOUND` 返回 `native-version`：官方组件证书不认证本机macOS程序集。相同前提的 `COMPONENT-SMART-BOUND`、`POTION-COST-INCUMBENT` 未运行；保留官方回退与门禁，不能报告这些启用分支已通过。
+- 反馈引导的一次请求误用了不存在的场景名，主动终止并清理；真实入口 `CONTENT-MOD-FAILURES` 后续通过。
+- 工具盘点320文件/38项目仅剩PowerShell7缺失，`.ps1`运行/语法未验证；两端结构规则同步维护，Bash实际通过。
 
 ## 可重跑入口
 
-Windows / Linux 原生无人入口分别为 `tools/testing/run-unattended-test.ps1` 和 `.sh`，使用场景 ID 与输入所列角色、遭遇、注入和短预算；每个请求上限 120 秒，最后一项必须带实例清理。macOS 从复跑输入的 nativeRequests 提取 request 到临时 JSON；fixturePath 指向已提交文件，沿同一原生协议执行：
+Windows / Linux 分别使用 `tools/testing/run-unattended-test.ps1` 和 `.sh`，从配套输入取场景ID、角色、遭遇和注入。每项上限120秒，最后一项带实例清理。macOS将配套输入 `nativeRequests` 写为临时JSON，保留实验路径相对输入归档的位置，或直接使用对应已提交fixture：
 
 ```bash
 ./tools/testing/run-unattended-test-macos.sh <request.json> ... --timeout-seconds 120 --cleanup-instance-on-exit
-```
-
-多人托管合同入口：
-
-```bash
 dotnet build tools/search/OfflineSearchHarness/OfflineSearchHarness.csproj -c Release
 dotnet .local/tool-build/OfflineSearchHarness/bin/Release/net9.0/OfflineSearchHarness.dll --multiplayer-review-contracts upstream-compatibility --encounter FUZZY_WURM_CRAWLER_WEAK --beam 4 --nodes 100 --budget-ms 1000 --dop 1 --out .local/review/upstream-compatibility
 ```
 
-同一入口的 `quota-contracts` 与 `dead-teammate` 模式分别覆盖贡献阶段与死亡/复活；后者使用 `--character NECROBINDER`。这些合同包含原生模型调用与完整状态比较，普通搜索指标本身不构成语义验收。
-
-## 静态与目录检查
+同一宿主的 `quota-contracts` 使用Beam8/100节点/3000ms；`dead-teammate` 使用NECROBINDER、Beam4/100节点/1000ms。它们包含原生模型调用与完整状态比较；普通离线搜索指标本身不构成语义验收。
 
 ```bash
 ./tools/inspection/verify-refactor-boundaries.sh
 python3 tools/inspection/verify-documentation.py
 python3 tools/inspection/verify-tools.py
 python3 tools/inspection/verify-coverage.py
-dotnet run --project tools/inspection/CoverageCatalog/CoverageCatalog.csproj -c Release -- . --verify-state-fields --verify-branch-state-reads
+dotnet run --project tools/inspection/CoverageCatalog/CoverageCatalog.csproj -c Release -- . --verify-state-fields --verify-branch-state-reads --verify-combat-choices --verify-autoplay-sources --verify-roster-sources
+dotnet run --project tools/testing/checks/CombatSolver.GcPolicyChecks/CombatSolver.GcPolicyChecks.csproj -c Release -- portable-runtime
 ```
-
-本轮 Bash 结构（259 个 Search 文件）、文档（552 份/2,828 个链接）、coverage 布局及 CoverageCatalog 3,035 项指定检查通过。Transposition 1,024,015 项与独立修复工具构建通过。macOS 无 PowerShell 7，tools 门禁 318 文件/38 项目仅剩 PowerShell 语法条件未满足；详见本轮归档。Windows 结构门禁与 Bash 维护等价规则，但不将静态阅读写作 Windows 运行通过。
 
 ## 未验证与历史
 
-真实联机、可见 UI/帧时间、Windows/Linux 实际运行、Windows MemoryCleaner、完整第三方 Mod 栈、全部报告 ZIP 和完整发布门禁未执行。受控多人脚本、变体和同根种子不能折算真人胜率。
+真实联机、可见UI/帧时间、Windows/Linux/移动端运行、Windows MemoryCleaner、完整第三方栈、全部问题ZIP、干净安装及完整发布门禁未执行。缩小甲虫特定原始问题仍未验证。独立官方对照仅覆盖本机能启用的路径；上游证书MVID及性能数据不因此扩大适用范围。
 
-[官方 0.49.0 入口快照](archive/testing/upstream-0490.md)与[官方分卷](archive/testing/README.md)保留上游的原始日期与结论；[本 fork 截至 0.48.1 的快照](archive/testing/multiplayer-through-0481.md)保存历次多人测试，不作为本轮通过证据。
+[上一轮fork测试入口](archive/testing/multiplayer-0492-20261003.md)、[官方0.50.0入口](archive/testing/upstream-0500.md)和[官方历史分卷](archive/testing/README.md)保留原始日期和证据等级。当前架构由 [架构地图](ARCHITECTURE.md)维护。

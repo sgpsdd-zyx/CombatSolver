@@ -23,8 +23,6 @@ internal sealed partial class CombatBeamSolver
         choices.AssertConsumed();
         combat.NormalizeAeonglassWithers(simulator);
         combat.NormalizeCardAfflictions(simulator);
-        combat.SetPredictedEnemyIntents(combat.CurrentMonsterMoves()
-            .Where(move => move.AttackHits.Count > 0).Select(move => move.Owner));
         simulator.CheckWinCondition(_startTurnNumber);
         return SearchBoundaryReason.None;
     }

@@ -56,6 +56,120 @@ internal sealed partial class UnattendedTestRunner
         _completedChecks.Add("FixedPotionPrefix:Disabled:Quota:EarliestTurn:Target:Protect:RequiredPair");
     }
 
+    private async Task AssertSmartOpeningPotionAdmissionAsync(CombatState combat, Player player, bool highLossOnly = false)
+    {
+        static void Check(bool condition, string message)
+        {
+            if (!condition) throw new InvalidOperationException("Smart opening potion admission: " + message);
+        }
+
+        await ClearOrderedEffectFixtureAsync(combat, player);
+        await CreatureCmd.SetCurrentHp(player.Creature, player.Creature.MaxHp);
+        await CreatureCmd.SetCurrentHp(combat.Enemies.Single(), 1);
+        await InjectCardAsync(combat, player, new() { CardId = "BLOODLETTING", Pile = "Hand" });
+        await InjectCardAsync(combat, player, new() { CardId = "STRIKE_IRONCLAD", Pile = "Hand" });
+        SetEnergy(player, 0);
+        foreach (var potion in player.Potions.ToArray()) potion.Discard();
+        Check(player.MaxPotionCount >= 2, "fixture requires two available potion slots");
+        if (player.MaxPotionCount > 2) player.SubtractFromMaxPotionCount(player.MaxPotionCount - 2);
+        InjectPotionForTest(player, "STRENGTH_POTION");
+        InjectPotionForTest(player, "DEXTERITY_POTION");
+        SolverDisplayNames names = SolverDisplayNames.Capture(combat);
+        SearchPolicySnapshot policy = SolverController.CaptureSearchPolicy(
+            SolverSettings.Capture(), combat, false, null) with
+        {
+            FixedBudget = true, BudgetOverrideMilliseconds = 10_000,
+            MaxDegreeOfParallelism = 1, VerifyIncrementalSearch = false,
+            UseBeamWidthPortfolio = false, UseNoveltyPortfolio = false,
+            StopAtAcceptableBattleHpLoss = false, IgnoreLongTermRewards = true,
+            RelicTargets = [], PotionPolicy = SolverPotionPolicy.Smart,
+            PotionStrategy = new(SolverPotionPolicy.Smart, []), PredictPotionReward = true,
+            Profile = SolverSearchProfile.Default with
+            {
+                BeamWidth = 8, MaxExpandedNodes = 256, SoftTimeBudgetMilliseconds = 10_000,
+                StopPortfolioAtHpTarget = false,
+            },
+        };
+
+        CombatRootSnapshot ForecastRoot(PotionRewardForecast expected)
+        {
+            for (int attempt = 0; attempt < 32; attempt++)
+            {
+                CombatRootSnapshot candidate = CombatRootSnapshot.Capture(combat, predictPotionReward: true);
+                if (candidate.PotionRewardOutlook.Forecast == expected) return candidate;
+                Check(candidate.PotionRewardOutlook.Forecast is PotionRewardForecast.Drop or PotionRewardForecast.NoDrop,
+                    "fixture requires a deterministic combat reward roll");
+                player.PlayerRng.Rewards.NextFloat();
+            }
+            throw new InvalidOperationException("Smart opening potion admission: requested reward roll was not found.");
+        }
+
+        async Task<(SolverResult Result, string[] Logs, string[] Phases)> Search(CombatRootSnapshot root)
+        {
+            string liveBefore = ContinuationStamp.CaptureLive(combat).StateText;
+            List<string> logs = [], phases = [];
+            using CancellationTokenSource deadline = new(TimeSpan.FromSeconds(15));
+            SolverResult result = await Task.Run(() => CombatSearchCoordinator.Solve(root, names,
+                new BattleDamageSnapshot(0, 0, 0, []), policy with
+                {
+                    Diagnostics = new(logs.Add, _ => { }),
+                }, deadline.Token, progress => phases.Add(progress.Phase)));
+            Check(ContinuationStamp.CaptureLive(combat).StateText == liveBefore
+                && root.ContinuationStamp.StateText == liveBefore, "native state and frozen root remain equal");
+            return (result, logs.ToArray(), phases.ToArray());
+        }
+
+        if (!highLossOnly)
+        {
+            CombatRootSnapshot noDrop = ForecastRoot(PotionRewardForecast.NoDrop);
+            Check(noDrop.PotionRewardOutlook.BeltFull && noDrop.PotionRewardOutlook.ReplacementHpCredit == 0,
+                "full belt with no drop has zero replacement credit");
+            var lowLoss = await Search(noDrop);
+            Check(lowLoss.Result.Snapshot.AllEnemiesDead && lowLoss.Result.ProjectedBattleHpLost == 3
+                && lowLoss.Result.ExplicitPotionCount == 0, "three-loss potion-free victory");
+            Check(lowLoss.Logs.Any(line => line.Contains("stop=no_potion_acceptable", StringComparison.Ordinal)),
+                "ordinary potion layer declines the opportunity cost");
+            Check(!lowLoss.Logs.Any(line => line.Contains("SMART_OPENING_POTION_PREFIXES", StringComparison.Ordinal))
+                && !lowLoss.Phases.Any(phase => phase.StartsWith("正在搜索使用 ", StringComparison.Ordinal)),
+                "zero admitted potion layers finish before building named opening routes");
+            _completedChecks.Add($"SmartOpeningAdmission:NoDrop:loss3:potions0:nodes={lowLoss.Result.TotalExpandedNodes}");
+
+            foreach (var potion in player.Potions.ToArray()) potion.Discard();
+            InjectPotionForTest(player, "FIRE_POTION");
+            InjectPotionForTest(player, "STRENGTH_POTION");
+            names = SolverDisplayNames.Capture(combat);
+            CombatRootSnapshot drop = ForecastRoot(PotionRewardForecast.Drop);
+            Check(drop.PotionRewardOutlook.BeltFull && drop.PotionRewardOutlook.ReplacementHpCredit >= 9,
+                "confirmed reward credits one freed slot");
+            var replacement = await Search(drop);
+            Check(replacement.Result.Snapshot.AllEnemiesDead && replacement.Result.ProjectedBattleHpLost == 0
+                && replacement.Result.ExplicitPotionCount == 1 && replacement.Result.PotionHpSaved == 3
+                && replacement.Result.PotionHpRequired == 1,
+                "replacement credit admits the one-potion route saving three HP");
+            _completedChecks.Add($"SmartOpeningAdmission:Drop:loss0:potions1:saved3:required1:nodes={replacement.Result.TotalExpandedNodes}");
+        }
+
+        await ClearPlayerPilesAsync(player);
+        await InjectCardAsync(combat, player, new()
+        {
+            CardId = "BLOODLETTING", Pile = "Hand", DynamicVars = new() { ["HpLoss"] = 12 },
+        });
+        await InjectCardAsync(combat, player, new() { CardId = "STRIKE_IRONCLAD", Pile = "Hand" });
+        await PowerCmd.Apply<MegaCrit.Sts2.Core.Models.Powers.StrengthPower>(
+            new ThrowingPlayerChoiceContext(), combat.Enemies.Single(), 20, combat.Enemies.Single(), null);
+        foreach (var potion in player.Potions.ToArray()) potion.Discard();
+        InjectPotionForTest(player, "FIRE_POTION");
+        InjectPotionForTest(player, "STRENGTH_POTION");
+        names = SolverDisplayNames.Capture(combat);
+        var valuable = await Search(ForecastRoot(PotionRewardForecast.NoDrop));
+        Check(valuable.Result.Snapshot.AllEnemiesDead && valuable.Result.ProjectedBattleHpLost == 0
+            && valuable.Result.ExplicitPotionCount == 1 && valuable.Result.PotionHpSaved == 12
+            && valuable.Result.PotionHpRequired == 9,
+            $"paid potion qualifies after saving twelve HP: loss={valuable.Result.ProjectedBattleHpLost} "
+            + $"potions={valuable.Result.ExplicitPotionCount} saved={valuable.Result.PotionHpSaved} required={valuable.Result.PotionHpRequired}");
+        _completedChecks.Add($"SmartOpeningAdmission:NoDrop:loss0:potions1:saved12:required9:nodes={valuable.Result.TotalExpandedNodes}");
+    }
+
     private async Task AssertFixedPrefixTurnOutcomesAsync(CombatState combat, Player player)
     {
         static void Check(bool condition, string message)

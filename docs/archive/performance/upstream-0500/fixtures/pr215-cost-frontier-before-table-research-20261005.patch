@@ -1,0 +1,20 @@
+--- a/src/Testing/Contracts/Search/UnattendedTestRunner.PotionCostIncumbent.cs
++++ b/src/Testing/Contracts/Search/UnattendedTestRunner.PotionCostIncumbent.cs
+@@ -178,6 +178,17 @@
+         bool zeroCostPruned = zero.ApplyPrimaryIncumbentBound([zeroPartial]).Count == 0;
+         if (!sameCostPruned || !missingCostKept || !zeroCostPruned)
+             throw new InvalidOperationException($"Potion-cost guard failed: same={sameCostPruned} unknown={missingCostKept} zero={zeroCostPruned}.");
++        // Test the shared table itself; member-return also includes local updates.
++        var proofBucket = ResourceIncumbentPolicy.CompletedBucket(ExpensiveWinner.Snapshot, 1);
++        var tableOnly = new PrimaryIncumbentTable();
++        tableOnly.Tighten(proofBucket, witnessed);
++        var actualCheapLateWitness = witnessed with
++        {
++            CombatEndedTurn = lateWinner.Snapshot.CombatEndedTurn!.Value,
++            ExplicitPotionStrategicCost = lateWinner.PotionStrategicCost,
++        };
++        if (!tableOnly.Tighten(proofBucket, actualCheapLateWitness))
++            throw new InvalidOperationException("COST_FRONTIER_TABLE_ONLY: existing singleton rejected actual cheaper later equal-HP complete victory; early_cost=" + witnessed.ExplicitPotionStrategicCost + " late_cost=" + actualCheapLateWitness.ExplicitPotionStrategicCost + " early_turn=" + witnessed.CombatEndedTurn + " late_turn=" + actualCheapLateWitness.CombatEndedTurn);
+         return new(cheapPartial, ExpensiveWinner.PotionStrategicCost, CheapWinner.PotionStrategicCost,
+             sharedKept, localKept, ablationKept, sameCostPruned, missingCostKept, zeroCostPruned, latePartial, lateSharedKept, lateLocalKept, unknownRecoveryKept);
+     }

@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "scenarioId": "Q010-O045-SAME-ROOT-TARGET",
+  "description": "O045 虱虫之祖：A 类回归夹具，达成的改善值具有内存档条件性。窄内存档（GC_SEARCH_ALLOCATION_LIMIT≈1.30GB、No-GC 弃区 24%）从 combat_start 同根得 1 战损、第 5 回合、1 瓶，与包内改善记录（:3，第 1 回合、已损 0）同根可比；宽内存档（≈2.32GB、弃区 44%）index=1 的 beam60 普通宽度成员（非精炼成员）得运行，零药最优由 20 改善到 14，其 strategic 净差 8 低于药水门槛 9，MaximumSmartPotionUses 返回 0 使整层药水搜索被跳过，实得 14 战损、第 7 回合、0 瓶（runId d67f8317705a4a9b9d355b8ce3996756 与同参数复跑 e3632e589f2b4ef4939c49a661a2c931）。W2 修复（src/Search/CombatSearchCoordinator.Audits.cs 梯度入口在 Smart 政策下另按必然受击轴求一份配额并取两者最大值）后，窄档复跑 Passed：runId 095e69ee275b4acca62f35e9e735c869，score=10001989977 与窄档基线逐位相同，并出现 axis_widened 诊断（maximum_from_deficit=1 → maximum_from_unavoidable=2）。判别力核查（界断言未被放宽的证据；约定 limit 一律按 MiB 即字节数/1048576）：无修复件在缺陷档实测 proj=14、endTurn=7、0 瓶（runId ea1171125aed45a19cc28857bfc0a8fd，limit=2169395780 字节 = 2069 MiB，GC_NO_GC_REGION_DECLINED percent_of_configured=41），当时原样保留的用药等值断言 expectedInitialPotionCount=1 当场抛「首轮路线使用药水 0 瓶，预期为 1 瓶」而 Failed ⇒ 该轴在新界集中未被放松、仍会红；同一产出相对战损上界 projAtMost=1 的否证是按断言源码推导（src/Testing/Contracts/Search/UnattendedTestRunner.SolverPolicy.cs:417-422，ProjectedBattleHpLost > 上界即抛），不是新界集下的实测 Failed。另有一次同形状的无断言对照运行 b3b6d729552846a39c7d588b73df42ef（limit=1979522968 字节 = 1888 MiB，诊断行 stop=no_potion_acceptable hp_deficit=8 maximum=0，因未传任何 ExpectedInitial* 参数故 status=Passed，只用作形状证据与同根配对，不得当作界断言生效的证据）。据此按 captain 裁决①把断言改为锁质量界：expectedInitialProjectedBattleHpLostAtMost=1 + expectedInitialPotionCount=1 + expectedInitialFinalEnemyHpAtMost=0 + expectedInitialOnlyDeathRoutesFound=false；原录制的 combatEndedTurn=5、potionHpSavedAtLeast=19、boundaryReason=None 与 score 10001989977 转为观测记录，因 head 在较宽档实测 saved=14 与等值断言互斥，而 proj 更低（0<1）、score 更高（10002069975>10001989977），属更好路线；endTurn 属路线形状差异。政策与批准见 docs/TEST_MATRIX.md「夹具锁定质量界」段。界集实测四样本（命令行同参数，两二进制各一次）：9286256b（head，1605001112 字节 = 1531 MiB，proj=0/pot=1）与 dc708c68（prefix，1631692012 字节 = 1556 MiB，proj=1/pot=1）均 Passed；落盘后以夹具本体复认也已通过：7d8a2799942d459390c12a1b87142a3d Passed（limit 1235238808 字节 = 1178 MiB、弃区 23%、proj=1、1 瓶、endTurn=5、score=10001989977 与认领者窄档 4d21b9fe… 逐位相同、axis_widened 14/19 → 配额 1→2、mainAssemblyHash BD84AE5C69DFC45E…105C24）。只断言终值：实测首段第 4 张是 BASH、包内改善是 STOKE，卡集不同，不断言路线同构；复跑仍须声明 NoGC/系统内存档，全部档间数字存档于 .local/tool-tasks/q010/verification-round2.md 表二、第三节。 2026-10-05 合并 origin/main 5d28a1cf 后：零药轴自身达 proj=0、score 10002069976（runId 8aaa687f7d934eb48f8dec9b197c002c），expectedInitialPotionCount=1 等值会把该更好路线判 Failed，已按质量界原则移除该键；判别力由 expectedInitialProjectedBattleHpLostAtMost=1 承担（无修复件宽档 proj=14 实测会踩破）。",
+  "characterId": "IRONCLAD",
+  "encounterId": "LOUSE_PROGENITOR_NORMAL",
+  "seed": "T3NDR7S6HYD8",
+  "ascension": 10,
+  "actIndexForTest": 1,
+  "checkpointArchivePath": ".local/issue-bundles/Q010/O045/raw/38d72af359ba4163abd73e297cb6727a.zip",
+  "checkpointSelector": "start",
+  "replayMode": "SearchOnly",
+  "enemyCurrentHp": 1,
+  "expectedInitialProjectedBattleHpLostAtMost": 1,
+  "expectedInitialFinalEnemyHpAtMost": 0,
+  "expectedInitialOnlyDeathRoutesFound": false,
+  "stopAfterInitialSolverResultAssertion": true,
+  "headlessFastModeForTest": "Instant",
+  "timeoutSeconds": 300,
+  "exitOnComplete": true
+}

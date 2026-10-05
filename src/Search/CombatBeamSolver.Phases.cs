@@ -1716,9 +1716,10 @@ internal sealed partial class CombatBeamSolver
                         fallback = child;
                     if (child.IsTerminal || child.Turn > node.Turn)
                     {
-                        // Publish an eligible victory before an unbounded play
-                        // layer finishes. Counter ties remain eligible at all turns.
-                        if (_strictHpBoundWithRelicTargets && child.IsTerminal
+                        // Publish every eligible completed victory at the serial
+                        // commit boundary, so the next play layer can use its HP bound.
+                        // Eligibility and resource-goal guards live in the tightening method.
+                        if (child.IsTerminal
                             && !child.Snapshot.HasRisk
                             && child.BoundaryReason == SearchBoundaryReason.None)
                             _ = TightenPrimarySearchIncumbentAtTurnLayer(

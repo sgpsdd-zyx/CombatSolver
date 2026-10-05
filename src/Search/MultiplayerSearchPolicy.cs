@@ -33,6 +33,7 @@ internal sealed record MultiplayerSearchPolicy(
         return policy with
         {
             Multiplayer = this,
+            PrimaryIncumbents = null,
             IncludeTurnSetup = TurnSetup != null,
             IgnoreLongTermRewards = true,
             RelicTargets = [],

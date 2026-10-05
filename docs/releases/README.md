@@ -4,17 +4,18 @@
 
 按版本倒序列出已有玩家更新日志，包括历史草案。是否正式发布以对应 Git 标签和发布记录为准；未发布改动见 [开发笔记](../DEVELOPMENT_NOTES.md)。发布 ZIP 存放在仓库根目录的 `releases/`，此处只保存文档。
 
-**多人 fork [0.49.2 已发布](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.49.2)。** 来源 `980f388f`，基于官方 `4b5537d0 / 0.49.1`，包含官方内存压力续搜紧急修复，并同步金币/最大生命、卡牌历史与费用、选牌和回合结算修复，保留多人手动军师与贡献政策。见[中英正文](0.49.2-RELEASE_NOTES.md)、[发布阶段](0.49.2-PUBLISH.md)和[合并验证与归档](../archive/strategy/upstream-0490-merge-20261003.md)。
+**多人 fork 0.50.1 正在定版**，基于官方 `0d290fbe / 0.50.0`。合入单人搜索与智能药水优化、回合结算和兼容性修复，多人继续保持手动军师与贡献政策。见[完整中英正文](0.50.1-RELEASE_NOTES.md)和[合并验证与归档](../archive/strategy/upstream-0500-merge-20261005.md)。当前已发布版本仍为 [0.49.2](0.49.2-PUBLISH.md)，正式渠道状态在发布成功后更新。
 
-上一公开 fork 为 **[0.48.1](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.48.1)**，基于官方 `a789aad2 / 0.48.0`，来源 `d543bea8`，见[发布凭证](0.48.1-PUBLISH.md)。此前为 **[0.47.3](0.47.3-PUBLISH.md)**、[0.47.2](0.47.2-PUBLISH.md)和[0.46.6](0.46.6-PUBLISH.md)。
+再前一公开 fork 为 **[0.48.1](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.48.1)**，基于官方 `a789aad2 / 0.48.0`，来源 `d543bea8`，见[发布凭证](0.48.1-PUBLISH.md)。此前为 **[0.47.3](0.47.3-PUBLISH.md)**、[0.47.2](0.47.2-PUBLISH.md)和[0.46.6](0.46.6-PUBLISH.md)。
 
 更早的 **[0.46.5](0.46.5-PUBLISH.md)** 完成[官方 0.46.4 合并](../archive/strategy/upstream-0464-merge-20260925.md)；再之前为 **[0.46.4](0.46.4-PUBLISH.md)**、**[0.46.3](0.46.3-PUBLISH.md)**、**[0.45.1](0.45.1-PUBLISH.md)** 与 **[0.44.1](0.44.1-PUBLISH.md)**。此前 **[0.44.2](0.44.2-PREPARE.md)** 仅从 `fd976376` 完成本地构建与最小包，后续由 0.45.1 统一交付，不补发旧包或旧标签。[实验结果](../archive/strategy/multiplayer-experiments-20260923/implementation.md)保留失败和恶化个案，不作真人联机胜率承诺。
 
-官方与 fork 的同号版本不相互替换；官方[0.49.1](upstream/0.49.1-RELEASE_NOTES.md)、[0.48.1](upstream/0.48.1-RELEASE_NOTES.md)、[0.47.3](upstream/0.47.3-RELEASE_NOTES.md)、[0.47.2](upstream/0.47.2-RELEASE_NOTES.md)、[0.46.4](upstream/0.46.4-RELEASE_NOTES.md)、[0.46.3](upstream/0.46.3-RELEASE_NOTES.md)、[0.44.1](upstream/0.44.1-RELEASE_NOTES.md)、[0.45.0](upstream/0.45.0-RELEASE_NOTES.md)及此前原文独立归档，官方标签保持原指向。独立尖塔军师工具由[工具目录](../../tools/runtime/SpireAdvisorMultiplayerFix/README.md#已交付产物)维护。
+官方与 fork 的同号版本不相互替换；官方[0.49.2](upstream/0.49.2-RELEASE_NOTES.md)、[0.49.1](upstream/0.49.1-RELEASE_NOTES.md)、[0.48.1](upstream/0.48.1-RELEASE_NOTES.md)、[0.47.3](upstream/0.47.3-RELEASE_NOTES.md)、[0.47.2](upstream/0.47.2-RELEASE_NOTES.md)、[0.46.4](upstream/0.46.4-RELEASE_NOTES.md)、[0.46.3](upstream/0.46.3-RELEASE_NOTES.md)、[0.44.1](upstream/0.44.1-RELEASE_NOTES.md)、[0.45.0](upstream/0.45.0-RELEASE_NOTES.md)及此前原文独立归档，官方标签保持原指向。独立尖塔军师工具由[工具目录](../../tools/runtime/SpireAdvisorMultiplayerFix/README.md#已交付产物)维护。
 
 | 版本系列 | 更新日志 |
 |---|---|
-| 0.49 | [0.49.1 官方原文](upstream/0.49.1-RELEASE_NOTES.md) · [0.49.1（fork，历史准备版）](0.49.1-PUBLISH.md) · [0.49.2（fork，已发布）](0.49.2-RELEASE_NOTES.md) · [0.49.0 官方原文](0.49.0-RELEASE_NOTES.md) |
+| 0.50 | [0.50.1（fork，定版中）](0.50.1-RELEASE_NOTES.md) · [0.50.0 官方原文](0.50.0-RELEASE_NOTES.md) |
+| 0.49 | [0.49.4 官方原文](0.49.4-RELEASE_NOTES.md) · [0.49.3 官方原文](0.49.3-RELEASE_NOTES.md) · [0.49.2 官方原文](upstream/0.49.2-RELEASE_NOTES.md) · [0.49.1 官方原文](upstream/0.49.1-RELEASE_NOTES.md) · [0.49.1（fork，历史准备版）](0.49.1-PUBLISH.md) · [0.49.2（fork，已发布）](0.49.2-RELEASE_NOTES.md) · [0.49.0 官方原文](0.49.0-RELEASE_NOTES.md) |
 | 0.48 | [0.48.1（fork，已发布）](0.48.1-RELEASE_NOTES.md) · [0.48.1 官方原文](upstream/0.48.1-RELEASE_NOTES.md) · [0.48.0 官方原文](0.48.0-RELEASE_NOTES.md) |
 | 0.47 | [0.47.3 官方原文](upstream/0.47.3-RELEASE_NOTES.md) · [0.47.3（fork，已发布）](0.47.3-RELEASE_NOTES.md) · [0.47.2 官方原文](upstream/0.47.2-RELEASE_NOTES.md) · [0.47.2（fork，已发布）](0.47.2-RELEASE_NOTES.md) · [0.47.1 官方原文](0.47.1-RELEASE_NOTES.md) · [0.47.0 官方原文](0.47.0-RELEASE_NOTES.md) |
 | 0.46 | [0.46.6（fork，已发布）](0.46.6-RELEASE_NOTES.md) · [0.46.5（fork，已发布）](0.46.5-RELEASE_NOTES.md) · [0.46.4 官方原文](upstream/0.46.4-RELEASE_NOTES.md) · [0.46.4（fork，已发布）](0.46.4-RELEASE_NOTES.md) · [0.46.3 官方原文](upstream/0.46.3-RELEASE_NOTES.md) · [0.46.3（fork，已发布）](0.46.3-RELEASE_NOTES.md) · [0.46.2 官方原文](0.46.2-RELEASE_NOTES.md) · [0.46.1 官方原文](0.46.1-RELEASE_NOTES.md) · [0.46.0 官方原文](0.46.0-RELEASE_NOTES.md) |

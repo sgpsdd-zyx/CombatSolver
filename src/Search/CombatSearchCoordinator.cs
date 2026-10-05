@@ -33,6 +33,7 @@ internal static partial class CombatSearchCoordinator
             RouteAdoptionCancellationToken = cancellationToken,
             RequestWorkTotals = requestWorkTotals,
             PortfolioTelemetry = portfolioTelemetry,
+            PrimaryIncumbents = policy.PrimaryIncumbents ?? new PrimaryIncumbentTable(),
         };
         SearchInteractionState? interaction = policy.Interaction;
         if (policy.IncludeTurnSetup)
@@ -189,6 +190,15 @@ internal static partial class CombatSearchCoordinator
             selected.PortfolioTelemetry = portfolioTelemetry;
             selected.ComparisonQuality = BuildInterimResult(root, policy, selected);
             selected.ComparisonRootState = root.ContinuationStamp.StateText;
+            if (!policy.DisableRefinementIncumbentForTesting && !policy.DisableSharedPrimaryIncumbentsForTesting
+                && PrimaryIncumbentTable.CanShareRoot(root)
+                && IsReusablePotionFreeVictory(policy, null, selected))
+            {
+                policy.PrimaryIncumbents!.Tighten(
+                    ResourceIncumbentPolicy.CompletedBucket(selected.Snapshot, 0),
+                    new(StrategicHpDeficit(root, policy, selected), selected.CombatEndedTurn!.Value, 0));
+                policy.PrimaryIncumbents.PotionFreeWitness = selected;
+            }
             return selected;
         }
         catch (OperationCanceledException)
@@ -318,10 +328,18 @@ internal static partial class CombatSearchCoordinator
                 ? passPolicy : passPolicy with { NoveltySearch = null };
             SolverResult? initialPlanIncumbent = TryRunOpeningPlanIncumbent(
                 passContext with { Policy = beamPolicy }, initialPotionPolicyOverride);
+            if (!policy.DisableRefinementIncumbentForTesting && !policy.DisableSharedPrimaryIncumbentsForTesting
+                && PrimaryIncumbentTable.CanShareRoot(root)
+                && beamPolicy.PrimaryIncumbents?.PotionFreeWitness is { } previousVictory
+                && IsReusablePotionFreeVictory(beamPolicy, initialPotionPolicyOverride, previousVictory)
+                && (initialPlanIncumbent == null || IsBetterPotionPolicyResult(
+                    root, beamPolicy, previousVictory, initialPlanIncumbent)))
+                initialPlanIncumbent = previousVictory;
             SolverResult SolveMember(SolverSearchProfile memberProfile, bool refinement,
                 PrimarySearchIncumbent? primaryIncumbent)
             {
-                if (initialPlanIncumbent != null && !refinement)
+                if ((initialPlanIncumbent != null || passContext.PlanDiscovery.NarrowOpeningIncumbentAttempted)
+                    && !refinement)
                     memberProfile = memberProfile with
                     {
                         SoftTimeBudgetMilliseconds = (int)Math.Clamp(passContext.RemainingMilliseconds,
@@ -921,6 +939,9 @@ internal static partial class CombatSearchCoordinator
         SolverResult result)
     {
         if (policy.EffectiveHasGrowthTargets
+            || !ResourceIncumbentPolicy.IsPrimaryHpBucket(
+                ResourceIncumbentPolicy.CompletedBucket(result.Snapshot, result.ExplicitPotionCount),
+                CombatBeamSolver.CanUseStrictHpRelicBound(root, policy))
             || policy.RelicTargets.Count > 0 && !CombatBeamSolver.CanUseStrictHpRelicBound(root, policy)
             || result.Snapshot.ProjectedDeathSaveUseCount > 0
             || !IsCompleteVictory(result)
@@ -928,7 +949,8 @@ internal static partial class CombatSearchCoordinator
             return null;
         return new PrimarySearchIncumbent(
             StrategicHpDeficit(root, policy, result),
-            combatEndedTurn);
+            combatEndedTurn,
+            result.PotionStrategicCostByTurn.Values.Sum());
     }
 
     private static SolverResult? SolveOptionalPotionPosterior(

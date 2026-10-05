@@ -104,6 +104,7 @@ internal sealed partial class UnattendedTestRunner
     private bool HasInitialSolverExpectation()
         => _request.ExpectNoGcFallbackForTest
             || _request.AllowNoGcFallbackForTest
+            || _request.ExpectedInitialUnavoidableHpLost.HasValue
             || _request.ExpectedInitialSoldHp.HasValue
             || _request.ExpectedInitialSoldHpAtMost.HasValue
             || _request.ExpectedInitialSoldHpBranchesPrunedAtLeast.HasValue
@@ -291,6 +292,12 @@ internal sealed partial class UnattendedTestRunner
             _completedChecks.Add("TurnSetupNativeChoiceOrder");
         }
 
+        if (_request.ExpectedInitialUnavoidableHpLost is { } expectedUnavoidable
+            && result.UnavoidableHpLost != expectedUnavoidable)
+        {
+            throw new InvalidOperationException(
+                $"首轮路线必然受击为 {result.UnavoidableHpLost}，预期为 {expectedUnavoidable}。");
+        }
         if (_request.ExpectedInitialSoldHp is { } expectedSoldHp && result.SoldHp != expectedSoldHp)
         {
             throw new InvalidOperationException(

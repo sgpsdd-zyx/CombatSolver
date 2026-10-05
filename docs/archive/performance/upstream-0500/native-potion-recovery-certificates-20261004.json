@@ -1,0 +1,1217 @@
+{
+  "schemaVersion": 1,
+  "gameDllSha256": "2b40d2df538db1ceb5fa48d958c80ab730ada1e07db88a870aff01a661768b9f",
+  "gameMvid": "8a76776c-0ce1-4d4f-90bd-8cce653dad8e",
+  "scope": "complete PotionModel subclass inventory; positive component semantics, NOT unconditional search-root certification",
+  "counts": {
+    "finite_direct_extra_turn": 1,
+    "conditional_zero": 58,
+    "finite_direct": 1,
+    "inactive_unknown": 1,
+    "generated_potion_unknown": 1,
+    "automatic_death_save": 1,
+    "finite_max_hp_growth": 1,
+    "finite_regeneration": 1,
+    "test_only_unknown": 1
+  },
+  "models": [
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.Ambergris",
+      "name": "Ambergris",
+      "kind": "finite_direct_extra_turn",
+      "mechanism": "一次回复实际 MaxHp × HealPercent / 100，原版50%；AmbergrisPower 额外回合可能触发其他已生效回复",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/Ambergris.cs",
+      "sourceSha256": "5442933a78c00692f0c3950f0845c9a060c6c1dd61e81dbf2c10c636bc4811d9",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyPlayer",
+      "usageDeclaration": "PotionUsage.AnyTime",
+      "effectPowers": [
+        "AmbergrisPower"
+      ],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": null
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.Ashwater",
+      "name": "Ashwater",
+      "kind": "conditional_zero",
+      "mechanism": "选择并消耗手牌；消耗回调、全部牌堆与回收闭包",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/Ashwater.cs",
+      "sourceSha256": "7f6f3d99fcfb9d49fc06042ce3fdef840bcce84523c45f8c789237838ab0d82e",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyPlayer",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": "Only closed initial/permanent/all-pile/returning sources, native filtered generation closure, audited global callbacks/attachments/enemies and single-player root; unknown remains unbounded"
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.AttackPotion",
+      "name": "AttackPotion",
+      "kind": "conditional_zero",
+      "mechanism": "原生角色攻击池筛选、解锁及人数约束、CanBeGeneratedInCombat、递归生成",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/AttackPotion.cs",
+      "sourceSha256": "ec55f0b3efd0af66012c9bbb93692f91b27e5fe56f247bafa260cd73fd8dca44",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyPlayer",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": "Only closed initial/permanent/all-pile/returning sources, native filtered generation closure, audited global callbacks/attachments/enemies and single-player root; unknown remains unbounded"
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.BeetleJuice",
+      "name": "BeetleJuice",
+      "kind": "conditional_zero",
+      "mechanism": "敌方 Shrink；攻击倍率及施加者死亡移除，不改生命",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/BeetleJuice.cs",
+      "sourceSha256": "b191ed26dbf7c2b8639b8e0780f99fce624dc843ebe738f5b6dd81f59204a0e5",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyEnemy",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [
+        "ShrinkPower"
+      ],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": "Only closed initial/permanent/all-pile/returning sources, native filtered generation closure, audited global callbacks/attachments/enemies and single-player root; unknown remains unbounded"
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.BlessingOfTheForge",
+      "name": "BlessingOfTheForge",
+      "kind": "conditional_zero",
+      "mechanism": "升级全部手牌；升级、卡牌变更与附着回调",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/BlessingOfTheForge.cs",
+      "sourceSha256": "4367941a97af28ea5ca877f02d6f80f81d3a01523be07d7a875ae3cab14fc0e4",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyPlayer",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": "Only closed initial/permanent/all-pile/returning sources, native filtered generation closure, audited global callbacks/attachments/enemies and single-player root; unknown remains unbounded"
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.BlockPotion",
+      "name": "BlockPotion",
+      "kind": "conditional_zero",
+      "mechanism": "目标玩家获得格挡；格挡回调",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/BlockPotion.cs",
+      "sourceSha256": "8c82d42522b357e70aa602c916309bfe80cf9cb2f2c0ae8f93ef8c835731de89",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyPlayer",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": "Only closed initial/permanent/all-pile/returning sources, native filtered generation closure, audited global callbacks/attachments/enemies and single-player root; unknown remains unbounded"
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.BloodPotion",
+      "name": "BloodPotion",
+      "kind": "finite_direct",
+      "mechanism": "一次使用回复实际 MaxHp × 实际 HealPercent / 100；原版值20%；需证明未来 MaxHp 上界及治疗修正闭包",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/BloodPotion.cs",
+      "sourceSha256": "0b2053f00b35c304ff8b6c71020fd2be14436b22e05730d2d9430e1cdbfe62e3",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyPlayer",
+      "usageDeclaration": "PotionUsage.AnyTime",
+      "effectPowers": [],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": null
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.BoneBrew",
+      "name": "BoneBrew",
+      "kind": "conditional_zero",
+      "mechanism": "Osty 召唤／宠物生命；不是玩家回复；召唤回调",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/BoneBrew.cs",
+      "sourceSha256": "a36fac628b9a9a351fb58ebefa93c8922cca54a970315ccaae627d9be29fff3c",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyPlayer",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": "Only closed initial/permanent/all-pile/returning sources, native filtered generation closure, audited global callbacks/attachments/enemies and single-player root; unknown remains unbounded"
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.BottledPotential",
+      "name": "BottledPotential",
+      "kind": "conditional_zero",
+      "mechanism": "手牌移入抽牌堆、洗牌、抽牌；牌堆与抽牌回调",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/BottledPotential.cs",
+      "sourceSha256": "b2c3698f7bc063e584acc29e32fd13f24a1969a510e41a8a9c62aef37661ccc8",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyPlayer",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": "Only closed initial/permanent/all-pile/returning sources, native filtered generation closure, audited global callbacks/attachments/enemies and single-player root; unknown remains unbounded"
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.Clarity",
+      "name": "Clarity",
+      "kind": "conditional_zero",
+      "mechanism": "抽一张牌并施加 ClarityPower；后续回合抽牌量加一并递减次数；抽牌与自动执行回调",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/Clarity.cs",
+      "sourceSha256": "ad676379cda510d4d15fb48838243885c469cae1d9a59b236cdc70f422321228",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyPlayer",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [
+        "ClarityPower"
+      ],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": "Only closed initial/permanent/all-pile/returning sources, native filtered generation closure, audited global callbacks/attachments/enemies and single-player root; unknown remains unbounded"
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.ColorlessPotion",
+      "name": "ColorlessPotion",
+      "kind": "conditional_zero",
+      "mechanism": "原生无色生成池与递归生成；选择、临时费用",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/ColorlessPotion.cs",
+      "sourceSha256": "facfe0ef53918e9bb15382aa0f998a4b3f83079926975793f24fbb1afe21b67d",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyPlayer",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": "Only closed initial/permanent/all-pile/returning sources, native filtered generation closure, audited global callbacks/attachments/enemies and single-player root; unknown remains unbounded"
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.CosmicConcoction",
+      "name": "CosmicConcoction",
+      "kind": "conditional_zero",
+      "mechanism": "原生无色池生成三张并升级；人数／解锁／可生成过滤及升级回调",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/CosmicConcoction.cs",
+      "sourceSha256": "6daeacf84687d4a585d93adc8c4badbbb8575c7e04b7d0f7bb6322d6f16212f3",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyPlayer",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": "Only closed initial/permanent/all-pile/returning sources, native filtered generation closure, audited global callbacks/attachments/enemies and single-player root; unknown remains unbounded"
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.CunningPotion",
+      "name": "CunningPotion",
+      "kind": "conditional_zero",
+      "mechanism": "显式生成升级 Shiv；固定令牌与升级回调",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/CunningPotion.cs",
+      "sourceSha256": "0bf2159666f6fd17895f1b136ef103d85d4191fc4a1f48719dad2e24bce9ff36",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyPlayer",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": "Only closed initial/permanent/all-pile/returning sources, native filtered generation closure, audited global callbacks/attachments/enemies and single-player root; unknown remains unbounded"
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.CureAll",
+      "name": "CureAll",
+      "kind": "conditional_zero",
+      "mechanism": "获得能量并抽牌；名称不表示治疗",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/CureAll.cs",
+      "sourceSha256": "f2370fdd27cada18a7c3576c6b0c3bf3cfff2e1f3b7e8cc54657ef973f9e84e8",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyPlayer",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": "Only closed initial/permanent/all-pile/returning sources, native filtered generation closure, audited global callbacks/attachments/enemies and single-player root; unknown remains unbounded"
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.DeprecatedPotion",
+      "name": "DeprecatedPotion",
+      "kind": "inactive_unknown",
+      "mechanism": "废弃的历史占位模型，继承基础 OnUse；不纳入可用药水安全集合",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/DeprecatedPotion.cs",
+      "sourceSha256": "3498f9853aec7eca975fd83ce047712a85c13d89661c83542c43b24d86908ed3",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyEnemy",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": null
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.DexterityPotion",
+      "name": "DexterityPotion",
+      "kind": "conditional_zero",
+      "mechanism": "DexterityPower；格挡加成",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/DexterityPotion.cs",
+      "sourceSha256": "b47f10cf681a8b015d250bf83026f9da200f3f713691d77bc6bbaff106240841",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyPlayer",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [
+        "DexterityPower"
+      ],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": "Only closed initial/permanent/all-pile/returning sources, native filtered generation closure, audited global callbacks/attachments/enemies and single-player root; unknown remains unbounded"
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.DistilledChaos",
+      "name": "DistilledChaos",
+      "kind": "conditional_zero",
+      "mechanism": "自动执行抽牌堆顶多张牌；全部牌堆、重复执行及生成闭包",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/DistilledChaos.cs",
+      "sourceSha256": "055a9c522964a21c0898fa8b507169c36de16c282a7e5a102bb60d13bd7dc7d6",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyPlayer",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": "Only closed initial/permanent/all-pile/returning sources, native filtered generation closure, audited global callbacks/attachments/enemies and single-player root; unknown remains unbounded"
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.DropletOfPrecognition",
+      "name": "DropletOfPrecognition",
+      "kind": "conditional_zero",
+      "mechanism": "选择抽牌堆的牌移入手牌；牌堆回调",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/DropletOfPrecognition.cs",
+      "sourceSha256": "5f1319f916c99fb1ad7e73cf916b762c1ac62dccecaec8e4a255897eb0af8963",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyPlayer",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": "Only closed initial/permanent/all-pile/returning sources, native filtered generation closure, audited global callbacks/attachments/enemies and single-player root; unknown remains unbounded"
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.Duplicator",
+      "name": "Duplicator",
+      "kind": "conditional_zero",
+      "mechanism": "DuplicationPower；增加出牌执行次数，不能忽略初始回复牌",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/Duplicator.cs",
+      "sourceSha256": "dcf212d0e19936dea4e8a99d9ec8ea33dcb4fa77168aaf41664f87a091fc66ed",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyPlayer",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [
+        "DuplicationPower"
+      ],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": "Only closed initial/permanent/all-pile/returning sources, native filtered generation closure, audited global callbacks/attachments/enemies and single-player root; unknown remains unbounded"
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.EnergyPotion",
+      "name": "EnergyPotion",
+      "kind": "conditional_zero",
+      "mechanism": "获得能量",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/EnergyPotion.cs",
+      "sourceSha256": "b1e6261ab1c321fb13e513b3666a112a648f7e24e438879670c03b9873819621",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyPlayer",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": "Only closed initial/permanent/all-pile/returning sources, native filtered generation closure, audited global callbacks/attachments/enemies and single-player root; unknown remains unbounded"
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.EntropicBrew",
+      "name": "EntropicBrew",
+      "kind": "generated_potion_unknown",
+      "mechanism": "战内调用 CreateRandomPotionOutOfCombat，能产生回复、加生命上限及复活药水；可能继续产生 EntropicBrew；无限显式额度无法证明有限上限，保持保守",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/EntropicBrew.cs",
+      "sourceSha256": "d5a71d48aa251b43275fd77f118904db46762a66717181c718adbbfa909b9519",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyPlayer",
+      "usageDeclaration": "PotionUsage.AnyTime",
+      "effectPowers": [],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": null
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.EssenceOfDarkness",
+      "name": "EssenceOfDarkness",
+      "kind": "conditional_zero",
+      "mechanism": "按实际球槽数量引导 DarkOrb；引导／激发回调",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/EssenceOfDarkness.cs",
+      "sourceSha256": "40471d800a7e114d96037966b3645df9e2ba82c4a514d919c5cbb89f501f8adf",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyPlayer",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": "Only closed initial/permanent/all-pile/returning sources, native filtered generation closure, audited global callbacks/attachments/enemies and single-player root; unknown remains unbounded"
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.ExplosiveAmpoule",
+      "name": "ExplosiveAmpoule",
+      "kind": "conditional_zero",
+      "mechanism": "敌方伤害及死亡回调",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/ExplosiveAmpoule.cs",
+      "sourceSha256": "ebf39cba651374c60ab8517dd03ab4c4f3c3460b93e701351c165b8c4c46ae2e",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AllEnemies",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": "Only closed initial/permanent/all-pile/returning sources, native filtered generation closure, audited global callbacks/attachments/enemies and single-player root; unknown remains unbounded"
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.FairyInABottle",
+      "name": "FairyInABottle",
+      "kind": "automatic_death_save",
+      "mechanism": "ShouldDie/AfterPreventingDeath 自动消耗并回复 max(实际 MaxHp×30%,1)；不是显式用药，保留复活资源比较；当前运行时保持保守",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/FairyInABottle.cs",
+      "sourceSha256": "6bcc4b32aca1fd7f240980c3c0c204dc4b7f91d702f0bbaceeaa4370867642e0",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.Self",
+      "usageDeclaration": "PotionUsage.Automatic",
+      "effectPowers": [],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": null
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.FirePotion",
+      "name": "FirePotion",
+      "kind": "conditional_zero",
+      "mechanism": "敌方伤害及死亡回调",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/FirePotion.cs",
+      "sourceSha256": "a2a19e23151edee2b9051dbb788295da42703a72646ca5ca2b211ef71aaa3f12",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyEnemy",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": "Only closed initial/permanent/all-pile/returning sources, native filtered generation closure, audited global callbacks/attachments/enemies and single-player root; unknown remains unbounded"
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.FlexPotion",
+      "name": "FlexPotion",
+      "kind": "conditional_zero",
+      "mechanism": "FlexPotionPower；临时力量与到期移除",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/FlexPotion.cs",
+      "sourceSha256": "ea4f983c898de1399e51334f407926d7f2dc6a060041ce8dd824078132e900db",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyPlayer",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [
+        "FlexPotionPower"
+      ],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": "Only closed initial/permanent/all-pile/returning sources, native filtered generation closure, audited global callbacks/attachments/enemies and single-player root; unknown remains unbounded"
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.FocusPotion",
+      "name": "FocusPotion",
+      "kind": "conditional_zero",
+      "mechanism": "FocusPower；球效果及激发回调",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/FocusPotion.cs",
+      "sourceSha256": "865b1ef2452e484116d82ae36c70e0f0679306cb93157f2df59e1624673fc4f8",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyPlayer",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [
+        "FocusPower"
+      ],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": "Only closed initial/permanent/all-pile/returning sources, native filtered generation closure, audited global callbacks/attachments/enemies and single-player root; unknown remains unbounded"
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.Fortifier",
+      "name": "Fortifier",
+      "kind": "conditional_zero",
+      "mechanism": "目标玩家获得其当前格挡的两倍；增加格挡，不增加生命",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/Fortifier.cs",
+      "sourceSha256": "a0222de25706d03c46d3ce1dac8c75318e1ccf2fc06c21cde29863cf0c7cb2ce",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyPlayer",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": "Only closed initial/permanent/all-pile/returning sources, native filtered generation closure, audited global callbacks/attachments/enemies and single-player root; unknown remains unbounded"
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.FoulPotion",
+      "name": "FoulPotion",
+      "kind": "conditional_zero",
+      "mechanism": "战内伤害全部非宠物，包括玩家；商店金币／事件效果属于搜索边界外",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/FoulPotion.cs",
+      "sourceSha256": "03e18124e498c2282412b7b557ac743b6a5e4eee9c8f82270f6ca9c1bc671277",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": null,
+      "usageDeclaration": "PotionUsage.AnyTime",
+      "effectPowers": [],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": "Only closed initial/permanent/all-pile/returning sources, native filtered generation closure, audited global callbacks/attachments/enemies and single-player root; unknown remains unbounded"
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.FruitJuice",
+      "name": "FruitJuice",
+      "kind": "finite_max_hp_growth",
+      "mechanism": "GainMaxHp 同时增加当前生命，原版5；有限回复与生命上限成长目标均需建模，当前运行时保持保守",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/FruitJuice.cs",
+      "sourceSha256": "c3b2e21d5de80ba98db92a0dea1551d7464f5e040857b08186e448e92a813e69",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyPlayer",
+      "usageDeclaration": "PotionUsage.AnyTime",
+      "effectPowers": [],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": null
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.FyshOil",
+      "name": "FyshOil",
+      "kind": "conditional_zero",
+      "mechanism": "StrengthPower、DexterityPower",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/FyshOil.cs",
+      "sourceSha256": "beda928734061e95c21827669bcc4bee93bbcac40007ddb6a4c6e0a7cf11c35c",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyPlayer",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [
+        "DexterityPower",
+        "StrengthPower"
+      ],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": "Only closed initial/permanent/all-pile/returning sources, native filtered generation closure, audited global callbacks/attachments/enemies and single-player root; unknown remains unbounded"
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.GamblersBrew",
+      "name": "GamblersBrew",
+      "kind": "conditional_zero",
+      "mechanism": "选择弃牌并抽牌；Sly 自动打出与全部牌堆闭包",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/GamblersBrew.cs",
+      "sourceSha256": "e3bf40294ceaa1867ea808628ca90fc104e4ab4fa0d5b010ffb3116732bd6970",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyPlayer",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": "Only closed initial/permanent/all-pile/returning sources, native filtered generation closure, audited global callbacks/attachments/enemies and single-player root; unknown remains unbounded"
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.GhostInAJar",
+      "name": "GhostInAJar",
+      "kind": "conditional_zero",
+      "mechanism": "IntangiblePower；减伤及到期移除",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/GhostInAJar.cs",
+      "sourceSha256": "8c00b5cc86a776d4b38977ece5ed1f0ee7d15cf53ee62f3adbad169330882719",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyPlayer",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [
+        "IntangiblePower"
+      ],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": "Only closed initial/permanent/all-pile/returning sources, native filtered generation closure, audited global callbacks/attachments/enemies and single-player root; unknown remains unbounded"
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.GigantificationPotion",
+      "name": "GigantificationPotion",
+      "kind": "conditional_zero",
+      "mechanism": "GigantificationPower；攻击倍率、攻击对象内部状态及用后递减",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/GigantificationPotion.cs",
+      "sourceSha256": "16288cbb78dbec04dcb9a8cf10eadd6819a37c9cce0cf4a6da0800e1d3497056",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyPlayer",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [
+        "GigantificationPower"
+      ],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": "Only closed initial/permanent/all-pile/returning sources, native filtered generation closure, audited global callbacks/attachments/enemies and single-player root; unknown remains unbounded"
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.GlowwaterPotion",
+      "name": "GlowwaterPotion",
+      "kind": "conditional_zero",
+      "mechanism": "消耗当前手牌后抽牌；消耗、抽牌、自动执行回调",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/GlowwaterPotion.cs",
+      "sourceSha256": "bcd34afb8625fcc50f5337db391b10be38bdb3351289c74164c0cf45390f9fb4",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyPlayer",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": "Only closed initial/permanent/all-pile/returning sources, native filtered generation closure, audited global callbacks/attachments/enemies and single-player root; unknown remains unbounded"
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.HeartOfIron",
+      "name": "HeartOfIron",
+      "kind": "conditional_zero",
+      "mechanism": "PlatingPower；格挡及受伤递减",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/HeartOfIron.cs",
+      "sourceSha256": "f7f6424600c31c4b4f753f9b47e2fb9734e203809b9f6f7070516a0f88535b0c",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyPlayer",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [
+        "PlatingPower"
+      ],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": "Only closed initial/permanent/all-pile/returning sources, native filtered generation closure, audited global callbacks/attachments/enemies and single-player root; unknown remains unbounded"
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.KingsCourage",
+      "name": "KingsCourage",
+      "kind": "conditional_zero",
+      "mechanism": "Forge；SovereignBlade 生成、成长目标及升级回调保持原规则",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/KingsCourage.cs",
+      "sourceSha256": "86fdda0ae1ef8a1ff9d3f0fee239160b15f74f8da9e9c9c09b7dfbb7a5ea9136",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyPlayer",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": "Only closed initial/permanent/all-pile/returning sources, native filtered generation closure, audited global callbacks/attachments/enemies and single-player root; unknown remains unbounded"
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.LiquidBronze",
+      "name": "LiquidBronze",
+      "kind": "conditional_zero",
+      "mechanism": "ThornsPower；敌方反伤及死亡回调",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/LiquidBronze.cs",
+      "sourceSha256": "8cd724ae37443a8e160ccf28820ea468bcaa30ec73a42bbfca253558db707424",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyPlayer",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [
+        "ThornsPower"
+      ],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": "Only closed initial/permanent/all-pile/returning sources, native filtered generation closure, audited global callbacks/attachments/enemies and single-player root; unknown remains unbounded"
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.LiquidMemories",
+      "name": "LiquidMemories",
+      "kind": "conditional_zero",
+      "mechanism": "从弃牌堆回收并临时免费；初始／消耗／待返回牌不能失去认证检查",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/LiquidMemories.cs",
+      "sourceSha256": "615f7730fb2c840247946483f926975fff5330e28d551263e2d750ca15113367",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyPlayer",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": "Only closed initial/permanent/all-pile/returning sources, native filtered generation closure, audited global callbacks/attachments/enemies and single-player root; unknown remains unbounded"
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.LuckyTonic",
+      "name": "LuckyTonic",
+      "kind": "conditional_zero",
+      "mechanism": "BufferPower；减少一次战损，不是治疗",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/LuckyTonic.cs",
+      "sourceSha256": "11a08d35a1a97d8340b24af1a27e421a393389113d6ff8cfe53b0bc8b05e25b9",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyPlayer",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [
+        "BufferPower"
+      ],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": "Only closed initial/permanent/all-pile/returning sources, native filtered generation closure, audited global callbacks/attachments/enemies and single-player root; unknown remains unbounded"
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.MazalethsGift",
+      "name": "MazalethsGift",
+      "kind": "conditional_zero",
+      "mechanism": "RitualPower；按回合获得力量",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/MazalethsGift.cs",
+      "sourceSha256": "caba4c6df73f8834c17a98f2fab38697987faae9110c5558b6965c83ca8bf2b8",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyPlayer",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [
+        "RitualPower"
+      ],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": "Only closed initial/permanent/all-pile/returning sources, native filtered generation closure, audited global callbacks/attachments/enemies and single-player root; unknown remains unbounded"
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.OrobicAcid",
+      "name": "OrobicAcid",
+      "kind": "conditional_zero",
+      "mechanism": "角色攻击、技能、能力各一张；原生解锁／人数／可生成过滤与递归闭包",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/OrobicAcid.cs",
+      "sourceSha256": "e5d4334e3b1d69f1c88325845f9f3363fd593726c2eb3c7c5f89bcb22d59c914",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyPlayer",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": "Only closed initial/permanent/all-pile/returning sources, native filtered generation closure, audited global callbacks/attachments/enemies and single-player root; unknown remains unbounded"
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.PoisonPotion",
+      "name": "PoisonPotion",
+      "kind": "conditional_zero",
+      "mechanism": "PoisonPower；敌方持续伤害与死亡回调",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/PoisonPotion.cs",
+      "sourceSha256": "2f2081931972709dd74c955331fdf028887ef2497e3fc807c696211f88867133",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyEnemy",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [
+        "PoisonPower"
+      ],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": "Only closed initial/permanent/all-pile/returning sources, native filtered generation closure, audited global callbacks/attachments/enemies and single-player root; unknown remains unbounded"
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.PotionOfBinding",
+      "name": "PotionOfBinding",
+      "kind": "conditional_zero",
+      "mechanism": "敌方 WeakPower、VulnerablePower",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/PotionOfBinding.cs",
+      "sourceSha256": "ce2ba08aa5fb578b87452e65f9e58fbce9b7d98bed3c69fc5e4b48f35d01f260",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AllEnemies",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [
+        "VulnerablePower",
+        "WeakPower"
+      ],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": "Only closed initial/permanent/all-pile/returning sources, native filtered generation closure, audited global callbacks/attachments/enemies and single-player root; unknown remains unbounded"
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.PotionOfCapacity",
+      "name": "PotionOfCapacity",
+      "kind": "conditional_zero",
+      "mechanism": "增加球槽；球槽改变回调",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/PotionOfCapacity.cs",
+      "sourceSha256": "2c3d727d3c27a871b7feee6b5bc1480e3b351e8034a02cee88061e51a240aceb",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyPlayer",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": "Only closed initial/permanent/all-pile/returning sources, native filtered generation closure, audited global callbacks/attachments/enemies and single-player root; unknown remains unbounded"
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.PotionOfDoom",
+      "name": "PotionOfDoom",
+      "kind": "conditional_zero",
+      "mechanism": "敌方 DoomPower；死亡阈值与死亡回调",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/PotionOfDoom.cs",
+      "sourceSha256": "cc293c2879ea7a9e935c7cd538c8ae33960f1fb4d35673b8e45fceb210371ed3",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyEnemy",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [
+        "DoomPower"
+      ],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": "Only closed initial/permanent/all-pile/returning sources, native filtered generation closure, audited global callbacks/attachments/enemies and single-player root; unknown remains unbounded"
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.PotionShapedRock",
+      "name": "PotionShapedRock",
+      "kind": "conditional_zero",
+      "mechanism": "Token 药水；敌方伤害，初始实际持有与普通生成分开处理",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/PotionShapedRock.cs",
+      "sourceSha256": "40d47b8a1d814e1ed02d4682aaabcd87152b02e5b5fca339a891eaf8168092a0",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyEnemy",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": "Only closed initial/permanent/all-pile/returning sources, native filtered generation closure, audited global callbacks/attachments/enemies and single-player root; unknown remains unbounded"
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.PotOfGhouls",
+      "name": "PotOfGhouls",
+      "kind": "conditional_zero",
+      "mechanism": "显式生成 Soul；抽牌与递归执行闭包",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/PotOfGhouls.cs",
+      "sourceSha256": "f93912a94023874f937f256e972d7e3b7eb25aefd1409e0a9c176cfad755788e",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyPlayer",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": "Only closed initial/permanent/all-pile/returning sources, native filtered generation closure, audited global callbacks/attachments/enemies and single-player root; unknown remains unbounded"
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.PowderedDemise",
+      "name": "PowderedDemise",
+      "kind": "conditional_zero",
+      "mechanism": "敌方 DemisePower；回合末伤害与死亡回调",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/PowderedDemise.cs",
+      "sourceSha256": "40bd82d7a74f9e110d219795d0a7ab9c7c54aaf121b2653fbb5d323bbb28827d",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyEnemy",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [
+        "DemisePower"
+      ],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": "Only closed initial/permanent/all-pile/returning sources, native filtered generation closure, audited global callbacks/attachments/enemies and single-player root; unknown remains unbounded"
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.PowerPotion",
+      "name": "PowerPotion",
+      "kind": "conditional_zero",
+      "mechanism": "原生角色能力池筛选；人数／解锁／可生成及递归生成",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/PowerPotion.cs",
+      "sourceSha256": "053e250005a92dccb29ce08db65e2df647e9a6ed1c3568e37c24642d7c924630",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyPlayer",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": "Only closed initial/permanent/all-pile/returning sources, native filtered generation closure, audited global callbacks/attachments/enemies and single-player root; unknown remains unbounded"
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.RadiantTincture",
+      "name": "RadiantTincture",
+      "kind": "conditional_zero",
+      "mechanism": "即时能量与 RadiancePower 的后续能量",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/RadiantTincture.cs",
+      "sourceSha256": "cff95e79a0845de3aeffb90553578c0dbfd2a7ba5c60a4ec1f867a53743cf7e7",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyPlayer",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [
+        "RadiancePower"
+      ],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": "Only closed initial/permanent/all-pile/returning sources, native filtered generation closure, audited global callbacks/attachments/enemies and single-player root; unknown remains unbounded"
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.RegenPotion",
+      "name": "RegenPotion",
+      "kind": "finite_regeneration",
+      "mechanism": "玩家再生；已有再生及所有合法剩余剂量累加后用三角和保守上界；禁药／额度只排除未使用剂量",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/RegenPotion.cs",
+      "sourceSha256": "8fd5923c7cbc19bf4ccdeb93e428d91bc7f392582990898b23737645adb6aa1b",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyPlayer",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [
+        "RegenPower"
+      ],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": null
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.ShacklingPotion",
+      "name": "ShacklingPotion",
+      "kind": "conditional_zero",
+      "mechanism": "敌方临时力量降低及到期恢复；不是生命重设",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/ShacklingPotion.cs",
+      "sourceSha256": "bfb225d3d62b5c8840a0a2469792357b8d236f7f86932055ce739c7cf641b991",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AllEnemies",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [
+        "ShacklingPotionPower"
+      ],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": "Only closed initial/permanent/all-pile/returning sources, native filtered generation closure, audited global callbacks/attachments/enemies and single-player root; unknown remains unbounded"
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.ShipInABottle",
+      "name": "ShipInABottle",
+      "kind": "conditional_zero",
+      "mechanism": "当前格挡及 BlockNextTurnPower",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/ShipInABottle.cs",
+      "sourceSha256": "1ccd40627d671eb04d88f643821b642c428973ff21367f111a8e39e28a34f03d",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyPlayer",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [
+        "BlockNextTurnPower"
+      ],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": "Only closed initial/permanent/all-pile/returning sources, native filtered generation closure, audited global callbacks/attachments/enemies and single-player root; unknown remains unbounded"
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.SkillPotion",
+      "name": "SkillPotion",
+      "kind": "conditional_zero",
+      "mechanism": "原生角色技能池筛选；人数／解锁／可生成及递归生成",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/SkillPotion.cs",
+      "sourceSha256": "214584632507b72666b5a5f7358bf6353433c9d7acd4d4d956d7074df51c8900",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyPlayer",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": "Only closed initial/permanent/all-pile/returning sources, native filtered generation closure, audited global callbacks/attachments/enemies and single-player root; unknown remains unbounded"
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.SneckoOil",
+      "name": "SneckoOil",
+      "kind": "conditional_zero",
+      "mechanism": "抽牌并随机化手牌费用；费用变化与抽牌回调",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/SneckoOil.cs",
+      "sourceSha256": "88eadb2c155d5a66fc9b597d076acc4cca3141b96df4561abb556f5cb50089b9",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyPlayer",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": "Only closed initial/permanent/all-pile/returning sources, native filtered generation closure, audited global callbacks/attachments/enemies and single-player root; unknown remains unbounded"
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.SoldiersStew",
+      "name": "SoldiersStew",
+      "kind": "conditional_zero",
+      "mechanism": "所有实际 Strike 标签牌 BaseReplayCount 增加；重复执行与初始来源闭包",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/SoldiersStew.cs",
+      "sourceSha256": "8b8366b010200ba22ca6cbc3c97fd49a81284da594a084c9cf86228c38fe43e4",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyPlayer",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": "Only closed initial/permanent/all-pile/returning sources, native filtered generation closure, audited global callbacks/attachments/enemies and single-player root; unknown remains unbounded"
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.SpeedPotion",
+      "name": "SpeedPotion",
+      "kind": "conditional_zero",
+      "mechanism": "SpeedPotionPower；临时敏捷及到期恢复",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/SpeedPotion.cs",
+      "sourceSha256": "f88a4cbdf0fda81069fc923d670becfb38889fb96453c2edd8680eb8a63de2e3",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyPlayer",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [
+        "SpeedPotionPower"
+      ],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": "Only closed initial/permanent/all-pile/returning sources, native filtered generation closure, audited global callbacks/attachments/enemies and single-player root; unknown remains unbounded"
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.StableSerum",
+      "name": "StableSerum",
+      "kind": "conditional_zero",
+      "mechanism": "RetainHandPower；保留手牌",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/StableSerum.cs",
+      "sourceSha256": "bc8c04c6b99d6c5d5ee9dee3350da408bf0b4048b337a42273675dee53a005d4",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyPlayer",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [
+        "RetainHandPower"
+      ],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": "Only closed initial/permanent/all-pile/returning sources, native filtered generation closure, audited global callbacks/attachments/enemies and single-player root; unknown remains unbounded"
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.StarPotion",
+      "name": "StarPotion",
+      "kind": "conditional_zero",
+      "mechanism": "获得星星；资源目标保持原规则",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/StarPotion.cs",
+      "sourceSha256": "5f941b39a389f991eac1ab58562459ba1864da71e163367a8506f2341f3b78bd",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyPlayer",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": "Only closed initial/permanent/all-pile/returning sources, native filtered generation closure, audited global callbacks/attachments/enemies and single-player root; unknown remains unbounded"
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.StrengthPotion",
+      "name": "StrengthPotion",
+      "kind": "conditional_zero",
+      "mechanism": "StrengthPower",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/StrengthPotion.cs",
+      "sourceSha256": "99938178396c21c5e9a9d0b651b48296590b81c1a403234df655b119c7cdd791",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyPlayer",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [
+        "StrengthPower"
+      ],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": "Only closed initial/permanent/all-pile/returning sources, native filtered generation closure, audited global callbacks/attachments/enemies and single-player root; unknown remains unbounded"
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.SwiftPotion",
+      "name": "SwiftPotion",
+      "kind": "conditional_zero",
+      "mechanism": "抽牌；全部牌堆和抽牌回调",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/SwiftPotion.cs",
+      "sourceSha256": "f66c044a9363f91fb091e7fccba74303b8a265f6620fc2dc8e3da3a5c192b2fa",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyPlayer",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": "Only closed initial/permanent/all-pile/returning sources, native filtered generation closure, audited global callbacks/attachments/enemies and single-player root; unknown remains unbounded"
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.TouchOfInsanity",
+      "name": "TouchOfInsanity",
+      "kind": "conditional_zero",
+      "mechanism": "选牌永久战内免费；不变牌；费用变化回调",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/TouchOfInsanity.cs",
+      "sourceSha256": "0d8b6dbaba540cec25ce86a2ffb14a6d91b7fb4b805529ef87194770e31ee33e",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyPlayer",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": "Only closed initial/permanent/all-pile/returning sources, native filtered generation closure, audited global callbacks/attachments/enemies and single-player root; unknown remains unbounded"
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.VulnerablePotion",
+      "name": "VulnerablePotion",
+      "kind": "conditional_zero",
+      "mechanism": "敌方 VulnerablePower",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/VulnerablePotion.cs",
+      "sourceSha256": "e4003426f9c72257691d7c0946ef93ac5b35d6ea1ae6b0132ac27b5108dbd968",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyEnemy",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [
+        "VulnerablePower"
+      ],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": "Only closed initial/permanent/all-pile/returning sources, native filtered generation closure, audited global callbacks/attachments/enemies and single-player root; unknown remains unbounded"
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.WeakPotion",
+      "name": "WeakPotion",
+      "kind": "conditional_zero",
+      "mechanism": "敌方 WeakPower",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/WeakPotion.cs",
+      "sourceSha256": "ef25f80f354aabbf0757c28f11429794e7cb5927c61b7bf485cafe62ca9336d2",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.AnyEnemy",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [
+        "WeakPower"
+      ],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": "Only closed initial/permanent/all-pile/returning sources, native filtered generation closure, audited global callbacks/attachments/enemies and single-player root; unknown remains unbounded"
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Potions.Mocks.MockDiscardAndAddShivsPotion",
+      "name": "MockDiscardAndAddShivsPotion",
+      "kind": "test_only_unknown",
+      "mechanism": "测试模型；不因属于原版 DLL 就认证为原版药水",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/sources/MockDiscardAndAddShivsPotion.cs",
+      "sourceSha256": "464eb90c6a304775f601203031ab7dcf0898f819a9144553f90c114aac321a60",
+      "declaredGameplayAndInheritedPotionWrapperReviewed": true,
+      "targetDeclaration": "TargetType.Self",
+      "usageDeclaration": "PotionUsage.CombatOnly",
+      "effectPowers": [],
+      "runtimeQualification": "minimal root inventory contract Passed for 58 zero and 5 deferred actual native models; actual-use breadth, complete callback closure and final regression pending",
+      "zeroCondition": null
+    }
+  ],
+  "powerSourceProvenance": [
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Powers.AmbergrisPower",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/power-sources/AmbergrisPower.cs",
+      "origin": ".local/general-healing-audit/native-src/Models.Powers.AmbergrisPower.cs",
+      "sha256": "e43122abaafb9136e0edc1ee5ccda29502b77527efa6a757e82e1a01eba47a01",
+      "exitCode": 0
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Powers.BlockNextTurnPower",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/power-sources/BlockNextTurnPower.cs",
+      "origin": "reused-audit:c56/native-src/BlockNextTurnPower.cs",
+      "sha256": "7ab300e23a7d1eefeb1401844f016bcec50c4d5ed1b6f42aaa0d15502e7eed94",
+      "exitCode": 0
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Powers.BufferPower",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/power-sources/BufferPower.cs",
+      "origin": "reused-audit:c56/native-src/BufferPower.cs",
+      "sha256": "39aaf9eb673fecc510cf9952153d7413f6d9f7d81993375cbc19629d8b505d4e",
+      "exitCode": 0
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Powers.ClarityPower",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/power-sources/ClarityPower.cs",
+      "origin": "new pinned decompile",
+      "sha256": "01ba39be2a8b23e1f32a4746b2b7a7542422a1b4586051f90d7edba61aecf1eb",
+      "exitCode": 0
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Powers.DemisePower",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/power-sources/DemisePower.cs",
+      "origin": "new pinned decompile",
+      "sha256": "8991d53ac155abcd36cc8809a4039e0c251d267657bfb817e7335e35d7cc0d1b",
+      "exitCode": 0
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Powers.DexterityPower",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/power-sources/DexterityPower.cs",
+      "origin": "reused-audit:c56/native-src/DexterityPower.cs",
+      "sha256": "901e07c9b5cc0b2256b311137d407154b50d6f1cc8f943f1890c9333053e47de",
+      "exitCode": 0
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Powers.DoomPower",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/power-sources/DoomPower.cs",
+      "origin": "reused-audit:c56/native-src/DoomPower.cs",
+      "sha256": "55425b2543a42cd3ea7edb36b85e0478b9adcfb1319d2e58f94c1d68764946a8",
+      "exitCode": 0
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Powers.DuplicationPower",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/power-sources/DuplicationPower.cs",
+      "origin": "new pinned decompile",
+      "sha256": "b0b5681a6d7109f10b717e65791ffb268d509a72d42de0a83d4c1fcd6a25e342",
+      "exitCode": 0
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Powers.FlexPotionPower",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/power-sources/FlexPotionPower.cs",
+      "origin": "new pinned decompile",
+      "sha256": "ed646be2a6a465e0b59b89abcd8ab33418d97bec79826af3f4bcafec06189557",
+      "exitCode": 0
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Powers.FocusPower",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/power-sources/FocusPower.cs",
+      "origin": "reused-audit:c56/native-src/FocusPower.cs",
+      "sha256": "99a32818445c56a52f3e50c566b64c0676a8acfce4b22e137408a42d97fba65a",
+      "exitCode": 0
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Powers.GigantificationPower",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/power-sources/GigantificationPower.cs",
+      "origin": "new pinned decompile",
+      "sha256": "43ac788fe93f381c3df2db77aab4a0356114184651db971175d415b90d649f64",
+      "exitCode": 0
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Powers.IntangiblePower",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/power-sources/IntangiblePower.cs",
+      "origin": "new pinned decompile",
+      "sha256": "67aadcf207f823055bd49d33ce558d68112da54e89217fa5cbd35af57156aa4d",
+      "exitCode": 0
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Powers.PlatingPower",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/power-sources/PlatingPower.cs",
+      "origin": "new pinned decompile",
+      "sha256": "a4c98b9b3b0d6cc499c56bce9726331f9f3e278b4f1d2bb0993b0084760e79e7",
+      "exitCode": 0
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Powers.PoisonPower",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/power-sources/PoisonPower.cs",
+      "origin": "new pinned decompile",
+      "sha256": "2cdea78f61e1539750bfab9436aacfa5a66031dc8be270e864f3728ee845ee25",
+      "exitCode": 0
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Powers.RadiancePower",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/power-sources/RadiancePower.cs",
+      "origin": "new pinned decompile",
+      "sha256": "040b3f9debe4f76de3f3e1687d6ca5a7e2a1213d2f402af28c94cdfb8457b9e8",
+      "exitCode": 0
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Powers.RegenPower",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/power-sources/RegenPower.cs",
+      "origin": ".local/general-healing-audit/native-src/Models.Powers.RegenPower.cs",
+      "sha256": "f507358d924e933fc057f1170f36dc250c066248cc16cc14feb996426c0c6733",
+      "exitCode": 0
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Powers.RetainHandPower",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/power-sources/RetainHandPower.cs",
+      "origin": "new pinned decompile",
+      "sha256": "c568e905b308efec8fd508cefdf282f6db4a97bb12ca9c357c53713cc1bc1eda",
+      "exitCode": 0
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Powers.RitualPower",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/power-sources/RitualPower.cs",
+      "origin": "new pinned decompile",
+      "sha256": "91a61d4f666368ac58205b2361e51047f7dff401bc8e5daad788798ada9b6989",
+      "exitCode": 0
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Powers.ShacklingPotionPower",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/power-sources/ShacklingPotionPower.cs",
+      "origin": "new pinned decompile",
+      "sha256": "2ecca3d6527b1be8a8b94b1ed4a42c1719869fbe5673f6f99450453d3a410ab1",
+      "exitCode": 0
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Powers.ShrinkPower",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/power-sources/ShrinkPower.cs",
+      "origin": "new pinned decompile",
+      "sha256": "8b0b030d5407d5fe59e0ae41bf683d4f554c64ab72cf744669280fba2b7540ef",
+      "exitCode": 0
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Powers.SpeedPotionPower",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/power-sources/SpeedPotionPower.cs",
+      "origin": ".local/general-healing-audit/regent-boss-source-audit/Powers.SpeedPotionPower.cs",
+      "sha256": "aa418c7cbbd089f02882873680d5ffeaebc3e45efe72080667783d3035abaeea",
+      "exitCode": 0
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Powers.StrengthPower",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/power-sources/StrengthPower.cs",
+      "origin": "new pinned decompile",
+      "sha256": "e69fb98a0cac94d4293aa0c67c188f501ed21f9d0999a562ea2b59e2e3dce54b",
+      "exitCode": 0
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Powers.ThornsPower",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/power-sources/ThornsPower.cs",
+      "origin": "new pinned decompile",
+      "sha256": "84fd3b6463ed0a6fd8d2dc0613821136b6c450e36ab1eb48da336312c6569366",
+      "exitCode": 0
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Powers.VulnerablePower",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/power-sources/VulnerablePower.cs",
+      "origin": "new pinned decompile",
+      "sha256": "4ffa795123ac0be87932a9f35f1d7f9bd5b836ab00b6eeb215af98a2ac1092a5",
+      "exitCode": 0
+    },
+    {
+      "type": "MegaCrit.Sts2.Core.Models.Powers.WeakPower",
+      "source": ".local/general-healing-audit/native-potion-catalog-20261004/power-sources/WeakPower.cs",
+      "origin": "new pinned decompile",
+      "sha256": "cd00e4a323d6a84e45820f0e7e7c8885ab80711c8ae5c21530b5fb8eaf159887",
+      "exitCode": 0
+    }
+  ],
+  "wrapperCallChain": [
+    "PotionModel.OnUseWrapper: BeforePotionUsed",
+    "CombatManager.BeginCardOrPotionEffect",
+    "PotionModel.OnUse: branching choices and own effect",
+    "CombatManager.EndCardOrPotionEffect",
+    "History.PotionUsed and AfterPotionUsed",
+    "CombatManager.CheckForEmptyHand"
+  ],
+  "acquisitionCallbacks": [
+    "PotionCmd.TryToProcure: AfterPotionProcured",
+    "PotionCmd.Discard: AfterPotionDiscarded"
+  ],
+  "generationBoundary": "EntropicBrew uses OutOfCombat factory even during combat; combat-generation exclusion does not block its healing/Fairy candidates. Card generation retains Feed/NotYet/Alchemize exclusions, initial/copy/recovery still independently checked.",
+  "unverified": [
+    "global finite-heal cap modifiers for Blood/Ambergris",
+    "Fruit growth comparisons",
+    "Fairy automatic resource comparisons",
+    "Entropic finite quota recursive bound",
+    "final candidate controls and fixed regression",
+    "all 64 native potion-use effects not executed",
+    "full callback closure for additional potion powers",
+    "upstream 0.49.1 integration and final complete-request controls"
+  ],
+  "productionIntegrated": false,
+  "nativeContract": {
+    "runId": "14eef45cfeb04fc7bb137f9cec2a8c08",
+    "status": "Passed",
+    "dllSha256": "a470322915f0a4bedf285cfb6e0df94aa57e99b8e69d65f27b4c21faaf50d046",
+    "checks": [
+      "NativePotionCatalog:All58PositiveActualModelDbRoots:FiveDeferredNativeModelsRefused:RootFork:DisabledQuota:LiveParentRngIsolation:ExistingRegenFormulaPreserved",
+      "ComponentSilentBoss:NativeFortifierTriplesExistingBlock:NativeLuckyBuffer:FullStateForkRng:NoPlayerRecovery",
+      "ComponentSilentBoss:EightActualNativeInitialPlays:FixedShivGeneration:MasterPlannerSly:ReflexDraw:PowerInstances:FullStateForkRng",
+      "ComponentSilentBoss:TwoFullNativeRounds:InsatiableSandpitFranticEscape:PoisonBoulderDamage:SparklingTurnThree:FullStateForkRng",
+      "ComponentSilentBoss:16OwnedParallelForks:FullStateBoundParentRngIsolation:NoSearchBudgetOrScoreChanged",
+      "NativeOutcome:combatEnded=False:turn=3:hp=52:maxHp=70"
+    ],
+    "elapsedMilliseconds": 34109.1522,
+    "scope": "58 actual native potion-inventory roots and 5 actual refused roots; two native potion uses, eight cards, two rounds, 16 forks; all 64 native potion-use effects NOT executed",
+    "instanceRemoved": true
+  },
+  "candidateProductionIntegrated": false
+}

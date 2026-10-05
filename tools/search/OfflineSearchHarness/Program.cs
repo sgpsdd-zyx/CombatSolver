@@ -18,6 +18,8 @@ internal static class Program
 
     private static int Main(string[] rawArgs)
     {
+        if (rawArgs.Length == 1 && rawArgs[0] == "--check-primary-incumbents")
+            return PrimaryIncumbentChecks.Run();
         if (rawArgs.Length == 1 && rawArgs[0] == "--check-early-turn-continuation-bound")
         {
             return EarlyTurnContinuationChecks.Run();
@@ -136,6 +138,12 @@ internal static class Program
             }
 
             reached = "M1";
+            if (generated?.Request.TheftPolicyForTest is { } theftPolicy)
+                SolverController.SetTheftPolicyForTesting(combat!, theftPolicy);
+            if (Environment.GetEnvironmentVariable("OFFLINE_HARNESS_THEFT_BUCKET_CHECKS") == "1")
+                PrimaryIncumbentChecks.RunTheft(combat!);
+            if (Environment.GetEnvironmentVariable("OFFLINE_HARNESS_RESOURCE_BUCKET_CHECKS") == "1")
+                PrimaryIncumbentChecks.RunResources(combat!);
             DuplicateChoiceProbe.RunBuilders(combat!, options.OutputDirectory);
             SnapshotOpportunityProbe.RunShuffleWitness(combat!, options.OutputDirectory);
             if (Environment.GetEnvironmentVariable("OFFLINE_HARNESS_HISTORY_CHECKS") == "1")
@@ -422,6 +430,8 @@ internal sealed record HarnessOptions
           --memory-no-progress-limit <int>  实验：连续多少次无进展回收后提前收手（0=关闭）
           --transposition-entry-limit <int>  实验：转置支配表合并条目上限（0=不设上限；缺省=生产默认 1000000）
           --stop-at-zero-loss    启用生产零战损达标停止政策
+          --disable-shared-incumbents  消融：仅关闭共享战损基准，保留上游成员内剪枝
+          --verify-shared-incumbent-reuse  Coordinator：核验相同根的跨请求胜利见证续用
           --stop-portfolio-at-hp-target  Coordinator：显式开启组合达标早停（缺省沿用生产配置）
           --disable-portfolio-hp-target-stop  Coordinator 消融：关闭组合达标早停
           --verify-incremental   逐动作完整回放核验（不得用于性能数字）
@@ -491,6 +501,8 @@ internal sealed record HarnessOptions
     public int? TranspositionEntryLimit { get; init; }
     public bool ProductionBudget { get; init; }
     public bool StopAtZeroLoss { get; init; }
+    public bool DisableSharedIncumbents { get; init; }
+    public bool VerifySharedIncumbentReuse { get; init; }
     public bool VerifyIncremental { get; init; }
     /// <summary>实验：走 Runtime 的搜索内 No-GC 生命周期，供无头宿主复现内存回收与截断。</summary>
     public bool EnableNoGcRegion { get; init; }
@@ -528,7 +540,8 @@ internal sealed record HarnessOptions
         int? earlyTurnExplorationBudgetMilliseconds = null;
         int? transpositionEntryLimit = null;
         bool measurePhases = false, enableNoGcRegion = false, productionBudget = false;
-        bool stopAtZeroLoss = false, verifyIncremental = false;
+        bool stopAtZeroLoss = false, verifyIncremental = false, disableSharedIncumbents = false;
+        bool verifySharedIncumbentReuse = false;
         double noGcRegionBudgetGigabytes = 1d;
         int orderingObservationLimit = 0;
         string? orderingWatchedStatesPath = null;
@@ -597,6 +610,8 @@ internal sealed record HarnessOptions
                 case "--early-turn-exploration-depth": earlyTurnExplorationDepth = int.Parse(Value()); break;
                 case "--early-turn-exploration-budget-ms": earlyTurnExplorationBudgetMilliseconds = int.Parse(Value()); break;
                 case "--stop-at-zero-loss": stopAtZeroLoss = true; break;
+                case "--disable-shared-incumbents": disableSharedIncumbents = true; break;
+                case "--verify-shared-incumbent-reuse": verifySharedIncumbentReuse = true; break;
                 case "--verify-incremental": verifyIncremental = true; break;
                 case "--production-budget": productionBudget = true; break;
                 case "--disable-transposition-prune": transpositionPruneOff = int.Parse(Value()); break;
@@ -752,6 +767,8 @@ internal sealed record HarnessOptions
             TranspositionEntryLimit = transpositionEntryLimit,
             ProductionBudget = productionBudget,
             StopAtZeroLoss = stopAtZeroLoss,
+            DisableSharedIncumbents = disableSharedIncumbents,
+            VerifySharedIncumbentReuse = verifySharedIncumbentReuse,
             VerifyIncremental = verifyIncremental,
             MemoryNoProgressRecoveryLimit = memoryNoProgressLimit,
             EnableNoGcRegion = enableNoGcRegion,

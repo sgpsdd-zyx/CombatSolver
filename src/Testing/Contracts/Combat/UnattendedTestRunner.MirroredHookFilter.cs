@@ -28,10 +28,16 @@ internal sealed partial class UnattendedTestRunner
             if (mask == MirroredHookMask.All)
                 continue;
             string name = mask.ToString();
+            // GoldCallbacks is the union of three native hooks, not a method name.
+            string[] hookNames = mask == MirroredHookMask.GoldCallbacks
+                ? [nameof(AbstractModel.ModifyGoldGained),
+                    nameof(AbstractModel.AfterModifyingGoldGained),
+                    nameof(AbstractModel.AfterGoldGained)]
+                : [name];
             AbstractModel[] expected = models.Where(model =>
                 model.GetType().Assembly != typeof(AbstractModel).Assembly
                 || model.GetType().GetMethods(BindingFlags.Instance | BindingFlags.Public)
-                    .Any(method => method.Name == name
+                    .Any(method => hookNames.Contains(method.Name)
                         && method.DeclaringType != typeof(AbstractModel)
                         && method.GetBaseDefinition().DeclaringType == typeof(AbstractModel)))
                 .ToArray();

@@ -164,11 +164,11 @@ internal sealed partial class UnattendedTestRunner
                 runner.SetStage("hand_potential_costs");
                 runner.AssertHandPotentialCosts(scenario.CombatState, scenario.Player);
             }
-            if (request.ScenarioId == "KNOWN-GAMEPLAY-MOD-BOUNDARY")
+            if (request.ScenarioId == "COMBAT-MOD-BOUNDARY")
             {
-                runner.SetStage("known_gameplay_mod_boundary");
-                AssertKnownGameplayModBoundary();
-                runner._completedChecks.Add("KnownGameplayModBoundary");
+                runner.SetStage("combat_mod_boundary");
+                AssertCombatModBoundary(scenario.CombatState);
+                runner._completedChecks.Add("CombatModBoundary:Merchant:GameplayDeclaration:RootUnchanged");
             }
             if (request.ScenarioId == "CYCLE-EXIT-REVOKED-PARENT")
             {
@@ -348,6 +348,7 @@ internal sealed partial class UnattendedTestRunner
                 runner.SetStage("base_lib_card_modifier_boundary");
                 await AssertBaseLibCardModifierBoundaryAsync(scenario.CombatState, scenario.Player);
                 runner._completedChecks.Add("BaseLibCardModifierBoundary");
+                runner._completedChecks.Add("BaseLibGeneratedClone:NativeState:Created:Hand:Draw:Discard:Exhaust:Play:Removed");
             }
 
             if (request.ExportBugReportAfterSetup)

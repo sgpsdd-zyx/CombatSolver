@@ -8,7 +8,7 @@
 
 后台只读取根与分支状态；真实战斗对象只用作稳定身份或只读模型元数据。未知语义形成明确边界或失败。
 
-本分支基于官方 `4b5537d0 / 0.49.1`。单人使用官方路径；多人只在手动请求时捕获全队根，规划本机动作，不部署或预测队友主动操作。产品合同见 [多人军师](multiplayer-advisor.md)。
+本分支基于官方 `0d290fbe / 0.50.0`。单人使用官方路径；多人只在手动请求时捕获全队根，规划本机动作，不部署或预测队友主动操作。产品合同见 [多人军师](multiplayer-advisor.md)。
 
 ## 2. Runtime
 
@@ -17,6 +17,7 @@
 | `src/Runtime/Entry.cs` | 初始化、战斗生命周期接线 |
 | `SolverController.cs` | 主线程请求、结果接收、续用、部署和自动执行 |
 | `SolverControllerSessions.cs` | 战斗、搜索、部署会话生命周期 |
+| `CombatBugReportUploadPolicy.cs` / `CombatBugReportDescription.cs` | 当前战斗内容的上传引导资格与真实错误分类；搜索会话单独记录期间玩家输入 |
 | `CombatRootSnapshot.cs` | 在主线程捕获并核对稳定根 |
 | `ContinuationStamp.cs` | live / predicted 跨回合一致性和字段差异 |
 | `SearchGcPolicy.cs` | 进程 GC、NoGC 和跨战斗回收协调 |
@@ -33,6 +34,8 @@
 多人烘焙手套根只补完本机剩余准备；原生输入始终属于玩家，停止搜索不取消原生选牌。只有原生暂停、动作队列和队友准备边界同时成立才可捕获；第三方回合开始扩展明确拒绝该入口。
 
 常规 GC 搜索的系统余量、分配限额和 Gen2 回收由 Runtime 作用域持有，Search 只在排空后的提交边界消费压力信号。常规检查点刷新请求限额；不可分割提交通过显式退出将分配交给 CLR，下一请求重新建立限额。Runtime 在限额和诊断成功后登记作用域，入口失败释放信号并传播原异常；退出时按作用域清理计数和信号。
+
+`SearchGcRuntimeInfo` 在 Runtime 一次探测按类型查询 GC 信息的能力。具备完整信息时保留后台回收与完成索引核对；Mono 等运行库使用同步完整回收和弱引用完成哨兵。暂停观测通过压力信号传递为可空值，Search 消费实际观测并保留其他工作量；检查点及回收日志明确标记不可用的暂停统计。
 
 ## 3. Search
 
@@ -54,14 +57,21 @@
 | `.FinalPlanOrdering.cs` / `RouteQualityPolicy` | 完整路线质量与各既有投影顺序 |
 | `.StateEvaluation.cs` / `.Terminal.cs` | 评分特征、终局回放和回合结果 |
 | `SimulatedCombatState*.cs` | 分支战斗状态与动作语义 |
+| `PrimaryIncumbentTable` / `ResourceIncumbentPolicy` | 同根同政策的资源桶见证、未来收益上界与认证回退 |
 
 成员共享原请求账本；预算准入、候选合法性和取优由所属策略决定。分支状态不承担 Beam 政策；中途保路和终局比较保持明确入口。药水反事实与强制用药的硬准入先于质量比较。固定前缀构造实际父链，EndTurn 从模拟前后状态生成 `TurnOutcome`。
+
+组合补搜入口按基线完成情况与节点、时间余量准入。每个成员在 `CombatBeamSolver.Phases` 的提交边界预约内存，Runtime 检查点执行回收和区域重建，连续无进展时结束当前成员；成员可跨多个区域完成，累计分配量由组合诊断记录。
+
+资源桶按失窃量、用药量、成长次数向量、遗物目标组合分层。CombatRootSnapshot 冻结根成长上界，ResourceIncumbentPolicy 另在保路时只读认证分支剩余上界；不改变分支状态键或续用戳。纯成长目标在已实现次数至分支上界之间逐桶消费独立战损基准，所有可能目标均无改进空间才停止公共展开。目标集合过大或上界未知保留搜索；混合遗物目标沿用最乐观最终资源桶。Runtime 会话只携带已保留的完整零药路线及对应桶，不跨根或政策沿用数值界。
 
 预览路线的采用回放持有请求级取消令牌，单轮搜索结束与用户取消请求分别判断。强制结束回合的卡牌动作只消费自身选择，后续回合选择由AdvanceRound持有。固定前缀在仍进行的稳定父状态继续，药水统一沿正式候选政策准入。
 
 `StrategicHpRecoveryBound` 在根快照中冻结回复环境资格，由 `.Remaining` 维护已审计来源闭包和分支剩余上界，未知来源保持无限上界。`.KnownSources` 单独提供当前原版已知来源策略，忽略尚未生成的随机药水回复；该策略资格不构成严格闭包证书。已有完整合规胜利可以沿既有 Retention 和组合成员入口提供界；主搜索之前的计划安排仍只对严格认证根开放，其余根保留原阶段顺序。
 
-以上计划安排、能力/成长承诺、药水反事实审计、前两回合追加探索和开发策略脚本仅属单人。多人从协调器前置分支返回，使用 `MultiplayerSearchPolicy`、`MultiplayerContributionObjective` 与 `MultiplayerPlanOrdering`；自有评分、保路、剪枝、缓存和预算均由多人对象持有，公共文件仅显式接入。普通时间/节点预算乘二，固定预算不变；最多十四敌方周期。`MultiplayerCycleCheckpoint` 持有不可变周期数值短链，三周期目标、伤害/代价前沿与条件续行由政策层解释。
+以上计划安排、能力/成长承诺、药水反事实审计、前两回合追加探索和开发策略脚本仅属单人。多人根拒绝组件回复证书、已知来源策略与成长上界，政策清空 `PrimaryIncumbents`，Runtime 不获取单人见证表，solver 不应用局部或共享胜利界及 Smart 用药剪枝。多人从协调器前置分支返回，使用 `MultiplayerSearchPolicy`、`MultiplayerContributionObjective` 与 `MultiplayerPlanOrdering`；自有评分、保路、剪枝、缓存和预算均由多人对象持有，公共文件仅显式接入。普通时间/节点预算乘二，固定预算不变；最多十四敌方周期。`MultiplayerCycleCheckpoint` 持有不可变周期数值短链，三周期目标、伤害/代价前沿与条件续行由政策层解释。
+
+`.Components` 组合逐项审查的卡牌、生成池、Power、遗物、药水和敌人证明，并锁定审计的原生 MVID。Runtime 在稳定根捕获证书及拒绝原因；模拟状态只提供已捕获的战斗、永久牌组和全局监听前缀，不读取 live。资格随根冻结，分支上界重新检查牌堆、待返回牌、层数和用药记录，未知来源不调用已知来源估计来收紧无限界。Smart 的精确用药层及开局用药后续搜索复用同一节血门槛；完整无药胜利基线经既有 continuation 请求传递，成长、遗物、强制用药、资源追回和保命资源门禁仍保留。证书是搜索元数据，不进入战斗指纹或续用文本。
 
 ## 4. 模拟与 Prediction
 
@@ -78,9 +88,15 @@ Fork 发生在动作、选牌、Power、死亡和出牌事务允许复制的稳�
 
 未知 gameplay subscriber 显式拒绝；已支持来源在主线程捕获，并在分支中消费隔离状态。登记合同与封闭入口见 [第三方适配手册](third-party/README.md)。
 
-金币命令由 `GoldGainSupport` 串联标准镜像：修改使用跑局前缀和战斗监听表，获得后的回调使用原生 null-child 跑局作用域。`SimulatedCombatState.GoldHooks` 在主线程冻结全局来源。单人仍使用官方冻结成员和失活拒绝边界；多人每次派发前按分支 Hook 资格生成监听序列，覆盖死亡与复活后的牌、遗物和药水归属。派发中不重新判断资格，也不读 live 活动状态。遗物、药水、金币和 HP 从所属分支读取，未知金币 override 显式拒绝。监听参与位图为三个金币方法共用一位，只形成保守成员超集，精确方法仍由 registry 区分；不溢出或复用其他 Hook 位。`CombatPredictionSimulator.GainMaxHp` 单独实现实际封顶增量与后续 Heal，Feed、FruitJuice 和 DragonFruit 共用这一权威入口。
+金币命令由 `GoldGainSupport` 串联标准镜像：修改使用跑局前缀和战斗监听表，获得后的回调使用原生 null-child 跑局作用域。`SimulatedCombatState.GoldHooks` 在主线程冻结全局来源。单人使用官方根活动成员与分支 `HooksActive` 过滤；多人每次派发前按同一分支资格生成全队监听序列，覆盖死亡与从死亡根复活后的牌、遗物和药水归属。多人派发中不重新判断资格，也不读 live 活动状态。遗物、药水、金币和 HP 从所属分支读取，未知金币 override 显式拒绝。监听参与位图为三个金币方法共用一位，只形成保守成员超集，精确方法仍由 registry 区分；不溢出或复用其他 Hook 位。`CombatPredictionSimulator.GainMaxHp` 单独实现实际封顶增量与后续 Heal，Feed、FruitJuice 和 DragonFruit 共用这一权威入口。
 
-多人完整根保留死亡成员及其残留状态，`SimulatedCombatState.Multiplayer` 独占逐玩家 Hook 资格；死亡清理后停用，复活恢复，Fork、状态键与续用戳完整保存。`JossPaperState` 是各持有者金纸累计与延迟虚无计数的唯一所有者，不另设多人计数副本。多人历史按原效果持有者范围扫描，不消费单人累计历史快捷入口。
+多人完整根保留死亡成员及其残留状态。逐玩家 Hook 资格统一属于 `SimPlayerCombatState.HooksActive`；`SimulatedCombatState.Multiplayer` 只读写该分支字段并使监听缓存失效，不另设停用集合。死亡清理后停用、治疗复活时恢复，Fork、状态键与多人续用戳完整保存。`JossPaperState` 是各持有者金纸累计与延迟虚无计数的唯一所有者，不另设多人计数副本。多人历史按原效果持有者范围扫描，不消费单人累计历史快捷入口。
+
+资源初始化冻结玩家基础最大能量，最大能量与抽牌按分支监听表、回合号及遗物隐藏状态结算；准备根和普通跨回合都一次性消费延迟能量。玩家 Hook 活动标志由引擎在死亡清理时关闭，Fork 继承并进入状态键，金币回调据此筛选成员。攻击意图由分支当前怪物 AI 行动派生，行动替换即时生效。
+
+回合末自动出牌先于 BeforeSideTurnEndEarly，PAELS_EYE 的手牌消耗由该 Hook 镜像拥有；额外回合资格在阶段结算后判断。部署会话区分动作、玩家结束／敌方阶段与下一玩家回合；最后一个结束阶段选择确认前解除旧会话归属。UI 的步骤和完成回调核对所属回合及当前路线快照。
+
+额外回合的判断与后置效果由 `ExtraTurnMirrors` 登记原版和第三方单项语义，`HookMirrors` 按原生监听顺序派发。多人在全队阶段二完成后逐活动玩家查询资格，再逐参与者执行一次后置回调；不另设佩尔之眼或龙涎香消费逻辑。后置回调使用固定成员快照，选牌暂停沿动作重放恢复；分支 Power 与佩尔之眼使用状态继续由 `SimulatedCombatState` 持有。
 
 ## 5. UI
 
@@ -92,6 +108,8 @@ Fork 发生在动作、选牌、Power、死亡和出牌事务允许复制的稳�
 
 源码按 [Testing 入口](../src/Testing/README.md) 收纳：Host 持有编排与协议，Support 持有共享差分辅助，Replay 持有恢复；Contracts 按 Combat/Search/Runtime/UI/ThirdParty/Multiplayer 分组，Regressions 保存社区和报告回归。各目录沿用原程序集与 partial 类型。
 
+组件剩余回复上界和 Smart 用药资格合同位于 `Contracts/Search`；根状态与完整原生差分仍由既有 Support/Runtime 合同提供，不改变 partial 方法、请求路由或状态所有权。
+
 | 入口 | 所有权 |
 | --- | --- |
 | `UnattendedTestRunner` | 请求级编排与共享 fixture helper |
@@ -99,7 +117,7 @@ Fork 发生在动作、选牌、Power、死亡和出牌事务允许复制的稳�
 | `ScenarioBuilder` | 建局与状态注入 |
 | `Executor` | 差分、搜索、部署执行及临时设置 |
 | `Assertions` | 执行前后断言 |
-| `Writer` | 结果协议和原子写入 |
+| `Writer` | 结果协议和原子写入；求解侧实测值（含 `UnavoidableHpLost`）在此进入 `UnattendedSolverMetrics`，两平台 launcher 的 `ExpectedInitial*` 参数只做透传，断言落在 Contracts |
 
 原生与模拟核对完整状态、顺序、引用、RNG 和续用合同。离线宿主只产搜索指标；headless 不证明真实可见布局或帧时间。入口见 [无人测试](HEADLESS_TESTING.md)、[离线宿主](OFFLINE_SEARCH_HARNESS.md)、[测试证据](TEST_MATRIX.md)。
 

@@ -54,6 +54,8 @@ internal static class MultiplayerUpstreamContracts
         }
         SearchPolicySnapshot captured = SolverController.CaptureSearchPolicy(SolverSettings.Capture(), state, false, null);
         Check(!captured.GrowthOpportunityTargets.HasTargets, "multiplayer_skips_single_player_growth_targets");
+        PrimaryIncumbentTable soloIncumbents = new();
+        soloIncumbents.Tighten(0, 0, new(0, 1));
         SearchPolicySnapshot policy = new MultiplayerSearchPolicy().Apply(captured with
         {
             EarlyTurnExplorationDepth = 2,
@@ -61,17 +63,22 @@ internal static class MultiplayerUpstreamContracts
             DevelopmentStrategy = new(new RejectSoloStrategy(), new Dictionary<string, double>()),
             UseBeamWidthPortfolio = true,
             UseNoveltyPortfolio = true,
+            PrimaryIncumbents = soloIncumbents,
         });
         Check(policy.EarlyTurnExplorationDepth == 0
             && policy.EarlyTurnExplorationBudgetMilliseconds == 0
             && policy.DevelopmentStrategy == null
             && !policy.UseBeamWidthPortfolio && !policy.UseNoveltyPortfolio,
             "multiplayer_discards_solo_exploration_and_script_policy");
+        Check(policy.PrimaryIncumbents == null, "multiplayer_discards_solo_incumbent_table");
         var root = CombatRootSnapshot.Capture(state, multiplayerAdvisor: true);
         Check(!root.HasOnlyPostCombatHealing && !root.CanCertifyRemainingHealing
             && !root.UsesKnownNativeHealingPolicy && root.InitialRemainingHealingUpperBound == int.MaxValue
             && root.HealingBoundCertificationReason == "multiplayer_advisor",
             "multiplayer_root_excludes_all_solo_healing_bounds");
+        Check(!root.UsesComponentHealingCertificate && root.ComponentHealingRejection == "multiplayer"
+            && root.ExhaustingGrowthUpperBound == null && !PrimaryIncumbentTable.CanShareRoot(root),
+            "multiplayer_root_rejects_component_and_growth_certificates");
         var names = SolverDisplayNames.Capture(state);
         var damage = BattleDamageTracker.Observe(state);
         var soloPlan = new PlanCommitment(PlanCommitmentKind.CopyPower, [], root.StartTurnNumber,
@@ -89,6 +96,18 @@ internal static class MultiplayerUpstreamContracts
                 multiplayer ? "multiplayer_rejects_solo_plan_commitment" : "solo_retains_official_plan_commitment");
         }
         var solver = new CombatBeamSolver(root, names, damage, policy, searchProfile: policy.Profile);
+        var injected = new CombatBeamSolver(root, names, damage,
+            policy with { PrimaryIncumbents = soloIncumbents }, searchProfile: policy.Profile);
+        var flags = BindingFlags.Instance | BindingFlags.NonPublic;
+        var retainedIncumbents = (PrimaryIncumbentTable)typeof(CombatBeamSolver)
+            .GetField("_primaryIncumbents", flags)!.GetValue(injected)!;
+        Check(!(bool)typeof(CombatBeamSolver).GetField("_useSharedPrimaryIncumbents", flags)!.GetValue(injected)!
+            && !ReferenceEquals(retainedIncumbents, soloIncumbents)
+            && !retainedIncumbents.TryGet(0, 0, out _),
+            "multiplayer_solver_rejects_injected_solo_victory_bound");
+        Check(!CombatBeamSolver.CanUseComponentSmartPotionEligibility(root, policy)
+            && !injected.ComponentSmartBoundEnabledForTesting,
+            "multiplayer_solver_disables_component_smart_potion_pruning");
         var parent = root.ForkSimulator();
         var child = parent.Fork();
         var parentState = (SimulatedCombatState)parent.State.CombatState;

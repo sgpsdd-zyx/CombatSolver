@@ -167,6 +167,7 @@ for name in \
     expected-initial-node-limit-snapshots-released-at-least \
     expected-initial-choice-branches-evaluated-at-least \
     expected-initial-executable-action-count-at-least \
+    expected-initial-unavoidable-hp-lost \
     expected-initial-sold-hp expected-initial-sold-hp-at-most \
     expected-initial-sold-hp-branches-pruned-at-least \
     expected-initial-death-save-relic-hp \

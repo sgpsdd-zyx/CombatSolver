@@ -112,6 +112,13 @@ internal static class ModRuntime
     private static void ApplyFixedBudgetSettings(HarnessOptions options)
     {
         SolverSearchProfile profile = ResolveProfile(options);
+        SolverSettingsData? resourceSettings = Environment.GetEnvironmentVariable("OFFLINE_HARNESS_RESOURCE_SETTINGS")
+            is { Length: > 0 } resourcePath
+                ? System.Text.Json.JsonSerializer.Deserialize<SolverSettingsData>(File.ReadAllText(resourcePath),
+                    new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true,
+                        Converters = { new System.Text.Json.Serialization.JsonStringEnumConverter() } })
+                    ?? throw new InvalidDataException("Empty resource policy settings.")
+                : null;
         SolverSettings.ApplyForTesting(new SolverSettingsData
         {
             PerformanceMigrationVersion = SolverSettings.CurrentPerformanceMigrationVersion,
@@ -131,6 +138,9 @@ internal static class ModRuntime
             OnlineStatisticsEnabled = false,
             SearchCompletionNotificationsEnabled = false,
             PotionPolicy = Enum.Parse<SolverPotionPolicy>(options.PotionPolicy, ignoreCase: true),
+            GrowthBudgets = resourceSettings?.GrowthBudgets ?? default,
+            RelicStrategyEnabled = resourceSettings?.RelicStrategyEnabled ?? true,
+            RelicCounterRules = resourceSettings?.RelicCounterRules ?? [],
         });
     }
 
@@ -392,8 +402,9 @@ internal static class ModRuntime
         BattleDamageSnapshot damage = BattleDamageTracker.Observe(state);
         SolverSettingsSnapshot settings = SolverSettings.Capture();
         SearchPolicySnapshot policy = SolverController.CaptureSearchPolicy(
-            settings, state, includeTurnSetup: false, theftPolicy: null);
-        policy = policy with { Profile = policy.Profile with
+            settings, state, includeTurnSetup: false, theftPolicy: SolverController.ResolveTheftPolicy(state));
+        policy = policy with { DisableSharedPrimaryIncumbentsForTesting = options.DisableSharedIncumbents,
+            Profile = policy.Profile with
         {
             BaseScoreOnly = options.Ordering == "base",
             SecondRankBand = options.Ordering == "band",
@@ -467,6 +478,14 @@ internal static class ModRuntime
             timeBoundaryDiagnostics.Info(message);
         }, timeBoundaryDiagnostics.Debug, timeBoundaryDiagnostics.PathObserver) };
         object describedPolicy = DescribePolicy(policy);
+        SolverCombatSession? incumbentSession = null;
+        if (options.VerifySharedIncumbentReuse)
+        {
+            if (options.SearchMode != "Coordinator" || options.DisableSharedIncumbents)
+                throw new InvalidOperationException("Shared incumbent reuse requires enabled Coordinator search.");
+            incumbentSession = new();
+            policy = policy with { PrimaryIncumbents = incumbentSession.AcquirePrimaryIncumbents(root, policy, damage) };
+        }
         SolverResult result;
         if (options.EnableNoGcRegion)
         {
@@ -503,6 +522,27 @@ internal static class ModRuntime
                 ? CombatSearchCoordinator.Solve(root, names, damage, policy, CancellationToken.None, diagnosticProgress)
                 : SolveEvaluate(root, names, damage, policy, settings,
                     options.BudgetMilliseconds, loop, out describedPolicy, ref timeBoundary);
+        }
+        if (incumbentSession != null)
+        {
+            PrimaryIncumbentTable reused = incumbentSession.AcquirePrimaryIncumbents(root, policy, damage);
+            if (!ReferenceEquals(reused.PotionFreeWitness, result))
+                throw new InvalidOperationException("Same-root request did not retain its executable victory witness.");
+            SolverResult next = CombatSearchCoordinator.Solve(root, names, damage,
+                policy with { PrimaryIncumbents = reused }, CancellationToken.None, null);
+            if (next.OnlyDeathRoutesFound || !next.Snapshot.AllEnemiesDead
+                || next.ProjectedBattleHpLost > result.ProjectedBattleHpLost
+                || next.ExplicitPotionCount != result.ExplicitPotionCount
+                || RouteQualityPolicy.Compare(
+                    RouteQuality.FromInterim(CombatSearchCoordinator.CapturePortfolioQuality(root, policy, next)),
+                    RouteQuality.FromInterim(CombatSearchCoordinator.CapturePortfolioQuality(root, policy, result)),
+                    RouteQualityProjection.PotionPolicy, policy.TheftPolicy) > 0)
+                throw new InvalidOperationException("Reused request lost victory quality.");
+            var changed = incumbentSession.AcquirePrimaryIncumbents(root,
+                policy with { PotionPolicy = SolverPotionPolicy.RequireAtLeastOne }, damage);
+            if (changed.PotionFreeWitness != null)
+                throw new InvalidOperationException("Changed policy inherited an incompatible witness.");
+            Console.WriteLine("SHARED_INCUMBENT_REUSE status=Passed same_root=True changed_policy_reset=True");
         }
         if (options.SearchMode == "Coordinator" && policy.MeasurePhasePerformance)
             LastPhasePerformance = SolverDiagnostics.DescribeSearchPhasePerformance(result);

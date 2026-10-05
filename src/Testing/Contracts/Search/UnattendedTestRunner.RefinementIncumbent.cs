@@ -11,6 +11,61 @@ namespace CombatSolver;
 
 internal sealed partial class UnattendedTestRunner
 {
+    private async Task AssertPrimaryIncumbentReuseAsync(CombatState live, Player player)
+    {
+        await ClearPlayerPilesAsync(player);
+        await CreatureCmd.SetCurrentHp(live.Enemies.Single(), 18);
+        await InjectCardAsync(live, player, new() { CardId = "ROYALTIES", Pile = "Hand", TreatAsDeckCard = true });
+        await InjectCardAsync(live, player, new() { CardId = "STRIKE_REGENT", Pile = "Hand", Count = 2 });
+        await InjectCardAsync(live, player, new() { CardId = "DEFEND_REGENT", Pile = "Hand", Count = 4 });
+        await InjectCardAsync(live, player, new() { CardId = "STRIKE_REGENT", Pile = "Draw", Count = 5 });
+        SetEnergy(player, 3);
+        CombatRootSnapshot root = CombatRootSnapshot.Capture(live);
+        SolverDisplayNames names = SolverDisplayNames.Capture(live);
+        BattleDamageSnapshot damage = BattleDamageTracker.Observe(live);
+        string before = ContinuationStamp.CaptureLive(live).StateText;
+        var policy = SolverController.CaptureSearchPolicy(SolverSettings.Capture(), live, false, null) with
+        {
+            FixedBudget = true, VerifyIncrementalSearch = true, MaxDegreeOfParallelism = 1,
+            BudgetOverrideMilliseconds = null, StopAtAcceptableBattleHpLoss = false,
+            UseBeamWidthPortfolio = true, UseNoveltyPortfolio = false,
+            IgnoreLongTermRewards = false, GrowthBudgets = new(Royalties: 5), RelicTargets = [],
+            PotionPolicy = SolverPotionPolicy.Disabled, PotionStrategy = new(SolverPotionPolicy.Disabled, []),
+        };
+        policy = policy with { Profile = policy.Profile with
+        {
+            BeamWidth = 45, MaxExpandedNodes = 20_000, SoftTimeBudgetMilliseconds = 20_000,
+        } };
+        SolverCombatSession session = new();
+        SolverResult? first = null;
+        using var deadline = new CancellationTokenSource(TimeSpan.FromSeconds(40));
+        for (int request = 0; request < 3; request++)
+        {
+            PrimaryIncumbentTable table = session.AcquirePrimaryIncumbents(root, policy, damage);
+            if (request > 0 && table.PotionFreeWitness == null)
+                throw new InvalidOperationException("Same-root growth victory was not retained.");
+            SolverResult result = await Task.Run(() => CombatSearchCoordinator.Solve(root, names, damage,
+                policy with { PrimaryIncumbents = table }, deadline.Token, null));
+            if (!result.Snapshot.AllEnemiesDead || result.Snapshot.PlayerDead || result.Snapshot.HasRisk
+                || result.BoundaryReason != SearchBoundaryReason.None || result.ExplicitPotionCount != 0
+                || result.Snapshot.GrowthRewards.Royalties != 1 || result.ProjectedBattleHpLost != 0
+                || result.CombatEndedTurn != 2
+                || first != null && RouteQualityPolicy.Compare(
+                    RouteQuality.FromInterim(CombatSearchCoordinator.CapturePortfolioQuality(root, policy, result)),
+                    RouteQuality.FromInterim(CombatSearchCoordinator.CapturePortfolioQuality(root, policy, first)),
+                    RouteQualityProjection.PotionPolicy, policy.TheftPolicy) > 0)
+                throw new InvalidOperationException($"Same-root growth request {request} lost its complete victory: "
+                    + $"won={result.Snapshot.AllEnemiesDead}, loss={result.ProjectedBattleHpLost}, turn={result.CombatEndedTurn}.");
+            first ??= result;
+        }
+        if (ContinuationStamp.CaptureLive(live).StateText != before)
+            throw new InvalidOperationException("Shared incumbent search mutated live combat.");
+        if (session.AcquirePrimaryIncumbents(root,
+            policy with { PotionPolicy = SolverPotionPolicy.RequireAtLeastOne }, damage).PotionFreeWitness != null)
+            throw new InvalidOperationException("A changed potion policy retained the prior victory.");
+        _completedChecks.Add("PrimaryIncumbentReuse:NativeRoot:ThreeRequests:Growth:ZeroLoss:Turn2:StrictIncremental:PolicyReset:LiveIsolation");
+    }
+
     private async Task AssertRefinementIncumbentAsync(CombatState live, Player player)
     {
         await ClearPlayerPilesAsync(player);

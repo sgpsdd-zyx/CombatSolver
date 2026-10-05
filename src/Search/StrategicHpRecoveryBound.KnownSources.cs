@@ -49,7 +49,8 @@ internal static partial class StrategicHpRecoveryBound
 
     internal static int KnownNativeHealingPotential(
         CombatPredictionSimulator simulator, Player player, int postCombatHeal,
-        bool includePotionHealing = true, int? maximumExplicitPotionUses = null)
+        bool includePotionHealing = true, int? maximumExplicitPotionUses = null,
+        bool ignoreExhaustedFeed = false)
     {
         if (simulator.HasPendingChoice || !CanUseKnownNativeHealingPolicy(simulator, player))
             return int.MaxValue;
@@ -59,8 +60,11 @@ internal static partial class StrategicHpRecoveryBound
         // Recurring relic heals and death saves retain the complete HP allowance.
         // Max-HP gains also heal: permanent-deck curse additions and combat-end
         // callbacks must stay conservative until their complete source chains are closed.
-        if (state.AllCards.Any(card => card.Preview is NotYet or Feed)
+        if (state.AllCards.Any(card => card.Preview is NotYet
+                || card.Preview is Feed && (!ignoreExhaustedFeed || !state.ExhaustPile.Cards.Contains(card)))
             || combat.PendingReturningCards.Any(card => card.Preview is NotYet or Feed)
+            || combat.EffectivePowers().OfType<SwipePower>()
+                .Any(power => power.StolenCard is NotYet or Feed)
             || combat.RelicsOf(player).Any(relic => !relic.IsMelted
                 && relic is DemonTongue or BookOfFiveRings or BookRepairKnife or LizardTail
                     or DragonFruit or DarkstonePeriapt or ChosenCheese))

@@ -15,7 +15,7 @@ AdaptedCardOnPlayMirrors.Register<MyCard>(
 
 四类补丁分别为 Prefix、Postfix、Transpiler、Finalizer。同类声明按实际执行顺序填写；审计用 Harmony 自身的排序器核对方法、所属模块、类别、owner、priority、before／after 和完整顺序。组合包括目标上的全部补丁，即使其中某个来源原本被视为非 gameplay。额外同 owner 补丁也会失配。多个相同补丁方法、动态补丁工厂及 Inner Prefix／Postfix 暂不支持。
 
-根审计仍逐个识别来源；未知来源与项目明确拒绝的 Mod 无法通过登记解除。没有补丁时选回普通镜像；非空组合不匹配时明确拒绝。适配声明不解除 subscriber、隐藏状态、目标类型或其他方法的门禁。
+根审计仍逐个识别来源；未知来源明确失败。gameplay-neutral 来源沿既有框架准入规则处理；已登记组合仍逐项核对全部补丁。没有补丁时选回普通镜像；非空组合不匹配时明确拒绝。适配声明不解除 subscriber、隐藏状态、目标类型或其他方法的门禁。
 
 完整预测实现通过现有 `MethodMirrorRegistry` 执行，保留卡牌 trace 与状态上下文。匹配后 `CardOnPlayMirrors` 直接返回，**不会再执行原版 OnPlay 镜像和 CardEffectSpec 补偿**。因此 handler 必须覆盖原方法及整组补丁的效果，包含原 spec 中仍然需要保留的部分。写入只通过分支状态或 MutablePreview；不得执行原生补丁、捕获 live 状态或在静态闭包里保存可变分支状态。
 

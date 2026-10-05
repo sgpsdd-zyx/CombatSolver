@@ -2,6 +2,7 @@
 namespace MegaCrit.Sts2.Core.Models
 {
     internal abstract class AbstractModel;
+    internal abstract class MonsterModel : AbstractModel;
     internal abstract class CardModel : AbstractModel
     {
         public int Value;
@@ -27,10 +28,11 @@ namespace MegaCrit.Sts2.Core.Modding
     internal static class AssemblyInfo
     {
         public static bool Unknown;
+        public static bool Neutral;
         public static Mod? ModForType(Type type, out bool isBaseGame)
         {
             isBaseGame = false;
-            return Unknown ? null : new Mod();
+            return Unknown ? null : new Mod { manifest = new() { affectsGameplay = !Neutral } };
         }
     }
 }
@@ -43,7 +45,7 @@ namespace CombatSolver
         public sealed class Log { public void Info(string message) { } }
     }
     internal sealed class IncompatibleGameplayModException(string id, string name, string description, string scope)
-        : InvalidOperationException($"{id}/{name}/{scope}: {description}");
+        : NotSupportedException($"{id}/{name}/{scope}: {description}");
 }
 namespace CombatSolver.Engine.Common
 {

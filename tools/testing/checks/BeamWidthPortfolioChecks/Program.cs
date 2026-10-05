@@ -343,14 +343,14 @@ checks += 4;
 const long Budget = 60_000;
 BeamWidthPortfolioBaseline Baseline(
     bool exhausted = true, bool provenZeroDamage = false, long elapsed = 5_000,
-    long expanded = 4_000, long allocated = 400_000_000, int width = 24)
-    => new(exhausted, provenZeroDamage, elapsed, expanded, allocated, width);
+    long expanded = 4_000, int width = 24)
+    => new(exhausted, provenZeroDamage, elapsed, expanded, width);
 
 string? Gate(
     BeamWidthPortfolioBaseline baseline, int memberWidth = 96, long remainingNodes = 16_000,
-    long remainingMilliseconds = 55_000, long remainingMemoryBytes = long.MaxValue)
+    long remainingMilliseconds = 55_000)
     => BeamWidthPortfolioGate.RejectRefinement(
-        baseline, memberWidth, remainingNodes, remainingMilliseconds, Budget, remainingMemoryBytes);
+        baseline, memberWidth, remainingNodes, remainingMilliseconds, Budget);
 
 Require(Gate(Baseline()) == null, "A baseline with headroom on every axis was refused.");
 Require(PowerCommitmentPortfolioGate.Reject(
@@ -401,15 +401,6 @@ Require(Gate(Baseline(elapsed: 5_000), memberWidth: 96, remainingMilliseconds: 3
 Require(Gate(Baseline(elapsed: 5_000), memberWidth: 96, remainingMilliseconds: 29_999)
         == BeamWidthPortfolioGate.SkippedTimeHeadroom,
     "A refinement started without enough remaining time for its estimate.");
-
-// Memory headroom uses the same estimate; a disabled signal (long.MaxValue) never blocks.
-Require(Gate(Baseline(allocated: 400_000_000), memberWidth: 96, remainingMemoryBytes: 2_400_000_000) == null,
-    "A refinement that exactly fits the reported memory headroom was refused.");
-Require(Gate(Baseline(allocated: 400_000_000), memberWidth: 96, remainingMemoryBytes: 2_399_999_999)
-        == BeamWidthPortfolioGate.SkippedMemoryHeadroom,
-    "A refinement started without enough reported memory headroom.");
-Require(Gate(Baseline(allocated: long.MaxValue / 1024), remainingMemoryBytes: long.MaxValue) == null,
-    "A disabled memory pressure signal blocked a refinement.");
 
 // The gate plugs into the combinator's rejection hook: rejected members keep their line and spend nothing.
 var gated = Portfolio([24, 96], 20_000,

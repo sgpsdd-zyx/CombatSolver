@@ -103,6 +103,37 @@ internal sealed class SearchProgressDisplayState(long startedAtTick)
 
 internal sealed class SolverCombatSession
 {
+    private string? _primaryIncumbentScope;
+    private PrimaryIncumbentTable _primaryIncumbents = new();
+
+    internal PrimaryIncumbentTable AcquirePrimaryIncumbents(
+        CombatRootSnapshot root, SearchPolicySnapshot policy, BattleDamageSnapshot damage)
+        => AcquirePrimaryIncumbents(root.ContinuationStamp.StateText + "\n" +
+            System.Text.Json.JsonSerializer.Serialize(new
+            {
+                damage, policy.PotionPolicy, policy.PotionStrategy, policy.TheftPolicy,
+                policy.ActTransitionBossHpStrategy, policy.FinalBossHpStrategy,
+                policy.IgnoreLongTermRewards, policy.GrowthBudgets,
+                policy.GrowthOpportunityTargets, policy.RelicTargets,
+                policy.BrightestFlameMaxHpLossLimit, policy.PredictPotionReward,
+                policy.IncludeTurnSetup,
+            }));
+
+    internal PrimaryIncumbentTable AcquirePrimaryIncumbents(string scope)
+    {
+        PrimaryIncumbentTable previous = _primaryIncumbents;
+        _primaryIncumbents = new();
+        if (string.Equals(_primaryIncumbentScope, scope, StringComparison.Ordinal)
+            && previous.PotionFreeWitness is { } witness
+            && previous.TryGet(ResourceIncumbentPolicy.CompletedBucket(witness.Snapshot, 0), out var bound))
+        {
+            _primaryIncumbents.PotionFreeWitness = witness;
+            _primaryIncumbents.Tighten(ResourceIncumbentPolicy.CompletedBucket(witness.Snapshot, 0), bound);
+        }
+        _primaryIncumbentScope = scope;
+        return _primaryIncumbents;
+    }
+
     public CombatState? State { get; set; }
     public SolverResult? LatestResult { get; set; }
     public LiveCombatStamp? LatestStamp { get; set; }
@@ -138,6 +169,7 @@ internal sealed class SolverCombatSession
     public bool AdvisoryStale { get; set; }
     public long AdvisoryCheckedAt { get; set; }
     public CombatBugReportIssueLedger BugReportIssues { get; } = new();
+    public CombatBugReportUploadPolicy UploadPolicy { get; } = new();
 }
 
 internal sealed class SolverSearchSession(
@@ -164,6 +196,11 @@ internal sealed class SolverSearchSession(
     public int ReferenceReleaseState;
     public int CancellationDisposeState;
     public bool DeployWhenReady { get; set; } = deployWhenReady;
+    public bool PlayerInputObserved { get; private set; }
+    public void ObserveInput(string origin)
+    {
+        if (origin == "player") PlayerInputObserved = true;
+    }
     public int MaxDegreeOfParallelism { get; set; } = 1;
     public SearchMemoryPressureSignal? MemoryPressureSignal { get; set; }
     public SearchInteractionState Interaction { get; } = new();

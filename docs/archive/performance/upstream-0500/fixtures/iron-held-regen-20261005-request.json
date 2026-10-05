@@ -1,0 +1,226 @@
+{
+  "schemaVersion": 1,
+  "scenarioId": "VH16-dev-00-ironclad-elite-held-regen",
+  "characterId": "IRONCLAD",
+  "encounterId": "DECIMILLIPEDE_ELITE",
+  "seed": "NOVELTY-DEV-20260915-00",
+  "preserveNativeCombatStateForTest": true,
+  "ascension": 10,
+  "actIndexForTest": 1,
+  "runCards": [
+    {
+      "cardId": "HEADBUTT",
+      "pile": "Hand",
+      "count": 1,
+      "upgradeLevels": 1,
+      "enchantmentId": null,
+      "enchantmentAmount": 1,
+      "afflictionId": null,
+      "afflictionAmount": 1,
+      "treatAsDeckCard": false,
+      "dynamicVars": {},
+      "enumMembers": {}
+    },
+    {
+      "cardId": "BULLY",
+      "pile": "Hand",
+      "count": 1,
+      "upgradeLevels": 1,
+      "enchantmentId": null,
+      "enchantmentAmount": 1,
+      "afflictionId": null,
+      "afflictionAmount": 1,
+      "treatAsDeckCard": false,
+      "dynamicVars": {},
+      "enumMembers": {}
+    },
+    {
+      "cardId": "STONE_ARMOR",
+      "pile": "Hand",
+      "count": 1,
+      "upgradeLevels": 1,
+      "enchantmentId": null,
+      "enchantmentAmount": 1,
+      "afflictionId": null,
+      "afflictionAmount": 1,
+      "treatAsDeckCard": false,
+      "dynamicVars": {},
+      "enumMembers": {}
+    },
+    {
+      "cardId": "TAUNT",
+      "pile": "Hand",
+      "count": 1,
+      "upgradeLevels": 1,
+      "enchantmentId": null,
+      "enchantmentAmount": 1,
+      "afflictionId": null,
+      "afflictionAmount": 1,
+      "treatAsDeckCard": false,
+      "dynamicVars": {},
+      "enumMembers": {}
+    },
+    {
+      "cardId": "BURNING_PACT",
+      "pile": "Hand",
+      "count": 1,
+      "upgradeLevels": 1,
+      "enchantmentId": null,
+      "enchantmentAmount": 1,
+      "afflictionId": null,
+      "afflictionAmount": 1,
+      "treatAsDeckCard": false,
+      "dynamicVars": {},
+      "enumMembers": {}
+    },
+    {
+      "cardId": "INFERNAL_BLADE",
+      "pile": "Hand",
+      "count": 1,
+      "upgradeLevels": 1,
+      "enchantmentId": null,
+      "enchantmentAmount": 1,
+      "afflictionId": null,
+      "afflictionAmount": 1,
+      "treatAsDeckCard": false,
+      "dynamicVars": {},
+      "enumMembers": {}
+    },
+    {
+      "cardId": "MANGLE",
+      "pile": "Hand",
+      "count": 1,
+      "upgradeLevels": 1,
+      "enchantmentId": null,
+      "enchantmentAmount": 1,
+      "afflictionId": null,
+      "afflictionAmount": 1,
+      "treatAsDeckCard": false,
+      "dynamicVars": {},
+      "enumMembers": {}
+    },
+    {
+      "cardId": "BARRICADE",
+      "pile": "Hand",
+      "count": 1,
+      "upgradeLevels": 1,
+      "enchantmentId": null,
+      "enchantmentAmount": 1,
+      "afflictionId": null,
+      "afflictionAmount": 1,
+      "treatAsDeckCard": false,
+      "dynamicVars": {},
+      "enumMembers": {}
+    },
+    {
+      "cardId": "PERFECTED_STRIKE",
+      "pile": "Hand",
+      "count": 1,
+      "upgradeLevels": 1,
+      "enchantmentId": null,
+      "enchantmentAmount": 1,
+      "afflictionId": null,
+      "afflictionAmount": 1,
+      "treatAsDeckCard": false,
+      "dynamicVars": {},
+      "enumMembers": {}
+    },
+    {
+      "cardId": "TWIN_STRIKE",
+      "pile": "Hand",
+      "count": 1,
+      "upgradeLevels": 1,
+      "enchantmentId": null,
+      "enchantmentAmount": 1,
+      "afflictionId": null,
+      "afflictionAmount": 1,
+      "treatAsDeckCard": false,
+      "dynamicVars": {},
+      "enumMembers": {}
+    },
+    {
+      "cardId": "RAMPAGE",
+      "pile": "Hand",
+      "count": 1,
+      "upgradeLevels": 1,
+      "enchantmentId": null,
+      "enchantmentAmount": 1,
+      "afflictionId": null,
+      "afflictionAmount": 1,
+      "treatAsDeckCard": false,
+      "dynamicVars": {},
+      "enumMembers": {}
+    },
+    {
+      "cardId": "THUNDERCLAP",
+      "pile": "Hand",
+      "count": 1,
+      "upgradeLevels": 1,
+      "enchantmentId": null,
+      "enchantmentAmount": 1,
+      "afflictionId": null,
+      "afflictionAmount": 1,
+      "treatAsDeckCard": false,
+      "dynamicVars": {},
+      "enumMembers": {}
+    },
+    {
+      "cardId": "JACKPOT",
+      "pile": "Hand",
+      "count": 1,
+      "upgradeLevels": 0,
+      "enchantmentId": null,
+      "enchantmentAmount": 1,
+      "afflictionId": null,
+      "afflictionAmount": 1,
+      "treatAsDeckCard": false,
+      "dynamicVars": {},
+      "enumMembers": {}
+    },
+    {
+      "cardId": "JACK_OF_ALL_TRADES",
+      "pile": "Hand",
+      "count": 1,
+      "upgradeLevels": 0,
+      "enchantmentId": null,
+      "enchantmentAmount": 1,
+      "afflictionId": null,
+      "afflictionAmount": 1,
+      "treatAsDeckCard": false,
+      "dynamicVars": {},
+      "enumMembers": {}
+    }
+  ],
+  "cards": [],
+  "clearRunDeck": false,
+  "potions": [
+    {
+      "potionId": "BEETLE_JUICE"
+    },
+    {
+      "potionId": "REGEN_POTION"
+    }
+  ],
+  "relics": [
+    {
+      "relicId": "ICE_CREAM",
+      "addWithoutObtainedEffects": true,
+      "integerMembers": {},
+      "booleanMembers": {}
+    },
+    {
+      "relicId": "TUNGSTEN_ROD",
+      "addWithoutObtainedEffects": true,
+      "integerMembers": {},
+      "booleanMembers": {}
+    },
+    {
+      "relicId": "KUNAI",
+      "addWithoutObtainedEffects": true,
+      "integerMembers": {},
+      "booleanMembers": {}
+    }
+  ],
+  "preCombatPlayerCurrentHpOverride": null,
+  "preCombatSimulationSeed": null
+}

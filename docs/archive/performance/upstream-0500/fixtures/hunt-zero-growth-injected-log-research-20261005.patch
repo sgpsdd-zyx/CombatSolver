@@ -1,0 +1,577 @@
+--- a/src/Search/StrategicHpRecoveryBound.Components.cs
++++ b/src/Search/StrategicHpRecoveryBound.Components.cs
+@@ -23,7 +23,7 @@
+     private static readonly Guid ComponentAuditMvid = new("8a76776c-0ce1-4d4f-90bd-8cce653dad8e");
+     private static readonly FrozenSet<Type> ComponentInitialCards = new Type[]
+     {
+-        typeof(Aggression), typeof(Hemokinesis), typeof(TearAsunder), typeof(Rupture),
++        typeof(TheHunt), typeof(Aggression), typeof(Hemokinesis), typeof(TearAsunder), typeof(Rupture),
+         typeof(Fisticuffs), typeof(TheGambit), typeof(DarkEmbrace), typeof(Stoke),
+         typeof(InfernalBlade), typeof(JackOfAllTrades), typeof(Jackpot),
+         typeof(Acrobatics), typeof(CorrosiveWave), typeof(FlickFlack),
+@@ -44,7 +44,7 @@
+
+     private static readonly FrozenSet<Type> ComponentRelics = new Type[]
+     {
+-        typeof(BurningBlood), typeof(EternalFeather), typeof(Cauldron), typeof(Brimstone),
++        typeof(BowlerHat), typeof(SparklingRouge), typeof(BurningBlood), typeof(EternalFeather), typeof(Cauldron), typeof(Brimstone),
+         typeof(IceCream), typeof(TungstenRod), typeof(Kunai),
+         typeof(DivineRight), typeof(Girya), typeof(OldCoin), typeof(VitruvianMinion),
+         typeof(RingOfTheSnake), typeof(PotionBelt), typeof(Shovel),
+@@ -59,20 +59,26 @@
+         => (ComponentInitialCards.Contains(card.GetType())
+                 || IronDecimillipedeSafeCards.Contains(card.GetType())
+                 || RemainingSafeCards.Contains(card.GetType()))
+-            && HasCertifiedRemainingAttachments(card) && !GrowthValues.HasTarget(card);
++            && HasCertifiedRemainingAttachments(card)
++            // TheHunt grants a post-combat card reward, not combat HP. Keep its
++            // growth objective and price in the separate incumbent policy.
++            && (!GrowthValues.HasTarget(card) || card is TheHunt);
+
+     private static bool ComponentRemainingCard(CardModel card)
+         => (ComponentInitialCards.Contains(card.GetType())
+                 || IronDecimillipedeSafeCards.Contains(card.GetType())
+                 || RemainingSafeCards.Contains(card.GetType())
+                 || NativeNonHealingGeneratedCards.Contains(card.GetType()))
+-            && HasCertifiedRemainingAttachments(card) && !GrowthValues.HasTarget(card);
++            && HasCertifiedRemainingAttachments(card)
++            // TheHunt grants a post-combat card reward, not combat HP. Keep its
++            // growth objective and price in the separate incumbent policy.
++            && (!GrowthValues.HasTarget(card) || card is TheHunt);
+
+     private static bool ComponentPotion(Type type)
+         => type == typeof(RegenPotion) || NativeZeroRecoveryPotions.Contains(type);
+
+     private static bool ComponentPower(Type type)
+-        => type == typeof(RegenPower) || type == typeof(ReattachPower) || type == typeof(SandpitPower)
++        => type == typeof(TheHuntPower) || type == typeof(RegenPower) || type == typeof(ReattachPower) || type == typeof(SandpitPower)
+             || RemainingSafePowers.Contains(type) || NativeNonHealingGeneratedPowers.Contains(type)
+             || NativeLouseClosure.Powers.Contains(type) || NativePotionZeroRecoveryPowers.Contains(type);
+
+--- a/src/Search/PrimaryIncumbentTable.cs
++++ b/src/Search/PrimaryIncumbentTable.cs
+@@ -21,6 +21,32 @@
+             return _bounds.TryGetValue(bucket, out incumbent);
+     }
+
++    // Reuse existing complete victory witnesses. With zero growth HP prices a
++    // strictly worse HP route cannot win through extra growth count. Equal HP
++    // always stays eligible. Growth targets gate early stopping, not the final
++    // strictly-better-HP comparison. For paid tiers also preserve cheaper routes.
++    internal bool HasStrictZeroGrowthHpWitness(SearchPolicySnapshot policy,
++        int stolen, int potions, int strategicHpLowerBoundWithoutGrowth,
++        int spentPotionStrategicCost = 0)
++    {
++        if (potions < 0 || policy.EffectiveGrowthBudgets != default
++            || policy.RelicTargets.Count != 0
++            || policy.TheftPolicy == SolverTheftPolicy.PreserveResources
++            || policy.PotionPolicy is not (SolverPotionPolicy.Smart or SolverPotionPolicy.Disabled)
++            || policy.PotionStrategy.HasForcedDirectives)
++            return false;
++        lock (_bounds)
++        {
++            foreach ((PrimaryIncumbentBucket bucket, PrimarySearchIncumbent witness) in _bounds)
++                if (bucket.Stolen == stolen && bucket.Potions == potions && bucket.RelicMask == 0
++                    && witness.ExplicitPotionStrategicCost is { } witnessCost
++                    && spentPotionStrategicCost >= witnessCost
++                    && strategicHpLowerBoundWithoutGrowth > witness.StrategicHpDeficit)
++                    return true;
++        }
++        return false;
++    }
++
+     internal bool Tighten(int stolen, int potions, PrimarySearchIncumbent candidate)
+         => Tighten(new(stolen, potions), candidate);
+
+--- a/src/Search/CombatBeamSolver.Retention.cs
++++ b/src/Search/CombatBeamSolver.Retention.cs
+@@ -357,6 +357,14 @@
+                 prune = ResourceIncumbentPolicy.PruneGrowthTargets(policy, remainingUpper,
+                     node.Snapshot.GrowthRewards, lootBucket, uses, hpLowerBound,
+                     _primaryIncumbents, out _, out _);
++            }
++            if (!prune && eligible
++                && (_hasGrowthTargets || node.Snapshot.GrowthRewards.Total != 0)
++                && _primaryIncumbents.HasStrictZeroGrowthHpWitness(policy,
++                    lootBucket, uses, hpLowerBound, node.Snapshot.ExplicitPotionStrategicCost))
++            {
++                prune = true;
++                _run.ZeroGrowthStrictPrimaryPrunes++;
+             }
+             if (prune)
+             {
+--- a/src/Search/CombatBeamSolver.Models.cs
++++ b/src/Search/CombatBeamSolver.Models.cs
+@@ -229,6 +229,7 @@
+         public int CrossTurnCandidatesProtected;
+         public int CrossTurnContinuationsStopped;
+         public int PrimaryIncumbentBranchesPruned;
++        public int ZeroGrowthStrictPrimaryPrunes;
+         public int PrimaryIncumbentCertifiedHealingBoundBranchesPruned;
+         public int PrimaryIncumbentUpdates;
+         public int StandPatProbes;
+--- a/src/Search/CombatBeamSolver.Phases.cs
++++ b/src/Search/CombatBeamSolver.Phases.cs
+@@ -463,6 +463,8 @@
+             bool candidateMemoryNoProgress = false,
+             IReadOnlyList<PlanAction>? routeAdoptionActions = null)
+         {
++            if (_run.ZeroGrowthStrictPrimaryPrunes != 0)
++                policy.Diagnostics.Info($"[CombatSolver] ZERO_GROWTH_STRICT_PRIMARY pruned={_run.ZeroGrowthStrictPrimaryPrunes}");
+             SearchMeasurement finalMeasurement = _run.Performance.Begin();
+             FinalPlanCandidate publishedCandidate = ordering.Candidate;
+             SearchNode materializedNode = publishedCandidate.Node.Snapshot.HasSimulator
+--- a/src/Testing/Host/UnattendedTestRunner.Executor.cs
++++ b/src/Testing/Host/UnattendedTestRunner.Executor.cs
+@@ -1002,6 +1002,20 @@
+             {
+                 runner.SetStage("opening_discard_choice_value");
+                 await runner.AssertOpeningDiscardChoiceValueAsync(combatState, player);
++                return Observation(combatEnded: false);
++            }
++
++            if (request.ScenarioId == "HUNT-RECOVERY-ZERO-GROWTH-BOUND")
++            {
++                runner.SetStage("hunt_recovery_zero_growth");
++                await runner.AssertHuntRecoveryBoundAsync(combatState, player);
++                return Observation(combatEnded: false);
++            }
++
++            if (request.ScenarioId == "HUNT-ZERO-GROWTH-CLOSED-TIER")
++            {
++                runner.SetStage("hunt_zero_growth_closed_tier");
++                await runner.AssertHuntClosedTierAsync(combatState, player);
+                 return Observation(combatEnded: false);
+             }
+
+--- /dev/null
++++ b/src/Testing/Contracts/Search/UnattendedTestRunner.HuntRecoveryBound.cs
+@@ -0,0 +1,428 @@
++using CombatSolver.Engine.Common;
++using CombatSolver.Engine.InCombat.Simulation;
++using MegaCrit.Sts2.Core.Combat;
++using MegaCrit.Sts2.Core.Commands;
++using MegaCrit.Sts2.Core.Entities.Cards;
++using MegaCrit.Sts2.Core.Entities.Players;
++using MegaCrit.Sts2.Core.Factories;
++using MegaCrit.Sts2.Core.GameActions;
++using MegaCrit.Sts2.Core.GameActions.Multiplayer;
++using MegaCrit.Sts2.Core.Models;
++using MegaCrit.Sts2.Core.Models.Cards;
++using MegaCrit.Sts2.Core.Models.Powers;
++using MegaCrit.Sts2.Core.Models.Relics;
++using MegaCrit.Sts2.Core.Rooms;
++using MegaCrit.Sts2.Core.Rewards;
++using MegaCrit.Sts2.Core.Runs;
++
++namespace CombatSolver;
++
++internal sealed partial class UnattendedTestRunner
++{
++    private async Task AssertHuntRecoveryBoundAsync(CombatState live, Player player)
++    {
++        foreach (var relic in player.Relics.ToArray()) await RelicCmd.Remove(relic);
++        foreach (var power in live.Creatures.SelectMany(c => c.Powers).ToArray()) await PowerCmd.Remove(power);
++        foreach (PotionModel? potion in player.PotionSlots.ToArray()) potion?.Discard();
++        await RelicCmd.Obtain<BowlerHat>(player);
++        await RelicCmd.Obtain<SparklingRouge>(player);
++        await ClearPlayerPilesAsync(player);
++        await InjectCardAsync(live, player, new() { CardId = "THE_HUNT", Pile = "Hand", Count = 2 });
++        await InjectCardAsync(live, player, new() { CardId = "STRIKE_SILENT", Pile = "Hand", Count = 4 });
++        await InjectCardAsync(live, player, new() { CardId = "DEFEND_SILENT", Pile = "Hand" });
++        await InjectCardAsync(live, player, new() { CardId = "STRIKE_SILENT", Pile = "Draw", Count = 10 });
++        await InjectCardAsync(live, player, new() { CardId = "DEFEND_SILENT", Pile = "Draw", Count = 10 });
++        if (live.Enemies.Count != 2) throw new InvalidOperationException("Hunt contract requires native two-Nibbit encounter.");
++        await CreatureCmd.SetCurrentHp(live.Enemies[0], 6);
++        await CreatureCmd.SetCurrentHp(live.Enemies[1], 16);
++        foreach (var enemy in live.Enemies) await SetBlockAsync(enemy, 0);
++        await CreatureCmd.SetCurrentHp(player.Creature, 60);
++        await SetBlockAsync(player.Creature, 0); SetEnergy(player, 100);
++        CombatRootSnapshot root = CombatRootSnapshot.Capture(live);
++        if (!root.CanCertifyRemainingHealing || root.InitialRemainingHealingUpperBound != 0)
++            throw new InvalidOperationException("Hunt positive root rejected: " + root.ComponentHealingRejection);
++        var parent = root.ForkSimulator();
++        string parentBefore = DescribeContinuationContractState(parent, root, player);
++        string liveBefore = ContinuationStamp.CaptureLive(live).StateText;
++        int Bound(CombatPredictionSimulator sim) => StrategicHpRecoveryBound.ComponentHealingUpperBound(sim, player, 0);
++        using (SimulationNotificationIsolation.Enter())
++        {
++            if (Bound(parent) != 0) throw new InvalidOperationException("Hunt root has nonzero recovery.");
++            var clone = parent.Fork();
++            PredictedCard owned = clone.State.GetPlayerCombatState(player).Hand.Cards.First(c => c.Preview is TheHunt);
++            clone.AddGeneratedCardToCombat(owned.CreateClone(), PileType.Exhaust, player,
++                resultKind: CardGenerationResultKind.Fixed);
++            if (Bound(clone) != 0) throw new InvalidOperationException("Copied/exhausted Hunt is not a zero HP source.");
++            foreach (PileType pile in new[] { PileType.Hand, PileType.Draw, PileType.Discard, PileType.Exhaust })
++            {
++                var unknown = parent.Fork();
++                unknown.AddGeneratedCardToCombat(PredictedCard.Create(ModelDb.Card<Feed>(), player), pile,
++                    player, resultKind: CardGenerationResultKind.Fixed);
++                if (Bound(unknown) != int.MaxValue) throw new InvalidOperationException("Unknown Feed source accepted in " + pile);
++            }
++            if (ModelDb.Card<TheHunt>().CanBeGeneratedInCombat
++                || CardFactory.FilterForCombat(new CardModel[] { ModelDb.Card<TheHunt>() }).Any())
++                throw new InvalidOperationException("Native combat generation incorrectly includes TheHunt.");
++        }
++        var policy = SolverController.CaptureSearchPolicy(SolverSettings.Capture(), live, false, null) with
++        {
++            FixedBudget = true, VerifyIncrementalSearch = true, MaxDegreeOfParallelism = 2,
++            DetailedDiagnostics = false, MeasurePhasePerformance = false, BudgetOverrideMilliseconds = null,
++            StopAtAcceptableBattleHpLoss = false, UseBeamWidthPortfolio = false, UseNoveltyPortfolio = false,
++            PotionPolicy = SolverPotionPolicy.Disabled, PotionStrategy = new(SolverPotionPolicy.Disabled, []),
++            RelicTargets = [], GrowthBudgets = default, PrimaryIncumbents = new(),
++        };
++        policy = policy with { Profile = policy.Profile with
++            { BeamWidth = 32, MaxExpandedNodes = 800, SoftTimeBudgetMilliseconds = 15000 } };
++        if (!policy.HasGrowthTargets || !policy.GrowthOpportunityTargets.IsBounded
++            || policy.GrowthOpportunityTargets.RequiredRewards.TheHunt != 2)
++            throw new InvalidOperationException("Native two-Hunt growth target not frozen.");
++        var proof = await Task.Run(() => CombatBeamSolver.HuntRecoveryProbeForTesting(root,
++            SolverDisplayNames.Capture(live), BattleDamageTracker.Observe(live), policy));
++        _completedChecks.Add(proof.QualityEvidence);
++        if (DescribeContinuationContractState(parent, root, player) != parentBefore
++            || ContinuationStamp.CaptureLive(live).StateText != liveBefore)
++            throw new InvalidOperationException("Hunt growth-bound probe changed live/parent/RNG.");
++        await Task.WhenAll(Enumerable.Range(0, 16).Select(_ => Task.Run(() =>
++        {
++            using var isolation = SimulationNotificationIsolation.Enter();
++            var child = parent.Fork();
++            if (Bound(child) != 0 || DescribeContinuationContractState(child, root, player) != parentBefore)
++                throw new InvalidOperationException("Hunt owned parallel Fork differs.");
++            child.State.GetCreature(player.Creature).CurrentHp--;
++        })));
++        using var deadline = new CancellationTokenSource(TimeSpan.FromSeconds(30));
++        CombatPredictionSimulator predicted = parent.Fork();
++        for (int index = 0; index < 2; index++)
++        {
++            using (SimulationNotificationIsolation.Enter())
++            {
++                var card = predicted.State.GetPlayerCombatState(player).Hand.Cards.First(c => c.Preview is TheHunt);
++                if (!predicted.ManualPlay(card, root.Enemies[index], out _))
++                    throw new InvalidOperationException("Predicted Hunt suspended.");
++                if (Bound(predicted) != 0 || ((SimulatedCombatState)predicted.State.CombatState).GrowthRewards.TheHunt != 1)
++                    throw new InvalidOperationException("Fatal/nonfatal Hunt changed recovery or growth unexpectedly.");
++            }
++            CardModel nativeCard = player.PlayerCombatState!.Hand.Cards.First(c => c is TheHunt);
++            GameAction played = await SolverController.EnqueueAndCaptureActionAsync(
++                queued => queued is PlayCardAction play && ReferenceEquals(play.NetCombatCard.ToCardModelOrNull(), nativeCard),
++                () => { if (!nativeCard.TryManualPlay(root.Enemies[index])) throw new InvalidOperationException("Native Hunt refused."); }, deadline.Token);
++            await played.CompletionTask.WaitAsync(deadline.Token);
++            if (ContinuationStamp.CaptureLive(live).StateText != ContinuationStamp.CapturePredicted(player,
++                predicted, root.StartTurnNumber, root.Forecast, root.StartTurnNumber).StateText)
++                throw new InvalidOperationException("Fatal/nonfatal Hunt full native continuation differs at " + index);
++            if ((player.RunState.CurrentRoom as CombatRoom ?? throw new InvalidOperationException("Expected native combat room.")).ExtraRewards[player].OfType<CardReward>().Count() != 1)
++                throw new InvalidOperationException("Native Hunt did not register exactly one unpopulated card reward.");
++            if ((player.RunState.CurrentRoom as CombatRoom ?? throw new InvalidOperationException("Expected native combat room.")).ExtraRewards[player].OfType<CardReward>().Single().IsPopulated)
++                throw new InvalidOperationException("Native Hunt reward was populated during combat.");
++        }
++        using (SimulationNotificationIsolation.Enter())
++            ((SimulatedCombatState)predicted.State.CombatState).GainPlayerGold(predicted, player, 8);
++        await PlayerCmd.GainGold(8, player);
++        if (ContinuationStamp.CaptureLive(live).StateText != ContinuationStamp.CapturePredicted(player,
++            predicted, root.StartTurnNumber, root.Forecast, root.StartTurnNumber).StateText)
++            throw new InvalidOperationException("Native Bowler gold full state differs.");
++        // Two actual turn boundaries exercise SparklingRouge's branch turn3 trigger.
++        for (int turn = 2; turn <= 3; turn++)
++        {
++            using (SimulationNotificationIsolation.Enter())
++                proof.AdvanceForNativeComparison(predicted, turn - 1);
++            int previous = player.PlayerCombatState!.TurnNumber;
++            CombatManager.Instance.OnEndedTurnLocally();
++            var action = new EndPlayerTurnAction(player, previous);
++            RunManager.Instance.ActionQueueSynchronizer.RequestEnqueue(action);
++            await action.CompletionTask.WaitAsync(deadline.Token);
++            while (player.PlayerCombatState is not { Phase: PlayerTurnPhase.Play } current || current.TurnNumber <= previous)
++            { deadline.Token.ThrowIfCancellationRequested(); EnsureWithinDeadline(); await NextFrameAsync(); }
++            if (ContinuationStamp.CaptureLive(live).StateText != ContinuationStamp.CapturePredicted(player,
++                predicted, turn, root.Forecast, root.StartTurnNumber).StateText)
++                throw new InvalidOperationException("Hunt/rouge full native turn state differs at " + turn);
++            using (SimulationNotificationIsolation.Enter())
++                if (Bound(predicted) != 0) throw new InvalidOperationException("Active Hunt/rouge source lost its zero certificate.");
++        }
++        if (DescribeContinuationContractState(parent, root, player) != parentBefore)
++            throw new InvalidOperationException("Actual Hunt/gold/turn actions changed frozen parent.");
++        await InjectCardAsync(live, player, new() { CardId = "FEED", Pile = "Exhaust" });
++        if (CombatRootSnapshot.Capture(live).CanCertifyRemainingHealing)
++            throw new InvalidOperationException("Initial unknown exhausted source was ignored.");
++        _completedChecks.Add("HuntRecovery:NativeFatalAndNonfatal:UnpopulatedPostCombatRewardOnly:NativeGenerationFilter:OwnedClone:AllFourPileUnknownRefusal:ActualCompleteP0Growth2Witness:UnsatisfiedGrowth1StrictHpOnly:UnboundedGrowthStrictHpOnly:EqualHpKept:PositiveGrowthPriceRelicTheftForcedPotionRefused:StrictHigherHpActualPrune:TwoNativeTurnBoundariesTurn3Rouge:NativeBowlerGold:16Forks:FullStateRngParentLiveIsolation");
++    }
++}
++
++internal sealed partial class CombatBeamSolver
++{
++    internal sealed record HuntRecoveryProof(CombatBeamSolver Member, string QualityEvidence)
++    {
++        internal void AdvanceForNativeComparison(CombatPredictionSimulator simulator, int startingTurn)
++            => Member.AdvanceHuntRoundForTesting(simulator, startingTurn);
++    }
++
++    private void AdvanceHuntRoundForTesting(CombatPredictionSimulator simulator, int startingTurn)
++    {
++        int shuffles = 0;
++        HashSet<uint> deaths = [];
++        foreach (var enemy in root.Enemies)
++            if (enemy.CombatId is uint id && simulator.State.GetCreature(enemy).IsDead) deaths.Add(id);
++        var combat = (SimulatedCombatState)simulator.State.CombatState;
++        SearchBoundaryReason boundary = AdvanceRound(simulator, combat, startingTurn, deaths,
++            ref shuffles, turnStartChoices: null);
++        if (boundary != SearchBoundaryReason.None || combat.GetPlayerTurnNumber(_player) != startingTurn + 1)
++            throw new InvalidOperationException("Native Hunt turn comparison reached a boundary.");
++    }
++
++    internal static HuntRecoveryProof HuntRecoveryProbeForTesting(CombatRootSnapshot root,
++        SolverDisplayNames names, BattleDamageSnapshot damage, SearchPolicySnapshot policy)
++    {
++        using var isolation = SimulationNotificationIsolation.Enter();
++        using var deadline = new CancellationTokenSource(TimeSpan.FromSeconds(25));
++        CombatBeamSolver Member(PrimaryIncumbentTable table) => new(root, names, damage,
++            policy with { PrimaryIncumbents = table }, deadline.Token);
++        SearchNode Route(CombatBeamSolver member, bool satisfied)
++        {
++            SearchNode node = CreateOpeningSearchSeed(member.Replay([]));
++            SearchNode Play(string card, int enemy)
++            {
++                var action = member.PrepareCardActions(node).First(a => a.Action.CardId == card
++                    && a.Action.TargetCombatId == root.Enemies[enemy].CombatId).Action;
++                node = member.CostChildForTesting(node, action); return node;
++            }
++            Play("THE_HUNT", 0);
++            Play("STRIKE_SILENT", 1);
++            if (satisfied) Play("THE_HUNT", 1);
++            else { Play("STRIKE_SILENT", 1); Play("STRIKE_SILENT", 1); }
++            if (!node.IsTerminal || node.Snapshot.HasRisk || node.Snapshot.PlayerDead
++                || node.Snapshot.GrowthRewards.TheHunt != (satisfied ? 2 : 1))
++                throw new InvalidOperationException("Actual Hunt victory did not establish expected growth.");
++            return node;
++        }
++        var table = new PrimaryIncumbentTable(); var member = Member(table);
++        SearchNode unsatisfied = Route(member, false);
++        member.TightenPrimarySearchIncumbentAtTurnLayer([unsatisfied], 0);
++        if (!table.HasStrictZeroGrowthHpWitness(policy, 0, 0, 1)
++            || table.HasStrictZeroGrowthHpWitness(policy, 0, 0, 0))
++            throw new InvalidOperationException("Strict HP comparison changed for an unsatisfied zero-price growth victory.");
++        SearchNode satisfied = Route(member, true);
++        member.TightenPrimarySearchIncumbentAtTurnLayer([satisfied], 0);
++        if (!table.HasStrictZeroGrowthHpWitness(policy, 0, 0, 1)
++            || table.HasStrictZeroGrowthHpWitness(policy, 0, 0, 0)
++            || table.HasStrictZeroGrowthHpWitness(policy with { GrowthBudgets = new(TheHunt: 1) }, 0, 0, 1)
++            || table.HasStrictZeroGrowthHpWitness(policy with { RelicTargets = [new(RelicCounterId.PenNib, 2, 2, 0, 10)] }, 0, 0, 1)
++            || table.HasStrictZeroGrowthHpWitness(policy with { TheftPolicy = SolverTheftPolicy.PreserveResources }, 0, 0, 1)
++            || table.HasStrictZeroGrowthHpWitness(policy with { PotionPolicy = SolverPotionPolicy.RequireAtLeastOne }, 0, 0, 1)
++            || !table.HasStrictZeroGrowthHpWitness(policy with { GrowthOpportunityTargets = GrowthOpportunityTargets.UnboundedForTesting("hunt_bound") }, 0, 0, 1)
++            || table.HasStrictZeroGrowthHpWitness(policy with { PotionStrategy = new(SolverPotionPolicy.Smart,
++                [new(0, "ENERGY_POTION", SolverPotionDirective.Force)]) }, 0, 0, 1)
++            || table.HasStrictZeroGrowthHpWitness(policy, 0, 1, 1))
++            throw new InvalidOperationException("Strict zero-growth witness policy/equal-HP guard differs.");
++        SearchNode seed = CreateOpeningSearchSeed(member.Replay([]));
++        SearchNode damaged = member.CostChildForTesting(seed, new(PlanActionKind.EndTurn, seed.Turn));
++        if (damaged.Snapshot.CumulativePlayerHpLost <= satisfied.Snapshot.CumulativePlayerHpLost
++            || member.ApplyPrimaryIncumbentBound([damaged]).Count != 0
++            || member._run.ZeroGrowthStrictPrimaryPrunes == 0)
++            throw new InvalidOperationException("Actual damaged incomplete growth route was not strictly bounded.");
++        var empty = Member(new());
++        if (empty.ApplyPrimaryIncumbentBound([damaged]).Count != 1)
++            throw new InvalidOperationException("Missing complete witness pruned a route.");
++        var unknown = ((CombatPredictionSimulator)damaged.Snapshot.Simulator).Fork();
++        unknown.AddToCombat<Feed>(root.PlayerIdentity.Creature, PileType.Exhaust, 1, creator: null);
++        var unknownSnapshot = member.Snapshot(unknown, damaged.Turn, damaged.ActionCount,
++            damaged.Snapshot.ShufflesCrossed, SearchBoundaryReason.None,
++            ((ForkableSet<uint>)damaged.Snapshot.ProcessedEnemyDeaths).Fork());
++        var unknownNode = new SearchNode(damaged.Action, damaged.ActionCount, damaged.PotionCount,
++            damaged.PotionStrategicCost, damaged.Turn, damaged.Traits, damaged.FutureSoldHp, unknownSnapshot.Score,
++            unknownSnapshot.StateKey, unknownSnapshot.HasRisk, unknownSnapshot.BoundaryReason, false,
++            damaged.Parent, unknownSnapshot, damaged.CombatProgress);
++        if (member.ApplyPrimaryIncumbentBound([unknownNode]).Count != 1)
++            throw new InvalidOperationException("Unknown exhausted healing escaped strict-growth guard.");
++        var control = new CombatBeamSolver(root, names, damage,
++            policy with { DisableSharedPrimaryIncumbentsForTesting = true }, deadline.Token).Solve();
++        var result = Member(new()).Solve();
++        static string Quality(SolverResult value) => $"won={value.Snapshot.AllEnemiesDead} "
++            + $"dead={value.Snapshot.PlayerDead} risk={value.Snapshot.HasRisk} boundary={value.BoundaryReason} "
++            + $"hp={value.ProjectedBattleHpLost} hunt={value.Snapshot.GrowthRewards.TheHunt} "
++            + $"pots={value.ExplicitPotionCount} deathsave={value.Snapshot.ProjectedDeathSaveUseCount} "
++            + $"expanded={value.TotalExpandedNodes} transitions={value.TotalTransitionCount}";
++        Godot.GD.Print($"[CombatSolver] HUNT_STRICT_QUALITY control=[{Quality(control)}] candidate=[{Quality(result)}]");
++        if (!control.Snapshot.AllEnemiesDead || control.Snapshot.PlayerDead || control.Snapshot.HasRisk
++            || control.BoundaryReason != SearchBoundaryReason.None
++            || !result.Snapshot.AllEnemiesDead || result.Snapshot.PlayerDead || result.Snapshot.HasRisk
++            || result.BoundaryReason != SearchBoundaryReason.None
++            || result.ProjectedBattleHpLost > control.ProjectedBattleHpLost
++            || result.ProjectedBattleHpLost == control.ProjectedBattleHpLost
++                && result.Snapshot.GrowthRewards.TheHunt < control.Snapshot.GrowthRewards.TheHunt
++            || result.ExplicitPotionCount != 0 || result.Snapshot.ProjectedDeathSaveUseCount != 0)
++            throw new InvalidOperationException($"DOP2 strict same-budget search changed Hunt quality: "
++                + $"control=[{Quality(control)}] candidate=[{Quality(result)}].");
++        unknownSnapshot.ReleaseSimulator(); damaged.Snapshot.ReleaseSimulator(); seed.Snapshot.ReleaseSimulator();
++        foreach (SearchNode winner in new[] { unsatisfied, satisfied })
++            for (SearchNode? node = winner; node != null; node = node.Parent) node.Snapshot.ReleaseSimulator();
++        return new(member, $"HuntSameBudgetDop2Strict:control=[{Quality(control)}]:candidate=[{Quality(result)}]");
++    }
++}
++
++
++internal sealed partial class UnattendedTestRunner
++{
++    private async Task AssertHuntClosedTierAsync(CombatState live, Player player)
++    {
++        foreach (var relic in player.Relics.ToArray()) await RelicCmd.Remove(relic);
++        foreach (var power in live.Creatures.SelectMany(c => c.Powers).ToArray()) await PowerCmd.Remove(power);
++        foreach (PotionModel? potion in player.PotionSlots.ToArray()) potion?.Discard();
++        await ClearPlayerPilesAsync(player);
++        await InjectCardAsync(live, player, new() { CardId = "THE_HUNT", Pile = "Hand", Count = 2 });
++        await InjectCardAsync(live, player, new() { CardId = "STRIKE_SILENT", Pile = "Hand", Count = 4 });
++        await InjectCardAsync(live, player, new() { CardId = "DEFEND_SILENT", Pile = "Draw", Count = 10 });
++        await InjectCardAsync(live, player, new() { CardId = "STRIKE_SILENT", Pile = "Draw", Count = 10 });
++        await CreatureCmd.SetCurrentHp(live.Enemies[0], 6);
++        await CreatureCmd.SetCurrentHp(live.Enemies[1], 16);
++        foreach (var enemy in live.Enemies) await SetBlockAsync(enemy, 0);
++        await CreatureCmd.SetCurrentHp(player.Creature, 60);
++        await SetBlockAsync(player.Creature, 0); SetEnergy(player, 100);
++        InjectPotionForTest(player, "CURE_ALL"); InjectPotionForTest(player, "SHACKLING_POTION");
++        CombatRootSnapshot root = CombatRootSnapshot.Capture(live);
++        if (!root.CanCertifyRemainingHealing || root.InitialRemainingHealingUpperBound != 0)
++            throw new InvalidOperationException("Closed-tier Hunt root rejected: " + root.ComponentHealingRejection);
++        var parent = root.ForkSimulator();
++        string parentBefore = DescribeContinuationContractState(parent, root, player);
++        string liveBefore = ContinuationStamp.CaptureLive(live).StateText;
++        var policy = SolverController.CaptureSearchPolicy(SolverSettings.Capture(), live, false, null) with
++        {
++            FixedBudget = true, VerifyIncrementalSearch = true, MaxDegreeOfParallelism = 2,
++            DetailedDiagnostics = false, MeasurePhasePerformance = false, BudgetOverrideMilliseconds = null,
++            StopAtAcceptableBattleHpLoss = false, UseBeamWidthPortfolio = false, UseNoveltyPortfolio = false,
++            PotionPolicy = SolverPotionPolicy.Smart, PotionStrategy = new(SolverPotionPolicy.Smart, []),
++            RelicTargets = [], GrowthBudgets = default, PrimaryIncumbents = new(),
++        };
++        policy = policy with { Profile = policy.Profile with
++            { BeamWidth = 12, MaxExpandedNodes = 400, SoftTimeBudgetMilliseconds = 15000 } };
++        var proof = await Task.Run(() => CombatBeamSolver.HuntClosedTierProbeForTesting(root,
++            SolverDisplayNames.Capture(live), BattleDamageTracker.Observe(live), policy));
++        _completedChecks.Add(proof.Evidence);
++        if (DescribeContinuationContractState(parent, root, player) != parentBefore
++            || ContinuationStamp.CaptureLive(live).StateText != liveBefore)
++            throw new InvalidOperationException("Closed-tier growth proof changed parent/live/RNG.");
++        using var deadline = new CancellationTokenSource(TimeSpan.FromSeconds(15));
++        PotionModel nativePotion = player.GetPotionAtSlotIndex(1)!;
++        GameAction use = await SolverController.EnqueueAndCaptureActionAsync(
++            action => action is UsePotionAction potion && potion.PotionIndex == 1 && ReferenceEquals(potion.Player, player),
++            () => nativePotion.EnqueueManualUse(null), deadline.Token);
++        await use.CompletionTask.WaitAsync(deadline.Token);
++        if (ContinuationStamp.CaptureLive(live).StateText != proof.NativeCheapPotionState)
++            throw new InvalidOperationException("Closed-tier cheap native potion complete state differs.");
++        if (DescribeContinuationContractState(parent, root, player) != parentBefore)
++            throw new InvalidOperationException("Native potion changed frozen Hunt parent.");
++        _completedChecks.Add("ClosedTierHunt:ActualCompleteGrowth1Witness:StrictHpOnly:EqualHpKept:CheaperPotionKept:MissingCostKept:OpenTierKept:DifferentCountKept:UnknownFeedKept:PositivePriceRelicTheftForcedPotionRefused:Dop2StrictSameBudgetQuality:NativePotionFullStateRng:ParentLiveIsolation");
++    }
++}
++
++internal sealed partial class CombatBeamSolver
++{
++    internal sealed record HuntClosedTierProof(string Evidence, string NativeCheapPotionState);
++
++    internal static HuntClosedTierProof HuntClosedTierProbeForTesting(CombatRootSnapshot root,
++        SolverDisplayNames names, BattleDamageSnapshot damage, SearchPolicySnapshot policy)
++    {
++        using var isolation = SimulationNotificationIsolation.Enter();
++        using var deadline = new CancellationTokenSource(TimeSpan.FromSeconds(25));
++        SolverResult counterfactual = new CombatBeamSolver(root, names, damage, policy, deadline.Token,
++            searchProfile: policy.Profile with { MaxExpandedNodes = 1 },
++            potionPolicyOverride: SolverPotionPolicy.Disabled).Solve();
++        if (counterfactual.Snapshot.AllEnemiesDead) throw new InvalidOperationException("Expected incomplete counterfactual.");
++        PotionFreePolicyBaseline baseline = new(false, counterfactual.ProjectedBattleHpLost,
++            counterfactual.Snapshot.PlayerHp, counterfactual.CombatEndedTurn);
++        CombatBeamSolver Member(PrimaryIncumbentTable table, int maximum = 1, bool disabled = false)
++            => new(root, names, damage, policy with { PrimaryIncumbents = table,
++                DisableSharedPrimaryIncumbentsForTesting = disabled }, deadline.Token,
++                potionPolicyOverride: SolverPotionPolicy.RequireAtLeastOne, potionFreePolicyBaseline: baseline,
++                maximumPotionUses: maximum, minimumPotionUses: 1);
++        SearchNode PotionPrefix(CombatBeamSolver member, int slot)
++        {
++            SearchNode seed = CreateOpeningSearchSeed(member.Replay([]));
++            PlanAction action = member.PreparePotionActions(seed).First(a => a.Action.PotionSlot == slot).Action;
++            return member.CostChildForTesting(seed, action);
++        }
++        SearchNode Winner(CombatBeamSolver member, SearchNode node)
++        {
++            foreach ((string card, int enemy) in new[] { ("THE_HUNT", 0), ("STRIKE_SILENT", 1),
++                ("STRIKE_SILENT", 1), ("STRIKE_SILENT", 1) })
++            {
++                PlanAction action = member.PrepareCardActions(node).First(a => a.Action.CardId == card
++                    && a.Action.TargetCombatId == root.Enemies[enemy].CombatId).Action;
++                node = member.CostChildForTesting(node, action);
++            }
++            if (!node.IsTerminal || node.Snapshot.HasRisk || node.Snapshot.GrowthRewards.TheHunt != 1)
++                throw new InvalidOperationException("Expected actual complete unsatisfied growth1 victory.");
++            return node;
++        }
++        var table = new PrimaryIncumbentTable(); var member = Member(table);
++        var expensive = PotionPrefix(member, 0); var cheap = PotionPrefix(member, 1);
++        var expensiveWinner = Winner(member, expensive); var cheapWinner = Winner(member, cheap);
++        int expensiveCost = expensive.Snapshot.ExplicitPotionStrategicCost;
++        int cheapCost = cheap.Snapshot.ExplicitPotionStrategicCost;
++        if (expensiveCost <= cheapCost || !member.TightenPrimarySearchIncumbentAtTurnLayer([expensiveWinner], 0))
++            throw new InvalidOperationException("Actual paid victory/cost did not publish existing witness.");
++        int hpBound = 1;
++        if (!table.HasStrictZeroGrowthHpWitness(policy, 0, 1, hpBound, expensiveCost)
++            || table.HasStrictZeroGrowthHpWitness(policy, 0, 1, hpBound, cheapCost)
++            || table.HasStrictZeroGrowthHpWitness(policy, 0, 1, 0, expensiveCost)
++            || table.HasStrictZeroGrowthHpWitness(policy, 0, 0, hpBound, expensiveCost)
++            || table.HasStrictZeroGrowthHpWitness(policy with { GrowthBudgets = new(TheHunt: 1) }, 0, 1, hpBound, expensiveCost)
++            || table.HasStrictZeroGrowthHpWitness(policy with { RelicTargets = [new(RelicCounterId.PenNib, 2, 2, 0, 10)] }, 0, 1, hpBound, expensiveCost)
++            || table.HasStrictZeroGrowthHpWitness(policy with { TheftPolicy = SolverTheftPolicy.PreserveResources }, 0, 1, hpBound, expensiveCost)
++            || table.HasStrictZeroGrowthHpWitness(policy with { PotionStrategy = new(SolverPotionPolicy.Smart,
++                [new(0, "CURE_ALL", SolverPotionDirective.Force)]) }, 0, 1, hpBound, expensiveCost))
++            throw new InvalidOperationException("Closed tier strict HP/cost/policy guard differs.");
++        var damaged = member.CostChildForTesting(expensive, new(PlanActionKind.EndTurn, expensive.Turn));
++        var cheapDamaged = member.CostChildForTesting(cheap, new(PlanActionKind.EndTurn, cheap.Turn));
++        for (int i = 0; i < 8 && cheapDamaged.Snapshot.CumulativePlayerHpLost == 0; i++)
++            cheapDamaged = member.CostChildForTesting(cheapDamaged, new(PlanActionKind.EndTurn, cheapDamaged.Turn));
++        int openCount = Member(table, maximum: 2).ApplyPrimaryIncumbentBound([damaged]).Count;
++        int ablatedCount = Member(table, disabled: true).ApplyPrimaryIncumbentBound([damaged]).Count;
++        int cheapCount = member.ApplyPrimaryIncumbentBound([cheapDamaged]).Count;
++        int equalCount = member.ApplyPrimaryIncumbentBound([expensive]).Count;
++        int damagedCount = member.ApplyPrimaryIncumbentBound([damaged]).Count;
++        if (damaged.Snapshot.CumulativePlayerHpLost <= 0 || cheapDamaged.Snapshot.CumulativePlayerHpLost <= 0
++            || openCount != 1 || ablatedCount != 1 || cheapCount != 1
++            || equalCount != 1 || damagedCount != 0
++            || member._run.ZeroGrowthStrictPrimaryPrunes == 0)
++            throw new InvalidOperationException($"Actual closed/open tier or cheaper/equal HP route differs: "
++                + $"hp={damaged.Snapshot.CumulativePlayerHpLost}/{cheapDamaged.Snapshot.CumulativePlayerHpLost} "
++                + $"open={openCount} ablated={ablatedCount} cheap={cheapCount} equal={equalCount} "
++                + $"damaged={damagedCount} prunes={member._run.ZeroGrowthStrictPrimaryPrunes}.");
++        var missingTable = new PrimaryIncumbentTable();
++        if (!table.TryGet(ResourceIncumbentPolicy.CompletedBucket(expensiveWinner.Snapshot, 1), out var witness))
++            throw new InvalidOperationException("Actual witness missing.");
++        missingTable.Tighten(ResourceIncumbentPolicy.CompletedBucket(expensiveWinner.Snapshot, 1),
++            witness with { ExplicitPotionStrategicCost = null });
++        if (Member(missingTable).ApplyPrimaryIncumbentBound([damaged]).Count != 1)
++            throw new InvalidOperationException("Missing actual potion cost pruned route.");
++        var unknown = ((CombatPredictionSimulator)damaged.Snapshot.Simulator).Fork();
++        unknown.AddToCombat<Feed>(root.PlayerIdentity.Creature, PileType.Exhaust, 1, creator: null);
++        var unknownSnapshot = member.Snapshot(unknown, damaged.Turn, damaged.ActionCount,
++            damaged.Snapshot.ShufflesCrossed, SearchBoundaryReason.None,
++            ((ForkableSet<uint>)damaged.Snapshot.ProcessedEnemyDeaths).Fork());
++        var unknownNode = new SearchNode(damaged.Action, damaged.ActionCount, damaged.PotionCount,
++            damaged.PotionStrategicCost, damaged.Turn, damaged.Traits, damaged.FutureSoldHp, unknownSnapshot.Score,
++            unknownSnapshot.StateKey, unknownSnapshot.HasRisk, unknownSnapshot.BoundaryReason, false,
++            damaged.Parent, unknownSnapshot, damaged.CombatProgress);
++        if (member.ApplyPrimaryIncumbentBound([unknownNode]).Count != 1)
++            throw new InvalidOperationException("Unknown exhausted Feed escaped closed tier proof.");
++        var control = Member(new(), disabled: true).Solve(); var candidate = Member(new()).Solve();
++        static string Quality(SolverResult r) => $"won={r.Snapshot.AllEnemiesDead},hp={r.ProjectedBattleHpLost},"
++            + $"growth={r.Snapshot.GrowthRewards.TheHunt},pots={r.ExplicitPotionCount},"
++            + $"cost={r.PotionStrategicCostByTurn.Values.Sum()},expanded={r.TotalExpandedNodes},transitions={r.TotalTransitionCount}";
++        if (!control.Snapshot.AllEnemiesDead || !candidate.Snapshot.AllEnemiesDead
++            || candidate.Snapshot.PlayerDead || candidate.Snapshot.HasRisk
++            || candidate.BoundaryReason != SearchBoundaryReason.None
++            || candidate.ProjectedBattleHpLost > control.ProjectedBattleHpLost
++            || candidate.ProjectedBattleHpLost == control.ProjectedBattleHpLost
++                && candidate.Snapshot.GrowthRewards.TheHunt < control.Snapshot.GrowthRewards.TheHunt
++            || candidate.ExplicitPotionCount != 1 || candidate.Snapshot.ProjectedDeathSaveUseCount != 0
++            || candidate.PotionStrategicCostByTurn.Values.Sum() > control.PotionStrategicCostByTurn.Values.Sum())
++            throw new InvalidOperationException($"Closed-tier same-budget quality differs: control=[{Quality(control)}] candidate=[{Quality(candidate)}].");
++        string nativeState = ContinuationStamp.CapturePredicted(root.PlayerIdentity, cheap.Snapshot.Simulator,
++            root.StartTurnNumber, root.Forecast, root.StartTurnNumber).StateText;
++        return new($"ClosedTierHunt:costs={expensiveCost}/{cheapCost}:strictPrunes={member._run.ZeroGrowthStrictPrimaryPrunes}:"
++            + $"control=[{Quality(control)}]:candidate=[{Quality(candidate)}]", nativeState);
++    }
++}

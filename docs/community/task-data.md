@@ -32,6 +32,7 @@ B016 从 2026-10-02 16:37（北京时间）的新快照继续整理，固定 703
 
 ## 去重口径与验证状态
 
+- 世界线任务按大、小主题混排，每批最多两个大任务，其余用小任务补齐五主题；分档、配比和排序见[社区任务发布规则](../../.agents/skills/combatsolver-community-tasks/SKILL.md#世界线任务组批)。
 - 报告/session 去重后，继续读取最早异常、第一处状态分叉和源码，按所有权、执行阶段及共同调用链归并主题。
 - 卡名、回合号、牌堆位置和包装异常不能作为拆主题依据。选牌回放、路线材料化、原生选择和回合准备等共享入口先按机制调查，不逐卡派发。
 - 同报错行不证明同根因。证据分为静态因果已定位、共同机制首因待证、证据不足；最后一类直接跳过。不同已证实首因可在主题内补充子问题。
@@ -59,9 +60,9 @@ python tools/community/classify-community-reports.py --reports .local/community-
 - [B015：T016～T020](https://github.com/Torch1230/CombatSolver/issues/174)，5 个代表包。
 - [B016：T021～T025](https://github.com/Torch1230/CombatSolver/issues/182)，5 个代表包。
 - [Q002：O001～O005](https://github.com/Torch1230/CombatSolver/issues/150)，5 个代表包。
-- [Q003：O006～O010](https://github.com/Torch1230/CombatSolver/issues/183)，5 个代表包。
-- [Q006：O021～O025](https://github.com/Torch1230/CombatSolver/issues/186)，5 个代表包。
-- [Q007：O026～O030](https://github.com/Torch1230/CombatSolver/issues/187)，5 个代表包。
+- [Q003：O006～O010](https://github.com/Torch1230/CombatSolver/issues/183)，5 个代表包，总折算改善 69 HP。
+- [Q006：O021～O025](https://github.com/Torch1230/CombatSolver/issues/186)，5 个代表包，总折算改善 24 HP。
+- [Q007：O026～O030](https://github.com/Torch1230/CombatSolver/issues/187)，5 个代表包，总折算改善 10 HP。
 - [Q008：O031～O035](https://github.com/Torch1230/CombatSolver/issues/208)，5 个代表包，总折算改善 34 HP。
 - [Q009：O036～O040](https://github.com/Torch1230/CombatSolver/issues/209)，5 个代表包，总折算改善 25 HP。
 - [Q010：O041～O045](https://github.com/Torch1230/CombatSolver/issues/210)，5 个代表包，总折算改善 19 HP。

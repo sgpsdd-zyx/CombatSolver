@@ -1,0 +1,95 @@
+--- a/src/Search/StrategicHpRecoveryBound.Components.cs
++++ b/src/Search/StrategicHpRecoveryBound.Components.cs
+@@ -31,12 +31,14 @@
+         // Reuse the successful native eight-card mechanism contract on this DLL.
+         typeof(Backstab), typeof(FanOfKnives), typeof(Flechettes), typeof(MasterPlanner),
+         typeof(NoxiousFumes), typeof(Prowess), typeof(Reflex), typeof(RollingBoulder),
++        // Reuse the individually reviewed Regent initial-source and native lifecycle contract.
++        typeof(PrepTime), typeof(StrikeRegent), typeof(Calamity), typeof(CrescentSpear), typeof(Furnace), typeof(GammaBlast), typeof(DefendRegent), typeof(Orbit), typeof(LunarBlast), typeof(SevenStars), typeof(GatherLight), typeof(Alignment), typeof(WroughtInWar), typeof(CollisionCourse), typeof(Bombardment), typeof(Venerate), typeof(FallingStar), typeof(Quasar), typeof(FranticEscape),
+     }.ToFrozenSet();
+
+     private static readonly FrozenSet<Type> ComponentEnemies = new Type[]
+     {
+         typeof(Nibbit), typeof(InfestedPrism), typeof(FuzzyWurmCrawler), typeof(SoulNexus),
+-        typeof(LouseProgenitor), typeof(DecimillipedeSegmentFront),
++        typeof(TheInsatiable), typeof(LouseProgenitor), typeof(DecimillipedeSegmentFront),
+         typeof(DecimillipedeSegmentMiddle), typeof(DecimillipedeSegmentBack),
+     }.ToFrozenSet();
+
+@@ -50,6 +52,7 @@
+         typeof(Whetstone), typeof(VeryHotCocoa), typeof(TuningFork), typeof(FestivePopper),
+         typeof(StrikeDummy), typeof(FakeHappyFlower), typeof(SneckoSkull),
+         typeof(TriBoomerang), typeof(OrnamentalFan), typeof(Permafrost),
++        typeof(MembershipCard), typeof(MercuryHourglass), typeof(VexingPuzzlebox),
+     }.ToFrozenSet();
+
+     private static bool ComponentInitialCard(CardModel card)
+@@ -69,7 +72,7 @@
+         => type == typeof(RegenPotion) || NativeZeroRecoveryPotions.Contains(type);
+
+     private static bool ComponentPower(Type type)
+-        => type == typeof(RegenPower) || type == typeof(ReattachPower)
++        => type == typeof(RegenPower) || type == typeof(ReattachPower) || type == typeof(SandpitPower)
+             || RemainingSafePowers.Contains(type) || NativeNonHealingGeneratedPowers.Contains(type)
+             || NativeLouseClosure.Powers.Contains(type) || NativePotionZeroRecoveryPowers.Contains(type);
+
+@@ -155,6 +158,12 @@
+             Type type = power.GetType();
+             if (!ComponentPower(type))
+                 return int.MaxValue;
++            if (type == typeof(SpeedPotionPower) && !ReferenceEquals(power.Owner, player.Creature))
++                return int.MaxValue;
++            if (type == typeof(SandpitPower) && (!combat.KnownEnemies.Contains(power.Owner)
++                || power.Owner.Monster?.GetType() != typeof(TheInsatiable)
++                || !ReferenceEquals(power.Target, player.Creature)))
++                return int.MaxValue;
+             if (type == typeof(RegenPower) && ReferenceEquals(power.Owner, player.Creature))
+                 regen += Math.Max(0, power.Amount);
+             if (type == typeof(ReattachPower) && (power.Owner.Player is not null
+--- a/src/Search/PrimaryIncumbentTable.cs
++++ b/src/Search/PrimaryIncumbentTable.cs
+@@ -7,7 +7,7 @@
+ internal sealed class PrimaryIncumbentTable
+ {
+     internal static bool CanShareRoot(CombatRootSnapshot root)
+-        => root.CanCertifyRemainingHealing || root.HasOnlyPostCombatHealing;
++        => root.CanCertifyRemainingHealing;
+
+     private readonly Dictionary<PrimaryIncumbentBucket, PrimarySearchIncumbent> _bounds = [];
+     internal SolverResult? PotionFreeWitness { get; set; }
+--- a/src/Search/CombatBeamSolver.Retention.cs
++++ b/src/Search/CombatBeamSolver.Retention.cs
+@@ -316,7 +316,7 @@
+                 ? RemainingHealingPotential : null,
+             out certifiedHealingBoundPruned,
+             allowTurnTieBound: !_strictHpBoundWithRelicTargets,
+-            pruneEqualHp: policy.RelicTargets.Count == 0);
++            pruneEqualHp: root.CanCertifyRemainingHealing && policy.RelicTargets.Count == 0);
+         // A node may still move to a higher potion tier. Only use its current
+         // tier's witness when explicit use is closed by the member's policy.
+         List<SearchNode>? sharedBounded = null;
+@@ -333,7 +333,7 @@
+             // Sharing must not turn a heuristic healing allowance into a proof.
+             // Unknown root mechanisms retain the member's existing search.
+             bool eligible = !node.IsTerminal && !node.Snapshot.HasRisk && potionTierClosed
+-                && (root.CanCertifyRemainingHealing || root.HasOnlyPostCombatHealing);
++                && root.CanCertifyRemainingHealing;
+             int remainingHealing = eligible ? CertifiedRemainingHealingPotential(node.Snapshot) : int.MaxValue;
+             eligible &= remainingHealing != int.MaxValue;
+             int hpLowerBound = eligible ? StrategicHpLowerBound(node.Snapshot, _strategicBossHpRelief,
+@@ -416,7 +416,14 @@
+         {
+             SearchNode node = retained[index];
+             int baselineFutureHealPotential = remainingHealingPotential?.Invoke(node.Snapshot) ?? int.MaxValue;
+-            int futureHealPotential = Math.Min(baselineFutureHealPotential, node.Snapshot.FutureHealPotential);
++            // The new equal-HP shortcut cannot tighten a proof with the legacy heuristic.
++            if (pruneEqualHp && baselineFutureHealPotential == int.MaxValue)
++            {
++                bounded?.Add(node);
++                continue;
++            }
++            int futureHealPotential = pruneEqualHp ? baselineFutureHealPotential
++                : Math.Min(baselineFutureHealPotential, node.Snapshot.FutureHealPotential);
+             if (ShouldPruneByPrimaryIncumbent(
+                     StrategicHpLowerBound(node.Snapshot, bossHpRelief, futureHealPotential),
+                     node.Turn,

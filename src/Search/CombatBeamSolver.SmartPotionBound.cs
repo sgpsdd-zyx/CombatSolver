@@ -3,24 +3,28 @@ namespace CombatSolver;
 internal sealed partial class CombatBeamSolver
 {
     // An exact optional-potion layer can affect the Smart selection only if it
-    // meets the existing HP-saving threshold. This is an eligibility ceiling,
-    // not an incumbent route. The closed Prism environment cannot generate a
-    // cheaper potion, heal, increase max HP, or recover stolen resources.
+    // meets the existing HP-saving threshold after a complete potion-free victory.
+    // Component certification excludes new potion/relic acquisition and HP-growth
+    // sources; branch-unknown sources retain the full counterfactual search.
     private readonly int? _smartPotionEligibilityHpCeiling =
         policy.Multiplayer == null
-        && directSearchPurpose == DirectSearchPurpose.SmartPotionGradient
+        && (directSearchPurpose == DirectSearchPurpose.SmartPotionGradient
+            || CanUseComponentSmartPotionEligibility(root, policy)
+                && attributionPurpose == ContinuationPurpose.SmartOpeningPotionPosterior)
         && policy.PotionPolicy == SolverPotionPolicy.Smart
         && !policy.PotionStrategy.HasForcedDirectives
         && policy.TheftPolicy != SolverTheftPolicy.PreserveResources
-        && root.PlayerIdentity.Character.GetType() == typeof(MegaCrit.Sts2.Core.Models.Characters.Defect)
-        && root.Enemies.Count > 0
-        && root.Enemies.All(enemy => enemy.Monster?.GetType() == typeof(MegaCrit.Sts2.Core.Models.Monsters.InfestedPrism))
-        && CanUseStrictHpRelicBound(root.CanCertifyRemainingHealing
-                && root.InitialRemainingHealingUpperBound == 0,
-            policy.EffectiveHasGrowthTargets, policy.RelicTargets)
         && root.SearchablePotions.Count > 0
-        && root.SearchablePotions.All(potion => potion.PotionId
-            == MegaCrit.Sts2.Core.Models.ModelDb.Potion<MegaCrit.Sts2.Core.Models.Potions.FoulPotion>().Id.Entry)
+        && (CanUseComponentSmartPotionEligibility(root, policy)
+            || (root.PlayerIdentity.Character.GetType() == typeof(MegaCrit.Sts2.Core.Models.Characters.Defect)
+                && root.Enemies.Count > 0
+                && root.Enemies.All(enemy => enemy.Monster?.GetType() == typeof(MegaCrit.Sts2.Core.Models.Monsters.InfestedPrism))
+                && CanUseStrictHpRelicBound(root.CanCertifyRemainingHealing
+                    && root.InitialRemainingHealingUpperBound == 0,
+                    policy.EffectiveHasGrowthTargets, policy.RelicTargets)
+                && root.SearchablePotions.Count > 0
+                && root.SearchablePotions.All(potion => potion.PotionId
+                    == MegaCrit.Sts2.Core.Models.ModelDb.Potion<MegaCrit.Sts2.Core.Models.Potions.FoulPotion>().Id.Entry)))
         && minimumPotionUses is > 0 && maximumPotionUses == minimumPotionUses
             ? SmartPotionEligibilityHpCeiling(potionFreePolicyBaseline,
                 minimumPotionUses.Value, root.MinimumSearchablePotionStrategicCost!.Value,
@@ -29,7 +33,21 @@ internal sealed partial class CombatBeamSolver
                     policy.ActTransitionBossHpStrategy, policy.FinalBossHpStrategy))
             : null;
 
+    internal static bool CanUseComponentSmartPotionEligibility(CombatRootSnapshot root, SearchPolicySnapshot policy)
+        => policy.Multiplayer == null && root.UsesComponentHealingCertificate
+            && root.SearchablePotions.Count > 0 && policy.PotionPolicy == SolverPotionPolicy.Smart
+            && !policy.PotionStrategy.HasForcedDirectives
+            && !policy.EffectiveHasGrowthTargets
+            && (policy.RelicTargets.Count == 0 || CanUseStrictHpRelicBound(root, policy))
+            && policy.TheftPolicy != SolverTheftPolicy.PreserveResources
+            && (root.InitialRemainingHealingUpperBound == 0
+                || StrategicHpRecoveryBound.ComponentHealingUpperBound(root.ForkSimulator(),
+                    root.PlayerIdentity, postCombatHeal: 0,
+                    potionStrategy: policy.PotionStrategy, effectivePotionPolicy: policy.PotionPolicy) == 0);
+
     private int _smartPotionEligibilityBranchesPruned;
+    internal bool ComponentSmartBoundEnabledForTesting => _smartPotionEligibilityHpCeiling is not null;
+    internal int ComponentSmartBoundPrunedForTesting => _smartPotionEligibilityBranchesPruned;
 
     internal static int? SmartPotionEligibilityHpCeiling(
         PotionFreePolicyBaseline? baseline, int exactPotionUses,
@@ -53,8 +71,14 @@ internal sealed partial class CombatBeamSolver
         for (int index = 0; index < retained.Count; index++)
         {
             SearchNode node = retained[index];
-            if (StrategicHpLowerBound(node.Snapshot, _strategicBossHpRelief,
-                    RemainingHealingPotential(node.Snapshot)) > ceiling)
+            int healing = RemainingHealingPotential(node.Snapshot);
+            // Unknown branch sources retain the original exhaustive audit.
+            if (root.UsesComponentHealingCertificate && healing == int.MaxValue)
+            {
+                bounded?.Add(node);
+                continue;
+            }
+            if (StrategicHpLowerBound(node.Snapshot, _strategicBossHpRelief, healing) > ceiling)
             {
                 if (bounded is null)
                 {

@@ -1,6 +1,7 @@
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Models;
+using CombatSolver.Engine.InCombat.Simulation;
 
 namespace CombatSolver;
 
@@ -17,18 +18,20 @@ internal sealed partial class SimulatedCombatState
     internal long AdvisorTotalDamage { get; private set; }
     internal long AdvisorUnattributedDamage { get; private set; }
     internal bool ExternalChoiceReached { get; private set; }
-    private ForkableSet<Player>? _inactiveMultiplayerPlayers;
-
     internal bool IsPlayerActiveForHooks(Player player)
-        => AdvisorPlayer == null || _inactiveMultiplayerPlayers?.Contains(player) != true;
+        => AdvisorPlayer == null || PlayerHookState(player).HooksActive;
+
+    private SimPlayerCombatState PlayerHookState(Player player)
+        => (_predictionState ?? throw new InvalidOperationException("Player hook state requires an attached prediction state."))
+            .GetPlayerCombatState(player);
 
     internal void SetPlayerActiveForHooks(Player player, bool active)
     {
         if (AdvisorPlayer == null) return;
-        bool changed = active
-            ? _inactiveMultiplayerPlayers?.Remove(player) == true
-            : (_inactiveMultiplayerPlayers ??= []).Add(player);
-        if (changed) InvalidateBaseHookListeners();
+        SimPlayerCombatState state = PlayerHookState(player);
+        if (state.HooksActive == active) return;
+        state.HooksActive = active;
+        InvalidateBaseHookListeners();
     }
 
     private bool IsMultiplayerHookOwnerActive(AbstractModel listener)
@@ -66,7 +69,7 @@ internal sealed partial class SimulatedCombatState
     }
 
     internal IReadOnlyList<PowerModel> PowersForHooks()
-        => AdvisorPlayer == null || _inactiveMultiplayerPlayers is not { Count: > 0 }
+        => AdvisorPlayer == null
             ? EffectivePowers()
             : EffectivePowers().Where(IsMultiplayerHookOwnerActive).ToArray();
 

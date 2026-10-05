@@ -1,0 +1,179 @@
+--- a/src/Search/StrategicHpRecoveryBound.Components.cs
++++ b/src/Search/StrategicHpRecoveryBound.Components.cs
+@@ -32,4 +32,9 @@
+         typeof(Backstab), typeof(FanOfKnives), typeof(Flechettes), typeof(MasterPlanner),
+         typeof(NoxiousFumes), typeof(Prowess), typeof(Reflex), typeof(RollingBoulder),
++        // Reuse the pinned Necro initial-source and actual summon/lifecycle proof.
++        typeof(Bodyguard), typeof(DefendNecrobinder), typeof(Defy), typeof(Delay),
++        typeof(DevourLife), typeof(Dirge), typeof(Dredge), typeof(NecroMastery),
++        typeof(NoEscape), typeof(Severance), typeof(SharedFate), typeof(SicEm),
++        typeof(StrikeNecrobinder), typeof(Transfigure), typeof(Unleash),
+         // Reuse the individually reviewed Regent initial-source and native lifecycle contract.
+         typeof(PrepTime), typeof(StrikeRegent), typeof(Calamity), typeof(CrescentSpear), typeof(Furnace), typeof(GammaBlast), typeof(DefendRegent), typeof(Orbit), typeof(LunarBlast), typeof(SevenStars), typeof(GatherLight), typeof(Alignment), typeof(WroughtInWar), typeof(CollisionCourse), typeof(Bombardment), typeof(Venerate), typeof(FallingStar), typeof(Quasar), typeof(FranticEscape),
+@@ -54,4 +59,5 @@
+         typeof(TriBoomerang), typeof(OrnamentalFan), typeof(Permafrost),
+         typeof(MembershipCard), typeof(MercuryHourglass), typeof(VexingPuzzlebox),
++        typeof(BoundPhylactery), typeof(LetterOpener), typeof(BowlerHat), typeof(WhiteStar),
+     }.ToFrozenSet();
+
+@@ -107,5 +113,8 @@
+                 RelicModel relic => ComponentRelics.Contains(relic.GetType()),
+                 PowerModel power => ComponentPower(power.GetType()),
+-                MonsterModel monster => ComponentEnemies.Contains(monster.GetType()),
++                MonsterModel monster => ComponentEnemies.Contains(monster.GetType())
++                    || monster.GetType() == typeof(Osty)
++                        && ReferenceEquals(monster.Creature.PetOwner, player)
++                        && combat.Allies.Contains(monster.Creature),
+                 PotionModel potion => ComponentPotion(potion.GetType()),
+                 _ => combat.IsCertifiedNonHealingSubscriberSource(source)
+@@ -148,5 +157,6 @@
+             || state.AllCards.Any(card => !ComponentRemainingCard(card.Preview))
+             || combat.PendingReturningCards.Any(card => !ComponentRemainingCard(card.Preview))
+-            || combat.Allies.Any(ally => ally.Player is null && ally.Monster?.GetType() != typeof(Osty))
++            || combat.Allies.Any(ally => ally.Player is null
++                && (ally.Monster?.GetType() != typeof(Osty) || !ReferenceEquals(ally.PetOwner, player)))
+             || state.OrbQueue.Orbs.Any(orb => orb.GetType() != typeof(LightningOrb)
+                 && orb.GetType() != typeof(FrostOrb) && orb.GetType() != typeof(DarkOrb)
+@@ -158,4 +168,6 @@
+             Type type = power.GetType();
+             if (!ComponentPower(type))
++                return int.MaxValue;
++            if (type == typeof(ShacklingPotionPower) && !combat.KnownEnemies.Contains(power.Owner))
+                 return int.MaxValue;
+             if (type == typeof(SpeedPotionPower) && !ReferenceEquals(power.Owner, player.Creature))
+--- /dev/null
++++ b/src/Testing/Contracts/Search/UnattendedTestRunner.ComponentNecroSharedProof.cs
+@@ -0,0 +1,119 @@
++using CombatSolver.Engine.Common;
++using CombatSolver.Engine.InCombat.Simulation;
++using MegaCrit.Sts2.Core.Combat;
++using MegaCrit.Sts2.Core.Commands;
++using MegaCrit.Sts2.Core.Entities.Cards;
++using MegaCrit.Sts2.Core.Entities.Players;
++using MegaCrit.Sts2.Core.Models;
++using MegaCrit.Sts2.Core.Models.Cards;
++using MegaCrit.Sts2.Core.Models.Powers;
++using MegaCrit.Sts2.Core.Models.Relics;
++
++namespace CombatSolver;
++
++internal sealed partial class UnattendedTestRunner
++{
++    private async Task AssertComponentNecroSharedProofAsync(CombatState live, Player player)
++    {
++        foreach (var relic in player.Relics.ToArray())
++            if (relic is not BoundPhylactery) await RelicCmd.Remove(relic);
++        foreach (var power in live.Creatures.SelectMany(creature => creature.Powers).ToArray())
++            if (power is not DieForYouPower) await PowerCmd.Remove(power);
++        foreach (var relic in new RelicModel[] { ModelDb.Relic<LetterOpener>().ToMutable(),
++            ModelDb.Relic<BowlerHat>().ToMutable(), ModelDb.Relic<WhiteStar>().ToMutable() })
++            await RelicCmd.Obtain(relic, player);
++        await ClearPlayerPilesAsync(player);
++        for (int index = 0; index < 2; index++)
++            await InjectCardAsync(live, player, new() { CardId = "STRIKE_NECROBINDER", Pile = "Hand" });
++        foreach (string id in new[] { "BODYGUARD", "DEFEND_NECROBINDER", "DEFY", "DELAY",
++            "DEVOUR_LIFE", "DIRGE", "DREDGE", "NECRO_MASTERY", "NO_ESCAPE", "SEVERANCE",
++            "SHARED_FATE", "SIC_EM", "TRANSFIGURE", "UNLEASH", "JACK_OF_ALL_TRADES", "JACKPOT" })
++            await InjectCardAsync(live, player, new() { CardId = id, Pile = "Draw" });
++        foreach (var potion in player.PotionSlots.ToArray()) potion?.Discard();
++        InjectPotionForTest(player, "SHACKLING_POTION");
++        InjectPotionForTest(player, "CURE_ALL");
++        SetEnergy(player, 100);
++        await CreatureCmd.SetCurrentHp(live.Enemies.Single(), 5);
++        CombatRootSnapshot root = CombatRootSnapshot.Capture(live);
++        if (!root.UsesComponentHealingCertificate || root.InitialRemainingHealingUpperBound != 0
++            || !PrimaryIncumbentTable.CanShareRoot(root))
++            throw new InvalidOperationException("Necro shared union rejected: " + root.ComponentHealingRejection);
++        CombatPredictionSimulator parent = root.ForkSimulator();
++        string parentBefore = DescribeContinuationContractState(parent, root, player);
++        string liveBefore = ContinuationStamp.CaptureLive(live).StateText;
++        using (SimulationNotificationIsolation.Enter())
++        {
++            for (int index = 0; index < 16; index++)
++            {
++                var child = parent.Fork();
++                if (StrategicHpRecoveryBound.ComponentHealingUpperBound(child, player, 0) != 0)
++                    throw new InvalidOperationException("Owned Osty union changed the Fork bound.");
++                ((SimulatedCombatState)child.State.CombatState).SetAmount<ShacklingPotionPower>(player.Creature, 7);
++                if (StrategicHpRecoveryBound.ComponentHealingUpperBound(child, player, 0) != int.MaxValue)
++                    throw new InvalidOperationException("Wrong player Shackling owner was certified.");
++            }
++        }
++        var table = new PrimaryIncumbentTable();
++        var policy = SolverController.CaptureSearchPolicy(SolverSettings.Capture(), live, false, null) with
++        {
++            FixedBudget = false, VerifyIncrementalSearch = true, MaxDegreeOfParallelism = 2,
++            DetailedDiagnostics = false, MeasurePhasePerformance = false,
++            BudgetOverrideMilliseconds = null, StopAtAcceptableBattleHpLoss = false,
++            UseBeamWidthPortfolio = true, UseNoveltyPortfolio = false,
++            PotionPolicy = SolverPotionPolicy.Smart,
++            PotionStrategy = new(SolverPotionPolicy.Smart, []), RelicTargets = [],
++            PrimaryIncumbents = table,
++        };
++        policy = policy with { Profile = policy.Profile with
++            { BeamWidth = 64, MaxExpandedNodes = 2000, SoftTimeBudgetMilliseconds = 30000 } };
++        if (!CombatSearchCoordinator.CanRunOpeningPlanIncumbent(root, policy, null)
++            || !CombatBeamSolver.CanUseComponentSmartPotionEligibility(root, policy))
++            throw new InvalidOperationException("Existing incumbent/Smart entry did not consume new certificate.");
++        var names = SolverDisplayNames.Capture(live);
++        var damage = BattleDamageTracker.Observe(live);
++        using var deadline = new CancellationTokenSource(TimeSpan.FromSeconds(30));
++        SolverResult control = await Task.Run(() => CombatSearchCoordinator.Solve(root, names, damage,
++            policy with { DisableSharedPrimaryIncumbentsForTesting = true }, deadline.Token, null));
++        SolverResult candidate = await Task.Run(() => CombatSearchCoordinator.Solve(root, names, damage,
++            policy, deadline.Token, null));
++        if (!control.Snapshot.AllEnemiesDead || !candidate.Snapshot.AllEnemiesDead
++            || control.Snapshot.PlayerDead || candidate.Snapshot.PlayerDead
++            || control.Snapshot.HasRisk || candidate.Snapshot.HasRisk
++            || candidate.ProjectedBattleHpLost != control.ProjectedBattleHpLost
++            || candidate.ExplicitPotionCount != control.ExplicitPotionCount
++            || candidate.ExplicitPotionCount != 0
++            || !table.TryGet(0, 0, out _))
++            throw new InvalidOperationException("Necro union did not publish an actual complete P0 victory or changed strict quality.");
++        await Task.Run(() => CombatBeamSolver.AssertNecroSharedConsumerForTesting(root, names, damage, policy), deadline.Token);
++        if (DescribeContinuationContractState(parent, root, player) != parentBefore
++            || ContinuationStamp.CaptureLive(live).StateText != liveBefore)
++            throw new InvalidOperationException("Necro union changed parent/live/RNG.");
++        await InjectCardAsync(live, player, new() { CardId = "FEED", Pile = "Exhaust" });
++        if (PrimaryIncumbentTable.CanShareRoot(CombatRootSnapshot.Capture(live)))
++            throw new InvalidOperationException("Unknown initial exhausted Feed opened a shared table.");
++        _completedChecks.Add("NecroSharedUnion:ReusedPinnedNativeEffects:OwnedPetAnd16Forks:WrongPowerOwnerRefused:CompleteP0CoordinatorWitness:StrictDop2SameBudgetControl:ExistingTablePublicationAndConsumer:UnknownInitialAndBranchExhaustRefused:ParentLiveRngIsolation");
++    }
++}
++
++internal sealed partial class CombatBeamSolver
++{
++    internal static void AssertNecroSharedConsumerForTesting(CombatRootSnapshot root,
++        SolverDisplayNames names, BattleDamageSnapshot damage, SearchPolicySnapshot policy)
++    {
++        using var isolation = SimulationNotificationIsolation.Enter();
++        var member = new CombatBeamSolver(root, names, damage, policy, CancellationToken.None,
++            potionPolicyOverride: SolverPotionPolicy.Disabled, maximumPotionUses: 0);
++        SearchNode opening = CreateOpeningSearchSeed(member.Replay([]));
++        if (member.ApplyPrimaryIncumbentBound([opening]).Count != 0)
++            throw new InvalidOperationException("A second member did not consume the complete shared P0 winner.");
++        var unknown = root.ForkSimulator();
++        unknown.AddGeneratedCardToCombat(PredictedCard.Create(ModelDb.Card<Feed>(), root.PlayerIdentity),
++            PileType.Exhaust, root.PlayerIdentity, resultKind: CardGenerationResultKind.Fixed);
++        if (StrategicHpRecoveryBound.ComponentHealingUpperBound(unknown, root.PlayerIdentity, 0) != int.MaxValue)
++            throw new InvalidOperationException("New exhausted Feed was certified after a complete witness.");
++        SearchNode unknownNode = CreateOpeningSearchSeed(member.Snapshot(unknown,
++            root.StartTurnNumber, 0, 0, SearchBoundaryReason.None, new HashSet<uint>()));
++        if (member.ApplyPrimaryIncumbentBound([unknownNode]).Count != 1)
++            throw new InvalidOperationException("Shared winner pruned a branch with unknown recovery.");
++    }
++}
+--- a/src/Testing/Host/UnattendedTestRunner.Executor.cs
++++ b/src/Testing/Host/UnattendedTestRunner.Executor.cs
+@@ -1003,4 +1003,11 @@
+                 runner.SetStage("opening_discard_choice_value");
+                 await runner.AssertOpeningDiscardChoiceValueAsync(combatState, player);
++                return Observation(combatEnded: false);
++            }
++
++            if (request.ScenarioId == "COMPONENT-NECRO-INCUMBENT-COMBO")
++            {
++                runner.SetStage("component_necro_incumbent_combo");
++                await runner.AssertComponentNecroSharedProofAsync(combatState, player);
+                 return Observation(combatEnded: false);
+             }

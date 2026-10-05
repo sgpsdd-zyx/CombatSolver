@@ -1,0 +1,248 @@
+--- a/src/Search/PrimaryIncumbentTable.cs
++++ b/src/Search/PrimaryIncumbentTable.cs
+@@ -9,8 +9,28 @@
+     internal static bool CanShareRoot(CombatRootSnapshot root)
+         => root.CanCertifyRemainingHealing;
+
+-    private readonly Dictionary<PrimaryIncumbentBucket, PrimarySearchIncumbent> _bounds = [];
++    // All entries are actual complete victories. Equal-HP cost/turn tradeoffs remain
++    // in this existing table; no synthetic minimum-cost/earliest-turn route is made.
++    private readonly Dictionary<PrimaryIncumbentBucket, List<PrimarySearchIncumbent>> _bounds = [];
+     internal SolverResult? PotionFreeWitness { get; set; }
++    private long _costQualifiedQueries;
++    private long _alternativeWitnessSelections;
++    private long _acceptedCostTradeoffs;
++    private int _maxFrontierSize;
++
++    internal (int Buckets, int Witnesses, int MaxFrontierSize, long Queries,
++        long AlternativeSelections, long AcceptedCostTradeoffs) Statistics()
++    {
++        lock (_bounds)
++        {
++            int witnesses = 0;
++            foreach (var frontier in _bounds.Values)
++                witnesses += frontier.Count;
++            return (_bounds.Count, witnesses, _maxFrontierSize, _costQualifiedQueries,
++                _alternativeWitnessSelections, _acceptedCostTradeoffs);
++        }
++    }
++
+
+     internal bool TryGet(int stolen, int potions, out PrimarySearchIncumbent incumbent)
+         => TryGet(new(stolen, potions), out incumbent);
+@@ -18,8 +38,64 @@
+     internal bool TryGet(PrimaryIncumbentBucket bucket, out PrimarySearchIncumbent incumbent)
+     {
+         lock (_bounds)
+-            return _bounds.TryGetValue(bucket, out incumbent);
++        {
++            if (!_bounds.TryGetValue(bucket, out var witnesses))
++            {
++                incumbent = default;
++                return false;
++            }
++            incumbent = Earliest(witnesses);
++            return true;
++        }
+     }
++
++    internal bool TryGet(PrimaryIncumbentBucket bucket, int spentPotionStrategicCost,
++        out PrimarySearchIncumbent incumbent)
++    {
++        lock (_bounds)
++        {
++            if (!_bounds.TryGetValue(bucket, out var witnesses))
++            {
++                incumbent = default;
++                return false;
++            }
++            _costQualifiedQueries++;
++            if (witnesses.Count == 1)
++            {
++                incumbent = witnesses[0];
++                return true;
++            }
++            // Strictly better HP remains usable at every cost. For equal HP select
++            // the earliest complete witness whose actual cost is already spent.
++            // The caller keeps the existing nullable-cost equality guard.
++            PrimarySearchIncumbent? eligible = null;
++            foreach (var witness in witnesses)
++                if (witness.ExplicitPotionStrategicCost is { } cost
++                    && spentPotionStrategicCost >= cost
++                    && (eligible == null || Earlier(witness, eligible.Value)))
++                    eligible = witness;
++            var earliest = Earliest(witnesses);
++            incumbent = eligible ?? earliest;
++            if (incumbent != earliest)
++                _alternativeWitnessSelections++;
++            return true;
++        }
++    }
++
++    private static PrimarySearchIncumbent Earliest(List<PrimarySearchIncumbent> witnesses)
++    {
++        var earliest = witnesses[0];
++        for (int index = 1; index < witnesses.Count; index++)
++            if (Earlier(witnesses[index], earliest))
++                earliest = witnesses[index];
++        return earliest;
++    }
++
++    private static bool Earlier(PrimarySearchIncumbent left, PrimarySearchIncumbent right)
++        => left.CombatEndedTurn < right.CombatEndedTurn
++            || left.CombatEndedTurn == right.CombatEndedTurn
++                && left.ExplicitPotionStrategicCost is { } leftCost
++                && (right.ExplicitPotionStrategicCost is not { } rightCost || leftCost < rightCost);
+
+     internal bool Tighten(int stolen, int potions, PrimarySearchIncumbent candidate)
+         => Tighten(new(stolen, potions), candidate);
+@@ -28,13 +104,42 @@
+     {
+         lock (_bounds)
+         {
+-            if (_bounds.TryGetValue(bucket, out var current)
+-                && (candidate.StrategicHpDeficit > current.StrategicHpDeficit
+-                    || candidate.StrategicHpDeficit == current.StrategicHpDeficit
+-                        && candidate.CombatEndedTurn >= current.CombatEndedTurn))
+-                return false;
+-            _bounds[bucket] = candidate;
++            if (!_bounds.TryGetValue(bucket, out var witnesses))
++            {
++                _bounds.Add(bucket, [candidate]);
++                _maxFrontierSize = Math.Max(_maxFrontierSize, 1);
++                return true;
++            }
++            foreach (var current in witnesses)
++                if (Dominates(current, candidate))
++                    return false;
++            if (candidate.ExplicitPotionStrategicCost is { } candidateCost)
++                foreach (var current in witnesses)
++                    if (candidate.StrategicHpDeficit == current.StrategicHpDeficit
++                        && candidate.CombatEndedTurn >= current.CombatEndedTurn
++                        && current.ExplicitPotionStrategicCost is { } currentCost
++                        && candidateCost < currentCost)
++                    {
++                        _acceptedCostTradeoffs++;
++                        break;
++                    }
++            for (int index = witnesses.Count - 1; index >= 0; index--)
++                if (Dominates(candidate, witnesses[index]))
++                    witnesses.RemoveAt(index);
++            witnesses.Add(candidate);
++            _maxFrontierSize = Math.Max(_maxFrontierSize, witnesses.Count);
+             return true;
+         }
+     }
++
++    private static bool Dominates(PrimarySearchIncumbent left, PrimarySearchIncumbent right)
++    {
++        if (left.StrategicHpDeficit != right.StrategicHpDeficit)
++            return left.StrategicHpDeficit < right.StrategicHpDeficit;
++        if (left.CombatEndedTurn > right.CombatEndedTurn)
++            return false;
++        if (left.ExplicitPotionStrategicCost is not { } leftCost)
++            return right.ExplicitPotionStrategicCost == null;
++        return right.ExplicitPotionStrategicCost is not { } rightCost || leftCost <= rightCost;
++    }
+ }
+--- a/src/Search/CombatBeamSolver.Retention.cs
++++ b/src/Search/CombatBeamSolver.Retention.cs
+@@ -341,7 +341,7 @@
+             bool prune = eligible
+                 && ResourceIncumbentPolicy.TryOptimisticBucket(policy, root.ExhaustingGrowthUpperBound,
+                     node.Snapshot, lootBucket, uses, out var resourceBucket, out int rewardCredit)
+-                && _primaryIncumbents.TryGet(resourceBucket, out var shared)
++                && _primaryIncumbents.TryGet(resourceBucket, node.Snapshot.ExplicitPotionStrategicCost, out var shared)
+                 && ShouldPruneByPrimaryIncumbent(
+                     hpLowerBound - rewardCredit,
+                     node.Turn, shared, allowTurnTieBound: !_strictHpBoundWithRelicTargets
+@@ -662,9 +662,10 @@
+                 _strategicBossHpRelief,
+                 node.Snapshot.DeathSaveHpRestored) - node.Snapshot.StrategicHpCredit;
+             var resourceBucket = ResourceIncumbentPolicy.CompletedBucket(node.Snapshot, explicitPotionUses);
+-            PrimarySearchIncumbent? classIncumbent = _primaryIncumbents.TryGet(
+-                resourceBucket, out var witnessed)
+-                    ? witnessed : null;
++            // Qualify the complete route independently; the table retains all
++            // cost/turn-incomparable witnesses at its best HP. Comparing with one
++            // representative here would discard a useful cheaper later victory.
++            PrimarySearchIncumbent? classIncumbent = null;
+             if (TryTightenPrimarySearchIncumbent(
+                 _potionFreePolicyBaseline,
+                 _minimumPotionUses,
+--- a/src/Search/CombatSearchCoordinator.cs
++++ b/src/Search/CombatSearchCoordinator.cs
+@@ -182,6 +182,14 @@
+             selected.PortfolioTelemetry = portfolioTelemetry;
+             selected.ComparisonQuality = BuildInterimResult(root, policy, selected);
+             selected.ComparisonRootState = root.ContinuationStamp.StateText;
++            if (policy.PrimaryIncumbents is { } proofTable)
++            {
++                var stats = proofTable.Statistics();
++                policy.Diagnostics.Info($"[CombatSolver/Test] COST_FRONTIER_CACHE scope=request_cumulative "
++                    + $"buckets={stats.Buckets} witnesses={stats.Witnesses} max_frontier={stats.MaxFrontierSize} "
++                    + $"queries={stats.Queries} alternative_selections={stats.AlternativeSelections} "
++                    + $"accepted_cost_tradeoffs={stats.AcceptedCostTradeoffs}");
++            }
+             if (!policy.DisableRefinementIncumbentForTesting && !policy.DisableSharedPrimaryIncumbentsForTesting
+                 && PrimaryIncumbentTable.CanShareRoot(root)
+                 && selected.ExplicitPotionCount == 0 && !selected.Snapshot.HasRisk
+--- a/src/Testing/Contracts/Search/UnattendedTestRunner.PotionCostIncumbent.cs
++++ b/src/Testing/Contracts/Search/UnattendedTestRunner.PotionCostIncumbent.cs
+@@ -178,6 +178,56 @@
+         bool zeroCostPruned = zero.ApplyPrimaryIncumbentBound([zeroPartial]).Count == 0;
+         if (!sameCostPruned || !missingCostKept || !zeroCostPruned)
+             throw new InvalidOperationException($"Potion-cost guard failed: same={sameCostPruned} unknown={missingCostKept} zero={zeroCostPruned}.");
++        // Equal HP witnesses with different cost/turn tradeoffs must remain actual
++        // complete routes. A cheap later witness can strengthen the cost-qualified
++        // bound without inventing a cheap early route or losing the early witness.
++        PrimaryIncumbentTable frontierTable = new();
++        var frontierPolicy = policy with { PrimaryIncumbents = frontierTable };
++        var earlyMember = Member(frontierPolicy);
++        var laterMember = Member(frontierPolicy);
++        if (!earlyMember.TightenPrimarySearchIncumbentAtTurnLayer([ExpensiveWinner], 0))
++            throw new InvalidOperationException("Frontier early complete witness was not published.");
++        bool acceptedCheapLater = laterMember.TightenPrimarySearchIncumbentAtTurnLayer([lateWinner], 1);
++        if (!acceptedCheapLater)
++            throw new InvalidOperationException("COST_FRONTIER: existing table rejected a cheaper later complete victory at equal HP; earlier expensive witness is not a usable equal-HP bound for the cheap branch.");
++        var bucket = ResourceIncumbentPolicy.CompletedBucket(lateWinner.Snapshot, 1);
++        if (!frontierTable.TryGet(bucket, ExpensiveWinner.PotionStrategicCost, out var earlyWitness)
++            || earlyWitness.CombatEndedTurn != ExpensiveWinner.Snapshot.CombatEndedTurn
++            || earlyWitness.ExplicitPotionStrategicCost != ExpensiveWinner.PotionStrategicCost
++            || !frontierTable.TryGet(bucket, lateWinner.PotionStrategicCost, out var laterWitness)
++            || laterWitness.CombatEndedTurn != lateWinner.Snapshot.CombatEndedTurn
++            || laterWitness.ExplicitPotionStrategicCost != lateWinner.PotionStrategicCost)
++            throw new InvalidOperationException("Frontier merged incomparable witnesses into synthetic cost/turn metadata.");
++        var consumer = Member(frontierPolicy);
++        if (consumer.ApplyPrimaryIncumbentBound([latePartial]).Count != 0
++            || consumer.ApplyPrimaryIncumbentBound([expensivePartial]).Count != 0
++            || consumer.ApplyPrimaryIncumbentBound([zeroPartial]).Count != 1)
++            throw new InvalidOperationException("Frontier did not strengthen both real cost-qualified branches or pruned an open lower-potion tier.");
++        int oracleCases = 0;
++        foreach (int hp in new[] { earlyWitness.StrategicHpDeficit - 1,
++                     earlyWitness.StrategicHpDeficit, earlyWitness.StrategicHpDeficit + 1 })
++        for (int turn = 1; turn <= 3; turn++)
++        for (int spent = 0; spent <= ExpensiveWinner.PotionStrategicCost + 1; spent++)
++        {
++            frontierTable.TryGet(bucket, spent, out var chosen);
++            bool Prunes(PrimarySearchIncumbent actual) => ShouldPruneByPrimaryIncumbent(hp, turn, actual,
++                allowTurnTieBound: actual.ExplicitPotionStrategicCost is { } c1 && spent >= c1,
++                pruneEqualHp: actual.ExplicitPotionStrategicCost is { } c2 && spent >= c2);
++            if (Prunes(chosen) != (Prunes(earlyWitness) || Prunes(laterWitness)))
++                throw new InvalidOperationException($"Frontier selected a weaker or invented witness: hp={hp} turn={turn} spent={spent}.");
++            oracleCases++;
++        }
++        // A strictly better HP winner replaces the old frontier; equal known-cost
++        // duplicates and dominated later/costlier witnesses do not grow it.
++        if (frontierTable.Tighten(bucket, laterWitness)
++            || frontierTable.Tighten(bucket, laterWitness with { CombatEndedTurn = laterWitness.CombatEndedTurn + 1 }))
++            throw new InvalidOperationException("Frontier retained a duplicate or dominated complete bound.");
++        var lowerHp = laterWitness with { StrategicHpDeficit = laterWitness.StrategicHpDeficit - 1 };
++        if (!frontierTable.Tighten(bucket, lowerHp)
++            || !frontierTable.TryGet(bucket, 0, out var stricter)
++            || stricter != lowerHp)
++            throw new InvalidOperationException("Strictly better HP did not supersede the old cost frontier.");
++        policy.Diagnostics.Info($"[CombatSolver/Test] COST_FRONTIER complete_witnesses=2 early_cost={earlyWitness.ExplicitPotionStrategicCost} late_cost={laterWitness.ExplicitPotionStrategicCost} extra_cheap_shared_prune=1 oracle_cases={oracleCases} synthetic_witness=False open_tier_kept=True");
+         return new(cheapPartial, ExpensiveWinner.PotionStrategicCost, CheapWinner.PotionStrategicCost,
+             sharedKept, localKept, ablationKept, sameCostPruned, missingCostKept, zeroCostPruned, latePartial, lateSharedKept, lateLocalKept, unknownRecoveryKept);
+     }

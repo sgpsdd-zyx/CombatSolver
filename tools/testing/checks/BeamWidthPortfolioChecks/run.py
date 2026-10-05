@@ -1,9 +1,8 @@
 """Compile the production beam-width portfolio combinator and its refinement gate against
 controlled member runs.
 
-The combinator source is copied verbatim; the comparison rule, the interim result record and the
-theft recovery order are extracted from their production files so the checks exercise the same
-ordering the coordinator uses, not a restatement of it.
+The combinator and pure quality policies are copied verbatim. The interim result record,
+theft recovery order and coordinator entry are extracted from their production files.
 """
 from pathlib import Path
 import subprocess
@@ -17,6 +16,9 @@ def block(path, declaration):
     text = path.read_text(encoding='utf-8')
     start = text.index(declaration)
     opening = text.index('{', start)
+    expression = text.find('=>', start, opening)
+    if expression != -1:
+        return text[start:text.index(';', expression) + 1]
     end, depth = opening + 1, 1
     while depth:
         depth += (text[end] == '{') - (text[end] == '}')
@@ -25,6 +27,8 @@ def block(path, declaration):
 
 
 search = root / 'src/Search'
+for filename in ('RouteQuality.cs', 'RouteQualityPolicy.cs', 'SolverInterimResultOrdering.cs'):
+    (out / filename).write_text((search / filename).read_text(encoding='utf-8'), encoding='utf-8')
 (out / 'BeamWidthPortfolio.cs').write_text(
     (search / 'BeamWidthPortfolio.cs').read_text(encoding='utf-8'), encoding='utf-8')
 (out / 'BeamWidthPortfolioGate.cs').write_text(
@@ -42,8 +46,6 @@ search = root / 'src/Search'
     'namespace CombatSolver;\n'
     + block(search / 'TheftEncounterStrategy.cs', 'internal enum SolverTheftPolicy') + '\n'
     + block(root / 'src/Runtime/SolverProgress.cs', 'internal sealed record SolverInterimResult(') + '\n'
-    + 'internal static class SolverInterimResultOrdering {\n'
-    + block(search / 'SolverInterimResultOrdering.cs', '    public static int ComparePrimaryQuality(') + '\n}\n'
     + 'internal static class TheftEncounterStrategy {\n'
     + block(search / 'TheftEncounterStrategy.cs', '    public static int CompareRecovery(SolverTheftPolicy? policy,') + '\n}\n'
     + 'internal static partial class CombatSearchCoordinator {\n'

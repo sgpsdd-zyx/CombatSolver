@@ -1,0 +1,110 @@
+--- a/src/Search/SimulatedCombatState.Fork.cs
++++ b/src/Search/SimulatedCombatState.Fork.cs
+@@ -213,15 +213,30 @@
+                 fork._effectiveHookListeners = RemapCachedModels(_effectiveHookListeners, context);
+         }
+
++        if (_activeHookListeners is not null)
++        {
++            if (ReferenceEquals(_activeHookListeners, _effectiveHookListeners))
++                fork._activeHookListeners = fork._effectiveHookListeners;
++            else if (_activeHookListeners is ConcatenatedListenerView activeView
++                && _effectiveHookListeners is ConcatenatedListenerView effectiveView
++                && ReferenceEquals(activeView.Suffix, effectiveView.Suffix)
++                && fork._effectiveHookListeners is ConcatenatedListenerView forkedEffective
++                && ReferenceEquals(activeView.Prefix, _activeHookListenerPrefix)
++                && fork._activeHookListenerPrefix is { } activePrefix)
++                fork._activeHookListeners = new ConcatenatedListenerView(activePrefix, forkedEffective.Suffix);
++            else
++                fork._activeHookListeners = RemapCachedModels(_activeHookListeners, context);
++        }
++
+         if (_effectiveRunHookListeners is not null)
+         {
+-            if (ReferenceEquals(_effectiveRunHookListeners, _effectiveHookListeners))
++            if (ReferenceEquals(_effectiveRunHookListeners, _activeHookListeners))
+             {
+-                fork._effectiveRunHookListeners = fork._effectiveHookListeners;
++                fork._effectiveRunHookListeners = fork._activeHookListeners;
+             }
+             else if (_effectiveRunHookListeners is ConcatenatedListenerView view
+-                && ReferenceEquals(view.Suffix, _effectiveHookListeners)
+-                && fork._effectiveHookListeners is { } forkedSuffix)
++                && ReferenceEquals(view.Suffix, _activeHookListeners)
++                && fork._activeHookListeners is { } forkedSuffix)
+             {
+                 // 逐元素重映射对拼接是可分配的：remap(前缀 ++ 后缀) == remap(前缀) ++ remap(后缀)。
+                 // 后缀就是刚刚重映射好的战斗监听表，前缀是根牌组快照（只含 CardModel/Enchantment，
+@@ -244,6 +259,26 @@
+             }
+         }
+
++        // Fork preserves receiver types and order. Rebind only to the independently
++        // remapped native lists; the immutable layout contains no branch models.
++        fork._mirroredHookListeners = RestoreMirroredHookCache(
++            _mirroredHookListeners, _activeHookListeners, fork._activeHookListeners);
++        fork._mirroredRunHookListeners = RestoreMirroredHookCache(
++            _mirroredRunHookListeners, _effectiveRunHookListeners, fork._effectiveRunHookListeners);
++    }
++
++    private static IReadOnlyList<AbstractModel>? RestoreMirroredHookCache(
++        IReadOnlyList<AbstractModel>? cached, IReadOnlyList<AbstractModel>? source,
++        IReadOnlyList<AbstractModel>? forkedSource)
++    {
++        if (cached is null || source is null || forkedSource is null)
++            return null;
++        if (ReferenceEquals(cached, source))
++            return forkedSource;
++        if (cached is MirroredHookListenerSnapshot filtered
++            && ReferenceEquals(filtered.Source, source))
++            return new MirroredHookListenerSnapshot(forkedSource, filtered.Layout);
++        return ReferenceEquals(cached, Array.Empty<AbstractModel>()) ? cached : null;
+     }
+
+     private static IReadOnlyList<AbstractModel> RemapCachedModels(
+--- a/src/Engine/Common/MirroredHookListenerFilter.cs
++++ b/src/Engine/Common/MirroredHookListenerFilter.cs
+@@ -331,6 +331,7 @@
+     IReadOnlyList<AbstractModel> source,
+     MirroredHookListenerLayout layout) : IReadOnlyList<AbstractModel>
+ {
++    internal IReadOnlyList<AbstractModel> Source => source;
+     internal MirroredHookListenerLayout Layout { get; } = layout;
+     internal bool HasAny(MirroredHookMask mask) => Layout.HasAny(mask);
+     public int Count => source.Count;
+--- a/src/Testing/Contracts/Combat/UnattendedTestRunner.MirroredHookFilter.cs
++++ b/src/Testing/Contracts/Combat/UnattendedTestRunner.MirroredHookFilter.cs
+@@ -70,6 +70,8 @@
+         var parentSource = (ICombatPredictionHookListenerSource)parentCombat;
+         IReadOnlyList<AbstractModel> parentList = parentSource.MirroredHookListeners;
+         StrengthPower parentStrength = parentCombat.GetPower<StrengthPower>(player.Creature)!;
++        IReadOnlyList<AbstractModel> parentRunList = parentSource.MirroredRunHookListeners;
++        HookLayoutCacheStatistics layoutBeforeFork = parentCombat.HookLayoutCacheStatistics;
+         CombatPredictionSimulator child = parent.Fork();
+         SimulatedCombatState childCombat = (SimulatedCombatState)child.State.CombatState;
+         var childSource = (ICombatPredictionHookListenerSource)childCombat;
+@@ -78,6 +80,15 @@
+             || !childSource.MirroredHookListeners.Contains(childStrength)
+             || childSource.MirroredHookListeners.Contains(parentStrength))
+             throw new InvalidOperationException("Filtered receivers retained a parent Power across Fork.");
++        if (childCombat.HookLayoutCacheStatistics != layoutBeforeFork
++            || parentList is not MirroredHookListenerSnapshot parentFiltered
++            || childSource.MirroredHookListeners is not MirroredHookListenerSnapshot childFiltered
++            || !ReferenceEquals(parentFiltered.Layout, childFiltered.Layout)
++            || parentRunList is not MirroredHookListenerSnapshot parentRunFiltered
++            || childSource.MirroredRunHookListeners is not MirroredHookListenerSnapshot childRunFiltered
++            || !ReferenceEquals(parentRunFiltered.Layout, childRunFiltered.Layout)
++            || childCombat.HookLayoutCacheStatistics != layoutBeforeFork)
++            throw new InvalidOperationException("Fork rebuilt an unchanged dispatch layout.");
+         AssertSharedHookLayouts(filter, models, parentStrength, childStrength, external);
+         childCombat.SetAmount<StrengthPower>(player.Creature, 0);
+         if (childSource.MirroredHookListeners.Contains(childStrength)
+@@ -120,7 +131,7 @@
+         if (MirroredHookListenerFilter.Capture().Filter([noOp]).Count != 0)
+             throw new InvalidOperationException("Removing the test patch did not restore root filtering.");
+         AssertKeywordModifierNoOpGuard(combat, player);
+-        _completedChecks.Add($"MirroredHookFilter:Methods={checkedMethods}:Models={models.Length}:OrderDuplicatesExternalForkInvalidationPatchRefreshSharedLayoutsSegmentsNoAnchorEffectivePrefixReuse");
++        _completedChecks.Add($"MirroredHookFilter:Methods={checkedMethods}:Models={models.Length}:OrderDuplicatesExternalForkInvalidationPatchRefreshSharedLayoutsSegmentsNoAnchorEffectivePrefixReuseForkDispatchCacheReuse");
+     }
+
+     private static void AssertListenerSegmentFork(

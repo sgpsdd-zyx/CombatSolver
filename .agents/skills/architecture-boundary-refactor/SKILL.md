@@ -9,13 +9,13 @@ description: 重构 CombatSolver 的 Search、Runtime 会话、UI snapshot、无
 
 官方 0.47.2 的候选生成统一到 `ExpansionPlan`；首动作的 live 目标检查仅用于单人，多人仍消费冻结根的目标。`AdmittedParent`、`AdmittedJobScheduler` 和两种执行器共用候选语义，保留各自消费顺序。单人 `PlanCommitment`、计划保路与延长无进展窗口不得进入多人，构造时清空承诺；多人协调器在请求账本和计划发现之前返回。
 
-官方 0.48.0 的剩余治疗证书、已知原版来源政策与 Smart 药水资格界只归单人，Runtime 根冻结资格，Search 只读消费；多人根不捕获这些资格。`DynamicVarSetAccess` 独占原版内部字典访问，其他消费者使用该桥；字段缺失走公开枚举，调用失败不能吞掉。`LiveCollectionGuard` 只在主线程根捕获窗口拒绝实机集合写入，不为 worker 提供 live 读取通道。
+官方剩余治疗证书、已知来源政策、0.50.0 组件证书/成长上界及胜利界只归单人。Runtime 根冻结资格，Search 只读消费；多人根拒绝这些证书，政策清空 `PrimaryIncumbents`，Runtime 不获取单人共享表，solver 不应用局部/共享胜利界或 Smart 药水资格界。`DynamicVarSetAccess` 独占原版内部字典访问，其他消费者使用该桥；字段缺失走公开枚举，调用失败不能吞掉。`LiveCollectionGuard` 只在主线程根捕获窗口拒绝实机集合写入，不为 worker 提供 live 读取通道。
 
 原生无人测试的包枚举预热属于 `ProtocolHost`，首次接受请求、建局之前一次完成；多人实验只准备本场配方，不再拥有跨请求的全局缓存初始化。普通游戏没有请求时不执行该准备，不改原版枚举值、包内容或失败语义。
 
 ## 适用边界
 
-`SimulatedCombatState.GoldHooks` 的单人来源保持官方路径；多人在每次派发前从分支资格冻结监听列表，支持死亡和复活，禁止回读原生 `IsActiveForHooks`。金币通用命令及镜像仍是唯一结算实现，不把多人选路政策加入其中。多人测试归 `src/Testing/Contracts/Multiplayer`；工具统一使用 `CombatSolverRepositoryRoot`，构建输出归 `.local/tool-build`。
+`SimulatedCombatState.GoldHooks` 的单人来源保持官方路径；多人在每次派发前从 `SimPlayerCombatState.HooksActive` 冻结监听列表，支持死亡和从死亡根复活，禁止回读原生 `IsActiveForHooks` 或新增多人停用集合。多人写入该字段时使监听缓存失效；Fork、生产键及续用保存原状态。全队阶段二后共用 `ExtraTurnMirrors` 查询并逐参与者执行一次后置回调，不保留另一套来源消费逻辑。金币通用命令及镜像仍是唯一结算实现，不把多人选路政策加入其中。多人测试归 `src/Testing/Contracts/Multiplayer`；工具统一使用 `CombatSolverRepositoryRoot`，构建输出归 `.local/tool-build`。
 
 本 skill 处理结构和所有权：拆分大类、迁移 run/session state、建立策略对象、隔离 renderer、整理测试编排、为工具提供稳定元数据。
 
@@ -105,7 +105,7 @@ description: 重构 CombatSolver 的 Search、Runtime 会话、UI snapshot、无
 - headless 实例目录、完整游戏/Mod 内容快照和主机资源预约属于 `tools/testing/headless-runtime.ps1/.sh`；默认实例根固定为当前仓库 `.local/headless-instances/<实例>`，不得回到 `%LOCALAPPDATA%` 或 XDG state。用户目录只保留跨任务互斥所需的小型主机租约。启动器保留请求协议、精确 PID/出生身份终止、结果与静稳 ACK。不得把测试协调放入游戏 Search/Runtime，或只删全局进程检查而继续共享 DLL/协议。并行只作正确性/吞吐验证，性能对照使用独占模式。
 - CoverageCatalog 只消费 `IMethodMirrorRegistryDescriptorProvider`，不反射 registry 私有字段。
 - 覆盖材料按 `coverage/README.md` 收纳；CoverageCatalog 从 catalog/evidence 读取登记，按完整路径消费 fixtures，替换 catalog/generated 快照，候选输入生成到 .local。移动目录保持证据等级与语义输入，运行器继续由 tools 持有。
-- Testing 按 `src/Testing/README.md` 的 Host、Support、Replay、Contracts 与 Regressions 收纳；移动保持原 partial 类型与协议。退役调查先检查跨层消费者，提取仍复用的 helper，再删除专用路由。一次性测试在 .local/tool-tasks 显式接入，任务结束清理；只有独立、可复跑的机制合同进入正式源码树。
+- Testing 按 `src/Testing/README.md` 的 Host、Support、Replay、Contracts 与 Regressions 收纳；组件回复界与 Smart 资格合同归 `Contracts/Search`，移动保持原 partial 类型与协议。退役调查先检查跨层消费者，提取仍复用的 helper，再删除专用路由。一次性测试在 .local/tool-tasks 显式接入，任务结束清理；只有独立、可复跑的机制合同进入正式源码树。
 
 ## 3. 实现方式
 

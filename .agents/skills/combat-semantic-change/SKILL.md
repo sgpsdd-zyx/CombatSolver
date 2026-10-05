@@ -9,15 +9,15 @@ description: 修改 CombatSolver 的卡牌、Power、遗物、药水、球、怪
 
 原生中毒伤害的 dealer 为空，原生历史与严格差分必须保留这一事实；Power applier 也不是混合毒层的完整来源账本。策略层可以另研究有明确来源依据的派生信用，但不能改写原生 dealer，且须定义根观察、混合来源、分支/Fork、衰减及跨重算的一致口径。现役多人仅额外记录无来源实际扣血，按值 Fork 并进入政策标签/增量核对，均分折算不改变实际伤害、个人目标或原生对账戳。`MULTIPLAYER-SHARED-DAMAGE` 覆盖混毒、全队原生周期、历史观察、治疗与分支隔离；`Intercept` 原型参考存在 `UnsupportedEffect`，不能把它计为已通过辅助语义。
 
-死亡玩家可留在阵容并保留 Power，活动 Hook 枚举不等于完整状态。多人根完整捕获，`SimulatedCombatState.Multiplayer` 持有逐玩家 Hook 资格并随 Fork、生产键及 ContinuationStamp 保存；死亡清理后停用、治疗复活时恢复，不能以 HP=0 提前停用而阻断救命效果。领域 Hook 补偿使用 `PowersForHooks`／逐玩家资格，完整快照与原生每回合能力初值继续保留残留状态。修改此边界以 `dead-teammate` 合同覆盖死亡、救命、复活、原生下一回合和根／Fork 隔离；不把其结果外推真实网络。
+死亡玩家可留在阵容并保留 Power，活动 Hook 枚举不等于完整状态。多人根完整捕获，逐玩家 Hook 资格统一由 `SimPlayerCombatState.HooksActive` 持有；`SimulatedCombatState.Multiplayer` 通过该字段过滤并使监听缓存失效，随 Fork、生产键及 ContinuationStamp 保存，不另设停用集合；死亡清理后停用、治疗复活时恢复，不能以 HP=0 提前停用而阻断救命效果。领域 Hook 补偿使用 `PowersForHooks`／逐玩家资格，完整快照与原生每回合能力初值继续保留残留状态。修改此边界以 `dead-teammate` 合同覆盖死亡、救命、复活、原生下一回合和根／Fork 隔离；不把其结果外推真实网络。
 
-遗物归属要分别核对根库存、逐持有者触发和显示来源。佩尔之眼的侧回合开始回调也观察未参加额外回合的持有者，不能先按参与者过滤而漏掉资格清除；持有者获得其他来源的额外回合时，原生 `AfterTakingExtraTurn` 同样消耗其佩尔之眼。分支状态和 Fork 用原有逐遗物状态表。最终路线触发记录以持有者、遗物和摘要去重，显示归属不进入战斗等价键。
+遗物归属要分别核对根库存、逐持有者触发和显示来源。佩尔之眼的侧回合开始回调也观察未参加额外回合的持有者，不能先按参与者过滤而漏掉资格清除；持有者获得其他来源的额外回合时，原生 `AfterTakingExtraTurn` 同样消耗其佩尔之眼。多人在全队阶段二结束后共用 `HookMirrors.ShouldTakeExtraTurn`／`AfterTakingExtraTurn`，按活动玩家判断并逐参与者结算一次。分支状态和 Fork 用原有逐遗物状态表。最终路线触发记录以持有者、遗物和摘要去重，显示归属不进入战斗等价键。
 
 `MultiplayerCycleCheckpoint` 仅保存敌方周期结束、下一玩家准备前的原始数值；由不可变短链引用前周期，Fork 可共享旧记录，子分支追加不能回写父分支。它不持有 Model 或模拟器，也不决定战斗语义；政策历史保留于搜索标签。变更捕获时点须验证开始阶段自损归属、额外玩家回合不追加周期、完整原生状态和 Fork 隔离。 多人贡献伤害在已有 `RecordDamageReceived` 入口按 dealer / PetOwner 归属；原版 `UnblockedDamage` 已经排除过杀，不能再次相减。根历史只在主线程读取，模拟计数按值 Fork，严格增量另核对计数/检查点；阶段政策不进入战斗键或 ContinuationStamp。
 
 ## 适用边界
 
-金币获得后的跑局监听序列在派发前固定。单人保留官方成员快照与失活拒绝；多人由 `SimulatedCombatState.GoldHooks` 按分支 Hook 资格枚举全队牌、遗物和药水，死亡停用、复活恢复，不读 live 或把来源限制为收钱玩家。全局来源在根冻结；最小验证覆盖存活、死亡、从死亡根复活后的获得金币与完整原生状态。金纸累计和延迟虚无计数只用逐遗物 `JossPaperState`，多人不另设副本；按持有者分别结算并验证 Fork 隔离。
+金币获得后的跑局监听序列在派发前固定。单人保留官方根活动成员与分支 `HooksActive` 过滤；多人由 `SimulatedCombatState.GoldHooks` 按分支 Hook 资格枚举全队牌、遗物和药水，死亡停用、复活恢复，不读 live 或把来源限制为收钱玩家。全局来源在根冻结；最小验证覆盖存活、死亡、从死亡根复活后的获得金币与完整原生状态。金纸累计和延迟虚无计数只用逐遗物 `JossPaperState`，多人不另设副本；按持有者分别结算并验证 Fork 隔离。
 
 本 skill 处理会改变合法动作或战斗结算的语义。纯 UI、职责移动、Beam/评分调优和发布工作分别使用对应 skill。
 
@@ -50,6 +50,8 @@ CombatRootSnapshot.Capture（主线程根）
 
 确定唯一权威结算点后再改代码。不能靠执行顺序抵消双结算。
 
+攻击意图直接从分支当前怪物 AI 行动派生；死亡变形、眩晕和强制行动可在同一玩家回合内替换行动，回合开始的派生缓存不足以支持伤害后条件。准备阶段重搜与普通跨回合使用同一延迟资源消费语义，基础最大能量在根冻结，监听表不读取实机战斗是否结束。回合末自动出牌先于 BeforeSideTurnEndEarly 的手牌消耗，额外回合资格在该阶段结算后判断。
+
 动态目标类型的分支覆盖必须同时定义能力存在和不存在两侧。君王之剑/小刀在分支无群攻能力时不能回退到实机 owner 的原生 TargetType；最小合同交错改变实机能力与独立分支，验证后台目标枚举不读 live。
 
 ## 2. 选择实现层
@@ -81,6 +83,8 @@ CombatRootSnapshot.Capture（主线程根）
 `AfterSideTurnEndLate` 的扩展使用 `AfterSideTurnEndLateMirrors.Register<TModel>`，在根捕获前完成登记；玩家和敌方共用 Hook facade，DisintegrationPower 不得恢复到独立晚期补偿。新增其他阶段时逐一核对原版顺序、选择暂停和状态所有权，不能把晚期入口当作所有回合事件的通用回调。
 
 `BeforeSideTurnStartMirrors` 与 `AfterPlayerTurnStartMirrors` 同样在根捕获前登记并冻结；单人和多人回合入口共用对应 Hook facade。无外部监听者的原版批次路径仍使用 `PowersForHooks` 与逐玩家遗物资格，不能因合入单人新入口恢复死亡队友的效果。外部登记路径按每阶段原生监听顺序派发；队友选择继续形成边界，不由军师代选。
+
+额外回合的 `ShouldTakeExtraTurn` / `AfterTakingExtraTurn` 由 `ExtraTurnMirrors` 登记原版及第三方单项效果。判断按原生顺序短路，后置回调先固定成员再依次结算；选择暂停沿原动作重放。状态读写使用分支 Power 和遗物记录；原生顺序、完整状态和 Fork 隔离用 `EXTRA-TURN-MIRROR-ORDER` 验证。
 
 ## 3. 状态所有权清单
 

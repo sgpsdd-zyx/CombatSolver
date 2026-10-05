@@ -1,4 +1,60 @@
 {
+  "EXTRA-TURN-MIRROR-ORDER": {
+    "status": "Passed",
+    "level": "HeadlessNativeFullStateDifferentialAndFork",
+    "procedure": "EXTRA-TURN-MIRROR-ORDER，合成第三方监听者置于龙涎香之前、龙涎香与帕尔之眼之间、两者之后，原生 Hook 与正式镜像逐项对账。",
+    "expected": "判断短路顺序、后置读取状态、完整战斗状态一致；父 Fork 与 live 保持原值，根捕获后登记被拒绝。",
+    "observed": "36f686e1cf2b442e836d1ab4e5bdda2d Passed，23.655秒；三个位置的后置观察值依次为1、0、100，原生与模拟一致。失败基线22436356在第一个位置为原生1层、模拟0层。实例已删除。",
+    "evidence": "src/Testing/Contracts/ThirdParty/UnattendedTestRunner.ExtraTurnMirrors.cs; docs/TEST_MATRIX.md"
+  },
+  "NINJA-SCROLL-ENTRY": {
+    "status": "Passed",
+    "level": "HeadlessNativeFullStateDifferentialAndFork",
+    "procedure": "SILENT / CHOMPERS_NORMAL，首回合 BeforeHandDraw，冻结有序手牌与生成历史，再调用原生 Hook。",
+    "expected": "生成三张 SHIV，父、Fork 与原生完整状态一致。",
+    "observed": "6c835c4da43e4431ac2f3546816082d6 Failed，预测缺三张 SHIV；b499bf8ad45f4553adf8273f73b47415 Passed。",
+    "evidence": "src/Testing/Regressions/Reports/UnattendedTestRunner.LogicBugBatch.cs; docs/issues/0.49.1-hardbugs-20261004.md"
+  },
+  "PAELS-EYE-AUTOPOST-ORDER": {
+    "status": "Passed",
+    "level": "HeadlessNativeFullStateDifferentialAndFork",
+    "procedure": "IRONCLAD / CHOMPERS_NORMAL，PAELS_EYE、手牌 HOWL_FROM_BEYOND、原生结束回合推进至下一回合。",
+    "expected": "自动出牌先于手牌消耗，额外回合、牌序、HP、历史和 RNG 一致。",
+    "observed": "c2d7d24da6644641b732ad4c3e24c79d Failed，敌 HP46/64；27c50a41c69b41e9a0d38cf2cafc22b1 Passed，20.252秒。",
+    "evidence": "src/Testing/Regressions/Reports/UnattendedTestRunner.LogicBugBatch.cs; docs/issues/0.49.1-hardbugs-20261004.md"
+  },
+  "WATERFALL-ATTACK-INTENT-CHANGE": {
+    "status": "Passed",
+    "level": "HeadlessNativeFullStateDifferentialAndFork",
+    "procedure": "DEFECT / WATERFALL_GIANT_BOSS，击败触发 ABOUT_TO_BLOW_MOVE 后再打一张 GO_FOR_THE_EYES。",
+    "expected": "攻击意图随分支行动即时变化，第二张牌的虚弱、完整状态与 Fork 对账。",
+    "observed": "eca3bee2645347609e5766d4cbfdfe12 Failed，多算 WEAK_POWER；a9e4e1c1eb674ef6b4c0a4f80a1cc1f7 Passed，19.750秒。",
+    "evidence": "src/Testing/Contracts/Combat/UnattendedTestRunner.CardInstanceLifecycles.cs; docs/issues/0.49.1-hardbugs-20261004.md"
+  },
+  "TURN-SETUP-DELAYED-ENERGY": {
+    "status": "Passed",
+    "level": "HeadlessNativeFullStateDifferentialAndFork",
+    "procedure": "第5回合准备根保留 ENERGY_NEXT_TURN_POWER，模拟准备阶段后调用原生 SetupPlayerTurn。",
+    "expected": "延迟能量只消费一次，完整状态和 Fork 一致。",
+    "observed": "b1a48fdde4bd4c9092ed2061dbbcce4e Failed，energy3/4；4f924c933fe7479f90639cf7042b55bf Passed，20.110秒。",
+    "evidence": "src/Testing/Regressions/Reports/UnattendedTestRunner.LogicBugBatch.cs; docs/issues/0.49.1-hardbugs-20261004.md"
+  },
+  "VOID-FORM-DEPLOY-CHOICES": {
+    "status": "Passed",
+    "level": "HeadlessNativeDeploymentAndIncrementalReplay",
+    "procedure": "REGENT / KNOWLEDGE_DEMON_BOSS，VoidForm固定前缀、1500毫秒和120节点短搜、增量验证，调用生产当前回合部署。",
+    "expected": "动作会话消费玩家结束／敌方选择，下一回合独立接管，完整原生状态及计划外重算计数保持。",
+    "observed": "99a04b583d884957a1670e4364e90587 复现卡牌完成后残留敌方选择；b381e23086ed44c5b62372ca275fecb0 Passed，23.097秒。",
+    "evidence": "src/Testing/Regressions/Reports/UnattendedTestRunner.LogicBugBatch.cs; docs/issues/0.49.1-hardbugs-20261004.md"
+  },
+  "ROOT-CONTENT-SOURCES": {
+    "status": "Passed",
+    "level": "HeadlessNativeInterfaceAndSourceContract",
+    "procedure": "原生缩小甲虫、实际来源映射与 Harmony 测试补丁；Owner依赖的规范／附着 Power、怪物、意图构造器、AI补丁及选牌重叠。",
+    "expected": "内容来源清楚，原 pending保持，实际附着实例物化，eng/zhs/zht 和失败账本不要求内容日志上传。",
+    "observed": "52c013fae2154e78a3da258d36d0745e Passed，23.006秒；包含空选牌操作保持原pending。第三方原包整场和缩小甲虫具体失效引用未验证；H11原版检查点恢复与短搜结果见逐类记录。",
+    "evidence": "src/Testing/Contracts/ThirdParty/UnattendedTestRunner.ContentModFailures.cs; docs/issues/0.49.1-hardbugs-20261004.md"
+  },
   "CASCADE-EMPTY-HAND-NATIVE": {
     "status": "Passed",
     "level": "HeadlessNativeFullStateDifferentialAndExecutionContinuation",
@@ -2750,6 +2806,38 @@
     "observed": "2026-10-04合并验收：b556026e627c4153bb3d2bf23948a095 Passed；原生虚弱倍率、完整状态/RNG；模拟96/95/200层与零格挡；实例已删除。",
     "evidence": "src/Testing/Regressions/Community/B013BlockDecimalBoundaryChecks.cs; docs/TEST_MATRIX.md"
   },
+  "Q010-O041-SAME-ROOT-NO-REGRESSION": {
+    "status": "Passed",
+    "level": "HeadlessSameRootCheckpointSearchOnlyQualityBaseline",
+    "procedure": "O041 猎人杀手 0.111.0 原包从 combat_start 同根 SearchOnly，Instant、300 秒上限和实例清理；Smart 政策与预算按包内录制政策恢复。",
+    "expected": "当前源码在同根的实际产出不退化：预计整场战损 17、第 6 回合完胜、boundary=None、路线 1 瓶且该瓶省血 ≥16。审核稿改善值 12 录于中途检查点（第 3 回合、已损 6），不同根，不作断言。",
+    "observed": "2026-10-04 首次执行 Passed（runId e1ef0c5f460d4128a824ba43adf2ce8f）：projHP=17、endTurn=6、boundary=None、1 瓶、该瓶省血 16（下限 9）、unavoidable=17、score=10001064970，与认领者产物 64c2f0401542492ab2ae739ee0b0da5f 的 score 逐位相同；本轮内存档更宽（limit 2329808792 字节 = 2222 MiB，认领者 1241302252），成员覆盖 ran=3/compared=3 对 ran=2/compared=1，多跑成员未夺走选中项。W2 修复后窄档复跑 Passed：4e7f8e7e284a447195163b3741dc3f02（limit 1183750724 字节 = 1129 MiB、弃区 22%，GC_NO_GC_REGION_DECLINED percent_of_configured=22 achieved_budget=3614518436），score=10001064970 逐位相同、未触发 axis_widened，即该夹具结果不由 W2 路径决定。t14 成对 A/B 再证：同根下 head 与无修复件（git archive 0f11938c 独立构建）的 score/proj/endTurn/potion 逐位相同（plain 5fcc8a58 对 720cce4c、diag b5ae5c5f 对 6030f4c1，均 10001064970/17/6/1），head 侧成员覆盖不低于无修复侧（diag 3/3 对 2/2）⇒ 无退化、无耗时反常（head searchMs 7592 对无修复 8172；launcher 墙钟 66051 对 70026，两口径分列）。断言值自首次执行起未改。fixture 版本 444a223dd2948a2c42ef7fbf89571606908fa1ba（该夹具在此 commit 前后断言集不变）。mainAssemblyHash 身份：修复后 BD84AE5C69DFC45E…105C24、修复前 8184A000439814AD…3F46E2（哈希只作「该 run 加载了哪个件」的记录；本仓库 Release 构建非字节可复现，不得当同源证据）。launcher 退出码 1 源于实例清理时 0Harmony.dll 句柄未释放，判定以 result.json 为准。2026-10-05 合并 origin/main 5d28a1cf 后重跑 Passed：b48801e89be448698ef95d25a9a53195（score 10001064970 逐位相同、proj=17、endTurn=6、1 瓶、hash A29416DE3903…；构建非字节可复现，哈希仅作该 run 的加载件身份）。",
+    "evidence": "coverage/fixtures/regressions/community/q010-o041-same-root-no-regression.json; docs/archive/community/2026-10-04-worldlines/Q010-claim-reproduction.md; docs/TEST_MATRIX.md"
+  },
+  "Q010-O042-SAME-ROOT-NO-REGRESSION": {
+    "status": "Passed",
+    "level": "HeadlessSameRootCheckpointSearchOnlyQualityBaseline",
+    "procedure": "O042 偷窃草蜢 0.111.0 原包从 combat_start 同根 SearchOnly，Instant、300 秒上限和实例清理；PreserveResources 偷窃政策按包内录制政策恢复。",
+    "expected": "同根实际产出不退化：预计整场战损 5、第 7 回合完胜、boundary=None、0 瓶，其中主动卖血 4、未追回资源 0、长期资源 ≥20、成长奖励 1。审核稿改善值 1 录于中途检查点（第 3 回合、已损 1），不同根，不作断言。",
+    "observed": "2026-10-04 首次执行 Passed（runId 430a16e96916498b9908ef5af1fd67ff）：projHP=5、endTurn=7、boundary=None、0 瓶、sold_hp=4、未追回 0、长期资源 20、成长奖励 1、unavoidable_hp_lost=1（1+4=5 成立）、score=10001354974，与认领者 0202e4fdcb1349a0b870a33fca69a983 逐位相同；本轮 limit 2298331032 字节 = 2192 MiB 对认领者 1283575704，成员覆盖 ran=3 对 ran=2，覆盖率上升未改变终值。W2 修复后复跑 Passed：5743f2ccc3de429584df1d0e92a538fd（窄档 limit 1189524716 字节 = 1134 MiB），score 逐位相同、未触发 axis_widened。unavoidable 分量已由观测升级为机器断言 expectedInitialUnavoidableHpLost=1（全链：协议 → UnattendedSolverMetrics.UnavoidableHpLost → Writer → ps1/sh 参数 → SolverPolicy 断言体）：正证 af3fdabed95b4ac6afa3c36162f66550 Passed（solverMetrics.unavoidableHpLost=1），反证 1c332f4748be4c86a2cb104b0cbd4ba3 Failed（断 9 时报「首轮路线必然受击为 1，预期为 9。」），两次同一二进制 BD84AE5C69DFC45E…105C24 ⇒ 断言确实执行到。t14 成对 A/B：head 0945a847（limit 1904955288 字节 = 1817 MiB，exp=51366/trans=211256，searchMs 986/totalMs 15364/launcher 60728）与无修复件 0265fa83（1876538604 字节 = 1790 MiB，exp=49881/trans=205389，946/14166/58849）score 同为 10001354974、proj/endTurn/potion 同为 5/7/0；head 多放行一个有界成员（W1 配额投影：决策时累计 expandedByMembers=11886 ⇒ quota=floor(11886/8)=1485，成本由宽度规则的 644623680 降到 ceil(min(1074372800,641651968)×1485×3/(7026×2))=203427236，仍小于余量 555298448 ⇒ 判定翻转，成本降 3.17×；旁证同批次 sentinel-head/O042 的 GATE 行 memory_cost=208599929 只有按 1485 才复现（按 878 得 123333830），见 .local/tool-tasks/q010/sentinel-head/O042），工作量 +2.9%、搜索耗时 +4.2%，在同主题跨轮波动（966/974/986/1242ms）内。fixture 版本 444a223dd2948a2c42ef7fbf89571606908fa1ba。2026-10-05 合并 origin/main 5d28a1cf 后重跑 Passed：09320b035f644bc8a3074b0f32a139d2（score 10001354974 逐位相同、proj=5、unavoidable=1 由新增协议字段机器断言通过、hash A29416DE3903…）。",
+    "evidence": "coverage/fixtures/regressions/community/q010-o042-same-root-no-regression.json; src/Runtime/SolverDiagnostics.cs; docs/archive/community/2026-10-04-worldlines/Q010-claim-reproduction.md; docs/TEST_MATRIX.md"
+  },
+  "Q010-O044-SAME-ROOT-TARGET": {
+    "status": "Passed",
+    "level": "HeadlessSameRootCheckpointSearchOnlyCommunityRegression",
+    "procedure": "O044 熟睡派对 0.111.0 原包从 combat_start 同根 SearchOnly，Instant、300 秒上限和实例清理。A 类回归夹具，只断言终值，不断言路线同构。",
+    "expected": "同根即达审核稿改善值的质量界：预计整场战损 ≤5（expectedInitialProjectedBattleHpLostAtMost）、0 瓶（等值，比下限更严）、完胜（final_enemy_hp ≤0 + 非仅死亡路线）。endTurn、boundary、score 等单机快照值不入断言，只作观测记录。",
+    "observed": "2026-10-04 首次执行 Passed（runId c1c11f6de94b41808b0f1cfbddbc5be5）：当时录制 projHP=5、endTurn=6、boundary=None、0 瓶、score=10001829972 与认领者 cf00c6f5a6f745e0a9142a1577e3ddca 逐位相同（limit 2325295000 字节 = 2218 MiB，成员覆盖 ran=1/compared=1 两侧同）。**断言由单机快照值改为质量界，原值 5/6/None/score 10001829972 存档于本叙述与夹具 description**：改前最后一次等值断言实测为 Failed（head d38f5b2b 与无修复件 9ff2a14f 都给 projHP=3、endTurn=7、score=10001949972，另有 diag 档 7b096c5b、6b6c21bf 同值，四次两二进制一致）⇒ 该录制三元组在本机对任何二进制都不可复现，是录制机内存档形态的函数，不是本次修复引入的退化；战损方向为改善（3<5）且 score 在两二进制间逐位相同。按质量界重跑：4e17b33a1367462c906cca1a83fc4aae Passed（limit 1232616004 字节 = 1176 MiB、弃区 23%，proj=3 ≤5、0 瓶、endTurn=7、score=10001949972，mainAssemblyHash BD84AE5C69DFC45E…105C24）。fixture 版本 444a223dd2948a2c42ef7fbf89571606908fa1ba。同主题 diag 档 head 成员覆盖 ran=3/compared=3 对无修复 ran=2/compared=2，score 相同 ⇒ 覆盖上升未改变采纳。未执行 DeploySolver 原生部署，无可见 Steam 帧时间结论。2026-10-05 合并 origin/main 5d28a1cf 后重跑 Passed：d1ec15e5cc2143f397f4aee6a8567242（proj=3 ≤5、score 10001949972、endTurn=7，与合并前质量界结论一致，hash A29416DE3903…）。",
+    "evidence": "coverage/fixtures/regressions/community/q010-o044-same-root-target.json; docs/archive/community/2026-10-04-worldlines/Q010-claim-reproduction.md; docs/TEST_MATRIX.md"
+  },
+  "Q010-O045-SAME-ROOT-TARGET": {
+    "status": "Passed",
+    "level": "HeadlessSameRootCheckpointSearchOnlyCommunityRegression",
+    "procedure": "O045 虱虫之祖 0.111.0 原包从 combat_start 同根 SearchOnly，Instant、300 秒上限和实例清理。A 类回归夹具，只断言终值，不断言路线同构。",
+    "expected": "同根即达审核稿改善值的质量界：预计整场战损 ≤1（expectedInitialProjectedBattleHpLostAtMost）、完胜（final_enemy_hp ≤0 + 非仅死亡路线）。判别力由战损上界承担：缺陷形貌（宽档 proj=14）与任何 >1 的产出都会踩破。endTurn、potionHpSaved、boundary=None、score 等单机快照值只作观测记录。用药等值断言（expectedInitialPotionCount=1）已移除——合并后重跑实测零药轴自身达 proj=0（见 observed），等值断言会把更好的路线判 Failed，违反质量界原则；W2 的药水层语义由 proj 上界与 observed 中的 axis_widened 证据覆盖。",
+    "observed": "2026-10-04 首次执行 Failed 并按同参数复现（d67f8317705a4a9b9d355b8ce3996756 与 e3632e589f2b4ef4939c49a661a2c931）：宽档（limit 2319212440 字节 = 2212 MiB、弃区 44%）下 index=1 的 beam60 普通宽度成员得运行，零药最优由 20 改善到 14，其 strategic 净差 8 低于 firstPaidPotionHpRequired=9，MaximumSmartPotionUses 返回 0 使整层药水搜索被跳过（Audits.cs 梯度入口，stop=no_potion_acceptable hp_deficit=8 maximum=0），实得 projHP=14、endTurn=7、0 瓶；认领者窄档（1296864492 字节 = 1237 MiB、弃区 24%）本就返回 1/5T/1 瓶。⇒ 同输入同政策下更宽内存覆盖反而产出更差结果，属搜索策略判据缺口。W2 修复（两处门槛链统一取 max(净差轴, 必然受击轴)）后窄档复跑 Passed：095e69ee275b4acca62f35e9e735c869，score=10001989977 与认领者窄档 4d21b9feaf90488aa05ab1a019b86173 逐位相同，诊断 axis_widened hp_deficit=14 unavoidable_hp_lost=19 maximum_from_deficit=1 maximum_from_unavoidable=2，第 2 层被真实搜索（saved=20 required=27 selected=False）后仍选第 1 层。**断言由单机快照值改为质量界，原值 1/5T/saved≥19/score 10001989977 存档于本叙述与夹具 description**：head 在较宽档实测 proj=0（优于录制的 1）、score=10002069975（高于录制值）但 saved=14 与下限 19 互斥、endTurn=6 与 5 不同 ⇒ 录制三元组与更优路线互斥，按裁决改为质量界而非调参掩盖。判别力核查（证明未放宽）：无修复件在缺陷档实测 proj=14/endTurn=7/0 瓶（ea1171125aed45a19cc28857bfc0a8fd，limit 2169395780 字节 = 2069 MiB、弃区 41%）当时被原样保留的用药等值断言当场判 Failed（「首轮路线使用药水 0 瓶，预期为 1 瓶」）；同形状在 1888 MiB 档由 b3b6d729552846a39c7d588b73df42ef 复现（该次未传任何断言参数，status=Passed 只作形状与同根配对证据，不可读成界断言生效）；同根 head 8215083c…（1904 MiB）给 proj=0/1 瓶/score=10002069975 ⇒ 不再产出 14/7T/0。按质量界重跑：7d8a2799942d459390c12a1b87142a3d Passed（limit 1235238808 字节 = 1178 MiB、弃区 23%，proj=1 ≤1、1 瓶、endTurn=5、score=10001989977 与认领者窄档逐位相同、axis_widened 14/19 → 1→2，mainAssemblyHash BD84AE5C69DFC45E…105C24）。fixture 版本 444a223dd2948a2c42ef7fbf89571606908fa1ba。未验证：同机可达最宽档止于 1904 MiB（弃区 38%），更宽档未取到；本机 GC_SEARCH_ALLOCATION_LIMIT 是日志前缀而非可调变量。2026-10-05 合并 origin/main 5d28a1cf 后重跑 Passed：8aaa687f7d934eb48f8dec9b197c002c（**零药轴自身达 proj=0**、score 10002069976 高于带药路线、endTurn=6、hash A29416DE3903…；该次 axis_widened 未触发——no_potion_acceptable 成立的原因是零药已最优而非药水层被否证，与移除用药等值断言互为印证：PotionCount=1 等值会把这条更好的零药路线判 Failed，属锁环境快照而非质量界）。",
+    "evidence": "coverage/fixtures/regressions/community/q010-o045-same-root-target.json; docs/archive/community/2026-10-04-worldlines/Q010-claim-reproduction.md; docs/TEST_MATRIX.md"
+  },
   "GC-DEFAULT-ENTRY-FAILURE": {
     "status": "Passed",
     "level": "StandaloneClrFaultInjectionAndScopeLifecycleContract",
@@ -3022,5 +3110,13 @@
     "expected": "Regular checkpoints retain a bounded allocation window; explicit indivisible commit fallback releases that window to CLR after actual collection. A later search creates a new bound; cancellation preserves the existing scope.",
     "observed": "2026-10-03: default-commit 2 and default-entry 2 passed. No production search policies changed. Prior card/multiplayer tests reused because their inputs and sources are unchanged. Actual NoGC-region diagnostics remain unverified on this host.",
     "evidence": "docs/archive/strategy/upstream-0490-merge-20261003.md; docs/archive/strategy/upstream-0490-merge-20261003-evidence.json; tools/testing/checks/CombatSolver.GcPolicyChecks/GcRecoveryChecks.cs"
+  },
+  "MULTIPLAYER-UPSTREAM-0500-COMPAT": {
+    "status": "Passed",
+    "level": "L2ManagedNativeFullPartyAndTargetedHeadless",
+    "procedure": "Merge upstream 0d290fbe / 0.50.0 into fork 1bca5f3f. Run 60 managed compatibility checks, 32 contribution checks, death/revival contract, 23 final native requests, and two solo roots at DOP1/DOP2 against independently built upstream.",
+    "expected": "Preserve official solo behavior and manual multiplayer ownership, contribution policy and H14. Share engine HooksActive and ordered extra-turn mirrors without importing solo component/growth certificates, primary incumbents or Smart pruning.",
+    "observed": "2026-10-05: 60 compatibility and 32 quota checks passed with native full-party state/Fork equality; death/revival and manual recomputation passed. 23 native requests passed, including extra-turn ownership, Toasty Mittens input/cancellation, manual loop then solo reset, native choices, gold/resources and content/UI prompts. Four upstream/fork pairs matched 346 non-timing fields with zero multiplayer entry calls. Group-debuff initial nonstandard seed missed the required kill; official COMBATSOLVER seed passed. Component healing native test rejected this macOS assembly with native-version; dependent certificate tests not run. Five owned headless snapshots removed by launchers. No real-network or visible-performance claim.",
+    "evidence": "docs/archive/strategy/upstream-0500-merge-20261005.md; docs/archive/strategy/upstream-0500-merge-20261005-evidence.json; docs/archive/strategy/upstream-0500-merge-20261005-inputs.json; tools/search/OfflineSearchHarness/MultiplayerUpstreamContracts.cs"
   }
 }

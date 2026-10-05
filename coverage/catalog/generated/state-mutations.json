@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "combatSolverVersion": "0.49.1",
+  "combatSolverVersion": "0.50.1",
   "gameVersion": "0.111.0",
   "unverifiedCount": 0,
   "snapshotOnlyWithoutRuntimeEvidenceCount": 22,
@@ -11051,7 +11051,7 @@
       "hook": "AfterTakingExtraTurn(MegaCrit.Sts2.Core.Entities.Players.Player)",
       "phase": "FutureLifecycle",
       "effectiveStatus": "Exact",
-      "capability": "SolverCompensation",
+      "capability": "EngineMirror",
       "requiresRuntimeEvidence": true,
       "runtimeVerified": true,
       "writes": [
@@ -16236,7 +16236,7 @@
       "hook": "AfterTakingExtraTurn(MegaCrit.Sts2.Core.Entities.Players.Player)",
       "phase": "FutureLifecycle",
       "effectiveStatus": "Exact",
-      "capability": "SolverCompensation",
+      "capability": "EngineMirror",
       "requiresRuntimeEvidence": true,
       "runtimeVerified": true,
       "writes": [
@@ -16265,7 +16265,7 @@
       "hook": "ShouldTakeExtraTurn(MegaCrit.Sts2.Core.Entities.Players.Player)",
       "phase": "FutureLifecycle",
       "effectiveStatus": "Exact",
-      "capability": "SolverCompensation",
+      "capability": "EngineMirror",
       "requiresRuntimeEvidence": true,
       "runtimeVerified": true,
       "writes": [

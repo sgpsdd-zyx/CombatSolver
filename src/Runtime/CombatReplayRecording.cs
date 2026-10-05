@@ -167,6 +167,7 @@ internal sealed class CombatReplayRecording : IDisposable
 
     private void Record(CombatReplayEvent value, string origin, string? description, RecordedChoiceContext? choiceContext = null)
     {
+        SolverController.ObserveCombatInput(origin);
         long sequence = _eventCursor++;
         if (IncompleteReason != null)
             return;
