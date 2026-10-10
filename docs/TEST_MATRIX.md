@@ -1,6 +1,6 @@
 # CombatSolver 测试入口
 
-当前源码基于官方 `5c773caa / 0.50.1 后续主线`，fork 0.50.2 本轮验证如下。发布状态见 [版本索引](releases/README.md)，测试分层见 [无人测试](HEADLESS_TESTING.md)，职责见 [Testing](../src/Testing/README.md)。历史结果不替代本轮验证。
+当前源码基于官方 `5c773caa / 0.50.1 后续主线`，fork [0.50.2 已发布](releases/0.50.2-PUBLISH.md)，本轮验证如下。发布状态见 [版本索引](releases/README.md)，测试分层见 [无人测试](HEADLESS_TESTING.md)，职责见 [Testing](../src/Testing/README.md)。历史结果不替代本轮验证。
 
 ## 2026-10-09 本轮结果
 
