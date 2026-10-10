@@ -865,7 +865,8 @@ foreach ($forbiddenRecoveryCall in @("GC.Collect(", "CollectGeneration2")) {
 }
 foreach ($gcChainRule in @(
     "return WaitForReclaimChainAsync(_reclaimTask)",
-    "CollectGeneration2ForAutomaticReclaimAsync(inSearchCheckpoint: true)",
+    "CollectGeneration2ForAutomaticReclaimAsync(",
+    "compactSmallObjectHeap: restartNoGcRegion",
     "_inSearchManualReclaimTask = manualCompletion.Task",
     "failure == null && (_regionExitRequired || _reclaimRequired)")) {
     if (-not (Select-String -LiteralPath $searchGcPolicyPath -SimpleMatch $gcChainRule -Quiet)) {
@@ -2219,6 +2220,11 @@ $multiplayerAdviceRules = @(
     @{ Path = 'src/Runtime/ContinuationStamp.Multiplayer.cs'; Text = '.Append('':'').Append(combat.IsPlayerActiveForHooks(player));' }
     @{ Path = 'src/Engine/InCombat/Simulation/CombatPredictionSimulator.Damage.cs'; Text = 'multiplayer.SetPlayerActiveForHooks(player, active: false);' }
     @{ Path = 'src/Engine/InCombat/Simulation/CombatPredictionSimulator.Heal.cs'; Text = 'multiplayer.SetPlayerActiveForHooks(revived, active: true);' }
+    @{ Path = 'src/Runtime/ContinuationStamp.Multiplayer.cs'; Text = 'text.Append(";peer_max_hand_size=").Append(RitsuLibFramework.GetMaxHandSize(player));' }
+    @{ Path = 'src/Runtime/ContinuationStamp.Multiplayer.cs'; Text = 'text.Append(";peer_max_hand_size=").Append(simulator.GetMaxHandSize(player));' }
+    @{ Path = 'src/Search/SimulatedCombatState.cs'; Text = 'fingerprint.Add("max_hand_sizes");' }
+    @{ Path = 'src/Search/CombatBeamSolver.StateEvaluation.cs'; Text = 'double cardValue = combat.AdvisorPlayer != null' }
+    @{ Path = 'src/Search/CombatBeamSolver.Expansion.Choices.cs'; Text = 'PreserveOrderedRoutingResidues = !IsMultiplayerAdvice && probeSnapshot.SandpitRemaining > 0,' }
     @{ Path = 'src/Search/MultiplayerSearchPolicy.cs'; Text = 'StopAtAcceptableBattleHpLoss = false' }
     @{ Path = 'src/Search/MultiplayerSearchPolicy.cs'; Text = 'EarlyTurnExplorationDepth = 0' }
     @{ Path = 'src/Search/MultiplayerSearchPolicy.cs'; Text = 'EarlyTurnExplorationBudgetMilliseconds = 0' }

@@ -1,4 +1,5 @@
 using System.Text;
+using STS2RitsuLib;
 using CombatSolver.Engine.InCombat.Simulation;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Entities.Players;
@@ -22,6 +23,7 @@ internal sealed partial record ContinuationStamp
                 .Append(':').Append(player.Creature.Block).Append(':').Append(pcs.Energy)
                 .Append(':').Append(pcs.Stars).Append(':').Append(player.Gold)
                 .Append(':').Append(player.IsActiveForHooks);
+            text.Append(";peer_max_hand_size=").Append(RitsuLibFramework.GetMaxHandSize(player));
             AppendOsty(text, player.Osty, player.Osty?.CurrentHp ?? 0, player.Osty?.MaxHp ?? 0);
             text.Append(";osty_block=").Append(player.Osty?.Block ?? 0);
             AppendLivePile(text, pcs.Hand, 'H');
@@ -53,6 +55,7 @@ internal sealed partial record ContinuationStamp
                 .Append(':').Append(creature.Block).Append(':').Append(pcs.Energy)
                 .Append(':').Append(pcs.Stars).Append(':').Append(combat.GetPlayerGold(player))
                 .Append(':').Append(combat.IsPlayerActiveForHooks(player));
+            text.Append(";peer_max_hand_size=").Append(simulator.GetMaxHandSize(player));
             var osty = combat.GetOsty(player);
             AppendOsty(text, osty, osty == null ? 0 : simulator.State.GetCreature(osty).CurrentHp,
                 combat.GetOstyMaxHp(simulator, player));

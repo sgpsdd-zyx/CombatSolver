@@ -1,0 +1,310 @@
+{
+  "schemaVersion": 1,
+  "sources": {
+    "forkBefore": "375caea8abb3067c6ecc526fe6aa44e81b398a1f",
+    "upstreamTarget": "5c773caaec742bc55588bc9ee21c361326a732f0",
+    "officialBase": "0d290fbee7e2779d2cebd8b8f652d82d00b6e8fc",
+    "officialRelease": "0.50.1",
+    "forkVersion": "0.50.2",
+    "date": "2026-10-09"
+  },
+  "nativeRequests": [
+    {
+      "schemaVersion": 1,
+      "scenarioId": "HAND-LIMIT-ROOT-CONSISTENCY",
+      "characterId": "IRONCLAD",
+      "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+      "seed": "COMBATSOLVER",
+      "enemyCurrentHp": 1000,
+      "timeoutSeconds": 120,
+      "headlessFastModeForTest": "Instant",
+      "enableNoGcRegionForTest": false,
+      "stopAfterCombatRootSnapshotAssertion": true,
+      "verifyCombatRootSnapshot": true
+    },
+    {
+      "schemaVersion": 1,
+      "scenarioId": "OVERLAY-VISIBILITY-LIFECYCLE",
+      "characterId": "IRONCLAD",
+      "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+      "seed": "COMBATSOLVER",
+      "enemyCurrentHp": 1000,
+      "timeoutSeconds": 120,
+      "headlessFastModeForTest": "Instant",
+      "enableNoGcRegionForTest": false,
+      "stopAfterCombatRootSnapshotAssertion": true
+    },
+    {
+      "schemaVersion": 1,
+      "scenarioId": "CHECKPOINT-PROFILE-CONTRACT",
+      "characterId": "IRONCLAD",
+      "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+      "seed": "COMBATSOLVER",
+      "enemyCurrentHp": 1000,
+      "timeoutSeconds": 120,
+      "headlessFastModeForTest": "Instant",
+      "enableNoGcRegionForTest": false,
+      "stopAfterCombatRootSnapshotAssertion": true
+    },
+    {
+      "schemaVersion": 1,
+      "scenarioId": "REPLAY-BOUNDARY-CONTRACT",
+      "characterId": "IRONCLAD",
+      "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+      "seed": "COMBATSOLVER",
+      "enemyCurrentHp": 1000,
+      "timeoutSeconds": 120,
+      "headlessFastModeForTest": "Instant",
+      "enableNoGcRegionForTest": false,
+      "stopAfterCombatRootSnapshotAssertion": true
+    },
+    {
+      "schemaVersion": 1,
+      "scenarioId": "CHOICE-COMBINATION-CONTRACT",
+      "characterId": "IRONCLAD",
+      "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+      "seed": "COMBATSOLVER",
+      "enemyCurrentHp": 1000,
+      "timeoutSeconds": 120,
+      "headlessFastModeForTest": "Instant",
+      "enableNoGcRegionForTest": false,
+      "stopAfterCombatRootSnapshotAssertion": true
+    },
+    {
+      "schemaVersion": 1,
+      "scenarioId": "HP-MODIFIER-COLLECTIONS",
+      "characterId": "IRONCLAD",
+      "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+      "seed": "COMBATSOLVER",
+      "enemyCurrentHp": 1000,
+      "timeoutSeconds": 120,
+      "headlessFastModeForTest": "Instant",
+      "enableNoGcRegionForTest": false,
+      "stopAfterCombatRootSnapshotAssertion": true,
+      "initialPlayerHp": 80,
+      "initialPlayerMaxHp": 80,
+      "relics": [
+        {
+          "relicId": "LIZARD_TAIL"
+        }
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "scenarioId": "FIXED-PREFIX-TURN-OUTCOMES",
+      "characterId": "IRONCLAD",
+      "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+      "seed": "COMBATSOLVER",
+      "enemyCurrentHp": 1000,
+      "timeoutSeconds": 120,
+      "headlessFastModeForTest": "Instant",
+      "enableNoGcRegionForTest": false,
+      "stopAfterCombatRootSnapshotAssertion": true
+    },
+    {
+      "schemaVersion": 1,
+      "scenarioId": "SMART-POTION-AUDIT-BUDGET",
+      "characterId": "IRONCLAD",
+      "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+      "seed": "COMBATSOLVER",
+      "enemyCurrentHp": 1000,
+      "timeoutSeconds": 120,
+      "headlessFastModeForTest": "Instant",
+      "enableNoGcRegionForTest": false,
+      "stopAfterCombatRootSnapshotAssertion": true
+    },
+    {
+      "schemaVersion": 1,
+      "scenarioId": "SMART-OPENING-POTION-ADMISSION",
+      "characterId": "SILENT",
+      "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+      "seed": "COMBATSOLVER",
+      "enemyCurrentHp": 1000,
+      "timeoutSeconds": 120,
+      "headlessFastModeForTest": "Instant",
+      "enableNoGcRegionForTest": false,
+      "stopAfterCombatRootSnapshotAssertion": true
+    },
+    {
+      "schemaVersion": 1,
+      "scenarioId": "CALCULATED-ATTACK-ROUTING-SENTINEL",
+      "description": "Independent calculated-damage and replay root with upgrade, exhaust choice and block preparation; preserve a zero-loss no-potion victory.",
+      "characterId": "SILENT",
+      "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+      "seed": "CALCULATEDROUTINGSENTINEL20261003",
+      "enemyCurrentHp": 60,
+      "initialEnemyMoveIds": [
+        "INHALE"
+      ],
+      "initialPlayerHp": 60,
+      "initialPlayerMaxHp": 60,
+      "initialPlayerBlock": 20,
+      "initialPlayerEnergy": 3,
+      "clearRunDeck": true,
+      "clearPlayerPiles": true,
+      "clearAllPowers": true,
+      "cards": [
+        {
+          "cardId": "BODY_SLAM",
+          "pile": "Hand",
+          "enchantmentId": "GLAM",
+          "enchantmentAmount": 1,
+          "treatAsDeckCard": true
+        },
+        {
+          "cardId": "ARMAMENTS",
+          "pile": "Hand",
+          "upgradeLevels": 1,
+          "treatAsDeckCard": true
+        },
+        {
+          "cardId": "BURNING_PACT",
+          "pile": "Hand",
+          "upgradeLevels": 1,
+          "treatAsDeckCard": true
+        },
+        {
+          "cardId": "DEFEND_IRONCLAD",
+          "pile": "Hand",
+          "count": 2,
+          "treatAsDeckCard": true
+        },
+        {
+          "cardId": "STRIKE_IRONCLAD",
+          "pile": "Hand",
+          "count": 2,
+          "treatAsDeckCard": true
+        },
+        {
+          "cardId": "POMMEL_STRIKE",
+          "pile": "Draw",
+          "count": 2,
+          "upgradeLevels": 1,
+          "treatAsDeckCard": true
+        }
+      ],
+      "potionPolicyForTest": "Disabled",
+      "fixedSearchBudget": true,
+      "searchBudgetOverrideMilliseconds": 5000,
+      "searchMaxDegreeOfParallelismForTest": 1,
+      "expectedInitialProjectedBattleHpLost": 0,
+      "expectedInitialFinalEnemyHpAtMost": 0,
+      "expectedInitialPotionCount": 0,
+      "expectedFinishedPlayerHpAtLeast": 60,
+      "expectedUnexpectedReplansAtMost": 0,
+      "deploymentFastModeForTest": "Instant",
+      "deploymentInterActionDelaySecondsForTest": 0,
+      "stopAfterInitialSolverResultAssertion": false,
+      "timeoutSeconds": 120,
+      "enableNoGcRegionForTest": false
+    },
+    {
+      "schemaVersion": 1,
+      "scenarioId": "MULTIPLAYER-TOASTY-CONTROLS",
+      "characterId": "IRONCLAD",
+      "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+      "seed": "MULTIPLAYER-TOASTY-CONTROLS",
+      "relics": [
+        {
+          "relicId": "TOASTY_MITTENS",
+          "addWithoutObtainedEffects": true
+        }
+      ],
+      "preserveNativeCombatStateForTest": true,
+      "fixedSearchBudget": true,
+      "searchBudgetOverrideMilliseconds": 1000,
+      "searchMaxDegreeOfParallelismForTest": 2,
+      "headlessFastModeForTest": "Instant",
+      "timeoutSeconds": 120,
+      "enableNoGcRegionForTest": false
+    }
+  ],
+  "nativeLauncher": {
+    "entry": "tools/testing/run-unattended-test-macos.sh",
+    "timeoutSeconds": 120,
+    "cleanupInstanceOnExit": true
+  },
+  "soloPowerRequest": {
+    "schemaVersion": 1,
+    "scenarioId": "UPSTREAM-0501-SOLO-POWER",
+    "characterId": "IRONCLAD",
+    "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+    "seed": "MULTIPLAYER-UPSTREAM-0410-COMPAT",
+    "enemyCurrentHp": 50,
+    "initialPlayerEnergy": 3,
+    "clearRunDeck": true,
+    "clearPlayerPiles": true,
+    "clearAllPowers": true,
+    "cards": [
+      {
+        "cardId": "INFLAME",
+        "pile": "Hand",
+        "treatAsDeckCard": true
+      },
+      {
+        "cardId": "STRIKE_IRONCLAD",
+        "pile": "Hand",
+        "treatAsDeckCard": true
+      },
+      {
+        "cardId": "STRIKE_IRONCLAD",
+        "pile": "Hand",
+        "treatAsDeckCard": true
+      },
+      {
+        "cardId": "DEFEND_IRONCLAD",
+        "pile": "Hand",
+        "treatAsDeckCard": true
+      },
+      {
+        "cardId": "DEFEND_IRONCLAD",
+        "pile": "Hand",
+        "treatAsDeckCard": true
+      }
+    ],
+    "fixedSearchBudget": true,
+    "searchBudgetOverrideMilliseconds": 15000,
+    "searchMaxDegreeOfParallelismForTest": 1,
+    "timeoutSeconds": 120
+  },
+  "soloPotionFixture": "coverage/fixtures/search/opening-strength-potion-0170.json",
+  "soloComparisonOptions": {
+    "beam": 12,
+    "nodes": 350,
+    "budgetMilliseconds": 15000,
+    "dop": [
+      1,
+      2
+    ],
+    "searchMode": "Coordinator",
+    "usePortfolio": true,
+    "powerPotionPolicy": "Disabled",
+    "potionPolicy": "RequireAtLeastOne"
+  },
+  "managedContracts": {
+    "upstream-compatibility": {
+      "encounter": "FUZZY_WURM_CRAWLER_WEAK",
+      "character": "IRONCLAD",
+      "beam": 4,
+      "nodes": 100,
+      "budgetMilliseconds": 1000,
+      "dop": 1
+    },
+    "quota-contracts": {
+      "encounter": "FUZZY_WURM_CRAWLER_WEAK",
+      "character": "IRONCLAD",
+      "beam": 8,
+      "nodes": 100,
+      "budgetMilliseconds": 3000,
+      "dop": 1
+    },
+    "dead-teammate": {
+      "encounter": "FUZZY_WURM_CRAWLER_WEAK",
+      "character": "NECROBINDER",
+      "beam": 4,
+      "nodes": 100,
+      "budgetMilliseconds": 1000,
+      "dop": 1
+    }
+  }
+}

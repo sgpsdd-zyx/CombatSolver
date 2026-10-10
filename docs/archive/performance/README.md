@@ -2,6 +2,7 @@
 
 [返回归档](../README.md)。以下文件保持各自的源码基线、失败和未验证项；归档不表示已修复。
 
+- [官方0.50.1后续主线研究](upstream-0501/README.md)
 - [官方0.50.0研究与整合](upstream-0500/README.md)
 - [admitted-expansion-jobs-20260908](admitted-expansion-jobs-20260908.md)
 - [backend-architecture-audit-20260908](backend-architecture-audit-20260908.md)

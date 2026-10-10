@@ -4,7 +4,7 @@ Combat Solver 是《杀戮尖塔 2》的战斗路线求解器，本 fork 支持�
 
 单人模式下，玩家可以只查看建议，也可以让求解器执行当前回合，或连续接管整场战斗。多人模式只提供手动请求的建议。搜索不会修改游戏 RNG，也不会在后台操作真实战斗状态。
 
-多人 fork **[0.50.1 已发布](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.50.1)**，合入官方 **0.50.0**。包含单人搜索与智能药水优化、回合结算和兼容性修复；多人保持手动军师、烘焙手套选牌计算和十四敌方周期。见[中英更新日志](docs/releases/0.50.1-RELEASE_NOTES.md)、[发布凭证](docs/releases/0.50.1-PUBLISH.md)和[合并验证](docs/archive/strategy/upstream-0500-merge-20261005.md)。
+多人 fork **0.50.2 发布准备**，合入官方 **0.50.1 后续主线**（`5c773caa`）。更新单人选路、智能药水、手牌上限与面板显示；多人保持手动军师、烘焙手套选牌计算和十四敌方周期。见[中英更新日志](docs/releases/0.50.2-RELEASE_NOTES.md)、[发布状态](docs/releases/README.md)和[合并验证](docs/archive/strategy/upstream-0501-merge-20261009.md)。
 
 **参与开发：** [社区任务入口](https://github.com/Torch1230/CombatSolver/issues/171)按每批五个主题发布故障修复与路线优化任务，每主题一至两个 0.47.x 代表包。[贡献指南](CONTRIBUTING.md)说明整批认领与 PR 流程，[夹具与脚手架指南](docs/community/testing-guide.md)说明差分、包回放与策略实验入口。
 
@@ -14,7 +14,7 @@ Combat Solver 是《杀戮尖塔 2》的战斗路线求解器，本 fork 支持�
 
 [多人军师](docs/multiplayer-advisor.md) 推荐本人的出牌和用药路线，最多推演十四个敌方回合。队友行动后自行决定何时重算；推演假设队友后续不主动出牌或用药，但仍结算其被动效果。多人功能目前供试用，尚未完成真实联机验收。
 
-**English UI:** Set the game language to English. Card pills and choices refresh during play; restart to refresh other existing windows. In single-player, use **Play turn** or **Auto: On**. Multiplayer fork **0.50.1 is released**, based on upstream **0.50.0**; see the [release record](docs/releases/0.50.1-PUBLISH.md) and [release notes](docs/releases/0.50.1-RELEASE_NOTES.md). You can calculate advice while Toasty Mittens awaits your exhaust choice, then confirm the choice yourself. Multiplayer retains manual advice, local contribution goals, up to fourteen enemy cycles, and doubled ordinary time and node limits. Teammates' future active actions are not modeled; live multiplayer is not yet verified. **Settings > Reports > Upload report** submits a bug report. Logs, raw errors, and some detailed diagnostics retain their original text.
+**English UI:** Set the game language to English. Card pills and choices refresh during play; restart to refresh other existing windows. In single-player, use **Play turn** or **Auto: On**. Multiplayer fork **0.50.2 is being prepared**, based on upstream **0.50.1 plus subsequent mainline changes**; see the [release status](docs/releases/README.md) and [release notes](docs/releases/0.50.2-RELEASE_NOTES.md). You can calculate advice while Toasty Mittens awaits your exhaust choice, then confirm the choice yourself. Multiplayer retains manual advice, local contribution goals, up to fourteen enemy cycles, and doubled ordinary time and node limits. Teammates' future active actions are not modeled; live multiplayer is not yet verified. **Settings > Reports > Upload report** submits a bug report. Logs, raw errors, and some detailed diagnostics retain their original text.
 
 界面跟随游戏语言：简体/繁体中文使用现有中文文案，其他语言使用英文。简化版不提供独立语言开关；卡牌胶囊、选牌和相关悬停说明支持运行中切换语言，其他既有窗口可通过重启统一刷新。
 
@@ -143,7 +143,7 @@ RitsuLib 需要单独安装。替换旧版前退出游戏，并确保只启用�
 
 ## 求解目标与边界
 
-最终路线依次比较生存、确认胜利、整场战损、药水消耗、主动卖血和敌方剩余状态。药水与普通出牌共同参与搜索，不使用独立的事后补算路线。
+智能用药先建立无可选药水的路线作为基线，省血收益达到药水机会成本后才考虑使用。跨搜索成员的合规路线统一比较整场战略战损与可选药水成本之和，再比较成长、结束回合与消耗数量。必要获胜、保留复活资源、追回资源和明确强制用药按各自策略处理；药水保护继续限制可用动作。药水补搜与后续优化共享同一请求预算。
 
 Combat Solver 使用受时间、节点和内存预算约束的 Beam Search。它展示的是当前预算内找到的最佳路线，不承诺数学意义上的全局最优解。单人路线视野没有固定回合数或洗牌次数上限；多人建议最多覆盖十四个敌方回合。循环检测、状态合并和预算终止仍会限制实际搜索范围。
 

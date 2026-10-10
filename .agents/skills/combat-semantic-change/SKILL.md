@@ -92,6 +92,8 @@ CombatRootSnapshot.Capture（主线程根）
 
 - 单人历史六项累计值由 `CombatPredictionHistory.Record` 维护，普通、手动选牌与执行续接 Fork 均继承已有总数，复制尾段不重复入账。多人沿用按各效果持有者范围扫描历史，不能调用只接受单人 owner 的累计入口。更改历史事件或续接路径时使用 `VerifyHistoryCounters=true` 核对单人独立扫描，并以 `upstream-compatibility` 覆盖多人两位玩家、生产键及原生全队状态；Started/Finished 与原始/Resolved 的计数时点不能混用。
 
+手牌上限由 `PredictionModHookSubscriberCapture` 在主线程逐玩家冻结，Fork 共享不可变表。生产状态键包含全部玩家上限；续用同时记录本机上限及多人逐成员上限，后台不重新询问 RitsuLib。变更此边界时覆盖本机/队友分别变化、旧根/多代 Fork 保持和完整 live/predicted 戳一致。
+
 新增分支状态必须回答：
 
 1. 根值从哪里、在哪个主线程时点捕获；

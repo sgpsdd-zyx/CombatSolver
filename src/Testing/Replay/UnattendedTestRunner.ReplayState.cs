@@ -492,13 +492,25 @@ internal sealed partial class UnattendedTestRunner
         string expected,
         string actual,
         bool allowLegacyZeroCounter = false,
-        IReadOnlyDictionary<char, IReadOnlyList<string>>? legacyCardKeywords = null)
+        IReadOnlyDictionary<char, IReadOnlyList<string>>? legacyCardKeywords = null,
+        IReadOnlyDictionary<char, IReadOnlyList<string>>? legacyCardCosts = null,
+        bool allowLegacyDefaultHandLimit = false)
     {
         if (string.Equals(expected, actual, StringComparison.Ordinal))
             return true;
 
         string[] expectedFields = expected.Split(';');
         string[] actualFields = actual.Split(';');
+        // Old vanilla reports omitted the default hand limit. The caller must
+        // first verify the complete native checkpoint; non-default, explicit,
+        // duplicate, and non-canonical fields still compare strictly.
+        if (allowLegacyDefaultHandLimit
+            && !expectedFields.Any(field => field.StartsWith("max_hand_size=", StringComparison.Ordinal))
+            && actualFields.Length > 0 && actualFields[^1] == "max_hand_size=10"
+            && actualFields.Count(field => field.StartsWith("max_hand_size=", StringComparison.Ordinal)) == 1)
+        {
+            actualFields = actualFields[..^1];
+        }
         if (allowLegacyZeroCounter)
         {
             int historyIndex = Array.FindIndex(expectedFields, field => field.StartsWith("Y=", StringComparison.Ordinal));
@@ -540,6 +552,12 @@ internal sealed partial class UnattendedTestRunner
             string expectedField = expectedFields[index];
             string actualField = actualFields[index];
             if (string.Equals(expectedField, actualField, StringComparison.Ordinal))
+                continue;
+            if (expectedField.Length >= 2 && expectedField[1] == '='
+                && expectedField[0] is 'H' or 'D' or 'C' or 'X'
+                && legacyCardCosts?.TryGetValue(expectedField[0], out IReadOnlyList<string>? costs) == true
+                && LegacyCardCostContinuationMatches(expectedField, actualField, costs,
+                    legacyCardKeywords?.GetValueOrDefault(expectedField[0])))
                 continue;
             if (expectedField.Length >= 2
                 && expectedField[1] == '='
@@ -756,9 +774,9 @@ internal sealed partial class UnattendedTestRunner
         List<TemporaryCardCost> temporaryStarCosts = [];
         foreach (JsonElement savedStarCost in savedStarCosts.EnumerateArray())
         {
-            TemporaryCardCost temporaryStarCost = new();
-            RestoreReplayPrimitiveState(temporaryStarCost, typeof(object), savedStarCost);
-            temporaryStarCosts.Add(temporaryStarCost);
+            // Nested captured fields are unqualified, unlike top-level model fields.
+            // Read them explicitly so the cost and both expiration flags survive.
+            temporaryStarCosts.Add(RestoreReplayTemporaryStarCost(savedStarCost));
         }
         FieldInfo temporaryStarCostsField = typeof(CardModel).GetField(
                 "_temporaryStarCosts",
@@ -766,6 +784,13 @@ internal sealed partial class UnattendedTestRunner
             ?? throw new MissingFieldException(typeof(CardModel).FullName, "_temporaryStarCosts");
         temporaryStarCostsField.SetValue(card, temporaryStarCosts);
     }
+
+    private static TemporaryCardCost RestoreReplayTemporaryStarCost(JsonElement saved) => new()
+    {
+        Cost = saved.GetProperty("<Cost>k__BackingField").GetInt32(),
+        ClearsWhenTurnEnds = saved.GetProperty("<ClearsWhenTurnEnds>k__BackingField").GetBoolean(),
+        ClearsWhenCardIsPlayed = saved.GetProperty("<ClearsWhenCardIsPlayed>k__BackingField").GetBoolean(),
+    };
 
     private static void RestoreReplayHandVisuals(Player player)
     {

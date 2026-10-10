@@ -1,5 +1,6 @@
 using System.Reflection;
 using System.Text.Json;
+using STS2RitsuLib;
 using CombatSolver;
 using CombatSolver.Engine.Common;
 using CombatSolver.Engine.InCombat.Simulation;
@@ -25,6 +26,12 @@ namespace OfflineSearchHarness;
 internal static class MultiplayerUpstreamContracts
 {
     private static bool ClockPrefix(ref ulong __result) { __result = 0; return false; }
+    private static readonly Dictionary<Player, int> HandLimits = [];
+    private static bool HandLimitPrefix(Player __0, ref int __result)
+    {
+        __result = HandLimits[__0];
+        return false;
+    }
 
     internal static string Run(CombatState state, HarnessOptions options, MainLoopContext loop)
     {
@@ -163,6 +170,14 @@ internal static class MultiplayerUpstreamContracts
             return value;
         }
         Check(Axe(child) == Axe(parent) + 2, "gold_axe_observes_both_finished_plays");
+        var cardValue = typeof(CombatBeamSolver).GetMethod("BranchCardValue",
+            BindingFlags.Static | BindingFlags.NonPublic)!
+            .CreateDelegate<Func<CombatPredictionSimulator, SimulatedCombatState, PredictedCard, double>>();
+        PredictedCard axe = child.State.GetPlayerCombatState(local).Hand.Cards
+            .Single(value => value.Preview is GoldAxe);
+        Check(cardValue(child, (SimulatedCombatState)child.State.CombatState, axe)
+            == CardChoiceSupport.CardValue(axe.Preview),
+            "multiplayer_preserves_card_value_without_solo_calculated_attack_guidance");
         var snapshot = typeof(CombatBeamSolver).GetMethod("Snapshot", BindingFlags.Instance | BindingFlags.NonPublic)!
             .CreateDelegate<Func<CombatPredictionSimulator, int, int, int, SearchBoundaryReason,
                 IReadOnlySet<uint>, SimulationSnapshot>>(solver);
@@ -214,12 +229,67 @@ internal static class MultiplayerUpstreamContracts
                 root.Forecast, root.StartTurnNumber).StateText == frozen.StateText, "root_unchanged_after_native_play");
         }
         finally { predicted.ReleaseSimulator(); }
+        VerifyHandLimits(state, local, peer, Check);
         VerifyEntropicCosts(state, local, peer, Check);
         VerifyResourceHooks(state, local, peer, Native, Check);
         File.WriteAllText(Path.Combine(options.OutputDirectory, "upstream-compatibility.json"),
             JsonSerializer.Serialize(new { status = "Passed", checks, localCounts, peerCounts },
                 new JsonSerializerOptions { WriteIndented = true }));
         return $"upstream_compatibility_checks={checks.Count} native_full_party_state_equal=true";
+    }
+
+    private static void VerifyHandLimits(CombatState state, Player local, Player peer,
+        Action<bool, string> check)
+    {
+        MethodInfo method = AccessTools.Method(typeof(RitsuLibFramework), nameof(RitsuLibFramework.GetMaxHandSize));
+        MethodInfo prefix = AccessTools.Method(typeof(MultiplayerUpstreamContracts), nameof(HandLimitPrefix));
+        HandLimits[local] = 10;
+        HandLimits[peer] = 12;
+        GameBootstrap.Harmony.Patch(method, prefix: new HarmonyMethod(prefix));
+        try
+        {
+            var names = SolverDisplayNames.Capture(state);
+            var damage = BattleDamageTracker.Observe(state);
+            var policy = new MultiplayerSearchPolicy().Apply(
+                SolverController.CaptureSearchPolicy(SolverSettings.Capture(), state, false, null));
+            (CombatRootSnapshot Root, StateFingerprint Key, string Stamp) Capture()
+            {
+                var root = CombatRootSnapshot.Capture(state, multiplayerAdvisor: true);
+                var solver = new CombatBeamSolver(root, names, damage, policy);
+                SimulationSnapshot snapshot = solver.ReplayMultiplayerForTesting([]);
+                try
+                {
+                    string predicted = ContinuationStamp.CapturePredicted(local, snapshot.Simulator,
+                        snapshot.Turn, root.Forecast, root.StartTurnNumber).StateText;
+                    check(predicted == ContinuationStamp.CaptureLive(state, multiplayerAdvisor: true).StateText,
+                        $"hand_limits_native_full_party_stamp_equal_{HandLimits[local]}_{HandLimits[peer]}");
+                    return (root, snapshot.StateKey, predicted);
+                }
+                finally { snapshot.ReleaseSimulator(); }
+            }
+            var initial = Capture();
+            var frozen = initial.Root.ForkSimulator();
+            var sibling = frozen.Fork();
+            HandLimits[local] = 11;
+            var localChanged = Capture();
+            check(localChanged.Key != initial.Key && localChanged.Stamp != initial.Stamp,
+                "local_hand_limit_changes_production_key_and_continuation");
+            HandLimits[local] = 10;
+            HandLimits[peer] = 13;
+            var peerChanged = Capture();
+            check(peerChanged.Key != initial.Key && peerChanged.Stamp != initial.Stamp,
+                "peer_hand_limit_changes_production_key_and_continuation");
+            foreach (var simulator in new[] { frozen, sibling, sibling.Fork() })
+                check(simulator.GetMaxHandSize(local) == 10 && simulator.GetMaxHandSize(peer) == 12
+                    && ContinuationStamp.CapturePredicted(local, simulator, initial.Root.StartTurnNumber,
+                        initial.Root.Forecast, initial.Root.StartTurnNumber).StateText == initial.Stamp,
+                    "captured_party_hand_limits_remain_frozen_across_live_change_and_fork");
+        }
+        finally
+        {
+            GameBootstrap.Harmony.Unpatch(method, prefix);
+            HandLimits.Clear();
+        }
     }
 
     private sealed class RejectSoloStrategy : IDevelopmentSearchStrategy

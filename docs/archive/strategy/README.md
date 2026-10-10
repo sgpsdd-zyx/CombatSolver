@@ -3,6 +3,7 @@
 [返回归档](../README.md)。以下文件保持各自的源码基线、失败和未验证项；归档不表示已修复。
 
 - [本 fork 截至 0.48.1 的策略索引](multiplayer-index-through-0481.md)
+- [官方 0.50.1 后续主线合并、验证与发布](upstream-0501-merge-20261009.md)
 - [官方 0.50.0 合并、验证与发布](upstream-0500-merge-20261005.md)
 - [官方 0.49.0 / 0.49.1 合并、验证与发布](upstream-0490-merge-20261003.md)
 - [0.17.0-optimization-plan](0.17.0-optimization-plan.md)
@@ -11,6 +12,7 @@
 - [beam-width-portfolio](beam-width-portfolio.md)
 - [bounded-novelty-search-20260916](bounded-novelty-search-20260916.md)
 - [contextual-ordering-20260922](contextual-ordering-20260922.md)
+- [2026-09-02 通用循环开发记录](generic-loops-development-20260902.md)
 - [incremental-history-counters](incremental-history-counters.md)
 - [learned-portfolio-gate-20260917](learned-portfolio-gate-20260917.md)
 - [player-worldlines-20260905](player-worldlines-20260905.md)
@@ -23,5 +25,6 @@
 - [strategy-optimization-20260923](strategy-optimization-20260923.md)
 - [strategy-optimization-directions-20260927](strategy-optimization-directions-20260927.md)
 - [strategy-optimization-part1-handoff-20260927](strategy-optimization-part1-handoff-20260927.md)
+- [Q015 排查历史（2026-10-06）](q015-investigation-20261006.md)
 - [STRATEGY_OPTIMIZATION_LOG](STRATEGY_OPTIMIZATION_LOG.md)
 - [worldline-top150-20260926](worldline-top150-20260926.md)

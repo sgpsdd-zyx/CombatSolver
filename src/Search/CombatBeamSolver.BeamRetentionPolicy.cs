@@ -945,6 +945,11 @@ internal sealed partial class CombatBeamSolver
                         routingNodes,
                         FindBestTargetPressure(routingNodes));
                     List<SearchNode> candidates = [];
+                    if (orderedRoutingContexts[contextIndex].Key.Effect
+                        is PlanChoiceEffect.Discard or PlanChoiceEffect.DiscardAndDraw)
+                    {
+                        AddRoutingCandidate(candidates, FindBestSafeDiscardContinuation(routingNodes));
+                    }
                     if (routingNodes.Min(ActionsSinceRetainedRoutingChoice) <= 1)
                     {
                         AddRoutingCandidate(candidates, group.BestSetup);
@@ -1251,6 +1256,7 @@ internal sealed partial class CombatBeamSolver
                              .OrderBy(group => group.Key))
                 {
                     IReadOnlyList<SearchNode> group = potionGroup.ToList();
+                    AddRequired(required, FindBestDamagingContinuation(group), limit);
                     AddRequired(required, FindBestFreshResourceStandPat(group), limit);
                     AddRequired(required, FindBestStandPat(group, SearchRouteTraits.Scaling), limit);
                     AddRequired(required, FindBestStandPat(group, SearchRouteTraits.Resource), limit);
@@ -1785,30 +1791,27 @@ internal sealed partial class CombatBeamSolver
                 limit,
                 _profile.AggressivePowerCommitment);
             _run.PowerValuationCandidates += pool.Count(node => node.PowerCommitment != null);
-            int retained = selected.Count(node => node.PowerCommitment != null);
-            _run.PowerCommitmentSeatsPeak = Math.Max(
-                _run.PowerCommitmentSeatsPeak,
-                Math.Min(retained, quota));
-            if (retained >= quota)
-                return;
-
-            foreach (SearchNode candidate in PowerCommitmentRetention.RankRepresentatives(pool, quota))
+            IReadOnlyList<SearchNode> representatives = PowerCommitmentRetention.RankRepresentatives(pool, quota);
+            int retained = 0;
+            foreach (SearchNode candidate in representatives)
             {
-                if (retained >= quota || ContainsReference(selected, candidate))
+                if (ContainsReference(selected, candidate))
+                {
+                    AddRequired(required, candidate, limit);
+                    retained++;
                     continue;
+                }
                 int replaceIndex = selected.FindLastIndex(node =>
-                    node.PowerCommitment == null
-                    && !ContainsReference(required, node));
+                    !ContainsReference(required, node)
+                    && !ContainsReference(representatives, node));
                 if (replaceIndex < 0)
-                    return;
+                    continue;
                 selected[replaceIndex] = candidate;
                 AddRequired(required, candidate, limit);
                 retained++;
                 _run.PowerCommitmentsAdmitted++;
-                _run.PowerCommitmentSeatsPeak = Math.Max(
-                    _run.PowerCommitmentSeatsPeak,
-                    retained);
             }
+            _run.PowerCommitmentSeatsPeak = Math.Max(_run.PowerCommitmentSeatsPeak, retained);
         }
 
         private void AdmitPlanCommitmentRepresentatives(

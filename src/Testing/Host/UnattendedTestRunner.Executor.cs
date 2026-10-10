@@ -69,6 +69,16 @@ internal sealed partial class UnattendedTestRunner
                 await runner.AssertMultiplayerRelicExtraTurnSourceAsync(combatState);
                 return Observation(combatEnded: false);
             }
+            if (request.ScenarioId == "CHECKPOINT-PROFILE-CONTRACT")
+            {
+                runner.AssertCheckpointProfileContract(combatState);
+                return Observation(combatEnded: false);
+            }
+            if (request.ScenarioId == "CHECKPOINT-RECORDED-PLAN-PATH")
+            {
+                await runner.PrepareRecordedPlanDeploymentAsync(combatState, deploy: false);
+                return Observation(combatEnded: false);
+            }
             if (request.ScenarioId == "CALCULATED-HISTORY-FREEZE")
             {
                 await runner.AssertCalculatedHistoryFreezeAsync(combatState, player);
@@ -1002,6 +1012,11 @@ internal sealed partial class UnattendedTestRunner
                 await runner.AssertNativeChooseOpenGateAsync(combatState, player);
                 return Observation(combatEnded: false);
             }
+            if (request.ScenarioId == "SMART-POTION-AUDIT-BUDGET")
+            {
+                await runner.AssertSmartPotionAuditBudgetAsync(combatState, player);
+                return Observation(combatEnded: false);
+            }
             if (request.ScenarioId is "SMART-OPENING-POTION-ADMISSION" or "SMART-OPENING-POTION-VALUE")
             {
                 await runner.AssertSmartOpeningPotionAdmissionAsync(combatState, player,
@@ -1470,6 +1485,8 @@ internal sealed partial class UnattendedTestRunner
             if (SolverController.LastTurnSetupResultForTesting == null
                 && !request.PreserveNativeCombatStateForTest && !runner.HasNativeRecording)
                 SolverController.BeginCombat(combatState);
+            if (request.ScenarioId == "CHECKPOINT-RECORDED-PLAN-DEPLOYMENT")
+                await runner.PrepareRecordedPlanDeploymentAsync(combatState);
             if (request.TheftPolicyForTest is { } theftPolicy)
                 SolverController.SetTheftPolicyForTesting(combatState, theftPolicy);
             SolverController.SetStopFullAutoOnCombatEnd(false, persist: false);
@@ -1978,6 +1995,8 @@ internal sealed partial class UnattendedTestRunner
                 && !stoppedAfterWorseRecalculationPause
                 && !stoppedAfterLiveRiskPause
                 && !stoppedAfterExpectedUnexpectedReplan;
+            if (request.ScenarioId == "CHECKPOINT-RECORDED-PLAN-DEPLOYMENT")
+                runner.AssertRecordedPlanDeployment(combatState);
             return Observation(combatEnded);
 
             ExecutionOutcome Observation(bool combatEnded, bool initialSearchHeld = false)

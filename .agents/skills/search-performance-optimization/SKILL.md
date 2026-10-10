@@ -17,9 +17,11 @@ description: 在战斗语义已证明正确后，审计或修改 CombatSolver �
 
 多人胜利早停捷径仍禁用，已有本机/队友药水资格沿原窗口捕获；用 `facts` 核对，不用最终路线长度推断搜索覆盖。结果分别报告返回深度、已观察最深周期和本次有效预算，不承诺十四周期最大输出或安全。
 
-当前官方基线为 `0d290fbe / 0.50.0`。单人能力估值、承诺、固定前缀组合及强制／Smart 用药梯度保持官方行为；多人协调器提前返回，`_hasRegisteredPowerCards` 另以 `policy.Multiplayer == null` 隔离共享候选。Runtime 多人跳过单人成长目标捕获，影子根疯狂科学升级信用容量为零；不能等事后忽略收益才过滤单人假设。`_planCommitment` 在多人构造时清空，新增计划保路及 `PlanHorizonPolicy` 不得延长多人窗口。单人历史键用累计值，多人按各效果原持有者范围扫描，不能借队友身份使用单人计数。兼容检查使用 `upstream-compatibility`、真实多人能力牌、该官方版本单人对照。全队回合在 `Expansion.Replay`，首动作目标过滤在 `ExpansionPlan`，目标枚举/支配/转置标签在 `Expansion.Candidates`，排名分派在 `BeamRetentionPolicy.Ranking`。多人不预测战后奖励；默认百万条转置上限不变，低于上限的检查不能证明触顶质量。 多人根拒绝组件回复证书和成长上界，Runtime 不获取单人见证表，政策清空 `PrimaryIncumbents`，solver 禁用局部/共享胜利界及组件 Smart 用药剪枝；以 `upstream-compatibility` 注入单人已胜路线验证隔离。组件证书保持官方原生程序集 MVID 门禁，平台不匹配时保留官方回退，不扩大白名单换取测试通过。
+当前官方基线为 `5c773caa / 0.50.1 后续主线`。单人能力估值、承诺、固定前缀组合及强制／Smart 用药梯度保持官方行为；多人协调器提前返回，`_hasRegisteredPowerCards` 另以 `policy.Multiplayer == null` 隔离共享候选。Runtime 多人跳过单人成长目标捕获，影子根疯狂科学升级信用容量为零；不能等事后忽略收益才过滤单人假设。`_planCommitment` 在多人构造时清空，新增计划保路及 `PlanHorizonPolicy` 不得延长多人窗口。单人历史键用累计值，多人按各效果原持有者范围扫描，不能借队友身份使用单人计数。兼容检查使用 `upstream-compatibility`、真实多人能力牌、该官方版本单人对照。全队回合在 `Expansion.Replay`，首动作目标过滤在 `ExpansionPlan`，目标枚举/支配/转置标签在 `Expansion.Candidates`，排名分派在 `BeamRetentionPolicy.Ranking`。多人不预测战后奖励；默认百万条转置上限不变，低于上限的检查不能证明触顶质量。 多人根拒绝组件回复证书和成长上界，Runtime 不获取单人见证表，政策清空 `PrimaryIncumbents`，solver 禁用局部/共享胜利界及组件 Smart 用药剪枝；以 `upstream-compatibility` 注入单人已胜路线验证隔离。组件证书保持官方原生程序集 MVID 门禁，平台不匹配时保留官方回退，不扩大白名单换取测试通过。
 
 官方 0.47.1 的有界开局前缀、延后用药和前两回合追加探索属于单人协调器；多人政策将 `EarlyTurnExplorationDepth`／预算置零、`DevelopmentStrategy` 置空，共享 solver 也拒绝多人开发脚本。单人保留官方设置和路径。混沌药水生成药水的免费来源按玩家／槽位在分支与 Fork 中保存，原混沌药水仍计自身成本；多人周期代价与终局使用已有分支实际成本，不重新按药水 ID 估价。共享 Inky 来源修复属战斗语义，单列原生差分。
+
+官方新增的破盾/弃牌/延迟伤害保路、计划胜利证明与 Smart 独立审计时间仍只在单人通道执行。多人共享快照保留原静态牌值与可执行手牌估值，不启用单人计算型伤害/重放加权及沙坑有序余牌扩展；原本机贡献前沿和固定预算保持。
 
 先证明同一起点、同一动作的 actual/simulated 状态一致。存在根快照、语义或续用偏差时转 `combat-semantic-change`，不要调搜索掩盖。
 
@@ -134,7 +136,7 @@ description: 在战斗语义已证明正确后，审计或修改 CombatSolver �
 - 原生 `PowerModel.GetTypeForAmount` 的枚举装箱优化只能替换精确匹配的两段同 int 枚举比较；保留所有虚 getter、decimal 判断、标签与异常区域，内部控制流或未知 IL 旁路。生产 transpiler 必须以真实游戏方法核对输出、getter 次数/顺序、未定义枚举值与分配；不能用跳过 getter 的类型缓存代替。
 - 游戏 `0.111.0` 的 `LocManager.SmartFormat` 复用同一个 SmartFormat 实例及对象池，不支持并发调用。`PowerDynamicVarWarmup` 必须在主线程根捕获时物化规范 Power 与当前战斗 Power 的显示变量；`PowerDynamicVarMaterializationGuardPatch` 保证 worker 不再惰性创建 Power 显示变量。命中 guard 时补齐主线程物化边界，不给全局格式化器加锁，也不在 worker 内提供默认文本。`LocManager.SmartFormat` 本身含异常过滤器，禁止直接用 Harmony 改写。
 - Runtime 拥有 `SearchGcPolicy`，Search 只通过 `SearchFramePressureSignal` / `SearchWorkPacer` 消费节流信号。
-- 层间预测不能要求整层必须容纳于单一区域。预测超过新区域容量或区域新分配很少时，使用原每批内存准入，不能反复重置刚完成回收的区域。自动回收请求后台收集，压缩仅由手动释放内存触发；实机已证明按高碎片比例自动压缩会造成数秒停顿。保持确认、取消与引用释放的所有权。
+- 层间预测不能要求整层必须容纳于单一区域。预测超过新区域容量或区域新分配很少时，使用原每批内存准入，不能反复重置刚完成回收的区域。普通 GC 的自动回收请求后台收集；需要重建 NoGC 的排空检查点直接请求一次压缩完整回收，确认新完成信息和释放后的弱引用哨兵后重建区域。手动释放继续使用自己的完整回收入口。实机曾证明按高碎片比例自动压缩会造成数秒停顿；生命周期合同只证明完成与所有权，可见暂停和平台性能另行取证。保持确认、取消与引用释放的所有权。
 - 手动释放先通过完整、阻塞、压缩的 `GCCollectionMode.Aggressive` 归还游戏空闲堆页面，再按用户明确要求调用管理员辅助程序清空全系统进程工作集与待机列表，保留系统和其他进程清理能力。工作集移出后的低占用不能当作堆已释放，恢复执行或下次 GC 会重新载入页面。核对 private/committed 与工作集各自的变化；`manual-release` 真实 CLR 合同及储君生成路线部署合同只覆盖游戏进程回收，不覆盖管理员系统清理，也不证明全部内存耗尽已解决。
 - 动态变量空元数据优化只针对已核对 null 默认值的 BaseLib 提示/升级字段和 Ritsu 提示工厂复制入口，在模拟隔离域使用不创建条目的查询；保留非空值、父子隔离及 live 路径，不改通用字段工厂或清空全局表。以真实 Clone 验证空值基线、自定义提示和升级值跨两代传播。
 - 原版 NodePool 信号清理只释放自己取得的 Array/Dictionary/Variant 与新转换的名称包装，不释放节点或持久 Callable 目标。修改该补偿时分别验证 NCard/NGridCardHolder 的真实泛型入口、入站/出站/递归/离树条件及包装登记数；不能把登记无增长当作全部旧战斗对象已释放。

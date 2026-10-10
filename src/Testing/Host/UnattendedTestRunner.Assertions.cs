@@ -18,6 +18,11 @@ internal sealed partial class UnattendedTestRunner
         public async Task RunBeforeExecutionAsync(ScenarioContext scenario)
         {
             UnattendedTestRequest request = runner._request;
+            if (request.ScenarioId == "OVERLAY-VISIBILITY-LIFECYCLE")
+            {
+                runner.SetStage("overlay_visibility_lifecycle");
+                await runner.AssertOverlayVisibilityLifecycleAsync(scenario.CombatState);
+            }
             if (request.ScenarioId == "REMAINING-HEALING-LOUSE")
             {
                 runner.SetStage("remaining_healing_louse");
@@ -69,6 +74,7 @@ internal sealed partial class UnattendedTestRunner
                 string before = ContinuationStamp.CaptureLive(scenario.CombatState).StateText;
                 runner._completedChecks.Add(AssertHpModifierCollections(scenario.CombatState, scenario.Player));
                 runner._completedChecks.Add(AssertProjectedTailLookup(scenario.CombatState, scenario.Player));
+                runner._completedChecks.Add(AssertProjectedSandpitBoundary(scenario.CombatState, scenario.Player));
                 if (ContinuationStamp.CaptureLive(scenario.CombatState).StateText != before)
                     throw new InvalidOperationException("HP modifier contract changed live combat.");
             }

@@ -848,7 +848,8 @@ forbid_fixed "$repository_root/src/Runtime/SearchGcPolicy.Recovery.cs" \
     'CollectGeneration2' 'NoGC recovery must not enter the reclaim chain:'
 for gc_chain_rule in \
     'return WaitForReclaimChainAsync(_reclaimTask)' \
-    'CollectGeneration2ForAutomaticReclaimAsync(inSearchCheckpoint: true)' \
+    'CollectGeneration2ForAutomaticReclaimAsync(' \
+    'compactSmallObjectHeap: restartNoGcRegion' \
     '_inSearchManualReclaimTask = manualCompletion.Task' \
     'failure == null && (_regionExitRequired || _reclaimRequired)'; do
     require_fixed "$search_gc_policy_path" "$gc_chain_rule" 'missing serialized reclaim-chain rule'
@@ -1728,6 +1729,11 @@ done
 while IFS='|' read -r relative_path required; do
     require_fixed "$repository_root/$relative_path" "$required" 'missing multiplayer advice boundary'
 done <<'MULTIPLAYER_ADVICE_RULES'
+src/Runtime/ContinuationStamp.Multiplayer.cs|text.Append(";peer_max_hand_size=").Append(RitsuLibFramework.GetMaxHandSize(player));
+src/Runtime/ContinuationStamp.Multiplayer.cs|text.Append(";peer_max_hand_size=").Append(simulator.GetMaxHandSize(player));
+src/Search/SimulatedCombatState.cs|fingerprint.Add("max_hand_sizes");
+src/Search/CombatBeamSolver.StateEvaluation.cs|double cardValue = combat.AdvisorPlayer != null
+src/Search/CombatBeamSolver.Expansion.Choices.cs|PreserveOrderedRoutingResidues = !IsMultiplayerAdvice && probeSnapshot.SandpitRemaining > 0,
 src/Search/SimulatedCombatState.GoldHooks.cs|return MultiplayerGoldAfterGainHookListeners();
 src/Search/SimulatedCombatState.GoldHooks.cs|return SinglePlayerGoldAfterGainHookListeners(simulator);
 src/Search/SimulatedCombatState.GoldHooks.cs|Player[] activePlayers = _players.Where(IsPlayerActiveForHooks).ToArray();

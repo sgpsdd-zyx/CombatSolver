@@ -138,6 +138,43 @@ internal sealed partial class UnattendedTestRunner
             InjectPotionForTest(player, "FIRE_POTION");
             InjectPotionForTest(player, "STRENGTH_POTION");
             names = SolverDisplayNames.Capture(combat);
+            CombatRootSnapshot paidRoot = ForecastRoot(PotionRewardForecast.NoDrop);
+            PotionFreePolicyBaseline baseline = new(true, 3, lowLoss.Result.Snapshot.PlayerHp,
+                lowLoss.Result.CombatEndedTurn);
+            PlanAction fire = new(PlanActionKind.UsePotion, paidRoot.StartTurnNumber,
+                PotionId: "FIRE_POTION", PotionSlot: 0, TargetCombatId: combat.Enemies.Single().CombatId);
+            PlanAction strength = new(PlanActionKind.UsePotion, paidRoot.StartTurnNumber,
+                PotionId: "STRENGTH_POTION", PotionSlot: 1);
+            string beforePaidPrefixes = ContinuationStamp.CaptureLive(combat).StateText;
+            foreach (PlanAction[] prefix in new[] { new[] { fire }, new[] { strength, fire } })
+            {
+                bool rejected = false;
+                try
+                {
+                    await Task.Run(() => new CombatBeamSolver(paidRoot, names,
+                        new BattleDamageSnapshot(0, 0, 0, []), policy,
+                        searchProfile: policy.Profile, potionFreePolicyBaseline: baseline,
+                        maximumPotionUses: prefix.Length, minimumPotionUses: prefix.Length,
+                        fixedPrefixActions: prefix).Solve());
+                }
+                catch (PotionPolicyUnsatisfiedException) { rejected = true; }
+                Check(rejected, $"fixed {prefix.Length}-potion victory must justify its opportunity cost");
+            }
+            SearchPolicySnapshot forcedPolicy = policy with
+            {
+                PotionStrategy = new(SolverPotionPolicy.Smart,
+                    [new(0, "FIRE_POTION", SolverPotionDirective.Force)]),
+            };
+            SolverResult forced = await Task.Run(() => new CombatBeamSolver(paidRoot, names,
+                new BattleDamageSnapshot(0, 0, 0, []), forcedPolicy,
+                searchProfile: policy.Profile, potionFreePolicyBaseline: baseline,
+                maximumPotionUses: 1, minimumPotionUses: 1, fixedPrefixActions: [fire]).Solve());
+            Check(forced.Snapshot.AllEnemiesDead && forced.ExplicitPotionCount == 1,
+                "the explicit Force directive permits the selected potion");
+            Check(ContinuationStamp.CaptureLive(combat).StateText == beforePaidPrefixes,
+                "paid and forced prefixes preserve native state");
+            _completedChecks.Add("SmartOpeningAdmission:PaidPrefixes:RejectOne:RejectTwo:ForceAccepted");
+
             CombatRootSnapshot drop = ForecastRoot(PotionRewardForecast.Drop);
             Check(drop.PotionRewardOutlook.BeltFull && drop.PotionRewardOutlook.ReplacementHpCredit >= 9,
                 "confirmed reward credits one freed slot");
@@ -228,6 +265,21 @@ internal sealed partial class UnattendedTestRunner
               && immediateVictory.BestNode.Actions.Count == 1
               && immediateVictory.CombatEndedTurn == firstTurn,
             "opening terminal suffix preserves the victory action and combat end turn");
+
+        PlanAction[] deathPrefix = Enumerable.Range(firstTurn, 30)
+            .Select(turn => new PlanAction(PlanActionKind.EndTurn, turn)).ToArray();
+        SolverResult laterDeath = await Task.Run(() => Solve(deathPrefix));
+        Check(laterDeath.Snapshot.PlayerDead, "continuation fixture reaches a later death");
+        MethodInfo forcedBoundary = typeof(CombatSearchCoordinator).GetMethod("FindForcedPowerTurnBoundary",
+            BindingFlags.Static | BindingFlags.NonPublic)!;
+        PlanAction[]? safeBoundary = await Task.Run(() => (PlanAction[]?)forcedBoundary.Invoke(null,
+            [root, policy, prefixProbe, laterDeath]));
+        Check(safeBoundary is { Length: 2 } && safeBoundary[^1].Turn == firstTurn + 1,
+            "safe turn boundary remains available before a later death");
+        Check(!prefixProbe.CanContinueAtPrefix(deathPrefix), "terminal death rejects continuation");
+        Check(!prefixProbe.CanContinueAtPrefix([immediateStrike]), "terminal victory rejects continuation");
+        Check(ContinuationStamp.CaptureLive(combat).StateText == liveBefore,
+            "continuation boundary probes preserve live state");
 
         CombatBeamSolver inspection = new(root, names, damage, policy, searchProfile: policy.Profile);
         SimulationSnapshot seedSnapshot = InvokeForcedTerminalReplay(inspection, [], null, 0, null);

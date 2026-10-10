@@ -519,10 +519,11 @@ internal static partial class SolverController
                 $"搜索并行度必须在 1..{SolverWeights.MaximumSearchMaxDegreeOfParallelism} 之间，" +
                 $"实际为 {maxDegreeOfParallelism}。");
         }
+        SolverSearchProfile profile = UnattendedTestRunner.CheckpointProfileOverride ?? settings.Profile;
         SearchPolicySnapshot policy = new(
             UnattendedTestRunner.BeamWeightPerturbationOverride is { } beamWeightPerturbation
-                ? settings.Profile with { BeamWeightPerturbation = beamWeightPerturbation }
-                : settings.Profile,
+                ? profile with { BeamWeightPerturbation = beamWeightPerturbation }
+                : profile,
             settings.PotionPolicy,
             CapturePotionStrategy(state, settings.PotionPolicy),
             settings.EnableDetailedDiagnosticLogs,
@@ -2188,6 +2189,8 @@ internal static partial class SolverController
         LastSearchFailureForTesting = null;
         BattleDamageTracker.Reset();
         SolverOverlay.Hide();
+        // 战斗重置隐藏界面，并登记下一个可操作边界的初始化请求。
+        SolverOverlay.MarkInitializationPending();
         bool unattendedRequestActive = UnattendedAsyncActivityTracker.IsRequestActive;
         Task regionExit = unattendedRequestActive
             ? Task.CompletedTask
@@ -2348,7 +2351,8 @@ internal static partial class SolverController
         if (IsMultiplayerSession)
             ObserveMultiplayerAdvice(current);
         // SL may replace the combat after TurnStarted. Reattach at the playable boundary.
-        if (!SolverOverlay.IsVisible && !IsSearching && !IsDeploying
+        // 初始化请求独立于用户通过 Ctrl+F9 选择的可见性。
+        if (SolverOverlay.InitializationPending && !IsSearching && !IsDeploying
             && !PendingCombatDeferredOperations.Any(task => !task.IsCompleted)
             && !PlayerTurnSetupCoordinator.IsManaging(current)
             && (current.Players.Count == 1 || IsMultiplayerSession)
