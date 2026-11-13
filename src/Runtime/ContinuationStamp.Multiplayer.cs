@@ -27,6 +27,8 @@ internal sealed partial record ContinuationStamp
             text.Append(";peer_max_hand_size=").Append(RitsuLibFramework.GetMaxHandSize(player));
             AppendOsty(text, player.Osty, player.Osty?.CurrentHp ?? 0, player.Osty?.MaxHp ?? 0);
             text.Append(";osty_block=").Append(player.Osty?.Block ?? 0);
+            AppendPets(text, state.Allies.Where(creature => creature.PetOwner == player && creature != player.Osty),
+                creature => creature.CurrentHp, creature => creature.MaxHp, creature => creature.Block);
             AppendLivePile(text, pcs.Hand, 'H');
             AppendLivePile(text, pcs.DrawPile, 'D');
             AppendLivePile(text, pcs.DiscardPile, 'C');
@@ -66,6 +68,10 @@ internal sealed partial record ContinuationStamp
             AppendOsty(text, osty, osty == null ? 0 : simulator.State.GetCreature(osty).CurrentHp,
                 combat.GetOstyMaxHp(simulator, player));
             text.Append(";osty_block=").Append(osty == null ? 0 : simulator.State.GetCreature(osty).Block);
+            AppendPets(text, combat.Allies.Where(creature => creature.PetOwner == player && creature != osty),
+                creature => simulator.State.GetCreature(creature).CurrentHp,
+                creature => simulator.State.GetCreature(creature).MaxHp,
+                creature => simulator.State.GetCreature(creature).Block);
             AppendPredictedPile(text, pcs.Hand, 'H');
             AppendPredictedPile(text, pcs.DrawPile, 'D');
             AppendPredictedPile(text, pcs.DiscardPile, 'C');

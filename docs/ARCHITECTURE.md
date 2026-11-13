@@ -123,7 +123,7 @@ Fork 发生在动作、选牌、Power、死亡和出牌事务允许复制的稳�
 
 `RunModels` 在主线程根捕获时克隆，按原生顺序进入监听前缀，Fork 保持分支所有权。九条战斗 RNG 与每名玩家的 `NonCombatGeneration` 共用完整状态快照及惰性物化合同。`CombatCardOrdering` 按新版原生顺序比较逐实例状态，费用经分支 Hook 解析；模拟洗牌和搜索投影共用此入口。
 
-箭槽由 `SimPlayerCombatState` 持有；`ImpaledPower` 的有序箭引用经同一个 Fork context 重映射。`CombatPredictionSimulator.Arrows` 负责射击、插入、拔出和销毁，`ArrowMirrors` 派发原生箭 Hook。旋律 Started／Finished 计数和首次 CardPlay 身份由 `SimulatedCombatState.Melodies` 持有。`AimPowerMirrors` 保存攻击后仍有效的来源身份；`SimulatedCombatState.ShowOff` 保存成长 Power 对卡实例的引用。多人状态键和续用戳逐成员记录上述状态与 NonCombatGeneration，不局限于本机。玩法 Dupe 持有分支原牌，包含离开牌堆的来源；Clone 与 Fork 分别保留原生玩法语义和分支隔离。
+箭槽由 `SimPlayerCombatState` 持有；`ImpaledPower` 的有序箭引用经同一个 Fork context 重映射。`CombatPredictionSimulator.Arrows` 负责射击、插入、拔出和销毁，`ArrowMirrors` 派发原生箭 Hook。旋律 Started／Finished 计数和首次 CardPlay 身份由 `SimulatedCombatState.Melodies` 持有；多人任一玩家回合号变化时，全队旋律随历史窗口一起失效，包括未参与额外回合的队友。`AimPowerMirrors` 保存攻击后仍有效的来源身份；`SimulatedCombatState.ShowOff` 保存成长 Power 对卡实例的引用。多人状态键和续用戳逐成员记录上述状态、NonCombatGeneration 及非奥斯蒂宠物的身份/HP/最大HP/格挡，不局限于本机。玩法 Dupe 持有分支原牌，包含离开牌堆的来源；Clone 与 Fork 分别保留原生玩法语义和分支隔离。
 
 `CardChoiceSupport.GetPotentialEffect` 提供开局选择类型；候选在实际出牌时构建并消费历史与 RNG。动态保留由 `CombatPredictedCardExtensions.ShouldRetainThisTurn` 合并分支关键词与逐实例单回合标记；指纹保存后者及已存在的关键词／Power 状态。回合准备的原版快捷路径与扩展 registry 共用 `TurnStartPowerSupport.ApplyBeforeSideTurnStartPower`，包含 Yah/Lullaby 复位；测试使用相同 Hook facade。
 

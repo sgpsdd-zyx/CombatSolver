@@ -2261,6 +2261,10 @@ $multiplayerAdviceRules = @(
     @{ Path = 'src/Search/MultiplayerSearchPolicy.cs'; Text = 'PrimaryIncumbents = null' }
     @{ Path = 'src/Search/CombatBeamSolver.MultiplayerRound.cs'; Text = 'HookMirrors.ShouldTakeExtraTurn(simulator, combat, player, out var source)' }
     @{ Path = 'src/Search/CombatBeamSolver.MultiplayerRound.cs'; Text = 'HookMirrors.AfterTakingExtraTurn(simulator, combat, item.Player, item.Source)' }
+    @{ Path = 'src/Search/SimulatedCombatState.Multiplayer.cs'; Text = '_melodies?.Clear();' }
+    @{ Path = 'src/Runtime/ContinuationStamp.Multiplayer.cs'; Text = 'AppendPets(text, state.Allies.Where(creature => creature.PetOwner == player' }
+    @{ Path = 'src/Runtime/ContinuationStamp.Multiplayer.cs'; Text = 'AppendPets(text, combat.Allies.Where(creature => creature.PetOwner == player' }
+    @{ Path = 'src/Search/CombatBeamSolver.StateEvaluation.cs'; Text = 'creature.PetOwner == peer' }
     @{ Path = 'src/Search/CombatBeamSolver.cs'; Text = '_developmentStrategy = policy.Multiplayer == null' }
     @{ Path = 'src/Search/CombatBeamSolver.cs'; Text = '_planCommitment = policy.Multiplayer == null ? planCommitment : null' }
     @{ Path = 'src/Search/CombatBeamSolver.ExpansionPlan.cs'; Text = 'if (!IsMultiplayerAdvice && node.ActionCount == 0 && !card.Original.CanPlayTargeting(target))' }

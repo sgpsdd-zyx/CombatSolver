@@ -1800,6 +1800,10 @@ src/Search/CombatBeamSolver.Retention.cs|=> !IsMultiplayerAdvice && (!_hasGrowth
 src/Search/MultiplayerSearchPolicy.cs|PrimaryIncumbents = null
 src/Search/CombatBeamSolver.MultiplayerRound.cs|HookMirrors.ShouldTakeExtraTurn(simulator, combat, player, out var source)
 src/Search/CombatBeamSolver.MultiplayerRound.cs|HookMirrors.AfterTakingExtraTurn(simulator, combat, item.Player, item.Source)
+src/Search/SimulatedCombatState.Multiplayer.cs|_melodies?.Clear();
+src/Runtime/ContinuationStamp.Multiplayer.cs|AppendPets(text, state.Allies.Where(creature => creature.PetOwner == player
+src/Runtime/ContinuationStamp.Multiplayer.cs|AppendPets(text, combat.Allies.Where(creature => creature.PetOwner == player
+src/Search/CombatBeamSolver.StateEvaluation.cs|creature.PetOwner == peer
 src/Search/CombatBeamSolver.cs|_developmentStrategy = policy.Multiplayer == null
 src/Search/CombatBeamSolver.cs|_planCommitment = policy.Multiplayer == null ? planCommitment : null
 src/Search/CombatBeamSolver.ExpansionPlan.cs|if (!IsMultiplayerAdvice && node.ActionCount == 0 && !card.Original.CanPlayTargeting(target))

@@ -614,7 +614,7 @@ internal sealed record SolverOverlaySnapshot(
             SolverText.Format($"[color={SolverUiTokens.Palette.TextMutedHex}]防守[/color]  本回合最高可起防 {result.MaxBlockByTurn.GetValueOrDefault(displayedTurn)}  │  路线实际起防 {result.ActualBlockByTurn.GetValueOrDefault(displayedTurn)}  │  卖血 {result.SoldHpByTurn.GetValueOrDefault(displayedTurn)}"),
             result.IsMultiplayerAdvice
                 ? SolverText.Format($"预测停止于：{(result.BoundaryReason == SearchBoundaryReason.UnsupportedEffect ? SolverText.Get("未支持的战斗效果") : BoundaryText(result.BoundaryReason, result.AdvisoryHorizon))}")
-                : SolverText.Format($"[color={SolverUiTokens.Palette.TextMutedHex}]边界[/color]  {BoundaryText(SearchBoundaryForDisplay(result))}  │  停止洗牌分支 {result.ShuffleBranchesPruned}  │  不可避免战损 {result.UnavoidableHpLost}"),
+                : SolverText.Format($"[color={SolverUiTokens.Palette.TextMutedHex}]边界[/color]  {BoundaryText(SearchBoundaryForDisplay(result), result.AdvisoryHorizon)}  │  停止洗牌分支 {result.ShuffleBranchesPruned}  │  不可避免战损 {result.UnavoidableHpLost}"),
         ];
         if (result.IsMultiplayerAdvice && result.AdvisoryTimeBudgetMilliseconds > 0)
             detailLines.Insert(1, SolverText.Format($"本次多人计算上限：{result.AdvisoryTimeBudgetMilliseconds / 1000d:F1} 秒 / {result.AdvisoryNodeBudget:N0} 节点。"));

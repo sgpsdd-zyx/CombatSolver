@@ -110,7 +110,7 @@ internal sealed partial class UnattendedTestRunner
         {
             CombatManager.Instance.SetReadyToEndTurn(peer, true);
             Check(CombatManager.Instance.IsPlayerReadyToEndTurn(peer), "ready_observed");
-            CombatManager.Instance.UndoReadyToEndTurn(peer);
+            CombatManager.Instance.TryUndoReadyToEndTurn(peer);
             Check(!CombatManager.Instance.IsPlayerReadyToEndTurn(peer), "ready_can_be_undone");
             root = CombatRootSnapshot.Capture(combat, multiplayerAdvisor: true);
             var policy = new MultiplayerSearchPolicy(Horizon: 3)

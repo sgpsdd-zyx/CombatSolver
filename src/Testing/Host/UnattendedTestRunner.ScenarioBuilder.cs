@@ -200,7 +200,7 @@ internal sealed partial class UnattendedTestRunner
                 await RunManager.Instance.GenerateMap();
             }
             else if (request.ScenarioId is "MULTIPLAYER-RELIC-OWNERSHIP" or "MULTIPLAYER-RELIC-EXTRA-TURN-SOURCE"
-                or "MULTIPLAYER-SHARED-DAMAGE" or MultiplayerExperimentSpec.ScenarioId
+                or "MULTIPLAYER-SHARED-DAMAGE" or "MULTIPLAYER-MODE-MOVES" or MultiplayerExperimentSpec.ScenarioId
                 or MultiplayerTurnSetupScenario or MultiplayerTurnSetupControlsScenario)
             {
                 var unlocks = SaveManager.Instance.GenerateUnlockStateFromProgress();

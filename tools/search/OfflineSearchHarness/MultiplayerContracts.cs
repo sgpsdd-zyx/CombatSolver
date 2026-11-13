@@ -290,7 +290,7 @@ internal static class MultiplayerContracts
         var localOption = options.First(action => action.TargetCombatId == local.Creature.CombatId
             && action.Choice?.Cards.Count == 1);
         var generated = solver.ReplayMultiplayerForTesting([localOption]);
-        using (CardSelectCmd.PushSelector(new PlannedCardSelector(localOption.Choice!)))
+        using (MegaCrit.Sts2.Core.Runs.RunManager.Instance.CardSelectorStack.PushSelector(local, new PlannedCardSelector(localOption.Choice!)))
             Native(attack.OnUseWrapper(new ThrowingPlayerChoiceContext(), local.Creature));
         AssertNativeState(state, generationRoot, generated.Simulator, "native generated potion choice");
         generated.ReleaseSimulator();

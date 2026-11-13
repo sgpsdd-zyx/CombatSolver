@@ -51,6 +51,9 @@ internal static class MultiplayerUpstreamContracts
         improvement.TinkerTimeType = CardType.Power;
         improvement.TinkerTimeRider = TinkerTime.RiderEffect.Improvement;
         Add(improvement, local);
+        Add(state.CreateCard(ModelDb.Card<ChoReady>(), peer), peer);
+        var peerPetRelic = (MegaCrit.Sts2.Core.Models.Relics.Wuppy)ModelDb.Relic<MegaCrit.Sts2.Core.Models.Relics.Wuppy>().ToMutable();
+        Native(RelicCmd.Obtain(peerPetRelic, peer));
 
         List<string> checks = [];
         void Check(bool condition, string name)
@@ -224,6 +227,28 @@ internal static class MultiplayerUpstreamContracts
                     && Stamp(root.ForkSimulator()) == originalStamp,
                     "party_113_mutations_preserve_root_" + owner.NetId);
             }
+            var pet = peerPetRelic.CombatWuppy
+                ?? throw new InvalidOperationException("Native teammate pet was not created.");
+            var petBranch = root.ForkSimulator();
+            var petKey = Key(petBranch);
+            string petStamp = Stamp(petBranch);
+            petBranch.State.GetCreature(pet).GainBlock(1);
+            Check(Key(petBranch) != petKey && Stamp(petBranch) != petStamp,
+                "peer_pet_changes_party_key_and_stamp");
+            Check(Key(petBranch.Fork()) == Key(petBranch) && Stamp(petBranch.Fork()) == Stamp(petBranch)
+                && Key(root.ForkSimulator()) == petKey && Stamp(root.ForkSimulator()) == petStamp,
+                "peer_pet_fork_and_root_isolation");
+
+            var melodyBranch = root.ForkSimulator();
+            var melodyCombat = (SimulatedCombatState)melodyBranch.State.CombatState;
+            var melodyCard = melodyBranch.State.GetPlayerCombatState(peer).Hand.Cards
+                .Single(value => value.Preview is ChoReady);
+            CardPlay melody = new() { Card = melodyCard.MutablePreview, Player = peer, Target = null,
+                ResultPile = PileType.Discard, Resources = default, IsAutoPlay = false, PlayIndex = 0, PlayCount = 1 };
+            melodyCombat.RecordMelodyFinished(melody);
+            Check(melodyCombat.MelodyCount(peer) > 0, "peer_melody_fixture_has_history");
+            melodyCombat.ResetMultiplayerHistoryWindow();
+            Check(melodyCombat.MelodyCount(peer) == 0, "extra_turn_clears_sitting_out_peer_melodies");
         }
         ContinuationStamp frozen = ContinuationStamp.CapturePredicted(local, root.ForkSimulator(),
             root.StartTurnNumber, root.Forecast, root.StartTurnNumber);

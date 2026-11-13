@@ -102,6 +102,7 @@ internal sealed partial class SimulatedCombatState
             ResetTurnCounter(ref _statusCardsDrawnThisTurn, player);
         }
         _fetchCardsPlayedThisTurn?.Clear();
+        _melodies?.Clear();
         _unblockedDamageThisTurn = null;
         _poweredAttackHitsThisTurn?.Clear();
         _doomAppliersThisTurn?.Clear();

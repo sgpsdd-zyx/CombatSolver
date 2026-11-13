@@ -114,7 +114,7 @@ internal sealed partial class UnattendedTestRunner
                     CombatManager.Instance.SetReadyToEndTurn(_peer, true);
                     if (!CombatManager.Instance.IsPlayerReadyToEndTurn(_peer))
                         throw new InvalidOperationException("Native peer ready was not observed.");
-                    CombatManager.Instance.UndoReadyToEndTurn(_peer);
+                    CombatManager.Instance.TryUndoReadyToEndTurn(_peer);
                     if (CombatManager.Instance.IsPlayerReadyToEndTurn(_peer))
                         throw new InvalidOperationException("Native peer ready withdrawal failed.");
                     Record("ready_withdrawal_contract");

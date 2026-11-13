@@ -4346,6 +4346,15 @@
     "observed": "5fb1b9dad6e848bcb89faa056256e9d7 Passed; two card hits across threshold and enemy-end Ritual; Inferno player-end threshold hit.",
     "evidence": "coverage/fixtures/monsters/ceremonial-beast-ritual-transition.json; docs/TEST_MATRIX.md"
   },
+  "MULTIPLAYER-UPSTREAM-0513-COMPAT": {
+    "status": "PassedWithDocumentedBoundaries",
+    "level": "L2NativeFullPartyAndManagedContracts",
+    "gameVersion": "0.113.0",
+    "procedure": "Merge 06083d36, run 82 compatibility and 32 contribution checks, death/revival/manual recomputation, 10 native requests, and two solo roots against independently built official source.",
+    "expected": "Official solo behavior retained; per-player arrows, melodies, RNG, pets and extra-turn sources preserve full-party state and Fork isolation without importing solo search policies.",
+    "observed": "2026-11-13 macOS/RitsuLib0.6.12: all targeted checks passed. Solo comparison 177 fields and complete route JSON identical. Pet-key and sitting-out-peer melody failures reproduced then fixed. Fool tutorial timeout and reused-process registry-freeze failure retained; fixture/pipeline corrections passed within 120s. Four headless instances removed by launchers. Live networking, visible performance, Windows/Linux runtime and full release gate not run.",
+    "evidence": "docs/archive/strategy/upstream-0513-merge-20261113.md; docs/archive/strategy/upstream-0513-merge-20261113-evidence.json; docs/archive/strategy/upstream-0513-merge-20261113-inputs.json; coverage/fixtures/scenarios/state/multiplayer-mode-moves.json"
+  },
   "CEREMONIAL-RITUAL-STANDARD": {
     "status": "Passed",
     "level": "HeadlessNativeFullStateDifferential",

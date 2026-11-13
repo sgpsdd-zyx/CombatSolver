@@ -121,7 +121,8 @@ internal sealed partial class UnattendedTestRunner
                     player.Creature.SetCurrentHpInternal(500);
                     await PowerCmd.Apply<BufferPower>(new ThrowingPlayerChoiceContext(), player.Creature,
                         32, player.Creature, null);
-                    await InjectCardAsync(combat, player, new() { CardId = "STRIKE_IRONCLAD", Pile = "Hand" });
+                    await InjectCardAsync(combat, player, new()
+                    { CardId = player == peer && peerPlays ? "CHO_READY" : "STRIKE_IRONCLAD", Pile = "Hand" });
                     // Avoid the first-shuffle tutorial; this fixture only needs the extra-turn boundary.
                     for (int cardIndex = 0; cardIndex < 12; cardIndex++)
                         await InjectCardAsync(combat, player, new() { CardId = "DEFEND_IRONCLAD", Pile = "Draw" });
@@ -132,11 +133,11 @@ internal sealed partial class UnattendedTestRunner
                 {
                     SaveEvidence(name + ":peer_play");
                     CardModel attack = peer.PlayerCombatState!.Hand.Cards.Single();
-                    if (!attack.CanPlayTargeting(combat.Enemies[0]))
+                    if (!attack.CanPlayTargeting(null))
                         throw new InvalidOperationException("Peer fixture attack was not legal.");
                     // Exercise native manual-play hooks without the singleplayer queue's peer-card visuals.
                     (int energy, int stars) = await attack.SpendResources();
-                    Task played = attack.OnPlayWrapper(new ThrowingPlayerChoiceContext(), combat.Enemies[0],
+                    Task played = attack.OnPlayWrapper(new ThrowingPlayerChoiceContext(), null,
                         isAutoPlay: false, new ResourceInfo
                         { EnergySpent = energy, EnergyValue = energy, StarsSpent = stars, StarValue = stars },
                         skipCardPileVisuals: true);

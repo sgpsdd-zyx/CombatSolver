@@ -1723,6 +1723,16 @@ internal sealed partial class CombatBeamSolver
                     key.Add(simulator.State.GetCreature(peerOsty).Block);
                     key.Add(simulatedCombat.GetOstyMaxHp(simulator, peer));
                 }
+                foreach (Creature pet in simulatedCombat.Allies.Where(creature => creature.PetOwner == peer
+                    && creature != simulatedCombat.GetOsty(peer)))
+                {
+                    SimCreatureState petState = simulator.State.GetCreature(pet);
+                    key.Add(pet.CombatId ?? uint.MaxValue);
+                    key.Add(pet.Monster!.Id.Entry);
+                    key.Add(petState.CurrentHp);
+                    key.Add(petState.MaxHp);
+                    key.Add(petState.Block);
+                }
             }
         }
         Player owner = _player;

@@ -1,6 +1,6 @@
 # Shared HP-loss incumbent pruning
 
-This single-player policy targets repeated work after an eligible complete victory is known: unavoidable early damage followed by safe turns, and fast victories rediscovered by portfolio members. The current source integrates upstream 06083d36 (0.51.3); runtime validation is pending.
+This single-player policy targets repeated work after an eligible complete victory is known: unavoidable early damage followed by safe turns, and fast victories rediscovered by portfolio members. The current source integrates upstream 06083d36 (0.51.3). Two representative solo roots match the independently built upstream source, and multiplayer isolation checks pass; this merge does not establish boss-route quality across encounters.
 
 The multiplayer fork keeps this policy only on the official single-player path. Multiplayer roots reject healing/growth certificates, and multiplayer policy and solvers do not reuse primary incumbent tables or bounds. Current ownership is in [the architecture map](../../ARCHITECTURE.md); current fork validation is in [the merge record](../../archive/strategy/upstream-0513-merge-20261113.md).
 

@@ -84,7 +84,7 @@ CombatRootSnapshot.Capture（主线程根）
 
 `BeforeSideTurnStartMirrors` 与 `AfterPlayerTurnStartMirrors` 同样在根捕获前登记并冻结；单人和多人回合入口共用对应 Hook facade。无外部监听者的原版批次路径仍使用 `PowersForHooks` 与逐玩家遗物资格，不能因合入单人新入口恢复死亡队友的效果。外部登记路径按每阶段原生监听顺序派发；队友选择继续形成边界，不由军师代选。
 
-额外回合的 `ShouldTakeExtraTurnEarly` / `ShouldTakeExtraTurn` / `AfterTakingExtraTurn` 由 `ExtraTurnMirrors` 登记原版及第三方单项效果。先遍历 Early，再遍历普通判断，首个命中来源获得资格，后置仅消费该来源；选择暂停沿原动作重放。状态读写使用分支 Power 和遗物记录；原生顺序、完整状态和 Fork 隔离用 `EXTRA-TURN-MIRROR-ORDER` 验证。
+额外回合的 `ShouldTakeExtraTurnEarly` / `ShouldTakeExtraTurn` / `AfterTakingExtraTurn` 由 `ExtraTurnMirrors` 登记原版及第三方单项效果。先遍历 Early，再遍历普通判断，首个命中来源获得资格，后置仅消费该来源；选择暂停沿原动作重放。多人先冻结全队参与者和对应来源，再消费来源；全队本回合历史与旋律一起失效，未参与者的 Power 生命周期仍只按参与条件推进。状态读写使用分支 Power 和遗物记录；原生顺序、完整状态和 Fork 隔离用 `EXTRA-TURN-MIRROR-ORDER` 及多人遗物归属夹具验证。
 
 ## 3. 状态所有权清单
 

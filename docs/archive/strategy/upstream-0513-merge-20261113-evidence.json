@@ -1,0 +1,193 @@
+{
+  "date": "2026-11-13",
+  "gameVersion": "0.113.0",
+  "ritsuLibVersion": "0.6.12",
+  "upstream": "06083d36cf6a2cd24cb61dfafc31f54d232683e6",
+  "forkVersion": "0.51.4",
+  "native": [
+    {
+      "batch": "native-melody-baseline",
+      "runId": "macos-4846373ee0154635a0cbffb097f77753",
+      "scenarioId": "MULTIPLAYER-RELIC-OWNERSHIP",
+      "gameMode": "Standard",
+      "status": "Failed",
+      "error": "System.InvalidOperationException: Multiplayer relic ownership failures: both_local_extra:native_state\n   at CombatSolver.UnattendedTestRunner.AssertMultiplayerRelicOwnershipAsync(CombatState combat)\n   at CombatSolver.UnattendedTestRunner.Executor.ExecuteAsync(ScenarioContext scenario)\n   at CombatSolver.UnattendedTestRunner.RunAsync()",
+      "completedChecks": []
+    },
+    {
+      "batch": "native",
+      "runId": "macos-03d39d956016419f880063dba11d7dbb",
+      "scenarioId": "MULTIPLAYER-RELIC-OWNERSHIP",
+      "gameMode": "Standard",
+      "status": "Passed",
+      "error": null,
+      "completedChecks": [
+        "MultiplayerRelicOwnership:PeerOnly:LocalExtra:BothExtra:NativeFullState:Fork:DisplayOwner",
+        "NativeOutcome:combatEnded=False:turn=5:hp=500:maxHp=500"
+      ]
+    },
+    {
+      "batch": "native",
+      "runId": "macos-abb61877cfdd4b1491df5c4b5c1d5cf3",
+      "scenarioId": "MULTIPLAYER-RELIC-EXTRA-TURN-SOURCE",
+      "gameMode": "Standard",
+      "status": "Passed",
+      "error": null,
+      "completedChecks": [
+        "MultiplayerRelicExtraTurnSource:NativeFullState:SourceConsumed:BothEyesUntouched:FrozenRoot",
+        "NativeOutcome:combatEnded=False:turn=1:hp=80:maxHp=80"
+      ]
+    },
+    {
+      "batch": "native",
+      "runId": "macos-f08c4f54eda748e596fd1b875bd3cd7c",
+      "scenarioId": "MULTIPLAYER-MODE-MOVES",
+      "gameMode": "Standard",
+      "status": "Passed",
+      "error": null,
+      "completedChecks": [
+        "MultiplayerModeMove:Standard:SoulFysh:FullParty:Fork:Root",
+        "MultiplayerModeMove:Standard:Aeonglass:FullParty:Fork:Root",
+        "MultiplayerModeMove:Standard:LagavulinMatriarch:FullParty:Fork:Root",
+        "NativeOutcome:combatEnded=False:turn=1:hp=80:maxHp=80"
+      ]
+    },
+    {
+      "batch": "native",
+      "runId": "macos-e736e699c211414d9d1e5f7ad8cb9743",
+      "scenarioId": "MULTIPLAYER-MODE-MOVES",
+      "gameMode": "Dread",
+      "status": "Passed",
+      "error": null,
+      "completedChecks": [
+        "MultiplayerModeMove:Dread:SoulFysh:FullParty:Fork:Root",
+        "MultiplayerModeMove:Dread:Aeonglass:FullParty:Fork:Root",
+        "MultiplayerModeMove:Dread:LagavulinMatriarch:FullParty:Fork:Root",
+        "NativeOutcome:combatEnded=False:turn=1:hp=80:maxHp=80"
+      ]
+    },
+    {
+      "batch": "native-remaining",
+      "runId": "macos-da2fc8f9f0d0413485fabf55157e388a",
+      "scenarioId": "FOOL-TURN-LIFECYCLE",
+      "gameMode": "Standard",
+      "status": "Passed",
+      "error": null,
+      "completedChecks": [
+        "FoolBranchState:ArrowIdentity:ImpaledReferences:LiveAdvance:ParentSibling:MultiTag:Retrieval:YahLullabyFlags:FullContinuation",
+        "FoolBranchState:ArrowIdentity:ImpaledReferences:LiveAdvance:ParentSibling:MultiTag:Retrieval:TwoTurns:FullContinuation",
+        "NativeOutcome:combatEnded=False:turn=3:hp=77:maxHp=77"
+      ]
+    },
+    {
+      "batch": "native-remaining",
+      "runId": "macos-e91923ef43044986b0edd19365dcb863",
+      "scenarioId": "LAMP-HOBBLING-SHOT",
+      "gameMode": "Standard",
+      "status": "Passed",
+      "error": null,
+      "completedChecks": [
+        "FuzzyWurmCrawler:INHALE",
+        "NativeOutcome:combatEnded=False:turn=1:hp=77:maxHp=77"
+      ]
+    },
+    {
+      "batch": "native-remaining",
+      "runId": "macos-f7229ddafa6e47c795154d850e55bcff",
+      "scenarioId": "EXTRA-TURN-MIRROR-ORDER",
+      "gameMode": "Standard",
+      "status": "Failed",
+      "error": "System.InvalidOperationException: Extra-turn mirrors must be registered before root capture or dispatch.\n   at CombatSolver.Engine.InCombat.Mirrors.Hooks.TurnEnd.ExtraTurnMirrors.RegisterGuarded(Type modelType, Action register)\n   at CombatSolver.Engine.InCombat.Mirrors.Hooks.TurnEnd.ExtraTurnMirrors.RegisterShouldTakeExtraTurn[TModel](Func`3 handler)\n   at CombatSolver.UnattendedTestRunner.AssertExtraTurnMirrorsAsync(CombatState combat, Player player)\n   at CombatSolver.UnattendedTestRunner.Executor.ExecuteAsync(ScenarioContext scenario)\n   at CombatSolver.UnattendedTestRunner.RunAsync()",
+      "completedChecks": []
+    },
+    {
+      "batch": "native-final",
+      "runId": "macos-dfd9d75ed37042e080b634ad5b32eee5",
+      "scenarioId": "EXTRA-TURN-MIRROR-ORDER",
+      "gameMode": "Standard",
+      "status": "Passed",
+      "error": null,
+      "completedChecks": [
+        "ExtraTurnMirrors:NativeOrder:EarlyPriority:EyeUsedAndUnused:ThreePositions:SelectedSource:FullState:Fork:LiveIsolation:Sealed",
+        "NativeOutcome:combatEnded=False:turn=1:hp=80:maxHp=80"
+      ]
+    },
+    {
+      "batch": "native-final",
+      "runId": "macos-07ada88b6fc7477f90a213ef0188cd5e",
+      "scenarioId": "REQUEST-BUDGET-DISPLAY",
+      "gameMode": "Standard",
+      "status": "Passed",
+      "error": null,
+      "completedChecks": [
+        "RequestBudgetDisplay:Coordinator:MemberLimit:RequestNodeLimit:RequestTimeLimit:Override:TotalNodes:ZhsZhtEng:SelectedRoutePreserved",
+        "NativeOutcome:combatEnded=False:turn=1:hp=80:maxHp=80"
+      ]
+    },
+    {
+      "batch": "native-final",
+      "runId": "macos-d058844245e742f8b6963850d241adc3",
+      "scenarioId": "MULTIPLAYER-TOASTY-CONTROLS",
+      "gameMode": "Standard",
+      "status": "Passed",
+      "error": null,
+      "completedChecks": [
+        "MultiplayerTurnSetup:StopDrainsWorker:NativeInputPreserved",
+        "MultiplayerTurnSetup:ChoiceDisplayed:NativePeerActionClearsCurrent:AdviceStale:ManualFreshRoot",
+        "MultiplayerTurnSetup:ManualDifferentChoiceDuringWorker:ResultStale:NoAutomation",
+        "NativeOutcome:combatEnded=False:turn=1:hp=80:maxHp=80"
+      ]
+    },
+    {
+      "batch": "native-final",
+      "runId": "macos-03ef52c3acb44072b23e14c8ad0a0826",
+      "scenarioId": "MODE-RULES-ISOLATION",
+      "gameMode": "Standard",
+      "status": "Passed",
+      "error": null,
+      "completedChecks": [
+        "ModeRules:Blitz0Through5:ConcurrentRoots:NestedScopes:LiveUnchanged",
+        "NativeOutcome:combatEnded=False:turn=1:hp=80:maxHp=80"
+      ]
+    },
+    {
+      "batch": "native",
+      "scenarioId": "FOOL-TURN-LIFECYCLE",
+      "runId": "macos-b3ada35e6a134faaa6510c9dbba2793e",
+      "status": "timeout",
+      "reason": "Native process returned no request result."
+    }
+  ],
+  "successfulNativeRequests": 10,
+  "managed": {
+    "compatibilityChecks": 82,
+    "quotaChecks": 32,
+    "deadTeammate": "Passed",
+    "baselineFailures": [
+      "peer_pet_changes_party_key_and_stamp",
+      "extra_turn_clears_sitting_out_peer_melodies"
+    ],
+    "outputRoot": ".local/upstream-update-20261113/managed"
+  },
+  "singlePlayer": {
+    "roots": 2,
+    "comparedFields": 177,
+    "mismatchedRoots": 0,
+    "completeRouteJsonEqual": true,
+    "comparison": ".local/upstream-update-20261113/comparison.json",
+    "source": "independently built unmodified upstream"
+  },
+  "coverage": {
+    "entries": 3437,
+    "unanalyzed": 0,
+    "runtimeEvidenceGaps": 0,
+    "requiredStateWriteEvidenceGaps": 0,
+    "note": "Catalog completeness reuses classified historical evidence; it does not mean every entry was rerun."
+  },
+  "limitations": [
+    "No live networking",
+    "No visible Steam or frame-time measurement",
+    "No Windows/Linux runtime validation",
+    "No clean install or full release gate"
+  ]
+}

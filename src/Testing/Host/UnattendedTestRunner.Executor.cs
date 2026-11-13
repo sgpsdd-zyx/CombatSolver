@@ -69,6 +69,11 @@ internal sealed partial class UnattendedTestRunner
                 await runner.AssertMultiplayerRelicExtraTurnSourceAsync(combatState);
                 return Observation(combatEnded: false);
             }
+            if (request.ScenarioId == "MULTIPLAYER-MODE-MOVES")
+            {
+                await runner.AssertMultiplayerModeMovesAsync(combatState);
+                return Observation(combatEnded: false);
+            }
             if (request.ScenarioId == "CHECKPOINT-PROFILE-CONTRACT")
             {
                 runner.AssertCheckpointProfileContract(combatState);

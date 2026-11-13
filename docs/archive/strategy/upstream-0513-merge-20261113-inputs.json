@@ -1,0 +1,161 @@
+[
+  {
+    "schemaVersion": 1,
+    "scenarioId": "MULTIPLAYER-RELIC-OWNERSHIP",
+    "characterId": "IRONCLAD",
+    "encounterId": "FOGMOG_NORMAL",
+    "enemyCurrentHp": 1000,
+    "seed": "MPRELICOWNER20260920",
+    "timeoutSeconds": 120,
+    "headlessFastModeForTest": "Instant",
+    "fixedSearchBudget": true,
+    "searchBudgetOverrideMilliseconds": 1000,
+    "searchMaxDegreeOfParallelism": 1
+  },
+  {
+    "schemaVersion": 1,
+    "scenarioId": "MULTIPLAYER-RELIC-EXTRA-TURN-SOURCE",
+    "characterId": "IRONCLAD",
+    "encounterId": "FOGMOG_NORMAL",
+    "enemyCurrentHp": 1000,
+    "seed": "MPRELICSOURCE20260920",
+    "timeoutSeconds": 120,
+    "headlessFastModeForTest": "Instant"
+  },
+  {
+    "schemaVersion": 1,
+    "scenarioId": "MULTIPLAYER-MODE-MOVES",
+    "characterId": "IRONCLAD",
+    "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+    "enemyCurrentHp": 1000,
+    "seed": "MPMODEMOVES20261113",
+    "timeoutSeconds": 120,
+    "headlessFastModeForTest": "Instant",
+    "enableNoGcRegionForTest": false
+  },
+  {
+    "schemaVersion": 1,
+    "scenarioId": "MULTIPLAYER-MODE-MOVES",
+    "characterId": "IRONCLAD",
+    "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+    "enemyCurrentHp": 1000,
+    "seed": "MPMODEMOVES20261113",
+    "timeoutSeconds": 120,
+    "headlessFastModeForTest": "Instant",
+    "enableNoGcRegionForTest": false,
+    "gameMode": "Dread"
+  },
+  {
+    "schemaVersion": 1,
+    "characterId": "FOOL",
+    "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+    "seed": "MERGE051320261113",
+    "enemyCurrentHp": 1000,
+    "timeoutSeconds": 120,
+    "headlessFastModeForTest": "Instant",
+    "enableNoGcRegionForTest": false,
+    "stopAfterCombatRootSnapshotAssertion": true,
+    "scenarioId": "FOOL-TURN-LIFECYCLE"
+  },
+  {
+    "schemaVersion": 1,
+    "characterId": "FOOL",
+    "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+    "seed": "MERGE051320261113",
+    "enemyCurrentHp": 1000,
+    "timeoutSeconds": 120,
+    "headlessFastModeForTest": "Instant",
+    "enableNoGcRegionForTest": false,
+    "stopAfterCombatRootSnapshotAssertion": true,
+    "scenarioId": "LAMP-HOBBLING-SHOT",
+    "monsterMoveChecks": [
+      {
+        "monsterId": "FuzzyWurmCrawler",
+        "moveId": "INHALE",
+        "enemyHpBefore": 999,
+        "clearAllPowersBeforeMove": true,
+        "clearAllRelicsBeforeMove": true,
+        "clearPlayerPilesBeforeMove": true,
+        "playerEnergyBefore": 99,
+        "relicsBeforeMove": [
+          {
+            "relicId": "UNSETTLING_LAMP"
+          }
+        ],
+        "cardsBeforeMove": [
+          {
+            "cardId": "HOBBLING_SHOT",
+            "pile": "Hand",
+            "upgradeLevels": 1
+          }
+        ],
+        "cardPlayChecksAfterMove": [
+          {
+            "cardId": "HOBBLING_SHOT",
+            "target": "Enemy"
+          }
+        ],
+        "triggerEnemySideTurnEndAfterMove": true,
+        "expectedEnemyPowers": {
+          "WEAK_POWER": 3,
+          "VULNERABLE_POWER": 3
+        }
+      }
+    ]
+  },
+  {
+    "schemaVersion": 1,
+    "characterId": "IRONCLAD",
+    "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+    "seed": "MERGE051320261113",
+    "enemyCurrentHp": 1000,
+    "timeoutSeconds": 120,
+    "headlessFastModeForTest": "Instant",
+    "enableNoGcRegionForTest": false,
+    "stopAfterCombatRootSnapshotAssertion": true,
+    "scenarioId": "EXTRA-TURN-MIRROR-ORDER"
+  },
+  {
+    "schemaVersion": 1,
+    "characterId": "IRONCLAD",
+    "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+    "seed": "MERGE051320261113",
+    "enemyCurrentHp": 1000,
+    "timeoutSeconds": 120,
+    "headlessFastModeForTest": "Instant",
+    "enableNoGcRegionForTest": false,
+    "stopAfterCombatRootSnapshotAssertion": true,
+    "scenarioId": "REQUEST-BUDGET-DISPLAY"
+  },
+  {
+    "schemaVersion": 1,
+    "scenarioId": "MULTIPLAYER-TOASTY-CONTROLS",
+    "characterId": "IRONCLAD",
+    "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+    "seed": "MULTIPLAYER-TOASTY-CONTROLS",
+    "relics": [
+      {
+        "relicId": "TOASTY_MITTENS",
+        "addWithoutObtainedEffects": true
+      }
+    ],
+    "preserveNativeCombatStateForTest": true,
+    "fixedSearchBudget": true,
+    "searchBudgetOverrideMilliseconds": 1000,
+    "searchMaxDegreeOfParallelismForTest": 1,
+    "headlessFastModeForTest": "Instant",
+    "timeoutSeconds": 120
+  },
+  {
+    "schemaVersion": 1,
+    "characterId": "IRONCLAD",
+    "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+    "seed": "MERGE051320261113",
+    "enemyCurrentHp": 1000,
+    "timeoutSeconds": 120,
+    "headlessFastModeForTest": "Instant",
+    "enableNoGcRegionForTest": false,
+    "stopAfterCombatRootSnapshotAssertion": true,
+    "scenarioId": "MODE-RULES-ISOLATION"
+  }
+]

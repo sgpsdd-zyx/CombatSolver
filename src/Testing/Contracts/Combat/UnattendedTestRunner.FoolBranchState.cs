@@ -21,7 +21,8 @@ internal sealed partial class UnattendedTestRunner
         foreach (string id in new[] { "QUIVER", "FOOLISH_SHOT", "FOOLISH_SHOT", "WAH_CHO_KI", "BOUNCE",
                      "STRIKE_FOOL", "STRIKE_FOOL", "STRIKE_FOOL" })
             await InjectCardAsync(combat, player, new() { CardId = id, Pile = "Hand" });
-        await InjectCardAsync(combat, player, new() { CardId = "DEFEND_FOOL", Pile = "Draw", Count = 5 });
+        // Two setup cycles should not open the new-profile shuffle tutorial.
+        await InjectCardAsync(combat, player, new() { CardId = "DEFEND_FOOL", Pile = "Draw", Count = 15 });
         await InjectPowerAsync(combat, player, new() { PowerId = "ARCHERY_POWER", Target = "Player", Amount = 3 });
         await InjectPowerAsync(combat, player, new() { PowerId = "HIDDEN_ROOTS_POWER", Target = "Player", Amount = 4 });
         await InjectPowerAsync(combat, player, new() { PowerId = "YAH_POWER", Target = "Player", Amount = 1 });
