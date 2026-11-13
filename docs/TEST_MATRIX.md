@@ -4,7 +4,7 @@
 
 ## 2026-11-13 本轮状态
 
-游戏0.113.0 / RitsuLib0.6.12 / macOS arm64。主项目和离线宿主Release零警告、零错误；Bash职责门禁通过（270 Search文件），coverage布局通过（650数据、598fixture、38组），CoverageCatalog3437项无未分析及必需证据缺口。PowerShell门禁完成状态见本轮记录。
+游戏0.113.0 / RitsuLib0.6.12 / macOS arm64。主项目和离线宿主Release零警告、零错误；Bash/PowerShell职责门禁通过（270 Search文件），工具盘点322文件/38项目通过，coverage布局通过（650数据、598fixture、38组），CoverageCatalog3437项无未分析及必需证据缺口。
 
 10个原生请求通过；82项多人兼容、32项贡献合同、死亡/复活与手动重算通过。两个单人固定根与独立构建官方比较，177个非计时字段和完整路线一致。原生输入、runId、失败与清理见[证据](archive/strategy/upstream-0513-merge-20261113-evidence.json)和[请求](archive/strategy/upstream-0513-merge-20261113-inputs.json)。旧测试与上游测试不是本轮证据。
 

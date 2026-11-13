@@ -1,12 +1,10 @@
 # 战斗路线求解器 / Combat Solver
 
-开发分支已合入官方 0.51.3 并通过定向验证，正在定版 0.51.4。当前源码需要游戏 0.113.0 与 RitsuLib 0.6.11 或更高版本，见[本轮记录](docs/archive/strategy/upstream-0513-merge-20261113.md)。以下下载入口仍指向已发布的 0.50.2。
-
 Combat Solver 是《杀戮尖塔 2》的战斗路线求解器，本 fork 支持单人求解和多人手动军师。它会在后台模拟当前手牌、牌堆、敌人行动、药水、遗物、选牌和跨回合状态，并在预算范围内给出推荐路线、预计战损与关键行动。
 
 单人模式下，玩家可以只查看建议，也可以让求解器执行当前回合，或连续接管整场战斗。多人模式只提供手动请求的建议。搜索不会修改游戏 RNG，也不会在后台操作真实战斗状态。
 
-多人 fork **[0.50.2 已发布](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.50.2)**，合入官方 **0.50.1 后续主线**（`5c773caa`）。更新单人选路、智能药水、手牌上限与面板显示；多人保持手动军师、烘焙手套选牌计算和十四敌方周期。见[中英更新日志](docs/releases/0.50.2-RELEASE_NOTES.md)、[发布凭证](docs/releases/0.50.2-PUBLISH.md)和[合并验证](docs/archive/strategy/upstream-0501-merge-20261009.md)。
+多人 fork **[0.51.4 已发布](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.51.4)**，合入官方 **0.51.3**（`06083d36`），适配游戏 **0.113.0 Beta** 和 RitsuLib **0.6.11+**。新增愚者、模式与新版战斗内容支持；单人沿官方搜索，多人保持手动军师、烘焙手套选牌计算和十四敌方周期。见[中英更新日志](docs/releases/0.51.4-RELEASE_NOTES.md)、[发布凭证](docs/releases/0.51.4-PUBLISH.md)和[合并验证](docs/archive/strategy/upstream-0513-merge-20261113.md)。
 
 **参与开发：** [社区任务入口](https://github.com/Torch1230/CombatSolver/issues/171)按每批五个主题发布故障修复与路线优化任务，每主题一至两个 0.47.x 代表包。[贡献指南](CONTRIBUTING.md)说明整批认领与 PR 流程，[夹具与脚手架指南](docs/community/testing-guide.md)说明差分、包回放与策略实验入口。
 
@@ -16,7 +14,7 @@ Combat Solver 是《杀戮尖塔 2》的战斗路线求解器，本 fork 支持�
 
 [多人军师](docs/multiplayer-advisor.md) 推荐本人的出牌和用药路线，最多推演十四个敌方回合。队友行动后自行决定何时重算；推演假设队友后续不主动出牌或用药，但仍结算其被动效果。多人功能目前供试用，尚未完成真实联机验收。
 
-**English UI:** Set the game language to English. Card pills and choices refresh during play; restart to refresh other existing windows. In single-player, use **Play turn** or **Auto: On**. Multiplayer fork **0.50.2 is released**, based on upstream **0.50.1 plus subsequent mainline changes**; see the [release record](docs/releases/0.50.2-PUBLISH.md) and [release notes](docs/releases/0.50.2-RELEASE_NOTES.md). You can calculate advice while Toasty Mittens awaits your exhaust choice, then confirm the choice yourself. Multiplayer retains manual advice, local contribution goals, up to fourteen enemy cycles, and doubled ordinary time and node limits. Teammates' future active actions are not modeled; live multiplayer is not yet verified. **Settings > Reports > Upload report** submits a bug report. Logs, raw errors, and some detailed diagnostics retain their original text.
+**English UI:** Set the game language to English. Card pills and choices refresh during play; restart to refresh other existing windows. In single-player, use **Play turn** or **Auto: On**. Multiplayer fork **0.51.4 is released**, based on upstream **0.51.3**, for game **0.113.0 Beta** and **RitsuLib 0.6.11+**; see the [release record](docs/releases/0.51.4-PUBLISH.md) and [release notes](docs/releases/0.51.4-RELEASE_NOTES.md). You can calculate advice while Toasty Mittens awaits your exhaust choice, then confirm the choice yourself. Multiplayer retains manual advice, local contribution goals, up to fourteen enemy cycles, and doubled ordinary time and node limits. Teammates' future active actions are not modeled; live multiplayer is not yet verified. **Settings > Reports > Upload report** submits a bug report. Logs, raw errors, and some detailed diagnostics retain their original text.
 
 界面跟随游戏语言：简体/繁体中文使用现有中文文案，其他语言使用英文。简化版不提供独立语言开关；卡牌胶囊、选牌和相关悬停说明支持运行中切换语言，其他既有窗口可通过重启统一刷新。
 
@@ -87,7 +85,7 @@ if (PreCombatForecastApi.IsAvailable)
 
 运行要求：
 
-- 《杀戮尖塔 2》`0.113.0 Beta`（当前源码）
+- 《杀戮尖塔 2》`0.113.0 Beta`
 - [RitsuLib](https://steamcommunity.com/sharedfiles/filedetails/?id=3747602295) `0.6.11` 或更高版本
 - 单人战斗；多人可使用手动军师试用功能
 

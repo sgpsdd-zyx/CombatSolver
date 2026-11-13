@@ -2,11 +2,11 @@
 
 [返回文档导航](../README.md)
 
-0.51.4 多人 fork 已合入官方 0.51.3 并通过定向验证，正在定版；见[中英玩家日志](0.51.4-RELEASE_NOTES.md)和[本轮记录](../archive/strategy/upstream-0513-merge-20261113.md)。
-
 按版本倒序列出已有玩家更新日志，包括历史草案。是否正式发布以对应 Git 标签和发布记录为准；未发布改动见 [开发笔记](../DEVELOPMENT_NOTES.md)。发布 ZIP 存放在仓库根目录的 `releases/`，此处只保存文档。
 
-**[多人 fork 0.50.2 已发布](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.50.2)**，基于官方 `5c773caa / 0.50.1 后续主线`，来源 `f7053994`。见[完整中英正文](0.50.2-RELEASE_NOTES.md)、[发布凭证](0.50.2-PUBLISH.md)和[本轮合并验证](../archive/strategy/upstream-0501-merge-20261009.md)。
+**[多人 fork 0.51.4 已发布](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.51.4)**，基于官方 `06083d36 / 0.51.3`，来源 `7f833c95`。支持游戏0.113.0 Beta与RitsuLib0.6.11+；见[完整中英正文](0.51.4-RELEASE_NOTES.md)、[发布凭证](0.51.4-PUBLISH.md)和[本轮合并验证](../archive/strategy/upstream-0513-merge-20261113.md)。
+
+上一公开版为 **[多人 fork 0.50.2](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.50.2)**，基于官方 `5c773caa / 0.50.1 后续主线`，来源 `f7053994`。见[完整中英正文](0.50.2-RELEASE_NOTES.md)、[发布凭证](0.50.2-PUBLISH.md)和[该批合并验证](../archive/strategy/upstream-0501-merge-20261009.md)。
 
 **[多人 fork 0.50.1 已发布](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.50.1)**，基于官方 `0d290fbe / 0.50.0`，来源 `9976da28`。合入单人搜索与智能药水优化、回合结算和兼容性修复，多人继续保持手动军师与贡献政策。见[完整中英正文](0.50.1-RELEASE_NOTES.md)、[发布凭证](0.50.1-PUBLISH.md)和[合并验证与归档](../archive/strategy/upstream-0500-merge-20261005.md)。上一公开 fork 为 [0.49.2](0.49.2-PUBLISH.md)。
 
@@ -18,7 +18,7 @@
 
 | 版本系列 | 更新日志 |
 |---|---|
-| 0.51 | [0.51.4（fork，定版中）](0.51.4-RELEASE_NOTES.md) · [0.51.3 官方原文](0.51.3-RELEASE_NOTES.md) · [0.51.2 官方原文](0.51.2-RELEASE_NOTES.md) · [0.51.1 · 0.113 适配 Part 2](0.51.1-RELEASE_NOTES.md) · [0.51.0 · 0.113 适配 Part 1](0.51.0-RELEASE_NOTES.md) |
+| 0.51 | [0.51.4（fork，已发布）](0.51.4-RELEASE_NOTES.md) · [0.51.3 官方原文](0.51.3-RELEASE_NOTES.md) · [0.51.2 官方原文](0.51.2-RELEASE_NOTES.md) · [0.51.1 · 0.113 适配 Part 2](0.51.1-RELEASE_NOTES.md) · [0.51.0 · 0.113 适配 Part 1](0.51.0-RELEASE_NOTES.md) |
 | 0.50 | [0.50.2（fork，已发布）](0.50.2-RELEASE_NOTES.md) · [0.50.1 官方原文](upstream/0.50.1-RELEASE_NOTES.md) · [0.50.1（fork，已发布）](0.50.1-RELEASE_NOTES.md) · [0.50.0 官方原文](0.50.0-RELEASE_NOTES.md) |
 | 0.49 | [0.49.4 官方原文](0.49.4-RELEASE_NOTES.md) · [0.49.3 官方原文](0.49.3-RELEASE_NOTES.md) · [0.49.2 官方原文](upstream/0.49.2-RELEASE_NOTES.md) · [0.49.1 官方原文](upstream/0.49.1-RELEASE_NOTES.md) · [0.49.1（fork，历史准备版）](0.49.1-PUBLISH.md) · [0.49.2（fork，已发布）](0.49.2-RELEASE_NOTES.md) · [0.49.0 官方原文](0.49.0-RELEASE_NOTES.md) |
 | 0.48 | [0.48.1（fork，已发布）](0.48.1-RELEASE_NOTES.md) · [0.48.1 官方原文](upstream/0.48.1-RELEASE_NOTES.md) · [0.48.0 官方原文](0.48.0-RELEASE_NOTES.md) |
