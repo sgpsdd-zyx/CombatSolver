@@ -2,6 +2,8 @@
 
 [返回文档导航](../README.md)
 
+0.51.4 多人 fork 正在合入官方 0.51.3，尚未发布；进度与依赖条件见[本轮记录](../archive/strategy/upstream-0513-merge-20261113.md)。
+
 按版本倒序列出已有玩家更新日志，包括历史草案。是否正式发布以对应 Git 标签和发布记录为准；未发布改动见 [开发笔记](../DEVELOPMENT_NOTES.md)。发布 ZIP 存放在仓库根目录的 `releases/`，此处只保存文档。
 
 **[多人 fork 0.50.2 已发布](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.50.2)**，基于官方 `5c773caa / 0.50.1 后续主线`，来源 `f7053994`。见[完整中英正文](0.50.2-RELEASE_NOTES.md)、[发布凭证](0.50.2-PUBLISH.md)和[本轮合并验证](../archive/strategy/upstream-0501-merge-20261009.md)。
@@ -16,6 +18,7 @@
 
 | 版本系列 | 更新日志 |
 |---|---|
+| 0.51 | [0.51.3](0.51.3-RELEASE_NOTES.md) · [0.51.2](0.51.2-RELEASE_NOTES.md) · [0.51.1 · 0.113 适配 Part 2](0.51.1-RELEASE_NOTES.md) · [0.51.0 · 0.113 适配 Part 1](0.51.0-RELEASE_NOTES.md) |
 | 0.50 | [0.50.2（fork，已发布）](0.50.2-RELEASE_NOTES.md) · [0.50.1 官方原文](upstream/0.50.1-RELEASE_NOTES.md) · [0.50.1（fork，已发布）](0.50.1-RELEASE_NOTES.md) · [0.50.0 官方原文](0.50.0-RELEASE_NOTES.md) |
 | 0.49 | [0.49.4 官方原文](0.49.4-RELEASE_NOTES.md) · [0.49.3 官方原文](0.49.3-RELEASE_NOTES.md) · [0.49.2 官方原文](upstream/0.49.2-RELEASE_NOTES.md) · [0.49.1 官方原文](upstream/0.49.1-RELEASE_NOTES.md) · [0.49.1（fork，历史准备版）](0.49.1-PUBLISH.md) · [0.49.2（fork，已发布）](0.49.2-RELEASE_NOTES.md) · [0.49.0 官方原文](0.49.0-RELEASE_NOTES.md) |
 | 0.48 | [0.48.1（fork，已发布）](0.48.1-RELEASE_NOTES.md) · [0.48.1 官方原文](upstream/0.48.1-RELEASE_NOTES.md) · [0.48.0 官方原文](0.48.0-RELEASE_NOTES.md) |

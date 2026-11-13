@@ -987,7 +987,7 @@ internal sealed partial class CombatBeamSolver
             return SearchBoundaryReason.None;
         SimPlayerCombatState playerState = simulator.State.GetPlayerCombatState(_player);
         IReadOnlyList<PlanCardChoice>? roundChoicePlans = turnStartChoices?
-            .Where(choice => choice.Effect != PlanChoiceEffect.ApplyKnowledgeCurse)
+            .Where(choice => choice.Effect != PlanChoiceEffect.ApplyKnowledgeCurse || choice.Timing != PlanChoiceTiming.EnemyTurn)
             .ToArray();
         TurnStartChoiceCursor roundChoices = new(roundChoicePlans);
         simulatedCombat.BeginActionChoices(roundChoices);
@@ -999,6 +999,7 @@ internal sealed partial class CombatBeamSolver
         cancellationToken.ThrowIfCancellationRequested();
         int roundHistoryEntryStart = simulator.History.Entries.Count;
         bool takingExtraTurn;
+        AbstractModel? extraTurnSource = null;
         bool hasActiveEmotionChip = false;
         if (IsMultiplayerAdvice)
         {
@@ -1062,7 +1063,7 @@ internal sealed partial class CombatBeamSolver
             }
         }
 
-        takingExtraTurn = Engine.InCombat.Mirrors.HookMirrors.ShouldTakeExtraTurn(simulator, simulatedCombat, _player);
+        takingExtraTurn = Engine.InCombat.Mirrors.HookMirrors.ShouldTakeExtraTurn(simulator, simulatedCombat, _player, out extraTurnSource);
         hasActiveEmotionChip = simulatedCombat.RelicsOf(_player).Any(relic => relic is MegaCrit.Sts2.Core.Models.Relics.EmotionChip && !relic.IsMelted);
         }
         SimCreatureState simulatedPlayer = simulator.State.GetCreature(_player.Creature);
@@ -1266,7 +1267,7 @@ internal sealed partial class CombatBeamSolver
             // just-finished turn becomes Emotion Chip's "previous turn" window.
             if (hasActiveEmotionChip)
                 simulatedCombat.RecordRelicRoundDamage(simulator, _player, roundHistoryEntryStart);
-            if (!Engine.InCombat.Mirrors.HookMirrors.AfterTakingExtraTurn(simulator, simulatedCombat, _player))
+            if (!Engine.InCombat.Mirrors.HookMirrors.AfterTakingExtraTurn(simulator, simulatedCombat, _player, extraTurnSource!))
                 return SearchBoundaryReason.PendingChoice;
         }
 

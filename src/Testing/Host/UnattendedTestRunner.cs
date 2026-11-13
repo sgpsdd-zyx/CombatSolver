@@ -212,7 +212,9 @@ internal sealed partial class UnattendedTestRunner
             if (_request.ExportBugReportAfterCombat)
             {
                 SetStage("export_bug_report_after_combat");
-                string directory = ProjectSettings.GlobalizePath("user://combat-solver-test-bug-reports");
+                string directory = _request.EvidenceDirectory is { Length: > 0 } evidence
+                    ? Path.Combine(evidence, "bug-reports")
+                    : ProjectSettings.GlobalizePath("user://combat-solver-test-bug-reports");
                 string archivePath = await CombatBugReportExporter.ExportCurrentAsync(directory);
                 using ZipArchive archive = ZipFile.OpenRead(archivePath);
                 AssertBugReportArchive(archive, "recent", _request.ExpectedBugReportControlMode);
@@ -667,7 +669,7 @@ internal sealed partial class UnattendedTestRunner
                     if (traces.Any(trace => trace.Stage == "Selected"))
                         throw new InvalidOperationException("首回合计划展示后、用户启动前，求解器已经替玩家完成选牌。");
                     if (player?.PlayerCombatState?.Phase != PlayerTurnPhase.Start
-                        || NPlayerHand.Instance?.IsInCardSelection != true)
+                        || !NativeChoiceSurface.IsVisible(traces.Last(trace => trace.Stage == "Visible").Surface))
                     {
                         throw new InvalidOperationException("首回合计划展示后没有停在原生选牌页面。");
                     }
@@ -1460,11 +1462,11 @@ internal sealed partial class UnattendedTestRunner
         {
             CardModel card = FindActualHandCard(player, playCheck.CardId, playCheck.Occurrence);
             using IDisposable? selector = playCheck.UseChoice
-                ? CardSelectCmd.PushSelector(new UnattendedCardSelector(
+                ? NativeTestCardSelectors.Push(new UnattendedCardSelector(
                     playCheck.ChoiceCardIds,
                     playCheck.ExpectedExcludedChoiceCardIds))
                 : null;
-            bool playable = card.TryManualPlay(ResolvePlayTarget(playCheck.Target, enemy));
+            bool playable = await PlayNativeCardAsync(card, ResolvePlayTarget(playCheck.Target, enemy));
             if (playable != playCheck.ExpectedPlayable)
             {
                 throw new InvalidOperationException(
@@ -1509,7 +1511,7 @@ internal sealed partial class UnattendedTestRunner
         if (check.PlayCardAfterMove is { } actualPlay)
         {
             IReadOnlyList<CardModel> cards = await InjectCardAsync(combatState, player, actualPlay);
-            if (cards.Count != 1 || !cards[0].TryManualPlay(enemy))
+            if (cards.Count != 1 || !await PlayNativeCardAsync(cards[0], enemy))
                 throw new InvalidOperationException($"无法在怪物行动后打出测试卡牌 {actualPlay.CardId}。");
             await RunManager.Instance.ActionExecutor.FinishedExecutingActions();
         }
@@ -1517,11 +1519,11 @@ internal sealed partial class UnattendedTestRunner
         {
             CardModel card = FindActualHandCard(player, playCheck.CardId, playCheck.Occurrence);
             using IDisposable? selector = playCheck.UseChoice
-                ? CardSelectCmd.PushSelector(new UnattendedCardSelector(
+                ? NativeTestCardSelectors.Push(new UnattendedCardSelector(
                     playCheck.ChoiceCardIds,
                     playCheck.ExpectedExcludedChoiceCardIds))
                 : null;
-            bool playable = card.TryManualPlay(ResolvePlayTarget(playCheck.Target, enemy));
+            bool playable = await PlayNativeCardAsync(card, ResolvePlayTarget(playCheck.Target, enemy));
             if (playable != playCheck.ExpectedPlayable)
             {
                 throw new InvalidOperationException(
@@ -1550,11 +1552,11 @@ internal sealed partial class UnattendedTestRunner
         {
             CardModel card = FindActualHandCard(player, playCheck.CardId, playCheck.Occurrence);
             using IDisposable? selector = playCheck.UseChoice
-                ? CardSelectCmd.PushSelector(new UnattendedCardSelector(
+                ? NativeTestCardSelectors.Push(new UnattendedCardSelector(
                     playCheck.ChoiceCardIds,
                     playCheck.ExpectedExcludedChoiceCardIds))
                 : null;
-            bool playable = card.TryManualPlay(ResolvePlayTarget(playCheck.Target, enemy));
+            bool playable = await PlayNativeCardAsync(card, ResolvePlayTarget(playCheck.Target, enemy));
             if (playable != playCheck.ExpectedPlayable)
             {
                 throw new InvalidOperationException(
@@ -1596,7 +1598,7 @@ internal sealed partial class UnattendedTestRunner
             HookPlayerChoiceContext context = new(player, player.NetId, GameActionType.Combat);
             using IDisposable? selector = check.AutoPrePlayChoiceCardIds.Length == 0
                 ? null
-                : CardSelectCmd.PushSelector(new UnattendedCardSelector(check.AutoPrePlayChoiceCardIds));
+                : NativeTestCardSelectors.Push(new UnattendedCardSelector(check.AutoPrePlayChoiceCardIds));
             await Hook.AfterAutoPrePlayPhaseEntered(context, combatState, player);
             await RunManager.Instance.ActionExecutor.FinishedExecutingActions();
         }
@@ -1604,11 +1606,11 @@ internal sealed partial class UnattendedTestRunner
         {
             CardModel card = FindActualHandCard(player, playCheck.CardId, playCheck.Occurrence);
             using IDisposable? selector = playCheck.UseChoice
-                ? CardSelectCmd.PushSelector(new UnattendedCardSelector(
+                ? NativeTestCardSelectors.Push(new UnattendedCardSelector(
                     playCheck.ChoiceCardIds,
                     playCheck.ExpectedExcludedChoiceCardIds))
                 : null;
-            bool playable = card.TryManualPlay(ResolvePlayTarget(playCheck.Target, enemy));
+            bool playable = await PlayNativeCardAsync(card, ResolvePlayTarget(playCheck.Target, enemy));
             if (playable != playCheck.ExpectedPlayable)
                 throw new InvalidOperationException(
                     $"实机中玩家回合准备后卡牌 {playCheck.CardId}#{playCheck.Occurrence} 可打出={playable}，预期 {playCheck.ExpectedPlayable}。");

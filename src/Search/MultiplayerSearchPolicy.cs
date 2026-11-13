@@ -48,6 +48,9 @@ internal sealed record MultiplayerSearchPolicy(
             DevelopmentStrategy = null,
             PortfolioExperiment = null,
             NoveltySearch = null,
+            UseBossTempoSearch = false,
+            BossTempoSearch = null,
+            PreserveBossTempoHpTies = false,
         };
     }
 }

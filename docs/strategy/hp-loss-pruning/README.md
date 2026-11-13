@@ -1,8 +1,8 @@
 # Shared HP-loss incumbent pruning
 
-This single-player change targets repeated work after an eligible complete victory is known: unavoidable early damage followed by safe turns, and fast victories rediscovered by portfolio members. Baseline: upstream 5d28a1cfa (0.49.3).
+This single-player policy targets repeated work after an eligible complete victory is known: unavoidable early damage followed by safe turns, and fast victories rediscovered by portfolio members. The current source integrates upstream 06083d36 (0.51.3); runtime validation is pending.
 
-The multiplayer fork keeps this policy only on the official single-player path. Multiplayer roots reject healing/growth certificates, and multiplayer policy and solvers do not reuse primary incumbent tables or bounds. Current ownership is in [the architecture map](../../ARCHITECTURE.md); current fork validation is in [the merge record](../../archive/strategy/upstream-0500-merge-20261005.md).
+The multiplayer fork keeps this policy only on the official single-player path. Multiplayer roots reject healing/growth certificates, and multiplayer policy and solvers do not reuse primary incumbent tables or bounds. Current ownership is in [the architecture map](../../ARCHITECTURE.md); current fork validation is in [the merge record](../../archive/strategy/upstream-0513-merge-20261113.md).
 
 ## Scope and safety
 
@@ -40,38 +40,18 @@ OFFLINE_HARNESS_RESOURCE_SETTINGS reads a test-only JSON containing GrowthBudget
 
 ## Evidence and limits
 
-Rebased validation is recorded in [the test matrix](../../TEST_MATRIX.md). Historical 0.49.1 results included expanded nodes 28,956 to 17,802 on the restored Infested Prisms root and 5,669 to 3,964 on a growth-copy fixture. These are prior-version evidence, not new 0.49.3 measurements.
+Current validation status is recorded in [the test matrix](../../TEST_MATRIX.md). Prior-version results, failures and limits are preserved in [the historical record](../../archive/strategy/single-player-hp-pruning-through-0513.md); they are not evidence for the current merge.
 
 Offline comparisons do not prove native automatic deployment, visible Steam frame time, all growth sources, all positive potion tiers or global optimality. The upstream comparison harness receives the same test-only resource-settings loader; upstream production source is unchanged.
 
-## 官方历史：同根成长路线续用
+## 首领卖血预算遍历
 
-完整零药胜利以完整结果参与下一次同根请求的选优，成长与遗物收益沿原政策比较；纯 HP 剪枝资格单独判断。固定成长根的敌方生命为 18，需要跨回合获胜，用于覆盖携带成长见证后的再次搜索。
+原版首领房间默认启用，包含第三幕双首领第一场。主搜索及原后处理完成后追加原配置节点和软时间的各1/5；达成既有完整HP目标时可以跳过。额外工作进入请求总账本，取消、接管及内存无进展沿原边界结束。时间是软限额，单次展开和最终回放可能超过截止点。
 
-```powershell
-$env:OFFLINE_HARNESS_RESOURCE_SETTINGS = 'coverage/fixtures/search/shared-growth-incumbent-settings.json'
-dotnet .local/tool-build/OfflineSearchHarness/bin/Release/net9.0/OfflineSearchHarness.dll --request coverage/fixtures/search/shared-growth-incumbent-reuse.json --label growth-reuse --out .local/growth-reuse --beam 45 --nodes 20000 --budget-ms 20000 --dop 1 --potion-policy Disabled --search-mode Coordinator --use-portfolio --verify-shared-incumbent-reuse
-```
+侦察以追加额度的至多1/3、3次排序偏差枚举首回合边界。当前回合动作和有正净潜力的强能力承诺先行，再按HP归一的中途分排序。动作Top-K和Beam席位由待处理栈替代，选牌枚举受原预算限制；独立转置键包含完整状态和剩余偏差，六维精确支配标签沿原实现。回调只冻结动作、状态键、消灭敌人数、用药量和排名，原模拟器随侦察释放。用药档0/1/2/3及以上各保留至多6个代表，优先已经兑现全部强制用药指令的前缀，再按消灭敌人数、用药量及排名选至多两个前缀，固定回放后由原Beam完成后续；两阶段共用追加余量。有限额度下仍可能漏解，不作全局最优或收敛保证。
 
-`02cf2283` 的该根第一次为第 2 回合零损胜利，第二次为未完成路线。修复后同根续用和政策变化失效通过。原生 `PRIMARY-INCUMBENT-REUSE` 连续三次请求、完整质量、严格增量回放和 live 隔离通过，直接证据见[测试矩阵](../../archive/testing/volume-16.md#同根成长胜利续用2026-10-05)。续用模式累计多次请求的执行时间，只用于正确性检查。
+生存按真实HP、回血和复活判断。累计损血可能因治疗超过开战HP，固定累计上限会剪掉这些可生存路线；预算界使用已有完整胜利和剩余治疗下界，并按用药、成长、遗物及追回资源分桶。等战损后续候选继续探索。新成员中途排序消除累计损血的重复计价和额外卖血罚分；致死投影的活节点继续参与出牌，实际死亡保留原判定。终局仍使用既有实际政策轴，跨成员的候选池相关Score尾键归零后比较。
 
-## 官方历史：单人共享损血剪枝（2026-10-05）
+原生遍历使用维护的 [卖血手牌](../../../coverage/fixtures/search/boss-tempo-native-cards.json)，由 `GENERATED-NOVELTY-SEARCH` 执行严格增量回放和完整部署。复跑时创建自有EvidenceDirectory，其中 `research-options.json` 写 `{"scheduler":"tempo"}` 并创建 `native.flag`；IRONCLAD / AEONGLASS_BOSS / Act2，seed `BOSSTEMPOBLOOD20261007`，敌HP28、玩家80/80、能量3，ClearPlayerHand/Piles，Beam1、1000节点、5000ms、DOP1、Disabled、NoGC0、Instant/0秒、Fixed、VerifyIncremental、Timeout120、CleanupInstanceOnExit。`tempo-portfolio` 配合 `smart.flag` 验证协调器追加额度，`beam` 配合该标记执行关闭成员的同条件对照。
 
-基线 `5d28a1cfa`（0.49.3），游戏 0.111.0 / RitsuLib 0.6.5。候选主项目及离线宿主 Release 构建均 0 警告、0 错误。初次构建缺 net48 引用程序集，使用本机已有 NuGet 引用包的 FrameworkPathOverride 后构建成功；未修改上游构建配置。
-
-本轮共享表20项、既有早回合界143项、成长资源35项、偷窃边界10项全部通过。成长小根的增量完整前缀回放及同根共享见证续用、政策变化失效检查通过。这些不是原生 actual/simulated 整场验收。
-
-独立 .NET 进程、Coordinator及组合开启、Disabled、DOP1、牌堆掩码0、No-GC关闭；两侧均 Boundary=None。上游仅在测试宿主移入相同 resource-settings 读取方法，生产源码保持基线；没有用关闭共享表代替整个上游基线。
-
-| 固定根 | 相同终局 | 展开：上游 → 候选 | 转移：上游 → 候选 | 单次搜索秒：上游 → 候选 |
-| --- | --- | --- | --- | --- |
-| Royalties 成长 | 胜利、收益1次/额度5、战损0、零药、第1回合 | 7572 → 11 | 20336 → 43 | 5.66 → 0.60 |
-| NotYet 回血哨兵 | 胜利、先回血再击杀、战损0、零药、第1回合 | 243 → 243 | 527 → 527 | 0.62 → 0.72 |
-
-成长根：REGENT / FUZZY_WURM_CRAWLER_WEAK / GROWTHBUCKET20261004，飞升0、敌HP6、玩家75/75、能量3、原生遗物。清空牌组与牌堆，手牌永久Royalties、2张StrikeRegent、4张DefendRegent；抽牌堆5张StrikeRegent。测试设置 `{"growthBudgets":{"royalties":5}}`。Beam45、20000节点、20000ms。回血根使用 `coverage/fixtures/scenarios/state/not-yet-heal-resource-0170.json`，Beam20、12000节点、20000ms。完整命令与边界入口见[复跑说明](#reproduction)。
-
-耗时是单次离线观察，回血哨兵本次多0.10秒，不能称为所有场景提速。未执行原问题包恢复、完整原生自动部署、可见Steam性能、全部成长来源及正数药水档整场验证。本机产物保存在忽略目录 `.local/pr-validation/`。
-
-## 官方历史：与PR #207的整合边界
-
-当前分支复用此共享表。组件证书根的等HP（含更晚回合）比较还须核对实际已用药水成本；缺失见证成本保留分支。无遗物目标时还可计入剩余必须显式用药次数乘以根冻结的最低药水成本；只有组件生成闭包排除新增药水来源才消费此界，未知分支保留。组件证书根的新共享消费严格分支回复证明，未知分支不借启发式重新认证；旧遭遇认证和其他已知原版根继续上游既有政策，不能写成新增严格证明。零HP额度遗物目标保留原有本地严格HP界，同HP目标路线继续搜索；正额度、成长和追回仍有原边界。原生证据及当前上游对照见[0.49.4整合记录](../../archive/performance/upstream-0500/pr207-upstream-0494-integration-20261005.md)。
+多人政策显式清空该成员、配置与等损保路开关；只保留官方单人路径。既有批次的对照、失败、原生兑现与研究缺口见[官方历史归档](../../archive/strategy/single-player-hp-pruning-through-0513.md)。本轮游戏 0.113 的编译和验证仍以[合并记录](../../archive/strategy/upstream-0513-merge-20261113.md)为准。

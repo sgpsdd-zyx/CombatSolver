@@ -232,7 +232,7 @@ internal static class MultiplayerContracts
     private static void VerifyExtraTurn(CombatState state, Player local, MainLoopContext loop,
         SearchPolicySnapshot policy)
     {
-        loop.RunUntilCompleted(PowerCmd.Apply<AmbergrisPower>(new ThrowingPlayerChoiceContext(),
+        loop.RunUntilCompleted(PowerCmd.Apply<ExtraTurnPower>(new ThrowingPlayerChoiceContext(),
             local.Creature, 1, local.Creature, null), TimeSpan.FromSeconds(20), "Extra turn setup");
         var root = CombatRootSnapshot.Capture(state, multiplayerAdvisor: true);
         var solver = new CombatBeamSolver(root, SolverDisplayNames.Capture(state),

@@ -31,13 +31,16 @@ internal sealed partial class CombatBeamSolver
         if (!PlayerTurnEndLifecycle.RunPhaseTwo(simulator, combat, participants)) return false;
         if (!CorePowerSupport.ApplyEnemyDeathPowers(simulator, combat, combat.KnownEnemies, deaths)) return false;
         // Native extra-turn queries run after both turn-end phases have settled.
-        Player[] extra = players.Where(player => combat.IsPlayerActiveForHooks(player)
-            && CombatSolver.Engine.InCombat.Mirrors.HookMirrors.ShouldTakeExtraTurn(simulator, combat, player)).ToArray();
-        combat.AdvisorExtraTurnPlayers = extra.ToArray();
-        foreach (Player player in extra)
-            if (!CombatSolver.Engine.InCombat.Mirrors.HookMirrors.AfterTakingExtraTurn(simulator, combat, player))
+        List<(Player Player, AbstractModel Source)> extra = [];
+        foreach (Player player in players)
+            if (combat.IsPlayerActiveForHooks(player)
+                && CombatSolver.Engine.InCombat.Mirrors.HookMirrors.ShouldTakeExtraTurn(simulator, combat, player, out var source))
+                extra.Add((player, source!));
+        combat.AdvisorExtraTurnPlayers = extra.Select(item => item.Player).ToArray();
+        foreach (var item in extra)
+            if (!CombatSolver.Engine.InCombat.Mirrors.HookMirrors.AfterTakingExtraTurn(simulator, combat, item.Player, item.Source))
                 return false;
-        extraTurn = extra.Length > 0;
+        extraTurn = extra.Count > 0;
         return true;
     }
 

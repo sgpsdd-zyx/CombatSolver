@@ -71,6 +71,9 @@ internal static class MultiplayerUpstreamContracts
             UseBeamWidthPortfolio = true,
             UseNoveltyPortfolio = true,
             PrimaryIncumbents = soloIncumbents,
+            UseBossTempoSearch = true,
+            BossTempoSearch = new(3),
+            PreserveBossTempoHpTies = true,
         });
         Check(policy.EarlyTurnExplorationDepth == 0
             && policy.EarlyTurnExplorationBudgetMilliseconds == 0
@@ -78,6 +81,8 @@ internal static class MultiplayerUpstreamContracts
             && !policy.UseBeamWidthPortfolio && !policy.UseNoveltyPortfolio,
             "multiplayer_discards_solo_exploration_and_script_policy");
         Check(policy.PrimaryIncumbents == null, "multiplayer_discards_solo_incumbent_table");
+        Check(!policy.UseBossTempoSearch && policy.BossTempoSearch == null && !policy.PreserveBossTempoHpTies,
+            "multiplayer_discards_boss_tempo_search_and_hp_ties");
         var root = CombatRootSnapshot.Capture(state, multiplayerAdvisor: true);
         Check(!root.HasOnlyPostCombatHealing && !root.CanCertifyRemainingHealing
             && !root.UsesKnownNativeHealingPolicy && root.InitialRemainingHealingUpperBound == int.MaxValue
@@ -193,6 +198,32 @@ internal static class MultiplayerUpstreamContracts
             StateFingerprint parentKey = Key(parent), childKey = Key(child);
             Check(parentKey != childKey && childKey == Key(child.Fork()) && parentKey == Key(parent),
                 "production_snapshot_distinguishes_history_and_preserves_forks");
+            string Stamp(CombatPredictionSimulator value) => ContinuationStamp.CapturePredicted(local, value,
+                root.StartTurnNumber, root.Forecast, root.StartTurnNumber).StateText;
+            foreach (Player owner in state.Players)
+            {
+                var branch = root.ForkSimulator();
+                string originalStamp = Stamp(branch);
+                StateFingerprint originalKey = Key(branch);
+                branch.State.GetPlayerCombatState(owner).GainArrowSlot();
+                Check(Key(branch) != originalKey && Stamp(branch) != originalStamp,
+                    "arrow_slot_changes_party_key_and_stamp_" + owner.NetId);
+                var fork = branch.Fork();
+                Check(Key(fork) == Key(branch) && Stamp(fork) == Stamp(branch)
+                    && !ReferenceEquals(fork.State.GetPlayerCombatState(owner).Arrows[0],
+                        branch.State.GetPlayerCombatState(owner).Arrows[0]),
+                    "arrow_slot_fork_remaps_owner_state_" + owner.NetId);
+                branch = root.ForkSimulator();
+                originalStamp = Stamp(branch);
+                originalKey = Key(branch);
+                branch.Rng.NonCombatGeneration(owner).NextInt(100);
+                Check(Key(branch) != originalKey && Stamp(branch) != originalStamp
+                    && Key(branch.Fork()) == Key(branch),
+                    "noncombat_rng_changes_party_key_and_stamp_" + owner.NetId);
+                Check(Key(root.ForkSimulator()) == originalKey
+                    && Stamp(root.ForkSimulator()) == originalStamp,
+                    "party_113_mutations_preserve_root_" + owner.NetId);
+            }
         }
         ContinuationStamp frozen = ContinuationStamp.CapturePredicted(local, root.ForkSimulator(),
             root.StartTurnNumber, root.Forecast, root.StartTurnNumber);

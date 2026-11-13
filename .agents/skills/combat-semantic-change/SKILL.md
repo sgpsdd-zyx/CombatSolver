@@ -11,7 +11,7 @@ description: 修改 CombatSolver 的卡牌、Power、遗物、药水、球、怪
 
 死亡玩家可留在阵容并保留 Power，活动 Hook 枚举不等于完整状态。多人根完整捕获，逐玩家 Hook 资格统一由 `SimPlayerCombatState.HooksActive` 持有；`SimulatedCombatState.Multiplayer` 通过该字段过滤并使监听缓存失效，随 Fork、生产键及 ContinuationStamp 保存，不另设停用集合；死亡清理后停用、治疗复活时恢复，不能以 HP=0 提前停用而阻断救命效果。领域 Hook 补偿使用 `PowersForHooks`／逐玩家资格，完整快照与原生每回合能力初值继续保留残留状态。修改此边界以 `dead-teammate` 合同覆盖死亡、救命、复活、原生下一回合和根／Fork 隔离；不把其结果外推真实网络。
 
-遗物归属要分别核对根库存、逐持有者触发和显示来源。佩尔之眼的侧回合开始回调也观察未参加额外回合的持有者，不能先按参与者过滤而漏掉资格清除；持有者获得其他来源的额外回合时，原生 `AfterTakingExtraTurn` 同样消耗其佩尔之眼。多人在全队阶段二结束后共用 `HookMirrors.ShouldTakeExtraTurn`／`AfterTakingExtraTurn`，按活动玩家判断并逐参与者结算一次。分支状态和 Fork 用原有逐遗物状态表。最终路线触发记录以持有者、遗物和摘要去重，显示归属不进入战斗等价键。
+遗物归属要分别核对根库存、逐持有者触发和显示来源。帕尔之眼的侧回合开始回调也观察未参加额外回合的持有者，不能先按参与者过滤而漏掉资格清除。0.113 额外回合先判断 Early，再判断普通阶段，后置只消耗选中的来源。多人在全队阶段二结束后冻结各活动玩家的选定来源，再逐参与者执行一次对应后置效果；不能恢复旧版遍历全部来源的消费行为。分支状态和 Fork 用原有逐遗物状态表。最终路线触发记录以持有者、遗物和摘要去重，显示归属不进入战斗等价键。
 
 `MultiplayerCycleCheckpoint` 仅保存敌方周期结束、下一玩家准备前的原始数值；由不可变短链引用前周期，Fork 可共享旧记录，子分支追加不能回写父分支。它不持有 Model 或模拟器，也不决定战斗语义；政策历史保留于搜索标签。变更捕获时点须验证开始阶段自损归属、额外玩家回合不追加周期、完整原生状态和 Fork 隔离。 多人贡献伤害在已有 `RecordDamageReceived` 入口按 dealer / PetOwner 归属；原版 `UnblockedDamage` 已经排除过杀，不能再次相减。根历史只在主线程读取，模拟计数按值 Fork，严格增量另核对计数/检查点；阶段政策不进入战斗键或 ContinuationStamp。
 
@@ -84,7 +84,7 @@ CombatRootSnapshot.Capture（主线程根）
 
 `BeforeSideTurnStartMirrors` 与 `AfterPlayerTurnStartMirrors` 同样在根捕获前登记并冻结；单人和多人回合入口共用对应 Hook facade。无外部监听者的原版批次路径仍使用 `PowersForHooks` 与逐玩家遗物资格，不能因合入单人新入口恢复死亡队友的效果。外部登记路径按每阶段原生监听顺序派发；队友选择继续形成边界，不由军师代选。
 
-额外回合的 `ShouldTakeExtraTurn` / `AfterTakingExtraTurn` 由 `ExtraTurnMirrors` 登记原版及第三方单项效果。判断按原生顺序短路，后置回调先固定成员再依次结算；选择暂停沿原动作重放。状态读写使用分支 Power 和遗物记录；原生顺序、完整状态和 Fork 隔离用 `EXTRA-TURN-MIRROR-ORDER` 验证。
+额外回合的 `ShouldTakeExtraTurnEarly` / `ShouldTakeExtraTurn` / `AfterTakingExtraTurn` 由 `ExtraTurnMirrors` 登记原版及第三方单项效果。先遍历 Early，再遍历普通判断，首个命中来源获得资格，后置仅消费该来源；选择暂停沿原动作重放。状态读写使用分支 Power 和遗物记录；原生顺序、完整状态和 Fork 隔离用 `EXTRA-TURN-MIRROR-ORDER` 验证。
 
 ## 3. 状态所有权清单
 
@@ -170,3 +170,5 @@ writeLive 和 writePredicted，复用 store 的 Fork context。状态描述按�
 - 金币 Modify/AfterModify 使用带 combat child 的跑局监听表，AfterGoldGained 使用 null-child 跑局序列。只在主线程冻结根成员，资源与 HP 消费分支状态；未知 override 不能依 manifest 的 Ignored 分类放行。最大生命增加后只回复实际封顶差值，并经过通用 Heal 的 HP 回调；原生严格差分覆盖小数、金币修正顺序、owner、熔化、封顶和成长/长期资源记录。
 
 - Hook 参与位图的金币方法族共用一位时，只允许保守保留更多监听成员；精确 dispatch 仍按方法查表。不得用超过 ulong 位宽的移位产生别名，也不得借共用位跳过有回调的成员。
+
+- 箭、额外回合与新伤害回调共用 `AdditionalCallbacks` 参与位，精确派发分别由所属 registry 持有。新增 Hook 同步参与元数据；回合准备的纯原版快捷路径与扩展路径共用单项结算体，最小合同通过正式 Hook facade 验证。

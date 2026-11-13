@@ -1,5 +1,6 @@
 using System.Text;
 using STS2RitsuLib;
+using CombatSolver.Engine.Common;
 using CombatSolver.Engine.InCombat.Simulation;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Entities.Players;
@@ -36,6 +37,11 @@ internal sealed partial record ContinuationStamp
             SimulatedCombatState.AppendLiveTurnCardHistory(text, state, player);
             SimulatedCombatState.AppendLiveStatefulRelics(text, player);
             RelicPredictionStateSupport.AppendLiveContinuation(text, player);
+            SimulatedCombatState.AppendLiveMelodyState(text, player, state);
+            SimulatedCombatState.AppendLiveShowOffState(text, player);
+            FoolStateSupport.AppendState(text, player, pcs.Arrows,
+                state.Creatures.SelectMany(creature => creature.Powers));
+            AppendRngState(text.Append(";peer_non_combat_generation="), player.PlayerRng.NonCombatGeneration.CaptureState());
         }
     }
 
@@ -70,6 +76,10 @@ internal sealed partial record ContinuationStamp
             combat.AppendPredictedTurnCardHistory(text, player);
             combat.AppendPredictedStatefulRelics(text, player);
             RelicPredictionStateSupport.AppendPredictedContinuation(text, simulator, combat.RelicsOf(player));
+            combat.AppendMelodyState(text, player);
+            combat.AppendShowOffState(text, player, simulator);
+            FoolStateSupport.AppendState(text, player, pcs.Arrows, combat.EffectivePowers(), simulator);
+            AppendRngState(text.Append(";peer_non_combat_generation="), simulator.Rng.NonCombatGenerationState(player));
         }
     }
 }

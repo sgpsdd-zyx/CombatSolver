@@ -478,7 +478,7 @@ internal static class MultiplayerHorizonContracts
                         && ExperimentalCompare(a, c) > 0)
                     throw new InvalidOperationException("Horizon ordering is not a consistent total preorder.");
 
-            native(PowerCmd.Apply<AmbergrisPower>(new ThrowingPlayerChoiceContext(),
+            native(PowerCmd.Apply<ExtraTurnPower>(new ThrowingPlayerChoiceContext(),
                 root.PlayerIdentity.Creature, 1, root.PlayerIdentity.Creature, null));
             root = CombatRootSnapshot.Capture(state, multiplayerAdvisor: true);
             solver = new CombatBeamSolver(root, SolverDisplayNames.Capture(state),

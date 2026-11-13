@@ -247,7 +247,7 @@ internal sealed partial class UnattendedTestRunner
                     && !combat.IsStarting
                     && !combat.IsInProgress
                     && combat.DebugOnlyGetState() == null
-                    && CardSelectCmd.Selector == null
+                    && NativeTestCardSelectors.Current == null
                     && !SolverController.IsSearching
                     && !SolverController.IsDeploying
                     && host.RootSceneContainer?.CurrentScene is NMainMenu;
@@ -323,7 +323,7 @@ internal sealed partial class UnattendedTestRunner
                     && CombatManager.Instance.IsInProgress
                     && !CombatManager.Instance.IsOverOrEnding
                     && CombatManager.Instance.DebugOnlyGetState() != null
-                    && CardSelectCmd.Selector == null
+                    && NativeTestCardSelectors.Current == null
                     && !SolverController.IsSearching
                     && !SolverController.IsDeploying;
                 if (!idle)

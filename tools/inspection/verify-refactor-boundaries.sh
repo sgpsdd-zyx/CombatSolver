@@ -870,7 +870,7 @@ src/Search/CombatBeamSolver.ParallelExpansion.cs	new(_run.ExpansionBatchPool)
 src/Search/CombatBeamSolver.Phases.cs	SearchWaveMemoryPolicy.ParentWaveCapacity(
 src/Engine/InCombat/Simulation/CombatPredictionRngSet.cs	private sealed class FrozenStream(PredictionRngState state)
 src/Engine/InCombat/Simulation/CombatPredictionRngSet.cs	new FrozenStream(_mutable.CaptureState())
-src/Testing/Host/UnattendedTestRunner.Assertions.cs	AssertLazyRngFork(scenario.CombatState.RunState.Rng)
+src/Testing/Host/UnattendedTestRunner.Assertions.cs	AssertLazyRngFork(scenario.CombatState.RunState.Rng, scenario.Player)
 src/Search/CombatBeamSolver.StateEvaluation.cs	AppendRngState(ref key, simulator.Rng.ShuffleState);
 src/Runtime/ContinuationStamp.cs	simulator.Rng.ShuffleState
 src/Search/CombatBeamSolver.StateEvaluation.cs	AppendRngState(ref key, simulator.Rng.CombatCardGenerationState);
@@ -987,6 +987,7 @@ expected_beam_files=(
     CombatBeamSolver.MultiplayerRound.cs
     CombatBeamSolver.MultiplayerTurnSetup.cs
     CombatBeamSolver.NoveltySearch.cs
+    CombatBeamSolver.BossTempo.cs
     CombatBeamSolver.Transpositions.cs
     CombatBeamSolver.OrderedMutationRetention.cs
     CombatBeamSolver.ParallelExpansion.cs
@@ -1258,7 +1259,7 @@ require_fixed "$repository_root/src/Search/StrategicHpRecoveryBound.KnownSources
 beam_phases_path="$search_root/CombatBeamSolver.Phases.cs"
 require_fixed "$beam_retention_facade_path" '_strictHpBoundWithRelicTargets = CanUseStrictHpRelicBound(root, policy)' 'missing common relic healing bound:'
 require_fixed "$beam_retention_facade_path" 'targets.All(target => target.HpAllowance == 0)' 'missing zero-allowance objective gate:'
-require_fixed "$beam_retention_facade_path" 'allowTurnTieBound: !_strictHpBoundWithRelicTargets' 'equal-HP counter routes must keep later turns:'
+require_fixed "$beam_retention_facade_path" 'allowTurnTieBound: policy.BossTempoSearch == null && !_strictHpBoundWithRelicTargets' 'equal-HP counter routes must keep later turns:'
 require_fixed "$search_root/CombatSearchCoordinator.cs" '!CombatBeamSolver.CanUseStrictHpRelicBound(root, policy)' 'shared incumbent must retain objective eligibility:'
 require_fixed "$search_root/CombatSearchCoordinator.PlanSearch.cs" 'if (!root.CanCertifyRemainingHealing' 'speculative early plans require the existing certified-root schedule:'
 require_fixed \
@@ -1317,9 +1318,14 @@ src/Search/CombatPlan.cs	public CombatTerminalStamp? TerminalStamp { get; } = te
 src/Search/CombatBeamSolver.Terminal.cs	combatEndedTurn = node.Snapshot.CombatEndedTurn;
 src/Search/SimulatedCombatState.cs	.Select(PredictionUtils.CloneModelForSimulation)
 src/Engine/InCombat/Mirrors/Hooks/Card/AfterCardGeneratedForCombatMirrors.cs	GetAeonglassWitherUpgradeCount(monster.Creature)
-src/Prediction/MonsterSpawnSupport.cs	.SelectMany(combat.RelicsOf)
+src/Prediction/MonsterSpawnSupport.cs	HookMirrors.AfterCreatureAddedToCombat(simulator, creature)
+src/Search/SimulatedCombatState.CardLifecycle.cs	HookMirrors.BeforeHandDraw(simulator, player, choices)
+src/Search/SimulatedCombatState.cs	Rules = source.Rules
+src/Prediction/DominionPredictionSupport.cs	Run.SetValue(clone, null)
+src/Prediction/NativeCombatRulesScope.cs	[ThreadStatic] private static CombatRulesSnapshot? _current
 src/Search/SimulatedCombatState.cs	foreach (BadgeModel badge in inner.BadgeModels)
-src/Search/SimulatedCombatState.cs	MultiplayerScalingRunStateField.SetValue(detachedMultiplayerScaling, null)
+src/Search/SimulatedCombatState.cs	RunModelRunStateField.SetValue(detached, null)
+src/Search/SimulatedCombatState.cs	RunModelCombatStateField.SetValue(detached, null)
 src/Engine/InCombat/Mirrors/Hooks/Block/ModifyBlockMultiplicativeMirrors.cs	registry.Register<MultiplayerScalingModel>(HandleMultiplayerScaling)
 src/Prediction/PredictionModHookSubscriberCapture.cs	ModHelper.IterateAllRunStateSubscribers(runState)
 src/Engine/Common/PredictionUtils.cs	PredictionModModelSupport.CloneCardAttachedModels(source, clone)
@@ -1783,14 +1789,17 @@ src/Search/MultiplayerSearchPolicy.cs|StopAtAcceptableBattleHpLoss = false
 src/Search/MultiplayerSearchPolicy.cs|EarlyTurnExplorationDepth = 0
 src/Search/MultiplayerSearchPolicy.cs|EarlyTurnExplorationBudgetMilliseconds = 0
 src/Search/MultiplayerSearchPolicy.cs|DevelopmentStrategy = null
+src/Search/MultiplayerSearchPolicy.cs|UseBossTempoSearch = false
+src/Search/MultiplayerSearchPolicy.cs|BossTempoSearch = null
+src/Search/MultiplayerSearchPolicy.cs|PreserveBossTempoHpTies = false
 src/Runtime/CombatRootSnapshot.cs|ComponentHealingRejection = IsMultiplayerAdvisor ? "multiplayer"
 src/Runtime/CombatRootSnapshot.cs|ExhaustingGrowthUpperBound = IsMultiplayerAdvisor ? null
 src/Search/CombatBeamSolver.cs|_useSharedPrimaryIncumbents = policy.Multiplayer == null
 src/Search/CombatBeamSolver.cs|_primaryIncumbents = policy.Multiplayer != null
 src/Search/CombatBeamSolver.Retention.cs|=> !IsMultiplayerAdvice && (!_hasGrowthTargets || _strictHpBoundWithRelicTargets)
 src/Search/MultiplayerSearchPolicy.cs|PrimaryIncumbents = null
-src/Search/CombatBeamSolver.MultiplayerRound.cs|HookMirrors.ShouldTakeExtraTurn(simulator, combat, player)
-src/Search/CombatBeamSolver.MultiplayerRound.cs|HookMirrors.AfterTakingExtraTurn(simulator, combat, player)
+src/Search/CombatBeamSolver.MultiplayerRound.cs|HookMirrors.ShouldTakeExtraTurn(simulator, combat, player, out var source)
+src/Search/CombatBeamSolver.MultiplayerRound.cs|HookMirrors.AfterTakingExtraTurn(simulator, combat, item.Player, item.Source)
 src/Search/CombatBeamSolver.cs|_developmentStrategy = policy.Multiplayer == null
 src/Search/CombatBeamSolver.cs|_planCommitment = policy.Multiplayer == null ? planCommitment : null
 src/Search/CombatBeamSolver.ExpansionPlan.cs|if (!IsMultiplayerAdvice && node.ActionCount == 0 && !card.Original.CanPlayTargeting(target))
@@ -1895,7 +1904,7 @@ for member in 'private sealed record KnownRoutePrefix(' 'private static MoveStat
 done
 
 extra_turn_registry="$repository_root/src/Engine/InCombat/Mirrors/Hooks/TurnEnd/ExtraTurnMirrors.cs"
-for registration in 'ShouldRegistry.Register<AmbergrisPower>' 'ShouldRegistry.Register<PaelsEye>' 'AfterRegistry.Register<AmbergrisPower>' 'AfterRegistry.Register<PaelsEye>'; do
+for registration in 'ShouldRegistry.Register<ExtraTurnPower>' 'EarlyRegistry.Register<PaelsEye>' 'AfterRegistry.Register<ExtraTurnPower>' 'AfterRegistry.Register<PaelsEye>'; do
     require_fixed "$extra_turn_registry" "$registration" 'extra-turn native effects must use the shared registry'
 done
 for legacy in 'ShouldTakeExtraPlayerTurn(' 'ConsumeExtraTurnSources('; do

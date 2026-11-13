@@ -75,6 +75,13 @@ internal sealed partial class SimulatedCombatState
                 SetStatefulRelicState(relic, new StatefulRelicState(0, state.Current));
                 break;
             }
+            case ConductorsBaton:
+                SetStatefulRelicState(relic, default);
+                break;
+            case TormentousCollar when _currentRoomType == RoomType.Elite && GetPlayerTurnNumber(relic.Owner) <= 1:
+                foreach (Creature enemy in HittableEnemies)
+                    ApplyPowerFromSource(typeof(WeakPower), enemy, relic.DynamicVars.Weak.IntValue, relic.Owner.Creature, null);
+                break;
             case BagOfMarbles:
                 if (GetPlayerTurnNumber(relic.Owner) <= 1)
                 {
@@ -176,6 +183,7 @@ internal sealed partial class SimulatedCombatState
                     break;
                 }
                 case BloodVial when turn <= 1:
+                case BathTowel when turn <= 1:
                 case FakeBloodVial when turn <= 1:
                     simulator.Heal(player.Creature, relic.DynamicVars.Heal.BaseValue);
                     break;
@@ -187,7 +195,7 @@ internal sealed partial class SimulatedCombatState
                             player,
                             relic.DynamicVars.Cards.IntValue,
                             simulator.Rng.CombatCardGeneration,
-                            _cardMultiplayerConstraint)
+                            _cardMultiplayerConstraint, Rules)
                         .ToArray();
                     foreach (PredictedCard option in options)
                         option.MutablePreview.AddKeyword(CardKeyword.Retain);
@@ -292,7 +300,7 @@ internal sealed partial class SimulatedCombatState
                             player,
                             1,
                             simulator.Rng.CombatCardGeneration,
-                            _cardMultiplayerConstraint)
+                            _cardMultiplayerConstraint, Rules)
                         .First();
                     generated.SetToFreeThisTurn();
                     simulator.AddGeneratedCardsToCombat(
@@ -429,6 +437,10 @@ internal sealed partial class SimulatedCombatState
                     SetStatefulRelicState(relic, state with { Previous = 1 });
                     break;
                 }
+                case ExerciseMat when turn <= 1:
+                    ApplyPowerFromSource(typeof(StretchPower), relic.Owner.Creature,
+                        relic.DynamicVars["StretchPower"].IntValue, relic.Owner.Creature, null);
+                    break;
                 case PaelsTears:
                 {
                     StatefulRelicState state = GetStatefulRelicState(relic);
@@ -503,7 +515,7 @@ internal sealed partial class SimulatedCombatState
                 relic.Owner,
                 count,
                 simulator.Rng.CombatCardGeneration,
-                _cardMultiplayerConstraint)
+                _cardMultiplayerConstraint, Rules)
             .ToList();
         AddGeneratedRelicCards(simulator, relic, generated, setFreeThisTurn);
     }

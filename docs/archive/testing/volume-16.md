@@ -14,7 +14,7 @@ PowerShell：`tools/testing/run-unattended-test.ps1 -ScenarioId EXTRA-TURN-MIRRO
 
 PowerShell：`tools/testing/run-unattended-test.ps1 -ScenarioId PRIMARY-INCUMBENT-REUSE -CharacterId REGENT -Seed GROWTHBUCKET20261004 -EnemyCurrentHp 18 -TimeoutSeconds 120 -CleanupInstanceOnExit`。Bash 使用 `--scenario-id PRIMARY-INCUMBENT-REUSE --character-id REGENT --seed GROWTHBUCKET20261004 --enemy-current-hp 18 --timeout-seconds 120 --cleanup-instance-on-exit`。
 
-同根离线复跑使用[固定根](../../../coverage/fixtures/search/shared-growth-incumbent-reuse.json)与[成长额度](../../../coverage/fixtures/search/shared-growth-incumbent-settings.json)，命令见[策略说明](../../strategy/hp-loss-pruning/README.md#官方历史同根成长路线续用)。该合同验证原生建局上的搜索与回放；整场部署及可见 Steam 性能分别验收。
+同根离线复跑使用[固定根](../../../coverage/fixtures/search/shared-growth-incumbent-reuse.json)与[成长额度](../../../coverage/fixtures/search/shared-growth-incumbent-settings.json)，命令见[策略说明](../strategy/single-player-hp-pruning-through-0513.md#官方历史同根成长路线续用)。该合同验证原生建局上的搜索与回放；整场部署及可见 Steam 性能分别验收。
 
 两项 PR 集成后的 `SHARED-GROWTH-AUTO-DEPLOY` Passed，runId `929ad5193d8d47c0b9cdddf14d027e78`，23.095秒。使用上述固定根的牌序，原生全自动在第2回合获胜，玩家75/75、零药，首动ROYALTIES，第2回合续用，计划外重算0。固定 Beam45/20000节点/20000ms/DOP1，严格增量验证，Instant/0秒部署；实例已删除。该模式的耗时用于正确性验收。独立离线回血哨兵本轮仍为先NOT_YET再击杀、战损0，展开243/转移527，单次搜索0.65秒；保持该固定根的质量与工作量。
 

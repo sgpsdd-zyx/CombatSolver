@@ -28,7 +28,7 @@ internal sealed partial class UnattendedTestRunner
             await ClearPlayerPilesAsync(player);
             await RelicCmd.Obtain(ModelDb.Relic<PaelsEye>().ToMutable(), player);
         }
-        await PowerCmd.Apply<AmbergrisPower>(new ThrowingPlayerChoiceContext(), local.Creature, 1, local.Creature, null);
+        await PowerCmd.Apply<ExtraTurnPower>(new ThrowingPlayerChoiceContext(), local.Creature, 1, local.Creature, null);
         await InjectCardAsync(combat, local, new() { CardId = "DEFEND_IRONCLAD", Pile = "Hand" });
         CardModel card = local.PlayerCombatState!.Hand.Cards.Single();
         (int energy, int stars) = await card.SpendResources();
@@ -36,33 +36,38 @@ internal sealed partial class UnattendedTestRunner
             new ResourceInfo { EnergySpent = energy, EnergyValue = energy, StarsSpent = stars, StarValue = stars },
             skipCardPileVisuals: true);
         PaelsEye localEye = local.GetRelic<PaelsEye>()!;
-        if (localEye.ShouldTakeExtraTurn(local) || !Hook.ShouldTakeExtraTurn(combat, local))
+        if (localEye.ShouldTakeExtraTurnEarly(local) || !Hook.ShouldTakeExtraTurn(combat, local, out var actualSource)
+            || actualSource is not ExtraTurnPower)
             throw new InvalidOperationException("Extra-turn fixture did not isolate the alternate turn source.");
         CombatRootSnapshot root = CombatRootSnapshot.Capture(combat, multiplayerAdvisor: true);
         CombatPredictionSimulator predicted = root.ForkSimulator();
         SimulatedCombatState shadow = (SimulatedCombatState)predicted.State.CombatState;
-        if (!Engine.InCombat.Mirrors.HookMirrors.AfterTakingExtraTurn(predicted, shadow, local))
+        if (!Engine.InCombat.Mirrors.HookMirrors.ShouldTakeExtraTurn(predicted, shadow, local, out var predictedSource)
+            || predictedSource is not ExtraTurnPower
+            || !Engine.InCombat.Mirrors.HookMirrors.AfterTakingExtraTurn(predicted, shadow, local, predictedSource))
             throw new InvalidOperationException("The native extra-turn source unexpectedly requested a choice.");
         ContinuationStamp expected = ContinuationStamp.CapturePredicted(local, predicted, root.StartTurnNumber,
             root.Forecast, root.StartTurnNumber);
-        await Hook.AfterTakingExtraTurn(combat, local);
+        await Hook.AfterTakingExtraTurn(combat, local, actualSource);
         ContinuationStamp actual = ContinuationStamp.CaptureLive(combat, multiplayerAdvisor: true);
         bool rootFrozen = ContinuationStamp.CapturePredicted(local, root.ForkSimulator(), root.StartTurnNumber,
             root.Forecast, root.StartTurnNumber).StateText == root.ContinuationStamp.StateText;
-        bool ownConsumed = !shadow.IsPaelsEyeUnused(shadow.RelicsOf(local).OfType<PaelsEye>().Single());
+        bool sourceConsumed = shadow.GetAmount<ExtraTurnPower>(local.Creature) == 0;
+        bool ownUntouched = shadow.IsPaelsEyeUnused(shadow.RelicsOf(local).OfType<PaelsEye>().Single())
+            && !localEye._usedThisCombat;
         bool peerUntouched = shadow.IsPaelsEyeUnused(shadow.RelicsOf(peer).OfType<PaelsEye>().Single())
             && !peer.GetRelic<PaelsEye>()!._usedThisCombat;
         bool equal = expected.StateText == actual.StateText;
         _writer.WriteGeneratedArtifact("multiplayer-relic-extra-turn-source.json", new
         {
-            equal, rootFrozen, ownConsumed, peerUntouched, localEye._usedThisCombat,
+            equal, rootFrozen, sourceConsumed, ownUntouched, peerUntouched, localEye._usedThisCombat,
             differences = expected.DescribeDifferences(actual, maximumDifferences: 12),
             expected = expected.StateText, actual = actual.StateText,
         });
-        if (!equal || !rootFrozen || !ownConsumed || !peerUntouched)
-            throw new InvalidOperationException("Alternate extra-turn source did not consume only the owner's Pael's Eye: "
+        if (!equal || !rootFrozen || !sourceConsumed || !ownUntouched || !peerUntouched)
+            throw new InvalidOperationException("Alternate extra-turn source did not preserve both players' Pael's Eyes: "
                 + string.Join("; ", expected.DescribeDifferences(actual, maximumDifferences: 12)));
-        _completedChecks.Add("MultiplayerRelicExtraTurnSource:NativeFullState:OwnConsumed:PeerUntouched:FrozenRoot");
+        _completedChecks.Add("MultiplayerRelicExtraTurnSource:NativeFullState:SourceConsumed:BothEyesUntouched:FrozenRoot");
     }
 
     private async Task AssertMultiplayerRelicOwnershipAsync(CombatState combat)
@@ -230,9 +235,9 @@ internal sealed partial class UnattendedTestRunner
                     if (player.GetRelic<PaelsEye>() is not { } liveEye) continue;
                     PaelsEye eye = shadow.RelicsOf(player).OfType<PaelsEye>().Single();
                     Check(name + ":eligibility:" + player.NetId,
-                        shadow.ShouldTriggerPaelsEye(eye) == liveEye.ShouldTakeExtraTurn(player),
+                        shadow.ShouldTriggerPaelsEye(eye) == liveEye.ShouldTakeExtraTurnEarly(player),
                         new { owner = player.NetId, predicted = shadow.ShouldTriggerPaelsEye(eye),
-                            actual = liveEye.ShouldTakeExtraTurn(player), liveEye._usedThisCombat,
+                            actual = liveEye.ShouldTakeExtraTurnEarly(player), liveEye._usedThisCombat,
                             liveEye._wasOwnerPartOfLastPlayerTurn });
                 }
                 Check(name + ":frozen_root", ContinuationStamp.CapturePredicted(local, root.ForkSimulator(),
