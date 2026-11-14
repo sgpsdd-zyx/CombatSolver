@@ -1,6 +1,6 @@
 # 多人军师
 
-当前公开 fork **[0.51.4](releases/0.51.4-PUBLISH.md)** 基于官方 **0.51.3**（`06083d36`），面向游戏 **0.113.0 Beta** 和 **RitsuLib 0.6.11+**。交付状态统一见[版本索引](releases/README.md)，本轮证据见[合并记录](archive/strategy/upstream-0513-merge-20261113.md)。多人继续使用本机贡献目标、无来源伤害折算与手动重算，支持烘焙手套原生选牌期间计算。
+当前公开 fork **[0.51.6](releases/0.51.6-PUBLISH.md)** 基于官方 **0.51.5**（`3677d4ca`），面向游戏 **0.113.0 Beta** 和 **RitsuLib 0.6.11+**。交付状态统一见[版本索引](releases/README.md)，本轮证据见[合并记录](archive/strategy/upstream-0515-merge-20261114.md)。多人继续使用本机贡献目标、无来源伤害折算与手动重算，支持烘焙手套原生选牌期间计算。
 
 多人使用三敌方周期的本机贡献目标、伤害/代价前沿与最长十四周期的条件续行。无来源实际伤害按阶段人数折算参与选路，个人贡献仍按真实归属。阶段目标的[实施依据](archive/strategy/multiplayer-cooperative-planning-20260922/implementation.md)与[伤害归属实验](archive/strategy/multiplayer-shared-damage-20260923/implementation.md)保留原始版本和结论范围。
 
@@ -93,4 +93,4 @@
 
 ## 验证与历史
 
-本轮验证、失败与未验证项见[官方 0.51.3 合并记录](archive/strategy/upstream-0513-merge-20261113.md)。早期扣血阈值、旧覆盖政策及版本验证统一移入[历史说明](archive/multiplayer/advisor-history-through-0481.md)，不作为当前选路规则。
+本轮验证、失败与未验证项见[官方 0.51.5 合并记录](archive/strategy/upstream-0515-merge-20261114.md)。早期扣血阈值、旧覆盖政策及版本验证统一移入[历史说明](archive/multiplayer/advisor-history-through-0481.md)，不作为当前选路规则。
