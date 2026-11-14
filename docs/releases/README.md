@@ -4,7 +4,7 @@
 
 按版本倒序列出已有玩家更新日志，包括历史草案。是否正式发布以对应 Git 标签和发布记录为准；未发布改动见 [开发笔记](../DEVELOPMENT_NOTES.md)。发布 ZIP 存放在仓库根目录的 `releases/`，此处只保存文档。
 
-**多人 fork 0.51.7 待发布**：双愚者同目标箭矢归属修复。见[中英正文](0.51.7-RELEASE_NOTES.md)和[验证归档](../archive/issues/multiplayer-arrows-20261114.md)。
+**[多人 fork 0.51.7 已发布](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.51.7)**，来源 `19072797`，修复双愚者同目标箭矢归属导致的搜索失败。见[中英正文](0.51.7-RELEASE_NOTES.md)、[发布凭证](0.51.7-PUBLISH.md)和[验证归档](../archive/issues/multiplayer-arrows-20261114.md)。上一公开fork为0.51.6，官方基线仍为0.51.5。
 
 **[多人 fork 0.51.6 已发布](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.51.6)**，基于官方`3677d4ca / 0.51.5`，来源`1b4e0b79`。见[完整中英正文](0.51.6-RELEASE_NOTES.md)、[发布凭证](0.51.6-PUBLISH.md)和[该批合并验证](../archive/strategy/upstream-0515-merge-20261114.md)。上一公开fork为0.51.4。
 
@@ -22,7 +22,7 @@
 
 | 版本系列 | 更新日志 |
 |---|---|
-| 0.51 | [0.51.6（fork，已发布）](0.51.6-RELEASE_NOTES.md) · [0.51.5 官方原文](0.51.5-RELEASE_NOTES.md) · [0.51.4 官方原文](upstream/0.51.4-RELEASE_NOTES.md) · [0.51.4（fork，已发布）](0.51.4-RELEASE_NOTES.md) · [0.51.3 官方原文](0.51.3-RELEASE_NOTES.md) · [0.51.2 官方原文](0.51.2-RELEASE_NOTES.md) · [0.51.1 · 0.113 适配 Part 2](0.51.1-RELEASE_NOTES.md) · [0.51.0 · 0.113 适配 Part 1](0.51.0-RELEASE_NOTES.md) |
+| 0.51 | [0.51.7（fork，已发布）](0.51.7-RELEASE_NOTES.md) · [0.51.6（fork，已发布）](0.51.6-RELEASE_NOTES.md) · [0.51.5 官方原文](0.51.5-RELEASE_NOTES.md) · [0.51.4 官方原文](upstream/0.51.4-RELEASE_NOTES.md) · [0.51.4（fork，已发布）](0.51.4-RELEASE_NOTES.md) · [0.51.3 官方原文](0.51.3-RELEASE_NOTES.md) · [0.51.2 官方原文](0.51.2-RELEASE_NOTES.md) · [0.51.1 · 0.113 适配 Part 2](0.51.1-RELEASE_NOTES.md) · [0.51.0 · 0.113 适配 Part 1](0.51.0-RELEASE_NOTES.md) |
 | 0.50 | [0.50.2（fork，已发布）](0.50.2-RELEASE_NOTES.md) · [0.50.1 官方原文](upstream/0.50.1-RELEASE_NOTES.md) · [0.50.1（fork，已发布）](0.50.1-RELEASE_NOTES.md) · [0.50.0 官方原文](0.50.0-RELEASE_NOTES.md) |
 | 0.49 | [0.49.4 官方原文](0.49.4-RELEASE_NOTES.md) · [0.49.3 官方原文](0.49.3-RELEASE_NOTES.md) · [0.49.2 官方原文](upstream/0.49.2-RELEASE_NOTES.md) · [0.49.1 官方原文](upstream/0.49.1-RELEASE_NOTES.md) · [0.49.1（fork，历史准备版）](0.49.1-PUBLISH.md) · [0.49.2（fork，已发布）](0.49.2-RELEASE_NOTES.md) · [0.49.0 官方原文](0.49.0-RELEASE_NOTES.md) |
 | 0.48 | [0.48.1（fork，已发布）](0.48.1-RELEASE_NOTES.md) · [0.48.1 官方原文](upstream/0.48.1-RELEASE_NOTES.md) · [0.48.0 官方原文](0.48.0-RELEASE_NOTES.md) |
