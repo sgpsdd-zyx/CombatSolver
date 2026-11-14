@@ -1,0 +1,725 @@
+{
+  "date": "2026-11-14",
+  "upstream": "3677d4cac2407e332f1419741878e635c1ce2ee3",
+  "forkVersion": "0.51.6",
+  "gameVersion": "0.113.0",
+  "ritsuLibVersion": "0.6.12",
+  "native": [
+    {
+      "runId": "macos-9d0e24ccfbc24c65a50194111f020ec6",
+      "scenarioId": "TIMBER-KILL-SPLASH",
+      "status": "Passed",
+      "error": null,
+      "completedChecks": [
+        "Chomper:SCREECH_MOVE",
+        "NativeOutcome:combatEnded=False:turn=1:hp=77:maxHp=77"
+      ],
+      "input": {
+        "schemaVersion": 1,
+        "characterId": "FOOL",
+        "encounterId": "CHOMPERS_NORMAL",
+        "seed": "MERGE051520261114",
+        "enemyCurrentHp": 999,
+        "timeoutSeconds": 120,
+        "headlessFastModeForTest": "Instant",
+        "enableNoGcRegionForTest": false,
+        "stopAfterCombatRootSnapshotAssertion": true,
+        "scenarioId": "TIMBER-KILL-SPLASH",
+        "monsterMoveChecks": [
+          {
+            "clearAllPowersBeforeMove": true,
+            "clearAllRelicsBeforeMove": true,
+            "clearPlayerPilesBeforeMove": true,
+            "playerEnergyBefore": 99,
+            "monsterId": "Chomper",
+            "moveId": "SCREECH_MOVE",
+            "enemyHpBefore": 20,
+            "cardsBeforeMove": [
+              {
+                "cardId": "TIMBER",
+                "pile": "Hand"
+              }
+            ],
+            "cardPlayChecksAfterMove": [
+              {
+                "cardId": "TIMBER",
+                "target": "Enemy"
+              }
+            ]
+          }
+        ],
+        "runId": "macos-9d0e24ccfbc24c65a50194111f020ec6",
+        "exitOnComplete": false
+      }
+    },
+    {
+      "runId": "macos-04ebf0142d5c4824afbb2a28018845e0",
+      "scenarioId": "CROSS-CHARACTER-ARROW",
+      "status": "Passed",
+      "error": null,
+      "completedChecks": [
+        "CrossCharacterArrow:FirstShootEntry:SingleSlot:NativeState:Fork:LiveAdvance",
+        "NativeOutcome:combatEnded=False:turn=1:hp=80:maxHp=80"
+      ],
+      "input": {
+        "schemaVersion": 1,
+        "characterId": "IRONCLAD",
+        "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+        "seed": "MERGE051520261114",
+        "enemyCurrentHp": 200,
+        "timeoutSeconds": 120,
+        "headlessFastModeForTest": "Instant",
+        "enableNoGcRegionForTest": false,
+        "stopAfterCombatRootSnapshotAssertion": true,
+        "scenarioId": "CROSS-CHARACTER-ARROW",
+        "runId": "macos-04ebf0142d5c4824afbb2a28018845e0",
+        "exitOnComplete": false
+      }
+    },
+    {
+      "runId": "macos-de0833230ff8417eaa7cb24b87bb386d",
+      "scenarioId": "WATERFALL-ARROW-TRANSITION",
+      "status": "Passed",
+      "error": null,
+      "completedChecks": [
+        "WaterfallGiant:PRESSURIZE_MOVE",
+        "NativeOutcome:combatEnded=False:turn=1:hp=77:maxHp=77"
+      ],
+      "input": {
+        "schemaVersion": 1,
+        "characterId": "FOOL",
+        "encounterId": "WATERFALL_GIANT_BOSS",
+        "seed": "MERGE051520261114",
+        "enemyCurrentHp": 999,
+        "timeoutSeconds": 120,
+        "headlessFastModeForTest": "Instant",
+        "enableNoGcRegionForTest": false,
+        "stopAfterCombatRootSnapshotAssertion": true,
+        "scenarioId": "WATERFALL-ARROW-TRANSITION",
+        "monsterMoveChecks": [
+          {
+            "clearAllPowersBeforeMove": true,
+            "clearAllRelicsBeforeMove": true,
+            "clearPlayerPilesBeforeMove": true,
+            "playerEnergyBefore": 99,
+            "monsterId": "WaterfallGiant",
+            "moveId": "PRESSURIZE_MOVE",
+            "enemyHpBefore": 10,
+            "cardsBeforeMove": [
+              {
+                "cardId": "HOBBLING_SHOT",
+                "pile": "Hand"
+              }
+            ],
+            "cardPlayChecksAfterMove": [
+              {
+                "cardId": "HOBBLING_SHOT",
+                "target": "Enemy",
+                "assertForkableAfterPlay": true
+              }
+            ],
+            "expectedEnemyPowers": {
+              "IMPALED_POWER": 1,
+              "WEAK_POWER": 1,
+              "VULNERABLE_POWER": 1
+            }
+          }
+        ],
+        "runId": "macos-de0833230ff8417eaa7cb24b87bb386d",
+        "exitOnComplete": false
+      }
+    },
+    {
+      "runId": "macos-900735fc76b24574910a750bb5def106",
+      "scenarioId": "CATASTROPHE-EMPTY-DRAW",
+      "status": "Passed",
+      "error": null,
+      "completedChecks": [
+        "FuzzyWurmCrawler:INHALE",
+        "FuzzyWurmCrawler:INHALE",
+        "NativeOutcome:combatEnded=False:turn=1:hp=77:maxHp=77"
+      ],
+      "input": {
+        "schemaVersion": 1,
+        "characterId": "FOOL",
+        "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+        "seed": "MERGE051520261114",
+        "enemyCurrentHp": 999,
+        "timeoutSeconds": 120,
+        "headlessFastModeForTest": "Instant",
+        "enableNoGcRegionForTest": false,
+        "stopAfterCombatRootSnapshotAssertion": true,
+        "scenarioId": "CATASTROPHE-EMPTY-DRAW",
+        "monsterMoveChecks": [
+          {
+            "clearAllPowersBeforeMove": true,
+            "clearAllRelicsBeforeMove": true,
+            "clearPlayerPilesBeforeMove": true,
+            "playerEnergyBefore": 99,
+            "monsterId": "FuzzyWurmCrawler",
+            "moveId": "INHALE",
+            "enemyHpBefore": 999,
+            "cardsBeforeMove": [
+              {
+                "cardId": "CATASTROPHE",
+                "pile": "Hand",
+                "upgradeLevels": 0
+              }
+            ],
+            "cardPlayChecksAfterMove": [
+              {
+                "cardId": "CATASTROPHE",
+                "target": "None"
+              }
+            ]
+          },
+          {
+            "clearAllPowersBeforeMove": true,
+            "clearAllRelicsBeforeMove": true,
+            "clearPlayerPilesBeforeMove": true,
+            "playerEnergyBefore": 99,
+            "monsterId": "FuzzyWurmCrawler",
+            "moveId": "INHALE",
+            "enemyHpBefore": 999,
+            "cardsBeforeMove": [
+              {
+                "cardId": "CATASTROPHE",
+                "pile": "Hand",
+                "upgradeLevels": 1
+              }
+            ],
+            "cardPlayChecksAfterMove": [
+              {
+                "cardId": "CATASTROPHE",
+                "target": "None"
+              }
+            ]
+          }
+        ],
+        "runId": "macos-900735fc76b24574910a750bb5def106",
+        "exitOnComplete": false
+      }
+    },
+    {
+      "runId": "macos-fa74dba4364a42c08e787925eaad10c7",
+      "scenarioId": "CARD-CONTINUATION-ENCORE",
+      "status": "Passed",
+      "error": null,
+      "completedChecks": [
+        "CardContinuationContract:AllOptions:FullStateRngHistory:Identity:SiblingMutation:Revisit:DOP2:Cancel:InvalidChoice",
+        "CardContinuationContract:NativeDaggerThrow:FullContinuation",
+        "CardContinuationContract:Encore:ActiveCardRemap:NativeCompletion",
+        "NativeOutcome:combatEnded=False:turn=1:hp=70:maxHp=70"
+      ],
+      "input": {
+        "schemaVersion": 1,
+        "characterId": "SILENT",
+        "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+        "seed": "MERGE051520261114",
+        "enemyCurrentHp": 999,
+        "timeoutSeconds": 120,
+        "headlessFastModeForTest": "Instant",
+        "enableNoGcRegionForTest": false,
+        "stopAfterCombatRootSnapshotAssertion": true,
+        "scenarioId": "CARD-CONTINUATION-ENCORE",
+        "runId": "macos-fa74dba4364a42c08e787925eaad10c7",
+        "exitOnComplete": false
+      }
+    },
+    {
+      "runId": "macos-f9f433c543084e12bd3d9b0e2c77ca65",
+      "scenarioId": "TURN-POWER-ORDERING",
+      "status": "Passed",
+      "error": null,
+      "completedChecks": [
+        "TurnPowerOrder:PrepTime:HiddenRoots:BothOrders:ExactNativeState",
+        "Ecstasy:BatchTransform:OrderedHand:FullRng:ExactNativeState",
+        "EnemyTurnEnd:Plating:RegenBeforeDoom:ExactNativeState",
+        "NativeOutcome:combatEnded=False:turn=1:hp=77:maxHp=77"
+      ],
+      "input": {
+        "schemaVersion": 1,
+        "characterId": "FOOL",
+        "encounterId": "NIBBITS_WEAK",
+        "seed": "MERGE051520261114",
+        "enemyCurrentHp": 200,
+        "timeoutSeconds": 120,
+        "headlessFastModeForTest": "Instant",
+        "enableNoGcRegionForTest": false,
+        "stopAfterCombatRootSnapshotAssertion": true,
+        "scenarioId": "TURN-POWER-ORDERING",
+        "runId": "macos-f9f433c543084e12bd3d9b0e2c77ca65",
+        "exitOnComplete": false
+      }
+    },
+    {
+      "runId": "macos-938a9a19b9dd4d3294bb4444daaa1a8b",
+      "scenarioId": "BEAT-DOWN-DYNAMIC-TARGET",
+      "status": "Passed",
+      "error": null,
+      "completedChecks": [
+        "BeatDown:SeekingEdge:DynamicTarget:AllEnemies:FullRng:ExactNativeState",
+        "NativeOutcome:combatEnded=False:turn=1:hp=75:maxHp=75"
+      ],
+      "input": {
+        "schemaVersion": 1,
+        "characterId": "REGENT",
+        "encounterId": "NIBBITS_WEAK",
+        "seed": "MERGE051520261114",
+        "enemyCurrentHp": 200,
+        "timeoutSeconds": 120,
+        "headlessFastModeForTest": "Instant",
+        "enableNoGcRegionForTest": false,
+        "stopAfterCombatRootSnapshotAssertion": true,
+        "scenarioId": "BEAT-DOWN-DYNAMIC-TARGET",
+        "runId": "macos-938a9a19b9dd4d3294bb4444daaa1a8b",
+        "exitOnComplete": false
+      }
+    },
+    {
+      "runId": "macos-3ceddd2e809b48158b2fd9b6458501ff",
+      "scenarioId": "TERMINAL-POWER-PREFIX",
+      "status": "Passed",
+      "error": null,
+      "completedChecks": [
+        "PowerPrefix:OrdinaryPowerAvailable:EarlyVictoryStopsSuffix",
+        "NativeOutcome:combatEnded=False:turn=1:hp=80:maxHp=80"
+      ],
+      "input": {
+        "schemaVersion": 1,
+        "characterId": "IRONCLAD",
+        "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+        "seed": "MERGE051520261114",
+        "enemyCurrentHp": 200,
+        "timeoutSeconds": 120,
+        "headlessFastModeForTest": "Instant",
+        "enableNoGcRegionForTest": false,
+        "stopAfterCombatRootSnapshotAssertion": true,
+        "scenarioId": "TERMINAL-POWER-PREFIX",
+        "runId": "macos-3ceddd2e809b48158b2fd9b6458501ff",
+        "exitOnComplete": false
+      }
+    },
+    {
+      "runId": "macos-f473d33609a44b51b7d85459e4b08d44",
+      "scenarioId": "DOOM-RETAINED-BLOCK",
+      "status": "Passed",
+      "error": null,
+      "completedChecks": [
+        "Doom:RetainedSegment:EarlyPlatingBlock:ExactNativeState",
+        "NativeOutcome:combatEnded=False:turn=1:hp=66:maxHp=66"
+      ],
+      "input": {
+        "schemaVersion": 1,
+        "characterId": "NECROBINDER",
+        "encounterId": "DECIMILLIPEDE_ELITE",
+        "seed": "MERGE051520261114",
+        "enemyCurrentHp": 100,
+        "timeoutSeconds": 120,
+        "headlessFastModeForTest": "Instant",
+        "enableNoGcRegionForTest": false,
+        "stopAfterCombatRootSnapshotAssertion": true,
+        "scenarioId": "DOOM-RETAINED-BLOCK",
+        "runId": "macos-f473d33609a44b51b7d85459e4b08d44",
+        "exitOnComplete": false
+      }
+    },
+    {
+      "runId": "macos-5dbe4e39294d4d6eb9a82c9b40f86d7d",
+      "scenarioId": "TURN-SETUP-UI-PEEK",
+      "status": "Passed",
+      "error": null,
+      "completedChecks": [
+        "TurnSetupControls:StopInitial:Restart:StopManual:NativeInputAvailable",
+        "TurnSetupControls:NativePlayReached:BusyFlagsCleared",
+        "TurnSetupControls:PeekBeforeTakeover:NativeHandSelectionAccepted",
+        "NativeOutcome:combatEnded=False:turn=1:hp=70:maxHp=70"
+      ],
+      "input": {
+        "schemaVersion": 1,
+        "characterId": "SILENT",
+        "encounterId": "GREMLIN_MERC_NORMAL",
+        "seed": "MERGE051520261114",
+        "enemyCurrentHp": 999,
+        "timeoutSeconds": 120,
+        "headlessFastModeForTest": "Instant",
+        "enableNoGcRegionForTest": false,
+        "stopAfterCombatRootSnapshotAssertion": false,
+        "scenarioId": "TURN-SETUP-UI-PEEK",
+        "forceShortSearchOnly": true,
+        "shortSearchBudgetOverrideMilliseconds": 1500,
+        "relics": [
+          {
+            "relicId": "TOASTY_MITTENS",
+            "addWithoutObtainedEffects": true
+          }
+        ],
+        "runId": "macos-5dbe4e39294d4d6eb9a82c9b40f86d7d",
+        "exitOnComplete": false
+      }
+    },
+    {
+      "runId": "macos-5e8dc59d5d154ba18061a88ce2c831b6",
+      "scenarioId": "TOASTY-QOL-SINGLE-STEP-EXECUTE",
+      "status": "Passed",
+      "error": null,
+      "completedChecks": [
+        "NoGcConfigurationApplied:Configured=False/16000000000:Established=0:Actual=False/0:ExpectedFallback=False:AllowedFallback=False:Latency=Interactive",
+        "PotionOutcomeNamesAndRewardGate",
+        "InitialWorldlineSummary",
+        "InitialPolicy:SoldHp=9;Potion=0,Saved=0/0,Rejected=0;Theft=PreserveResources,Outstanding=0;Turns=5;Shuffles=2;Unmirrored=0;HpLost=9;ProjectedBattleHpLost=9;Block=5/15;Pruned=0;Total=987.8ms/282249568B;Gc=256.1ms/14.5msMax;Frame=55.1msMax/1Over50;CacheHits=0;ChoiceBranches=4887;Actions=3;OnlyDeath=False;CombatEndedTurn=5;DeathTurn=-;ActEndingBoss=False;BossHpRelief=None",
+        "SingleStepBoundary:Turn=2:Surface=Hand:Selected=0:UiTurn=2",
+        "SingleStepTakeover:Mode=ExecuteCurrentTurn:Turn=2:DelayMs=27:Reused=true:UnexpectedReplans=0",
+        "NativeOutcome:combatEnded=False:turn=2:hp=61:maxHp=70"
+      ],
+      "input": {
+        "schemaVersion": 1,
+        "scenarioId": "TOASTY-QOL-SINGLE-STEP-EXECUTE",
+        "characterId": "SILENT",
+        "encounterId": "GREMLIN_MERC_NORMAL",
+        "seed": "TOASTY-QOL-SINGLE-STEP-EXECUTE",
+        "relics": [
+          {
+            "relicId": "TOASTY_MITTENS",
+            "addWithoutObtainedEffects": true
+          }
+        ],
+        "enemyCurrentHp": 999,
+        "forceShortSearchOnly": true,
+        "shortSearchBudgetOverrideMilliseconds": 3000,
+        "singleStepAfterInitialSearch": true,
+        "singleStepResumeModeForTest": "ExecuteCurrentTurn",
+        "timeoutSeconds": 120,
+        "headlessFastModeForTest": "Instant",
+        "enableNoGcRegionForTest": false,
+        "runId": "macos-5e8dc59d5d154ba18061a88ce2c831b6",
+        "exitOnComplete": false
+      }
+    },
+    {
+      "runId": "macos-cad8c0324ddc45d4ad4f3669e43cf085",
+      "scenarioId": "MULTIPLAYER-TOASTY-CONTROLS",
+      "status": "Passed",
+      "error": null,
+      "completedChecks": [
+        "MultiplayerTurnSetup:StopDrainsWorker:NativeInputPreserved",
+        "MultiplayerTurnSetup:ChoiceDisplayed:NativePeerActionClearsCurrent:AdviceStale:ManualFreshRoot",
+        "MultiplayerTurnSetup:ManualDifferentChoiceDuringWorker:ResultStale:NoAutomation",
+        "NativeOutcome:combatEnded=False:turn=1:hp=80:maxHp=80"
+      ],
+      "input": {
+        "schemaVersion": 1,
+        "scenarioId": "MULTIPLAYER-TOASTY-CONTROLS",
+        "characterId": "IRONCLAD",
+        "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+        "seed": "MULTIPLAYER-TOASTY-CONTROLS",
+        "relics": [
+          {
+            "relicId": "TOASTY_MITTENS",
+            "addWithoutObtainedEffects": true
+          }
+        ],
+        "preserveNativeCombatStateForTest": true,
+        "fixedSearchBudget": true,
+        "searchBudgetOverrideMilliseconds": 1000,
+        "searchMaxDegreeOfParallelismForTest": 1,
+        "headlessFastModeForTest": "Instant",
+        "timeoutSeconds": 120,
+        "runId": "macos-cad8c0324ddc45d4ad4f3669e43cf085",
+        "exitOnComplete": false
+      }
+    },
+    {
+      "runId": "macos-3ad46780b2db4852aba09d63ec640887",
+      "scenarioId": "MULTIPLAYER-RELIC-OWNERSHIP",
+      "status": "Passed",
+      "error": null,
+      "completedChecks": [
+        "MultiplayerRelicOwnership:PeerOnly:LocalExtra:BothExtra:NativeFullState:Fork:DisplayOwner",
+        "NativeOutcome:combatEnded=False:turn=5:hp=500:maxHp=500"
+      ],
+      "input": {
+        "schemaVersion": 1,
+        "scenarioId": "MULTIPLAYER-RELIC-OWNERSHIP",
+        "characterId": "IRONCLAD",
+        "encounterId": "FOGMOG_NORMAL",
+        "enemyCurrentHp": 1000,
+        "seed": "MPRELICOWNER20260920",
+        "timeoutSeconds": 120,
+        "headlessFastModeForTest": "Instant",
+        "fixedSearchBudget": true,
+        "searchBudgetOverrideMilliseconds": 1000,
+        "searchMaxDegreeOfParallelism": 1,
+        "runId": "macos-3ad46780b2db4852aba09d63ec640887",
+        "exitOnComplete": true
+      }
+    }
+  ],
+  "managed": {
+    "compatibility": {
+      "status": "Passed",
+      "checks": [
+        "multiplayer_skips_single_player_growth_targets",
+        "multiplayer_discards_solo_exploration_and_script_policy",
+        "multiplayer_discards_solo_incumbent_table",
+        "multiplayer_discards_boss_tempo_search_and_hp_ties",
+        "multiplayer_root_excludes_all_solo_healing_bounds",
+        "multiplayer_root_rejects_component_and_growth_certificates",
+        "solo_retains_official_plan_commitment",
+        "multiplayer_rejects_solo_plan_commitment",
+        "multiplayer_solver_rejects_injected_solo_victory_bound",
+        "multiplayer_solver_disables_component_smart_potion_pruning",
+        "multiplayer_has_no_upgrade_credit_capacity",
+        "history_keeps_per_effect_owner_scope",
+        "multiplayer_history_key_matches_scan_0",
+        "multiplayer_history_key_matches_scan_1",
+        "history_key_changes_only_in_child",
+        "history_key_survives_fork",
+        "gold_axe_observes_both_finished_plays",
+        "multiplayer_preserves_card_value_without_solo_calculated_attack_guidance",
+        "production_snapshot_distinguishes_history_and_preserves_forks",
+        "arrow_slot_changes_party_key_and_stamp_2",
+        "arrow_slot_fork_remaps_owner_state_2",
+        "noncombat_rng_changes_party_key_and_stamp_2",
+        "party_113_mutations_preserve_root_2",
+        "arrow_slot_changes_party_key_and_stamp_1",
+        "arrow_slot_fork_remaps_owner_state_1",
+        "noncombat_rng_changes_party_key_and_stamp_1",
+        "party_113_mutations_preserve_root_1",
+        "peer_pet_changes_party_key_and_stamp",
+        "peer_pet_fork_and_root_isolation",
+        "peer_melody_fixture_has_history",
+        "extra_turn_clears_sitting_out_peer_melodies",
+        "improvement_applies_to_owner_without_advisor_growth_credit",
+        "fork_cannot_create_multiplayer_upgrade_credit",
+        "mad_science_native_full_party_state_equal",
+        "root_unchanged_after_native_play",
+        "hand_limits_native_full_party_stamp_equal_10_12",
+        "hand_limits_native_full_party_stamp_equal_11_12",
+        "local_hand_limit_changes_production_key_and_continuation",
+        "hand_limits_native_full_party_stamp_equal_10_13",
+        "peer_hand_limit_changes_production_key_and_continuation",
+        "captured_party_hand_limits_remain_frozen_across_live_change_and_fork",
+        "captured_party_hand_limits_remain_frozen_across_live_change_and_fork",
+        "captured_party_hand_limits_remain_frozen_across_live_change_and_fork",
+        "entropic_source_procured_1",
+        "entropic_generated_without_pending_choice_1",
+        "entropic_source_keeps_own_cost_1",
+        "entropic_recipient_inventory_filled_1",
+        "entropic_free_cost_and_inventory_are_fork_local_1",
+        "ordinary_replacement_procured_1",
+        "ordinary_replacement_does_not_inherit_free_cost_1",
+        "entropic_source_procured_0",
+        "entropic_generated_without_pending_choice_0",
+        "entropic_source_keeps_own_cost_0",
+        "entropic_recipient_inventory_filled_0",
+        "entropic_free_cost_and_inventory_are_fork_local_0",
+        "ordinary_replacement_procured_0",
+        "ordinary_replacement_does_not_inherit_free_cost_0",
+        "entropic_branches_preserve_root_and_live",
+        "gold_alive_owner_does_not_mutate_live",
+        "gold_alive_owner_native_full_party_state",
+        "gold_alive_owner_parent_and_fork_isolation",
+        "gold_peer_death_settles",
+        "gold_peer_death_native_full_party_state",
+        "gold_peer_death_parent_and_fork_isolation",
+        "gold_with_dead_peer_does_not_mutate_live",
+        "gold_with_dead_peer_native_full_party_state",
+        "gold_with_dead_peer_parent_and_fork_isolation",
+        "gold_peer_revived_native_full_party_state",
+        "gold_peer_revived_parent_and_fork_isolation",
+        "gold_revived_owner_does_not_mutate_live",
+        "gold_revived_owner_native_full_party_state",
+        "gold_revived_owner_parent_and_fork_isolation",
+        "joss_deferred_settles",
+        "joss_participants_1_native_full_party_state",
+        "joss_participants_1_parent_and_fork_isolation",
+        "joss_deferred_settles",
+        "joss_participants_2_native_full_party_state",
+        "joss_participants_2_parent_and_fork_isolation",
+        "joss_deferred_settles",
+        "joss_participants_1_2_native_full_party_state",
+        "joss_participants_1_2_parent_and_fork_isolation",
+        "joss_owner_deferred_consumed_once"
+      ],
+      "localCounts": {
+        "FinishedPlays": 2,
+        "EtherealPlays": 0,
+        "LightningChannels": 0,
+        "UnblockedHitsReceived": 1,
+        "CardsDrawn": 1,
+        "CardsGenerated": 1
+      },
+      "peerCounts": {
+        "FinishedPlays": 2,
+        "EtherealPlays": 1,
+        "LightningChannels": 0,
+        "UnblockedHitsReceived": 1,
+        "CardsDrawn": 1,
+        "CardsGenerated": 1
+      }
+    },
+    "quota": {
+      "checks": [
+        "stage_share_and_absolute_deadline",
+        "same_round_recalculation_does_not_renew",
+        "healing_and_continued_progress_share_stage_origin",
+        "roster_change_preserves_deadline_and_previous_result",
+        "elapsed_stage_renews_explicitly",
+        "recalculation_does_not_add_nonadditive_capped_progress",
+        "no_last_damage_point_health_cliff",
+        "local_index_one",
+        "native_overkill_counts_only_actual_hp",
+        "local_damage_credited",
+        "damage_ledger_fork_and_root_isolation",
+        "child_foreign_and_unknown_damage_stays_in_child",
+        "native_local_play_accepted",
+        "local_play_full_party_native_equal",
+        "native_recalculation_keeps_paid_damage",
+        "native_peer_play_accepted",
+        "native_peer_damage_does_not_pay_or_postpone_local_quota",
+        "enemy_healing_reopens_progress",
+        "native_changes_do_not_mutate_frozen_prediction",
+        "quota_does_not_skip_real_retaliation_incremental_equal",
+        "fixed_node_budget_respected",
+        "risk_cannot_dominate_reliable_witness",
+        "real_victory_overrides_stale_cycle",
+        "victory_after_deadline_does_not_backdate_stage",
+        "fixed_batch_ordering_125_triples",
+        "unassessed_budget_fallback_remains_unknown",
+        "quota_and_unknown_ui_eng",
+        "quota_and_unknown_ui_zhs",
+        "quota_and_unknown_ui_zht",
+        "native_retaliation_play_STRIKE_IRONCLAD",
+        "native_retaliation_play_DEFEND_IRONCLAD",
+        "retaliation_full_party_native_cycle_equal"
+      ],
+      "expandedNodes": 5,
+      "transitionCount": 9,
+      "advisoryObjective": {
+        "stage": 1,
+        "startedRound": 1,
+        "deadlineRound": 1,
+        "targetDamage": 6,
+        "paidDamage": 0,
+        "remainingCycles": 1,
+        "participantCount": 2,
+        "renewalReason": "initial",
+        "previousTarget": null,
+        "previousProgress": null,
+        "stageEnemyHp": 12,
+        "observedLocalDamage": 0,
+        "observedTotalDamage": 0,
+        "observedUnattributedDamage": 0
+      },
+      "advisoryPlannedContribution": 6,
+      "advisoryObjectiveWitness": true,
+      "actions": [
+        {
+          "kind": "PlayCard",
+          "turn": 1,
+          "cardId": "STRIKE_IRONCLAD",
+          "cardOccurrence": 0,
+          "targetIndex": 0,
+          "targetCombatId": 2,
+          "cardTitle": "STRIKE_IRONCLAD.title",
+          "targetName": "FUZZY_WURM_CRAWLER.name",
+          "choice": null,
+          "nestedChoices": null,
+          "nestedChoicesBeforePrimary": 0,
+          "potionSlot": -1,
+          "potionId": "",
+          "potionTitle": "",
+          "turnStartChoices": null,
+          "relicEffects": [],
+          "replayCount": 0,
+          "cardStateKey": "STRIKE_IRONCLAD+0|energy=False:1|stars=False:-1|replay=0:0|exhaust=False|sly=False|retain=False|deck=False|keywords=|vars=Damage=6|-|:0|baselib=-|keywordsAdded=|keywordsRemoved=|dupe=False",
+          "cardStateOccurrence": 0,
+          "endsPlayerTurn": false,
+          "cardUpgradeLevel": 0,
+          "cardEnchantmentId": "",
+          "isExecutable": true,
+          "actionTitle": "STRIKE_IRONCLAD.title"
+        },
+        {
+          "kind": "PlayCard",
+          "turn": 1,
+          "cardId": "DEFEND_IRONCLAD",
+          "cardOccurrence": 0,
+          "targetIndex": -1,
+          "targetCombatId": null,
+          "cardTitle": "DEFEND_IRONCLAD.title",
+          "targetName": "",
+          "choice": null,
+          "nestedChoices": null,
+          "nestedChoicesBeforePrimary": 0,
+          "potionSlot": -1,
+          "potionId": "",
+          "potionTitle": "",
+          "turnStartChoices": null,
+          "relicEffects": [],
+          "replayCount": 0,
+          "cardStateKey": "DEFEND_IRONCLAD+0|energy=False:1|stars=False:-1|replay=0:0|exhaust=False|sly=False|retain=False|deck=False|keywords=|vars=Block=5|-|:0|baselib=-|keywordsAdded=|keywordsRemoved=|dupe=False",
+          "cardStateOccurrence": 0,
+          "endsPlayerTurn": false,
+          "cardUpgradeLevel": 0,
+          "cardEnchantmentId": "",
+          "isExecutable": true,
+          "actionTitle": "DEFEND_IRONCLAD.title"
+        },
+        {
+          "kind": "EndTurn",
+          "turn": 1,
+          "cardId": "",
+          "cardOccurrence": 0,
+          "targetIndex": -1,
+          "targetCombatId": null,
+          "cardTitle": "",
+          "targetName": "",
+          "choice": null,
+          "nestedChoices": null,
+          "nestedChoicesBeforePrimary": 0,
+          "potionSlot": -1,
+          "potionId": "",
+          "potionTitle": "",
+          "turnStartChoices": null,
+          "relicEffects": [],
+          "replayCount": 0,
+          "cardStateKey": "",
+          "cardStateOccurrence": 0,
+          "endsPlayerTurn": false,
+          "cardUpgradeLevel": 0,
+          "cardEnchantmentId": "",
+          "isExecutable": false,
+          "actionTitle": ""
+        }
+      ]
+    }
+  },
+  "gc": {
+    "exitCode": 134,
+    "completedChecksBeforeFailure": 3,
+    "failedCheck": "portable NoGC restart avoids unavailable detailed information",
+    "reason": "The capability fixture must exercise an actual NoGC region.",
+    "unverified": [
+      "NoGC restart",
+      "manual memory release",
+      "unexpected capability probe error check"
+    ],
+    "log": ".local/upstream-update-20261114/gc.log"
+  },
+  "gates": {
+    "bashSearchFiles": 270,
+    "powerShellSearchFiles": 270,
+    "coverageEntries": 3437,
+    "unanalyzed": 0,
+    "requiredEvidenceGaps": 0
+  },
+  "limitations": [
+    "No live networking or visible UI/performance",
+    "No Windows/Linux runtime",
+    "No full release gate or clean install",
+    "No replay of original two-potion report or redirected damage target",
+    "No new solo route quality comparison"
+  ]
+}

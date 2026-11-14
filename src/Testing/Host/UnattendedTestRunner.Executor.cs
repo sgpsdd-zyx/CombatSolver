@@ -326,6 +326,11 @@ internal sealed partial class UnattendedTestRunner
                 await runner.AssertFoolBranchStateAsync(combatState, player);
                 return Observation(combatEnded: false);
             }
+            if (request.ScenarioId == "CROSS-CHARACTER-ARROW")
+            {
+                await runner.AssertCrossCharacterArrowAsync(combatState, player);
+                return Observation(combatEnded: false);
+            }
             if (request.ScenarioId == "SHOW-OFF-GROWTH")
             {
                 await runner.AssertShowOffGrowthAsync(combatState, player);
@@ -683,7 +688,7 @@ internal sealed partial class UnattendedTestRunner
                 await AssertCardChoiceSearchAsync(combatState, player);
                 return Observation(combatEnded: false);
             }
-            if (request.ScenarioId == "CARD-CONTINUATION-CONTRACT")
+            if (request.ScenarioId is "CARD-CONTINUATION-CONTRACT" or "CARD-CONTINUATION-ENCORE")
             {
                 await runner.RunCardContinuationContractAsync(combatState, player);
                 return Observation(combatEnded: false);
@@ -1001,6 +1006,26 @@ internal sealed partial class UnattendedTestRunner
             if (request.ScenarioId == "RITUAL-TEMPORARY-STRENGTH")
             {
                 await runner.AssertRitualTemporaryStrengthOrderAsync(combatState, player);
+                return Observation(combatEnded: false);
+            }
+            if (request.ScenarioId == "TURN-POWER-ORDERING")
+            {
+                await runner.AssertTurnPowerOrderingAsync(combatState, player);
+                return Observation(combatEnded: false);
+            }
+            if (request.ScenarioId == "BEAT-DOWN-DYNAMIC-TARGET")
+            {
+                await runner.AssertBeatDownDynamicTargetAsync(combatState, player);
+                return Observation(combatEnded: false);
+            }
+            if (request.ScenarioId == "TERMINAL-POWER-PREFIX")
+            {
+                await runner.AssertTerminalPowerPrefixAsync(combatState, player);
+                return Observation(combatEnded: false);
+            }
+            if (request.ScenarioId == "DOOM-RETAINED-BLOCK")
+            {
+                await runner.AssertDoomRetainedBlockAsync(combatState, player);
                 return Observation(combatEnded: false);
             }
             if (request.ScenarioId == "NOXIOUS-RAMPART-ORDER")

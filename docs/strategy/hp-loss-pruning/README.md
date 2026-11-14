@@ -1,6 +1,6 @@
 # Shared HP-loss incumbent pruning
 
-This single-player policy targets repeated work after an eligible complete victory is known: unavoidable early damage followed by safe turns, and fast victories rediscovered by portfolio members. The current source integrates upstream 06083d36 (0.51.3). Two representative solo roots match the independently built upstream source, and multiplayer isolation checks pass; this merge does not establish boss-route quality across encounters.
+This single-player policy targets repeated work after an eligible complete victory is known: unavoidable early damage followed by safe turns, and fast victories rediscovered by portfolio members. The current source integrates upstream 3677d4ca (0.51.5). Targeted native checks and multiplayer isolation contracts pass. The earlier two-root solo comparison belongs to the 0.51.3 merge; this merge does not establish boss-route quality across encounters.
 
 The multiplayer fork keeps this policy only on the official single-player path. Multiplayer roots reject healing/growth certificates, and multiplayer policy and solvers do not reuse primary incumbent tables or bounds. Current ownership is in [the architecture map](../../ARCHITECTURE.md); current fork validation is in [the merge record](../../archive/strategy/upstream-0513-merge-20261113.md).
 
@@ -54,4 +54,4 @@ Offline comparisons do not prove native automatic deployment, visible Steam fram
 
 原生遍历使用维护的 [卖血手牌](../../../coverage/fixtures/search/boss-tempo-native-cards.json)，由 `GENERATED-NOVELTY-SEARCH` 执行严格增量回放和完整部署。复跑时创建自有EvidenceDirectory，其中 `research-options.json` 写 `{"scheduler":"tempo"}` 并创建 `native.flag`；IRONCLAD / AEONGLASS_BOSS / Act2，seed `BOSSTEMPOBLOOD20261007`，敌HP28、玩家80/80、能量3，ClearPlayerHand/Piles，Beam1、1000节点、5000ms、DOP1、Disabled、NoGC0、Instant/0秒、Fixed、VerifyIncremental、Timeout120、CleanupInstanceOnExit。`tempo-portfolio` 配合 `smart.flag` 验证协调器追加额度，`beam` 配合该标记执行关闭成员的同条件对照。
 
-多人政策显式清空该成员、配置与等损保路开关；只保留官方单人路径。既有批次的对照、失败、原生兑现与研究缺口见[官方历史归档](../../archive/strategy/single-player-hp-pruning-through-0513.md)。本轮游戏 0.113 的编译和验证仍以[合并记录](../../archive/strategy/upstream-0513-merge-20261113.md)为准。
+多人政策显式清空该成员、配置与等损保路开关；只保留官方单人路径。既有批次的对照、失败、原生兑现与研究缺口见[官方历史归档](../../archive/strategy/single-player-hp-pruning-through-0513.md)。本轮游戏 0.113 的编译和验证以[合并记录](../../archive/strategy/upstream-0515-merge-20261114.md)为准。

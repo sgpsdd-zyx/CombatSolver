@@ -18,7 +18,7 @@
 
 | 版本系列 | 更新日志 |
 |---|---|
-| 0.51 | [0.51.4（fork，已发布）](0.51.4-RELEASE_NOTES.md) · [0.51.3 官方原文](0.51.3-RELEASE_NOTES.md) · [0.51.2 官方原文](0.51.2-RELEASE_NOTES.md) · [0.51.1 · 0.113 适配 Part 2](0.51.1-RELEASE_NOTES.md) · [0.51.0 · 0.113 适配 Part 1](0.51.0-RELEASE_NOTES.md) |
+| 0.51 | [0.51.6（fork，定版中）](0.51.6-RELEASE_NOTES.md) · [0.51.5 官方原文](0.51.5-RELEASE_NOTES.md) · [0.51.4 官方原文](upstream/0.51.4-RELEASE_NOTES.md) · [0.51.4（fork，已发布）](0.51.4-RELEASE_NOTES.md) · [0.51.3 官方原文](0.51.3-RELEASE_NOTES.md) · [0.51.2 官方原文](0.51.2-RELEASE_NOTES.md) · [0.51.1 · 0.113 适配 Part 2](0.51.1-RELEASE_NOTES.md) · [0.51.0 · 0.113 适配 Part 1](0.51.0-RELEASE_NOTES.md) |
 | 0.50 | [0.50.2（fork，已发布）](0.50.2-RELEASE_NOTES.md) · [0.50.1 官方原文](upstream/0.50.1-RELEASE_NOTES.md) · [0.50.1（fork，已发布）](0.50.1-RELEASE_NOTES.md) · [0.50.0 官方原文](0.50.0-RELEASE_NOTES.md) |
 | 0.49 | [0.49.4 官方原文](0.49.4-RELEASE_NOTES.md) · [0.49.3 官方原文](0.49.3-RELEASE_NOTES.md) · [0.49.2 官方原文](upstream/0.49.2-RELEASE_NOTES.md) · [0.49.1 官方原文](upstream/0.49.1-RELEASE_NOTES.md) · [0.49.1（fork，历史准备版）](0.49.1-PUBLISH.md) · [0.49.2（fork，已发布）](0.49.2-RELEASE_NOTES.md) · [0.49.0 官方原文](0.49.0-RELEASE_NOTES.md) |
 | 0.48 | [0.48.1（fork，已发布）](0.48.1-RELEASE_NOTES.md) · [0.48.1 官方原文](upstream/0.48.1-RELEASE_NOTES.md) · [0.48.0 官方原文](0.48.0-RELEASE_NOTES.md) |

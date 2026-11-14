@@ -1481,7 +1481,6 @@ internal sealed partial class SimulatedCombatState
         creature.HpDisplay = HpDisplay.InfiniteWithoutNumbers;
         ForceMonsterMove(owner, "ABOUT_TO_BLOW_MOVE");
         (_steamEruptionPhases ??= [])[owner] = SteamEruptionPhase.AboutToBlow;
-        RemovePowersAfterDeath(owner);
         return true;
     }
 

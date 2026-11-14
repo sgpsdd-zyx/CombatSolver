@@ -1,14 +1,22 @@
 # CombatSolver 测试入口
 
-当前源码基于官方 `06083d36 / 0.51.3`，多人 fork 0.51.4 已完成定向验证。[本轮记录](archive/strategy/upstream-0513-merge-20261113.md)维护证据与限制；发布状态见[版本索引](releases/README.md)，[无人测试](HEADLESS_TESTING.md)维护分层口径。
+当前源码基于官方 `3677d4ca / 0.51.5`，多人 fork 0.51.6 已完成定向验证。[本轮记录](archive/strategy/upstream-0515-merge-20261114.md)维护证据与限制；发布状态见[版本索引](releases/README.md)，[无人测试](HEADLESS_TESTING.md)维护分层口径。
 
-## 2026-11-13 本轮状态
+## 2026-11-14 本轮状态
+
+游戏0.113.0 / RitsuLib0.6.12 / macOS arm64。13项原生请求全部通过，包含选牌Fork完整历史、回合能力/怪物死亡差分、单人T2原生选牌续用（Reused=true、UnexpectedReplans=0）和多人手动控制。82项多人兼容、32项贡献合同通过，输入和runId见[结构化证据](archive/strategy/upstream-0515-merge-20261114-evidence.json)。一个无头实例由启动器清理。
+
+主项目和离线宿主Release零警告/错误；Bash/PowerShell职责门禁均通过（270 Search文件），CoverageCatalog3437项无未分析与必需证据缺口，coverage布局653数据/601fixture/38组通过。GC portable-runtime前三项完成，第四项因未建立实际1GB NoGC区域失败，后续项未执行；不降低断言或据此承诺性能。真实联机、可见UI/性能、完整门禁、Windows/Linux运行未验证。
+
+官方测试原文见[卷27](archive/testing/volume-27.md)和[卷28](archive/testing/volume-28.md)，不是fork本轮证据。
+
+## 2026-11-13 历史状态
 
 游戏0.113.0 / RitsuLib0.6.12 / macOS arm64。主项目和离线宿主Release零警告、零错误；Bash/PowerShell职责门禁通过（270 Search文件），工具盘点322文件/38项目通过，coverage布局通过（650数据、598fixture、38组），CoverageCatalog3437项无未分析及必需证据缺口。
 
 10个原生请求通过；82项多人兼容、32项贡献合同、死亡/复活与手动重算通过。两个单人固定根与独立构建官方比较，177个非计时字段和完整路线一致。原生输入、runId、失败与清理见[证据](archive/strategy/upstream-0513-merge-20261113-evidence.json)和[请求](archive/strategy/upstream-0513-merge-20261113-inputs.json)。旧测试与上游测试不是本轮证据。
 
-## 本轮覆盖
+## 2026-11-13 覆盖
 
 - L0：Release构建、结构规则、文档/工具/coverage布局检查，CoverageCatalog状态与分支读取验证。
 - L2：多人逐玩家新增状态的根/Fork/生产键/完整续用对账、额外回合来源、多目标模式结算；覆盖死亡队友监听隔离。

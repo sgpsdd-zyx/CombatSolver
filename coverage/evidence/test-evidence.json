@@ -4363,5 +4363,86 @@
     "expected": "Native and predicted state agree for Plow removal, Ritual, Strength, stun AI, ordered piles and RNG.",
     "observed": "6670b0c777ed4a76aeddbd697a4c243c Passed; two card hits across threshold and enemy-end Ritual; Inferno player-end threshold hit.",
     "evidence": "coverage/fixtures/monsters/ceremonial-beast-ritual-transition.json; docs/TEST_MATRIX.md"
+  },
+  "TURN-POWER-ORDERING": {
+    "status": "Passed",
+    "level": "HeadlessNativeFullStateDifferential",
+    "gameVersion": "0.113.0",
+    "procedure": "FOOL / NIBBITS_WEAK，EnemyCurrentHp=200，120秒上限。",
+    "expected": "准备时间与潜伏根系两种次序、狂喜批量变牌、再生先于灾厄均与原生完整状态及RNG一致。",
+    "observed": "69137d6f4f1f457190fd70aa97f46b24 Passed，31.07秒。原包作为定位基线，未恢复完整玩家环境。",
+    "evidence": "src/Testing/Contracts/Combat/UnattendedTestRunner.TurnPowerOrdering.cs; docs/TEST_MATRIX.md; docs/issues/reports-20261114-logic.md"
+  },
+  "DOOM-RETAINED-BLOCK": {
+    "status": "Passed",
+    "level": "HeadlessNativeFullStateDifferential",
+    "gameVersion": "0.113.0",
+    "procedure": "NECROBINDER / DECIMILLIPEDE_ELITE，EnemyCurrentHp=100，显式施加覆甲与灾厄，120秒上限。",
+    "expected": "灾厄死亡留场体保留Early覆甲格挡，全敌完整状态及AI一致。",
+    "observed": "3dab74c121ba4e2fb825025d03b755a6 Passed，23.51秒。两次夹具失败及修正记录在问题文档。",
+    "evidence": "src/Testing/Contracts/Combat/UnattendedTestRunner.TurnPowerOrdering.cs; docs/TEST_MATRIX.md; docs/issues/reports-20261114-logic.md"
+  },
+  "BEAT-DOWN-DYNAMIC-TARGET": {
+    "status": "Passed",
+    "level": "HeadlessNativeFullStateDifferential",
+    "gameVersion": "0.113.0",
+    "procedure": "REGENT / NIBBITS_WEAK，EnemyCurrentHp=200，SEEKING_EDGE_POWER与弃牌堆SOVEREIGN_BLADE，120秒上限。",
+    "expected": "狠揍自动群攻多敌完整状态、RNG和面向与原生一致。",
+    "observed": "d6cf2a6b8dae48a6a6f32d703138c864 Passed，8.16秒。",
+    "evidence": "src/Testing/Contracts/Combat/UnattendedTestRunner.TurnPowerOrdering.cs; docs/TEST_MATRIX.md"
+  },
+  "TURN-SETUP-UI-PEEK": {
+    "status": "Passed",
+    "level": "HeadlessNativeDeployment",
+    "gameVersion": "0.113.0",
+    "procedure": "SILENT / GREMLIN_MERC_NORMAL / TOASTY_MITTENS，短搜1500ms，120秒上限。",
+    "expected": "停止及重算后在窥视模式接管选择，原生进入Play，忙碌状态清除。",
+    "observed": "4878c27d572f492e9012d8c2d1e2615b Passed，9.60秒。原报告未记录窥视标志，具体原包首因仍待反馈。",
+    "evidence": "src/Testing/Contracts/Runtime/UnattendedTestRunner.TurnSetupControls.cs; docs/TEST_MATRIX.md; docs/issues/reports-20261114-logic.md"
+  },
+  "TIMBER-KILL-SPLASH": {
+    "status": "Passed",
+    "level": "HeadlessNativeFullStateDifferential",
+    "gameVersion": "0.113.0",
+    "procedure": "run-unattended-test.ps1 -ScenarioId TIMBER-KILL-SPLASH; fixture and character in docs/TEST_MATRIX.md; 120 s cap; instance cleanup.",
+    "expected": "Kill-triggered splash and native full state",
+    "observed": "4b2d2c2e358a4c4696eb046ed0b29ecd Passed; Chomper:SCREECH_MOVE; NativeOutcome:combatEnded=False:turn=1:hp=77:maxHp=77",
+    "evidence": "coverage/fixtures/cards/timber-kill-splash.json; docs/issues/reports-20261113-logic.md"
+  },
+  "CATASTROPHE-EMPTY-DRAW": {
+    "status": "Passed",
+    "level": "HeadlessNativeFullStateDifferential",
+    "gameVersion": "0.113.0",
+    "procedure": "run-unattended-test.ps1 -ScenarioId CATASTROPHE-EMPTY-DRAW; fixture and character in docs/TEST_MATRIX.md; 120 s cap; instance cleanup.",
+    "expected": "Base/upgraded empty-pile RNG and full state",
+    "observed": "0d9cfcb954c04f1da0cd6d34207b1f55 Passed; FuzzyWurmCrawler:INHALE; FuzzyWurmCrawler:INHALE; NativeOutcome:combatEnded=False:turn=1:hp=77:maxHp=77",
+    "evidence": "coverage/fixtures/cards/catastrophe-empty-draw.json; docs/issues/reports-20261113-logic.md"
+  },
+  "WATERFALL-ARROW-TRANSITION": {
+    "status": "Passed",
+    "level": "HeadlessNativeFullStateDifferential",
+    "gameVersion": "0.113.0",
+    "procedure": "run-unattended-test.ps1 -ScenarioId WATERFALL-ARROW-TRANSITION; fixture and character in docs/TEST_MATRIX.md; 120 s cap; instance cleanup.",
+    "expected": "Phase transition before impalement and debuffs; full state and Fork",
+    "observed": "23dad02b2bb04e0a925aafedd00cdcd0 Passed; WaterfallGiant:PRESSURIZE_MOVE; NativeOutcome:combatEnded=False:turn=1:hp=77:maxHp=77",
+    "evidence": "coverage/fixtures/monsters/waterfall-arrow-transition.json; docs/issues/reports-20261113-logic.md"
+  },
+  "CROSS-CHARACTER-ARROW": {
+    "status": "Passed",
+    "level": "HeadlessNativeFullStateDifferential",
+    "gameVersion": "0.113.0",
+    "procedure": "run-unattended-test.ps1 -ScenarioId CROSS-CHARACTER-ARROW; fixture and character in docs/TEST_MATRIX.md; 120 s cap; instance cleanup.",
+    "expected": "Single/bulk entry, one slot, parent/sibling isolation and live advancement",
+    "observed": "51a7b646dc1b4f2caf876e5e56a0ff26 Passed; CrossCharacterArrow:FirstShootEntry:SingleSlot:NativeState:Fork:LiveAdvance; NativeOutcome:combatEnded=False:turn=1:hp=80:maxHp=80",
+    "evidence": "src/Testing/Contracts/Combat/UnattendedTestRunner.FoolBranchState.cs; docs/issues/reports-20261113-logic.md"
+  },
+  "CARD-CONTINUATION-ENCORE": {
+    "status": "Passed",
+    "level": "HeadlessNativeFullStateDifferential",
+    "gameVersion": "0.113.0",
+    "procedure": "run-unattended-test.ps1 -ScenarioId CARD-CONTINUATION-ENCORE; fixture and character in docs/TEST_MATRIX.md; 120 s cap; instance cleanup.",
+    "expected": "Active card remapping, all choices, full state/history/RNG, DOP2 and native completion",
+    "observed": "0209ec0d87654471a4c85dc81faa7433 Passed; CardContinuationContract:AllOptions:FullStateRngHistory:Identity:SiblingMutation:Revisit:DOP2:Cancel:InvalidChoice; CardContinuationContract:NativeDaggerThrow:FullContinuation; CardContinuationContract:Encore:ActiveCardRemap:NativeCompletion; NativeOutcome:combatEnded=False:turn=1:hp=70:maxHp=70",
+    "evidence": "src/Testing/Contracts/Combat/UnattendedTestRunner.CardContinuation.cs; docs/issues/reports-20261113-logic.md"
   }
 }

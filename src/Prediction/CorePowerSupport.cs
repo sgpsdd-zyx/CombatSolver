@@ -529,9 +529,6 @@ internal static class CorePowerSupport
         IReadOnlyList<Creature> enemies)
     {
         EndTurnPowerSupport.TriggerVeryEarly(combat, enemies);
-        EndTurnPowerSupport.TriggerEnemyDoom(simulator, combat, enemies);
-        if (simulator.HasPendingChoice)
-            return false;
         foreach (Creature enemy in enemies)
         {
             if (simulator.State.GetCreature(enemy).IsAlive)
@@ -546,10 +543,14 @@ internal static class CorePowerSupport
                 if (plating > 0)
                     simulator.GainBlock(enemy, plating, ValueProp.Unpowered);
             }
-            Tick<DoubleDamagePower>(combat, enemy);
             if (simulator.HasPendingChoice)
                 return false;
         }
+        EndTurnPowerSupport.TriggerEnemyDoom(simulator, combat, enemies);
+        if (simulator.HasPendingChoice)
+            return false;
+        foreach (Creature enemy in enemies)
+            Tick<DoubleDamagePower>(combat, enemy);
         if (!EndTurnPowerSupport.TriggerRegular(simulator, combat, CombatSide.Enemy, enemies))
             return false;
         PowerLifecycleSupport.ResolvePowerAmountChanges(simulator, combat);
@@ -625,11 +626,6 @@ internal static class CorePowerSupport
                 processedDeaths.Add(combatId);
                 continue;
             }
-            bool steamEruptionTriggered = combat.TryTriggerSteamEruptionDeath(simulator, enemy);
-            if (simulator.HasPendingChoice)
-                return false;
-            if (steamEruptionTriggered)
-                continue;
             (newlyDead ??= []).Add(enemy);
         }
         if (newlyDead != null)
