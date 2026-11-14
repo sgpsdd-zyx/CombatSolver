@@ -1,10 +1,14 @@
 # CombatSolver 测试入口
 
-当前源码基于官方 `3677d4ca / 0.51.5`，多人 fork 0.51.6 已完成定向验证。[本轮记录](archive/strategy/upstream-0515-merge-20261114.md)维护证据与限制；发布状态见[版本索引](releases/README.md)，[无人测试](HEADLESS_TESTING.md)维护分层口径。
+当前源码基于官方 `3677d4ca / 0.51.5`，多人 fork 0.51.7 已完成箭矢归属定向验证。[问题记录](archive/issues/multiplayer-arrows-20261114.md)维护本轮证据与限制；发布状态见[版本索引](releases/README.md)，[无人测试](HEADLESS_TESTING.md)维护分层口径。
 
-## 2026-11-14 本轮状态
+## 2026-11-14 箭矢归属修复
 
-游戏0.113.0 / RitsuLib0.6.12 / macOS arm64。13项原生请求全部通过，包含选牌Fork完整历史、回合能力/怪物死亡差分、单人T2原生选牌续用（Reused=true、UnexpectedReplans=0）和多人手动控制。82项多人兼容、32项贡献合同通过，输入和runId见[结构化证据](archive/strategy/upstream-0515-merge-20261114-evidence.json)。一个无头实例由启动器清理。
+游戏0.113.0 / RitsuLib0.6.13 / macOS arm64。`MULTIPLAYER-ARROW-OWNERSHIP` 在未改生产源码上复现问题包同一异常，修复后44项断言通过：双愚者同目标、按施加者叠加、各自命中计数与拔箭、移除后重新施加、完整全队原生状态和父/兄弟/后代隔离。`FOOL-BRANCH-STATE` 单人哨兵通过。两个隔离进程均由启动器删除实例；未运行原包恢复、真实联机、可见游戏或完整发布门禁。可重跑输入为[多人箭矢夹具](../coverage/fixtures/scenarios/state/multiplayer-arrow-ownership.json)，runId见[归档](archive/issues/multiplayer-arrows-20261114.md)。
+
+## 2026-11-14 官方0.51.5合并（历史批次）
+
+游戏0.113.0 / RitsuLib0.6.13 / macOS arm64。13项原生请求全部通过，包含选牌Fork完整历史、回合能力/怪物死亡差分、单人T2原生选牌续用（Reused=true、UnexpectedReplans=0）和多人手动控制。82项多人兼容、32项贡献合同通过，输入和runId见[结构化证据](archive/strategy/upstream-0515-merge-20261114-evidence.json)。一个无头实例由启动器清理。RitsuLib版本依据该批原始启动日志更正，旧文档误记为0.6.12；本段不是箭矢修复后的复测。
 
 主项目和离线宿主Release零警告/错误；Bash/PowerShell职责门禁均通过（270 Search文件），CoverageCatalog3437项无未分析与必需证据缺口，coverage布局653数据/601fixture/38组通过。GC portable-runtime前三项完成，第四项因未建立实际1GB NoGC区域失败，后续项未执行；不降低断言或据此承诺性能。真实联机、可见UI/性能、完整门禁、Windows/Linux运行未验证。
 

@@ -714,7 +714,10 @@ internal sealed partial class SimulatedCombatState
                 if (offset != power.Amount) Apply<ThornsPower>(target, offset, applier);
             };
         }
-        if (instanced || GetAmount<T>(target) == 0)
+        int existingAmount = UsesMultiplayerPerApplierPower(incoming)
+            ? GetMultiplayerPowerForApplier<T>(target, applier)?.Amount ?? 0
+            : GetAmount<T>(target);
+        if (instanced || existingAmount == 0)
             beforeApplied?.Invoke(amount);
         PowerModel simulated;
         if (instanced)
@@ -839,7 +842,8 @@ internal sealed partial class SimulatedCombatState
 
     public int GetAmount<T>(Creature target) where T : PowerModel
     {
-        if (CanonicalModels.Power<T>().InstanceType == MegaCrit.Sts2.Core.Entities.Powers.PowerInstanceType.Instanced)
+        if (CanonicalModels.Power<T>().InstanceType == MegaCrit.Sts2.Core.Entities.Powers.PowerInstanceType.Instanced
+            || UsesMultiplayerPerApplierPower(CanonicalModels.Power<T>()))
             return GetPower<T>(target)?.Amount ?? 0;
         if (_powers != null && _powers.TryGetValue((target, typeof(T)), out PowerModel? power))
             return power.Amount;
@@ -850,7 +854,8 @@ internal sealed partial class SimulatedCombatState
 
     public T? GetPower<T>(Creature target) where T : PowerModel
     {
-        if (CanonicalModels.Power<T>().InstanceType == MegaCrit.Sts2.Core.Entities.Powers.PowerInstanceType.Instanced)
+        if (CanonicalModels.Power<T>().InstanceType == MegaCrit.Sts2.Core.Entities.Powers.PowerInstanceType.Instanced
+            || UsesMultiplayerPerApplierPower(CanonicalModels.Power<T>()))
             return EffectivePowers().OfType<T>().FirstOrDefault(power => ReferenceEquals(power.Owner, target));
         if (_powers != null && _powers.TryGetValue((target, typeof(T)), out PowerModel? power))
             return (T)power;
@@ -880,7 +885,9 @@ internal sealed partial class SimulatedCombatState
         T? power = GetPower<T>(target);
         if (power?.SkipNextDurationTick == true)
         {
-            T mutable = (T)GetOrCreatePower(target, CanonicalModels.Power<T>(), power.Applier);
+            T mutable = (T)(UsesMultiplayerPerApplierPower(power)
+                ? GetMutablePowerInstance(power)
+                : GetOrCreatePower(target, CanonicalModels.Power<T>(), power.Applier));
             mutable.SkipNextDurationTick = false;
             return;
         }
@@ -895,7 +902,8 @@ internal sealed partial class SimulatedCombatState
         if (current == amount)
             return;
         T canonical = CanonicalModels.Power<T>();
-        PowerModel simulated = canonical.InstanceType == MegaCrit.Sts2.Core.Entities.Powers.PowerInstanceType.Instanced
+        PowerModel simulated = (canonical.InstanceType == MegaCrit.Sts2.Core.Entities.Powers.PowerInstanceType.Instanced
+            || UsesMultiplayerPerApplierPower(canonical))
             && GetPower<T>(target) is { } instance
                 ? GetMutablePowerInstance(instance)
                 : GetOrCreatePower(target, canonical, null);
@@ -935,7 +943,7 @@ internal sealed partial class SimulatedCombatState
         if (_rootMultiInstancePowerClones?.TryGetValue(power, out PowerModel? rootClone) == true)
             return rootClone;
 
-        if (_rootMultiInstancePowers.Contains(power))
+        if (_rootMultiInstancePowers.Contains(power) || UsesMultiplayerPerApplierPower(power))
         {
             rootClone = PredictionUtils.CloneModelForSimulation(power);
             rootClone._owner = power.Owner;
@@ -1063,6 +1071,8 @@ internal sealed partial class SimulatedCombatState
     private PowerModel GetOrCreatePower<T>(Creature target, T prototype, Creature? applier)
         where T : PowerModel
     {
+        if (UsesMultiplayerPerApplierPower(prototype))
+            return GetOrCreateMultiplayerPowerForApplier(target, prototype, applier);
         (Creature, Type) key = (target, typeof(T));
         bool captured = _powers != null && _powers.TryGetValue(key, out _);
         if (captured && _powers![key].Amount != 0)

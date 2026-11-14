@@ -2,6 +2,8 @@
 
 [返回归档](../README.md)。以下文件保持各自的源码基线、失败和未验证项；归档不表示已修复。
 
+- [多人双愚者箭矢归属修复（0.51.7）](multiplayer-arrows-20261114.md)
+
 - [0.18.0-bugfix-plan](0.18.0-bugfix-plan.md)
 - [0.18.0-raw-bug-batch](0.18.0-raw-bug-batch.md)
 - [20260903-hard-logic-triage](20260903-hard-logic-triage.md)

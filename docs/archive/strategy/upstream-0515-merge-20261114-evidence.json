@@ -3,7 +3,7 @@
   "upstream": "3677d4cac2407e332f1419741878e635c1ce2ee3",
   "forkVersion": "0.51.6",
   "gameVersion": "0.113.0",
-  "ritsuLibVersion": "0.6.12",
+  "ritsuLibVersion": "0.6.13",
   "native": [
     {
       "runId": "macos-9d0e24ccfbc24c65a50194111f020ec6",

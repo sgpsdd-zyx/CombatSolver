@@ -10,7 +10,7 @@
 
 ## 验证
 
-本轮使用游戏0.113.0、RitsuLib0.6.12、macOS arm64。主项目Release20.28秒、离线宿主6.12秒，均0警告/错误。13个原生请求全部通过，均受120秒上限约束；完整输入、runId与检查项见[结构化证据](upstream-0515-merge-20261114-evidence.json)。覆盖大树将倾、非愚者箭槽、洪流巨人转阶段、横祸空堆、安可选牌Fork、能力/死亡顺序、动态目标、终局前缀、窥视后接管、单人第二回合续用和多人手动/额外回合。单步第二回合原生选择后`Reused=true`、`UnexpectedReplans=0`。唯一无头实例`.local/headless-instances/macos.3sADnQ`已由启动器删除。
+本轮使用游戏0.113.0、RitsuLib0.6.13、macOS arm64。主项目Release20.28秒、离线宿主6.12秒，均0警告/错误。13个原生请求全部通过，均受120秒上限约束；完整输入、runId与检查项见[结构化证据](upstream-0515-merge-20261114-evidence.json)。覆盖大树将倾、非愚者箭槽、洪流巨人转阶段、横祸空堆、安可选牌Fork、能力/死亡顺序、动态目标、终局前缀、窥视后接管、单人第二回合续用和多人手动/额外回合。单步第二回合原生选择后`Reused=true`、`UnexpectedReplans=0`。唯一无头实例`.local/headless-instances/macos.3sADnQ`已由启动器删除。
 
 82项多人兼容、32项贡献合同通过。Bash/PowerShell职责门禁均为270个Search文件；CoverageCatalog3437项，未分析、必需runtime/state-write证据缺口为0，26项明确在回放视野外。目录生成复用历史分类，不表示3437项本轮复跑。coverage布局653数据/601fixture/38组通过。
 

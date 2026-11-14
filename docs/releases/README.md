@@ -4,7 +4,9 @@
 
 按版本倒序列出已有玩家更新日志，包括历史草案。是否正式发布以对应 Git 标签和发布记录为准；未发布改动见 [开发笔记](../DEVELOPMENT_NOTES.md)。发布 ZIP 存放在仓库根目录的 `releases/`，此处只保存文档。
 
-**[多人 fork 0.51.6 已发布](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.51.6)**，基于官方`3677d4ca / 0.51.5`，来源`1b4e0b79`。见[完整中英正文](0.51.6-RELEASE_NOTES.md)、[发布凭证](0.51.6-PUBLISH.md)和[本轮合并验证](../archive/strategy/upstream-0515-merge-20261114.md)。上一公开fork为0.51.4。
+**多人 fork 0.51.7 待发布**：双愚者同目标箭矢归属修复。见[中英正文](0.51.7-RELEASE_NOTES.md)和[验证归档](../archive/issues/multiplayer-arrows-20261114.md)。
+
+**[多人 fork 0.51.6 已发布](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.51.6)**，基于官方`3677d4ca / 0.51.5`，来源`1b4e0b79`。见[完整中英正文](0.51.6-RELEASE_NOTES.md)、[发布凭证](0.51.6-PUBLISH.md)和[该批合并验证](../archive/strategy/upstream-0515-merge-20261114.md)。上一公开fork为0.51.4。
 
 **[多人 fork 0.51.4 已发布](https://github.com/sgpsdd-zyx/CombatSolver/releases/tag/v0.51.4)**，基于官方 `06083d36 / 0.51.3`，来源 `7f833c95`。支持游戏0.113.0 Beta与RitsuLib0.6.11+；见[完整中英正文](0.51.4-RELEASE_NOTES.md)、[发布凭证](0.51.4-PUBLISH.md)和[该批合并验证](../archive/strategy/upstream-0513-merge-20261113.md)。
 

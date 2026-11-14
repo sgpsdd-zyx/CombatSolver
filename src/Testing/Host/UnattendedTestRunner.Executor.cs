@@ -59,6 +59,11 @@ internal sealed partial class UnattendedTestRunner
                 await runner.AssertMultiplayerSharedDamageAsync(combatState);
                 return Observation(combatEnded: false);
             }
+            if (request.ScenarioId == "MULTIPLAYER-ARROW-OWNERSHIP")
+            {
+                await runner.AssertMultiplayerArrowOwnershipAsync(combatState);
+                return Observation(combatEnded: false);
+            }
             if (request.ScenarioId == "MULTIPLAYER-RELIC-OWNERSHIP")
             {
                 await runner.AssertMultiplayerRelicOwnershipAsync(combatState);

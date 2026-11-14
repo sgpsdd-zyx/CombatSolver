@@ -135,6 +135,8 @@ Fork 发生在动作、选牌、Power、死亡和出牌事务允许复制的稳�
 
 伤害命令先修正伤害并触发伤害前 Hook，再经过 `ModifyPreBlockDamageTargetMirrors`、格挡及奥斯提转移。战宠生命、最大生命、格挡和关联遗物计数进入状态键与续用；战宠死亡后是否保留阵容由分支死亡语义判断。
 
+多人 `InstancedPerApplier` Power 由 `SimulatedCombatState.MultiplayerPowers` 按持有者、类型和施加者查找；同一施加者叠加，不同施加者分别建实例。即使根仅有一位玩家的实例，也进入既有逐实例克隆表和 Fork；移除后重新取得新实例及监听位置。普通读取返回首个有效实例，精确修改仍以实例身份进行。箭槽、命中计数与逐玩家状态键/续用戳沿既有所有权，单人原路径不启用该入口。验证见 `MULTIPLAYER-ARROW-OWNERSHIP`。
+
 ## 5. UI
 
 `SolverOverlaySnapshot.Capture` 是结果到展示的唯一投影边界，可读取 `SolverResult` 与显示元数据。`SolverOverlay`、`SolverRouteRow`、`SolverActionPill` 只渲染只读 snapshot。

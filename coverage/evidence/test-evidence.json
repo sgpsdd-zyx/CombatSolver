@@ -1,4 +1,13 @@
 {
+  "MULTIPLAYER-ARROW-OWNERSHIP": {
+    "status": "Passed",
+    "level": "HeadlessNativeFullStateDifferentialAndFork",
+    "gameVersion": "0.113.0",
+    "procedure": "tools/testing/run-unattended-test-macos.sh coverage/fixtures/scenarios/state/multiplayer-arrow-ownership.json --timeout-seconds 120 --cleanup-instance-on-exit; macOS arm64 / RitsuLib 0.6.13.",
+    "expected": "Two Fools retain independent Impaled instances, arrows and hit counters on one enemy; same-applier stacking, removal/reapplication and Fork isolation match complete native party state.",
+    "observed": "Baseline macos-641960492a1642dabec65922823d8a9b failed with Arrow power application did not create its target state. Fixed macos-311a04644fb844ae8e0ee4d8be833062 passed 44 assertions. Single-player FOOL-BRANCH-STATE macos-81b32896f6dd435e8e9e31d869752c13 passed. Both instances removed. Original report replay and live multiplayer not run.",
+    "evidence": "coverage/fixtures/scenarios/state/multiplayer-arrow-ownership.json; src/Testing/Contracts/Multiplayer/UnattendedTestRunner.MultiplayerArrowOwnership.cs; docs/archive/issues/multiplayer-arrows-20261114.md"
+  },
   "EXTRA-TURN-MIRROR-ORDER": {
     "status": "Passed",
     "level": "HeadlessNativeFullStateDifferential",

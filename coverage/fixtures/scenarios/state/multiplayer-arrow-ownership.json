@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "scenarioId": "MULTIPLAYER-ARROW-OWNERSHIP",
+  "characterId": "FOOL",
+  "encounterId": "FUZZY_WURM_CRAWLER_WEAK",
+  "seed": "MPARROW20261114",
+  "timeoutSeconds": 120,
+  "headlessFastModeForTest": "Instant"
+}
